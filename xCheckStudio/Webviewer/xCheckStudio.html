@@ -1,0 +1,218 @@
+<html>
+
+<head>
+    <title>xCheckStudio</title>
+
+    <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
+    <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+
+    <script type="text/javascript" src="Javascripts/common/Example.js"></script>
+    <script type="text/javascript" src="Javascripts/common/ModelTree.js"></script>
+    <script type="text/javascript" src="Javascripts/common/require.js"></script>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\xCheckStudioInterface.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\GenericProperties.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewManager.js"></script>
+    
+    <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
+    <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
+
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+
+    <style type="text/css">           
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #555;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <table>
+        <iframe name="formDestination" height="100px"></iframe>
+        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+            <tr>
+                <td>
+                    <input id="dataSoures" name="dataSouresName[]" type="file" multiple />
+                </td>
+                <td>
+                    <input type="submit" value="Upload">
+                </td>
+                <td>
+                    <button onclick="loadModel()">load model</button>
+                </td>
+                <td>
+                    <button id="checkButton">Check Datasources</button>
+                </td>
+
+
+            </tr>
+        </form>
+        <tr>
+            <!-- First model tree and it's viewer -->
+            <td valign="top">
+                <div id="modelTree1" style="overflow: auto;"></div>
+            </td>
+            <td>
+                <div id="viewerContainer1" class="example-canvas-small"></div>
+            </td>
+
+            <!-- second model tree and it's viewer -->
+            <td valign="top">
+                <div id="modelTree2" style="overflow: auto;"></div>
+            </td>
+            <td>
+                <div id="viewerContainer2" class="example-canvas-small"></div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td> </td>
+            <td>
+                <div class="viewOrientation1">
+
+
+                    <button id="Front1">Front</button>
+                    <button id="Back1">Back</button>
+                    <button id="Top1">Top</button>
+                    <button id="Bottom1">Bottom</button>
+                    <button id="Left1">Left</button>
+                    <button id="Right1">Right</button>
+                    <button id="Iso1">Iso</button>
+
+                </div>
+            </td>
+
+            <td> </td>
+            <td>
+                <div class="viewOrientation2">
+
+
+                    <button id="Front2">Front</button>
+                    <button id="Back2">Back</button>
+                    <button id="Top2">Top</button>
+                    <button id="Bottom2">Bottom</button>
+                    <button id="Left2">Left</button>
+                    <button id="Right2">Right</button>
+                    <button id="Iso2">Iso</button>
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+
+        </tr>
+    </table>
+
+    <table id="comparisonTable">
+    <tr>
+        <td id="mainReviewCell"></td>
+        <td id="detailedReviewCell"></td>
+    </tr>>    
+    </table>
+
+    <script type="text/javascript">
+      
+        var xCheckStudioInterface1;
+        var xCheckStudioInterface2;
+        function loadModel() {
+
+            let selectedFiles = document.getElementById("dataSoures").files;
+            let selectedFilesCount = selectedFiles.length;
+            for (let i = 0; i < selectedFilesCount; i++) {
+                // let selectedFile = selectedFiles[i].name;
+                // let split_fileNamelength = selectedFile.replace(/^.*[\\\/]/, '').split('.').length;
+                // if (selectedFile.replace(/^.*[\\\/]/, '').split('.')[split_fileNamelength - 1] == "scs" || selectedFile.replace(/^.*[\\\/]/, '').split('.')[split_fileNamelength - 1] == "SCS") {
+                //     let split_filePath = selectedFile.split('\\');
+                //     let fileName;
+                //     if (split_filePath.length > 1) {
+                //         fileName = split_filePath[split_filePath.length - 1];
+                //     }
+
+                let fileName = selectedFiles[i].name;
+                var uri = "uploads/scs/" + fileName;
+                let Id = i + 1;
+                var container_Id = "viewerContainer" + Id;
+                var model_Tree = "modelTree" + Id;
+
+                viewerOptions = "viewerOptions" + i;
+                viewerOptions = {
+                    containerId: container_Id,
+                    endpointUri: uri,
+                    modelTree: model_Tree
+                };
+
+                if (i == 0) {
+                    xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
+                    xCheckStudioInterface1.setupViewer(viewerOptions, true);
+                }
+                else if (i == 1) {
+                    xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
+                    xCheckStudioInterface2.setupViewer(viewerOptions, false);
+                }
+                else {
+                    break;
+                }
+                //}
+            }
+        }
+        
+        window.onload = function () {
+                var checkButton = document.getElementById("checkButton");
+                checkButton.onclick = function () 
+                {
+                    var checkManager = new CheckManager();
+                    checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
+                    
+                    var reviewManager = new ReviewManager(checkManager);
+                    reviewManager.populateReviewTables();
+
+                    // add event handler for collapsible rows
+                    var coll = document.getElementsByClassName("collapsible");
+                    var i;
+
+                    for (i = 0; i < coll.length; i++) {
+                        coll[i].addEventListener("click", function () {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                                content.style.display = "none";
+                            } else {
+                                content.style.display = "block";
+                            }
+                        });
+                    }
+                };
+            };           
+
+        $(document).ready(function () {
+            $('[data-toggle="toggle"]').change(function () {
+                $(this).parents().next('.hide').toggle();
+            });
+        });
+    </script>
+</body>
+
+</html>
