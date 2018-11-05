@@ -1,6 +1,7 @@
-function GenericProperties(name, mainComponentClass, subComponentClass)
+function GenericProperties(name, identifier, mainComponentClass, subComponentClass)
 {
     this.Name = name;
+    this.Identifier = identifier;
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
 

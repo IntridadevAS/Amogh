@@ -8,7 +8,7 @@ function ReviewManager(checkManager) {
         for (var componentsGroupName in this.CheckManager.ComponentsGroups) {
             var componentsGroup = this.CheckManager.ComponentsGroups[componentsGroupName];
 
-            var component = componentsGroup.Components[j];
+            //var component = componentsGroup.Components[j];
 
             var btn = document.createElement("BUTTON");       // Create a <button> element
             btn.className = "collapsible";
@@ -32,6 +32,10 @@ function ReviewManager(checkManager) {
             thead.appendChild(tr);
 
             var th = document.createElement("th");
+            th.innerHTML = "ID"
+            tr.appendChild(th);
+
+            th = document.createElement("th");
             th.innerHTML = "Source A"
             tr.appendChild(th);
 
@@ -54,11 +58,15 @@ function ReviewManager(checkManager) {
                 tbody.appendChild(tr);
 
                 td = document.createElement("td");
-                td.innerHTML = component.SourceAName;;
+                td.innerHTML = component.Identifier;
                 tr.appendChild(td);
 
                 td = document.createElement("td");
-                td.innerHTML = component.SourceBName;;
+                td.innerHTML = component.SourceAName;
+                tr.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = component.SourceBName;
                 tr.appendChild(td);
 
                 td = document.createElement("td");
@@ -112,8 +120,8 @@ function ReviewManager(checkManager) {
                          _this.RestoreBackgroundColor(row);
                      }
                 };
-            };
-            currentRow.onmouseout = createMouseOutHandler(currentRow);
+            };            
+            currentRow.onmouseout = createMouseOutHandler(currentRow);           
         }
     }
 
@@ -125,28 +133,100 @@ function ReviewManager(checkManager) {
         row.style.backgroundColor = "#ffffff";
     }
 
-    ReviewManager.prototype.populateDetailedReviewTable = function (row) {
-
-        var parentTable = document.getElementById("detailedReviewCell");
-
-        // var cell = row.getElementsByTagName("td")[0];
-        // if (!cell) {            
-        //     return;
-        // }
-
+    ReviewManager.prototype.populateDetailedReviewTable = function (row) {      
         var tBodyElement = row.parentElement;
         if(!tBodyElement)
         {
             return;
         }
-        var tableElement = tBodyElement.parentElement;
-        alert("id: " + tableElement.id); 
-        // var id = cell.innerHTML;
-        // alert("id:" + id);
+        var tableElement = tBodyElement.parentElement;       
+        for (var componentsGroupName in this.CheckManager.ComponentsGroups) {
+            var componentsGroup = this.CheckManager.ComponentsGroups[componentsGroupName];
+            if (componentsGroup.ComponentClass != tableElement.id) {
+                continue;
+            }
+            for (var i = 0; i < componentsGroup.Components.length; i++) {
+                var component = componentsGroup.Components[i];
+                var idCell = row.getElementsByTagName("td")[0];
 
-        // for (var componentsGroupName in this.CheckManager.ComponentsGroups) {
+                // var sourceACell = row.getElementsByTagName("td")[0];
+                // var sourceBCell = row.getElementsByTagName("td")[1];
 
+                if(component.Identifier == idCell.innerHTML /*&&
+                   component.SourceBName == sourceBCell.innerHTML*/ )
+                   {
+                    var parentTable = document.getElementById("detailedReviewCell");
+                    parentTable.innerHTML = '';
 
-        // }
+                    var div = document.createElement("DIV");
+                    //div.className = "content";
+                    parentTable.appendChild(div);
+
+                    var table = document.createElement("TABLE");
+                    table.id = component.Identifier;
+                    div.appendChild(table);
+
+                    // thead
+                    var thead = document.createElement("thead");
+                    table.appendChild(thead);
+
+                    var tr = document.createElement("tr");
+                    thead.appendChild(tr);
+
+                    var th = document.createElement("th");
+                    th.innerHTML = "Source A Name"
+                    tr.appendChild(th);
+
+                    var th = document.createElement("th");
+                    th.innerHTML = "Source A Value"
+                    tr.appendChild(th);
+
+                    th = document.createElement("th");
+                    th.innerHTML = "Source B Name"
+                    tr.appendChild(th);
+
+                    th = document.createElement("th");
+                    th.innerHTML = "Source B Value"
+                    tr.appendChild(th);
+
+                    th = document.createElement("th");
+                    th.innerHTML = "Status"
+                    tr.appendChild(th);
+
+                    var tbody = document.createElement("tbody");            
+                    table.appendChild(tbody);
+
+                    for (var j = 0; j < component.CheckProperties.length; j++) 
+                    {
+                        var property = component.CheckProperties[j];
+
+                        tr = document.createElement("tr");
+                        tbody.appendChild(tr);
+
+                        td = document.createElement("td");
+                        td.innerHTML = property.SourceAName;
+                        tr.appendChild(td);
+
+                        td = document.createElement("td");
+                        td.innerHTML = property.SourceAValue;
+                        tr.appendChild(td);
+
+                        td = document.createElement("td");
+                        td.innerHTML = property.SourceBName;
+                        tr.appendChild(td);
+
+                        td = document.createElement("td");
+                        td.innerHTML = property.SourceBValue;
+                        tr.appendChild(td);
+
+                        td = document.createElement("td");
+                        td.innerHTML = property.Result;
+                        tr.appendChild(td);
+                    }
+                      
+                    break;
+                   }                   
+            }
+        }        
     }
 }

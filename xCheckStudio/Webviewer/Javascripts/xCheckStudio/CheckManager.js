@@ -7,7 +7,7 @@ function CheckManager() {
         // var source1Properties = xCheckStudioInterface1.sourceProperties;
         // var source2Properties = xCheckStudioInterface2.sourceProperties;
 
-        var parentTable = document.getElementById("comparisonTable");
+        //var parentTable = document.getElementById("comparisonTable");
 
         for (var i = 0, source1PropertiesCollection = source1Properties; i < source1PropertiesCollection.length; i++) {
             var source1ComponentProperties = source1PropertiesCollection[i];
@@ -28,10 +28,11 @@ function CheckManager() {
             for (var j = 0, source2PropertiesCollection = source2Properties; j < source2PropertiesCollection.length; j++) {
                 var source2ComponentProperties = source2PropertiesCollection[j];
 
-                if (source1ComponentProperties.Name === source2ComponentProperties.Name &&
+                if (source1ComponentProperties.Identifier === source2ComponentProperties.Identifier &&
                     source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass) {
                     var checkComponent = new CheckComponent(source1ComponentProperties.Name, 
                                                             source2ComponentProperties.Name, 
+                                                            source1ComponentProperties.Identifier,
                                                             source1ComponentProperties.SubComponentClass )
                     componentGroup.AddCheckComponent(checkComponent);
 
@@ -78,7 +79,9 @@ function ComponentGroup(componentClass) {
 
 function CheckComponent(sourceAName,
     sourceBName,
+    identifier,
     subComponentClass) {
+    this.Identifier = identifier;    
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
     this.SubComponentClass = subComponentClass

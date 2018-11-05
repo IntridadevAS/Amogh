@@ -1,6 +1,4 @@
-// <reference path="../hoops_web_viewer.d.ts"/>
-// <reference path="../common/Example.ts"/>
-// <reference path="../common/ModelTree.ts"/>
+
 var xCheckStudio;
 (function (xCheckStudio) 
 {
@@ -36,17 +34,10 @@ var xCheckStudio;
 				model:viewerOptions.model
                 });
 		
-	           viewer.start();		   
+	           viewer.start();	   
 			    
-				// if( _this._firstViewer)
-				// {
-				// 	_this._secondViewer = viewer;
-				// }
-				// else
-				// {
-					_this._firstViewer = viewer;
-				// }
-                
+						_this._firstViewer = viewer;
+				                
                 _this.sourceProperties=[];
 
                 _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
@@ -137,29 +128,8 @@ var xCheckStudio;
 			element = document.getElementById(isoButton);
 			element.onclick = function () {
                _this._firstViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-            };		
-				
-			//// view properties
-			//element = document.getElementById("viewProperties");
-			//element.onclick = function () 
-			//{
-            //   if( _this._selectedNodeId)
-			//   {				   
-			//	    if (_this._viewer.model.isNodeLoaded( _this._selectedNodeId)) 
-			//		{
-			//			_this._viewer.model.getNodeProperties(_this._selectedNodeId).then(function(properties){
-	        //                   var jj=0;
-			//			  })	;					
-			//		}
-			//   }
-            //};     
-            
-            // var checkButton = document.getElementById("checkButton");
-            // checkButton.onclick = function () 
-            // {
-            //     _this.readProperties(xCheckStudioInterface1._firstViewer.model.getAbsoluteRootNode());               
-            //    var jj=0;
-            // };
+            };	
+		
         };        
        
         xCheckStudioInterface.prototype._onSelection = function (selectionEvent) {
@@ -202,19 +172,11 @@ var xCheckStudio;
                        Object.keys(nodeProperties).length > 0)
                     {
                         var mainComponentClass = nodeProperties["Intrida Data/MainComponentClass"];
+                        var name = nodeProperties["Intrida Data/Name"];
                         var identifier = nodeProperties["Intrida Data/Identifier"];
                         var subComponentClass = nodeProperties["Intrida Data/SubComponentClass"];
-                       
-                        if(identifier == "XMP_622")
-                        {
-                          var jj=0;
-                        }
-                        if(_this._firstViewer.model.getNodeName(nodeId) == "905676")
-                        {
-                             var hjdf=0;
-                        }
-                        
-                        var genericPropertiesObject = new GenericProperties(identifier, mainComponentClass, subComponentClass);
+                                              
+                        var genericPropertiesObject = new GenericProperties(name, identifier, mainComponentClass, subComponentClass);
 
                         for (var key in nodeProperties) 
                         {
