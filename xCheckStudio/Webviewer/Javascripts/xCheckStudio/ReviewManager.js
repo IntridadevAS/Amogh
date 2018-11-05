@@ -98,7 +98,11 @@ function ReviewManager(checkManager) {
                         _this.RestoreBackgroundColor(_this.SelectedComponentRow);
                      }
 
-                    _this.populateDetailedReviewTable(row);                    
+                    _this.populateDetailedReviewTable(row);  
+                    
+                    xCheckStudioInterface1.highlightNode(row.cells[0].innerText);
+                    xCheckStudioInterface2.highlightNode(row.cells[0].innerText);
+
                     _this.SelectedComponentRow = row;
                 };
             };

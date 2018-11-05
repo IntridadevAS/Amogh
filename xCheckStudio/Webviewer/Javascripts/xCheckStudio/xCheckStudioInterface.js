@@ -39,6 +39,7 @@ var xCheckStudio;
 						_this._firstViewer = viewer;
 				                
                 _this.sourceProperties=[];
+                _this.componentNodeDataObject={};
 
                 _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
                 _this._bindEvents(viewer, isFirstViewer);
@@ -186,6 +187,10 @@ var xCheckStudio;
                         }        
                         
                         _this.sourceProperties.push(genericPropertiesObject);
+                        
+                        // keep track of component node data
+                        var componentNodeData = new ComponentNodeData(name, identifier, mainComponentClass, nodeId);
+                        _this.componentNodeDataObject[identifier]= componentNodeData;
                     }
                     
                     var children = _this._firstViewer.model.getNodeChildren(nodeId);
@@ -200,6 +205,21 @@ var xCheckStudio;
                   });					
                 }
            }           
+        };
+
+        xCheckStudioInterface.prototype.highlightNode = function (nodeName) {
+            var _this = this;
+
+            if(!(nodeName in _this.componentNodeDataObject))
+            {
+                return;
+            }            
+           
+            var component_data = _this.componentNodeDataObject[nodeName];
+            var nodeId = component_data.NodeId;
+            
+            _this._firstViewer.selectionManager.selectNode(nodeId);
+            _this._firstViewer.view.fitNodes([nodeId]);                       
         };
 
         return xCheckStudioInterface;
