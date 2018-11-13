@@ -77,7 +77,7 @@ var node_id = 0;
             });
 
             // viewer 1 operators            
-            var frontButton = "Front";
+            /*var frontButton = "Front";
             var backButton = "Back";
             var topButton = "Top";
             var bottomButton = "Bottom";
@@ -130,7 +130,7 @@ var node_id = 0;
             element = document.getElementById(isoButton);
             element.onclick = function () {
                 _this._firstViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-            };
+            };*/
 
         };
 

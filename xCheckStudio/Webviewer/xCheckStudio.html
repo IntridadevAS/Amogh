@@ -18,11 +18,52 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
 
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
-    <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> 
+    <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
 
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
-    <style type="text/css">           
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* The grid: Three equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 50px;
+            text-align: center;
+            font-size: 25px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .containerTab {
+            padding: 20px;
+            color: white;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Closable button inside the container tab */
+        .closebtn {
+            float: right;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+
+        }
+
         .collapsible {
             background-color: #777;
             color: white;
@@ -35,7 +76,8 @@
             font-size: 15px;
         }
 
-        .active, .collapsible:hover {
+        .active,
+        .collapsible:hover {
             background-color: #555;
         }
 
@@ -51,171 +93,177 @@
 
 <body>
 
-    <table>
-        <iframe name="formDestination" height="100px"></iframe>
-        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
-            <tr>
-                <td>
-                    <input id="dataSoures" name="dataSouresName[]" type="file" multiple />
-                </td>
-                <td>
-                    <input type="submit" value="Upload">
-                </td>
-                <td>
-                    <button onclick="loadModel()">load model</button>
-                </td>
-                <td>
-                    <button id="checkButton">Check Datasources</button>
-                </td>
 
+    <iframe name="formDestination" height="100px"></iframe>
 
-            </tr>
-        </form>
-        <tr>
+    <button id="checkButton">Check Datasources</button>
+
+    <!-- Three columns -->
+    <div class="row">
+        <div class="column" onclick="openTab('b1');" style="background:LightSalmon ;">
+            Source A
+        </div>
+        <div class="column" onclick="openTab('b2');" style="background:LightGreen ;">
+            Source B
+        </div>
+    </div>
+
+    <!-- Full-width columns: (hidden by default) -->
+    <div id="b1" class="containerTab" style="display:none;background:LightSalmon; ">
+        <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+        <h2>Source A</h2>
+        <div>
             <!-- First model tree and it's viewer -->
-            <td valign="top">
-                <div id="modelTree1" style="overflow: auto;"></div>
-            </td>
-            <td>
-                <div id="viewerContainer1" class="example-canvas-small"></div>
-            </td>
+            <table>
+                <tr>
+                    <td>
 
+                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+
+                            <input id="dataSoures1" name="dataSouresName[]" type="file" multiple />
+                            <input id="upload1" type="submit" value="Upload">
+                            <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
+                                model</button>
+                        </form>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <td valign="top">
+                        <div id="modelTree1" style="overflow: auto;"></div>
+                    </td>
+                    <td>
+                        <div id="viewerContainer1" class="example-canvas-small"></div>
+                    </td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="b2" class="containerTab" style="display:none;background:LightGreen ">
+        <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+        <h2>Source B</h2>
+        <div>
             <!-- second model tree and it's viewer -->
-            <td valign="top">
-                <div id="modelTree2" style="overflow: auto;"></div>
-            </td>
-            <td>
-                <div id="viewerContainer2" class="example-canvas-small"></div>
-            </td>
-        </tr>
+            <table>
+                <tr>
+                    <td>
+
+                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+
+                            <input id="dataSoures2" name="dataSouresName[]" type="file" multiple />
+                            <input id="upload2" type="submit" value="Upload">
+                            <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
+                                model</button>
+                        </form>
 
 
-        <tr>
-            <td> </td>
-            <td>
-                <div class="viewOrientation1">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <td valign="top">
+                        <div id="modelTree2" style="overflow: auto;"></div>
+                    </td>
+                    <td>
+                        <div id="viewerContainer2" class="example-canvas-small"></div>
+                    </td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
-
-                    <button id="Front1">Front</button>
-                    <button id="Back1">Back</button>
-                    <button id="Top1">Top</button>
-                    <button id="Bottom1">Bottom</button>
-                    <button id="Left1">Left</button>
-                    <button id="Right1">Right</button>
-                    <button id="Iso1">Iso</button>
-
-                </div>
-            </td>
-
-            <td> </td>
-            <td>
-                <div class="viewOrientation2">
-
-
-                    <button id="Front2">Front</button>
-                    <button id="Back2">Back</button>
-                    <button id="Top2">Top</button>
-                    <button id="Bottom2">Bottom</button>
-                    <button id="Left2">Left</button>
-                    <button id="Right2">Right</button>
-                    <button id="Iso2">Iso</button>
-
-                </div>
-            </td>
-        </tr>
-        <tr>
-
-        </tr>
-    </table>
 
     <table id="comparisonTable">
-    <tr>
-        <td id="mainReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
-        <td id="detailedReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
-    </tr>>    
+        <tr>
+            <td id="mainReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
+            <td id="detailedReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
+        </tr>>
     </table>
 
     <script type="text/javascript">
         var reviewManager;
-        var checkManager ;
+        var checkManager;
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
-
         var checkCaseManager;
 
-        function loadModel() {
+        function openTab(tabName) {
+            var i, x;
+            tab_name = tabName;
+            x = document.getElementsByClassName("containerTab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
 
-            let selectedFiles = document.getElementById("dataSoures").files;
+        function loadModel(dataSoures, viewerContainer, modelTreeContainer) {
+
+            let selectedFiles = document.getElementById(dataSoures).files;
             let selectedFilesCount = selectedFiles.length;
-            for (let i = 0; i < selectedFilesCount; i++) {
-                // let selectedFile = selectedFiles[i].name;
-                // let split_fileNamelength = selectedFile.replace(/^.*[\\\/]/, '').split('.').length;
-                // if (selectedFile.replace(/^.*[\\\/]/, '').split('.')[split_fileNamelength - 1] == "scs" || selectedFile.replace(/^.*[\\\/]/, '').split('.')[split_fileNamelength - 1] == "SCS") {
-                //     let split_filePath = selectedFile.split('\\');
-                //     let fileName;
-                //     if (split_filePath.length > 1) {
-                //         fileName = split_filePath[split_filePath.length - 1];
-                //     }
 
-                let fileName = selectedFiles[i].name;
-                var uri = "uploads/scs/" + fileName;
-                let Id = i + 1;
-                var container_Id = "viewerContainer" + Id;
-                var model_Tree = "modelTree" + Id;
+            let fileName = selectedFiles[0].name;
+            var uri = "uploads/scs/" + fileName;
+            var container_Id = viewerContainer.id;
+            var model_Tree = modelTreeContainer.id;
 
-                viewerOptions = "viewerOptions" + i;
-                viewerOptions = {
-                    containerId: container_Id,
-                    endpointUri: uri,
-                    modelTree: model_Tree
-                };
+            viewerOptions = {
+                containerId: container_Id,
+                endpointUri: uri,
+                modelTree: model_Tree
+            };
 
-                if (i == 0) {
-                    xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
-                    xCheckStudioInterface1.setupViewer(viewerOptions, true);
-                }
-                else if (i == 1) {
-                    xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
-                    xCheckStudioInterface2.setupViewer(viewerOptions, false);
-                }
-                else {
-                    break;
-                }
-                //}
+            if (viewerContainer.id === "viewerContainer1") {
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
+                xCheckStudioInterface1.setupViewer(viewerOptions, true);
+                document.getElementById("load1").disabled = true;
+                document.getElementById("upload1").disabled = true;
+                document.getElementById("dataSoures1").disabled = true;
+            }
+            else if (viewerContainer.id === "viewerContainer2") {
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
+                xCheckStudioInterface2.setupViewer(viewerOptions, false);
+                document.getElementById("load2").disabled = true;
+                document.getElementById("upload2").disabled = true;
+                document.getElementById("dataSoures2").disabled = true;
             }
         }
-        
+
         window.onload = function () {
-                var checkButton = document.getElementById("checkButton");
-                checkButton.onclick = function () 
-                {
-                    checkManager = new CheckManager();
-                    checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
-                    
-                    reviewManager = new ReviewManager(checkManager);
-                    reviewManager.populateReviewTables();
+            var checkButton = document.getElementById("checkButton");
+            checkButton.onclick = function () {
+                checkManager = new CheckManager();
+                checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
 
-                    // add event handler for collapsible rows
-                    var coll = document.getElementsByClassName("collapsible");
-                    var i;
+                reviewManager = new ReviewManager(checkManager);
+                reviewManager.populateReviewTables();
 
-                    for (i = 0; i < coll.length; i++) {
-                        coll[i].addEventListener("click", function () {
-                            this.classList.toggle("active");
-                            var content = this.nextElementSibling;
-                            if (content.style.display === "block") {
-                                content.style.display = "none";
-                            } else {
-                                content.style.display = "block";
-                            }
-                        });
-                    }
-                };
+                // add event handler for collapsible rows
+                var coll = document.getElementsByClassName("collapsible");
+                var i;
 
-                readXml();
-            };           
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
+                }
+            };
 
-    function readXml() {
+            readXml();
+        };
+
+        function readXml() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
@@ -227,15 +275,14 @@
             xhttp.send();
         }
 
-        function readCheckCaseData(xml) {            
+        function readCheckCaseData(xml) {
             var xmlText = xml.responseText;
 
             var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString( xmlText, "application/xml");
+            var xmlDoc = parser.parseFromString(xmlText, "application/xml");
 
             var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
-            if(checkCaseElements.length < 0)
-            {
+            if (checkCaseElements.length < 0) {
                 return;
             }
 
@@ -243,75 +290,57 @@
             checkCaseManager = new CheckCaseManager();
 
             var checkCaseElement = checkCaseElements[0];
-            
+
             // CheckCase object
             var checkCase = new CheckCase(checkCaseElement.getAttribute("name"));
 
-            for(var i = 0; i < checkCaseElement.children.length; i++)
-            {
+            for (var i = 0; i < checkCaseElement.children.length; i++) {
                 var componentGroupElement = checkCaseElement.children[i];
-                if(componentGroupElement.localName != "ComponentGroup")
-                {
+                if (componentGroupElement.localName != "ComponentGroup") {
                     continue;
                 }
 
                 // ComponentGroup object
                 var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
 
-                for (var j = 0; j < componentGroupElement.children.length; j++)
-                 {
+                for (var j = 0; j < componentGroupElement.children.length; j++) {
                     var componentElement = componentGroupElement.children[j];
                     if (componentElement.localName != "ComponentClass") {
                         continue;
                     }
 
-                      // Component object
-                      var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
+                    // Component object
+                    var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
 
-                      for (var k = 0; k < componentElement.children.length; k++) 
-                      {
+                    for (var k = 0; k < componentElement.children.length; k++) {
                         var propertyElement = componentElement.children[k];
-                        if (propertyElement.localName != "Property") 
-                        {
+                        if (propertyElement.localName != "Property") {
                             continue;
                         }
 
-                         var sourceAProperty = propertyElement.getAttribute("sourceAName");
-                         var sourceBProperty = propertyElement.getAttribute("sourceBName");                         
-                         var severity = propertyElement.getAttribute("severity");
+                        var sourceAProperty = propertyElement.getAttribute("sourceAName");
+                        var sourceBProperty = propertyElement.getAttribute("sourceBName");
+                        var severity = propertyElement.getAttribute("severity");
 
-                         // create mapping property object 
-                         var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty, sourceBProperty, severity);
-                         checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-                      }
+                        // create mapping property object 
+                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty, sourceBProperty, severity);
+                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                    }
 
-                      checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
                 }
 
                 checkCase.addComponentGroup(checkCaseComponentGroup);
             }
-
-
             checkCaseManager.addCheckCase(checkCase);
-
-            // var table = "<tr><th>Artist</th><th>Title</th></tr>";
-            // var x = xmlDoc.getElementsByTagName("CD");
-            // for (i = 0; i < x.length; i++) {
-            //     table += "<tr><td>" +
-            //         x[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue +
-            //         "</td><td>" +
-            //         x[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue +
-            //         "</td></tr>";
-            // }
-            // document.getElementById("demo").innerHTML = table;
         }
 
-    $(document).ready(function () {
-        $('[data-toggle="toggle"]').change(function () {
-            $(this).parents().next('.hide').toggle();
+        $(document).ready(function () {
+            $('[data-toggle="toggle"]').change(function () {
+                $(this).parents().next('.hide').toggle();
+            });
         });
-    });
-</script>
-    </body>
+    </script>
+</body>
 
 </html>
