@@ -5,8 +5,8 @@ function ReviewManager(checkManager) {
         //var parentTable = document.getElementById("comparisonTable");
         var parentTable = document.getElementById("mainReviewCell");
 
-        for (var componentsGroupName in this.CheckManager.ComponentsGroups) {
-            var componentsGroup = this.CheckManager.ComponentsGroups[componentsGroupName];
+        for (var componentsGroupName in this.CheckManager.CheckComponentsGroups) {
+            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];
 
             //var component = componentsGroup.Components[j];
 
@@ -70,12 +70,8 @@ function ReviewManager(checkManager) {
                 tr.appendChild(td);
 
                 td = document.createElement("td");
-                // td.innerHTML = property1.Value;;
-                tr.appendChild(td);
-
-                for (var k = 0; k < component.CheckProperties.length; k++) {
-                    var property = component.CheckProperties[j];
-                }
+                td.innerHTML = component.Status;
+                tr.appendChild(td);               
             }
 
             this.bindEvents(table);
@@ -93,6 +89,11 @@ function ReviewManager(checkManager) {
             {
                 return function () 
                 {
+                    if(_this.SelectedComponentRow === row)
+                    {
+                      return;
+                    }
+
                     if(_this.SelectedComponentRow)
                      {
                         _this.RestoreBackgroundColor(_this.SelectedComponentRow);
@@ -144,8 +145,8 @@ function ReviewManager(checkManager) {
             return;
         }
         var tableElement = tBodyElement.parentElement;       
-        for (var componentsGroupName in this.CheckManager.ComponentsGroups) {
-            var componentsGroup = this.CheckManager.ComponentsGroups[componentsGroupName];
+        for (var componentsGroupName in this.CheckManager.CheckComponentsGroups) {
+            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];
             if (componentsGroup.ComponentClass != tableElement.id) {
                 continue;
             }
@@ -224,7 +225,16 @@ function ReviewManager(checkManager) {
                         tr.appendChild(td);
 
                         td = document.createElement("td");
-                        td.innerHTML = property.Result;
+                        if(property.PerformCheck &&
+                           property.Result)
+                        {
+                           td.innerHTML = "Success";
+                        }
+                        else
+                        {
+                            td.innerHTML = property.Severity;
+                        }
+
                         tr.appendChild(td);
                     }
                       

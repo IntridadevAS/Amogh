@@ -1,7 +1,7 @@
 function CheckManager() {
     this.Name = name;
 
-    this.ComponentsGroups = {};
+    this.CheckComponentsGroups = {};
 
     CheckManager.prototype.checkDataSources = function (source1Properties, source2Properties) {
         // var source1Properties = xCheckStudioInterface1.sourceProperties;
@@ -12,16 +12,33 @@ function CheckManager() {
         for (var i = 0, source1PropertiesCollection = source1Properties; i < source1PropertiesCollection.length; i++) {
             var source1ComponentProperties = source1PropertiesCollection[i];
 
-            var componentGroup;
-            if (this.ComponentsGroups &&
-                source1ComponentProperties.MainComponentClass in this.ComponentsGroups) {
-                componentGroup = this.ComponentsGroups[source1ComponentProperties.MainComponentClass];
+            // get check case for comparison to perform
+            var checkCase = checkCaseManager.CheckCases[0];
+
+            // check if component class exists in checkcase
+            if (!checkCase.componentGroupExists(source1ComponentProperties.MainComponentClass)) {
+                continue;
+            }
+            // get check case group
+            var checkCaseGroup = checkCase.getComponentGroup(source1ComponentProperties.MainComponentClass);
+
+            // check if component exists in checkCaseGroup
+            if (!checkCaseGroup.componentClassExists(source1ComponentProperties.SubComponentClass)) {
+                continue;
+            }
+            // get check case component
+            var checkCaseComponentClass = checkCaseGroup.getComponentClass(source1ComponentProperties.SubComponentClass);
+
+            var checkComponentGroup;
+            if (this.CheckComponentsGroups &&
+                source1ComponentProperties.MainComponentClass in this.CheckComponentsGroups) {
+                checkComponentGroup = this.CheckComponentsGroups[source1ComponentProperties.MainComponentClass];
             }
             else {
-                componentGroup = new ComponentGroup(source1ComponentProperties.MainComponentClass);
-                this.ComponentsGroups[source1ComponentProperties.MainComponentClass] = componentGroup;
+                checkComponentGroup = new CheckComponentGroup(source1ComponentProperties.MainComponentClass);
+                this.CheckComponentsGroups[source1ComponentProperties.MainComponentClass] = checkComponentGroup;
             }
-            if (!componentGroup) {
+            if (!checkComponentGroup) {
                 continue;
             }
 
@@ -29,30 +46,54 @@ function CheckManager() {
                 var source2ComponentProperties = source2PropertiesCollection[j];
 
                 if (source1ComponentProperties.Identifier === source2ComponentProperties.Identifier &&
-                    source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass) {
-                    var checkComponent = new CheckComponent(source1ComponentProperties.Name, 
-                                                            source2ComponentProperties.Name, 
-                                                            source1ComponentProperties.Identifier,
-                                                            source1ComponentProperties.SubComponentClass )
-                    componentGroup.AddCheckComponent(checkComponent);
+                    source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass &&
+                    source1ComponentProperties.SubComponentClass === source2ComponentProperties.SubComponentClass) {                  
+                       
+                        var checkComponent = new CheckComponent(source1ComponentProperties.Name,
+                        source2ComponentProperties.Name,
+                        source1ComponentProperties.Identifier,
+                        source1ComponentProperties.SubComponentClass)
+                        checkComponentGroup.AddCheckComponent(checkComponent);
 
-                    for (var k = 0; k < source1ComponentProperties.properties.length; k++) {
-                        var property1 = source1ComponentProperties.properties[k];
+                    for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
+                        // get check case mapping property object
+                        var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
 
-                        for (var l = 0; l < source2ComponentProperties.properties.length; l++) {
-                            var property2 = source2ComponentProperties.properties[l];
+                        var property1Name;
+                        var property2Name;
+                        var property1Value;
+                        var property2Value;
+                        var severity;
+                        var performCheck;
+                        if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
+                            source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
+                            var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+                            var property2 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
 
-                            if (property1.Name === property2.Name) {
-                                var checkProperty = new CheckProperty(property1.Name,
-                                    property1.Value,
-                                    property2.Name,
-                                    property2.Value);
-
-
-                                checkComponent.AddCheckProperty(checkProperty);
-                            }
+                            property1Name = property1.Name;
+                            property2Name = property2.Name;
+                            property1Value = property1.Value;
+                            property2Value = property2.Value;
+                            severity = checkCaseMappingProperty.Severity;
+                            performCheck = true;
+                        }
+                        else {
+                            property1Name = checkCaseMappingProperty.SourceAName;
+                            property2Name = checkCaseMappingProperty.SourceBName;
+                            property1Value = "";
+                            property2Value = "";
+                            severity = "No Match";
+                            performCheck = false;
                         }
 
+                        var checkProperty = new CheckProperty(property1Name,
+                            property1Value,
+                            property2Name,
+                            property2Value,
+                            severity,
+                            performCheck);
+
+                        checkComponent.AddCheckProperty(checkProperty);
                     }
 
                     break;
@@ -62,17 +103,12 @@ function CheckManager() {
     }
 }
 
-// function ComponentGroups(componentClass) {
-//     this.ComponentClass = componentClass;
 
-//     this.ComponentGroups;
-// }
-
-function ComponentGroup(componentClass) {
+function CheckComponentGroup(componentClass) {
     this.ComponentClass = componentClass;
 
     this.Components = [];
-    ComponentGroup.prototype.AddCheckComponent = function (Component) {
+    CheckComponentGroup.prototype.AddCheckComponent = function (Component) {
         this.Components.push(Component);
     }
 }
@@ -81,28 +117,50 @@ function CheckComponent(sourceAName,
     sourceBName,
     identifier,
     subComponentClass) {
-    this.Identifier = identifier;    
+
+    this.Identifier = identifier;
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
     this.SubComponentClass = subComponentClass
 
-    this.Status;
+    this.Status = "Success";
     this.CheckProperties = [];
+
     CheckComponent.prototype.AddCheckProperty = function (property) {
         this.CheckProperties.push(property);
+        if (!property.Result) {
+            if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
+                this.Status = "Error";
+            }
+            else if (property.Severity.toLowerCase() === ("Warning").toLowerCase() &&
+                this.Status.toLowerCase() !== ("Error").toLowerCase()) {
+                this.Status = "Warning";
+            }
+        }
+        else if (property.Severity.toLowerCase() === ("No Match").toLowerCase() &&
+            this.Status.toLowerCase() !== ("Error").toLowerCase() &&
+            this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
+            this.Status = "No Match";
+        }
     }
 }
 
 function CheckProperty(sourceAName,
     sourceAValue,
     sourceBName,
-    sourceBValue) {
+    sourceBValue,
+    severity,
+    performCheck) {
     this.SourceAName = sourceAName;
     this.SourceAValue = sourceAValue;
     this.SourceBName = sourceBName;
     this.SourceBValue = sourceBValue;
 
     this.Result = sourceAValue === sourceBValue;
+
+    this.Severity = severity;
+
+    this.PerformCheck = performCheck;
 }
 
 
