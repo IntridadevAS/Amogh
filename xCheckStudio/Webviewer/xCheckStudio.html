@@ -135,7 +135,8 @@
     </table>
 
     <script type="text/javascript">
-      
+        var reviewManager;
+        var checkManager ;
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
         function loadModel() {
@@ -184,10 +185,10 @@
                 var checkButton = document.getElementById("checkButton");
                 checkButton.onclick = function () 
                 {
-                    var checkManager = new CheckManager();
+                    checkManager = new CheckManager();
                     checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
                     
-                    var reviewManager = new ReviewManager(checkManager);
+                    reviewManager = new ReviewManager(checkManager);
                     reviewManager.populateReviewTables();
 
                     // add event handler for collapsible rows

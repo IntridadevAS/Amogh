@@ -146,6 +146,17 @@ var xCheckStudio;
             };
             ModelTree.prototype._listItemClick = function (nodeId) {
                 this._viewer.selectPart(nodeId);
+                this._viewer.view.fitNodes([nodeId]);
+                if (this._viewer._params.containerId == "viewerContainer2") 
+                {
+                    xCheckStudioInterface1._modelTree._viewer.selectPart(nodeId);
+                    xCheckStudioInterface1._firstViewer.view.fitNodes([nodeId]);
+                }
+                else if(this._viewer._params.containerId == "viewerContainer1")
+                {
+                    xCheckStudioInterface2._modelTree._viewer.selectPart(nodeId);
+                    xCheckStudioInterface2._firstViewer.view.fitNodes([nodeId]);
+                }
             };
             return ModelTree;
         }());

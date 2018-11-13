@@ -99,9 +99,9 @@ function ReviewManager(checkManager) {
                      }
 
                     _this.populateDetailedReviewTable(row);  
-                    
-                    xCheckStudioInterface1.highlightNode(row.cells[0].innerText);
-                    xCheckStudioInterface2.highlightNode(row.cells[0].innerText);
+
+                    xCheckStudioInterface1.highlightNode(row.cells[0].innerHTML);
+                    xCheckStudioInterface2.highlightNode(row.cells[0].innerHTML);
 
                     _this.SelectedComponentRow = row;
                 };
@@ -232,5 +232,47 @@ function ReviewManager(checkManager) {
                    }                   
             }
         }        
+    }
+
+
+    ReviewManager.prototype.getTable = function(data)
+    {
+        var componentsGroupName  = data["ComponentClass"];
+        var doc = document.getElementsByClassName("collapsible");
+        for(var i =0; i< doc.length; i++)
+        {
+            if(componentsGroupName.localeCompare(doc[i].innerHTML) == 0)
+            {
+                var nextSibling = doc[i].nextSibling;
+                if(nextSibling.style.display != "block")
+                {
+                    nextSibling.style.display = "block";
+                }
+                var siblingCount = nextSibling.childElementCount;
+                for(var j=0; j < siblingCount; j++)
+                {
+                    var child = doc[i].nextSibling.children[j];
+                    var childRows = child.getElementsByTagName("tr");
+                    for(var k =0; k < childRows.length; k++)
+                    {
+                        var childRow = childRows[k];
+                        var childRowColumns = childRows[k].getElementsByTagName("td");
+                        if(childRowColumns.length > 0)
+                        {
+                            if ((childRowColumns[0].innerHTML).localeCompare(data["Id"]) == 0) {
+                                row = childRow;
+                                if (this.SelectedComponentRow) {
+                                    this.RestoreBackgroundColor(this.SelectedComponentRow);
+                                }
+                                this.ChangeBackgroundColor(row)
+                                this.populateDetailedReviewTable(row);    
+                                this.SelectedComponentRow = row;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        var temp =10;
     }
 }
