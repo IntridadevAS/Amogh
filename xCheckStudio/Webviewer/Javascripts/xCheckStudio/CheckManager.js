@@ -68,7 +68,7 @@ function CheckManager() {
                         if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
                             source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
                             var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-                            var property2 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+                            var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
 
                             property1Name = property1.Name;
                             property2Name = property2.Name;
