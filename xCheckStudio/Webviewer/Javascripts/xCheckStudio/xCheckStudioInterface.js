@@ -77,7 +77,7 @@ var node_id = 0;
             });
 
             // viewer 1 operators            
-            /*var frontButton = "Front";
+            var frontButton = "Front";
             var backButton = "Back";
             var topButton = "Top";
             var bottomButton = "Bottom";
@@ -130,7 +130,7 @@ var node_id = 0;
             element = document.getElementById(isoButton);
             element.onclick = function () {
                 _this._firstViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-            };*/
+            };
 
         };
 
@@ -150,24 +150,27 @@ var node_id = 0;
 
                     if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
                         let data = this.nodeIdVsComponentIdData[this._selectedNodeId];
-                        if(data != undefined)
+                        if(checkManager != undefined)   
                         {
-                            reviewManager.getTable(data);
-                            if (this._firstViewer._params.containerId == "viewerContainer2") {
-                                xCheckStudioInterface1.highlightNode(data["Id"]);
+                            if(data != undefined)
+                            {
+                                reviewManager.getTable(data);
+                                if (this._firstViewer._params.containerId == "viewerContainer2") {
+                                    xCheckStudioInterface1.highlightNode(data["Id"]);
+                                }
+                                else if (this._firstViewer._params.containerId == "viewerContainer1") {
+                                    xCheckStudioInterface2.highlightNode(data["Id"]);
+                                }
                             }
-                            else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                                xCheckStudioInterface2.highlightNode(data["Id"]);
-                            }
-                        }
-                        else{
-                            if (this._firstViewer._params.containerId == "viewerContainer2") {
-                                xCheckStudioInterface1.highlightNode(this._selectedNodeId);
-                            }
-                            else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                                xCheckStudioInterface2.highlightNode(this._selectedNodeId);
-                            }
-                        }                        
+                            else{
+                                if (this._firstViewer._params.containerId == "viewerContainer2") {
+                                    xCheckStudioInterface1.highlightNode(this._selectedNodeId);
+                                }
+                                else if (this._firstViewer._params.containerId == "viewerContainer1") {
+                                    xCheckStudioInterface2.highlightNode(this._selectedNodeId);
+                                }
+                            } 
+                        }                    
                     }
                 }
             }

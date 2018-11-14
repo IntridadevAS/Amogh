@@ -116,27 +116,35 @@
             <!-- First model tree and it's viewer -->
             <table>
                 <tr>
+                    <td></td>
                     <td>
-
-                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
-
-                            <input id="dataSoures1" name="dataSouresName[]" type="file" multiple />
-                            <input id="upload1" type="submit" value="Upload">
-                            <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
-                                model</button>
-                        </form>
-
-
+                            <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+                                <input id="dataSoures1" name="dataSouresName[]" type="file" multiple />
+                                <input id="upload1" type="submit" value="Upload">
+                                <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load model</button>
+                            </form>
                     </td>
                 </tr>
                 <tr>
-                    <td>
                     <td valign="top">
                         <div id="modelTree1" style="overflow: auto;"></div>
                     </td>
                     <td>
                         <div id="viewerContainer1" class="example-canvas-small"></div>
                     </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="viewOrientation2">
+                            <button id="Front1">Front</button>
+                            <button id="Back1">Back</button>
+                            <button id="Top1">Top</button>
+                            <button id="Bottom1">Bottom</button>
+                            <button id="Left1">Left</button>
+                            <button id="Right1">Right</button>
+                            <button id="Iso1">Iso</button>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -150,27 +158,36 @@
             <!-- second model tree and it's viewer -->
             <table>
                 <tr>
+                    <td></td>
                     <td>
-
-                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
-
-                            <input id="dataSoures2" name="dataSouresName[]" type="file" multiple />
-                            <input id="upload2" type="submit" value="Upload">
-                            <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
-                                model</button>
-                        </form>
-
-
+                            <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+                                <input id="dataSoures2" name="dataSouresName[]" type="file" multiple />
+                                <input id="upload2" type="submit" value="Upload">
+                                <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load model</button>
+                            </form>
                     </td>
                 </tr>
                 <tr>
-                    <td>
                     <td valign="top">
                         <div id="modelTree2" style="overflow: auto;"></div>
                     </td>
                     <td>
                         <div id="viewerContainer2" class="example-canvas-small"></div>
                     </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="viewOrientation2">
+                            <button id="Front2">Front</button>
+                            <button id="Back2">Back</button>
+                            <button id="Top2">Top</button>
+                            <button id="Bottom2">Bottom</button>
+                            <button id="Left2">Left</button>
+                            <button id="Right2">Right</button>
+                            <button id="Iso2">Iso</button>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -182,7 +199,7 @@
         <tr>
             <td id="mainReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
             <td id="detailedReviewCell" style="text-align:left;vertical-align:top;padding:0"></td>
-        </tr>>
+        </tr>
     </table>
 
     <script type="text/javascript">
