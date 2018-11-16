@@ -91,15 +91,21 @@ function ReviewManager(checkManager) {
                     var checkPropertyOwnerId = component.getCheckProperty('Intrida Data/OwnerId', 'Intrida Data/OwnerId');
 
                     td = document.createElement("td");
-                    td.innerHTML = checkPropertySource.SourceAValue;
+                    if (checkPropertySource != undefined) {
+                        td.innerHTML = checkPropertySource.SourceAValue;
+                    }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
+                    if (checkPropertyDestination != undefined) {
                     td.innerHTML = checkPropertyDestination.SourceAValue;
+                    }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
+                    if (checkPropertyOwnerId != undefined) {
                     td.innerHTML = checkPropertyOwnerId.SourceAValue;
+                    }
                     tr.appendChild(td);
                 }
             }

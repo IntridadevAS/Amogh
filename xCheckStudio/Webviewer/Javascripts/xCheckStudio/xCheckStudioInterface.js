@@ -279,8 +279,7 @@ var node_id = 0;
                 return;
             }
 
-            if (!(componentIdentifier in this.componentIdVsComponentData)) {  
-                alert("'" + componentIdentifier + "' : Component not found.")             
+            if (!(componentIdentifier in this.componentIdVsComponentData)) {                          
                 return;
             }
 
