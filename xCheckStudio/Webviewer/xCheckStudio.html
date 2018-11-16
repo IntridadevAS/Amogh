@@ -210,12 +210,11 @@
         var checkCaseManager;
 
         function openTab(tabName) {
-            var i, x;
-            tab_name = tabName;
-            x = document.getElementsByClassName("containerTab");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
+            var tabs = document.getElementsByClassName("containerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
             }
+
             document.getElementById(tabName).style.display = "block";
         }
 
@@ -238,6 +237,7 @@
             if (viewerContainer.id === "viewerContainer1") {
                 xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
                 xCheckStudioInterface1.setupViewer(viewerOptions, true);
+               
                 document.getElementById("load1").disabled = true;
                 document.getElementById("upload1").disabled = true;
                 document.getElementById("dataSoures1").disabled = true;
@@ -245,6 +245,7 @@
             else if (viewerContainer.id === "viewerContainer2") {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
                 xCheckStudioInterface2.setupViewer(viewerOptions, false);
+                
                 document.getElementById("load2").disabled = true;
                 document.getElementById("upload2").disabled = true;
                 document.getElementById("dataSoures2").disabled = true;
@@ -254,18 +255,18 @@
         window.onload = function () {
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
+                // perform property check
                 checkManager = new CheckManager();
                 checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
 
+                // populate review table 
                 reviewManager = new ReviewManager(checkManager);
                 reviewManager.populateReviewTables();
 
                 // add event handler for collapsible rows
-                var coll = document.getElementsByClassName("collapsible");
-                var i;
-
-                for (i = 0; i < coll.length; i++) {
-                    coll[i].addEventListener("click", function () {
+                var collapsibleRows = document.getElementsByClassName("collapsible");              
+                for (var i = 0; i < collapsibleRows.length; i++) {
+                    collapsibleRows[i].addEventListener("click", function () {
                         this.classList.toggle("active");
                         var content = this.nextElementSibling;
                         if (content.style.display === "block") {
@@ -277,10 +278,11 @@
                 }
             };
 
-            readXml();
+            // read check case data from xml configuration file
+            readCheckCaseXml();
         };
 
-        function readXml() {
+        function readCheckCaseXml() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {

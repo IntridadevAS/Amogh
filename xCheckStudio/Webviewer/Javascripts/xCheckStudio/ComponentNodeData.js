@@ -1,7 +1,14 @@
-function ComponentNodeData(name, id, componentClass, nodeId)
+function ComponentNodeData(name, 
+                           componentClass, 
+                           nodeId,
+                           source,
+                           destination,
+                           ownerId)
 {
-    this.Name = name;
-    this.Id = id;
+    this.Name = name;    
     this.ComponentClass = componentClass;
     this.NodeId = nodeId;
+    this.Source =source;
+    this.Destination =destination;
+    this.OwnerId =ownerId;
 }

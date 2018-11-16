@@ -1,9 +1,18 @@
-function GenericProperties(name, identifier, mainComponentClass, subComponentClass)
+function GenericProperties(name,
+                           mainComponentClass, 
+                           subComponentClass,
+                           source,
+                           destination,
+                           ownerId)
 {
     this.Name = name;
-    this.Identifier = identifier;
+  
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
+
+    this.Source = source;
+    this.Destination = destination;
+    this.OwnerId = ownerId;
 
     this.properties=[];
     GenericProperties.prototype.addProperty = function(genericProperty)
@@ -14,7 +23,7 @@ function GenericProperties(name, identifier, mainComponentClass, subComponentCla
     GenericProperties.prototype.propertyExists = function(propertyName)
     {
         for (var i = 0; i < this.properties.length; i++) {           
-            if (this.properties[i].Name === 'Intrida Data/'+propertyName) {
+            if (this.properties[i].Name === propertyName) {
                 return true;
             }
         }
@@ -24,7 +33,7 @@ function GenericProperties(name, identifier, mainComponentClass, subComponentCla
 
     GenericProperties.prototype.getProperty = function (propertyName) {
         for (var i = 0; i < this.properties.length; i++) {   
-            if (this.properties[i].Name === 'Intrida Data/'+propertyName) {
+            if (this.properties[i].Name === propertyName) {
                 return this.properties[i];
             }
         }

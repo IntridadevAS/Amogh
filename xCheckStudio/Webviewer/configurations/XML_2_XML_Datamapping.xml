@@ -51,34 +51,8 @@
 		 <Property sourceAName="Proj_Def_Field8" sourceBName="Proj_Def_Field8"  severity="Warning"/>
 		 <Property sourceAName="Proj_Def_Field6" sourceBName="Proj_Def_Field6"  severity="Warning"/>
 		 <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Warning"/> 		 
-   </ComponentClass>
-   
-      <!--  <Component id="XMP_3">		
-		       <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description1"  severity="Warning"/>
-			   <Property sourceAName="REMARKS" sourceBName="REMARKS1"  severity="Error"/>
-			   <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Error"/>
-			   <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
-			   <Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
-			   <Property sourceAName="Area" sourceBName="Area"  severity="Error"/>
-			   <Property sourceAName="Specification" sourceBName="Specification"  severity="Error"/>
-			   <Property sourceAName="Tracing_Size" sourceBName="Tracing_Size"  severity="Error"/>
-			   <Property sourceAName="Insulation_Index" sourceBName="Insulation_Index"  severity="Error"/>
-			   <Property sourceAName="Proj_Def_Field7" sourceBName="Proj_Def_Field71"  severity="Error"/>
-		 </Component>
-		 
-		<Component id="XMP_5">
-		    <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description2"  severity="Warning"/>
-			<Property sourceAName="REMARKS" sourceBName="REMARKS2"  severity="Error"/>
-			<Property sourceAName="Fluid" sourceBName="Fluid"  severity="Error"/>
-			<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
-			<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
-			<Property sourceAName="Area" sourceBName="Area"  severity="Error"/>
-			<Property sourceAName="Specification" sourceBName="Specification"  severity="Error"/>
-			<Property sourceAName="Tracing_Size" sourceBName="Tracing_Size"  severity="Error"/>
-			<Property sourceAName="Insulation_Index" sourceBName="Insulation_Index"  severity="Error"/>
-			<Property sourceAName="Proj_Def_Field7" sourceBName="Proj_Def_Field72"  severity="Error"/>
-		</Component>
-	 -->
+   </ComponentClass>  
+    
    </ComponentGroup>
    
     <ComponentGroup name="PipingNetworkSegment">
@@ -120,49 +94,11 @@
 			 <Property sourceAName="Proj_Def_Field8" sourceBName="Proj_Def_Field8"  severity="Warning"/>  
 			 <Property sourceAName="Proj_Def_Field6" sourceBName="Proj_Def_Field6"  severity="Warning"/> 
 			 
-             s<Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
+             <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
 			 <Property sourceAName="REMARKS" sourceBName="REMARKS"  severity="Warning"/>  
 			 <Property sourceAName="Main" sourceBName="Main"  severity="Warning"/> 
 
-		</ComponentClass>
-        <Component id="XMP_1049">	
-		       <Property sourceAName="BranchId" sourceBName="BranchId1"  severity="Warning"/>
-			   <Property sourceAName="Source" sourceBName="Source1"  severity="Error"/>
-			   <Property sourceAName="Destination" sourceBName="Destination"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_From" sourceBName="Connected_PDMS_Type_From"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_To" sourceBName="Connected_PDMS_Type_To"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_From" sourceBName="Connected_Handle_From"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_To" sourceBName="Connected_Handle_To"  severity="Error"/>
-			   <Property sourceAName="OwnerId" sourceBName="OwnerId"  severity="Error"/>
-			   <Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
-			   <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Error"/>
-		 </Component>
-		 
-		 <Component id="XMP_981">	
-		       <Property sourceAName="BranchId" sourceBName="BranchId2"  severity="Warning"/>
-			   <Property sourceAName="Source" sourceBName="Source2"  severity="Error"/>
-			   <Property sourceAName="Destination" sourceBName="Destination"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_From" sourceBName="Connected_PDMS_Type_From"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_To" sourceBName="Connected_PDMS_Type_To"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_From" sourceBName="Connected_Handle_From"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_To" sourceBName="Connected_Handle_To"  severity="Error"/>
-			   <Property sourceAName="OwnerId" sourceBName="OwnerId"  severity="Error"/>
-			   <Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
-			   <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Error"/>
-		 </Component>
-		 
-		 <Component id="XMP_971">	
-		       <Property sourceAName="BranchId" sourceBName="BranchId3"  severity="Warning"/>
-			   <Property sourceAName="Source" sourceBName="Source3"  severity="Error"/>
-			   <Property sourceAName="Destination" sourceBName="Destination"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_From" sourceBName="Connected_PDMS_Type_From"  severity="Error"/>
-			   <Property sourceAName="Connected_PDMS_Type_To" sourceBName="Connected_PDMS_Type_To"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_From" sourceBName="Connected_Handle_From"  severity="Error"/>
-			   <Property sourceAName="Connected_Handle_To" sourceBName="Connected_Handle_To"  severity="Error"/>
-			   <Property sourceAName="OwnerId" sourceBName="OwnerId"  severity="Error"/>
-			   <Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
-			   <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Error"/>
-		 </Component>
+		</ComponentClass>       
 	</ComponentGroup>
 	
 	<ComponentGroup name="Equipment">
@@ -542,34 +478,8 @@
                <Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
                <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
                <Property sourceAName="Trim_1" sourceBName="Trim_1"  severity="Error"/>
-		</ComponentClass>
+		</ComponentClass>	
 		
-		<!-- <Component id="XMP_75">	
-		       <Property sourceAName="Block" sourceBName="Block1"  severity="Warning"/>
-			   <Property sourceAName="TagBlock" sourceBName="TagBlock1"  severity="Error"/>
-			   <Property sourceAName="Function" sourceBName="Function1"  severity="Error"/>
-			   <Property sourceAName="TagFunction" sourceBName="TagFunction1"  severity="Error"/>
-			   <Property sourceAName="Prefix" sourceBName="Prefix1"  severity="Error"/>
-			   <Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
-			   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
-			   <Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
-			   <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
-			   <Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
-		</Component>
-		
-		<Component id="XMP_225">	
-		       <Property sourceAName="Block" sourceBName="Block1"  severity="Warning"/>
-			   <Property sourceAName="TagBlock" sourceBName="TagBlock1"  severity="Error"/>
-			   <Property sourceAName="Function" sourceBName="TagBlock1"  severity="Error"/>
-			   <Property sourceAName="TagFunction" sourceBName="TagFunction1"  severity="Error"/>
-			   <Property sourceAName="Prefix" sourceBName="Prefix1"  severity="Error"/>
-			   <Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
-			   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
-			   <Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
-			   <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
-			   <Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
-		</Component>
-		-->
 	</ComponentGroup>
 	
 	<ComponentGroup name="PipeConnectorSymbol">

@@ -45,13 +45,38 @@ function CheckManager() {
             for (var j = 0, source2PropertiesCollection = source2Properties; j < source2PropertiesCollection.length; j++) {
                 var source2ComponentProperties = source2PropertiesCollection[j];
 
-                if (source1ComponentProperties.Identifier === source2ComponentProperties.Identifier &&
+                if (source1ComponentProperties.Name === source2ComponentProperties.Name &&
                     source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass &&
                     source1ComponentProperties.SubComponentClass === source2ComponentProperties.SubComponentClass) {                  
                        
+                        // if component is PipingNetworkSegment, check if source and destination properties are same
+                        // because they may have same tag names
+                        if( source1ComponentProperties.MainComponentClass ==="PipingNetworkSegment")
+                        {
+                          var source1Source =  source1ComponentProperties.getProperty('Intrida Data/Source' );
+                          var source1Destination =  source1ComponentProperties.getProperty('Intrida Data/Destination' );
+                          var source1OwnerId =  source1ComponentProperties.getProperty('Intrida Data/OwnerId' );
+                          var source2Source =  source2ComponentProperties.getProperty('Intrida Data/Source');
+                          var source2Destination =  source2ComponentProperties.getProperty('Intrida Data/Destination');
+                          var source2OwnerId =  source2ComponentProperties.getProperty('Intrida Data/OwnerId');
+
+                          if(source1Source === undefined ||
+                            source1Destination === undefined ||
+                            source2Source === undefined ||
+                            source2Destination === undefined ||
+                            source1OwnerId === undefined ||
+                            source2OwnerId === undefined ||
+                            source1Source.Value !== source2Source.Value || 
+                            source1Destination.Value !==  source2Destination.Value ||
+                            source1OwnerId.Value !== source2OwnerId.Value)
+                           {
+                               continue;
+                           }
+                        }
+
                         var checkComponent = new CheckComponent(source1ComponentProperties.Name,
                         source2ComponentProperties.Name,
-                        source1ComponentProperties.Identifier,
+                        /*source1ComponentProperties.Identifier,*/
                         source1ComponentProperties.SubComponentClass)
                         checkComponentGroup.AddCheckComponent(checkComponent);
 
@@ -65,10 +90,10 @@ function CheckManager() {
                         var property2Value;
                         var severity;
                         var performCheck;
-                        if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
-                            source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
-                            var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-                            var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+                        if (source1ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceAName) &&
+                            source2ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceBName)) {
+                            var property1 = source1ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceAName);
+                            var property2 = source2ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceBName);
 
                             property1Name = property1.Name;
                             property2Name = property2.Name;
@@ -115,10 +140,10 @@ function CheckComponentGroup(componentClass) {
 
 function CheckComponent(sourceAName,
     sourceBName,
-    identifier,
+   /* identifier,*/
     subComponentClass) {
 
-    this.Identifier = identifier;
+    //this.Identifier = identifier;
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
     this.SubComponentClass = subComponentClass
@@ -142,6 +167,17 @@ function CheckComponent(sourceAName,
             this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
             this.Status = "No Match";
         }
+    }
+
+    CheckComponent.prototype.getCheckProperty = function (sourceAPropertyName, sourceBPropertyName) {
+        for (var i = 0; i < this.CheckProperties.length; i++) {   
+            if (this.CheckProperties[i].SourceAName === sourceAPropertyName &&
+                this.CheckProperties[i].SourceBName === sourceBPropertyName) {
+                return this.CheckProperties[i];
+            }
+        }
+      
+        return undefined;
     }
 }
 

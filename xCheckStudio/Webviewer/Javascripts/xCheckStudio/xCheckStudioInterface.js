@@ -3,27 +3,16 @@ var xCheckStudio;
 var node_id = 0;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
+        
         function xCheckStudioInterface() {
             this._selectedNodeId = null;
-        }
-        //xCheckStudioInterface.prototype.start = function (viewerOptions) {
-        //    var _this = this;
-        //    xCheckStudio.createViewer(viewerOptions).then(function (viewer) {
-        //        _this._viewer = viewer;
-        //        _this._modelTree = new xCheckStudio.Ui.ModelTree("modelTree", _this._viewer);
-        //        _this._bindEvents();
-        //        _this._viewer.start();
-        //		
-        //		  var backgroundTopColor = xCheckStudio.Util.hexToRgb("#D1BDBD");
-        //		  var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
-        //		  
-        //		 _this._viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
-        //    });
-        //};
+            this._selectedComponentId = null;
+        }       
 
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
             var _this = this;
 
+            // create and start viewer
             var viewer = new Communicator.WebViewer({
                 containerId: viewerOptions.containerId, //"myContainer",
                 //endpointUri: "uploads/scs/"+file_name+".scs"
@@ -36,18 +25,26 @@ var node_id = 0;
             _this._firstViewer = viewer;
 
             _this.sourceProperties = [];
-            _this.componentIdVsNodeIdData = {};
-            _this.nodeIdVsComponentIdData = {};
+            _this.componentIdVsComponentData = {};
+            _this.nodeIdVsComponentData = {};
 
+            // construct model tree
             _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
+
+            // register viewer evenets
             _this._bindEvents(viewer, isFirstViewer);
 
+            // set viewer's background color
+            _this.setViewerBackgroundColor();            
+        }
+
+        xCheckStudioInterface.prototype.setViewerBackgroundColor = function ()
+        {
             var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
             var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
 
-            viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
+            this._firstViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
         }
-
 
         xCheckStudioInterface.prototype._bindEvents = function (viewer, isFirstViewer) {
 
@@ -59,9 +56,7 @@ var node_id = 0;
 
                     _this._modelTree.viewNode(viewer.model.getAbsoluteRootNode());
 
-                    _this.readProperties(viewer.model.getAbsoluteRootNode());
-                    //_this._modelTree.setNodesVisible(_this._viewer.model.getAbsoluteRootNode(), false);
-                    //_this._viewer.SelectionManager.setNodeSelectionColor(Color.red());
+                    _this.readProperties(viewer.model.getAbsoluteRootNode());                  
                 },
                 selectionArray: function (selections) {
                     for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
@@ -76,7 +71,15 @@ var node_id = 0;
                 }
             });
 
-            // viewer 1 operators            
+             // viewer operators            
+             _this.registerViewerOperators(isFirstViewer);     
+        };
+
+        xCheckStudioInterface.prototype.registerViewerOperators = function (isFirstViewer) {
+           
+            var _this = this;
+
+            // viewer operators            
             var frontButton = "Front";
             var backButton = "Back";
             var topButton = "Top";
@@ -132,7 +135,7 @@ var node_id = 0;
                 _this._firstViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
             };
 
-        };
+        }
 
         xCheckStudioInterface.prototype._onSelection = function (selectionEvent) {
             var selection = selectionEvent.getSelection();
@@ -149,27 +152,40 @@ var node_id = 0;
                     }
 
                     if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
-                        let data = this.nodeIdVsComponentIdData[this._selectedNodeId];
+                        let data = this.nodeIdVsComponentData[this._selectedNodeId];
                         if(checkManager != undefined)   
                         {
                             if(data != undefined)
                             {
-                                reviewManager.getTable(data);
+                                 // get component identifier
+                                 var componentIdentifier = data["Name"];
+                                 if(data.ComponentClass === "PipingNetworkSegment")
+                                 {
+                                     componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                                 }
+                                 if(this._selectedComponentId ===  componentIdentifier)
+                                 {
+                                     return;
+                                 }
+
+                                // highlight corresponding component in review table 
+                                reviewManager.HighlightReviewComponent(data);                               
+                               
                                 if (this._firstViewer._params.containerId == "viewerContainer2") {
-                                    xCheckStudioInterface1.highlightNode(data["Id"]);
+                                    xCheckStudioInterface1.highlightComponent(componentIdentifier );
                                 }
                                 else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                                    xCheckStudioInterface2.highlightNode(data["Id"]);
+                                    xCheckStudioInterface2.highlightComponent(componentIdentifier);
                                 }
                             }
-                            else{
-                                if (this._firstViewer._params.containerId == "viewerContainer2") {
-                                    xCheckStudioInterface1.highlightNode(this._selectedNodeId);
-                                }
-                                else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                                    xCheckStudioInterface2.highlightNode(this._selectedNodeId);
-                                }
-                            } 
+                            // else{
+                            //     if (this._firstViewer._params.containerId == "viewerContainer2") {
+                            //         xCheckStudioInterface1.highlightNode(this._selectedNodeId);
+                            //     }
+                            //     else if (this._firstViewer._params.containerId == "viewerContainer1") {
+                            //         xCheckStudioInterface2.highlightNode(this._selectedNodeId);
+                            //     }
+                            //} 
                         }                    
                     }
                 }
@@ -190,23 +206,58 @@ var node_id = 0;
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0) {
                             var mainComponentClass = nodeProperties["Intrida Data/MainComponentClass"];
-                            var name = nodeProperties["Intrida Data/Name"];
-                            var identifier = nodeProperties["Intrida Data/Identifier"];
+                            var name = nodeProperties["Intrida Data/Name"];                           
                             var subComponentClass = nodeProperties["Intrida Data/SubComponentClass"];
 
-                            var genericPropertiesObject = new GenericProperties(name, identifier, mainComponentClass, subComponentClass);
+                            // check if source, destination and ownerid properties exists to uniquely identify
+                            // PipingNetworkSegment
+                            var source;
+                            var destination;
+                            var ownerId;
+                            if("Intrida Data/Source" in nodeProperties &&
+                               "Intrida Data/Destination" in nodeProperties &&
+                               "Intrida Data/OwnerId" in nodeProperties)
+                            {
+                                source= nodeProperties["Intrida Data/Source"];
+                                destination = nodeProperties["Intrida Data/Destination"];                           
+                                ownerId  = nodeProperties["Intrida Data/OwnerId"];
+                            }
 
-                            for (var key in nodeProperties) {
-                                //console.log(key, nodeProperties[key]);
+                            // create generic properties object
+                            var genericPropertiesObject = new GenericProperties(name,
+                                                                                mainComponentClass, 
+                                                                                subComponentClass,
+                                                                                source,
+                                                                                destination,
+                                                                                ownerId);
+
+                            // iterate node properties and add to generic properties object
+                            for (var key in nodeProperties) {                                
                                 var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
                                 genericPropertiesObject.addProperty(genericPropertyObject);
                             }
 
+                            // add genericProperties object to sourceproperties collection
                             _this.sourceProperties.push(genericPropertiesObject);
 
-                            var componentNodeData = new ComponentNodeData(name, identifier, mainComponentClass, nodeId);
-                            _this.componentIdVsNodeIdData[identifier] = componentNodeData;
-                            _this.nodeIdVsComponentIdData[nodeId] = componentNodeData;
+                            // keep track of component vs node id
+                            var componentIdentifier = name
+
+                            var componentNodeData = new ComponentNodeData(name, 
+                                                                          mainComponentClass, 
+                                                                          nodeId,
+                                                                          source,
+                                                                          destination,
+                                                                          ownerId);
+                            if(source !== undefined &&
+                               destination !== undefined &&
+                               ownerId !== undefined)
+                               {
+                                componentIdentifier = name+"_"+source+"_"+destination+"_"+ownerId;
+                               }
+
+                            _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                            _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                         }
 
                         var children = _this._firstViewer.model.getNodeChildren(nodeId);
@@ -221,20 +272,31 @@ var node_id = 0;
             }
         };
 
-        xCheckStudioInterface.prototype.highlightNode = function (nodeName) {
-            var _this = this;
+        xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {
 
-            if (!(nodeName in _this.componentIdVsNodeIdData)) {
-                _this._firstViewer.selectionManager.selectNode(nodeName);
-                _this._firstViewer.view.fitNodes([nodeName]);
+            if(componentIdentifier === this._selectedComponentId)
+            {
                 return;
             }
 
-            var component_data = _this.componentIdVsNodeIdData[nodeName];
+            if (!(componentIdentifier in this.componentIdVsComponentData)) {  
+                alert("'" + componentIdentifier + "' : Component not found.")             
+                return;
+            }
+
+            this._selectedComponentId =  componentIdentifier;
+
+            var component_data = this.componentIdVsComponentData[componentIdentifier];
             var nodeId = component_data.NodeId;
 
-            _this._firstViewer.selectionManager.selectNode(nodeId);
-            _this._firstViewer.view.fitNodes([nodeId]);
+            this.highlightNode(nodeId);                        
+        };
+
+        xCheckStudioInterface.prototype.highlightNode = function (nodeId) { 
+            this._firstViewer.selectionManager.selectNode(nodeId);
+            this._firstViewer.view.fitNodes([nodeId]);
+
+            this._selectedNodeId = nodeId;
         };
 
         return xCheckStudioInterface;

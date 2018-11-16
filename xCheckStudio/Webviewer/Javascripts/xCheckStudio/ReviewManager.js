@@ -31,9 +31,9 @@ function ReviewManager(checkManager) {
             var tr = document.createElement("tr");
             thead.appendChild(tr);
 
-            var th = document.createElement("th");
-            th.innerHTML = "ID"
-            tr.appendChild(th);
+            // var th = document.createElement("th");
+            // th.innerHTML = "ID"
+            // tr.appendChild(th);
 
             th = document.createElement("th");
             th.innerHTML = "Source A"
@@ -47,6 +47,22 @@ function ReviewManager(checkManager) {
             th.innerHTML = "Status"
             tr.appendChild(th);
 
+            // if component groupd is PipingNetworkSegment, create two hidden columns at end for Source and destination
+            if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+
+                th = document.createElement("th");
+                th.innerHTML = "Source"
+                tr.appendChild(th);
+
+                th = document.createElement("th");
+                th.innerHTML = "Destination"
+                tr.appendChild(th);
+
+                th = document.createElement("th");
+                th.innerHTML = "OwnerId"
+                tr.appendChild(th);
+            }
+
             var tbody = document.createElement("tbody");
             tbody.className = "hide";
             table.appendChild(tbody);
@@ -58,10 +74,6 @@ function ReviewManager(checkManager) {
                 tbody.appendChild(tr);
 
                 td = document.createElement("td");
-                td.innerHTML = component.Identifier;
-                tr.appendChild(td);
-
-                td = document.createElement("td");
                 td.innerHTML = component.SourceAName;
                 tr.appendChild(td);
 
@@ -71,7 +83,25 @@ function ReviewManager(checkManager) {
 
                 td = document.createElement("td");
                 td.innerHTML = component.Status;
-                tr.appendChild(td);               
+                tr.appendChild(td);
+
+                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                    var checkPropertySource = component.getCheckProperty('Intrida Data/Source', 'Intrida Data/Source');
+                    var checkPropertyDestination = component.getCheckProperty('Intrida Data/Destination', 'Intrida Data/Destination');
+                    var checkPropertyOwnerId = component.getCheckProperty('Intrida Data/OwnerId', 'Intrida Data/OwnerId');
+
+                    td = document.createElement("td");
+                    td.innerHTML = checkPropertySource.SourceAValue;
+                    tr.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = checkPropertyDestination.SourceAValue;
+                    tr.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = checkPropertyOwnerId.SourceAValue;
+                    tr.appendChild(td);
+                }
             }
 
             this.bindEvents(table);
@@ -85,24 +115,26 @@ function ReviewManager(checkManager) {
         var rows = table.getElementsByTagName("tr");
         for (i = 0; i < rows.length; i++) {
             var currentRow = table.rows[i];
-            var createClickHandler = function (row) 
-            {
-                return function () 
-                {
-                    if(_this.SelectedComponentRow === row)
-                    {
-                      return;
+            var createClickHandler = function (row) {
+                return function () {
+                    if (_this.SelectedComponentRow === row) {
+                        return;
                     }
 
-                    if(_this.SelectedComponentRow)
-                     {
+                    if (_this.SelectedComponentRow) {
                         _this.RestoreBackgroundColor(_this.SelectedComponentRow);
-                     }
+                    }
 
-                    _this.populateDetailedReviewTable(row);  
+                    _this.populateDetailedReviewTable(row);
 
-                    xCheckStudioInterface1.highlightNode(row.cells[0].innerHTML);
-                    xCheckStudioInterface2.highlightNode(row.cells[0].innerHTML);
+                    var reviewTableId = _this.getReviewTableId(row);
+
+                    var componentIdentifier = row.cells[0].innerHTML;
+                    if (reviewTableId === "PipingNetworkSegment") {
+                        componentIdentifier += "_" + row.cells[3].innerHTML + "_" + row.cells[4].innerHTML + "_" + row.cells[5].innerHTML;
+                    }
+                    xCheckStudioInterface1.highlightComponent(componentIdentifier);
+                    xCheckStudioInterface2.highlightComponent(componentIdentifier);
 
                     _this.SelectedComponentRow = row;
                 };
@@ -120,13 +152,12 @@ function ReviewManager(checkManager) {
             // row mouse out event
             var createMouseOutHandler = function (row) {
                 return function () {
-                    if(_this.SelectedComponentRow !== row)
-                     {
-                         _this.RestoreBackgroundColor(row);
-                     }
+                    if (_this.SelectedComponentRow !== row) {
+                        _this.RestoreBackgroundColor(row);
+                    }
                 };
-            };            
-            currentRow.onmouseout = createMouseOutHandler(currentRow);           
+            };
+            currentRow.onmouseout = createMouseOutHandler(currentRow);
         }
     }
 
@@ -138,37 +169,61 @@ function ReviewManager(checkManager) {
         row.style.backgroundColor = "#ffffff";
     }
 
-    ReviewManager.prototype.populateDetailedReviewTable = function (row) {      
+    ReviewManager.prototype.getReviewTableId = function (row) {
         var tBodyElement = row.parentElement;
-        if(!tBodyElement)
-        {
+        if (!tBodyElement) {
             return;
         }
-        var tableElement = tBodyElement.parentElement;       
+        var tableElement = tBodyElement.parentElement;
+
+        return tableElement.id;
+    }
+
+    ReviewManager.prototype.populateDetailedReviewTable = function (row) {
+
+        var reviewTableId = this.getReviewTableId(row);
+
         for (var componentsGroupName in this.CheckManager.CheckComponentsGroups) {
+
+            // get the componentgroupd corresponding to selected component 
             var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];
-            if (componentsGroup.ComponentClass != tableElement.id) {
+            if (componentsGroup.ComponentClass != reviewTableId) {
                 continue;
             }
+
             for (var i = 0; i < componentsGroup.Components.length; i++) {
                 var component = componentsGroup.Components[i];
-                var idCell = row.getElementsByTagName("td")[0];
 
-                // var sourceACell = row.getElementsByTagName("td")[0];
-                // var sourceBCell = row.getElementsByTagName("td")[1];
+                var source1NameCell = row.getElementsByTagName("td")[0];
+                var source2NameCell = row.getElementsByTagName("td")[1];
 
-                if(component.Identifier == idCell.innerHTML /*&&
-                   component.SourceBName == sourceBCell.innerHTML*/ )
-                   {
+                if (component.SourceAName == source1NameCell.innerHTML &&
+                    component.SourceBName == source2NameCell.innerHTML) {
+                    // if component is PipingNetworkSegment, check if source and destination properties are same
+                    // because they may have same tag names
+                    if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                        var checkPropertySource = component.getCheckProperty('Intrida Data/Source', 'Intrida Data/Source');
+                        var checkPropertyDestination = component.getCheckProperty('Intrida Data/Destination', 'Intrida Data/Destination');
+                        var checkPropertyOwnerId = component.getCheckProperty('Intrida Data/OwnerId', 'Intrida Data/OwnerId');
+
+                        if (checkPropertySource != undefined &&
+                            checkPropertyDestination != undefined &&
+                            checkPropertyOwnerId != undefined) {
+                            if (checkPropertySource.SourceAValue !== row.getElementsByTagName("td")[3].innerHTML ||
+                                checkPropertyDestination.SourceAValue !== row.getElementsByTagName("td")[4].innerHTML ||
+                                checkPropertyOwnerId.SourceAValue !== row.getElementsByTagName("td")[5].innerHTML) {
+                                continue;
+                            }
+                        }
+                    }
+
                     var parentTable = document.getElementById("detailedReviewCell");
                     parentTable.innerHTML = '';
 
                     var div = document.createElement("DIV");
-                    //div.className = "content";
                     parentTable.appendChild(div);
 
                     var table = document.createElement("TABLE");
-                    table.id = component.Identifier;
                     div.appendChild(table);
 
                     // thead
@@ -198,11 +253,10 @@ function ReviewManager(checkManager) {
                     th.innerHTML = "Status"
                     tr.appendChild(th);
 
-                    var tbody = document.createElement("tbody");            
+                    var tbody = document.createElement("tbody");
                     table.appendChild(tbody);
 
-                    for (var j = 0; j < component.CheckProperties.length; j++) 
-                    {
+                    for (var j = 0; j < component.CheckProperties.length; j++) {
                         var property = component.CheckProperties[j];
 
                         tr = document.createElement("tr");
@@ -225,64 +279,68 @@ function ReviewManager(checkManager) {
                         tr.appendChild(td);
 
                         td = document.createElement("td");
-                        if(property.PerformCheck &&
-                           property.Result)
-                        {
-                           td.innerHTML = "Success";
+                        if (property.PerformCheck &&
+                            property.Result) {
+                            td.innerHTML = "Success";
                         }
-                        else
-                        {
+                        else {
                             td.innerHTML = property.Severity;
                         }
 
                         tr.appendChild(td);
                     }
-                      
+
                     break;
-                   }                   
+                }
             }
-        }        
+        }
     }
 
 
-    ReviewManager.prototype.getTable = function(data)
-    {
-        var componentsGroupName  = data["ComponentClass"];
+    ReviewManager.prototype.HighlightReviewComponent = function (data) {
+        var componentsGroupName = data["ComponentClass"];
         var doc = document.getElementsByClassName("collapsible");
-        for(var i =0; i< doc.length; i++)
-        {
-            if(componentsGroupName.localeCompare(doc[i].innerHTML) == 0)
-            {
+        for (var i = 0; i < doc.length; i++) {
+            if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
                 var nextSibling = doc[i].nextSibling;
-                if(nextSibling.style.display != "block")
-                {
+                if (nextSibling.style.display != "block") {
                     nextSibling.style.display = "block";
                 }
                 var siblingCount = nextSibling.childElementCount;
-                for(var j=0; j < siblingCount; j++)
-                {
+                for (var j = 0; j < siblingCount; j++) {
                     var child = doc[i].nextSibling.children[j];
                     var childRows = child.getElementsByTagName("tr");
-                    for(var k =0; k < childRows.length; k++)
-                    {
+                    for (var k = 0; k < childRows.length; k++) {
                         var childRow = childRows[k];
                         var childRowColumns = childRows[k].getElementsByTagName("td");
-                        if(childRowColumns.length > 0)
-                        {
-                            if ((childRowColumns[0].innerHTML).localeCompare(data["Id"]) == 0) {
-                                row = childRow;
+                        if (childRowColumns.length > 0) {
+                            if (childRowColumns[0].innerHTML === componentIdentifier) {
+
+                                if (data.ComponentClass === "PipingNetworkSegment") {
+                                    if (childRowColumns.length < 6) {
+                                        continue;
+                                    }
+
+                                    if (data.Source !== childRowColumns[3].innerHTML ||
+                                        data.Destination !== childRowColumns[4].innerHTML ||
+                                        data.OwnerId !== childRowColumns[5].OwnerId) {
+                                        continue;
+                                    }
+                                }
+
+
                                 if (this.SelectedComponentRow) {
                                     this.RestoreBackgroundColor(this.SelectedComponentRow);
                                 }
-                                this.ChangeBackgroundColor(row)
-                                this.populateDetailedReviewTable(row);    
-                                this.SelectedComponentRow = row;
+
+                                this.ChangeBackgroundColor(childRow)
+                                this.populateDetailedReviewTable(childRow);
+                                this.SelectedComponentRow = childRow;
                             }
                         }
                     }
                 }
             }
         }
-        var temp =10;
     }
 }
