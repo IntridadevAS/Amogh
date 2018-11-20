@@ -1,14 +1,11 @@
 function ReviewManager(checkManager) {
     this.CheckManager = checkManager;
     this.SelectedComponentRow;
-    ReviewManager.prototype.populateReviewTables = function () {
-        //var parentTable = document.getElementById("comparisonTable");
+    ReviewManager.prototype.populateReviewTables = function () {       
         var parentTable = document.getElementById("mainReviewCell");
 
         for (var componentsGroupName in this.CheckManager.CheckComponentsGroups) {
-            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];
-
-            //var component = componentsGroup.Components[j];
+            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];            
 
             var btn = document.createElement("BUTTON");       // Create a <button> element
             btn.className = "collapsible";
@@ -29,11 +26,7 @@ function ReviewManager(checkManager) {
             table.appendChild(thead);
 
             var tr = document.createElement("tr");
-            thead.appendChild(tr);
-
-            // var th = document.createElement("th");
-            // th.innerHTML = "ID"
-            // tr.appendChild(th);
+            thead.appendChild(tr);          
 
             th = document.createElement("th");
             th.innerHTML = "Source A"
@@ -84,6 +77,9 @@ function ReviewManager(checkManager) {
                 td = document.createElement("td");
                 td.innerHTML = component.Status;
                 tr.appendChild(td);
+               
+                 // construct component identifier 
+                var componentIdentifier = component.SourceAName;
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     var checkPropertySource = component.getCheckProperty('Intrida Data/Source', 'Intrida Data/Source');
@@ -93,21 +89,31 @@ function ReviewManager(checkManager) {
                     td = document.createElement("td");
                     if (checkPropertySource != undefined) {
                         td.innerHTML = checkPropertySource.SourceAValue;
+
+                        componentIdentifier += "_" +checkPropertySource.SourceAValue;
                     }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
                     if (checkPropertyDestination != undefined) {
                     td.innerHTML = checkPropertyDestination.SourceAValue;
+
+                    componentIdentifier += "_" +checkPropertyDestination.SourceAValue;
                     }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
                     if (checkPropertyOwnerId != undefined) {
                     td.innerHTML = checkPropertyOwnerId.SourceAValue;
+
+                    componentIdentifier += "_" +checkPropertyOwnerId.SourceAValue;
                     }
-                    tr.appendChild(td);
-                }
+                    tr.appendChild(td); 
+            }
+
+             // highlight component with corresponding color after check performed            
+             xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, component.Status);
+             xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, component.Status);
             }
 
             this.bindEvents(table);

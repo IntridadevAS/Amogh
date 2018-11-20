@@ -6,7 +6,7 @@ var node_id = 0;
         
         function xCheckStudioInterface() {
             this._selectedNodeId = null;
-            this._selectedComponentId = null;
+            this._selectedComponentId = null;            
         }       
 
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
@@ -24,12 +24,13 @@ var node_id = 0;
 
             _this._firstViewer = viewer;
 
-            _this.sourceProperties = [];
-            _this.componentIdVsComponentData = {};
-            _this.nodeIdVsComponentData = {};
-
+            _this.sourceProperties = [];          
+           
             // construct model tree
             _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
+
+            // create highlight manager
+            _this.highlightManager = new HighlightManager(viewer);
 
             // register viewer evenets
             _this._bindEvents(viewer, isFirstViewer);
@@ -152,7 +153,7 @@ var node_id = 0;
                     }
 
                     if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
-                        let data = this.nodeIdVsComponentData[this._selectedNodeId];
+                        let data = this.highlightManager.nodeIdVsComponentData[this._selectedNodeId];
                         if(checkManager != undefined)   
                         {
                             if(data != undefined)
@@ -177,15 +178,7 @@ var node_id = 0;
                                 else if (this._firstViewer._params.containerId == "viewerContainer1") {
                                     xCheckStudioInterface2.highlightComponent(componentIdentifier);
                                 }
-                            }
-                            // else{
-                            //     if (this._firstViewer._params.containerId == "viewerContainer2") {
-                            //         xCheckStudioInterface1.highlightNode(this._selectedNodeId);
-                            //     }
-                            //     else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                            //         xCheckStudioInterface2.highlightNode(this._selectedNodeId);
-                            //     }
-                            //} 
+                            }            
                         }                    
                     }
                 }
@@ -256,8 +249,8 @@ var node_id = 0;
                                 componentIdentifier = name+"_"+source+"_"+destination+"_"+ownerId;
                                }
 
-                            _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                            _this.nodeIdVsComponentData[nodeId] = componentNodeData;
+                            _this.highlightManager.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                            _this.highlightManager.nodeIdVsComponentData[nodeId] = componentNodeData;
                         }
 
                         var children = _this._firstViewer.model.getNodeChildren(nodeId);
@@ -270,34 +263,22 @@ var node_id = 0;
                     });
                 }
             }
-        };
+        };      
 
-        xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {
+        xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {           
+            var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
 
-            if(componentIdentifier === this._selectedComponentId)
+            if(nodeId === undefined)
             {
                 return;
             }
 
-            if (!(componentIdentifier in this.componentIdVsComponentData)) {                          
-                return;
-            }
-
-            this._selectedComponentId =  componentIdentifier;
-
-            var component_data = this.componentIdVsComponentData[componentIdentifier];
-            var nodeId = component_data.NodeId;
-
-            this.highlightNode(nodeId);                        
-        };
-
-        xCheckStudioInterface.prototype.highlightNode = function (nodeId) { 
-            this._firstViewer.selectionManager.selectNode(nodeId);
-            this._firstViewer.view.fitNodes([nodeId]);
+            this.highlightManager.highlightNodeInViewer(nodeId);  
 
             this._selectedNodeId = nodeId;
         };
 
+      
         return xCheckStudioInterface;
     }());
     xCheckStudio.xCheckStudioInterface = xCheckStudioInterface;
