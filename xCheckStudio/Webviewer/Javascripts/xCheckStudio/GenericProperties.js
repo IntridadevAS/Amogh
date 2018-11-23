@@ -47,7 +47,8 @@ function GenericProperties(name,
 
 function GenericProperty(name, format, value)
 {
-    this.Name = name;
+    this.Name = name.replace('Intrida Data/','');
+    //this.Name = name;
     this.Format = format;
     this.Value = value;
 }

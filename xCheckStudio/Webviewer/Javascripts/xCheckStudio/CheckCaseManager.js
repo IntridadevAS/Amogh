@@ -77,8 +77,8 @@ function CheckCaseComponentClass(className) {
 
     CheckCaseComponentClass.prototype.propertyExists = function (sourceApropertyName, sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {           
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName.replace('Intrida Data/','') &&
-                this.MappingProperties[i].SourceBName === sourceBpropertyName.replace('Intrida Data/','')) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
+                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
                 return true;
             }
         }
@@ -88,7 +88,7 @@ function CheckCaseComponentClass(className) {
 
     CheckCaseComponentClass.prototype.sourceAPropertyExists = function (sourceApropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {           
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName.replace('Intrida Data/','')) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName) {
                 return true;
             }
         }
@@ -98,7 +98,7 @@ function CheckCaseComponentClass(className) {
 
     CheckCaseComponentClass.prototype.sourceBPropertyExists = function (sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {           
-            if (this.MappingProperties[i].SourceBName === sourceBpropertyName.replace('Intrida Data/','')) {
+            if (this.MappingProperties[i].SourceBName === sourceBpropertyName) {
                 return true;
             }
         }
@@ -108,8 +108,8 @@ function CheckCaseComponentClass(className) {
 
     CheckCaseComponentClass.prototype.getProperty = function (sourceApropertyName, sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName.replace('Intrida Data/','') &&
-                this.MappingProperties[i].SourceBName === sourceBpropertyName.replace('Intrida Data/','')) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
+                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
                 return this.MappingProperties[i];
             }
         }

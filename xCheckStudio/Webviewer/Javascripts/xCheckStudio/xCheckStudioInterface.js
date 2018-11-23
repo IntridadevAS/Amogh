@@ -250,6 +250,10 @@ var xCheckStudio;
                                 ownerId,
                                 nodeId);
 
+                            // add component class as generic property
+                            var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
+                            genericPropertiesObject.addProperty(componentClassPropertyObject);
+
                             // iterate node properties and add to generic properties object
                             for (var key in nodeProperties) {
                                 var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);

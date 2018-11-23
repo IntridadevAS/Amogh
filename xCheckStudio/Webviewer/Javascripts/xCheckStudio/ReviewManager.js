@@ -82,9 +82,9 @@ function ReviewManager(checkManager) {
                 var componentIdentifier = component.SourceAName;
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                    var checkPropertySource = component.getCheckProperty('Intrida Data/Source', 'Intrida Data/Source');
-                    var checkPropertyDestination = component.getCheckProperty('Intrida Data/Destination', 'Intrida Data/Destination');
-                    var checkPropertyOwnerId = component.getCheckProperty('Intrida Data/OwnerId', 'Intrida Data/OwnerId');
+                    var checkPropertySource = component.getCheckProperty('Source', 'Source');
+                    var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination');
+                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId');
 
                     td = document.createElement("td");
                     if (checkPropertySource != undefined) {
@@ -242,9 +242,9 @@ function ReviewManager(checkManager) {
                     // if component is PipingNetworkSegment, check if source and destination properties are same
                     // because they may have same tag names
                     if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                        var checkPropertySource = component.getCheckProperty('Intrida Data/Source', 'Intrida Data/Source');
-                        var checkPropertyDestination = component.getCheckProperty('Intrida Data/Destination', 'Intrida Data/Destination');
-                        var checkPropertyOwnerId = component.getCheckProperty('Intrida Data/OwnerId', 'Intrida Data/OwnerId');
+                        var checkPropertySource = component.getCheckProperty('Source', 'Source');
+                        var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination');
+                        var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId');
 
                         if (checkPropertySource != undefined &&
                             checkPropertyDestination != undefined &&
@@ -296,42 +296,54 @@ function ReviewManager(checkManager) {
                     var tbody = document.createElement("tbody");
                     table.appendChild(tbody);
 
-                    for (var j = 0; j < component.CheckProperties.length; j++) {
-                        var property = component.CheckProperties[j];
+                    // show component class name as property in detailed review table 
+                    var property = new CheckProperty("ComponentClass",
+                                                    component.SubComponentClass,
+                                                    "ComponentClass",
+                                                    component.SubComponentClass,
+                                                    "",
+                                                    true,
+                                                    "");
+                    tr = this.addPropertyRowToDetailedTable(property);
+                    tbody.appendChild(tr);
 
-                        tr = document.createElement("tr");
+                    for (var j = 0; j < component.CheckProperties.length; j++) {
+                        property = component.CheckProperties[j];
+
+                        //tr = document.createElement("tr");
+                        tr = this.addPropertyRowToDetailedTable(property);
                         tbody.appendChild(tr);
 
-                        td = document.createElement("td");
-                        td.innerHTML = property.SourceAName;
-                        tr.appendChild(td);
+                        // td = document.createElement("td");
+                        // td.innerHTML = property.SourceAName;
+                        // tr.appendChild(td);
 
-                        td = document.createElement("td");
-                        td.innerHTML = property.SourceAValue;
-                        tr.appendChild(td);
+                        // td = document.createElement("td");
+                        // td.innerHTML = property.SourceAValue;
+                        // tr.appendChild(td);
 
-                        td = document.createElement("td");
-                        td.innerHTML = property.SourceBName;
-                        tr.appendChild(td);
+                        // td = document.createElement("td");
+                        // td.innerHTML = property.SourceBName;
+                        // tr.appendChild(td);
 
-                        td = document.createElement("td");
-                        td.innerHTML = property.SourceBValue;
-                        tr.appendChild(td);
+                        // td = document.createElement("td");
+                        // td.innerHTML = property.SourceBValue;
+                        // tr.appendChild(td);
 
-                        td = document.createElement("td");
-                        if (property.PerformCheck &&
-                            property.Result) {
-                            td.innerHTML = "OK";
-                        }
-                        else
-                        {
-                            td.innerHTML = property.Severity;
-                        }
+                        // td = document.createElement("td");
+                        // if (property.PerformCheck &&
+                        //     property.Result) {
+                        //     td.innerHTML = "OK";
+                        // }
+                        // else
+                        // {
+                        //     td.innerHTML = property.Severity;
+                        // }
 
-                        tr.appendChild(td);
+                        // tr.appendChild(td);
 
-                        // set row's background color according to status
-                        tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML);
+                        // // set row's background color according to status
+                        // tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML);
                     }
 
                     break;
@@ -339,7 +351,44 @@ function ReviewManager(checkManager) {
             }
         }
     }
+    
+    ReviewManager.prototype.addPropertyRowToDetailedTable = function (property)
+    {
+        var tr = document.createElement("tr");
+        //tbody.appendChild(tr);
 
+        var td = document.createElement("td");
+        td.innerHTML = property.SourceAName;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerHTML = property.SourceAValue;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerHTML =  property.SourceBName;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerHTML = property.SourceBValue;;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        if (property.PerformCheck &&
+            property.Result) {
+            td.innerHTML = "OK";
+        }
+        else
+        {
+            td.innerHTML = property.Severity;
+        }
+        tr.appendChild(td);
+
+        // set row's background color according to status
+        tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML); 
+        
+        return tr;
+    }
 
     ReviewManager.prototype.HighlightReviewComponent = function (data) {
         var componentsGroupName = data["MainComponentClass"];

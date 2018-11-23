@@ -51,12 +51,12 @@ function CheckManager() {
                     // if component is PipingNetworkSegment, check if source and destination properties are same
                     // because they may have same tag names
                     if (source1ComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-                        var source1Source = source1ComponentProperties.getProperty('Intrida Data/Source');
-                        var source1Destination = source1ComponentProperties.getProperty('Intrida Data/Destination');
-                        var source1OwnerId = source1ComponentProperties.getProperty('Intrida Data/OwnerId');
-                        var source2Source = source2ComponentProperties.getProperty('Intrida Data/Source');
-                        var source2Destination = source2ComponentProperties.getProperty('Intrida Data/Destination');
-                        var source2OwnerId = source2ComponentProperties.getProperty('Intrida Data/OwnerId');
+                        var source1Source = source1ComponentProperties.getProperty('Source');
+                        var source1Destination = source1ComponentProperties.getProperty('Destination');
+                        var source1OwnerId = source1ComponentProperties.getProperty('OwnerId');
+                        var source2Source = source2ComponentProperties.getProperty('Source');
+                        var source2Destination = source2ComponentProperties.getProperty('Destination');
+                        var source2OwnerId = source2ComponentProperties.getProperty('OwnerId');
 
                         if (source1Source === undefined ||
                             source1Destination === undefined ||
@@ -90,11 +90,11 @@ function CheckManager() {
                         var performCheck;
                         var description;
 
-                        if (source1ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceAName) &&
-                            source2ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceBName)) {
+                        if (source1ComponentProperties.propertyExists( checkCaseMappingProperty.SourceAName) &&
+                            source2ComponentProperties.propertyExists( checkCaseMappingProperty.SourceBName)) {
 
-                            var property1 = source1ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceAName);
-                            var property2 = source2ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceBName);
+                            var property1 = source1ComponentProperties.getProperty( checkCaseMappingProperty.SourceAName);
+                            var property2 = source2ComponentProperties.getProperty( checkCaseMappingProperty.SourceBName);
 
                             property1Name = property1.Name;
                             property2Name = property2.Name;
@@ -160,9 +160,9 @@ function CheckManager() {
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source1ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceAName))
+                    if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName))
                     {
-                        var property1 = source1ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceAName);
+                        var property1 = source1ComponentProperties.getProperty( checkCaseMappingProperty.SourceAName);
                         property1Name = property1.Name;                        
                         property1Value = property1.Value;
 
@@ -231,13 +231,13 @@ function CheckManager() {
                     // because they may have same tag names
                     if (source2ComponentProperties.MainComponentClass === "PipingNetworkSegment") {
                        
-                        var source2Source = source2ComponentProperties.getProperty('Intrida Data/Source');
-                        var source2Destination = source2ComponentProperties.getProperty('Intrida Data/Destination');
-                        var source2OwnerId = source2ComponentProperties.getProperty('Intrida Data/OwnerId');
+                        var source2Source = source2ComponentProperties.getProperty('Source');
+                        var source2Destination = source2ComponentProperties.getProperty('Destination');
+                        var source2OwnerId = source2ComponentProperties.getProperty('OwnerId');
 
-                        var source1Source = source1ComponentProperties.getProperty('Intrida Data/Source');
-                        var source1Destination = source1ComponentProperties.getProperty('Intrida Data/Destination');
-                        var source1OwnerId = source1ComponentProperties.getProperty('Intrida Data/OwnerId');
+                        var source1Source = source1ComponentProperties.getProperty('Source');
+                        var source1Destination = source1ComponentProperties.getProperty('Destination');
+                        var source1OwnerId = source1ComponentProperties.getProperty('OwnerId');
                       
                         if (source1Source === undefined ||
                             source1Destination === undefined ||
@@ -266,8 +266,8 @@ function CheckManager() {
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source2ComponentProperties.propertyExists('Intrida Data/' + checkCaseMappingProperty.SourceAName)) {
-                        var property2 = source2ComponentProperties.getProperty('Intrida Data/' + checkCaseMappingProperty.SourceAName);
+                    if (source2ComponentProperties.propertyExists( checkCaseMappingProperty.SourceAName)) {
+                        var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
                         property2Name = property2.Name;
                         property2Value = property2.Value;
 
