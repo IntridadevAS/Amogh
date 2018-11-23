@@ -1,4 +1,4 @@
-<CheckCase name="XML_2_XML">
+<CheckCase name="XML_2_XML" complianceCheck="false">
 
    <ComponentGroup name="Drawing">
         <!--<Component id="905676">
@@ -26,7 +26,7 @@
    <ComponentGroup name="PipingNetworkSystem" >
    
    <ComponentClass name="PipingSystem">
-         <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description11"  severity="Warning"/>  
+         <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
 		 <Property sourceAName="REMARKS" sourceBName="REMARKS"  severity="Warning"/>  
 		 <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Warning"/>
          <Property sourceAName="Number" sourceBName="Number"  severity="Warning"/>

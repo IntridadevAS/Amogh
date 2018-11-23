@@ -310,19 +310,20 @@ function CheckComponent(sourceAName,
     this.SourceBName = sourceBName;
     this.SubComponentClass = subComponentClass
 
-    this.Status = "Success";
+    this.Status = "OK";
     this.CheckProperties = [];
 
     CheckComponent.prototype.AddCheckProperty = function (property) {
         this.CheckProperties.push(property);
 
         if (!property.PerformCheck) {
-            if (property.Severity.toLowerCase() === ("No Value").toLowerCase() &&
-                this.Status.toLowerCase() !== ("Error").toLowerCase() &&
-                this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
-                this.Status = "No Value";
-            }
-            else if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
+            // if (property.Severity.toLowerCase() === ("No Value").toLowerCase() &&
+            //     this.Status.toLowerCase() !== ("Error").toLowerCase() &&
+            //     this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
+            //     this.Status = "No Value";
+            // }
+            // else
+             if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
                 this.Status = "Error";
             }
         }

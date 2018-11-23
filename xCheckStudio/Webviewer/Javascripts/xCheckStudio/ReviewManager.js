@@ -112,8 +112,8 @@ function ReviewManager(checkManager) {
             }
 
              // highlight component with corresponding color after check performed            
-             xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, component.Status);
-             xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, component.Status);
+             xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+             xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
             }
 
             this.bindEvents(table);
@@ -177,8 +177,34 @@ function ReviewManager(checkManager) {
         row.style.backgroundColor = "#9999ff";
     }
 
-    ReviewManager.prototype.RestoreBackgroundColor = function (row) {
-        row.style.backgroundColor = "#ffffff";
+    ReviewManager.prototype.RestoreBackgroundColor = function (row) {        
+        row.style.backgroundColor =this.getComponentRowHighlightColor(row.cells[2].innerHTML);
+    }
+    
+    ReviewManager.prototype.getComponentRowHighlightColor = function (status)
+    {
+        var color;
+        if (status.toLowerCase() === ("OK").toLowerCase()) {
+            color = SuccessColor;
+        }
+        else if (status.toLowerCase() === ("Error").toLowerCase()) {
+            color = ErrorColor;
+        }
+        else if (status.toLowerCase() === ("Warning").toLowerCase()) {
+            color = WarningColor;
+        }
+        else if (status.toLowerCase() === ("No Match").toLowerCase()) {
+            color = NoMatchColor;
+        }
+        else if (status.toLowerCase() === ("No Value").toLowerCase()) {
+            color = NoValueColor;
+        }
+        else 
+        {
+            color = "#ffffff";
+        }
+
+       return xCheckStudio.Util.rgbToHex(color.r, color.g, color.b); 
     }
 
     ReviewManager.prototype.getReviewTableId = function (row) {
@@ -293,9 +319,10 @@ function ReviewManager(checkManager) {
                         td = document.createElement("td");
                         if (property.PerformCheck &&
                             property.Result) {
-                            td.innerHTML = "Success";
+                            td.innerHTML = "OK";
                         }
-                        else {
+                        else
+                        {
                             td.innerHTML = property.Severity;
                         }
 

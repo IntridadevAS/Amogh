@@ -1,12 +1,12 @@
+var SuccessColor = Communicator.Color.green();
+var ErrorColor = Communicator.Color.red();
+var WarningColor = Communicator.Color.yellow();
+var NoMatchColor = Communicator.Color.blue();
+var NoValueColor = Communicator.Color.white();
+
 function HighlightManager(viewer) {
-
-    this.Viewer = viewer;
-
-    this.SuccessColor = Communicator.Color.green();
-    this.ErrorColor = Communicator.Color.red();
-    this.WarningColor = Communicator.Color.yellow();
-    this.NoMatchColor = Communicator.Color.blue();
-    this.NoValueColor = Communicator.Color.white();
+    
+    this.Viewer = viewer;  
    
     this.componentIdVsComponentData = {};
     this.nodeIdVsComponentData = {};
@@ -29,7 +29,9 @@ function HighlightManager(viewer) {
         return nodeId;
     }
 
-    HighlightManager.prototype.changeComponentColor = function (componentIdentifier, status) {
+    HighlightManager.prototype.changeComponentColor = function (componentIdentifier,
+                                                                componentRow, 
+                                                                status) {
 
         var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
         if (nodeId === undefined) {
@@ -37,20 +39,20 @@ function HighlightManager(viewer) {
         }
 
         var color;
-        if (status.toLowerCase() === ("Success").toLowerCase()) {
-            color = this.SuccessColor;
+        if (status.toLowerCase() === ("OK").toLowerCase()) {
+            color = SuccessColor;
         }
         else if (status.toLowerCase() === ("Error").toLowerCase()) {
-            color = this.ErrorColor;
+            color = ErrorColor;
         }
         else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-            color = this.WarningColor;
+            color = WarningColor;
         }
         else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-            color = this.NoMatchColor;
+            color = NoMatchColor;
         }
         else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-            color = this.NoValueColor;
+            color = NoValueColor;
         }
         else {
             return;
@@ -59,6 +61,9 @@ function HighlightManager(viewer) {
         // set nodes face and line colors
         this.Viewer.model.setNodesFaceColor([nodeId], color);
         this.Viewer.model.setNodesLineColor([nodeId], color);
+
+        // set the component row color in main review table
+        componentRow.style.backgroundColor =  xCheckStudio.Util.rgbToHex(color.r, color.g, color.b);        
     }
 
     HighlightManager.prototype.highlightNodeInViewer = function (nodeId) {
