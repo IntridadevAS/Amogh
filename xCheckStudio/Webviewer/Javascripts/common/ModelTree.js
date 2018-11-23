@@ -6,39 +6,82 @@ var xCheckStudio;
     (function (Ui) {
         var ModelTree = /** @class */ (function () {
             function ModelTree(elementId, viewer) {
-                this._size = new Communicator.Point2(250, 570);
+                this._size = new Communicator.Point2(768, 570);
                 this._elementId = elementId;
                 this._viewer = viewer;
+
+                this.NodeGroups = [];
+
                 this._createElements();
+
                 this._initEvents();
             }
             ModelTree.prototype._createElements = function () {
                 var _this = this;
+
+                // get container element Id 
                 var containerElement = document.getElementById(this._elementId);
-                containerElement.style.width = this._size.x + "px";
-                containerElement.style.height = this._size.y + "px";
-                var heading = document.createElement("div");
-                heading.classList.add("xCheckStudio-div-block");
-                heading.innerHTML = "Model Tree:";
-                containerElement.appendChild(heading);
-                var navBox = document.createElement("div");
-                navBox.classList.add("xCheckStudio-div-block");
-                containerElement.appendChild(navBox);
-                this._treeSelect = document.createElement("select");
-                this._treeSelect.onchange = function () {
-                    _this._onTreeSelectChange();
-                };
-                navBox.appendChild(this._treeSelect);
-                this._childrenElement = document.createElement("ul");
-                this._childrenElement.style.listStyleType = "none";
-                this._childrenElement.style.fontSize = "12px";
-                containerElement.appendChild(this._childrenElement);
+
+                // create div element to hold model browser 
+                var tableDiv = document.createElement("div");
+                tableDiv.className = "scrollable";
+                tableDiv.style.width = this._size.x + "px";
+                tableDiv.style.height = this._size.y + "px";
+                containerElement.appendChild(tableDiv);
+
+                // create model browser table
+                _this.ModelBrowserTable = document.createElement("Table");
+                _this.ModelBrowserTable.style.width = this._size.x + "px";
+                tableDiv.appendChild(_this.ModelBrowserTable);
+
+                //create header for table
+                tableHeading = document.createElement("tr");
+                tableHeading.style.backgroundColor = "#3498db";
+
+                var td = document.createElement("td");
+                td.innerHTML = "Component";
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "MainComponentClass";
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "SubComponentClass";
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "Source"
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "Destination"
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "OwnerId"
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
+                td.innerHTML = "NodeId "
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                this.ModelBrowserTable.appendChild(tableHeading);
+
             };
+
             ModelTree.prototype._initEvents = function () {
                 var _this = this;
                 this._viewer.setCallbacks({
                     assemblyTreeReady: function () {
-                        _this.viewNode(_this._viewer.model.getAbsoluteRootNode());
+                        // _this.viewNode(_this._viewer.model.getAbsoluteRootNode());
                     },
                     selectionArray: function (selectionEvents) {
                         for (var _i = 0, selectionEvents_1 = selectionEvents; _i < selectionEvents_1.length; _i++) {
@@ -48,120 +91,448 @@ var xCheckStudio;
                                 var nodeId = selection.getNodeId();
                                 var model = _this._viewer.model;
                                 if (model.isNodeLoaded(nodeId)) {
-                                    _this.viewNode(nodeId);
+                                    //_this.viewNode(nodeId);
                                 }
                             }
                         }
                     }
                 });
             };
-            ModelTree.prototype._onTreeSelectChange = function () {
-                // get selected tree element
-                var selectedId = null;
-                var currentChild = this._treeSelect.firstChild;
-                while (currentChild) {
-                    if (currentChild.selected) {
-                        selectedId = parseInt(currentChild.value, 10);
-                        break;
+
+
+            ModelTree.prototype.revisedRandId = function () {
+                return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+            }
+
+            ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) {
+                var model = this._viewer.model;
+                var componentName = model.getNodeName(nodeId);
+
+                var row = document.createElement("tr");
+                row.style.backgroundColor = "#ffffff";
+                if (styleList !== undefined) {
+                    row.classList = styleList;
+                }
+                this.ModelBrowserTable.appendChild(row);
+
+                //add node properties to model browser table
+                var nodeData;
+                if (this._viewer._params.containerId === "viewerContainer1") {
+                    nodeData = xCheckStudioInterface1.highlightManager.nodeIdVsComponentData[nodeId];
+                }
+                else if (this._viewer._params.containerId === "viewerContainer2") {
+                    nodeData = xCheckStudioInterface2.highlightManager.nodeIdVsComponentData[nodeId];
+                }
+
+                var td = document.createElement("td");
+
+                if (nodeData != undefined) {
+
+                    td.innerHTML = componentName;
+                    td.style.fontSize = "12px";
+                    var isAssemblyNodeType = this.isAssemblyNode(nodeId);
+                    if (isAssemblyNodeType) {
+
+                        td.className = componentStyleClass;
                     }
-                    currentChild = currentChild.nextSibling;
-                }
-                this.viewNode(selectedId);
-            };
-            ModelTree.prototype.viewNode = function (nodeId) {
-                if (nodeId !== null) {
-                    var model = this._viewer.model;
-                    var children = model.getNodeChildren(nodeId);
-                    if (children.length > 0) {
-                        this._clearElements();
-                        this._fillSelect(nodeId);
-                        this._treeSelect.value = nodeId.toString();
-                        this._fillChildren(nodeId);
-                    }
-                    else {
-                        this.viewNode(model.getNodeParent(nodeId));
-                    }
-                }
-            };
-            ModelTree.prototype.clearContent = function () {
-                this._clearElements();
-            };
-            ModelTree.prototype._clearElements = function () {
-                while (this._treeSelect.firstChild) {
-                    this._treeSelect.removeChild(this._treeSelect.firstChild);
-                }
-                while (this._childrenElement.firstChild) {
-                    this._childrenElement.removeChild(this._childrenElement.firstChild);
-                }
-            };
-            ModelTree.prototype._fillSelect = function (nodeId) {
-                var parent = this._viewer.model.getNodeParent(nodeId);
-                if (parent === null) {
-                    this._addSelectNode(nodeId, 0);
-                    return 0;
+
+                    td.style.cursor = "pointer";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.Source != undefined ? nodeData.Source : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.Destination != undefined ? nodeData.Destination : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.OwnerId != undefined ? nodeData.OwnerId : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
                 }
                 else {
-                    var level = this._fillSelect(parent) + 1;
-                    this._addSelectNode(nodeId, level);
-                    return level;
-                }
-            };
-            ModelTree.prototype._addSelectNode = function (nodeId, level) {
-                var name = "";
-                for (var i = 0; i < level; i++) {
-                    name += '.';
-                }
-                var option = document.createElement("option");
-                option.value = nodeId.toString();
-                option.text = name + this._viewer.model.getNodeName(nodeId);
-                this._treeSelect.appendChild(option);
-            };
-            ModelTree.prototype._fillChildren = function (nodeId) {
-                var children = this._viewer.model.getNodeChildren(nodeId);
-                for (var _i = 0, children_1 = children; _i < children_1.length; _i++) {
-                    var child = children_1[_i];
-                    if (this._viewer.model.getNodeType(child) == Communicator.NodeType.AssemblyNode ||
-                        this._viewer.model.getNodeType(child) == Communicator.NodeType.PartInstance ||
-                        this._viewer.model.getNodeType(child) == Communicator.NodeType.Part) {
-                        this._addChildRow(child);
 
+                    td.innerHTML = componentName;
+                    td.style.fontSize = "12px";
+                    var isAssemblyNodeType = this.isAssemblyNode(nodeId);
+                    if (isAssemblyNodeType) {
+
+                        td.className = componentStyleClass;
+                    }
+                    td.style.cursor = "pointer";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = "";
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = ""
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = ""
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = ""
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = ""
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+
+                    td = document.createElement("td");
+                    td.innerHTML = ""
+                    td.style.fontSize = "12px";
+                    row.appendChild(td);
+                }
+
+
+
+                if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
+                    this.NodeGroups.push(componentStyleClass);
+                }
+
+                // click event for each row
+                var _this = this;
+                row.onclick = function () {
+
+                    if (_this.SelectedComponentRow === this) {
+                        return;
+                    }
+
+                    if (_this.SelectedComponentRow) {
+                        _this.RestoreBackgroundColor(_this.SelectedComponentRow);
+                    }
+
+                    _this.BrowserItemClick(nodeId, this);
+                    _this.SelectedComponentRow = this;
+
+                    if (checkManager != undefined) {
+                        componentIdentifier = this.children[0].innerText.trim();
+                        if (this.children[1].innerHTML === "PipingNetworkSegment") {
+                            componentIdentifier += "_" + this.children[3].innerHTML + "_" + this.children[4].innerHTML + "_" + this.children[5].innerHTML;
+                        }
+                        //to select component row in other viewer
+                        _this.selectComponentRow(component_name);
+                    }
+                };
+
+                // row mouse hover event
+                var createMouseHoverHandler = function (currentRow) {
+                    return function () {
+                        _this.ChangeBackgroundColor(currentRow);
+                    };
+                };
+                row.onmouseover = createMouseHoverHandler(row);
+
+                // row mouse out event
+                var createMouseOutHandler = function (currentRow) {
+                    return function () {
+                        if (_this.SelectedComponentRow !== currentRow) {
+                            _this.RestoreBackgroundColor(currentRow);
+                        }
+                    };
+                };
+                row.onmouseout = createMouseOutHandler(row);
+            }
+
+
+            ModelTree.prototype.selectComponentRow = function (componentIdentifier) {
+                if (this._viewer._params.containerId == "viewerContainer2") {
+                    children = xCheckStudioInterface1._modelTree.ModelBrowserTable.children;
+                    for (var i = 0; i < children.length; i++) {
+                        var child = children[i];
+                        if (child.childElementCount > 0) {
+                            childCell = child.children[0];
+                            childComponentIdentifier = childCell.textContent;
+                            if (child.children[1].innerHTML === "PipingNetworkSegment") {
+                                childComponentIdentifier += "_" + child.children[3].innerHTML + "_" + child.children[4].innerHTML + "_" + child.children[5].innerHTML
+                            }
+                            if (childComponentIdentifier === componentIdentifier) {
+                                if (xCheckStudioInterface1._modelTree.SelectedComponentRow !== undefined) {
+                                    this.RestoreBackgroundColor(xCheckStudioInterface1._modelTree.SelectedComponentRow);
+                                }
+
+                                xCheckStudioInterface1._modelTree.SelectedComponentRow = child;
+                                xCheckStudioInterface1._modelTree.SelectedComponentRow.style.backgroundColor = "#9999ff";
+                            }
+                        }
+                    }
+                }
+                else if (this._viewer._params.containerId == "viewerContainer1") {
+                    children = xCheckStudioInterface2._modelTree.ModelBrowserTable.children;
+                    for (var i = 0; i < children.length; i++) {
+                        var child = children[i];
+                        if (child.childElementCount > 0) {
+                            childCell = child.children[0];
+                            childComponentIdentifier = childCell.textContent;
+                            if (child.children[1].innerHTML === "PipingNetworkSegment") {
+                                childComponentIdentifier += "_" + child.children[3].innerHTML + "_" + child.children[4].innerHTML + "_" + child.children[5].innerHTML
+                            }
+                            if (childComponentIdentifier === componentIdentifier) {
+                                if (xCheckStudioInterface2._modelTree.SelectedComponentRow !== undefined) {
+                                    this.RestoreBackgroundColor(xCheckStudioInterface2._modelTree.SelectedComponentRow);
+                                }
+
+                                xCheckStudioInterface2._modelTree.SelectedComponentRow = child;
+                                xCheckStudioInterface2._modelTree.SelectedComponentRow.style.backgroundColor = "#9999ff";
+                            }
+                        }
                     }
                 }
             };
-            ModelTree.prototype._addChildRow = function (nodeId) {
-                var _this = this;
-                var listItem = document.createElement("li");
-                listItem.innerHTML = this._viewer.model.getNodeName(nodeId) || "unnamed";
-                listItem.dataset["partId"] = nodeId.toString();
-                listItem.style.cursor = "pointer";
-                listItem.style.padding = "2px";
-                var selection = this._viewer.selectionManager.getLast();
-                if (selection && nodeId === selection.getNodeId()) {
-                    listItem.style.fontWeight = "bold";
-                }
-                listItem.onclick = function () {
-                    _this._listItemClick(nodeId);
-                };
-                this._childrenElement.appendChild(listItem);
-            };
-            ModelTree.prototype._listItemClick = function (nodeId) {
+
+
+            ModelTree.prototype.BrowserItemClick = function (nodeId, thisRow) {
+
                 this._viewer.selectPart(nodeId);
                 this._viewer.view.fitNodes([nodeId]);
-                if(checkManager != undefined)
-                {
-                    if (this._viewer._params.containerId == "viewerContainer2") 
-                    {
+                if (checkManager != undefined) {
+                    if (this._viewer._params.containerId == "viewerContainer2") {
                         xCheckStudioInterface1._modelTree._viewer.selectPart(nodeId);
                         xCheckStudioInterface1._firstViewer.view.fitNodes([nodeId]);
                     }
-                    else if(this._viewer._params.containerId == "viewerContainer1")
-                    {
+                    else if (this._viewer._params.containerId == "viewerContainer1") {
                         xCheckStudioInterface2._modelTree._viewer.selectPart(nodeId);
                         xCheckStudioInterface2._firstViewer.view.fitNodes([nodeId]);
                     }
                 }
-                
+
             };
+
+            ModelTree.prototype.ChangeBackgroundColor = function (row) {
+                row.style.backgroundColor = "#9999ff";
+            }
+
+            ModelTree.prototype.RestoreBackgroundColor = function (row) {
+                row.style.backgroundColor = "#ffffff";
+            }
+
+            ModelTree.prototype.getComponentstyleClass = function (componentName) {
+                var componentStyleClass = componentName.replace(" ", "");
+                componentStyleClass = componentStyleClass.replace(":", "");
+                if (this._viewer._params.containerId === "viewerContainer2") {
+                    componentStyleClass += "-viewer2";
+                }
+                else if (this._viewer._params.containerId === "viewerContainer1") {
+                    componentStyleClass += "-viewer1";
+                }
+                while (this.NodeGroups.includes(componentStyleClass)) {
+                    componentStyleClass += "-" + this.revisedRandId();
+                }
+                return componentStyleClass;
+            }
+
+            ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
+                if (nodeId !== null) {
+                    var model = this._viewer.model;
+                    var children = model.getNodeChildren(nodeId);
+
+                    if (children.length > 0) {
+                        var componentName = model.getNodeName(nodeId);
+
+                        var componentStyleClass = this.getComponentstyleClass(componentName);
+
+                        this.addComponentRow(nodeId, styleList, componentStyleClass);
+
+                        for (var _i = 0, children_1 = children; _i < children_1.length; _i++) {
+                            var child = children_1[_i];
+
+                            var collapsibleCellStyle;
+                            if (styleList !== undefined) {
+                                collapsibleCellStyle = styleList + " " + componentStyleClass;
+                            }
+                            else {
+                                collapsibleCellStyle = componentStyleClass;
+                            }
+                            this.addModelBrowserComponent(child, collapsibleCellStyle);
+                        }
+                    }
+                }
+
+            };
+
+            ModelTree.prototype.isAssemblyNode = function (nodeId) {
+                var nodeType = this._viewer.model.getNodeType(nodeId);
+                if (nodeType == Communicator.NodeType.AssemblyNode) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            };
+
+            //to create collapsible table rows in model browser
+            //https://jsfiddle.net/y4Mdy/1372/
+            ModelTree.prototype.CreateGroup = function (group_name) {
+                var _this = this;
+                // Create Button(Image)
+                $('td.' + group_name).prepend("<img class='" + group_name + " button_closed'> ");
+                // Add Padding to Data
+                $('tr.' + group_name).each(function () {
+                    var first_td = $(this).children('td').first();
+                    var padding_left = parseInt($(first_td).css('padding-left'));
+                    $(first_td).css('padding-left', String(padding_left + 15) + 'px');
+                });
+                this.RestoreGroup(group_name);
+
+                // Tie toggle function to the button
+                $('img.' + group_name).click(function () {
+                    _this.ToggleGroup(group_name);
+                });
+            }
+
+            //to create collapsible table rows in model browser
+            //https://jsfiddle.net/y4Mdy/1372/
+            ModelTree.prototype.ToggleGroup = function (group_name) {
+                this.ToggleButton($('img.' + group_name));
+                this.RestoreGroup(group_name);
+                if (this._viewer._params.containerId === "viewerContainer1") {
+                    var groupName = group_name.split("");
+                    var length = groupName.length;
+                    var temp = "";
+                    for (var i = 0; i < length; i++) {
+                        if (i < length - 1) {
+                            temp += groupName[i];
+                        }
+                        else if (i == length - 1) {
+                            temp += "2";
+                        }
+                    }
+                }
+                else if (this._viewer._params.containerId === "viewerContaine2") {
+                    var groupName = group_name.split("");
+                    var length = groupName.length;
+                    var temp = "";
+                    for (var i = 0; i < length; i++) {
+                        if (i < length - 1) {
+                            temp += groupName[i];
+                        }
+                        else if (i == length - 1) {
+                            temp += "1";
+                        }
+                    }
+                    xCheckStudioInterface1._modelTree.ToggleButton($('img.' + temp));
+                    xCheckStudioInterface1._modelTree.RestoreGroup(temp);
+                }
+            }
+
+            ModelTree.prototype.OpenGroup = function (group_name, child_groupName) {
+                var _this = this;
+                if ($('img.' + group_name).hasClass('button_open')) {
+                    // Open everything
+                    $('tr.' + group_name).show();
+
+                    // Close subgroups that been closed
+                    $('tr.' + group_name).find('img.button_closed').each(function () {
+                        if (sub_group_name != child_groupName) {
+                            sub_group_name = $(this).attr('class').split(/\s+/)[0];
+                            //console.log(sub_group_name);
+                            _this.RestoreGroup(sub_group_name);
+                        }
+                    });
+                }
+
+                if ($('img.' + group_name).hasClass('button_closed')) {
+                    // Close everything
+                    $('tr.' + group_name).hide();
+                }
+            }
+
+            //to create collapsible table rows in model browser
+            //https://jsfiddle.net/y4Mdy/1372/
+            ModelTree.prototype.RestoreGroup = function (group_name) {
+                var _this = this;
+                if ($('img.' + group_name).hasClass('button_open')) {
+                    // Open everything
+                    $('tr.' + group_name).show();
+
+                    // Close subgroups that been closed
+                    $('tr.' + group_name).find('img.button_closed').each(function () {
+                        sub_group_name = $(this).attr('class').split(/\s+/)[0];
+                        //console.log(sub_group_name);
+                        _this.RestoreGroup(sub_group_name);
+                    });
+                }
+
+                if ($('img.' + group_name).hasClass('button_closed')) {
+                    // Close everything
+                    $('tr.' + group_name).hide();
+                }
+            }
+
+            //to create collapsible table rows in model browser
+            //https://jsfiddle.net/y4Mdy/1372/
+            ModelTree.prototype.ToggleButton = function (button) {
+                $(button).toggleClass('button_open');
+                $(button).toggleClass('button_closed');
+            }
+
+
+            ModelTree.prototype.HighlightModelBrowserRow = function (componentIdentifier) {
+                if (checkManager != undefined) {
+                    browserTableRows = this.ModelBrowserTable.getElementsByTagName("tr");
+                    for (var i = 0; i < browserTableRows.length; i++) {
+                        var childRow = browserTableRows[i];
+                        var childRowColumns = childRow.cells;
+                        var rowIdentifier = childRowColumns[0].innerText;
+                        /*
+                        add comment
+                        */
+                        rowIdentifier = rowIdentifier.trim();
+                        if (childRowColumns.length > 0) {
+                            if (childRowColumns[1].innerHTML === "PipingNetworkSegment") {
+                                for (var j = 1; j < childRowColumns.length; j++) {
+                                    if ((j == 3 || j == 4 || j == 5) && childRowColumns[j].innerText != undefined) {
+                                        inner_Text = (childRowColumns[j].innerText);
+                                        inner_Text = inner_Text.trim();
+                                        rowIdentifier += "_" + inner_Text;
+                                    }
+                                }
+                            }
+                            if (componentIdentifier === rowIdentifier) {
+                                if (this.SelectedComponentRow) {
+                                    this.RestoreBackgroundColor(this.SelectedComponentRow);
+                                }
+
+                                this.ChangeBackgroundColor(childRow)
+                                this.SelectedComponentRow = childRow;
+
+                                break;
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
             return ModelTree;
         }());
         Ui.ModelTree = ModelTree;

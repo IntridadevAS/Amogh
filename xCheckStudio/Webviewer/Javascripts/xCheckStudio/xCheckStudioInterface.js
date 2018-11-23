@@ -1,13 +1,13 @@
 
 var xCheckStudio;
-var node_id = 0;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
-        
+
         function xCheckStudioInterface() {
             this._selectedNodeId = null;
-            this._selectedComponentId = null;            
-        }       
+            this._selectedComponentId = null;
+            this.nodeIdArray = [];
+        }
 
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
             var _this = this;
@@ -24,8 +24,8 @@ var node_id = 0;
 
             _this._firstViewer = viewer;
 
-            _this.sourceProperties = [];          
-           
+            _this.sourceProperties = [];
+
             // construct model tree
             _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
 
@@ -36,11 +36,10 @@ var node_id = 0;
             _this._bindEvents(viewer, isFirstViewer);
 
             // set viewer's background color
-            _this.setViewerBackgroundColor();            
+            _this.setViewerBackgroundColor();
         }
 
-        xCheckStudioInterface.prototype.setViewerBackgroundColor = function ()
-        {
+        xCheckStudioInterface.prototype.setViewerBackgroundColor = function () {
             var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
             var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
 
@@ -54,10 +53,9 @@ var node_id = 0;
             viewer.setCallbacks({
                 firstModelLoaded: function () {
                     viewer.view.fitWorld();
+                    _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
+                    _this.readProperties(viewer.model.getAbsoluteRootNode(), 0);
 
-                    _this._modelTree.viewNode(viewer.model.getAbsoluteRootNode());
-
-                    _this.readProperties(viewer.model.getAbsoluteRootNode());                  
                 },
                 selectionArray: function (selections) {
                     for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
@@ -69,17 +67,16 @@ var node_id = 0;
                             _this._onSelection(selection);
                         }
                     }
-                }
+                },
+
             });
 
-             // viewer operators            
-             _this.registerViewerOperators(isFirstViewer);     
+            // viewer operators            
+            _this.registerViewerOperators(isFirstViewer);
         };
 
         xCheckStudioInterface.prototype.registerViewerOperators = function (isFirstViewer) {
-           
             var _this = this;
-
             // viewer operators            
             var frontButton = "Front";
             var backButton = "Back";
@@ -154,36 +151,65 @@ var node_id = 0;
 
                     if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
                         let data = this.highlightManager.nodeIdVsComponentData[this._selectedNodeId];
-                        if(checkManager != undefined)   
-                        {
-                            if(data != undefined)
-                            {
-                                 // get component identifier
-                                 var componentIdentifier = data["Name"];
-                                 if(data.ComponentClass === "PipingNetworkSegment")
-                                 {
-                                     componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
-                                 }
-                                 if(this._selectedComponentId ===  componentIdentifier)
-                                 {
-                                     return;
-                                 }
+                        if (data != undefined) {
+                            if (checkManager != undefined) {
+                                // get component identifier
+                                var componentIdentifier = data["Name"];
+                                if (data.MainComponentClass === "PipingNetworkSegment") {
+                                    componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                                }
+                                if (this._selectedComponentId === data.NodeId) {
+                                    return;
+                                }
 
                                 // highlight corresponding component in review table 
-                                reviewManager.HighlightReviewComponent(data);                               
-                               
+                                reviewManager.HighlightReviewComponent(data);
+                                
+                                // highlight corresponding component in model browser table
+                                this._modelTree.HighlightModelBrowserRow(componentIdentifier);
+
                                 if (this._firstViewer._params.containerId == "viewerContainer2") {
-                                    xCheckStudioInterface1.highlightComponent(componentIdentifier );
+                                    xCheckStudioInterface1.highlightComponent(componentIdentifier);
+                                   xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
                                 }
                                 else if (this._firstViewer._params.containerId == "viewerContainer1") {
                                     xCheckStudioInterface2.highlightComponent(componentIdentifier);
+                                   xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
                                 }
-                            }            
-                        }                    
+                            }
+                            else {
+                                var componentIdentifier = data["Name"];
+                                if (data.MainComponentClass === "PipingNetworkSegment") {
+                                    componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                                }
+                                if (this._selectedComponentId === data.NodeId) {
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
             }
         };
+
+        
+        xCheckStudioInterface.prototype.createNodeIdArray = function (nodeId) {
+            var _this = this;
+            if (nodeId !== null &&
+                (_this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
+                    _this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.Part ||
+                    _this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.PartInstance)
+                /*&& xCheckStudioInterface != null*/) {
+                this.nodeIdArray.push(nodeId);
+                var children = _this._firstViewer.model.getNodeChildren(nodeId);
+                if (children.length > 0) {    
+                    for (var i = 0, children_1 = children; i < children_1.length; i++) {
+                        var child = children_1[i];
+                        _this.createNodeIdArray(child);
+                    }
+                }
+            }
+        }
 
         xCheckStudioInterface.prototype.readProperties = function (nodeId) {
             var _this = this;
@@ -197,9 +223,9 @@ var node_id = 0;
 
                     _this._firstViewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
                         if (nodeProperties != null &&
-                            Object.keys(nodeProperties).length > 0) {
+                            Object.keys(nodeProperties).length > 0) {                        
                             var mainComponentClass = nodeProperties["Intrida Data/MainComponentClass"];
-                            var name = nodeProperties["Intrida Data/Name"];                           
+                            var name = nodeProperties["Intrida Data/Name"];
                             var subComponentClass = nodeProperties["Intrida Data/SubComponentClass"];
 
                             // check if source, destination and ownerid properties exists to uniquely identify
@@ -207,25 +233,25 @@ var node_id = 0;
                             var source;
                             var destination;
                             var ownerId;
-                            if("Intrida Data/Source" in nodeProperties &&
-                               "Intrida Data/Destination" in nodeProperties &&
-                               "Intrida Data/OwnerId" in nodeProperties)
-                            {
-                                source= nodeProperties["Intrida Data/Source"];
-                                destination = nodeProperties["Intrida Data/Destination"];                           
-                                ownerId  = nodeProperties["Intrida Data/OwnerId"];
+                            if ("Intrida Data/Source" in nodeProperties &&
+                                "Intrida Data/Destination" in nodeProperties &&
+                                "Intrida Data/OwnerId" in nodeProperties) {
+                                source = nodeProperties["Intrida Data/Source"];
+                                destination = nodeProperties["Intrida Data/Destination"];
+                                ownerId = nodeProperties["Intrida Data/OwnerId"];
                             }
 
                             // create generic properties object
                             var genericPropertiesObject = new GenericProperties(name,
-                                                                                mainComponentClass, 
-                                                                                subComponentClass,
-                                                                                source,
-                                                                                destination,
-                                                                                ownerId);
+                                mainComponentClass,
+                                subComponentClass,
+                                source,
+                                destination,
+                                ownerId,
+                                nodeId);
 
                             // iterate node properties and add to generic properties object
-                            for (var key in nodeProperties) {                                
+                            for (var key in nodeProperties) {
                                 var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
                                 genericPropertiesObject.addProperty(genericPropertyObject);
                             }
@@ -236,49 +262,66 @@ var node_id = 0;
                             // keep track of component vs node id
                             var componentIdentifier = name
 
-                            var componentNodeData = new ComponentNodeData(name, 
-                                                                          mainComponentClass, 
-                                                                          nodeId,
-                                                                          source,
-                                                                          destination,
-                                                                          ownerId);
-                            if(source !== undefined &&
-                               destination !== undefined &&
-                               ownerId !== undefined)
-                               {
-                                componentIdentifier = name+"_"+source+"_"+destination+"_"+ownerId;
-                               }
+                            var componentNodeData = new ComponentNodeData(name,
+                                mainComponentClass,
+                                subComponentClass,
+                                source,
+                                destination,
+                                ownerId,
+                                nodeId);
+                            if (source !== undefined &&
+                                destination !== undefined &&
+                                ownerId !== undefined) {
+                                componentIdentifier = name + "_" + source + "_" + destination + "_" + ownerId;
+                            }
 
                             _this.highlightManager.componentIdVsComponentData[componentIdentifier] = componentNodeData;
                             _this.highlightManager.nodeIdVsComponentData[nodeId] = componentNodeData;
                         }
 
-                        var children = _this._firstViewer.model.getNodeChildren(nodeId);
-                        if (children.length > 0) {
+                        var children = _this._firstViewer.model.getNodeChildren(nodeId);                       
+                        if (children.length > 0) {                
                             for (var i = 0, children_1 = children; i < children_1.length; i++) {
                                 var child = children_1[i];
-                                _this.readProperties(child, xCheckStudioInterface);
+
+                                if (child !== null &&
+                                    (_this._firstViewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
+                                        _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
+                                        _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
+                                            _this.readProperties(child)
+                                        } 
                             }
+                        } 
+
+                        if(_this.nodeIdArray.indexOf(nodeId) != -1)
+                        {
+                            _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
+                        }
+                        if (_this.nodeIdArray.length == 0) {
+                            _this._modelTree.addModelBrowserComponent(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+                            for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
+                                _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
+                            }
+
                         }
                     });
                 }
-            }
-        };      
+            } 
+            
+        };
 
-        xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {           
+        xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {
             var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
-
-            if(nodeId === undefined)
-            {
+            if (nodeId === undefined) {
                 return;
             }
 
-            this.highlightManager.highlightNodeInViewer(nodeId);  
+            this.highlightManager.highlightNodeInViewer(nodeId);
 
             this._selectedNodeId = nodeId;
         };
 
-      
+
         return xCheckStudioInterface;
     }());
     xCheckStudio.xCheckStudioInterface = xCheckStudioInterface;

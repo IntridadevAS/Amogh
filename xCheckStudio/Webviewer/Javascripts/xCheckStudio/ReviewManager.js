@@ -145,8 +145,13 @@ function ReviewManager(checkManager) {
                     if (reviewTableId === "PipingNetworkSegment") {
                         componentIdentifier += "_" + row.cells[3].innerHTML + "_" + row.cells[4].innerHTML + "_" + row.cells[5].innerHTML;
                     }
+                    // highlight component in graphics view in both viewer
                     xCheckStudioInterface1.highlightComponent(componentIdentifier);
                     xCheckStudioInterface2.highlightComponent(componentIdentifier);
+
+                    // highlight model browser table row in both viewer
+                    xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                    xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
 
                     _this.SelectedComponentRow = row;
                 };
@@ -337,7 +342,7 @@ function ReviewManager(checkManager) {
 
 
     ReviewManager.prototype.HighlightReviewComponent = function (data) {
-        var componentsGroupName = data["ComponentClass"];
+        var componentsGroupName = data["MainComponentClass"];
         var doc = document.getElementsByClassName("collapsible");
         for (var i = 0; i < doc.length; i++) {
             if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
@@ -350,21 +355,29 @@ function ReviewManager(checkManager) {
                     var child = doc[i].nextSibling.children[j];
                     var childRows = child.getElementsByTagName("tr");
                     for (var k = 0; k < childRows.length; k++) {
+                        
                         var childRow = childRows[k];
-                        var childRowColumns = childRows[k].getElementsByTagName("td");
+                        var childRowColumns = childRow.getElementsByTagName("td");
                         if (childRowColumns.length > 0) {
-                            if (childRowColumns[0].innerHTML === componentIdentifier) {
-
-                                if (data.ComponentClass === "PipingNetworkSegment") {
-                                    if (childRowColumns.length < 6) {
-                                        continue;
+                            if (childRowColumns[0].innerHTML === data.Name) {
+                                var componentIdentifier = data.Name;
+                                var rowIdentifier = childRowColumns[0].innerHTML
+                                if (data.MainComponentClass === "PipingNetworkSegment") {
+                                    componentIdentifier += "_" + data.Source + "_" + data.Destination + "_" + data.OwnerId;
+                                    rowIdentifier += "_" + childRowColumns[3].innerHTML + "_"
+                                        + childRowColumns[4].innerHTML + "_" + childRowColumns[5].innerHTML;
+                                    if (rowIdentifier === componentIdentifier) {
+                                        if (this.SelectedComponentRow) {
+                                            this.RestoreBackgroundColor(this.SelectedComponentRow);
+                                        }
+        
+                                        this.ChangeBackgroundColor(childRow)
+                                        this.populateDetailedReviewTable(childRow);
+                                        this.SelectedComponentRow = childRow;
+        
+                                        break;
                                     }
 
-                                    if (data.Source !== childRowColumns[3].innerHTML ||
-                                        data.Destination !== childRowColumns[4].innerHTML ||
-                                        data.OwnerId !== childRowColumns[5].OwnerId) {
-                                        continue;
-                                    }
                                 }
 
 

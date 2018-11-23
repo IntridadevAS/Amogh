@@ -3,7 +3,8 @@ function GenericProperties(name,
                            subComponentClass,
                            source,
                            destination,
-                           ownerId)
+                           ownerId,
+                           nodeId)
 {
     this.Name = name;
   
@@ -13,6 +14,8 @@ function GenericProperties(name,
     this.Source = source;
     this.Destination = destination;
     this.OwnerId = ownerId;
+    
+    this.NodeId = nodeId;
 
     this.properties=[];
     GenericProperties.prototype.addProperty = function(genericProperty)
