@@ -178,33 +178,30 @@ function ReviewManager(checkManager) {
     }
 
     ReviewManager.prototype.RestoreBackgroundColor = function (row) {        
-        row.style.backgroundColor =this.getComponentRowHighlightColor(row.cells[2].innerHTML);
+        row.style.backgroundColor =this.getRowHighlightColor(row.cells[2].innerHTML);
     }
     
-    ReviewManager.prototype.getComponentRowHighlightColor = function (status)
-    {
-        var color;
+    ReviewManager.prototype.getRowHighlightColor = function (status)
+    {        
         if (status.toLowerCase() === ("OK").toLowerCase()) {
-            color = SuccessColor;
+            return SuccessColor;
         }
         else if (status.toLowerCase() === ("Error").toLowerCase()) {
-            color = ErrorColor;
+            return ErrorColor;
         }
         else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-            color = WarningColor;
+            return WarningColor;
         }
         else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-            color = NoMatchColor;
+            return NoMatchColor;
         }
         else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-            color = NoValueColor;
+            return NoValueColor;
         }
         else 
         {
-            color = "#ffffff";
-        }
-
-       return xCheckStudio.Util.rgbToHex(color.r, color.g, color.b); 
+            return "#ffffff";
+        }       
     }
 
     ReviewManager.prototype.getReviewTableId = function (row) {
@@ -327,6 +324,9 @@ function ReviewManager(checkManager) {
                         }
 
                         tr.appendChild(td);
+
+                        // set row's background color according to status
+                        tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML);
                     }
 
                     break;

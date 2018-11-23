@@ -1,8 +1,8 @@
-var SuccessColor = Communicator.Color.green();
-var ErrorColor = Communicator.Color.red();
-var WarningColor = Communicator.Color.yellow();
-var NoMatchColor = Communicator.Color.blue();
-var NoValueColor = Communicator.Color.white();
+var SuccessColor = "#70db70";
+var ErrorColor = "#ff4d4d";
+var WarningColor = "#ffff99";
+var NoMatchColor ="#ccccff";
+var NoValueColor = "#f2f2f2";
 
 function HighlightManager(viewer) {
     
@@ -59,11 +59,14 @@ function HighlightManager(viewer) {
         }
 
         // set nodes face and line colors
-        this.Viewer.model.setNodesFaceColor([nodeId], color);
-        this.Viewer.model.setNodesLineColor([nodeId], color);
+        var rgbColor = xCheckStudio.Util.hexToRgb(color);
+        var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
+        this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
+        this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
 
         // set the component row color in main review table
-        componentRow.style.backgroundColor =  xCheckStudio.Util.rgbToHex(color.r, color.g, color.b);        
+        //componentRow.style.backgroundColor =  xCheckStudio.Util.rgbToHex(color.r, color.g, color.b);     
+        componentRow.style.backgroundColor =   color;
     }
 
     HighlightManager.prototype.highlightNodeInViewer = function (nodeId) {
