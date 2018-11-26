@@ -239,7 +239,7 @@ var xCheckStudio;
                             componentIdentifier += "_" + this.children[3].innerHTML + "_" + this.children[4].innerHTML + "_" + this.children[5].innerHTML;
                         }
                         //to select component row in other viewer
-                        _this.selectComponentRow(component_name);
+                        _this.selectComponentRow(componentIdentifier);
                     }
                 };
 
@@ -270,7 +270,7 @@ var xCheckStudio;
                         var child = children[i];
                         if (child.childElementCount > 0) {
                             childCell = child.children[0];
-                            childComponentIdentifier = childCell.textContent;
+                            childComponentIdentifier = childCell.textContent.trim();
                             if (child.children[1].innerHTML === "PipingNetworkSegment") {
                                 childComponentIdentifier += "_" + child.children[3].innerHTML + "_" + child.children[4].innerHTML + "_" + child.children[5].innerHTML
                             }
@@ -496,7 +496,7 @@ var xCheckStudio;
 
 
             ModelTree.prototype.HighlightModelBrowserRow = function (componentIdentifier) {
-                if (checkManager != undefined) {
+                // if (checkManager != undefined) {
                     browserTableRows = this.ModelBrowserTable.getElementsByTagName("tr");
                     for (var i = 0; i < browserTableRows.length; i++) {
                         var childRow = browserTableRows[i];
@@ -530,7 +530,7 @@ var xCheckStudio;
                         }
 
                     }
-                }
+                // }
             }
 
             return ModelTree;

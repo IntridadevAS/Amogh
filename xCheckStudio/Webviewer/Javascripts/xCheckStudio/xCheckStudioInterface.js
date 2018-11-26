@@ -185,6 +185,7 @@ var xCheckStudio;
                                 if (this._selectedComponentId === data.NodeId) {
                                     return;
                                 }
+                                this._modelTree.HighlightModelBrowserRow(componentIdentifier);
                             }
                         }
                     }

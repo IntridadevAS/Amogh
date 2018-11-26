@@ -18,7 +18,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
-    
+
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
 
@@ -90,21 +90,19 @@
             background-color: #f1f1f1;
         }
 
-        img.button_open{
-        content:url('images/button-open.png');
-        cursor:pointer;
+        img.button_open {
+            content: url('images/button-open.png');
+            cursor: pointer;
         }
 
-        img.button_closed{
-        content: url('images/button-closed.png');
-        cursor:pointer;
+        img.button_closed {
+            content: url('images/button-closed.png');
+            cursor: pointer;
         }
 
-        .scrollable
-        {
+        .scrollable {
             overflow: auto;
         }
-
     </style>
 
 </head>
@@ -114,7 +112,8 @@
 
     <iframe name="formDestination" height="100px"></iframe>
 
-    <button id="checkButton">Check Datasources</button>
+    <button id="checkButton" disabled="true">Check Datasources</button>
+    <button onclick="refreshCheck()" id="refreshCheckButton" disabled="true">Refresh Check</button>
 
     <!-- Three columns -->
     <div class="row">
@@ -136,16 +135,17 @@
                 <tr>
                     <td></td>
                     <td>
-                            <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
-                                <input id="dataSoures1" name="dataSouresName" type="file" />
-                                <input id="upload1" type="submit" value="Upload">
-                                <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load model</button>
-                            </form>
+                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+                            <input id="dataSoures1" name="dataSouresName" type="file" />
+                            <input id="upload1" type="submit" value="Upload">
+                            <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
+                                model</button>
+                        </form>
                     </td>
                 </tr>
                 <tr>
                     <td valign="top">
-                        <div id="modelTree1" ></div>
+                        <div id="modelTree1"></div>
                     </td>
                     <td>
                         <div id="viewerContainer1" class="example-canvas-small"></div>
@@ -178,11 +178,12 @@
                 <tr>
                     <td></td>
                     <td>
-                            <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
-                                <input id="dataSoures2" name="dataSouresName" type="file" />
-                                <input id="upload2" type="submit" value="Upload">
-                                <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load model</button>
-                            </form>
+                        <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data" target="formDestination">
+                            <input id="dataSoures2" name="dataSouresName" type="file" />
+                            <input id="upload2" type="submit" value="Upload">
+                            <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
+                                model</button>
+                        </form>
                     </td>
                 </tr>
                 <tr>
@@ -227,6 +228,24 @@
         var xCheckStudioInterface2;
         var checkCaseManager;
 
+        //to refresh check review table using table Id
+        function refreshCheck() {
+            //disable refresh check button
+            document.getElementById("refreshCheckButton").disabled = true;
+
+            //enable check button
+            document.getElementById("checkButton").disabled = false;
+            var mainReviewCellContent = document.getElementById("mainReviewCell").innerHTML;
+            if (mainReviewCellContent != "") {
+                document.getElementById("mainReviewCell").innerHTML = "";
+            }
+            var detailedReviewCellContent = document.getElementById("detailedReviewCell").innerHTML;
+            if (detailedReviewCellContent != "") {
+                document.getElementById("detailedReviewCell").innerHTML = "";
+            }
+            checkManager = undefined;
+        }
+
         function openTab(tabName) {
             var tabs = document.getElementsByClassName("containerTab");
             for (var i = 0; i < tabs.length; i++) {
@@ -242,7 +261,7 @@
             let selectedFilesCount = selectedFiles.length;
 
             let fileName = selectedFiles[0].name;
-            fileName= fileName.substring(0, fileName.lastIndexOf('.'));
+            fileName = fileName.substring(0, fileName.lastIndexOf('.'));
             fileName += '.scs';
 
             var uri = "uploads/scs/" + fileName;
@@ -258,7 +277,7 @@
             if (viewerContainer.id === "viewerContainer1") {
                 xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
                 xCheckStudioInterface1.setupViewer(viewerOptions, true);
-               
+
                 document.getElementById("load1").disabled = true;
                 document.getElementById("upload1").disabled = true;
                 document.getElementById("dataSoures1").disabled = true;
@@ -266,37 +285,47 @@
             else if (viewerContainer.id === "viewerContainer2") {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
                 xCheckStudioInterface2.setupViewer(viewerOptions, false);
-                
+
                 document.getElementById("load2").disabled = true;
                 document.getElementById("upload2").disabled = true;
                 document.getElementById("dataSoures2").disabled = true;
             }
+
+            //enable check Button
+            document.getElementById("checkButton").disabled = false;
         }
 
         window.onload = function () {
+
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
-                // perform property check
-                checkManager = new CheckManager();
-                checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
+                    //disable check button 
+                    document.getElementById("checkButton").disabled = true;
 
-                // populate review table 
-                reviewManager = new ReviewManager(checkManager);
-                reviewManager.populateReviewTables();
+                    //enable refresh check Button
+                    document.getElementById("refreshCheckButton").disabled = false;
 
-                // add event handler for collapsible rows
-                var collapsibleRows = document.getElementsByClassName("collapsible");              
-                for (var i = 0; i < collapsibleRows.length; i++) {
-                    collapsibleRows[i].addEventListener("click", function () {
-                        this.classList.toggle("active");
-                        var content = this.nextElementSibling;
-                        if (content.style.display === "block") {
-                            content.style.display = "none";
-                        } else {
-                            content.style.display = "block";
-                        }
-                    });
-                } 
+                    // perform property check
+                    checkManager = new CheckManager();
+                    checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
+
+                    // populate review table 
+                    reviewManager = new ReviewManager(checkManager);
+                    reviewManager.populateReviewTables();
+
+                    // add event handler for collapsible rows
+                    var collapsibleRows = document.getElementsByClassName("collapsible");
+                    for (var i = 0; i < collapsibleRows.length; i++) {
+                        collapsibleRows[i].addEventListener("click", function () {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                                content.style.display = "none";
+                            } else {
+                                content.style.display = "block";
+                            }
+                        });
+                    }
             };
 
             // read check case data from xml configuration file
@@ -380,6 +409,9 @@
                 $(this).parents().next('.hide').toggle();
             });
         });
+
+
+
     </script>
 </body>
 
