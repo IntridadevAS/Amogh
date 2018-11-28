@@ -18,11 +18,15 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckRules.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
 
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
 
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+
+    <script src='configurations\dir.php'></script>
 
     <style type="text/css">
         * {
@@ -213,6 +217,8 @@
         </div>
     </div>
 
+    <label>Compliance<input type='checkbox' onclick='complianceCBClick(this);'></label>
+    <label>Check Case<select id="checkCaseSelect"></select></label>
 
     <table id="comparisonTable">
         <tr>
@@ -227,6 +233,11 @@
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
         var checkCaseManager;
+
+        var activeViewerContainer;
+        var complianceCheck = false;
+
+        var checkCaseFilesData;
 
         //to refresh check review table using table Id
         function refreshCheck() {
@@ -253,6 +264,21 @@
             }
 
             document.getElementById(tabName).style.display = "block";
+            if (tabName === "b1") {
+                activeViewerContainer = viewerContainer1;
+            }
+            else if (tabName === "b2") {
+                activeViewerContainer = viewerContainer2;
+            }
+        }
+
+        // compliance checkbox handler
+        function complianceCBClick(checkBox) {
+            complianceCheck = checkBox.checked;
+
+            if (checkCaseFilesData) {
+                checkCaseFilesData.populateCheckCases();
+            }
         }
 
         function loadModel(dataSoures, viewerContainer, modelTreeContainer) {
@@ -305,113 +331,56 @@
                     //enable refresh check Button
                     document.getElementById("refreshCheckButton").disabled = false;
 
-                    // perform property check
-                    checkManager = new CheckManager();
-                    checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
+                var checkCaseSelect = document.getElementById("checkCaseSelect");
+                if (checkCaseSelect.value === "None") {
+                    alert("Please select check case from list.")
+                    return;
+                }
 
-                    // populate review table 
-                    reviewManager = new ReviewManager(checkManager);
-                    reviewManager.populateReviewTables();
+                // get check case file name
+                var fileName;
+                if (!complianceCheck) {
 
-                    // add event handler for collapsible rows
-                    var collapsibleRows = document.getElementsByClassName("collapsible");
-                    for (var i = 0; i < collapsibleRows.length; i++) {
-                        collapsibleRows[i].addEventListener("click", function () {
-                            this.classList.toggle("active");
-                            var content = this.nextElementSibling;
-                            if (content.style.display === "block") {
-                                content.style.display = "none";
-                            } else {
-                                content.style.display = "block";
-                            }
-                        });
+                    for (var i = 0; i < checkCaseFilesData.NonComplianceCheckData.length; i++) {
+                        var checkCaseFileData = checkCaseFilesData.NonComplianceCheckData[i];
+                        if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
+                            fileName = checkCaseFileData.FileName;
+                            break;
+                        }
                     }
+                }
+                else {
+                    for (var i = 0; i < checkCaseFilesData.ComplianceCheckDataList.length; i++) {
+                        var checkCaseFileData = checkCaseFilesData.ComplianceCheckDataList[i];
+                        if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
+                            fileName = checkCaseFileData.FileName;
+                            break;
+                        }
+                    }
+                }
+
+                if (fileName === undefined ||
+                    fileName === null) {
+                    return;
+                }
+
+                // read check case data from XML checkcase data file
+                checkCaseManager = new CheckCaseManager();
+                checkCaseManager.readCheckCaseData(fileName);
             };
 
-            // read check case data from xml configuration file
-            readCheckCaseXml();
+            // read check cases list
+            checkCaseFilesData = new CheckCaseFilesData();
+            checkCaseFilesData.readCheckCases();           
         };
 
-        function readCheckCaseXml() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    readCheckCaseData(this);
-                }
-            };
 
-            xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
-            xhttp.send();
-        }
-
-        function readCheckCaseData(xml) {
-            var xmlText = xml.responseText;
-
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(xmlText, "application/xml");
-
-            var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
-            if (checkCaseElements.length < 0) {
-                return;
-            }
-
-            // check case manager object
-            checkCaseManager = new CheckCaseManager();
-
-            var checkCaseElement = checkCaseElements[0];
-
-            // CheckCase object
-            var checkCase = new CheckCase(checkCaseElement.getAttribute("name"));
-
-            for (var i = 0; i < checkCaseElement.children.length; i++) {
-                var componentGroupElement = checkCaseElement.children[i];
-                if (componentGroupElement.localName != "ComponentGroup") {
-                    continue;
-                }
-
-                // ComponentGroup object
-                var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
-
-                for (var j = 0; j < componentGroupElement.children.length; j++) {
-                    var componentElement = componentGroupElement.children[j];
-                    if (componentElement.localName != "ComponentClass") {
-                        continue;
-                    }
-
-                    // Component object
-                    var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
-
-                    for (var k = 0; k < componentElement.children.length; k++) {
-                        var propertyElement = componentElement.children[k];
-                        if (propertyElement.localName != "Property") {
-                            continue;
-                        }
-
-                        var sourceAProperty = propertyElement.getAttribute("sourceAName");
-                        var sourceBProperty = propertyElement.getAttribute("sourceBName");
-                        var severity = propertyElement.getAttribute("severity");
-
-                        // create mapping property object 
-                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty, sourceBProperty, severity);
-                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-                    }
-
-                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
-                }
-
-                checkCase.addComponentGroup(checkCaseComponentGroup);
-            }
-            checkCaseManager.addCheckCase(checkCase);
-        }
 
         $(document).ready(function () {
             $('[data-toggle="toggle"]').change(function () {
                 $(this).parents().next('.hide').toggle();
             });
         });
-
-
-
     </script>
 </body>
 

@@ -1,11 +1,12 @@
 function ReviewManager(checkManager) {
     this.CheckManager = checkManager;
     this.SelectedComponentRow;
-    ReviewManager.prototype.populateReviewTables = function () {       
+    this.MainReviewTableStatusCell = -1;
+    ReviewManager.prototype.populateReviewTables = function () {
         var parentTable = document.getElementById("mainReviewCell");
 
         for (var componentsGroupName in this.CheckManager.CheckComponentsGroups) {
-            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];            
+            var componentsGroup = this.CheckManager.CheckComponentsGroups[componentsGroupName];
 
             var btn = document.createElement("BUTTON");       // Create a <button> element
             btn.className = "collapsible";
@@ -26,19 +27,29 @@ function ReviewManager(checkManager) {
             table.appendChild(thead);
 
             var tr = document.createElement("tr");
-            thead.appendChild(tr);          
+            thead.appendChild(tr);
 
-            th = document.createElement("th");
-            th.innerHTML = "Source A"
-            tr.appendChild(th);
+            if (!checkManager.ComplianceCheck) {
 
-            th = document.createElement("th");
-            th.innerHTML = "Source B"
-            tr.appendChild(th);
+                th = document.createElement("th");
+                th.innerHTML = "Source A"
+                tr.appendChild(th);
+
+                th = document.createElement("th");
+                th.innerHTML = "Source B"
+                tr.appendChild(th);
+            }
+            else {
+                th = document.createElement("th");
+                th.innerHTML = "Source"
+                tr.appendChild(th);
+            }
 
             th = document.createElement("th");
             th.innerHTML = "Status"
             tr.appendChild(th);
+
+            this.MainReviewTableStatusCell = tr.cells.length - 1;
 
             // if component groupd is PipingNetworkSegment, create two hidden columns at end for Source and destination
             if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
@@ -70,50 +81,66 @@ function ReviewManager(checkManager) {
                 td.innerHTML = component.SourceAName;
                 tr.appendChild(td);
 
-                td = document.createElement("td");
-                td.innerHTML = component.SourceBName;
-                tr.appendChild(td);
+                if (!checkManager.ComplianceCheck) {
+                    td = document.createElement("td");
+                    td.innerHTML = component.SourceBName;
+                    tr.appendChild(td);
+                }
 
                 td = document.createElement("td");
                 td.innerHTML = component.Status;
                 tr.appendChild(td);
-               
-                 // construct component identifier 
+
+                // construct component identifier 
                 var componentIdentifier = component.SourceAName;
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                    var checkPropertySource = component.getCheckProperty('Source', 'Source');
-                    var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination');
-                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId');
+                    var checkPropertySource = component.getCheckProperty('Source', 'Source', checkManager.ComplianceCheck);
+                    var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', checkManager.ComplianceCheck);
+                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', checkManager.ComplianceCheck);
 
                     td = document.createElement("td");
                     if (checkPropertySource != undefined) {
                         td.innerHTML = checkPropertySource.SourceAValue;
 
-                        componentIdentifier += "_" +checkPropertySource.SourceAValue;
+                        componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
                     if (checkPropertyDestination != undefined) {
-                    td.innerHTML = checkPropertyDestination.SourceAValue;
+                        td.innerHTML = checkPropertyDestination.SourceAValue;
 
-                    componentIdentifier += "_" +checkPropertyDestination.SourceAValue;
+                        componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
                     tr.appendChild(td);
 
                     td = document.createElement("td");
                     if (checkPropertyOwnerId != undefined) {
-                    td.innerHTML = checkPropertyOwnerId.SourceAValue;
+                        td.innerHTML = checkPropertyOwnerId.SourceAValue;
 
-                    componentIdentifier += "_" +checkPropertyOwnerId.SourceAValue;
+                        componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
-                    tr.appendChild(td); 
-            }
+                    tr.appendChild(td);
+                }
 
-             // highlight component with corresponding color after check performed            
-             xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
-             xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+                // highlight component with corresponding color after check performed
+                if (!checkManager.ComplianceCheck) {
+                    // if not compliance check
+                    xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+                    xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+                }
+                else {
+                    // if compliance check
+                    if (xCheckStudioInterface1 !== undefined &&
+                        xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
+                        xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+                    }
+                    else if (xCheckStudioInterface2 !== undefined &&
+                        xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
+                        xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
+                    }
+                }
             }
 
             this.bindEvents(table);
@@ -143,15 +170,44 @@ function ReviewManager(checkManager) {
 
                     var componentIdentifier = row.cells[0].innerHTML;
                     if (reviewTableId === "PipingNetworkSegment") {
-                        componentIdentifier += "_" + row.cells[3].innerHTML + "_" + row.cells[4].innerHTML + "_" + row.cells[5].innerHTML;
+                        var source = row.cells[_this.MainReviewTableStatusCell + 1].innerHTML;
+                        var destination = row.cells[_this.MainReviewTableStatusCell + 2].innerHTML;
+                        var ownerId = row.cells[_this.MainReviewTableStatusCell + 3].innerHTML;
+                        componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
                     }
-                    // highlight component in graphics view in both viewer
-                    xCheckStudioInterface1.highlightComponent(componentIdentifier);
-                    xCheckStudioInterface2.highlightComponent(componentIdentifier);
 
-                    // highlight model browser table row in both viewer
-                    xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                    if (!checkManager.ComplianceCheck) {
+                        // if not compliance check
+
+                        // highlight component in graphics view in both viewer
+                        xCheckStudioInterface1.highlightComponent(componentIdentifier);
+                        xCheckStudioInterface2.highlightComponent(componentIdentifier);
+
+                        // highlight model browser table row in both viewer
+                        xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                        xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                    }
+                    else {
+                        // if compliance check
+                        if (xCheckStudioInterface1 !== undefined &&
+                            xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
+
+                            // highlight component in graphics view in active viewer
+                            xCheckStudioInterface1.highlightComponent(componentIdentifier);
+
+                            // highlight model browser table row in active viewer
+                            xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                        }
+                        else if (xCheckStudioInterface2 !== undefined &&
+                            xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
+
+                            // highlight component in graphics view in active viewer
+                            xCheckStudioInterface2.highlightComponent(componentIdentifier);
+
+                            // highlight model browser table row in active viewer
+                            xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                        }
+                    }
 
                     _this.SelectedComponentRow = row;
                 };
@@ -182,12 +238,15 @@ function ReviewManager(checkManager) {
         row.style.backgroundColor = "#9999ff";
     }
 
-    ReviewManager.prototype.RestoreBackgroundColor = function (row) {        
-        row.style.backgroundColor =this.getRowHighlightColor(row.cells[2].innerHTML);
+    ReviewManager.prototype.RestoreBackgroundColor = function (row) {
+        if (this.MainReviewTableStatusCell < 0) {
+            return;
+        }
+
+        row.style.backgroundColor = this.getRowHighlightColor(row.cells[this.MainReviewTableStatusCell].innerHTML);
     }
-    
-    ReviewManager.prototype.getRowHighlightColor = function (status)
-    {        
+
+    ReviewManager.prototype.getRowHighlightColor = function (status) {
         if (status.toLowerCase() === ("OK").toLowerCase()) {
             return SuccessColor;
         }
@@ -203,10 +262,9 @@ function ReviewManager(checkManager) {
         else if (status.toLowerCase() === ("No Value").toLowerCase()) {
             return NoValueColor;
         }
-        else 
-        {
+        else {
             return "#ffffff";
-        }       
+        }
     }
 
     ReviewManager.prototype.getReviewTableId = function (row) {
@@ -237,21 +295,30 @@ function ReviewManager(checkManager) {
                 var source1NameCell = row.getElementsByTagName("td")[0];
                 var source2NameCell = row.getElementsByTagName("td")[1];
 
-                if (component.SourceAName == source1NameCell.innerHTML &&
-                    component.SourceBName == source2NameCell.innerHTML) {
+                if (component.SourceAName == source1NameCell.innerHTML) {
+                    if (!checkManager.ComplianceCheck &&
+                        component.SourceBName !== source2NameCell.innerHTML) {
+                        continue;
+                    }
+
                     // if component is PipingNetworkSegment, check if source and destination properties are same
                     // because they may have same tag names
                     if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                        var checkPropertySource = component.getCheckProperty('Source', 'Source');
-                        var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination');
-                        var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId');
+                        var checkPropertySource = component.getCheckProperty('Source', 'Source', checkManager.ComplianceCheck);
+                        var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', checkManager.ComplianceCheck);
+                        var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', checkManager.ComplianceCheck);
 
                         if (checkPropertySource != undefined &&
                             checkPropertyDestination != undefined &&
                             checkPropertyOwnerId != undefined) {
-                            if (checkPropertySource.SourceAValue !== row.getElementsByTagName("td")[3].innerHTML ||
-                                checkPropertyDestination.SourceAValue !== row.getElementsByTagName("td")[4].innerHTML ||
-                                checkPropertyOwnerId.SourceAValue !== row.getElementsByTagName("td")[5].innerHTML) {
+
+                            var source = row.cells[this.MainReviewTableStatusCell + 1].innerHTML;
+                            var destination = row.cells[this.MainReviewTableStatusCell + 2].innerHTML;
+                            var ownerId = row.cells[this.MainReviewTableStatusCell + 3].innerHTML;
+
+                            if (checkPropertySource.SourceAValue !== source ||
+                                checkPropertyDestination.SourceAValue !== destination ||
+                                checkPropertyOwnerId.SourceAValue !== ownerId) {
                                 continue;
                             }
                         }
@@ -281,13 +348,15 @@ function ReviewManager(checkManager) {
                     th.innerHTML = "Source A Value"
                     tr.appendChild(th);
 
-                    th = document.createElement("th");
-                    th.innerHTML = "Source B Name"
-                    tr.appendChild(th);
+                    if (!checkManager.ComplianceCheck) {
+                        th = document.createElement("th");
+                        th.innerHTML = "Source B Name"
+                        tr.appendChild(th);
 
-                    th = document.createElement("th");
-                    th.innerHTML = "Source B Value"
-                    tr.appendChild(th);
+                        th = document.createElement("th");
+                        th.innerHTML = "Source B Value"
+                        tr.appendChild(th);
+                    }
 
                     th = document.createElement("th");
                     th.innerHTML = "Status"
@@ -298,52 +367,20 @@ function ReviewManager(checkManager) {
 
                     // show component class name as property in detailed review table 
                     var property = new CheckProperty("ComponentClass",
-                                                    component.SubComponentClass,
-                                                    "ComponentClass",
-                                                    component.SubComponentClass,
-                                                    "",
-                                                    true,
-                                                    "");
+                        component.SubComponentClass,
+                        "ComponentClass",
+                        component.SubComponentClass,
+                        "",
+                        true,
+                        "");
                     tr = this.addPropertyRowToDetailedTable(property);
                     tbody.appendChild(tr);
 
                     for (var j = 0; j < component.CheckProperties.length; j++) {
                         property = component.CheckProperties[j];
 
-                        //tr = document.createElement("tr");
                         tr = this.addPropertyRowToDetailedTable(property);
                         tbody.appendChild(tr);
-
-                        // td = document.createElement("td");
-                        // td.innerHTML = property.SourceAName;
-                        // tr.appendChild(td);
-
-                        // td = document.createElement("td");
-                        // td.innerHTML = property.SourceAValue;
-                        // tr.appendChild(td);
-
-                        // td = document.createElement("td");
-                        // td.innerHTML = property.SourceBName;
-                        // tr.appendChild(td);
-
-                        // td = document.createElement("td");
-                        // td.innerHTML = property.SourceBValue;
-                        // tr.appendChild(td);
-
-                        // td = document.createElement("td");
-                        // if (property.PerformCheck &&
-                        //     property.Result) {
-                        //     td.innerHTML = "OK";
-                        // }
-                        // else
-                        // {
-                        //     td.innerHTML = property.Severity;
-                        // }
-
-                        // tr.appendChild(td);
-
-                        // // set row's background color according to status
-                        // tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML);
                     }
 
                     break;
@@ -351,9 +388,8 @@ function ReviewManager(checkManager) {
             }
         }
     }
-    
-    ReviewManager.prototype.addPropertyRowToDetailedTable = function (property)
-    {
+
+    ReviewManager.prototype.addPropertyRowToDetailedTable = function (property) {
         var tr = document.createElement("tr");
         //tbody.appendChild(tr);
 
@@ -365,28 +401,29 @@ function ReviewManager(checkManager) {
         td.innerHTML = property.SourceAValue;
         tr.appendChild(td);
 
-        td = document.createElement("td");
-        td.innerHTML =  property.SourceBName;
-        tr.appendChild(td);
+        if (!checkManager.ComplianceCheck) {
+            td = document.createElement("td");
+            td.innerHTML = property.SourceBName;
+            tr.appendChild(td);
 
-        td = document.createElement("td");
-        td.innerHTML = property.SourceBValue;;
-        tr.appendChild(td);
+            td = document.createElement("td");
+            td.innerHTML = property.SourceBValue;;
+            tr.appendChild(td);
+        }
 
         td = document.createElement("td");
         if (property.PerformCheck &&
             property.Result) {
             td.innerHTML = "OK";
         }
-        else
-        {
+        else {
             td.innerHTML = property.Severity;
         }
         tr.appendChild(td);
 
         // set row's background color according to status
-        tr.style.backgroundColor =this.getRowHighlightColor(td.innerHTML); 
-        
+        tr.style.backgroundColor = this.getRowHighlightColor(td.innerHTML);
+
         return tr;
     }
 
@@ -404,7 +441,7 @@ function ReviewManager(checkManager) {
                     var child = doc[i].nextSibling.children[j];
                     var childRows = child.getElementsByTagName("tr");
                     for (var k = 0; k < childRows.length; k++) {
-                        
+
                         var childRow = childRows[k];
                         var childRowColumns = childRow.getElementsByTagName("td");
                         if (childRowColumns.length > 0) {
@@ -413,17 +450,22 @@ function ReviewManager(checkManager) {
                                 var rowIdentifier = childRowColumns[0].innerHTML
                                 if (data.MainComponentClass === "PipingNetworkSegment") {
                                     componentIdentifier += "_" + data.Source + "_" + data.Destination + "_" + data.OwnerId;
-                                    rowIdentifier += "_" + childRowColumns[3].innerHTML + "_"
-                                        + childRowColumns[4].innerHTML + "_" + childRowColumns[5].innerHTML;
+
+                                    var source = row.cells[this.MainReviewTableStatusCell + 1].innerHTML;
+                                    var destination = row.cells[this.MainReviewTableStatusCell + 2].innerHTML;
+                                    var ownerId = row.cells[this.MainReviewTableStatusCell + 3].innerHTML;
+
+                                    rowIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+
                                     if (rowIdentifier === componentIdentifier) {
                                         if (this.SelectedComponentRow) {
                                             this.RestoreBackgroundColor(this.SelectedComponentRow);
                                         }
-        
+
                                         this.ChangeBackgroundColor(childRow)
                                         this.populateDetailedReviewTable(childRow);
                                         this.SelectedComponentRow = childRow;
-        
+
                                         break;
                                     }
 

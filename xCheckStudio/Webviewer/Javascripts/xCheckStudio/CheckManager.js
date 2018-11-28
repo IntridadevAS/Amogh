@@ -1,9 +1,194 @@
-function CheckManager() {
+function CheckManager(complianceCheck) {
     this.Name = name;
+    this.ComplianceCheck = complianceCheck;
 
     this.CheckComponentsGroups = {};
 
-    CheckManager.prototype.checkDataSources = function (source1Properties, source2Properties) {      
+    CheckManager.prototype.performCheck = function () {
+        // perform property check
+        //checkManager = new CheckManager(complianceCheck);
+
+        if (!complianceCheck) {
+            if (xCheckStudioInterface1 === undefined ||
+                xCheckStudioInterface1 === undefined) {
+                alert("Property check can't be performed.")
+                return;
+            }
+
+
+            this.checkDataSources(xCheckStudioInterface1.sourceProperties,
+                                  xCheckStudioInterface2.sourceProperties);
+        }
+        else {
+            var sourceProperties;
+            if (xCheckStudioInterface1 !== undefined &&
+                xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
+                sourceProperties = xCheckStudioInterface1.sourceProperties;
+            }
+            else if (xCheckStudioInterface2 !== undefined &&
+                xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
+                sourceProperties = xCheckStudioInterface2.sourceProperties;
+            }
+            if (sourceProperties === undefined) {
+                return;
+            }
+
+            this.checkDataSourceForCompliance(sourceProperties);
+        }
+
+
+        // populate review table 
+        reviewManager = new ReviewManager(this);
+        reviewManager.populateReviewTables();
+
+        // add event handler for collapsible rows
+        var collapsibleRows = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < collapsibleRows.length; i++) {
+            collapsibleRows[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    }
+
+    CheckManager.prototype.checkDataSourceForCompliance = function (sourceProperties) {
+
+        for (var i = 0, sourcePropertiesCollection = sourceProperties; i < sourcePropertiesCollection.length; i++) {
+            var sourceComponentProperties = sourcePropertiesCollection[i];
+
+            // get check case for comparison to perform
+            var checkCase = checkCaseManager.CheckCases[0];
+
+            // check if component class exists in checkcase
+            if (!checkCase.componentGroupExists(sourceComponentProperties.MainComponentClass)) {
+                continue;
+            }
+
+            // get check case group
+            var checkCaseGroup = checkCase.getComponentGroup(sourceComponentProperties.MainComponentClass);
+
+            // check if component exists in checkCaseGroup
+            if (!checkCaseGroup.componentClassExists(sourceComponentProperties.SubComponentClass)) {
+                continue;
+            }
+            // get check case component
+            var checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceComponentProperties.SubComponentClass);
+
+            var checkComponentGroup;
+            if (this.CheckComponentsGroups &&
+                sourceComponentProperties.MainComponentClass in this.CheckComponentsGroups) {
+                checkComponentGroup = this.CheckComponentsGroups[sourceComponentProperties.MainComponentClass];
+            }
+            else {
+                checkComponentGroup = new CheckComponentGroup(sourceComponentProperties.MainComponentClass);
+                this.CheckComponentsGroups[sourceComponentProperties.MainComponentClass] = checkComponentGroup;
+            }
+            if (!checkComponentGroup) {
+                continue;
+            }
+
+            var checkComponent = new CheckComponent(sourceComponentProperties.Name,
+                undefined,
+                sourceComponentProperties.SubComponentClass)
+            checkComponentGroup.AddCheckComponent(checkComponent);
+
+            for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
+                // get check case mapping property object
+                var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
+
+                if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
+                    var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+
+                    propertyName = property.Name;
+                    propertyValue = property.Value;
+                    result = true;
+                    // if (propertyValue === undefined || propertyValue === "") {
+                    //     severity = "No Value";
+                    // }
+                    // else {
+                    // check rule
+                    if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.None) {
+
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Must_Have_Value) {
+                        if (propertyValue === undefined || propertyValue === "") {
+                            result = false;
+                        }
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Number) {
+                        if (isNaN(propertyValue)) {
+                            result = false;
+                        }
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Start_With) {
+                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+                        if (ruleArray.length < 2) {
+                            result = false;
+                        }
+                        else {
+                            var prefix = ruleArray[1];
+                            result = propertyValue.startsWith(prefix);
+                        }
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Contain) {
+                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+                        if (ruleArray.length < 2) {
+                            result = false;
+                        }
+                        else {
+                            var substring = ruleArray[1];
+
+                            if (propertyValue.indexOf(substring) === -1) {
+                                result = value;
+                            }
+                        }
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Equal_To) {
+                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+                        if (ruleArray.length < 2) {
+                            result = false;
+                        }
+                        else {
+                            var prefix = ruleArray[1];
+                            result = propertyValue === prefix;
+                        }
+                    }
+                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_End_With) {
+                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+                        if (ruleArray.length < 2) {
+                            result = false;
+                        }
+                        else {
+                            var prefix = ruleArray[1];
+                            result = propertyValue.endsWith(prefix);                            
+                        }
+                    }
+                    //}
+
+
+                    performCheck = true;
+                    var checkProperty = new CheckProperty(propertyName,
+                        propertyValue,
+                        "",
+                        "",
+                        checkCaseMappingProperty.Severity,
+                        performCheck,
+                        checkCaseMappingProperty.Comment);
+
+                    checkProperty.Result = result;
+
+                    checkComponent.AddCheckProperty(checkProperty);
+                }
+            }
+        }
+    }
+
+    CheckManager.prototype.checkDataSources = function (source1Properties, source2Properties) {
 
         for (var i = 0, source1PropertiesCollection = source1Properties; i < source1PropertiesCollection.length; i++) {
             var source1ComponentProperties = source1PropertiesCollection[i];
@@ -46,7 +231,7 @@ function CheckManager() {
                 if (source1ComponentProperties.Name === source2ComponentProperties.Name &&
                     source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass &&
                     source1ComponentProperties.SubComponentClass === source2ComponentProperties.SubComponentClass) {
-                    
+
 
                     // if component is PipingNetworkSegment, check if source and destination properties are same
                     // because they may have same tag names
@@ -74,7 +259,7 @@ function CheckManager() {
                     componentMatchFound = true;
 
                     var checkComponent = new CheckComponent(source1ComponentProperties.Name,
-                        source2ComponentProperties.Name,                        
+                        source2ComponentProperties.Name,
                         source1ComponentProperties.SubComponentClass)
                     checkComponentGroup.AddCheckComponent(checkComponent);
 
@@ -90,11 +275,11 @@ function CheckManager() {
                         var performCheck;
                         var description;
 
-                        if (source1ComponentProperties.propertyExists( checkCaseMappingProperty.SourceAName) &&
-                            source2ComponentProperties.propertyExists( checkCaseMappingProperty.SourceBName)) {
+                        if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
+                            source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
 
-                            var property1 = source1ComponentProperties.getProperty( checkCaseMappingProperty.SourceAName);
-                            var property2 = source2ComponentProperties.getProperty( checkCaseMappingProperty.SourceBName);
+                            var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+                            var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
 
                             property1Name = property1.Name;
                             property2Name = property2.Name;
@@ -151,30 +336,29 @@ function CheckManager() {
             }
 
             // if component match not found 
-            if (!componentMatchFound) {                
+            if (!componentMatchFound) {
                 var checkComponent = new CheckComponent(source1ComponentProperties.Name,
                     "",
                     source1ComponentProperties.SubComponentClass)
-               
+
 
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName))
-                    {
-                        var property1 = source1ComponentProperties.getProperty( checkCaseMappingProperty.SourceAName);
-                        property1Name = property1.Name;                        
+                    if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
+                        var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+                        property1Name = property1.Name;
                         property1Value = property1.Value;
 
                         var checkProperty = new CheckProperty(property1Name,
-                                  property1Value,
-                                  undefined,
-                                  undefined,
-                                  "",
-                                  undefined,
-                                  undefined);
+                            property1Value,
+                            undefined,
+                            undefined,
+                            "",
+                            undefined,
+                            undefined);
 
-                        checkComponent.AddCheckProperty(checkProperty);      
+                        checkComponent.AddCheckProperty(checkProperty);
                     }
                 }
 
@@ -200,7 +384,7 @@ function CheckManager() {
             // check if component exists in checkCaseGroup
             if (!checkCaseGroup.componentClassExists(source2ComponentProperties.SubComponentClass)) {
                 continue;
-            }                  
+            }
             // get check case component
             var checkCaseComponentClass = checkCaseGroup.getComponentClass(source2ComponentProperties.SubComponentClass);
 
@@ -225,12 +409,12 @@ function CheckManager() {
                 if (source2ComponentProperties.Name === source1ComponentProperties.Name &&
                     source2ComponentProperties.MainComponentClass === source1ComponentProperties.MainComponentClass &&
                     source2ComponentProperties.SubComponentClass === source1ComponentProperties.SubComponentClass) {
-                    
+
 
                     // if component is PipingNetworkSegment, check if source and destination properties are same
                     // because they may have same tag names
                     if (source2ComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-                       
+
                         var source2Source = source2ComponentProperties.getProperty('Source');
                         var source2Destination = source2ComponentProperties.getProperty('Destination');
                         var source2OwnerId = source2ComponentProperties.getProperty('OwnerId');
@@ -238,7 +422,7 @@ function CheckManager() {
                         var source1Source = source1ComponentProperties.getProperty('Source');
                         var source1Destination = source1ComponentProperties.getProperty('Destination');
                         var source1OwnerId = source1ComponentProperties.getProperty('OwnerId');
-                      
+
                         if (source1Source === undefined ||
                             source1Destination === undefined ||
                             source2Source === undefined ||
@@ -252,21 +436,21 @@ function CheckManager() {
                         }
                     }
 
-                    componentMatchFound = true; 
+                    componentMatchFound = true;
                     break;
                 }
             }
 
             // if component match not found 
-            if (!componentMatchFound) {                
+            if (!componentMatchFound) {
                 var checkComponent = new CheckComponent("",
                     source2ComponentProperties.Name,
                     source2ComponentProperties.SubComponentClass)
-                
+
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source2ComponentProperties.propertyExists( checkCaseMappingProperty.SourceAName)) {
+                    if (source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
                         var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
                         property2Name = property2.Name;
                         property2Value = property2.Value;
@@ -323,7 +507,7 @@ function CheckComponent(sourceAName,
             //     this.Status = "No Value";
             // }
             // else
-             if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
+            if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
                 this.Status = "Error";
             }
         }
@@ -341,14 +525,21 @@ function CheckComponent(sourceAName,
         }
     }
 
-    CheckComponent.prototype.getCheckProperty = function (sourceAPropertyName, sourceBPropertyName) {
+    CheckComponent.prototype.getCheckProperty = function (sourceAPropertyName, 
+                                                          sourceBPropertyName,
+                                                          complianceCheck) {
         for (var i = 0; i < this.CheckProperties.length; i++) {
-            if (this.CheckProperties[i].SourceAName === sourceAPropertyName &&
-                this.CheckProperties[i].SourceBName === sourceBPropertyName) {
+            if (this.CheckProperties[i].SourceAName === sourceAPropertyName) {
+                if (!complianceCheck) {
+                    if (this.CheckProperties[i].SourceBName !== sourceBPropertyName) {
+                        continue;
+                    }
+                }
+
                 return this.CheckProperties[i];
             }
         }
-
+        
         return undefined;
     }
 }

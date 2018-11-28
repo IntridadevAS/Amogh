@@ -321,9 +321,11 @@ var xCheckStudio;
                 return;
             }
 
+            this._selectedNodeId = nodeId;
+            
             this.highlightManager.highlightNodeInViewer(nodeId);
 
-            this._selectedNodeId = nodeId;
+            // this._selectedNodeId = nodeId;
         };
 
 
