@@ -1,0 +1,179 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
+    <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleInterface.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
+
+    <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
+    <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* The grid: Three equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 50px;
+            text-align: center;
+            font-size: 25px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .containerTab {
+            padding: 20px;
+            color: white;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Closable button inside the container tab */
+        .closebtn {
+            float: right;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+
+        }
+
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .active,
+        .collapsible:hover {
+            background-color: #555;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+
+        img.button_open {
+            content: url('images/button-open.png');
+            cursor: pointer;
+        }
+
+        img.button_closed {
+            content: url('images/button-closed.png');
+            cursor: pointer;
+        }
+
+        .scrollable {
+
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table style="min-width: -webkit-fill-available; max-width: -webkit-fill-available;;height:-webkit-fill-available; margin: auto; border: none; ">
+        <th colspan="2" style=" background-color: #333333; height: 5%; text-align: center;  border: none; ">
+            <img src="images/Header.png">
+        </th>
+        <tr style="height: 80%;  border: none; ">
+            <td width="60%" style=" border: none; ">
+                <table id="comparisonTable" style="width: 100%; height:100%; ">
+                    <tr style="height: 50%; width: 100%;">
+                        <td style="height: 50%; width: 60%;">
+                            <div id="mainReviewCell" style="text-align:left;vertical-align:top;max-width: 1200px;height: 90%;"
+                                class="scrollable"></div>
+                        </td>
+                    </tr>
+                    <tr style="height: 50%; width: 100%;">
+                        <td style="height: 50%; width: 60%;">
+                            <div id="detailedReviewCell" style="text-align:left;vertical-align:top;padding:0;max-width: 1200px; height: 100%;"
+                                class="scrollable"></div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="30%" style=" border: none; ">
+                <table id="comparisonTable" style="width: 100%; height:100%; margin: auto;">
+                    <tr style="width: 100%; height: 50%; margin: auto">
+                        <td>
+                            <div id="viewerContainer1" class="example-canvas-tiny" style="min-width: 400px;"></div>
+                        </td>
+                    </tr>
+                    <tr style="width: 100%; height: 50%;">
+                        <td>
+                            <div id="viewerContainer2" class="example-canvas-tiny" style="min-width: 400px;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <th colspan="2" style=" background-color: #333333;  height: 10%; border: none;">
+        </th>
+    </table>
+
+    <script>
+        var reviewModuleInterface;
+        var reviewModuleViewerInterface1;
+        var reviewModuleViewerInterface2;
+        var reviewManager;
+
+        window.onload = function () {
+
+            loadModel();
+            createReviewManager();
+
+        };
+
+        function loadModel() {
+            // read viewerContainer Id and URL of viewer1
+            var viewerOptions = localStorage['viewerContainer1'];
+            // localStorage.removeItem('viewerContainer1');
+            var viewerOptions1 = viewerOptions.split(",");
+
+            // read viewerContainer Id and URL of viewer2
+            viewerOptions = localStorage['viewerContainer2'];
+            // localStorage.removeItem('viewerContainer2');
+            var viewerOptions2 = viewerOptions.split(",");
+
+            reviewModuleInterface = new ReviewModuleInterface();
+            reviewModuleInterface.loadModels(viewerOptions1, viewerOptions2);
+
+        }
+
+        function createReviewManager() {
+            reviewModuleInterface.createReviewManager();
+        }
+
+    </script>
+</body>
+
+</html>

@@ -4,6 +4,26 @@ function CheckManager(complianceCheck) {
 
     this.CheckComponentsGroups = {};
 
+    CheckManager.prototype.restore = function (checkManagerData) {
+        for (var property in checkManagerData.CheckComponentsGroups) {
+            if (checkManagerData.CheckComponentsGroups.hasOwnProperty(property)) {
+                var componentGroupData = checkManagerData.CheckComponentsGroups[property];
+                var checkComponentGroup = new CheckComponentGroup( componentGroupData.ComponentClass);
+                checkComponentGroup.restore(componentGroupData);
+               
+                this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
+            }
+        }
+        
+        // for (var i = 0; i < checkManagerData.CheckComponentsGroups.length; i++) {
+        //     var componentGroupData = checkManagerData.CheckComponentsGroups[i];
+        //     var checkComponentGroup = new CheckComponentGroup( componentGroupData.ComponentClass);
+        //     checkComponentGroup.restore(componentGroupData);
+           
+        //     this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
+        // }
+    }
+
     CheckManager.prototype.performCheck = function () {
         // perform property check
         //checkManager = new CheckManager(complianceCheck);
@@ -482,6 +502,20 @@ function CheckComponentGroup(componentClass) {
     CheckComponentGroup.prototype.AddCheckComponent = function (Component) {
         this.Components.push(Component);
     }
+
+    CheckComponentGroup.prototype.restore = function (componentGroupData) {
+        //this.ComponentClass = componentGroupData.ComponentClass;
+        for (var i = 0; i < componentGroupData.Components.length; i++) {
+            var componentData = componentGroupData.Components[i];
+
+            var checkComponent = new CheckComponent(componentData.SourceAName,
+                componentData.SourceBName,
+                componentData.SubComponentClass);
+
+            checkComponent.restore(componentData);
+            this.Components.push(checkComponent);
+        }
+    }
 }
 
 function CheckComponent(sourceAName,
@@ -541,6 +575,31 @@ function CheckComponent(sourceAName,
         }
         
         return undefined;
+    }
+
+     CheckComponent.prototype.restore = function (componentData) {
+        
+        if(componentData.Status.toLowerCase() === "no match")
+         {
+             // if component data having status as No match, there is no need 
+             // restore properties for this component
+             this.Status = "No Match";
+             return ;
+         }
+
+        for (var i = 0; i < componentData.CheckProperties.length; i++) {
+           var checkPropertyData =  componentData.CheckProperties[i];
+
+           var checkProperty = new CheckProperty(checkPropertyData.SourceAName,
+            checkPropertyData.SourceAValue,
+            checkPropertyData.SourceBName,
+            checkPropertyData.SourceBValue,
+            checkPropertyData.Severity,
+            checkPropertyData.PerformCheck,
+            checkPropertyData.Description);
+
+            this.AddCheckProperty(checkProperty);
+        }
     }
 }
 

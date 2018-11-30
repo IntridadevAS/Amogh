@@ -29,14 +29,14 @@ function HighlightManager(viewer) {
         return nodeId;
     }
 
-    HighlightManager.prototype.changeComponentColor = function (componentIdentifier,
+    HighlightManager.prototype.changeComponentRowColor = function (/*componentIdentifier,*/
                                                                 componentRow, 
                                                                 status) {
 
-        var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
-        if (nodeId === undefined) {
-            return;
-        }
+        // var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
+        // if (nodeId === undefined) {
+        //     return;
+        // }
 
         var color;
         if (status.toLowerCase() === ("OK").toLowerCase()) {
@@ -58,11 +58,11 @@ function HighlightManager(viewer) {
             return;
         }
 
-        // set nodes face and line colors
-        var rgbColor = xCheckStudio.Util.hexToRgb(color);
-        var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
-        this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
-        this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
+        // // set nodes face and line colors
+        // var rgbColor = xCheckStudio.Util.hexToRgb(color);
+        // var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
+        // this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
+        // this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
 
         // set the component row color in main review table
         //componentRow.style.backgroundColor =  xCheckStudio.Util.rgbToHex(color.r, color.g, color.b);     

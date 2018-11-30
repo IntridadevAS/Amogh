@@ -118,10 +118,10 @@ var xCheckStudio;
                 //add node properties to model browser table
                 var nodeData;
                 if (this._viewer._params.containerId === "viewerContainer1") {
-                    nodeData = xCheckStudioInterface1.highlightManager.nodeIdVsComponentData[nodeId];
+                    nodeData = xCheckStudioInterface1.nodeIdVsComponentData[nodeId];
                 }
                 else if (this._viewer._params.containerId === "viewerContainer2") {
-                    nodeData = xCheckStudioInterface2.highlightManager.nodeIdVsComponentData[nodeId];
+                    nodeData = xCheckStudioInterface2.nodeIdVsComponentData[nodeId];
                 }
 
                 var td = document.createElement("td");

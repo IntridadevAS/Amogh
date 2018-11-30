@@ -15,7 +15,7 @@ function ReviewManager(checkManager) {
             parentTable.appendChild(btn);
 
             var div = document.createElement("DIV");
-            div.className = "content";
+            div.className = "content scrollable";
             parentTable.appendChild(div);
 
             var table = document.createElement("TABLE");
@@ -124,23 +124,9 @@ function ReviewManager(checkManager) {
                     tr.appendChild(td);
                 }
 
-                // highlight component with corresponding color after check performed
-                if (!checkManager.ComplianceCheck) {
-                    // if not compliance check
-                    xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
-                    xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
-                }
-                else {
-                    // if compliance check
-                    if (xCheckStudioInterface1 !== undefined &&
-                        xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
-                        xCheckStudioInterface1.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
-                    }
-                    else if (xCheckStudioInterface2 !== undefined &&
-                        xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
-                        xCheckStudioInterface2.highlightManager.changeComponentColor(componentIdentifier, tr, component.Status);
-                    }
-                }
+                // highlight component row in main review table with corresponding color after check performed
+                var highlightManager = new HighlightManager();
+                highlightManager.changeComponentRowColor(tr, component.Status);
             }
 
             this.bindEvents(table);
@@ -180,32 +166,32 @@ function ReviewManager(checkManager) {
                         // if not compliance check
 
                         // highlight component in graphics view in both viewer
-                        xCheckStudioInterface1.highlightComponent(componentIdentifier);
-                        xCheckStudioInterface2.highlightComponent(componentIdentifier);
+                        reviewModuleViewerInterface1.highlightComponent(componentIdentifier);
+                        reviewModuleViewerInterface2.highlightComponent(componentIdentifier);
 
                         // highlight model browser table row in both viewer
-                        xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                        xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                        // xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                        // xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
                     }
                     else {
                         // if compliance check
-                        if (xCheckStudioInterface1 !== undefined &&
-                            xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
+                        if (reviewModuleViewerInterface1 !== undefined &&
+                            reviewModuleViewerInterface1.Viewer._params.containerId === activeViewerContainer.id) {
 
                             // highlight component in graphics view in active viewer
-                            xCheckStudioInterface1.highlightComponent(componentIdentifier);
+                            reviewModuleViewerInterface1.highlightComponent(componentIdentifier);
 
                             // highlight model browser table row in active viewer
-                            xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                            // reviewModuleInterface.reviewModuleViewerInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
                         }
-                        else if (xCheckStudioInterface2 !== undefined &&
-                            xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
+                        else if (reviewModuleViewerInterface2 !== undefined &&
+                            reviewModuleViewerInterface2.Viewer._params.containerId === activeViewerContainer.id) {
 
                             // highlight component in graphics view in active viewer
-                            xCheckStudioInterface2.highlightComponent(componentIdentifier);
+                            reviewModuleViewerInterface2.highlightComponent(componentIdentifier);
 
                             // highlight model browser table row in active viewer
-                            xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                            // reviewModuleInterface.reviewModuleViewerInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
                         }
                     }
 
@@ -292,6 +278,10 @@ function ReviewManager(checkManager) {
             for (var i = 0; i < componentsGroup.Components.length; i++) {
                 var component = componentsGroup.Components[i];
 
+                if(component.Status.toLowerCase() === "no match")
+                {
+                    return;
+                }
                 var source1NameCell = row.getElementsByTagName("td")[0];
                 var source2NameCell = row.getElementsByTagName("td")[1];
 
@@ -330,6 +320,10 @@ function ReviewManager(checkManager) {
                     var div = document.createElement("DIV");
                     parentTable.appendChild(div);
 
+                    div.innerHTML = "Check Details :";
+                    div.style.fontSize = "20px";
+                    div.style.fontWeight = "bold";
+
                     var table = document.createElement("TABLE");
                     div.appendChild(table);
 
@@ -365,7 +359,7 @@ function ReviewManager(checkManager) {
                     var tbody = document.createElement("tbody");
                     table.appendChild(tbody);
 
-                    // show component class name as property in detailed review table 
+                    // show component class name as property in detailed review table               
                     var property = new CheckProperty("ComponentClass",
                         component.SubComponentClass,
                         "ComponentClass",
@@ -427,63 +421,63 @@ function ReviewManager(checkManager) {
         return tr;
     }
 
-    ReviewManager.prototype.HighlightReviewComponent = function (data) {
-        var componentsGroupName = data["MainComponentClass"];
-        var doc = document.getElementsByClassName("collapsible");
-        for (var i = 0; i < doc.length; i++) {
-            if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
-                var nextSibling = doc[i].nextSibling;
-                if (nextSibling.style.display != "block") {
-                    nextSibling.style.display = "block";
-                }
-                var siblingCount = nextSibling.childElementCount;
-                for (var j = 0; j < siblingCount; j++) {
-                    var child = doc[i].nextSibling.children[j];
-                    var childRows = child.getElementsByTagName("tr");
-                    for (var k = 0; k < childRows.length; k++) {
+    // ReviewManager.prototype.HighlightReviewComponent = function (data) {
+    //     var componentsGroupName = data["MainComponentClass"];
+    //     var doc = document.getElementsByClassName("collapsible");
+    //     for (var i = 0; i < doc.length; i++) {
+    //         if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
+    //             var nextSibling = doc[i].nextSibling;
+    //             if (nextSibling.style.display != "block") {
+    //                 nextSibling.style.display = "block";
+    //             }
+    //             var siblingCount = nextSibling.childElementCount;
+    //             for (var j = 0; j < siblingCount; j++) {
+    //                 var child = doc[i].nextSibling.children[j];
+    //                 var childRows = child.getElementsByTagName("tr");
+    //                 for (var k = 0; k < childRows.length; k++) {
 
-                        var childRow = childRows[k];
-                        var childRowColumns = childRow.getElementsByTagName("td");
-                        if (childRowColumns.length > 0) {
-                            if (childRowColumns[0].innerHTML === data.Name) {
-                                var componentIdentifier = data.Name;
-                                var rowIdentifier = childRowColumns[0].innerHTML
-                                if (data.MainComponentClass === "PipingNetworkSegment") {
-                                    componentIdentifier += "_" + data.Source + "_" + data.Destination + "_" + data.OwnerId;
+    //                     var childRow = childRows[k];
+    //                     var childRowColumns = childRow.getElementsByTagName("td");
+    //                     if (childRowColumns.length > 0) {
+    //                         if (childRowColumns[0].innerHTML === data.Name) {
+    //                             var componentIdentifier = data.Name;
+    //                             var rowIdentifier = childRowColumns[0].innerHTML
+    //                             if (data.MainComponentClass === "PipingNetworkSegment") {
+    //                                 componentIdentifier += "_" + data.Source + "_" + data.Destination + "_" + data.OwnerId;
 
-                                    var source = row.cells[this.MainReviewTableStatusCell + 1].innerHTML;
-                                    var destination = row.cells[this.MainReviewTableStatusCell + 2].innerHTML;
-                                    var ownerId = row.cells[this.MainReviewTableStatusCell + 3].innerHTML;
+    //                                 var source = row.cells[this.MainReviewTableStatusCell + 1].innerHTML;
+    //                                 var destination = row.cells[this.MainReviewTableStatusCell + 2].innerHTML;
+    //                                 var ownerId = row.cells[this.MainReviewTableStatusCell + 3].innerHTML;
 
-                                    rowIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+    //                                 rowIdentifier += "_" + source + "_" + destination + "_" + ownerId;
 
-                                    if (rowIdentifier === componentIdentifier) {
-                                        if (this.SelectedComponentRow) {
-                                            this.RestoreBackgroundColor(this.SelectedComponentRow);
-                                        }
+    //                                 if (rowIdentifier === componentIdentifier) {
+    //                                     if (this.SelectedComponentRow) {
+    //                                         this.RestoreBackgroundColor(this.SelectedComponentRow);
+    //                                     }
 
-                                        this.ChangeBackgroundColor(childRow)
-                                        this.populateDetailedReviewTable(childRow);
-                                        this.SelectedComponentRow = childRow;
+    //                                     this.ChangeBackgroundColor(childRow)
+    //                                     this.populateDetailedReviewTable(childRow);
+    //                                     this.SelectedComponentRow = childRow;
 
-                                        break;
-                                    }
+    //                                     break;
+    //                                 }
 
-                                }
+    //                             }
 
 
-                                if (this.SelectedComponentRow) {
-                                    this.RestoreBackgroundColor(this.SelectedComponentRow);
-                                }
+    //                             if (this.SelectedComponentRow) {
+    //                                 this.RestoreBackgroundColor(this.SelectedComponentRow);
+    //                             }
 
-                                this.ChangeBackgroundColor(childRow)
-                                this.populateDetailedReviewTable(childRow);
-                                this.SelectedComponentRow = childRow;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //                             this.ChangeBackgroundColor(childRow)
+    //                             this.populateDetailedReviewTable(childRow);
+    //                             this.SelectedComponentRow = childRow;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }

@@ -1,3 +1,4 @@
+var xCheckStudio;
 (function (xCheckStudio) {
     var Util;
     (function (Util) {

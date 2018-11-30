@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        function validateForm() {
+            var username = document.forms["loginForm"]["user"].value;
+            var password = document.forms["loginForm"]["pwd"].value;
+            if (username !="" && password != "" && username === password) {
+                alert("Welcome");
+                window.location = "/home.html"; //"/xCheckStudio.html";
+                return false;
+            }
+            else {
+                alert("Please Try again!");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+        <table style="width: -webkit-fill-available; height:-webkit-fill-available;  background-color: red; background-image: linear-gradient(-315deg, red, red, orange); margin: auto; " >
+            <th style=" background-color: #333333; height: 20%;">
+                <img src="images/Header.png">
+            </th>
+            <tr style=" text-align: center">
+               <td  >
+                <form id="loginForm" method="post" style="padding: 20px;">
+                    <input style="width: 450px; height: 40px; margin-bottom: 10px;" type="text" name="user" placeholder="Username"
+                        required>
+                    <br>
+                    <input style="width: 450px; height: 40px; margin-bottom: 10px;" type="Password" name="pwd" placeholder="Password"
+                        required>
+                    <br>
+                    <input style="width: 450px; height: 45px; margin-bottom: 10px; background-color: #333333; border-radius: 10px; color: white; font-size: 30px" type="submit" name="submit" value="Log in"
+                        onclick="return validateForm()">
+                </form>
+                <br>
+                <span style="margin-bottom: 10px;"><a href="">Forgot Password</a> 
+                    <br>
+                <span>Language <select>
+                        <option>English</option>
+                        <option>Hindi</option>
+                        <option>Chinese</option>
+                    </select></span>
+               </td>
+            </tr>
+            <th style=" background-color: #333333;  height: 20%;">
+            </th>
+        </table>
+
+</html>
