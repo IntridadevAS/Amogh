@@ -3,7 +3,9 @@ var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
 
-        function xCheckStudioInterface() {
+        function xCheckStudioInterface(sourceType) {
+            this.SourceType = sourceType;
+
             this._selectedNodeId = null;
             this._selectedComponentId = null;
             this.nodeIdArray = [];
@@ -166,7 +168,7 @@ var xCheckStudio;
 
                     //             // highlight corresponding component in review table 
                     //             reviewManager.HighlightReviewComponent(data);
-                                
+
                     //             // highlight corresponding component in model browser table
                     //             this._modelTree.HighlightModelBrowserRow(componentIdentifier);
 
@@ -195,7 +197,7 @@ var xCheckStudio;
             }
         };
 
-        
+
         xCheckStudioInterface.prototype.createNodeIdArray = function (nodeId) {
             var _this = this;
             if (nodeId !== null &&
@@ -205,7 +207,7 @@ var xCheckStudio;
                 /*&& xCheckStudioInterface != null*/) {
                 this.nodeIdArray.push(nodeId);
                 var children = _this._firstViewer.model.getNodeChildren(nodeId);
-                if (children.length > 0) {    
+                if (children.length > 0) {
                     for (var i = 0, children_1 = children; i < children_1.length; i++) {
                         var child = children_1[i];
                         _this.createNodeIdArray(child);
@@ -226,7 +228,7 @@ var xCheckStudio;
 
                     _this._firstViewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
                         if (nodeProperties != null &&
-                            Object.keys(nodeProperties).length > 0) {                        
+                            Object.keys(nodeProperties).length > 0) {
                             var mainComponentClass = nodeProperties["Intrida Data/MainComponentClass"];
                             var name = nodeProperties["Intrida Data/Name"];
                             var subComponentClass = nodeProperties["Intrida Data/SubComponentClass"];
@@ -286,8 +288,8 @@ var xCheckStudio;
                             _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                         }
 
-                        var children = _this._firstViewer.model.getNodeChildren(nodeId);                       
-                        if (children.length > 0) {                
+                        var children = _this._firstViewer.model.getNodeChildren(nodeId);
+                        if (children.length > 0) {
                             for (var i = 0, children_1 = children; i < children_1.length; i++) {
                                 var child = children_1[i];
 
@@ -295,13 +297,12 @@ var xCheckStudio;
                                     (_this._firstViewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
-                                            _this.readProperties(child)
-                                        } 
+                                    _this.readProperties(child)
+                                }
                             }
-                        } 
+                        }
 
-                        if(_this.nodeIdArray.indexOf(nodeId) != -1)
-                        {
+                        if (_this.nodeIdArray.indexOf(nodeId) != -1) {
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
                         if (_this.nodeIdArray.length == 0) {
@@ -339,8 +340,8 @@ var xCheckStudio;
                         }
                     });
                 }
-            } 
-            
+            }
+
         };
 
         // xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {

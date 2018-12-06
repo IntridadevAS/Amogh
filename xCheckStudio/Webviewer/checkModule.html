@@ -1,8 +1,11 @@
 <html>
 
 <head>
+    <title>xCheckStudio</title>
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
+
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
@@ -17,9 +20,13 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentNodeData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckRules.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
 
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
+
+    <script src='configurations\dir.php'></script>
     <style>
         /* The grid: Three equal columns that floats next to each other */
         .column {
@@ -139,9 +146,9 @@
                                         target="formDestination">
                                         <input id="dataSoures1" name="dataSouresName" type="file" />
                                         <input id="upload1" type="submit" value="Upload">
-                                        <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
-                                            model</button>
                                     </form>
+                                    <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
+                                        model</button>
                                 </td>
                             </tr>
                             <tr>
@@ -166,6 +173,15 @@
                                     </div>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <label>Compliance<input id='complianceSourceACB' type='checkbox'></label>
+                                    <label>CheckAll<input id='checkAllSourceACB' type='checkbox' onclick='checkAll(this);'></label>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -182,9 +198,9 @@
                                         target="formDestination">
                                         <input id="dataSoures2" name="dataSouresName" type="file" />
                                         <input id="upload2" type="submit" value="Upload">
-                                        <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
-                                            model</button>
                                     </form>
+                                    <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
+                                        model</button>
                                 </td>
                             </tr>
                             <tr>
@@ -210,144 +226,286 @@
                                     </div>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
+                                    <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAll(this);'></label>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
             </td>
+        <tr>
+            <td>
+                <label>Check Case <select id="checkCaseSelect"></select></label> <br>
+                <label>Comparison <input id='comparisonCB' type='checkbox'></label>
+            </td>
         </tr>
-        <th colspan="2" style=" background-color: #333333;  height: 15%;">
+
+        </tr>
+        <th colspan="2" style=" background-color: #333333;  height: 10%;">
         </th>
     </table>
 
-    <script>
+    <script type="text/javascript">
+
+        function postData(url, method) {
+
+            // post comparison data
+            if (comparisonCheckManager) {
+                $.ajax({
+                    url: 'postData/comparisonCheckpostDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+            }
+
+            // post source A compliance data
+            if (sourceAComplianceCheckManager) {
+                $.ajax({
+                    url: 'postData/sourceAComplianceDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "SourceAComplianceCheckManager": JSON.stringify(sourceAComplianceCheckManager) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+            }
+
+            // post source B compliance data
+            if (sourceBComplianceCheckManager) {
+                $.ajax({
+                    url: 'postData/sourceBComplianceDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+            }
+
+            // post source A viewer data
+            if (xCheckStudioInterface1 &&
+                xCheckStudioInterface1._firstViewer) {
+
+                //virewer container Data
+                var viewerOptions = [];
+                viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
+                viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
+
+                $.ajax({
+                    url: 'postData/sourceAViewerDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+
+
+                // postnode id and component data relation
+                if (xCheckStudioInterface1.nodeIdVsComponentData) {
+                    $.ajax({
+                        url: 'postData/sourceANodeIdVsComponentDataWriter.php',
+                        type: "POST",
+                        async: false,
+                        data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+                        success: function (data) {
+                            //alert("success");
+                            //$("#result").html(data);
+                        }
+                    });
+                }
+
+                if (xCheckStudioInterface1.componentIdVsComponentData) {
+                    $.ajax({
+                        url: 'postData/sourceAComponentIdVsComponentDataWriter.php',
+                        type: "POST",
+                        async: false,
+                        data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+                        success: function (data) {
+                            //alert("success");
+                            //$("#result").html(data);
+                        }
+                    });
+                }
+
+            }
+
+            // post source B viewer data
+            if (xCheckStudioInterface2 &&
+                xCheckStudioInterface2._firstViewer) {
+
+                //virewer container Data
+                var viewerOptions = [];
+                viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
+                viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
+
+                $.ajax({
+                    url: 'postData/sourceBViewerDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+
+                // postnode id and component data relation
+                if (xCheckStudioInterface2.nodeIdVsComponentData) {
+                    $.ajax({
+                        url: 'postData/sourceBNodeIdVsComponentDataWriter.php',
+                        type: "POST",
+                        async: false,
+                        data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+                        success: function (data) {
+                            //alert("success");
+                            //$("#result").html(data);
+                        }
+                    });
+                }
+
+                if (xCheckStudioInterface2.componentIdVsComponentData) {
+                    $.ajax({
+                        url: 'postData/sourceBComponentIdVsComponentDataWriter.php',
+                        type: "POST",
+                        async: false,
+                        data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+                        success: function (data) {
+                            //alert("success");
+                            //$("#result").html(data);
+                        }
+                    });
+                }
+            }
+
+        }
+
 
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
-        var checkManager;
+        //var checkManager;
+        var checkCaseManager;
 
+
+        //var activeViewerContainer;
+        //var complianceCheck = false;
+
+        var checkCaseFilesData;
 
         window.onload = function () {
 
+
+
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
+              
 
-                //virewer container Data
-                var viewerOptionsArray1 = [];
-                viewerOptionsArray1.push(xCheckStudioInterface1._firstViewer._params.containerId);
-                viewerOptionsArray1.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
+                var checkCaseSelect = document.getElementById("checkCaseSelect");
+                if (checkCaseSelect.value === "None") {
+                    alert("Please select check case from list.")
+                    return;
+                }
 
+                //var checkMethod;
+                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
 
-                localStorage.setItem('viewerContainer1', viewerOptionsArray1)
+                    var comparisonCB = document.getElementById('comparisonCB');
+                    if (comparisonCB.checked &&
+                        checkType.Name.toLowerCase() === "comparison" &&
+                        xCheckStudioInterface1 &&
+                        xCheckStudioInterface2 &&
+                        checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
+                        checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
+                        // checkMethod = checkType.Name;
+                        // break;
+                        if (!comparisonCheckManager) {
+                            comparisonCheckManager = new CheckManager();
+                            comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                xCheckStudioInterface2.sourceProperties,
+                                checkType,
+                                true);
+                        }
+                    }
+                    else {
+                        if (xCheckStudioInterface1) {
+                            var complianceSourceACB = document.getElementById("complianceSourceACB");
+                            if (checkType.Name.toLowerCase() === "compliance" &&
+                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
+                                complianceSourceACB.checked) {
+                                if (!sourceAComplianceCheckManager) {
+                                    sourceAComplianceCheckManager = new CheckManager();
+                                    sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                        undefined,
+                                        checkType,
+                                        false);
+                                }
+                            }
+                        }
 
-                var viewerOptionsArray2 = [];
-                viewerOptionsArray2.push(xCheckStudioInterface2._firstViewer._params.containerId);
-                viewerOptionsArray2.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
-                localStorage.setItem('viewerContainer2', viewerOptionsArray2)
+                        if (xCheckStudioInterface2) {
+                            var complianceSourceBCB = document.getElementById("complianceSourceBCB");
+                            if (checkType.Name.toLowerCase() === "compliance" &&
+                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase() &&
+                                complianceSourceBCB.checked) {
+                                if (!sourceBComplianceCheckManager) {
 
-                var nodeIdVsComponentDataJSON = [];
-                var componentIdVsComponentDataJSON = [];
+                                    sourceBComplianceCheckManager = new CheckManager();
+                                    sourceBComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                        undefined,
+                                        checkType,
+                                        false);
+                                }
+                            }
+                        }
+                    }
+                }
 
-                nodeIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData);
-                localStorage.setItem('nodeIdVsComponentData1', nodeIdVsComponentDataJSON);
-
-                componentIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData);
-                localStorage.setItem('componentIdVsComponentData1', componentIdVsComponentDataJSON);
-
-                nodeIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData);
-                localStorage.setItem('nodeIdVsComponentData2', nodeIdVsComponentDataJSON);
-
-                componentIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData);
-                localStorage.setItem('componentIdVsComponentData2', componentIdVsComponentDataJSON);
-
-
-                // perform property check
-                checkManager = new CheckManager();
-                checkManager.checkDataSources(xCheckStudioInterface1.sourceProperties, xCheckStudioInterface2.sourceProperties);
-
-                checkManagerJSON = JSON.stringify(checkManager);
-                localStorage.setItem('checkManager', checkManagerJSON);
-
+                postData();
                 window.open("/reviewModule.html", "_blank");
                 return false;
             };
 
-            // read check case data from xml configuration file
-            readCheckCaseXml();
+            var checkCaseSelect = document.getElementById("checkCaseSelect");
+            checkCaseSelect.onchange = function () {
+                var fileName;
+                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                    if (checkCaseFileData.CheckCaseName === this.value) {
+                        fileName = checkCaseFileData.FileName;
+                        break;
+                    }
+                }
+                if (fileName === undefined) {
+                    return;
+                }
+
+                // read check case data from XML checkcase data file
+                checkCaseManager = new CheckCaseManager();
+                checkCaseManager.readCheckCaseData(fileName);
+            }
+
+            // read check cases files list
+            checkCaseFilesData = new CheckCaseFilesData();
+            checkCaseFilesData.readCheckCaseFiles();
         };
-
-        function readCheckCaseXml() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    readCheckCaseData(this);
-                }
-            };
-
-            xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
-            xhttp.send();
-        }
-
-        function readCheckCaseData(xml) {
-            var xmlText = xml.responseText;
-
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(xmlText, "application/xml");
-
-            var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
-            if (checkCaseElements.length < 0) {
-                return;
-            }
-
-            // check case manager object
-            checkCaseManager = new CheckCaseManager();
-
-            var checkCaseElement = checkCaseElements[0];
-
-            // CheckCase object
-            var checkCase = new CheckCase(checkCaseElement.getAttribute("name"));
-
-            for (var i = 0; i < checkCaseElement.children.length; i++) {
-                var componentGroupElement = checkCaseElement.children[i];
-                if (componentGroupElement.localName != "ComponentGroup") {
-                    continue;
-                }
-
-                // ComponentGroup object
-                var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
-
-                for (var j = 0; j < componentGroupElement.children.length; j++) {
-                    var componentElement = componentGroupElement.children[j];
-                    if (componentElement.localName != "ComponentClass") {
-                        continue;
-                    }
-
-                    // Component object
-                    var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
-
-                    for (var k = 0; k < componentElement.children.length; k++) {
-                        var propertyElement = componentElement.children[k];
-                        if (propertyElement.localName != "Property") {
-                            continue;
-                        }
-
-                        var sourceAProperty = propertyElement.getAttribute("sourceAName");
-                        var sourceBProperty = propertyElement.getAttribute("sourceBName");
-                        var severity = propertyElement.getAttribute("severity");
-
-                        // create mapping property object 
-                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty, sourceBProperty, severity);
-                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-                    }
-
-                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
-                }
-
-                checkCase.addComponentGroup(checkCaseComponentGroup);
-            }
-            checkCaseManager.addCheckCase(checkCase);
-            // checkCaseManagerJSON = JSON.stringify(checkCaseManager);
-            // localStorage.setItem('checkCaseManager', checkCaseManagerJSON);
-        }
 
         function openTab(tabName) {
             var tabs = document.getElementsByClassName("containerTab");
@@ -358,12 +516,52 @@
             document.getElementById(tabName).style.display = "block";
         }
 
+        function checkAllCBClick(checkBox) {
+
+        }
+
         function loadModel(dataSoures, viewerContainer, modelTreeContainer) {
 
+            if (!checkCaseManager ||
+                !checkCaseManager.CheckCase) {
+                alert("CheckCaseManager not found.");
+                return;
+            }
             let selectedFiles = document.getElementById(dataSoures).files;
             let selectedFilesCount = selectedFiles.length;
 
             let fileName = selectedFiles[0].name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            //if (checkCaseManager && checkCaseManager.CheckCase) {
+            var sourceAType;
+            var sourceBType;
+            for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+                var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+                if (checkType.Name.toLowerCase() === "comparison") {
+                    sourceAType = checkType.SourceAType;
+                    sourceBType = checkType.SourceBType;
+                }
+                else if (checkType.Name.toLowerCase() === "compliance") {
+                    sourceAType = checkType.SourceAType;
+                }
+            }
+
+            if (viewerContainer.id === "viewerContainer1") {
+                if (!sourceAType ||
+                    sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return;
+                }
+            }
+            else if (viewerContainer.id === "viewerContainer2") {
+                if (!sourceBType ||
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return;
+                }
+            }
+            //}
+
             fileName = fileName.substring(0, fileName.lastIndexOf('.'));
             fileName += '.scs';
 
@@ -371,36 +569,32 @@
             var container_Id = viewerContainer.id;
             var model_Tree = modelTreeContainer.id;
 
+            if (!xCheckStudio.Util.fileExists(uri)) {
+                alert("File not found to load.");
+                return;
+            }
+
             viewerOptions = {
                 containerId: container_Id,
                 endpointUri: uri,
                 modelTree: model_Tree
             };
 
-            // var viewerOptionsArray = [];
-            // viewerOptionsArray.push(viewerOptions.containerId);
-            // viewerOptionsArray.push(viewerOptions.endpointUri);
-
             if (viewerContainer.id === "viewerContainer1") {
-                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface();
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface1.setupViewer(viewerOptions, true);
 
                 document.getElementById("load1").disabled = true;
                 document.getElementById("upload1").disabled = true;
                 document.getElementById("dataSoures1").disabled = true;
-
-                // localStorage.setItem('viewerContainer1', viewerOptionsArray)
-
             }
             else if (viewerContainer.id === "viewerContainer2") {
-                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface();
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface2.setupViewer(viewerOptions, false);
 
                 document.getElementById("load2").disabled = true;
                 document.getElementById("upload2").disabled = true;
                 document.getElementById("dataSoures2").disabled = true;
-
-                // localStorage.setItem('viewerContainer2', viewerOptionsArray)
             }
 
             //enable check Button

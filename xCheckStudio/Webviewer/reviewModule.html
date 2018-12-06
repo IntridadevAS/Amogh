@@ -11,9 +11,24 @@
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
 
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
+
+    <!-- <script src='postTest.php'></script>  -->
+    <script src='postData/comparisonCheckpostDataReader.php'></script>
+    <script src='postData/sourceAComplianceDataReader.php'></script>
+    <script src='postData/sourceBComplianceDataReader.php'></script>
+    <script src='postData/sourceAViewerDataReader.php'></script>
+    <script src='postData/sourceBViewerDataReader.php'></script>
+
+    <script src='postData/sourceAComponentIdVsComponentDataReader.php'></script>
+    <script src='postData/sourceBComponentIdVsComponentDataReader.php'></script>
+    <script src='postData/sourceANodeIdVsComponentDataReader.php'></script>
+    <script src='postData/sourceBNodeIdVsComponentDataReader.php'></script>
+
     <style type="text/css">
         * {
             box-sizing: border-box;
@@ -38,6 +53,7 @@
         .containerTab {
             padding: 20px;
             color: white;
+            overflow: auto;
         }
 
         /* Clear floats after the columns */
@@ -106,17 +122,86 @@
         </th>
         <tr style="height: 80%;  border: none; ">
             <td width="60%" style=" border: none; ">
-                <table id="comparisonTable" style="width: 100%; height:100%; ">
-                    <tr style="height: 50%; width: 100%;">
-                        <td style="height: 50%; width: 60%;">
-                            <div id="mainReviewCell" style="text-align:left;vertical-align:top;max-width: 1200px;height: 90%;"
-                                class="scrollable"></div>
+
+                <table id="ResultColumn" style="width: 100%; height:100%; ">
+                    <tr style="height: 5%">
+                        <td>
+                            <div class="column" onclick="openTab('ComparisonTabPage');" style="background:BlueViolet ;border-radius: 10px; width: 100%; height: 50%">
+                                Comparison
+                            </div>
+                        </td>
+                        <td>
+                            <div class="column" onclick="openTab('SourceAComplianceTabPage');" style="background:LightSalmon ;border-radius: 10px; width: 100%; height: 50%">
+                                Source A Compliance
+                            </div>
+                        </td>
+                        <td>
+                            <div class="column" onclick="openTab('SourceBComplianceTabPage');" style="background:lightgreen ; border-radius: 10px; width: 100%; height: 50%">
+                                Source B Compliance
+                            </div>
                         </td>
                     </tr>
-                    <tr style="height: 50%; width: 100%;">
-                        <td style="height: 50%; width: 60%;">
-                            <div id="detailedReviewCell" style="text-align:left;vertical-align:top;padding:0;max-width: 1200px; height: 100%;"
-                                class="scrollable"></div>
+                    <tr style="height: 85%">
+                        <td colspan="3">
+                            <div id="ComparisonTabPage" class="containerTab" style="display:none;background:BlueViolet; height: 100%">
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <h2>Comparison</h2>
+                                <div style="height:100%" class="scrollable">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div id="ComparisonMainReviewCell" class="scrollable" style="text-align:left;vertical-align:top;max-width: 1200px;height: 90%"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div id="ComparisonDetailedReviewCell" class="scrollable"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="SourceAComplianceTabPage" class="containerTab" style="display:none;background:LightSalmon;  height: 100%">
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <h2>Source A Compliance</h2>
+                                <div style="height:100%" class="scrollable">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div id="SourceAComplianceMainReviewCell" class="scrollable" style="text-align:left;vertical-align:top;max-width: 1200px;height: 90%;"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div id="SourceAComplianceDetailedReviewCell" style="text-align:left;vertical-align:top;padding:0;max-width: 1200px; height: 100%;"
+                                                    class="scrollable"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="SourceBComplianceTabPage" class="containerTab" style="display:none;background:lightgreen;  height: 100%">
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <h2>Source B Compliance</h2>
+                                <div style="height:100%" class="scrollable">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div id="SourceBComplianceMainReviewCell" style="text-align:left;vertical-align:top;max-width: 1200px;height: 90%;"
+                                                    class="scrollable"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div id="SourceBComplianceDetailedReviewCell" style="text-align:left;vertical-align:top;padding:0;max-width: 1200px; height: 100%;"
+                                                    class="scrollable"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -144,33 +229,78 @@
         var reviewModuleInterface;
         var reviewModuleViewerInterface1;
         var reviewModuleViewerInterface2;
+
         var reviewManager;
+
+        var comparisonCheckData;
+        var sourceAComplianceData;
+        var sourceBComplianceData;
+        var sourceAViewerData;
+        var sourceBViewerData;
+
+        var sourceAComponentIdVsComponentData;
+        var sourceBComponentIdVsComponentData;
+        var sourceANodeIdVsComponentData;
+        var sourceBNodeIdVsComponentData;
 
         window.onload = function () {
 
+            if (typeof ComparisonCheckData !== 'undefined') {
+                comparisonCheckData = ComparisonCheckData;
+            }
+
+            if (typeof SourceAComplianceData !== 'undefined') {
+                sourceAComplianceData = SourceAComplianceData;
+            }
+
+            if (typeof SourceBComplianceData !== 'undefined') {
+                sourceBComplianceData = SourceBComplianceData;
+            }
+
+            if (typeof SourceAViewerData !== 'undefined') {
+                sourceAViewerData = SourceAViewerData;
+            }
+
+            if (typeof SourceBViewerData !== 'undefined') {
+                sourceBViewerData = SourceBViewerData;
+            }
+
+
+            if (typeof SourceAComponentIdVsComponentData !== 'undefined') {
+                sourceAComponentIdVsComponentData = SourceAComponentIdVsComponentData;
+            }
+            if (typeof SourceANodeIdVsComponentData !== 'undefined') {
+                sourceANodeIdVsComponentData = SourceANodeIdVsComponentData;
+            }
+            if (typeof SourceBComponentIdVsComponentData !== 'undefined') {
+                sourceBComponentIdVsComponentData = SourceBComponentIdVsComponentData;
+            }
+            if (typeof SourceBNodeIdVsComponentData !== 'undefined') {
+                sourceBNodeIdVsComponentData = SourceBNodeIdVsComponentData;
+            }
+
             loadModel();
             createReviewManager();
-
         };
 
         function loadModel() {
-            // read viewerContainer Id and URL of viewer1
-            var viewerOptions = localStorage['viewerContainer1'];
-            // localStorage.removeItem('viewerContainer1');
-            var viewerOptions1 = viewerOptions.split(",");
-
-            // read viewerContainer Id and URL of viewer2
-            viewerOptions = localStorage['viewerContainer2'];
-            // localStorage.removeItem('viewerContainer2');
-            var viewerOptions2 = viewerOptions.split(",");
-
             reviewModuleInterface = new ReviewModuleInterface();
-            reviewModuleInterface.loadModels(viewerOptions1, viewerOptions2);
+            reviewModuleInterface.loadModels(sourceAViewerData, sourceBViewerData);
 
         }
 
         function createReviewManager() {
             reviewModuleInterface.createReviewManager();
+        }
+
+
+        function openTab(tabName) {
+            var tabs = document.getElementsByClassName("containerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+
+            document.getElementById(tabName).style.display = "block";
         }
 
     </script>

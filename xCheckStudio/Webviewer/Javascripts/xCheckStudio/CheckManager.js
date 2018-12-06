@@ -1,6 +1,9 @@
-function CheckManager(complianceCheck) {
-    this.Name = name;
-    this.ComplianceCheck = complianceCheck;
+var comparisonCheckManager;
+var sourceAComplianceCheckManager;
+var sourceBComplianceCheckManager;
+
+function CheckManager() {
+    this.Name = name;   
 
     this.CheckComponentsGroups = {};
 
@@ -13,84 +16,36 @@ function CheckManager(complianceCheck) {
                
                 this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
             }
-        }
-        
-        // for (var i = 0; i < checkManagerData.CheckComponentsGroups.length; i++) {
-        //     var componentGroupData = checkManagerData.CheckComponentsGroups[i];
-        //     var checkComponentGroup = new CheckComponentGroup( componentGroupData.ComponentClass);
-        //     checkComponentGroup.restore(componentGroupData);
-           
-        //     this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
-        // }
+        }      
+     
     }
 
-    CheckManager.prototype.performCheck = function () {
-        // perform property check
-        //checkManager = new CheckManager(complianceCheck);
+    CheckManager.prototype.performCheck = function (sourceProperties1, 
+                                                    sourceProperties2, 
+                                                    checkCaseType, 
+                                                    comparisonCheck) {      
 
-        if (!complianceCheck) {
-            if (xCheckStudioInterface1 === undefined ||
-                xCheckStudioInterface1 === undefined) {
-                alert("Property check can't be performed.")
-                return;
-            }
-
-
-            this.checkDataSources(xCheckStudioInterface1.sourceProperties,
-                                  xCheckStudioInterface2.sourceProperties);
+        if (comparisonCheck) {
+            this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
         }
         else {
-            var sourceProperties;
-            if (xCheckStudioInterface1 !== undefined &&
-                xCheckStudioInterface1._firstViewer._params.containerId === activeViewerContainer.id) {
-                sourceProperties = xCheckStudioInterface1.sourceProperties;
-            }
-            else if (xCheckStudioInterface2 !== undefined &&
-                xCheckStudioInterface2._firstViewer._params.containerId === activeViewerContainer.id) {
-                sourceProperties = xCheckStudioInterface2.sourceProperties;
-            }
-            if (sourceProperties === undefined) {
-                return;
-            }
-
-            this.checkDataSourceForCompliance(sourceProperties);
-        }
-
-
-        // populate review table 
-        reviewManager = new ReviewManager(this);
-        reviewManager.populateReviewTables();
-
-        // add event handler for collapsible rows
-        var collapsibleRows = document.getElementsByClassName("collapsible");
-        for (var i = 0; i < collapsibleRows.length; i++) {
-            collapsibleRows[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
-                }
-            });
+            this.checkDataSourceForCompliance(sourceProperties1, checkCaseType);
         }
     }
 
-    CheckManager.prototype.checkDataSourceForCompliance = function (sourceProperties) {
+    CheckManager.prototype.checkDataSourceForCompliance = function (sourceProperties,
+                                                                    checkCaseType) {
 
         for (var i = 0, sourcePropertiesCollection = sourceProperties; i < sourcePropertiesCollection.length; i++) {
-            var sourceComponentProperties = sourcePropertiesCollection[i];
-
-            // get check case for comparison to perform
-            var checkCase = checkCaseManager.CheckCases[0];
+            var sourceComponentProperties = sourcePropertiesCollection[i];           
 
             // check if component class exists in checkcase
-            if (!checkCase.componentGroupExists(sourceComponentProperties.MainComponentClass)) {
+            if (!checkCaseType.componentGroupExists(sourceComponentProperties.MainComponentClass)) {
                 continue;
             }
 
             // get check case group
-            var checkCaseGroup = checkCase.getComponentGroup(sourceComponentProperties.MainComponentClass);
+            var checkCaseGroup = checkCaseType.getComponentGroup(sourceComponentProperties.MainComponentClass);
 
             // check if component exists in checkCaseGroup
             if (!checkCaseGroup.componentClassExists(sourceComponentProperties.SubComponentClass)) {
@@ -208,20 +163,22 @@ function CheckManager(complianceCheck) {
         }
     }
 
-    CheckManager.prototype.checkDataSources = function (source1Properties, source2Properties) {
+    CheckManager.prototype.checkDataSources = function (source1Properties, 
+                                                        source2Properties,
+                                                        checkCaseType) {
 
         for (var i = 0, source1PropertiesCollection = source1Properties; i < source1PropertiesCollection.length; i++) {
             var source1ComponentProperties = source1PropertiesCollection[i];
 
             // get check case for comparison to perform
-            var checkCase = checkCaseManager.CheckCases[0];
+            //var checkCase = checkCaseManager.CheckCase;
 
             // check if component class exists in checkcase
-            if (!checkCase.componentGroupExists(source1ComponentProperties.MainComponentClass)) {
+            if (!checkCaseType.componentGroupExists(source1ComponentProperties.MainComponentClass)) {
                 continue;
             }
             // get check case group
-            var checkCaseGroup = checkCase.getComponentGroup(source1ComponentProperties.MainComponentClass);
+            var checkCaseGroup = checkCaseType.getComponentGroup(source1ComponentProperties.MainComponentClass);
 
             // check if component exists in checkCaseGroup
             if (!checkCaseGroup.componentClassExists(source1ComponentProperties.SubComponentClass)) {
@@ -392,14 +349,14 @@ function CheckManager(complianceCheck) {
             var source2ComponentProperties = source2PropertiesCollection[i];
 
             // get check case for comparison to perform
-            var checkCase = checkCaseManager.CheckCases[0];
+           // var checkCase = checkCaseManager.CheckCases[0];
 
             // check if component class exists in checkcase
-            if (!checkCase.componentGroupExists(source2ComponentProperties.MainComponentClass)) {
+            if (!checkCaseType.componentGroupExists(source2ComponentProperties.MainComponentClass)) {
                 continue;
             }
             // get check case group
-            var checkCaseGroup = checkCase.getComponentGroup(source2ComponentProperties.MainComponentClass);
+            var checkCaseGroup = checkCaseType.getComponentGroup(source2ComponentProperties.MainComponentClass);
 
             // check if component exists in checkCaseGroup
             if (!checkCaseGroup.componentClassExists(source2ComponentProperties.SubComponentClass)) {

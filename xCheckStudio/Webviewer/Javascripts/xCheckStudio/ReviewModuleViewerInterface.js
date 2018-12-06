@@ -8,8 +8,7 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
     ReviewModuleViewerInterface.prototype.setupViewer = function () {
         // create and start viewer
         var viewer = new Communicator.WebViewer({
-            containerId: viewerOptions[0], //"myContainer",
-            //endpointUri: "uploads/scs/"+file_name+".scs"
+            containerId: viewerOptions[0], //"myContainer",          
             endpointUri: viewerOptions[1], //"uploads/scs/bearingassembly.scs"	
         });
 
@@ -17,19 +16,14 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
         // create highlight manager
         this.highlightManager = new HighlightManager(viewer);
         if (viewer._params.containerId === "viewerContainer2") {
-            this.highlightManager.nodeIdVsComponentData = JSON.parse(localStorage.getItem('nodeIdVsComponentData2'));
-            // localStorage.removeItem('nodeIdVsComponentData2');
-
-            this.highlightManager.componentIdVsComponentData = JSON.parse(localStorage.getItem('componentIdVsComponentData2'));
-            // localStorage.removeItem('componentIdVsComponentData2');
+            this.highlightManager.nodeIdVsComponentData = sourceBNodeIdVsComponentData;
+            this.highlightManager.componentIdVsComponentData = sourceAComponentIdVsComponentData;           
         }
-        else if (viewer._params.containerId === "viewerContainer1") {
-            this.highlightManager.nodeIdVsComponentData = JSON.parse(localStorage.getItem('nodeIdVsComponentData1'));
-            // localStorage.removeItem('nodeIdVsComponentData1');
-
-            this.highlightManager.componentIdVsComponentData = JSON.parse(localStorage.getItem('componentIdVsComponentData1'));
-            // localStorage.removeItem('componentIdVsComponentData1');
+        else if (viewer._params.containerId === "viewerContainer1") {                    
+            this.highlightManager.nodeIdVsComponentData = sourceANodeIdVsComponentData;
+            this.highlightManager.componentIdVsComponentData = sourceAComponentIdVsComponentData;            
         }
+       
         this.Viewer = viewer;
         this.bindEvents(viewer);
         this.setViewerBackgroundColor();

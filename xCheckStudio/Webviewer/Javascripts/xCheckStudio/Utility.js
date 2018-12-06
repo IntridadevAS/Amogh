@@ -8,6 +8,22 @@ var xCheckStudio;
             return hex.length == 1 ? "0" + hex : hex;
         }
         
+        function getFileExtension(filename) {
+        return filename.split('.').pop();
+        }
+        Util.getFileExtension = getFileExtension;
+       
+        function fileExists(fileURL){
+
+            var http = new XMLHttpRequest();
+        
+            http.open('HEAD', fileURL, false);
+            http.send();
+        
+            return http.status != 404;        
+        }
+        Util.fileExists = fileExists;
+       
         function rgbToHex(r, g, b) {
             return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
         }

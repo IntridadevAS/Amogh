@@ -1,10 +1,10 @@
 function CheckCaseManager() {
-    this.CheckCases = [];
+    this.CheckCase;
 
     this.Ready = true;
-    CheckCaseManager.prototype.addCheckCase = function (checkCase) {
-        this.CheckCases.push(checkCase);
-    }
+    // CheckCaseManager.prototype.addCheckCase = function (checkCase) {
+    //     this.CheckCases.push(checkCase);
+    // }
 
     CheckCaseManager.prototype.readCheckCaseData = function (fileName) {
         var _this = this;
@@ -32,10 +32,10 @@ function CheckCaseManager() {
     }
 
     CheckCaseManager.prototype.onCheckCaseDataReadComplete = function () {
-        
-        // perform property check
-        checkManager = new CheckManager(complianceCheck);
-        checkManager.performCheck();
+
+        // // perform property check
+        // checkManager = new CheckManager(complianceCheck);
+        // checkManager.performCheck();
     }
 
     CheckCaseManager.prototype.readCheckCaseXml = function (xml) {
@@ -56,76 +56,143 @@ function CheckCaseManager() {
 
         // CheckCase object
         var checkCaseName = checkCaseElement.getAttribute("name");
-        var complianceCheck = checkCaseElement.getAttribute("complianceCheck");
-        var checkCase = new CheckCase(checkCaseName, complianceCheck);
+        // var complianceCheck = checkCaseElement.getAttribute("complianceCheck");
+        var checkCase = new CheckCase(checkCaseName/*, complianceCheck*/);
 
-        for (var i = 0; i < checkCaseElement.children.length; i++) {
-            var componentGroupElement = checkCaseElement.children[i];
-            if (componentGroupElement.localName != "ComponentGroup") {
+        //for (var i = 0; i < checkCaseElement.children.length; i++) {
+        for (var checkTypeIndex = 0; checkTypeIndex < checkCaseElement.children.length; checkTypeIndex++) {
+            var checkTypeElement = checkCaseElement.children[checkTypeIndex];
+            if (checkTypeElement.localName != "Check") {
                 continue;
             }
 
-            // ComponentGroup object
-            var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
+            var checkTypeName = checkTypeElement.getAttribute("type");
+            var sourceAType = checkTypeElement.getAttribute("sourceType");
+            var sourceBType;
 
-            for (var j = 0; j < componentGroupElement.children.length; j++) {
-                var componentElement = componentGroupElement.children[j];
-                if (componentElement.localName != "ComponentClass") {
+            if (sourceAType === undefined ||
+                sourceAType === null) {
+                sourceAType = checkTypeElement.getAttribute("sourceAType");
+                sourceBType = checkTypeElement.getAttribute("sourceBType");
+            }
+
+            var checkType = new CheckType(checkTypeName, sourceAType, sourceBType);
+
+            for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
+                var componentGroupElement = checkTypeElement.children[componentGroupIndex];
+                if (componentGroupElement.localName != "ComponentGroup") {
                     continue;
                 }
 
-                // Component object
-                var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
+                // ComponentGroup object
+                var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
 
-                for (var k = 0; k < componentElement.children.length; k++) {
-                    var propertyElement = componentElement.children[k];
-                    if (propertyElement.localName != "Property") {
+                for (var j = 0; j < componentGroupElement.children.length; j++) {
+                    var componentElement = componentGroupElement.children[j];
+                    if (componentElement.localName != "ComponentClass") {
                         continue;
                     }
 
-                    var sourceAProperty;
-                    var sourceBProperty;
-                    var rule;
-                    if (complianceCheck.toLowerCase() == "true".toLowerCase()) {
-                        sourceAProperty = propertyElement.getAttribute("name");
-                        rule = propertyElement.getAttribute("rule");
-                    }
-                    else {
-                        sourceAProperty = propertyElement.getAttribute("sourceAName");
-                        sourceBProperty = propertyElement.getAttribute("sourceBName");
-                    }
-                    var severity = propertyElement.getAttribute("severity");
-                    var comment = propertyElement.getAttribute("comment");
+                    // Component object
+                    var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
 
-                    // create mapping property object 
-                    var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-                        sourceBProperty,
-                        severity,
-                        rule,
-                        comment);
-                    checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                    for (var k = 0; k < componentElement.children.length; k++) {
+                        var propertyElement = componentElement.children[k];
+                        if (propertyElement.localName != "Property") {
+                            continue;
+                        }
+
+                        var sourceAProperty = propertyElement.getAttribute("name");
+                        var sourceBProperty;
+                        var rule;
+                        if (sourceAProperty === undefined ||
+                            sourceAProperty === null) {
+                            sourceAProperty = propertyElement.getAttribute("sourceAName");
+                            sourceBProperty = propertyElement.getAttribute("sourceBName");
+                        }
+                        else {
+                            rule = propertyElement.getAttribute("rule");
+                        }
+
+                        // if (complianceCheck.toLowerCase() == "true".toLowerCase()) {
+                        //     sourceAProperty = propertyElement.getAttribute("name");
+                        //     rule = propertyElement.getAttribute("rule");
+                        // }
+                        // else {
+                        //     sourceAProperty = propertyElement.getAttribute("sourceAName");
+                        //     sourceBProperty = propertyElement.getAttribute("sourceBName");
+                        // }
+                        var severity = propertyElement.getAttribute("severity");
+                        var comment = propertyElement.getAttribute("comment");
+
+                        // create mapping property object 
+                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
+                            sourceBProperty,
+                            severity,
+                            rule,
+                            comment);
+                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                    }
+
+                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
                 }
 
-                checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+                checkType.addComponentGroup(checkCaseComponentGroup);
             }
 
-            checkCase.addComponentGroup(checkCaseComponentGroup);
+            checkCase.addCheckType(checkType);
         }
-        this.addCheckCase(checkCase);
+
+        //this.addCheckCase(checkCase);
+        this.CheckCase = checkCase;
     }
 }
 
-function CheckCase(name, complianceCheck) {
+function CheckCase(name/*, complianceCheck*/) {
     this.Name = name;
-    this.ComplianceCheck = complianceCheck;
+    //this.ComplianceCheck = complianceCheck;
+
+    this.CheckTypes = [];
+
+    CheckCase.prototype.addCheckType = function (checkType) {
+        this.CheckTypes.push(checkType);
+    }
+
+    CheckCase.prototype.checkTypeExists = function (checkTypeName) {
+        for (var i = 0; i < this.CheckTypes.length; i++) {
+            if (this.CheckTypes[i].Name === checkTypeName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CheckCase.prototype.getCheckType = function (checkTypeName) {
+        for (var i = 0; i < this.CheckTypes.length; i++) {
+            if (this.CheckTypes[i].Name === checkTypeName) {
+                return this.CheckTypes[i];
+            }
+        }
+
+        return undefined;
+    }
+}
+
+function CheckType(name, 
+                   sourceAType, 
+                   sourceBType) {
+    this.Name = name;
+    this.SourceAType = sourceAType;
+    this.SourceBType = sourceBType;
 
     this.ComponentGroups = [];
 
-    CheckCase.prototype.addComponentGroup = function (componentGroup) {
+    CheckType.prototype.addComponentGroup = function (componentGroup) {
         this.ComponentGroups.push(componentGroup);
     }
 
-    CheckCase.prototype.componentGroupExists = function (componentClass) {
+    CheckType.prototype.componentGroupExists = function (componentClass) {
         for (var i = 0; i < this.ComponentGroups.length; i++) {
             if (this.ComponentGroups[i].Name === componentClass) {
                 return true;
@@ -135,7 +202,7 @@ function CheckCase(name, complianceCheck) {
         return false;
     }
 
-    CheckCase.prototype.getComponentGroup = function (componentClass) {
+    CheckType.prototype.getComponentGroup = function (componentClass) {
         for (var i = 0; i < this.ComponentGroups.length; i++) {
             if (this.ComponentGroups[i].Name === componentClass) {
                 return this.ComponentGroups[i];

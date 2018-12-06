@@ -1,3 +1,4 @@
+
 var ReviewModuleInterface = function () {
     ReviewModuleInterface.prototype.loadModels = function (viewerOptions1, viewerOptions2) {
         reviewModuleViewerInterface1 = new ReviewModuleViewerInterface(viewerOptions1);
@@ -8,15 +9,33 @@ var ReviewModuleInterface = function () {
     }
 
     ReviewModuleInterface.prototype.createReviewManager = function () {
-        var parsedCheckmanagerData = JSON.parse(localStorage['checkManager']);
-        // localStorage.removeItem('checkManager');
+        // create check managers
+        var comparisonCheckManager;
+        var sourceAComplianceCheckManager;
+        var sourceBComplianceCheckManager;
 
-        var checkManager = new CheckManager("");
-        checkManager.restore(parsedCheckmanagerData)
+        if (comparisonCheckData) {
+            comparisonCheckManager = new CheckManager("");
+            comparisonCheckManager.restore(comparisonCheckData)
+        }
 
-        // populate review table 
-        reviewManager = new ReviewManager(checkManager);
-        reviewManager.populateReviewTables();
+        if (sourceAComplianceData) {
+            sourceAComplianceCheckManager = new CheckManager("");
+            sourceAComplianceCheckManager.restore(sourceAComplianceData)
+        }
+
+        if (sourceBComplianceData) {
+            sourceBComplianceCheckManager = new CheckManager("");
+            sourceBComplianceCheckManager.restore(sourceBComplianceData)
+        }
+
+
+
+        // populate review table
+        reviewManager = new ReviewManager();
+        reviewManager.populateReviewTables(comparisonCheckManager,
+            sourceAComplianceCheckManager,
+            sourceBComplianceCheckManager);
 
         // add event handler for collapsible rows
         var collapsibleRows = document.getElementsByClassName("collapsible");
@@ -31,5 +50,6 @@ var ReviewModuleInterface = function () {
                 }
             });
         }
-    }
+
+    }   
 }
