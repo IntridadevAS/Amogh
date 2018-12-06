@@ -1,1 +1,0 @@
-var SourceBViewerData = ["viewerContainer2","uploads/scs/905676_dummy.scs"];
