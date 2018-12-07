@@ -1,6 +1,8 @@
 <html>
 
 <head>
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
 
@@ -278,6 +280,17 @@
             if (typeof SourceBNodeIdVsComponentData !== 'undefined') {
                 sourceBNodeIdVsComponentData = SourceBNodeIdVsComponentData;
             }
+
+            // remove post data js files from server from earlier check results, if any
+             $.ajax({
+                 data: '',
+                 url: 'postData/postDataCleaner.php',
+                 method: 'POST', // or GET
+                 async: false,
+                 success: function (msg) {
+                     //alert('Post Data files deleted');
+                 }
+             });
 
             loadModel();
             createReviewManager();

@@ -254,6 +254,16 @@
     <script type="text/javascript">
 
         function postData(url, method) {
+            // remove post data js files from server from earlier check results, if any
+            $.ajax({
+                data: '',
+                url: 'postData/postDataCleaner.php',
+                method: 'POST', // or GET
+                async: false,
+                success: function (msg) {
+                    //alert('Post Data files deleted');
+                }
+            });
 
             // post comparison data
             if (comparisonCheckManager) {
@@ -410,16 +420,23 @@
         var checkCaseFilesData;
 
         window.onload = function () {
-
-
-
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
-              
 
                 var checkCaseSelect = document.getElementById("checkCaseSelect");
                 if (checkCaseSelect.value === "None") {
                     alert("Please select check case from list.")
+                    return;
+                }
+
+                // check if any check case type is selected
+                var comparisonCB = document.getElementById("comparisonCB");
+                var complianceSourceACB = document.getElementById("complianceSourceACB");
+                var complianceSourceBCB = document.getElementById("complianceSourceBCB");
+                if (!comparisonCB.checked &&
+                    !complianceSourceACB.checked &&
+                    !complianceSourceBCB.checked) {
+                    alert("No selected check type found. Please select check type.")
                     return;
                 }
 

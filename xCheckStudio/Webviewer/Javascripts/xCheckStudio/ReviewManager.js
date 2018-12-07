@@ -20,13 +20,17 @@ function ReviewManager() {
         }
 
         if (sourceAComplianceCheckManager) {
-            this.SourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager);
-            this.SourceAComplianceReviewManager.populateReviewTable("SourceAComplianceMainReviewCell");
+            this.SourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                                                                              "SourceAComplianceMainReviewCell",
+                                                                              "SourceAComplianceDetailedReviewCell");
+            this.SourceAComplianceReviewManager.populateReviewTable();
         }
 
         if (sourceBComplianceCheckManager) {
-            this.SourcebBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager);
-            this.SourcebBComplianceReviewManager.populateReviewTable("SourceBComplianceMainReviewCell");
+            this.SourcebBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                                                                               "SourceBComplianceMainReviewCell",
+                                                                               "SourceBComplianceDetailedReviewCell");
+            this.SourcebBComplianceReviewManager.populateReviewTable();
         }
     } 
     
