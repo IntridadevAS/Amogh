@@ -1,11 +1,18 @@
 
-var ReviewModuleViewerInterface = function (viewerOptions) {
+var ReviewModuleViewerInterface = function (viewerOptions,
+    componentIdVsComponentData,
+    nodeIdVsComponentData) {
 
     this.ViewerOptions = viewerOptions;
     this.selectedNodeId = null;
     this.selectedComponentId = null;
 
+    this.ComponentIdVsComponentData = componentIdVsComponentData;
+    this.NodeIdVsComponentData = nodeIdVsComponentData;
+    this.ComponentIdStatusData = {};
+
     ReviewModuleViewerInterface.prototype.setupViewer = function () {
+
         // create and start viewer
         var viewer = new Communicator.WebViewer({
             containerId: viewerOptions[0], //"myContainer",          
@@ -13,20 +20,31 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
         });
 
         viewer.start();
-        // create highlight manager
-        this.highlightManager = new HighlightManager(viewer);
-        if (viewer._params.containerId === "viewerContainer2") {
-            this.highlightManager.nodeIdVsComponentData = sourceBNodeIdVsComponentData;
-            this.highlightManager.componentIdVsComponentData = sourceAComponentIdVsComponentData;           
-        }
-        else if (viewer._params.containerId === "viewerContainer1") {                    
-            this.highlightManager.nodeIdVsComponentData = sourceANodeIdVsComponentData;
-            this.highlightManager.componentIdVsComponentData = sourceAComponentIdVsComponentData;            
-        }
-       
         this.Viewer = viewer;
         this.bindEvents(viewer);
         this.setViewerBackgroundColor();
+
+        // create highlight manager
+        this.highlightManager = new HighlightManager(viewer, this.ComponentIdVsComponentData, this.NodeIdVsComponentData);
+    }
+
+    ReviewModuleViewerInterface.prototype.highlightComponentsfromResult = function () {
+        for (var componentId in this.ComponentIdStatusData) {
+            if (this.ComponentIdStatusData.hasOwnProperty(componentId)) {
+
+                var tr = this.ComponentIdStatusData[componentId][0];
+                var status = this.ComponentIdStatusData[componentId][1];
+
+                // set the component row color in main review table     
+                var hexColor = this.highlightManager.getComponentHexColor(status);
+                if (hexColor === undefined) {
+                    continue;
+                }
+                tr.style.backgroundColor = hexColor;
+
+                this.highlightManager.changeComponentColorInViewer(componentId, status);
+            }
+        }
     }
 
     ReviewModuleViewerInterface.prototype.bindEvents = function (viewer) {
@@ -36,6 +54,8 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
         viewer.setCallbacks({
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
+
+                _this.highlightComponentsfromResult();
             },
             selectionArray: function (selections) {
                 for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
@@ -66,13 +86,6 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
         }
 
         this.highlightManager.highlightNodeInViewer(nodeId);
-        if (this.Viewer._params.containerId == "viewerContainer2") {
-            reviewModuleViewerInterface1.highlightManager.highlightNodeInViewer(nodeId);
-        }
-        else if (this.Viewer._params.containerId == "viewerContainer1") {
-            reviewModuleViewerInterface2.highlightManager.highlightNodeInViewer(nodeId);
-        }
-        
 
         this._selectedNodeId = nodeId;
     };
@@ -94,8 +107,7 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
                 if (model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.BodyInstance) {
                     let data = this.highlightManager.nodeIdVsComponentData[this.selectedNodeId];
                     if (data != undefined) {
-                        // if (checkManager != undefined) {
-                        // get component identifier
+
                         var componentIdentifier = data["Name"];
                         if (data.MainComponentClass === "PipingNetworkSegment") {
                             componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
@@ -107,17 +119,8 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
                         // highlight corresponding component in review table 
                         this.HighlightReviewComponent(data);
 
-                        // highlight corresponding component in model browser table
-                        // this._modelTree.HighlightModelBrowserRow(componentIdentifier);
-
-                        if (this.Viewer._params.containerId == "viewerContainer2") {
-                            this.highlightComponent(componentIdentifier);
-                            //    xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                        }
-                        else if (this.Viewer._params.containerId == "viewerContainer1") {
-                            this.highlightComponent(componentIdentifier);
-                            //    xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                        }
+                        // highlight corresponding component in model browser table                     
+                        this.highlightComponent(componentIdentifier);
                     }
                 }
             }
@@ -138,7 +141,7 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
                     var child = doc[i].nextSibling.children[j];
                     var childRows = child.getElementsByTagName("tr");
                     for (var k = 0; k < childRows.length; k++) {
-                        
+
                         var childRow = childRows[k];
                         var childRowColumns = childRow.getElementsByTagName("td");
                         if (childRowColumns.length > 0) {
@@ -153,11 +156,11 @@ var ReviewModuleViewerInterface = function (viewerOptions) {
                                         if (reviewManager.SelectedComponentRow) {
                                             reviewManager.RestoreBackgroundColor(reviewManager.SelectedComponentRow);
                                         }
-        
+
                                         reviewManager.ChangeBackgroundColor(childRow)
                                         reviewManager.populateDetailedReviewTable(childRow);
                                         reviewManager.SelectedComponentRow = childRow;
-        
+
                                         break;
                                     }
 

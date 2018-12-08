@@ -1,14 +1,36 @@
 
 function ComplianceReviewManager(complianceCheckManager,
-                                 mainReviewTableContainer,
-                                 detailedReviewTableContainer) {
+    viewerData,
+    mainReviewTableContainer,
+    detailedReviewTableContainer,
+    componentIdVsComponentData,
+    nodeIdVsComponentData) {
+
+    this.ViewerData = viewerData;
+  
+    this.ReviewModuleViewerInterface;
+   
     this.ComplianceCheckManager = complianceCheckManager;
 
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
+    this.ComponentIdStatusData = {};
+
+    this.ComponentIdVsComponentData = componentIdVsComponentData;
+    this.NodeIdVsComponentData = nodeIdVsComponentData;
+
+    ComplianceReviewManager.prototype.loadDatasource = function () {
+        this.ReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.ViewerData,
+                                                                           this.ComponentIdVsComponentData,
+                                                                           this.NodeIdVsComponentData);
+        this.ReviewModuleViewerInterface.ComponentIdStatusData =  this.ComponentIdStatusData;
+
+        this.ReviewModuleViewerInterface.setupViewer();      
+    }
+
     ComplianceReviewManager.prototype.populateReviewTable = function () {
-        var parentTable = document.getElementById( this.MainReviewTableContainer);
+        var parentTable = document.getElementById(this.MainReviewTableContainer);
 
         for (var componentsGroupName in this.ComplianceCheckManager.CheckComponentsGroups) {
             var componentsGroup = this.ComplianceCheckManager.CheckComponentsGroups[componentsGroupName];
@@ -34,21 +56,10 @@ function ComplianceReviewManager(complianceCheckManager,
             var tr = document.createElement("tr");
             thead.appendChild(tr);
 
-            // if (!checkManager.ComplianceCheck) {
+            th = document.createElement("th");
+            th.innerHTML = "Source"
+            tr.appendChild(th);
 
-            // th = document.createElement("th");
-            // th.innerHTML = "Source A"
-            // tr.appendChild(th);
-
-            // th = document.createElement("th");
-            // th.innerHTML = "Source B"
-            // tr.appendChild(th);
-            // }
-            // else {
-                th = document.createElement("th");
-                th.innerHTML = "Source"
-                tr.appendChild(th);
-            // }
 
             th = document.createElement("th");
             th.innerHTML = "Status"
@@ -85,12 +96,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 td = document.createElement("td");
                 td.innerHTML = component.SourceAName;
                 tr.appendChild(td);
-
-                // if (!checkManager.ComplianceCheck) {
-                // td = document.createElement("td");
-                // td.innerHTML = component.SourceBName;
-                // tr.appendChild(td);
-                // }
 
                 td = document.createElement("td");
                 td.innerHTML = component.Status;
@@ -129,16 +134,15 @@ function ComplianceReviewManager(complianceCheckManager,
                     tr.appendChild(td);
                 }
 
-                // highlight component row in main review table with corresponding color after check performed
-                var highlightManager = new HighlightManager();
-                highlightManager.changeComponentRowColor(tr, component.Status);
+                 // keep track of component id vs table row and status         
+                this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];               
             }
 
             this.bindEvents(table);
-        }
+        }        
     }
 
-    
+
     ComplianceReviewManager.prototype.bindEvents = function (table) {
         var _this = this;
 
@@ -167,39 +171,9 @@ function ComplianceReviewManager(complianceCheckManager,
                         var ownerId = row.cells[_this.MainReviewTableStatusCell + 3].innerHTML;
                         componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
                     }
-
-                    // if (!checkManager.ComplianceCheck) {
-                        // if not compliance check
-
-                        // highlight component in graphics view in both viewer
-                        reviewModuleViewerInterface1.highlightComponent(componentIdentifier);
-                        reviewModuleViewerInterface2.highlightComponent(componentIdentifier);
-
-                        // highlight model browser table row in both viewer
-                        // xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                        // xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    // }
-                    // else {
-                    //     // if compliance check
-                    //     if (reviewModuleViewerInterface1 !== undefined &&
-                    //         reviewModuleViewerInterface1.Viewer._params.containerId === activeViewerContainer.id) {
-
-                    //         // highlight component in graphics view in active viewer
-                    //         reviewModuleViewerInterface1.highlightComponent(componentIdentifier);
-
-                    //         // highlight model browser table row in active viewer
-                    //         // reviewModuleInterface.reviewModuleViewerInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    //     }
-                    //     else if (reviewModuleViewerInterface2 !== undefined &&
-                    //         reviewModuleViewerInterface2.Viewer._params.containerId === activeViewerContainer.id) {
-
-                    //         // highlight component in graphics view in active viewer
-                    //         reviewModuleViewerInterface2.highlightComponent(componentIdentifier);
-
-                    //         // highlight model browser table row in active viewer
-                    //         // reviewModuleInterface.reviewModuleViewerInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    //     }
-                    // }
+                   
+                    // highlight component in graphics view in both viewer
+                    _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);                    
 
                     _this.SelectedComponentRow = row;
                 };
@@ -285,9 +259,6 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
                 }
 
-                // var parentTable = document.getElementById("ComparisonDetailedReviewCell");
-                // parentTable.innerHTML = '';
-
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
 
@@ -312,16 +283,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 var th = document.createElement("th");
                 th.innerHTML = "Source A Value"
                 tr.appendChild(th);
-
-                // // if (!checkManager.ComplianceCheck) {
-                // th = document.createElement("th");
-                // th.innerHTML = "Source B Name"
-                // tr.appendChild(th);
-
-                // th = document.createElement("th");
-                // th.innerHTML = "Source B Value"
-                // tr.appendChild(th);
-                // // }
 
                 th = document.createElement("th");
                 th.innerHTML = "Status"
@@ -365,16 +326,6 @@ function ComplianceReviewManager(complianceCheckManager,
         td = document.createElement("td");
         td.innerHTML = property.SourceAValue;
         tr.appendChild(td);
-
-        // //if (!checkManager.ComplianceCheck) {
-        // td = document.createElement("td");
-        // td.innerHTML = property.SourceBName;
-        // tr.appendChild(td);
-
-        // td = document.createElement("td");
-        // td.innerHTML = property.SourceBValue;;
-        // tr.appendChild(td);
-        // //}
 
         td = document.createElement("td");
         if (property.PerformCheck &&

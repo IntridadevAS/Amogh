@@ -6,12 +6,10 @@
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
@@ -19,7 +17,6 @@
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
 
-    <!-- <script src='postTest.php'></script>  -->
     <script src='postData/comparisonCheckpostDataReader.php'></script>
     <script src='postData/sourceAComplianceDataReader.php'></script>
     <script src='postData/sourceBComplianceDataReader.php'></script>
@@ -212,12 +209,12 @@
                 <table id="comparisonTable" style="width: 100%; height:100%; margin: auto;">
                     <tr style="width: 100%; height: 50%; margin: auto">
                         <td>
-                            <div id="viewerContainer1" class="example-canvas-tiny" style="min-width: 400px;"></div>
+                            <div id="viewerContainer1" class="example-canvas-tiny" style="min-width: 400px;">Source A</div>
                         </td>
                     </tr>
                     <tr style="width: 100%; height: 50%;">
                         <td>
-                            <div id="viewerContainer2" class="example-canvas-tiny" style="min-width: 400px;"></div>
+                            <div id="viewerContainer2" class="example-canvas-tiny" style="min-width: 400px;">Source B</div>
                         </td>
                     </tr>
                 </table>
@@ -228,84 +225,103 @@
     </table>
 
     <script>
-        var reviewModuleInterface;
-        var reviewModuleViewerInterface1;
-        var reviewModuleViewerInterface2;
-
-        var reviewManager;
-
-        var comparisonCheckData;
-        var sourceAComplianceData;
-        var sourceBComplianceData;
-        var sourceAViewerData;
-        var sourceBViewerData;
-
-        var sourceAComponentIdVsComponentData;
-        var sourceBComponentIdVsComponentData;
-        var sourceANodeIdVsComponentData;
-        var sourceBNodeIdVsComponentData;
+        var comparisonReviewManager;
+        var sourceAComplianceReviewManager;
+        var sourceBComplianceReviewManager;
 
         window.onload = function () {
 
+            var comparisonCheckManager;
+            var sourceAComplianceCheckManager;
+            var sourceBComplianceCheckManager;
+
             if (typeof ComparisonCheckData !== 'undefined') {
-                comparisonCheckData = ComparisonCheckData;
+
+                // restore comparison check data
+                comparisonCheckManager = new CheckManager("");
+                comparisonCheckManager.restore(ComparisonCheckData)
+
+                // create comparisonreviewmanager
+                comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                    SourceAViewerData,
+                    SourceBViewerData,
+                    "ComparisonMainReviewCell",
+                    "ComparisonDetailedReviewCell",
+                    SourceAComponentIdVsComponentData,
+                    SourceANodeIdVsComponentData,
+                    SourceBComponentIdVsComponentData,
+                    SourceBNodeIdVsComponentData);
+
+                // populate review table
+                comparisonReviewManager.populateReviewTable();
             }
 
             if (typeof SourceAComplianceData !== 'undefined') {
-                sourceAComplianceData = SourceAComplianceData;
+
+                // restore source A compliance check data
+                sourceAComplianceCheckManager = new CheckManager("");
+                sourceAComplianceCheckManager.restore(SourceAComplianceData)
+
+                // create sourceAComplianceReviewManager
+                sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                    SourceAViewerData,
+                    "SourceAComplianceMainReviewCell",
+                    "SourceAComplianceDetailedReviewCell",
+                    SourceAComponentIdVsComponentData,
+                    SourceANodeIdVsComponentData);
+
+                // populate review table
+                sourceAComplianceReviewManager.populateReviewTable();
             }
 
             if (typeof SourceBComplianceData !== 'undefined') {
-                sourceBComplianceData = SourceBComplianceData;
+
+                // restore source A compliance check data
+                sourceBComplianceCheckManager = new CheckManager("");
+                sourceBComplianceCheckManager.restore(SourceBComplianceData)
+
+                // create sourceBComplianceReviewManager
+                sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                    SourceBViewerData,
+                    "SourceBComplianceMainReviewCell",
+                    "SourceBComplianceDetailedReviewCell",
+                    SourceBComponentIdVsComponentData,
+                    SourceBNodeIdVsComponentData);
+
+                // populate review table
+                sourceBComplianceReviewManager.populateReviewTable();
             }
 
-            if (typeof SourceAViewerData !== 'undefined') {
-                sourceAViewerData = SourceAViewerData;
-            }
-
-            if (typeof SourceBViewerData !== 'undefined') {
-                sourceBViewerData = SourceBViewerData;
-            }
-
-
-            if (typeof SourceAComponentIdVsComponentData !== 'undefined') {
-                sourceAComponentIdVsComponentData = SourceAComponentIdVsComponentData;
-            }
-            if (typeof SourceANodeIdVsComponentData !== 'undefined') {
-                sourceANodeIdVsComponentData = SourceANodeIdVsComponentData;
-            }
-            if (typeof SourceBComponentIdVsComponentData !== 'undefined') {
-                sourceBComponentIdVsComponentData = SourceBComponentIdVsComponentData;
-            }
-            if (typeof SourceBNodeIdVsComponentData !== 'undefined') {
-                sourceBNodeIdVsComponentData = SourceBNodeIdVsComponentData;
-            }
+            // make buttons collapsible
+            setButtonsCollapsible();
 
             // remove post data js files from server from earlier check results, if any
-             $.ajax({
-                 data: '',
-                 url: 'postData/postDataCleaner.php',
-                 method: 'POST', // or GET
-                 async: false,
-                 success: function (msg) {
-                     //alert('Post Data files deleted');
-                 }
-             });
-
-            loadModel();
-            createReviewManager();
+            $.ajax({
+                data: '',
+                url: 'postData/postDataCleaner.php',
+                method: 'POST', // or GET
+                async: false,
+                success: function (msg) {
+                    //alert('Post Data files deleted');
+                }
+            });
         };
 
-        function loadModel() {
-            reviewModuleInterface = new ReviewModuleInterface();
-            reviewModuleInterface.loadModels(sourceAViewerData, sourceBViewerData);
-
+        function setButtonsCollapsible() {
+            // add event handler for collapsible rows
+            var collapsibleRows = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < collapsibleRows.length; i++) {
+                collapsibleRows[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
         }
-
-        function createReviewManager() {
-            reviewModuleInterface.createReviewManager();
-        }
-
 
         function openTab(tabName) {
             var tabs = document.getElementsByClassName("containerTab");
@@ -314,6 +330,42 @@
             }
 
             document.getElementById(tabName).style.display = "block";
+
+            // clear views before loading models into viewers
+            if (comparisonReviewManager) {
+                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.model.clear();
+                }
+
+                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
+                }
+            }
+            if (sourceAComplianceReviewManager) {
+                if (sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
+                    sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
+                    sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
+                }
+            }
+            if (sourceBComplianceReviewManager) {
+                if (sourceBComplianceReviewManager.ReviewModuleViewerInterface &&
+                    sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
+                    sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
+                }
+            }
+
+            // load data sources in viewer
+            if (tabName === "ComparisonTabPage") {
+                comparisonReviewManager.loadDatasources();
+            }
+            else if (tabName === "SourceAComplianceTabPage") {
+                sourceAComplianceReviewManager.loadDatasource();
+            }
+            else if (tabName === "SourceBComplianceTabPage") {
+                sourceBComplianceReviewManager.loadDatasource();
+            }
         }
 
     </script>

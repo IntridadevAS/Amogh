@@ -1,15 +1,17 @@
 var SuccessColor = "#70db70";
 var ErrorColor = "#ff4d4d";
 var WarningColor = "#ffff99";
-var NoMatchColor ="#ccccff";
+var NoMatchColor = "#ccccff";
 var NoValueColor = "#f2f2f2";
 
-function HighlightManager(viewer) {
-    
-    this.Viewer = viewer;  
-   
-    this.componentIdVsComponentData = {};
-    this.nodeIdVsComponentData = {};
+function HighlightManager(viewer,
+    componentIdVsComponentData,
+    nodeIdVsComponentData) {
+
+    this.Viewer = viewer;
+
+    this.ComponentIdVsComponentData = componentIdVsComponentData
+    this.NodeIdVsComponentData = nodeIdVsComponentData;
 
     HighlightManager.prototype.getNodeIdFromComponentIdentifier = function (componentIdentifier) {
 
@@ -17,56 +19,59 @@ function HighlightManager(viewer) {
             return undefined;
         }
 
-        if (!(componentIdentifier in this.componentIdVsComponentData)) {
+        if (!(componentIdentifier in this.ComponentIdVsComponentData)) {
             return undefined;
         }
 
         this._selectedComponentId = componentIdentifier;
 
-        var component_data = this.componentIdVsComponentData[componentIdentifier];
+        var component_data = this.ComponentIdVsComponentData[componentIdentifier];
         var nodeId = component_data.NodeId;
 
         return nodeId;
     }
 
-    HighlightManager.prototype.changeComponentRowColor = function (/*componentIdentifier,*/
-                                                                componentRow, 
-                                                                status) {
-
-        // var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
-        // if (nodeId === undefined) {
-        //     return;
-        // }
-
-        var color;
+    HighlightManager.prototype.getComponentHexColor = function (status) {
+        // var color;
         if (status.toLowerCase() === ("OK").toLowerCase()) {
-            color = SuccessColor;
+            return SuccessColor;
         }
         else if (status.toLowerCase() === ("Error").toLowerCase()) {
-            color = ErrorColor;
+            return ErrorColor;
         }
         else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-            color = WarningColor;
+            return WarningColor;
         }
         else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-            color = NoMatchColor;
+            return NoMatchColor;
         }
         else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-            color = NoValueColor;
+            return NoValueColor;
         }
         else {
+            return undefined;
+        }
+    }
+
+    HighlightManager.prototype.changeComponentColorInViewer = function (componentIdentifier,
+        /*componentRow,*/
+        status) {
+
+        var hexColor = this.getComponentHexColor(status);
+        if (hexColor === undefined) {
             return;
         }
 
-        // // set nodes face and line colors
-        // var rgbColor = xCheckStudio.Util.hexToRgb(color);
-        // var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
-        // this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
-        // this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
+        var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
+        if (nodeId === undefined) {
+            return;
+        }
 
-        // set the component row color in main review table
-        //componentRow.style.backgroundColor =  xCheckStudio.Util.rgbToHex(color.r, color.g, color.b);     
-        componentRow.style.backgroundColor =   color;
+        // set nodes face and line colors from status of compoentns
+        var rgbColor = xCheckStudio.Util.hexToRgb(hexColor);
+        var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
+        this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
+        this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
     }
 
     HighlightManager.prototype.highlightNodeInViewer = function (nodeId) {

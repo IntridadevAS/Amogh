@@ -1,9 +1,48 @@
-function ComparisonReviewManager(comparisonCheckManager) {
+function ComparisonReviewManager(comparisonCheckManager,
+    sourceAViewerData,
+    sourceBViewerData,
+    mainReviewTableContainer,
+    detailedReviewTableContainer,
+    sourceAComponentIdVsComponentData,
+    sourceANodeIdVsComponentData,
+    sourceBComponentIdVsComponentData,
+    sourceBNodeIdVsComponentData) {
+    
+    this.SourceAViewerData = sourceAViewerData;
+    this.SourceBViewerData = sourceBViewerData;
+
+    this.SourceAReviewModuleViewerInterface;
+    this.SourceBReviewModuleViewerInterface;
+
+    this.MainReviewTableContainer = mainReviewTableContainer;
+    this.DetailedReviewTableContainer = detailedReviewTableContainer;
+
+    this.ComponentIdStatusData = {}; 
+
     this.ComparisonCheckManager = comparisonCheckManager;
 
-    ComparisonReviewManager.prototype.populateReviewTable = function (reviewTableContainer) {
+     this.SourceAComponentIdVsComponentData =sourceAComponentIdVsComponentData;
+     this.SourceANodeIdVsComponentData =sourceANodeIdVsComponentData;
+     this.SourceBComponentIdVsComponentData =sourceBComponentIdVsComponentData;
+     this.SourceBNodeIdVsComponentData =sourceBNodeIdVsComponentData;
 
-        var parentTable = document.getElementById(reviewTableContainer);
+    ComparisonReviewManager.prototype.loadDatasources = function () {
+        this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
+            this.SourceAComponentIdVsComponentData,
+            this.SourceANodeIdVsComponentData);
+        this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
+        this.SourceAReviewModuleViewerInterface.setupViewer();
+
+        this.SourceBReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceBViewerData,
+            this.SourceBComponentIdVsComponentData,
+            this.SourceBNodeIdVsComponentData);
+        this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
+        this.SourceBReviewModuleViewerInterface.setupViewer();
+    }
+
+    ComparisonReviewManager.prototype.populateReviewTable = function () {
+
+        var parentTable = document.getElementById(this.MainReviewTableContainer);
 
         for (var componentsGroupName in this.ComparisonCheckManager.CheckComponentsGroups) {
             var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
@@ -29,8 +68,6 @@ function ComparisonReviewManager(comparisonCheckManager) {
             var tr = document.createElement("tr");
             thead.appendChild(tr);
 
-            // if (!checkManager.ComplianceCheck) {
-
             th = document.createElement("th");
             th.innerHTML = "Source A"
             tr.appendChild(th);
@@ -38,13 +75,7 @@ function ComparisonReviewManager(comparisonCheckManager) {
             th = document.createElement("th");
             th.innerHTML = "Source B"
             tr.appendChild(th);
-            // }
-            // else {
-            //     th = document.createElement("th");
-            //     th.innerHTML = "Source"
-            //     tr.appendChild(th);
-            // }
-
+      
             th = document.createElement("th");
             th.innerHTML = "Status"
             tr.appendChild(th);
@@ -80,13 +111,11 @@ function ComparisonReviewManager(comparisonCheckManager) {
                 td = document.createElement("td");
                 td.innerHTML = component.SourceAName;
                 tr.appendChild(td);
-
-                // if (!checkManager.ComplianceCheck) {
+               
                 td = document.createElement("td");
                 td.innerHTML = component.SourceBName;
                 tr.appendChild(td);
-                // }
-
+               
                 td = document.createElement("td");
                 td.innerHTML = component.Status;
                 tr.appendChild(td);
@@ -124,9 +153,8 @@ function ComparisonReviewManager(comparisonCheckManager) {
                     tr.appendChild(td);
                 }
 
-                // highlight component row in main review table with corresponding color after check performed
-                var highlightManager = new HighlightManager();
-                highlightManager.changeComponentRowColor(tr, component.Status);
+                // keep track of component id vs table row and status               
+                this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];                
             }
 
             this.bindEvents(table);
@@ -165,8 +193,8 @@ function ComparisonReviewManager(comparisonCheckManager) {
                     _this.SelectedComponentRow = row;
 
                     // highlight component in graphics view in both viewer
-                    reviewModuleViewerInterface1.highlightComponent(componentIdentifier);
-                    reviewModuleViewerInterface2.highlightComponent(componentIdentifier);
+                    _this.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                    _this.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
                 };
             };
             currentRow.onclick = createClickHandler(currentRow);
@@ -248,10 +276,7 @@ function ComparisonReviewManager(comparisonCheckManager) {
                             continue;
                         }
                     }
-                }
-
-                // var parentTable = document.getElementById("ComparisonDetailedReviewCell");
-                // parentTable.innerHTML = '';
+                }              
 
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
@@ -277,16 +302,14 @@ function ComparisonReviewManager(comparisonCheckManager) {
                 var th = document.createElement("th");
                 th.innerHTML = "Source A Value"
                 tr.appendChild(th);
-
-                // if (!checkManager.ComplianceCheck) {
+               
                 th = document.createElement("th");
                 th.innerHTML = "Source B Name"
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "Source B Value"
-                tr.appendChild(th);
-                // }
+                tr.appendChild(th);              
 
                 th = document.createElement("th");
                 th.innerHTML = "Status"
@@ -321,8 +344,7 @@ function ComparisonReviewManager(comparisonCheckManager) {
 
     ComparisonReviewManager.prototype.addPropertyRowToDetailedTable = function (property) {
         var tr = document.createElement("tr");
-        //tbody.appendChild(tr);
-
+       
         var td = document.createElement("td");
         td.innerHTML = property.SourceAName;
         tr.appendChild(td);
@@ -330,16 +352,14 @@ function ComparisonReviewManager(comparisonCheckManager) {
         td = document.createElement("td");
         td.innerHTML = property.SourceAValue;
         tr.appendChild(td);
-
-        //if (!checkManager.ComplianceCheck) {
+      
         td = document.createElement("td");
         td.innerHTML = property.SourceBName;
         tr.appendChild(td);
 
         td = document.createElement("td");
         td.innerHTML = property.SourceBValue;;
-        tr.appendChild(td);
-        //}
+        tr.appendChild(td);        
 
         td = document.createElement("td");
         if (property.PerformCheck &&
