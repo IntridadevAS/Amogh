@@ -49,7 +49,13 @@
             color: white;
         }
 
-        .containerTab {
+        .checkResultsContainerTab {
+            padding: 20px;
+            color: white;
+            overflow: auto;
+        }
+
+        .viewContainerTab {
             padding: 20px;
             color: white;
             overflow: auto;
@@ -115,34 +121,56 @@
 
 <body>
 
+    <!-- Main window table -->
     <table style="min-width: -webkit-fill-available; max-width: -webkit-fill-available;;height:-webkit-fill-available; margin: auto; border: none; ">
+
+        <!-- top logo image -->
         <th colspan="2" style=" background-color: #333333; height: 5%; text-align: center;  border: none; ">
             <img src="images/Header.png">
         </th>
+
+        <!-- main table rows -->
         <tr style="height: 80%;  border: none; ">
+
+            <!-- First cell of main table row -->
             <td width="60%" style=" border: none; ">
 
+                <!-- Result column table -->
                 <table id="ResultColumn" style="width: 100%; height:100%; ">
+
+                    <!--tab buttons row-->
                     <tr style="height: 5%">
+
+                        <!--Comparison button-->
                         <td>
-                            <div class="column" onclick="openTab('ComparisonTabPage');" style="background:BlueViolet ;border-radius: 10px; width: 100%; height: 50%">
+                            <div class="column" onclick="openCheckResultTab('ComparisonTabPage');" style="background:BlueViolet ;border-radius: 10px; width: 100%; height: 50%">
                                 Comparison
                             </div>
                         </td>
+
+                        <!--Source A Compliance button-->
                         <td>
-                            <div class="column" onclick="openTab('SourceAComplianceTabPage');" style="background:LightSalmon ;border-radius: 10px; width: 100%; height: 50%">
+                            <div class="column" onclick="openCheckResultTab('SourceAComplianceTabPage');" style="background:LightSalmon ;border-radius: 10px; width: 100%; height: 50%">
                                 Source A Compliance
                             </div>
                         </td>
+
+                        <!--Source B Compliance button-->
                         <td>
-                            <div class="column" onclick="openTab('SourceBComplianceTabPage');" style="background:lightgreen ; border-radius: 10px; width: 100%; height: 50%">
+                            <div class="column" onclick="openCheckResultTab('SourceBComplianceTabPage');" style="background:lightgreen ; border-radius: 10px; width: 100%; height: 50%">
                                 Source B Compliance
                             </div>
                         </td>
                     </tr>
+
+                    <!--tab pages row-->
                     <tr style="height: 85%">
+
+                        <!--tab pages cell-->
                         <td colspan="3">
-                            <div id="ComparisonTabPage" class="containerTab" style="display:none;background:BlueViolet; height: 100%">
+
+                            <!--Comparison Tab Page-->
+                            <div id="ComparisonTabPage" class="checkResultsContainerTab" style="display:none;background:BlueViolet; height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Comparison</h2>
                                 <div style="height:100%" class="scrollable">
@@ -161,7 +189,8 @@
                                 </div>
                             </div>
 
-                            <div id="SourceAComplianceTabPage" class="containerTab" style="display:none;background:LightSalmon;  height: 100%">
+                            <!--Source A Compliance Tab Page-->
+                            <div id="SourceAComplianceTabPage" class="checkResultsContainerTab" style="display:none;background:LightSalmon;  height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Source A Compliance</h2>
                                 <div style="height:100%" class="scrollable">
@@ -181,7 +210,8 @@
                                 </div>
                             </div>
 
-                            <div id="SourceBComplianceTabPage" class="containerTab" style="display:none;background:lightgreen;  height: 100%">
+                            <!--Source B Compliance Tab Page-->
+                            <div id="SourceBComplianceTabPage" class="checkResultsContainerTab" style="display:none;background:lightgreen;  height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Source B Compliance</h2>
                                 <div style="height:100%" class="scrollable">
@@ -202,11 +232,17 @@
                                 </div>
                             </div>
                         </td>
+
                     </tr>
+
+                    <!-- End of Result column table -->
                 </table>
+
             </td>
+
+            <!-- Second cell of main table row -->
             <td width="30%" style=" border: none; ">
-                <table id="comparisonTable" style="width: 100%; height:100%; margin: auto;">
+                <!-- <table id="comparisonTable" style="width: 100%; height:100%; margin: auto;">
                     <tr style="width: 100%; height: 50%; margin: auto">
                         <td>
                             <div id="viewerContainer1" class="example-canvas-tiny" style="min-width: 400px;">Source A</div>
@@ -217,11 +253,84 @@
                             <div id="viewerContainer2" class="example-canvas-tiny" style="min-width: 400px;">Source B</div>
                         </td>
                     </tr>
+                </table> -->
+
+                <!-- View column table -->
+                <table id="viewColumn" style="width: 100%; height:100%; ">
+
+                    <!--tab buttons row-->
+                    <tr style="height: 5%">
+
+                        <!--Checks button-->
+                        <td>
+                            <div class="column" onclick="openViewTab('ChecksTabPage');" style="background:BlueViolet ;border-radius: 10px; width: 100%; height: 50%">
+                                Checks
+                            </div>
+                        </td>
+
+                        <!--Analytics button-->
+                        <td>
+                            <div class="column" onclick="openViewTab('AnalyticsTabPage');" style="background:LightSalmon ;border-radius: 10px; width: 100%; height: 50%">
+                                Analytics
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <!--tab pages row-->
+                    <tr style="height: 85%">
+
+                        <!--tab pages cell-->
+                        <td colspan="2">
+
+                            <!--Checks Tab Page-->
+                            <div id="ChecksTabPage" class="viewContainerTab" style="display:none;background:BlueViolet; height: 100%">
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <h2>Checks</h2>
+                                <div style="height:100%" class="scrollable">
+                                    <table style="width: 100%; height:100%; margin: auto;">
+
+                                        <tr style="width: 100%; height: 50%; margin: auto">
+                                            <td>
+                                                <div id="viewerContainer1" class="example-canvas-tiny" style="min-width: 400px;">Source
+                                                    A</div>
+                                            </td>
+                                        </tr>
+
+                                        <tr style="width: 100%; height: 50%;">
+                                            <td>
+                                                <div id="viewerContainer2" class="example-canvas-tiny" style="min-width: 400px;">Source
+                                                    B</div>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!--Analytics Tab Page-->
+                            <div id="AnalyticsTabPage" class="viewContainerTab" style="display:none;background:LightSalmon;  height: 100%">
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <h2>Analytics</h2>
+                                <div style="height:100%" class="scrollable">
+
+                                </div>
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <!-- End of View column table -->
                 </table>
             </td>
+
         </tr>
+
+        <!-- Bottom image -->
         <th colspan="2" style=" background-color: #333333;  height: 10%; border: none;">
         </th>
+
     </table>
 
     <script>
@@ -323,8 +432,8 @@
             }
         }
 
-        function openTab(tabName) {
-            var tabs = document.getElementsByClassName("containerTab");
+        function openCheckResultTab(tabName) {
+            var tabs = document.getElementsByClassName("checkResultsContainerTab");
             for (var i = 0; i < tabs.length; i++) {
                 tabs[i].style.display = "none";
             }
@@ -368,6 +477,14 @@
             }
         }
 
+        function openViewTab(tabName) {
+            var tabs = document.getElementsByClassName("viewContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+
+            document.getElementById(tabName).style.display = "block";
+        }
     </script>
 </body>
 
