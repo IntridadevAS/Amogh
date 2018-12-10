@@ -4,11 +4,14 @@
     <title>xCheckStudio</title>
     <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
+    <link rel="stylesheet" href="CSS\handsontable_full_min_MIT.css" type="text/css" />
 
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+    <script type="text/javascript" src="Javascripts/SheetJS/xlsx.js"></script>
+    <script type="text/javascript" src="Javascripts/HandsOnTable/handsontable_full_min_MIT.js"></script>
 
     <script type="text/javascript" src="Javascripts/common/Example.js"></script>
     <script type="text/javascript" src="Javascripts/common/ModelTree.js"></script>
@@ -23,6 +26,9 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckRules.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\Grid.js"></script>
 
 
 
@@ -144,7 +150,7 @@
                                 <td>
                                     <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data"
                                         target="formDestination">
-                                        <input id="dataSoures1" name="dataSouresName" type="file" />
+                                        <input id="dataSoures1" name="dataSouresName" type="file" onchange="Read(event)" />
                                         <input id="upload1" type="submit" value="Upload">
                                     </form>
                                     <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
@@ -196,7 +202,7 @@
                                 <td>
                                     <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data"
                                         target="formDestination">
-                                        <input id="dataSoures2" name="dataSouresName" type="file" />
+                                        <input id="dataSoures2" name="dataSouresName" type="file" onchange="Read(event)" />
                                         <input id="upload2" type="submit" value="Upload">
                                     </form>
                                     <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
@@ -252,6 +258,58 @@
     </table>
 
     <script type="text/javascript">
+        var excelReader1;
+        var excelReader2;
+        var inputFileType;
+
+
+        function Read(event) {
+            if (!checkCaseManager ||
+                !checkCaseManager.CheckCase) {
+                //remove file from input 
+                event.target.value = "";
+                alert("CheckCaseManager not found.");
+                return;
+            }
+
+            if (event.target.id === "dataSoures1") {
+                let fileName = event.target.files[0].name;
+                var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+                inputFileType = fileExtension;
+                if (fileExtension === "xls") {
+                    xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                    document.getElementById('modelTree1').innerHTML = ""
+                    document.getElementById('viewerContainer1').innerHTML = ""
+                    xCheckStudioInterface1.readExcelFileData(event, "modelTree1");
+                }
+                else if (fileExtension === "xml") {
+                    document.getElementById('modelTree1').innerHTML = ""
+                    document.getElementById('viewerContainer1').innerHTML = ""
+                    document.getElementById("load1").disabled = false;
+                    document.getElementById("upload1").disabled = false;
+                }
+            }
+            else if (event.target.id === "dataSoures2") {
+                let fileName = event.target.files[0].name;
+                var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+                inputFileType = fileExtension;
+                if (fileExtension === "xls") {
+                    xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                    document.getElementById('modelTree2').innerHTML = ""
+                    document.getElementById('viewerContainer2').innerHTML = ""
+                    xCheckStudioInterface2.readExcelFileData(event, "modelTree2");
+                }
+                else if (fileExtention === "xml") {
+                    document.getElementById('modelTree2').innerHTML = ""
+                    document.getElementById('viewerContainer2').innerHTML = ""
+                    document.getElementById("load2").disabled = false;
+                    document.getElementById("upload2").disabled = false;
+                }
+            }
+
+            document.getElementById("checkButton").disabled = false;
+        }
+
 
         function postData(url, method) {
             // remove post data js files from server from earlier check results, if any
@@ -404,24 +462,22 @@
                     });
                 }
             }
-
         }
 
 
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
-        //var checkManager;
         var checkCaseManager;
-
-
-        //var activeViewerContainer;
-        //var complianceCheck = false;
 
         var checkCaseFilesData;
 
         window.onload = function () {
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
+
+                sourceAComplianceCheckManager = "";
+                sourceBComplianceCheckManager = "";
+                comparisonCheckManager = "";
 
                 var checkCaseSelect = document.getElementById("checkCaseSelect");
                 if (checkCaseSelect.value === "None") {

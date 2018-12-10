@@ -11,6 +11,14 @@ var xCheckStudio;
             this.nodeIdArray = [];
             this.componentIdVsComponentData = {};
             this.nodeIdVsComponentData = {};
+            this.sourceProperties = [];
+            
+            this.excelReader = new ExcelReader(sourceType);
+        }
+
+        xCheckStudioInterface.prototype.readExcelFileData = function (event, containerId){
+            this.excelReader.ReadFileData(event, containerId);
+            this.sourceProperties = this.excelReader.sourceProperties;
         }
 
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
@@ -28,7 +36,7 @@ var xCheckStudio;
 
             _this._firstViewer = viewer;
 
-            _this.sourceProperties = [];
+            // _this.sourceProperties = [];
 
             // construct model tree
             _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
@@ -306,32 +314,6 @@ var xCheckStudio;
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
                         if (_this.nodeIdArray.length == 0) {
-                            // var properties = [];
-                            // var nodeIdVsComponentDataJSON = [];
-                            // var componentIdVsComponentDataJSON = [];
-                            // if(_this._firstViewer._params.containerId === "viewerContainer1")
-                            // {
-                            //     properties = JSON.stringify( xCheckStudioInterface1.sourceProperties);
-                            //     localStorage.setItem('interface1sourceProperties',properties);
-
-                            //     nodeIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData);
-                            //     localStorage.setItem('nodeIdVsComponentData1',nodeIdVsComponentDataJSON);
-
-                            //     componentIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData);
-                            //     localStorage.setItem('componentIdVsComponentData1',componentIdVsComponentDataJSON);
-
-                            // }
-                            // else if(_this._firstViewer._params.containerId === "viewerContainer2"){
-                            //     properties = JSON.stringify( xCheckStudioInterface2.sourceProperties);
-                            //     localStorage.setItem('interface2sourceProperties',properties);
-
-                            //     nodeIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData);
-                            //     localStorage.setItem('nodeIdVsComponentData2',nodeIdVsComponentDataJSON);
-
-                            //     componentIdVsComponentDataJSON = JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData);
-                            //     localStorage.setItem('componentIdVsComponentData2',componentIdVsComponentDataJSON);
-
-                            // }
                             _this._modelTree.addModelBrowserComponent(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
                             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
                                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);

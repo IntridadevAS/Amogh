@@ -327,7 +327,7 @@ var xCheckStudio;
             };
 
             ModelTree.prototype.ChangeBackgroundColor = function (row) {
-                row.style.backgroundColor = "#9999ff";
+                row.style.backgroundColor = "#B2BABB";
             }
 
             ModelTree.prototype.RestoreBackgroundColor = function (row) {
