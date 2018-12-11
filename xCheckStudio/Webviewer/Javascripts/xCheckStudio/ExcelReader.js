@@ -11,12 +11,12 @@ function ExcelReader(sourceType) {
     this.excelModelBrowser = new ExcelModeBrowser();
 }
 
-ExcelReader.prototype.ReadFileData = function (event, containerId) {
+ExcelReader.prototype.ReadFileData = function (file, containerId) {
     // removeAllOptions(dynamic_select);
     this.containerId = containerId;
-    var files = event.target.files;
-    var file = files[0];
-    if (files && file) {
+    //var files = event.target.files;
+    //var file = files[0];
+    if (file) {
         var reader = new FileReader();
         var _this = this;
         reader.onload = function (readerEvt) {

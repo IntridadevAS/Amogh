@@ -2,28 +2,49 @@ var xCheckStudio;
 (function (xCheckStudio) {
     var Util;
     (function (Util) {
-        
+
         function componentToHex(c) {
             var hex = c.toString(16);
             return hex.length == 1 ? "0" + hex : hex;
         }
-        
+
         function getFileExtension(filename) {
-        return filename.split('.').pop();
+            return filename.split('.').pop();
         }
         Util.getFileExtension = getFileExtension;
-       
-        function fileExists(fileURL){
 
-            var http = new XMLHttpRequest();
-        
-            http.open('HEAD', fileURL, false);
-            http.send();
-        
-            return http.status != 404;        
+        function fileExists(fileURL) {
+
+            return new Promise(function (resolve, reject) {
+                var http = new XMLHttpRequest();
+
+                http.onload = function (event) {
+                    if (this.status === 404) {
+                        return reject(false);
+                    }
+                    else {
+                        return resolve(true);
+                    }
+                    // return this.status != 404;
+                }
+
+                http.open('HEAD', fileURL, true);
+                http.send();
+            });
+
+            // var http = new XMLHttpRequest();
+
+            // http.onload = function (event) {
+            //   return this.status != 404;    
+            // }
+
+            // http.open('HEAD', fileURL, true);
+            // http.send();
+
+            //return http.status != 404;        
         }
         Util.fileExists = fileExists;
-       
+
         function rgbToHex(r, g, b) {
             return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
         }

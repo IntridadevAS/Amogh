@@ -102,10 +102,49 @@
         .scrollable {
             overflow: auto;
         }
+
+        #divLoading
+        {
+            display : none;
+        }
+        #divLoading.show
+        {
+            display : block;
+            position : fixed;
+            z-index: 100;
+            background-image : url('/images/busySpinner.gif');
+            background-color:#666;
+            opacity : 0.4;
+            background-repeat : no-repeat;
+            background-position : center;
+            left : 0;
+            bottom : 0;
+            right : 0;
+            top : 0;
+        }
+        #loadinggif.show
+        {
+            left : 50%;
+            top : 50%;
+            position : absolute;
+            z-index : 101;
+            width : 32px;
+            height : 32px;
+            margin-left : -16px;
+            margin-top : -16px;
+        }
+        div.content {
+        width : 1000px;
+        height : 1000px;
+        }
+
         </style>
 </head>
 
 <body>
+    <div id="divLoading">
+    </div>
+
     <table style="width: -webkit-fill-available; height:-webkit-fill-available; margin: auto; ">
         <th colspan="2" style=" background-color: #333333; height: 15%;  text-align: center">
             <img src="images/Header.png">
@@ -113,10 +152,10 @@
         </th>
         <tr style=" text-align: center">
             <td colspan="2">
-                <iframe name="formDestination" height="100px"></iframe>
+                <!-- <iframe name="formDestination" height="100px"></iframe> -->
 
                 <button id="checkButton" disabled="true" onclick="goToReviewModule()"> Check Datasources</button>
-                <button onclick="refreshCheck()" id="refreshCheckButton" disabled="true">Refresh Check</button>
+                <button onclick="clearData()" id="ClearButton">Clear data</button>
 
             </td>
         </tr>
@@ -145,18 +184,14 @@
                     <div>
                         <!-- First model tree and it's viewer -->
                         <table>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data"
-                                        target="formDestination">
-                                        <input id="dataSoures1" name="dataSouresName" type="file" onchange="Read(event)" />
-                                        <input id="upload1" type="submit" value="Upload">
-                                    </form>
-                                    <button id="load1" onclick="loadModel('dataSoures1', viewerContainer1, modelTree1)">load
-                                        model</button>
-                                </td>
+                            <tr colspan="2">
+                                <form id="uploadDatasourceAForm" enctype="multipart/form-data">
+                                    <div>
+                                        <input id="dataSouresA" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresA', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')" />
+                                    </div>
+                                </form>
                             </tr>
+
                             <tr>
                                 <td valign="top">
                                     <div id="modelTree1"></div>
@@ -197,18 +232,14 @@
                     <div>
                         <!-- second model tree and it's viewer -->
                         <table>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <form action="uploads/uploadfiles.php" method="post" enctype="multipart/form-data"
-                                        target="formDestination">
-                                        <input id="dataSoures2" name="dataSouresName" type="file" onchange="Read(event)" />
-                                        <input id="upload2" type="submit" value="Upload">
-                                    </form>
-                                    <button id="load2" onclick="loadModel('dataSoures2', viewerContainer2, modelTree2)">load
-                                        model</button>
-                                </td>
+                            <tr colspan="2">
+                                <form id="uploadDatasourceBForm" enctype="multipart/form-data">
+                                    <div>
+                                        <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')" />
+                                    </div>
+                                </form>
                             </tr>
+
                             <tr>
                                 <td valign="top">
                                     <div id="modelTree2"></div>
@@ -258,54 +289,178 @@
     </table>
 
     <script type="text/javascript">
-        var excelReader1;
-        var excelReader2;
-        var inputFileType;
+        // var excelReader1;
+        // var excelReader2;
+        // var inputFileType;
 
+        var xCheckStudioInterface1;
+        var xCheckStudioInterface2;
+        var checkCaseManager;
 
-        function Read(event) {
-            if (!checkCaseManager ||
-                !checkCaseManager.CheckCase) {
-                //remove file from input 
-                event.target.value = "";
-                alert("CheckCaseManager not found.");
-                return;
+        var checkCaseFilesData;
+
+        window.onload = function () {
+            var checkButton = document.getElementById("checkButton");
+            checkButton.onclick = function () {
+
+                sourceAComplianceCheckManager = undefined;
+                sourceBComplianceCheckManager = undefined;
+                comparisonCheckManager = undefined;
+
+                var checkCaseSelect = document.getElementById("checkCaseSelect");
+                if (checkCaseSelect.value === "None") {
+                    alert("Please select check case from list.")
+                    return;
+                }
+
+                // check if any check case type is selected
+                var comparisonCB = document.getElementById("comparisonCB");
+                var complianceSourceACB = document.getElementById("complianceSourceACB");
+                var complianceSourceBCB = document.getElementById("complianceSourceBCB");
+                if (!comparisonCB.checked &&
+                    !complianceSourceACB.checked &&
+                    !complianceSourceBCB.checked) {
+                    alert("No selected check type found. Please select check type.")
+                    return;
+                }
+
+                //var checkMethod;
+                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+
+                    var comparisonCB = document.getElementById('comparisonCB');
+                    if (comparisonCB.checked &&
+                        checkType.Name.toLowerCase() === "comparison" &&
+                        xCheckStudioInterface1 &&
+                        xCheckStudioInterface2 &&
+                        checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
+                        checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
+                        // checkMethod = checkType.Name;
+                        // break;
+                        if (!comparisonCheckManager) {
+                            comparisonCheckManager = new CheckManager();
+                            comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                xCheckStudioInterface2.sourceProperties,
+                                checkType,
+                                true);
+                        }
+                    }
+                    else {
+                        if (xCheckStudioInterface1) {
+                            var complianceSourceACB = document.getElementById("complianceSourceACB");
+                            if (checkType.Name.toLowerCase() === "compliance" &&
+                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
+                                complianceSourceACB.checked) {
+                                if (!sourceAComplianceCheckManager) {
+                                    sourceAComplianceCheckManager = new CheckManager();
+                                    sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                        undefined,
+                                        checkType,
+                                        false);
+                                }
+                            }
+                        }
+
+                        if (xCheckStudioInterface2) {
+                            var complianceSourceBCB = document.getElementById("complianceSourceBCB");
+                            if (checkType.Name.toLowerCase() === "compliance" &&
+                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase() &&
+                                complianceSourceBCB.checked) {
+                                if (!sourceBComplianceCheckManager) {
+
+                                    sourceBComplianceCheckManager = new CheckManager();
+                                    sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
+                                        undefined,
+                                        checkType,
+                                        false);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                postData();
+                window.open("/reviewModule.html", "_blank");
+                return false;
+            };
+
+            var checkCaseSelect = document.getElementById("checkCaseSelect");
+            checkCaseSelect.onchange = function () {
+                var fileName;
+                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                    if (checkCaseFileData.CheckCaseName === this.value) {
+                        fileName = checkCaseFileData.FileName;
+                        break;
+                    }
+                }
+                if (fileName === undefined) {
+                    return;
+                }
+
+                // read check case data from XML checkcase data file
+                checkCaseManager = new CheckCaseManager();
+                checkCaseManager.readCheckCaseData(fileName);
             }
 
-            if (event.target.id === "dataSoures1") {
-                let fileName = event.target.files[0].name;
-                var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-                inputFileType = fileExtension;
-                if (fileExtension === "xls") {
-                    xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                    document.getElementById('modelTree1').innerHTML = ""
-                    document.getElementById('viewerContainer1').innerHTML = ""
-                    xCheckStudioInterface1.readExcelFileData(event, "modelTree1");
-                }
-                else if (fileExtension === "xml") {
-                    document.getElementById('modelTree1').innerHTML = ""
-                    document.getElementById('viewerContainer1').innerHTML = ""
-                    document.getElementById("load1").disabled = false;
-                    document.getElementById("upload1").disabled = false;
-                }
+            // read check cases files list
+            checkCaseFilesData = new CheckCaseFilesData();
+            checkCaseFilesData.readCheckCaseFiles();
+        };
+
+        function readExcelDataSource(file,
+            dataSource,
+            viewerContainer,
+            modelTreeContainer) {
+            // if (!checkCaseManager ||
+            //     !checkCaseManager.CheckCase) {
+            //     //remove file from input 
+            //     event.target.value = "";
+            //     alert("CheckCaseManager not found.");
+            //     return;
+            // }
+
+            // if (event.target.id === "dataSoures1") {
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            //inputFileType = fileExtension;
+            // if (fileExtension === "xls") {
+            document.getElementById(modelTreeContainer).innerHTML = ""
+            document.getElementById(viewerContainer).innerHTML = ""
+            if (!xCheckStudioInterface1) {
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
             }
-            else if (event.target.id === "dataSoures2") {
-                let fileName = event.target.files[0].name;
-                var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-                inputFileType = fileExtension;
-                if (fileExtension === "xls") {
-                    xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                    document.getElementById('modelTree2').innerHTML = ""
-                    document.getElementById('viewerContainer2').innerHTML = ""
-                    xCheckStudioInterface2.readExcelFileData(event, "modelTree2");
-                }
-                else if (fileExtention === "xml") {
-                    document.getElementById('modelTree2').innerHTML = ""
-                    document.getElementById('viewerContainer2').innerHTML = ""
-                    document.getElementById("load2").disabled = false;
-                    document.getElementById("upload2").disabled = false;
-                }
+            else {
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
             }
+
+            // }
+            // else if (fileExtension === "xml") {
+            //     document.getElementById('modelTree1').innerHTML = ""
+            //     document.getElementById('viewerContainer1').innerHTML = ""
+            //     document.getElementById("load1").disabled = false;
+            //     document.getElementById("upload1").disabled = false;
+            // }
+            // }
+            // else if (event.target.id === "dataSoures2") {
+            //     let fileName = event.target.files[0].name;
+            //     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            //     inputFileType = fileExtension;
+            //     if (fileExtension === "xls") {
+            //         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            //         document.getElementById('modelTree2').innerHTML = ""
+            //         document.getElementById('viewerContainer2').innerHTML = ""
+            //         xCheckStudioInterface2.readExcelFileData(event, "modelTree2");
+            //     }
+            //     else if (fileExtention === "xml") {
+            //         document.getElementById('modelTree2').innerHTML = ""
+            //         document.getElementById('viewerContainer2').innerHTML = ""
+            //         document.getElementById("load2").disabled = false;
+            //         document.getElementById("upload2").disabled = false;
+            //     }
+            // }
 
             document.getElementById("checkButton").disabled = false;
         }
@@ -464,122 +619,6 @@
             }
         }
 
-
-        var xCheckStudioInterface1;
-        var xCheckStudioInterface2;
-        var checkCaseManager;
-
-        var checkCaseFilesData;
-
-        window.onload = function () {
-            var checkButton = document.getElementById("checkButton");
-            checkButton.onclick = function () {
-
-                sourceAComplianceCheckManager = "";
-                sourceBComplianceCheckManager = "";
-                comparisonCheckManager = "";
-
-                var checkCaseSelect = document.getElementById("checkCaseSelect");
-                if (checkCaseSelect.value === "None") {
-                    alert("Please select check case from list.")
-                    return;
-                }
-
-                // check if any check case type is selected
-                var comparisonCB = document.getElementById("comparisonCB");
-                var complianceSourceACB = document.getElementById("complianceSourceACB");
-                var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                if (!comparisonCB.checked &&
-                    !complianceSourceACB.checked &&
-                    !complianceSourceBCB.checked) {
-                    alert("No selected check type found. Please select check type.")
-                    return;
-                }
-
-                //var checkMethod;
-                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-
-                    var comparisonCB = document.getElementById('comparisonCB');
-                    if (comparisonCB.checked &&
-                        checkType.Name.toLowerCase() === "comparison" &&
-                        xCheckStudioInterface1 &&
-                        xCheckStudioInterface2 &&
-                        checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
-                        checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
-                        // checkMethod = checkType.Name;
-                        // break;
-                        if (!comparisonCheckManager) {
-                            comparisonCheckManager = new CheckManager();
-                            comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                xCheckStudioInterface2.sourceProperties,
-                                checkType,
-                                true);
-                        }
-                    }
-                    else {
-                        if (xCheckStudioInterface1) {
-                            var complianceSourceACB = document.getElementById("complianceSourceACB");
-                            if (checkType.Name.toLowerCase() === "compliance" &&
-                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
-                                complianceSourceACB.checked) {
-                                if (!sourceAComplianceCheckManager) {
-                                    sourceAComplianceCheckManager = new CheckManager();
-                                    sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                        undefined,
-                                        checkType,
-                                        false);
-                                }
-                            }
-                        }
-
-                        if (xCheckStudioInterface2) {
-                            var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                            if (checkType.Name.toLowerCase() === "compliance" &&
-                                checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase() &&
-                                complianceSourceBCB.checked) {
-                                if (!sourceBComplianceCheckManager) {
-
-                                    sourceBComplianceCheckManager = new CheckManager();
-                                    sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
-                                        undefined,
-                                        checkType,
-                                        false);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                postData();
-                window.open("/reviewModule.html", "_blank");
-                return false;
-            };
-
-            var checkCaseSelect = document.getElementById("checkCaseSelect");
-            checkCaseSelect.onchange = function () {
-                var fileName;
-                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-                    if (checkCaseFileData.CheckCaseName === this.value) {
-                        fileName = checkCaseFileData.FileName;
-                        break;
-                    }
-                }
-                if (fileName === undefined) {
-                    return;
-                }
-
-                // read check case data from XML checkcase data file
-                checkCaseManager = new CheckCaseManager();
-                checkCaseManager.readCheckCaseData(fileName);
-            }
-
-            // read check cases files list
-            checkCaseFilesData = new CheckCaseFilesData();
-            checkCaseFilesData.readCheckCaseFiles();
-        };
-
         function openTab(tabName) {
             var tabs = document.getElementsByClassName("containerTab");
             for (var i = 0; i < tabs.length; i++) {
@@ -593,19 +632,73 @@
 
         }
 
-        function loadModel(dataSoures, viewerContainer, modelTreeContainer) {
+        function loadDataSource(event,
+            dataSource,
+            formId,
+            viewerContainer,
+            modelTreeContainer) {
 
             if (!checkCaseManager ||
                 !checkCaseManager.CheckCase) {
                 alert("CheckCaseManager not found.");
+                document.getElementById(formId).reset();
                 return;
             }
-            let selectedFiles = document.getElementById(dataSoures).files;
+
+            let selectedFiles = document.getElementById(dataSource).files;
+            let selectedFilesCount = selectedFiles.length;
+            if (selectedFilesCount == 0) {
+                document.getElementById(formId).reset();
+                return;
+            }
+
+            var file = event.target.files[0];
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+
+            if (fileExtension.toLowerCase() === "xml") {
+                var busySpinner = document.getElementById("divLoading");
+                busySpinner.className = 'show';
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "uploads/uploadfiles.php", true);
+                xhr.onload = function (event) {
+                    alert("The server says: " + event.target.response);
+                    if (loadModel(dataSource, viewerContainer, modelTreeContainer)) {
+                        document.getElementById(dataSource).disabled = true;
+                    }
+                    else {
+                        document.getElementById(formId).reset();
+                    }
+
+                    busySpinner.classList.remove('show')
+                };
+                var formData = new FormData(document.getElementById(formId));
+                xhr.send(formData);
+            }
+            else if (fileExtension.toLowerCase() === "xls") {
+                {
+                    readExcelDataSource(file,
+                        dataSource,
+                        viewerContainer,
+                        modelTreeContainer);
+                }
+            }
+        }
+
+        function loadModel(dataSource, viewerContainer, modelTreeContainer) {
+
+            if (!checkCaseManager ||
+                !checkCaseManager.CheckCase) {
+                alert("CheckCaseManager not found.");
+                return false;
+            }
+            let selectedFiles = document.getElementById(dataSource).files;
             let selectedFilesCount = selectedFiles.length;
 
             let fileName = selectedFiles[0].name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-            //if (checkCaseManager && checkCaseManager.CheckCase) {
+
             var sourceAType;
             var sourceBType;
             for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
@@ -619,62 +712,61 @@
                 }
             }
 
-            if (viewerContainer.id === "viewerContainer1") {
+            if (viewerContainer === "viewerContainer1") {
                 if (!sourceAType ||
                     sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
                     alert("Data source type doesn't match with check case.");
-                    return;
+                    return false;
                 }
             }
-            else if (viewerContainer.id === "viewerContainer2") {
+            else if (viewerContainer === "viewerContainer2") {
                 if (!sourceBType ||
                     sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                     alert("Data source type doesn't match with check case.");
-                    return;
+                    return false;
                 }
             }
-            //}
 
             fileName = fileName.substring(0, fileName.lastIndexOf('.'));
             fileName += '.scs';
 
             var uri = "uploads/scs/" + fileName;
-            var container_Id = viewerContainer.id;
-            var model_Tree = modelTreeContainer.id;
+            //var container_Id = viewerContainer.id;
+            //var model_Tree = modelTreeContainer.id;
 
-            if (!xCheckStudio.Util.fileExists(uri)) {
-                alert("File not found to load.");
-                return;
-            }
+            xCheckStudio.Util.fileExists(uri).then(function (success) {
+                if (success) {
+                    //alert("File found to load.");
+                    viewerOptions = {
+                        containerId: viewerContainer,
+                        endpointUri: uri,
+                        modelTree: modelTreeContainer
+                    };
 
-            viewerOptions = {
-                containerId: container_Id,
-                endpointUri: uri,
-                modelTree: model_Tree
-            };
+                    if (viewerContainer === "viewerContainer1") {
+                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                        xCheckStudioInterface1.setupViewer(viewerOptions, true);
+                    }
+                    else if (viewerContainer === "viewerContainer2") {
+                        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                        xCheckStudioInterface2.setupViewer(viewerOptions, false);
+                    }
 
-            if (viewerContainer.id === "viewerContainer1") {
-                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface1.setupViewer(viewerOptions, true);
-
-                document.getElementById("load1").disabled = true;
-                document.getElementById("upload1").disabled = true;
-                document.getElementById("dataSoures1").disabled = true;
-            }
-            else if (viewerContainer.id === "viewerContainer2") {
-                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.setupViewer(viewerOptions, false);
-
-                document.getElementById("load2").disabled = true;
-                document.getElementById("upload2").disabled = true;
-                document.getElementById("dataSoures2").disabled = true;
-            }
+                }
+                else {
+                    alert("File not found to load.");
+                    return false;
+                }
+            });
 
             //enable check Button
             document.getElementById("checkButton").disabled = false;
-
+            return true;
         }
 
+        function clearData() {
+            window.location.reload();
+        }
 
     </script>
 </body>

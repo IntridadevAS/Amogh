@@ -285,7 +285,7 @@
 
                             <!--Checks Tab Page-->
                             <div id="ChecksTabPage" class="viewContainerTab" style="display:none;background:BlueViolet; height: 100%">
-                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>                              
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <div style="height:100%" class="scrollable">
                                     <table style="width: 100%; height:100%; margin: auto;">
 
@@ -309,7 +309,7 @@
 
                             <!--Analytics Tab Page-->
                             <div id="AnalyticsTabPage" class="viewContainerTab" style="display:none;background:LightSalmon;  height: 100%">
-                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>                                
+                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <div style="height:100%" class="scrollable">
 
                                 </div>
@@ -342,6 +342,7 @@
             var sourceAComplianceCheckManager;
             var sourceBComplianceCheckManager;
 
+
             if (typeof ComparisonCheckData !== 'undefined') {
 
                 // restore comparison check data
@@ -349,15 +350,29 @@
                 comparisonCheckManager.restore(ComparisonCheckData)
 
                 // create comparisonreviewmanager
-                comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                    SourceAViewerData,
-                    SourceBViewerData,
-                    "ComparisonMainReviewCell",
-                    "ComparisonDetailedReviewCell",
-                    SourceAComponentIdVsComponentData,
-                    SourceANodeIdVsComponentData,
-                    SourceBComponentIdVsComponentData,
-                    SourceBNodeIdVsComponentData);
+                if (typeof SourceAViewerData === 'undefined'||
+                    typeof SourceBViewerData === 'undefined') {
+                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                        undefined,
+                        undefined,
+                        "ComparisonMainReviewCell",
+                        "ComparisonDetailedReviewCell",
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined);
+                }
+                else {
+                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                        SourceAViewerData,
+                        SourceBViewerData,
+                        "ComparisonMainReviewCell",
+                        "ComparisonDetailedReviewCell",
+                        SourceAComponentIdVsComponentData,
+                        SourceANodeIdVsComponentData,
+                        SourceBComponentIdVsComponentData,
+                        SourceBNodeIdVsComponentData);
+                }
 
                 // populate review table
                 comparisonReviewManager.populateReviewTable();
@@ -370,12 +385,23 @@
                 sourceAComplianceCheckManager.restore(SourceAComplianceData)
 
                 // create sourceAComplianceReviewManager
-                sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-                    SourceAViewerData,
-                    "SourceAComplianceMainReviewCell",
-                    "SourceAComplianceDetailedReviewCell",
-                    SourceAComponentIdVsComponentData,
-                    SourceANodeIdVsComponentData);
+                if (typeof SourceAViewerData === 'undefined') {
+                    sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                        undefined,
+                        "SourceAComplianceMainReviewCell",
+                        "SourceAComplianceDetailedReviewCell",
+                        undefined,
+                        undefined);
+                }
+                else {
+                    sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                        SourceAViewerData,
+                        "SourceAComplianceMainReviewCell",
+                        "SourceAComplianceDetailedReviewCell",
+                        SourceAComponentIdVsComponentData,
+                        SourceANodeIdVsComponentData);
+                }
+
 
                 // populate review table
                 sourceAComplianceReviewManager.populateReviewTable();
@@ -388,12 +414,22 @@
                 sourceBComplianceCheckManager.restore(SourceBComplianceData)
 
                 // create sourceBComplianceReviewManager
-                sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-                    SourceBViewerData,
-                    "SourceBComplianceMainReviewCell",
-                    "SourceBComplianceDetailedReviewCell",
-                    SourceBComponentIdVsComponentData,
-                    SourceBNodeIdVsComponentData);
+                if (typeof SourceBViewerData === 'undefined') {
+                    sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                        undefined,
+                        "SourceBComplianceMainReviewCell",
+                        "SourceBComplianceDetailedReviewCell",
+                        undefined,
+                        undefined);
+                }
+                else {
+                    sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                        SourceBViewerData,
+                        "SourceBComplianceMainReviewCell",
+                        "SourceBComplianceDetailedReviewCell",
+                        SourceBComponentIdVsComponentData,
+                        SourceBNodeIdVsComponentData);
+                }
 
                 // populate review table
                 sourceBComplianceReviewManager.populateReviewTable();
@@ -464,13 +500,13 @@
             }
 
             // load data sources in viewer
-            if (tabName === "ComparisonTabPage") {
+            if (comparisonReviewManager && tabName === "ComparisonTabPage") {
                 comparisonReviewManager.loadDatasources();
             }
-            else if (tabName === "SourceAComplianceTabPage") {
+            else if (sourceAComplianceReviewManager && tabName === "SourceAComplianceTabPage") {
                 sourceAComplianceReviewManager.loadDatasource();
             }
-            else if (tabName === "SourceBComplianceTabPage") {
+            else if (sourceBComplianceReviewManager && tabName === "SourceBComplianceTabPage") {
                 sourceBComplianceReviewManager.loadDatasource();
             }
         }

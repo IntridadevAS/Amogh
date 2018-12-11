@@ -16,8 +16,8 @@ var xCheckStudio;
             this.excelReader = new ExcelReader(sourceType);
         }
 
-        xCheckStudioInterface.prototype.readExcelFileData = function (event, containerId){
-            this.excelReader.ReadFileData(event, containerId);
+        xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId){
+            this.excelReader.ReadFileData(file, containerId);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
