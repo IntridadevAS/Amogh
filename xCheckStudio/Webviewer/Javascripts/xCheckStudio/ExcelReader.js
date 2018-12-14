@@ -39,21 +39,18 @@ ExcelReader.prototype.process_wb = function (wb, containerId) {
     
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserComponent(this.sourceDataSheet, containerId);
-    this.excelModelBrowser.sourceDataSheets;
-    var sheetData = this.excelModelBrowser.sourceDataSheets;
-    for (var sheetName in sheetData) {
-        mainComponentClass = sheetName;
-        var mainComponentClassData = sheetData[sheetName];
-        for (var subcomponentClass in mainComponentClassData) {
-            var subComponentClassData = mainComponentClassData[subcomponentClass];
-            for (var i = 0; i < subComponentClassData.length; i++) {
-                this.sourceProperties.push(subComponentClassData[i]);
-            }
-        }
-    }
-
-
-
+    
+    // var sheetData = this.sourceDataSheet;
+    // for (var sheetName in sheetData) {
+    //     mainComponentClass = sheetName;
+    //     var mainComponentClassData = sheetData[sheetName];
+    //     for (var subcomponentClass in mainComponentClassData) {
+    //         var subComponentClassData = mainComponentClassData[subcomponentClass];
+    //         for (var i = 0; i < subComponentClassData.length; i++) {
+    //             this.sourceProperties.push(subComponentClassData[i]);
+    //         }
+    //     }
+    // }
 };
 
 ExcelReader.prototype.ChangeBackgroundColor = function (row) {

@@ -1,13 +1,16 @@
 
 function ComplianceReviewManager(complianceCheckManager,
     viewerData,
+    sourceProperties,
     mainReviewTableContainer,
     detailedReviewTableContainer,
     componentIdVsComponentData,
     nodeIdVsComponentData) {
 
     this.ViewerData = viewerData;
-  
+    
+    this.SourceProperties = sourceProperties;
+
     this.ReviewModuleViewerInterface;
    
     this.ComplianceCheckManager = complianceCheckManager;
@@ -21,12 +24,18 @@ function ComplianceReviewManager(complianceCheckManager,
     this.NodeIdVsComponentData = nodeIdVsComponentData;
 
     ComplianceReviewManager.prototype.loadDatasource = function () {
-        this.ReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.ViewerData,
-                                                                           this.ComponentIdVsComponentData,
-                                                                           this.NodeIdVsComponentData);
-        this.ReviewModuleViewerInterface.ComponentIdStatusData =  this.ComponentIdStatusData;
+        if (this.ViewerData !== undefined) {
+            this.ReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.ViewerData,
+                this.ComponentIdVsComponentData,
+                this.NodeIdVsComponentData);
+            this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
 
-        this.ReviewModuleViewerInterface.setupViewer();      
+            this.ReviewModuleViewerInterface.setupViewer();
+        }
+        else if (this.SourceProperties !== undefined) {
+            // createGridView(this.SourceProperties, "viewerContainer1", 0, 0);
+        }
+
     }
 
     ComplianceReviewManager.prototype.populateReviewTable = function () {
@@ -162,6 +171,8 @@ function ComplianceReviewManager(complianceCheckManager,
 
                     _this.populateDetailedReviewTable(row);
 
+                    if(_this.ReviewModuleViewerInterface !== undefined)
+                    {
                     var reviewTableId = _this.getReviewTableId(row);
 
                     var componentIdentifier = row.cells[0].innerHTML;
@@ -173,7 +184,20 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
                    
                     // highlight component in graphics view in both viewer
-                    _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);                    
+                    _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);    
+                }               
+                 else{
+                        var sheetName = row.parentElement.parentElement.id;
+                        if(typeof SourceAProperties !== 'undefined')
+                        {
+                            _this.showSelectedSheetData("viewerContainer1", sheetName, row);
+                        }
+                        if(typeof SourceBProperties !== 'undefined')
+                        {
+                            _this.showSelectedSheetData("viewerContainer2", sheetName, row);
+                        }
+                                               
+                    } 
 
                     _this.SelectedComponentRow = row;
                 };
@@ -200,6 +224,132 @@ function ComplianceReviewManager(complianceCheckManager,
         }
     }
 
+    ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
+        var currentSheetName = sheetName ;//thisRow.cells[0].innerText.trim();
+        var mainComponentClasses;
+        var mainComponentClasseData;
+       if(viewerContainer === "viewerContainer1")
+       {
+         mainComponentClasses = Object.keys(this.SourceProperties);
+         mainComponentClasseData = this.SourceProperties[currentSheetName];
+       }
+       else if(viewerContainer === "viewerContainer2")
+       {
+         mainComponentClasses = Object.keys(this.SourceProperties);
+         mainComponentClasseData = this.SourceProperties[currentSheetName];
+       }
+
+        //var mainComponentClasseData = this.SourceAProperties[currentSheetName];
+        var properties = [];
+
+        if (mainComponentClasseData !== {}) {
+                    for (var subComponentClass in mainComponentClasseData) {
+                        for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) {
+                            properties.push(mainComponentClasseData[subComponentClass][i]);
+                        }
+                    }
+                createGridView(properties, viewerContainer, 0, 0);
+
+                if(thisRow.tagName.toLowerCase() !== "tr")
+                {
+                    return;
+                }
+
+            // if (thisRow.cells[0].innerText !== "" && thisRow.cells[2].innerText !== "") {
+
+                var viewer1ContainerData = document.getElementById("viewerContainer1")
+                
+                if (viewer1ContainerData.innerHTML.length > 60) {
+                    var containerChildren = viewer1ContainerData.children;
+                    var columnHeaders = containerChildren[0].getElementsByTagName("span");
+                    var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
+                    var column = {};
+                    for (var i = 0; i < columnHeaders.length; i++) {
+                        columnHeader = columnHeaders[i];
+                        if (columnHeader.innerHTML.trim() === "Name") {
+                            column[columnHeader.innerHTML.trim()] = i;
+                        }
+                        if (Object.keys(column).length === 1) {
+                            break;
+                        }
+                    }
+                    for (var i = 1; i < mainComponentClassDataTable.length; i++) {
+                        rowData = mainComponentClassDataTable[i];
+
+                        if(thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
+                            thisRow.cells[1].innerText === rowData.cells[column.Name].innerText)
+                            {
+                                if(this.SelectedComponentRowFromSheet1)
+                                {
+                                    for(var j =0; j < this.SelectedComponentRowFromSheet1.cells.length; j++)
+                                    {
+                                        cell = this.SelectedComponentRowFromSheet1.cells[j];
+                                        cell.style.backgroundColor = "#ffffff"
+                                    }
+                                }
+
+                                for(var j =0; j < rowData.cells.length; j++)
+                                    {
+                                        cell = rowData.cells[j];
+                                        cell.style.backgroundColor = "#B2BABB"
+                                    }
+
+                                this.SelectedComponentRowFromSheet1 = rowData;
+                                
+
+                            }
+                    }
+                }
+
+                var viewer2ContainerData = document.getElementById("viewerContainer2")
+                
+                if (viewer2ContainerData.innerHTML.length > 60) {
+                    var containerChildren = viewer2ContainerData.children;
+                    var columnHeaders = containerChildren[0].getElementsByTagName("span");
+                    var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
+                    var column = {};
+                    for (var i = 0; i < columnHeaders.length; i++) {
+                        columnHeader = columnHeaders[i];
+                        if (columnHeader.innerHTML.trim() === "Name") {
+                            column[columnHeader.innerHTML.trim()] = i;
+                        }
+                        if (Object.keys(column).length === 1) {
+                            break;
+                        }
+                    }
+                    for (var i = 1; i < mainComponentClassDataTable.length; i++) {
+                        rowData = mainComponentClassDataTable[i];
+
+                        if(thisRow.cells[0].innerText === rowData.cells[column.Name].innerText  ||
+                            thisRow.cells[1].innerText === rowData.cells[column.Name].innerText)
+                            {
+                                if(this.SelectedComponentRowFromSheet2)
+                                {
+                                    for(var j =0; j < this.SelectedComponentRowFromSheet2.cells.length; j++)
+                                    {
+                                        cell = this.SelectedComponentRowFromSheet2.cells[j];
+                                        cell.style.backgroundColor = "#ffffff"
+                                    }
+                                }
+
+                                for(var j =0; j < rowData.cells.length; j++)
+                                    {
+                                        cell = rowData.cells[j];
+                                        cell.style.backgroundColor = "#B2BABB"
+                                    }
+
+                                this.SelectedComponentRowFromSheet2 = rowData;
+                                
+
+                            }
+                    }
+                }
+            // }
+
+
+            
+        }
+    };
     ComplianceReviewManager.prototype.populateDetailedReviewTable = function (row) {
 
         var parentTable = document.getElementById(this.DetailedReviewTableContainer);

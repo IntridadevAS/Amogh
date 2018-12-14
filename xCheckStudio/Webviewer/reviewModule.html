@@ -28,6 +28,15 @@
     <script src='postData/sourceANodeIdVsComponentDataReader.php'></script>
     <script src='postData/sourceBNodeIdVsComponentDataReader.php'></script>
 
+    <script src='postData/SourceASheetDataReader.php'></script>
+    <script src='postData/SourceBSheetDataReader.php'></script>
+    <script src='postData/jsonreader.php'></script>
+
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
+    <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
+
+
     <style type="text/css">
         * {
             box-sizing: border-box;
@@ -350,28 +359,37 @@
                 comparisonCheckManager.restore(ComparisonCheckData)
 
                 // create comparisonreviewmanager
-                if (typeof SourceAViewerData === 'undefined'||
-                    typeof SourceBViewerData === 'undefined') {
-                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                        undefined,
-                        undefined,
-                        "ComparisonMainReviewCell",
-                        "ComparisonDetailedReviewCell",
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined);
-                }
-                else {
+
+                if (typeof SourceAViewerData !== 'undefined' &&
+                    typeof SourceBViewerData !== 'undefined' &&
+                    SourceAComponentIdVsComponentData !== 'undefined' &&
+                    SourceANodeIdVsComponentData !== 'undefined' &&
+                    SourceBComponentIdVsComponentData !== 'undefined' &&
+                    SourceBNodeIdVsComponentData !== 'undefined') {
                     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
                         SourceAViewerData,
                         SourceBViewerData,
+                        undefined,
+                        undefined,
                         "ComparisonMainReviewCell",
                         "ComparisonDetailedReviewCell",
                         SourceAComponentIdVsComponentData,
                         SourceANodeIdVsComponentData,
                         SourceBComponentIdVsComponentData,
                         SourceBNodeIdVsComponentData);
+                }
+                else if (typeof SourceAProperties !== 'undefined' && typeof SourceBProperties !== 'undefined') {
+                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                        undefined,
+                        undefined,
+                        SourceAProperties,
+                        SourceBProperties,
+                        "ComparisonMainReviewCell",
+                        "ComparisonDetailedReviewCell",
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined);
                 }
 
                 // populate review table
@@ -385,17 +403,19 @@
                 sourceAComplianceCheckManager.restore(SourceAComplianceData)
 
                 // create sourceAComplianceReviewManager
-                if (typeof SourceAViewerData === 'undefined') {
+                if (typeof SourceAProperties !== 'undefined') {
                     sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
                         undefined,
+                        SourceAProperties,
                         "SourceAComplianceMainReviewCell",
                         "SourceAComplianceDetailedReviewCell",
                         undefined,
                         undefined);
                 }
-                else {
+                else if (typeof SourceAViewerData !== 'undefined') {
                     sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
                         SourceAViewerData,
+                        undefined,
                         "SourceAComplianceMainReviewCell",
                         "SourceAComplianceDetailedReviewCell",
                         SourceAComponentIdVsComponentData,
@@ -414,17 +434,19 @@
                 sourceBComplianceCheckManager.restore(SourceBComplianceData)
 
                 // create sourceBComplianceReviewManager
-                if (typeof SourceBViewerData === 'undefined') {
+                if (typeof SourceBProperties !== 'undefined') {
                     sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
                         undefined,
+                        SourceBProperties,
                         "SourceBComplianceMainReviewCell",
                         "SourceBComplianceDetailedReviewCell",
                         undefined,
                         undefined);
                 }
-                else {
+                else if (typeof SourceBViewerData !== 'undefined') {
                     sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
                         SourceBViewerData,
+                        undefined,
                         "SourceBComplianceMainReviewCell",
                         "SourceBComplianceDetailedReviewCell",
                         SourceBComponentIdVsComponentData,
@@ -457,6 +479,14 @@
                 collapsibleRows[i].addEventListener("click", function () {
                     this.classList.toggle("active");
                     var content = this.nextElementSibling;
+                    // if (typeof SourceAProperties !== 'undefined') {
+                    //     var sheetName = this.innerText.trim();
+                    //     comparisonReviewManager.showSelectedSheetData("viewerContainer1", sheetName, this);
+                    // }
+                    // if (typeof SourceBProperties !== 'undefined') {
+                    //     var sheetName = this.innerText.trim();
+                    //     comparisonReviewManager.showSelectedSheetData("viewerContainer2", sheetName, this);
+                    // }
                     if (content.style.display === "block") {
                         content.style.display = "none";
                     } else {
@@ -485,17 +515,32 @@
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
                 }
+                if (document.getElementById("viewerContainer1").getElementsByTagName("div")) {
+                    document.getElementById("viewerContainer1").innerHTML = ""
+                    // }
+                }
+                if (document.getElementById("viewerContainer2").getElementsByTagName("div")) {
+                    document.getElementById("viewerContainer2").innerHTML = ""
+                    // divElements.innerHTML = "";
+                    }
+                
             }
             if (sourceAComplianceReviewManager) {
                 if (sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
+                if (document.getElementById("viewerContainer1").getElementsByTagName("div")) {
+                    document.getElementById("viewerContainer1").innerHTML = ""
+                }
             }
             if (sourceBComplianceReviewManager) {
                 if (sourceBComplianceReviewManager.ReviewModuleViewerInterface &&
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
+                }
+                if (document.getElementById("viewerContainer2").getElementsByTagName("div")) {
+                    document.getElementById("viewerContainer2").innerHTML = ""
                 }
             }
 

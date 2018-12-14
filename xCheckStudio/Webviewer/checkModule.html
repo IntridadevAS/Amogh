@@ -31,6 +31,11 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\Grid.js"></script>
 
 
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
+    <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
+    
+
 
     <script src='configurations\dir.php'></script>
     <style>
@@ -298,7 +303,7 @@
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
         var checkCaseManager;
-
+        var jsonObj;
         var checkCaseFilesData;
 
         window.onload = function () {
@@ -348,7 +353,7 @@
                                 undefined);
                         }
                     }
-                    else {
+                    else{
                         if (xCheckStudioInterface1) {
                             var complianceSourceACB = document.getElementById("complianceSourceACB");
                             if (checkType.Name.toLowerCase() === "compliance" &&
@@ -383,6 +388,7 @@
                         }
                     }
                 }
+                jsonObj = JSON.stringify(xCheckStudioInterface1.sourceProperties, null, 2);
 
                 postData();
                 window.open("/reviewModule.html", "_blank");
@@ -525,47 +531,77 @@
                 });
             }
 
+
+//
+
+
+if (jsonObj) {
+    $.ajax({
+        url: 'postData/jsonwriter.php',
+        type: "POST",
+        async: false,
+        data: { "JSONDATA": JSON.stringify(jsonObj) },
+        success: function (data) {
+            //alert("success");
+            //$("#result").html(data);
+        }
+    });
+}
             // post source A viewer data
-            if (xCheckStudioInterface1 &&
-                xCheckStudioInterface1._firstViewer) {
+            if (xCheckStudioInterface1) {
+                if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
+                    //virewer container Data
+                    var viewerOptions = [];
+                    viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
+                    viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
 
-                //virewer container Data
-                var viewerOptions = [];
-                viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
-                viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
-
-                $.ajax({
-                    url: 'postData/sourceAViewerDataWriter.php',
-                    type: "POST",
-                    async: false,
-                    data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
-                    success: function (data) {
-                        //alert("success");
-                        //$("#result").html(data);
-                    }
-                });
-
-
-                // postnode id and component data relation
-                if (xCheckStudioInterface1.nodeIdVsComponentData) {
                     $.ajax({
-                        url: 'postData/sourceANodeIdVsComponentDataWriter.php',
+                        url: 'postData/sourceAViewerDataWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+                        data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
                         success: function (data) {
                             //alert("success");
                             //$("#result").html(data);
                         }
                     });
-                }
 
-                if (xCheckStudioInterface1.componentIdVsComponentData) {
+
+                    // postnode id and component data relation
+                    if (xCheckStudioInterface1.nodeIdVsComponentData) {
+                        $.ajax({
+                            url: 'postData/sourceANodeIdVsComponentDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+
+                    if (xCheckStudioInterface1.componentIdVsComponentData) {
+                        $.ajax({
+                            url: 'postData/sourceAComponentIdVsComponentDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+                }
+                
+                else if(xCheckStudioInterface1.SourceType.toLowerCase() === "xls")
+                {
                     $.ajax({
-                        url: 'postData/sourceAComponentIdVsComponentDataWriter.php',
+                        url: 'postData/SourceASheetDataWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+                        data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
                         success: function (data) {
                             //alert("success");
                             //$("#result").html(data);
@@ -575,53 +611,66 @@
 
             }
 
-            // post source B viewer data
-            if (xCheckStudioInterface2 &&
-                xCheckStudioInterface2._firstViewer) {
+            if (xCheckStudioInterface2) {
+                if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
+                    //virewer container Data
+                    var viewerOptions = [];
+                    viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
+                    viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
 
-                //virewer container Data
-                var viewerOptions = [];
-                viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
-                viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
+                    $.ajax({
+                        url: 'postData/sourceBViewerDataWriter.php',
+                        type: "POST",
+                        async: false,
+                        data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
+                        success: function (data) {
+                            //alert("success");
+                            //$("#result").html(data);
+                        }
+                    });
 
-                $.ajax({
-                    url: 'postData/sourceBViewerDataWriter.php',
-                    type: "POST",
-                    async: false,
-                    data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
-                    success: function (data) {
-                        //alert("success");
-                        //$("#result").html(data);
+                    // postnode id and component data relation
+                    if (xCheckStudioInterface2.nodeIdVsComponentData) {
+                        $.ajax({
+                            url: 'postData/sourceBNodeIdVsComponentDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
                     }
-                });
 
-                // postnode id and component data relation
-                if (xCheckStudioInterface2.nodeIdVsComponentData) {
+                    if (xCheckStudioInterface2.componentIdVsComponentData) {
+                        $.ajax({
+                            url: 'postData/sourceBComponentIdVsComponentDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+                }
+           
+            else if(xCheckStudioInterface2.SourceType.toLowerCase() === "xls")
+                {
                     $.ajax({
-                        url: 'postData/sourceBNodeIdVsComponentDataWriter.php',
+                        url: 'postData/SourceBSheetDataWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+                        data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
                         success: function (data) {
                             //alert("success");
                             //$("#result").html(data);
                         }
                     });
                 }
-
-                if (xCheckStudioInterface2.componentIdVsComponentData) {
-                    $.ajax({
-                        url: 'postData/sourceBComponentIdVsComponentDataWriter.php',
-                        type: "POST",
-                        async: false,
-                        data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
-                        success: function (data) {
-                            //alert("success");
-                            //$("#result").html(data);
-                        }
-                    });
-                }
-            }
+				 }
         }
 
         function openTab(tabName) {
