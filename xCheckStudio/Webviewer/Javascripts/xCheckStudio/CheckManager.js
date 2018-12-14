@@ -3,7 +3,7 @@ var sourceAComplianceCheckManager;
 var sourceBComplianceCheckManager;
 
 function CheckManager() {
-    this.Name = name;   
+    this.Name = name;
 
     this.CheckComponentsGroups = {};
 
@@ -11,33 +11,40 @@ function CheckManager() {
         for (var property in checkManagerData.CheckComponentsGroups) {
             if (checkManagerData.CheckComponentsGroups.hasOwnProperty(property)) {
                 var componentGroupData = checkManagerData.CheckComponentsGroups[property];
-                var checkComponentGroup = new CheckComponentGroup( componentGroupData.ComponentClass);
+                var checkComponentGroup = new CheckComponentGroup(componentGroupData.ComponentClass);
                 checkComponentGroup.restore(componentGroupData);
-               
+
                 this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
             }
-        }      
-     
+        }
+
     }
 
-    CheckManager.prototype.performCheck = function (sourceProperties1, 
-                                                    sourceProperties2, 
-                                                    checkCaseType, 
-                                                    comparisonCheck) {      
+    CheckManager.prototype.performCheck = function (sourceProperties1,
+                                                    sourceProperties2,
+                                                    checkCaseType,
+                                                    comparisonCheck,
+                                                    interfaceObject) {
 
         if (comparisonCheck) {
             this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
         }
         else {
-            this.checkDataSourceForCompliance(sourceProperties1, checkCaseType);
+            this.checkDataSourceForCompliance(sourceProperties1, checkCaseType, interfaceObject);
         }
     }
 
     CheckManager.prototype.checkDataSourceForCompliance = function (sourceProperties,
-                                                                    checkCaseType) {
+                                                                    checkCaseType,
+                                                                    interfaceObject) {
 
-        for (var i = 0, sourcePropertiesCollection = sourceProperties; i < sourcePropertiesCollection.length; i++) {
-            var sourceComponentProperties = sourcePropertiesCollection[i];           
+        for (var i = 0; i < sourceProperties.length; i++) {
+            var sourceComponentProperties = sourceProperties[i];
+
+             // check if this property is checked or not, in Source A
+             if (!interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
+                continue;
+            }
 
             // check if component class exists in checkcase
             if (!checkCaseType.componentGroupExists(sourceComponentProperties.MainComponentClass)) {
@@ -82,11 +89,7 @@ function CheckManager() {
                     propertyName = property.Name;
                     propertyValue = property.Value;
                     result = true;
-                    // if (propertyValue === undefined || propertyValue === "") {
-                    //     severity = "No Value";
-                    // }
-                    // else {
-                    // check rule
+            
                     if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.None) {
 
                     }
@@ -140,11 +143,9 @@ function CheckManager() {
                         }
                         else {
                             var prefix = ruleArray[1];
-                            result = propertyValue.endsWith(prefix);                            
+                            result = propertyValue.endsWith(prefix);
                         }
-                    }
-                    //}
-
+                    }                  
 
                     performCheck = true;
                     var checkProperty = new CheckProperty(propertyName,
@@ -163,292 +164,330 @@ function CheckManager() {
         }
     }
 
-    CheckManager.prototype.checkDataSources = function (source1Properties, 
-                                                        source2Properties,
-                                                        checkCaseType) {
+    CheckManager.prototype.checkDataSources = function (sourceAProperties,
+        sourceBProperties,
+        checkCaseType) {
 
-        for (var i = 0, source1PropertiesCollection = source1Properties; i < source1PropertiesCollection.length; i++) {
-            var source1ComponentProperties = source1PropertiesCollection[i];
+        var comparedSourceBComponents = [];
 
-            // get check case for comparison to perform
-            //var checkCase = checkCaseManager.CheckCase;
+        // compare checked properties from source A with corresponding source B properties
+        for (var i = 0; i < sourceAProperties.length; i++) {
+            var sourceAComponentProperties = sourceAProperties[i];
+
+            // check if this property is checked or not, in Source A
+            if (!xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
+                continue;
+            }
 
             // check if component class exists in checkcase
-            if (!checkCaseType.componentGroupExists(source1ComponentProperties.MainComponentClass)) {
+            if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass)) {
                 continue;
             }
             // get check case group
-            var checkCaseGroup = checkCaseType.getComponentGroup(source1ComponentProperties.MainComponentClass);
+            var checkCaseGroup = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass);
 
             // check if component exists in checkCaseGroup
-            if (!checkCaseGroup.componentClassExists(source1ComponentProperties.SubComponentClass)) {
+            if (!checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass)) {
                 continue;
             }
             // get check case component
-            var checkCaseComponentClass = checkCaseGroup.getComponentClass(source1ComponentProperties.SubComponentClass);
+            var checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass);
 
-            var checkComponentGroup;
-            if (this.CheckComponentsGroups &&
-                source1ComponentProperties.MainComponentClass in this.CheckComponentsGroups) {
-                checkComponentGroup = this.CheckComponentsGroups[source1ComponentProperties.MainComponentClass];
-            }
-            else {
-                checkComponentGroup = new CheckComponentGroup(source1ComponentProperties.MainComponentClass);
-                this.CheckComponentsGroups[source1ComponentProperties.MainComponentClass] = checkComponentGroup;
-            }
+            // create or get check component group
+            var checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass);
             if (!checkComponentGroup) {
                 continue;
             }
 
+            // componentMatchFound flag
             var componentMatchFound = false;
 
-            for (var j = 0, source2PropertiesCollection = source2Properties; j < source2PropertiesCollection.length; j++) {
-                var source2ComponentProperties = source2PropertiesCollection[j];
+            // check corresponding component in source B
+            for (var j = 0; j < sourceBProperties.length; j++) {
+                var sourceBComponentProperties = sourceBProperties[j];
 
-                if (source1ComponentProperties.Name === source2ComponentProperties.Name &&
-                    source1ComponentProperties.MainComponentClass === source2ComponentProperties.MainComponentClass &&
-                    source1ComponentProperties.SubComponentClass === source2ComponentProperties.SubComponentClass) {
-
-
-                    // if component is PipingNetworkSegment, check if source and destination properties are same
-                    // because they may have same tag names
-                    if (source1ComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-                        var source1Source = source1ComponentProperties.getProperty('Source');
-                        var source1Destination = source1ComponentProperties.getProperty('Destination');
-                        var source1OwnerId = source1ComponentProperties.getProperty('OwnerId');
-                        var source2Source = source2ComponentProperties.getProperty('Source');
-                        var source2Destination = source2ComponentProperties.getProperty('Destination');
-                        var source2OwnerId = source2ComponentProperties.getProperty('OwnerId');
-
-                        if (source1Source === undefined ||
-                            source1Destination === undefined ||
-                            source2Source === undefined ||
-                            source2Destination === undefined ||
-                            source1OwnerId === undefined ||
-                            source2OwnerId === undefined ||
-                            source1Source.Value !== source2Source.Value ||
-                            source1Destination.Value !== source2Destination.Value ||
-                            source1OwnerId.Value !== source2OwnerId.Value) {
-                            continue;
-                        }
-                    }
-
-                    componentMatchFound = true;
-
-                    var checkComponent = new CheckComponent(source1ComponentProperties.Name,
-                        source2ComponentProperties.Name,
-                        source1ComponentProperties.SubComponentClass)
-                    checkComponentGroup.AddCheckComponent(checkComponent);
-
-                    for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
-                        // get check case mapping property object
-                        var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-
-                        var property1Name;
-                        var property2Name;
-                        var property1Value;
-                        var property2Value;
-                        var severity;
-                        var performCheck;
-                        var description;
-
-                        if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
-                            source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
-
-                            var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-                            var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
-
-                            property1Name = property1.Name;
-                            property2Name = property2.Name;
-                            property1Value = property1.Value;
-                            property2Value = property2.Value;
-
-                            // If both properties (Source A and Source B properties) do not have values, 
-                            // show  'No Value' severity
-                            if ((property1Value === undefined || property1Value === "") &&
-                                (property2Value === undefined || property2Value === "")) {
-                                severity = "No Value";
-                                performCheck = false;
-                                description = "Both properties have no values.";
-                            }
-                            else if ((property1Value === undefined || property1Value === "") ||
-                                (property2Value === undefined || property2Value === "")) {
-                                // If anyone of the properties has no value, then show 'Error'.
-                                severity = "Error";
-                                performCheck = false;
-
-                                description = "One of the properties have no value.";
-                            }
-                            else {
-                                severity = checkCaseMappingProperty.Severity;
-                                performCheck = true;
-
-                                description = "Property check performed";
-                            }
-                        }
-                        else {
-                            property1Name = checkCaseMappingProperty.SourceAName;
-                            property2Name = checkCaseMappingProperty.SourceBName;
-                            property1Value = "";
-                            property2Value = "";
-                            severity = "Error";
-                            performCheck = false;
-
-                            description = "Property match not found.";
-                        }
-
-                        var checkProperty = new CheckProperty(property1Name,
-                            property1Value,
-                            property2Name,
-                            property2Value,
-                            severity,
-                            performCheck,
-                            description);
-
-                        checkComponent.AddCheckProperty(checkProperty);
-                    }
-
-                    break;
+                // check if components are match
+                if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                    continue;
                 }
-            }
 
-            // if component match not found 
-            if (!componentMatchFound) {
-                var checkComponent = new CheckComponent(source1ComponentProperties.Name,
-                    "",
-                    source1ComponentProperties.SubComponentClass)
+                // mark this source B proerty compoent as matched
+                comparedSourceBComponents.push(sourceBComponentProperties);
 
+                // set componentMatchFound flag to true
+                componentMatchFound = true;
+
+                // create checkcomponent object
+                var checkComponent = new CheckComponent(sourceAComponentProperties.Name,
+                    sourceBComponentProperties.Name,
+                    sourceAComponentProperties.SubComponentClass)
+                checkComponentGroup.AddCheckComponent(checkComponent);
 
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source1ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
-                        var property1 = source1ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-                        property1Name = property1.Name;
-                        property1Value = property1.Value;
 
-                        var checkProperty = new CheckProperty(property1Name,
-                            property1Value,
-                            undefined,
-                            undefined,
-                            "",
-                            undefined,
-                            undefined);
-
-                        checkComponent.AddCheckProperty(checkProperty);
+                    var checkProperty = this.checkProperties(checkCaseMappingProperty, sourceAComponentProperties, sourceBComponentProperties);
+                    if (!checkProperty) {
+                        continue;
                     }
+                    checkComponent.AddCheckProperty(checkProperty);
                 }
 
-                checkComponent.Status = "No Match";
+                break;
+            }
+
+            // if component match not found 
+            if (!componentMatchFound) {
+                var checkComponent = this.getNoMatchComponent(sourceAComponentProperties, checkCaseComponentClass, true);
                 checkComponentGroup.AddCheckComponent(checkComponent);
             }
         }
 
-        // check all source2 component match
-        for (var i = 0, source2PropertiesCollection = source2Properties; i < source2PropertiesCollection.length; i++) {
-            var source2ComponentProperties = source2PropertiesCollection[i];
+        // compare checked properties from source B with corresponding source A properties
+        for (var i = 0; i < sourceBProperties.length; i++) {
+            var sourceBComponentProperties = sourceBProperties[i];
 
-            // get check case for comparison to perform
-           // var checkCase = checkCaseManager.CheckCases[0];
+            // check if this component is already compared. If yes, then do nothing
+            var componentCompared = false;
+            for (var comparedComponentIndex = 0; comparedComponentIndex < comparedSourceBComponents.length; comparedComponentIndex++) {
+                if (comparedSourceBComponents[comparedComponentIndex] === sourceBComponentProperties) {
+                    componentCompared = true;
+                    break;
+                }
+            }
+            if (componentCompared) {
+                continue;
+            }
+
+            // check if this property is checked or not in SOurce BG
+            if (!xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
+                continue;
+            }
 
             // check if component class exists in checkcase
-            if (!checkCaseType.componentGroupExists(source2ComponentProperties.MainComponentClass)) {
+            if (!checkCaseType.componentGroupExists(sourceBComponentProperties.MainComponentClass)) {
                 continue;
             }
             // get check case group
-            var checkCaseGroup = checkCaseType.getComponentGroup(source2ComponentProperties.MainComponentClass);
+            var checkCaseGroup = checkCaseType.getComponentGroup(sourceBComponentProperties.MainComponentClass);
 
             // check if component exists in checkCaseGroup
-            if (!checkCaseGroup.componentClassExists(source2ComponentProperties.SubComponentClass)) {
+            if (!checkCaseGroup.componentClassExists(sourceBComponentProperties.SubComponentClass)) {
                 continue;
             }
             // get check case component
-            var checkCaseComponentClass = checkCaseGroup.getComponentClass(source2ComponentProperties.SubComponentClass);
+            var checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceBComponentProperties.SubComponentClass);
 
-            var checkComponentGroup;
-            if (this.CheckComponentsGroups &&
-                source2ComponentProperties.MainComponentClass in this.CheckComponentsGroups) {
-                checkComponentGroup = this.CheckComponentsGroups[source2ComponentProperties.MainComponentClass];
-            }
-            else {
-                checkComponentGroup = new CheckComponentGroup(source2ComponentProperties.MainComponentClass);
-                this.CheckComponentsGroups[source2ComponentProperties.MainComponentClass] = checkComponentGroup;
-            }
+            // create or get check component group
+            var checkComponentGroup = this.getCheckComponentGroup(sourceBComponentProperties.MainComponentClass);
             if (!checkComponentGroup) {
                 continue;
             }
 
             var componentMatchFound = false;
 
-            for (var j = 0, source1PropertiesCollection = source1Properties; j < source1PropertiesCollection.length; j++) {
-                var source1ComponentProperties = source1PropertiesCollection[j];
+            for (var j = 0; j < sourceAProperties.length; j++) {
+                var sourceAComponentProperties = sourceAProperties[j];
 
-                if (source2ComponentProperties.Name === source1ComponentProperties.Name &&
-                    source2ComponentProperties.MainComponentClass === source1ComponentProperties.MainComponentClass &&
-                    source2ComponentProperties.SubComponentClass === source1ComponentProperties.SubComponentClass) {
-
-
-                    // if component is PipingNetworkSegment, check if source and destination properties are same
-                    // because they may have same tag names
-                    if (source2ComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-
-                        var source2Source = source2ComponentProperties.getProperty('Source');
-                        var source2Destination = source2ComponentProperties.getProperty('Destination');
-                        var source2OwnerId = source2ComponentProperties.getProperty('OwnerId');
-
-                        var source1Source = source1ComponentProperties.getProperty('Source');
-                        var source1Destination = source1ComponentProperties.getProperty('Destination');
-                        var source1OwnerId = source1ComponentProperties.getProperty('OwnerId');
-
-                        if (source1Source === undefined ||
-                            source1Destination === undefined ||
-                            source2Source === undefined ||
-                            source2Destination === undefined ||
-                            source1OwnerId === undefined ||
-                            source2OwnerId === undefined ||
-                            source1Source.Value !== source2Source.Value ||
-                            source1Destination.Value !== source2Destination.Value ||
-                            source1OwnerId.Value !== source2OwnerId.Value) {
-                            continue;
-                        }
-                    }
-
-                    componentMatchFound = true;
-                    break;
+                // check if components are match
+                if (!this.isComponentMatch(sourceBComponentProperties, sourceAComponentProperties)) {
+                    continue;
                 }
-            }
 
-            // if component match not found 
-            if (!componentMatchFound) {
-                var checkComponent = new CheckComponent("",
-                    source2ComponentProperties.Name,
-                    source2ComponentProperties.SubComponentClass)
+                componentMatchFound = true;
+
+                // create checkcomponent object
+                var checkComponent = new CheckComponent(sourceAComponentProperties.Name,
+                    sourceBComponentProperties.Name,
+                    sourceAComponentProperties.SubComponentClass)
+                checkComponentGroup.AddCheckComponent(checkComponent);
 
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
                     // get check case mapping property object
                     var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-                    if (source2ComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
-                        var property2 = source2ComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-                        property2Name = property2.Name;
-                        property2Value = property2.Value;
 
-                        var checkProperty = new CheckProperty(undefined,
-                            undefined,
-                            property2Name,
-                            property2Value,
-                            "",
-                            undefined,
-                            undefined);
-
-                        checkComponent.AddCheckProperty(checkProperty);
+                    var checkProperty = this.checkProperties(checkCaseMappingProperty, sourceAComponentProperties, sourceBComponentProperties);
+                    if (!checkProperty) {
+                        continue;
                     }
+                    checkComponent.AddCheckProperty(checkProperty);
                 }
 
-                checkComponent.Status = "No Match";
+                break;
+            }
+
+            // if component match not found 
+            if (!componentMatchFound) {
+                var checkComponent = this.getNoMatchComponent(sourceBComponentProperties, checkCaseComponentClass, false);
                 checkComponentGroup.AddCheckComponent(checkComponent);
             }
         }
     }
+
+    CheckManager.prototype.getNoMatchComponent = function (sourceComponentProperties,
+        checkCaseComponentClass,
+        sourceAComponent) {
+
+        var checkComponent;
+        if (sourceAComponent) {
+            checkComponent = new CheckComponent(sourceComponentProperties.Name,
+                                                "",
+                                                sourceComponentProperties.SubComponentClass);
+        }
+        else {
+            checkComponent = new CheckComponent("",
+                                                sourceComponentProperties.Name,                
+                                                sourceComponentProperties.SubComponentClass);
+        } 
+
+        for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
+            // get check case mapping property object
+            var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
+            if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
+                var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+
+                var checkProperty = new CheckProperty(property.Name,
+                    property.Value,
+                    undefined,
+                    undefined,
+                    "",
+                    undefined,
+                    undefined);
+
+                checkComponent.AddCheckProperty(checkProperty);
+            }
+        }
+
+        checkComponent.Status = "No Match";
+        return checkComponent;
+    }
+
+    CheckManager.prototype.checkProperties = function (checkCaseMappingProperty,
+        sourceAComponentProperties,
+        sourceBComponentProperties) {
+        // // get check case mapping property object
+        // var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
+
+        var property1Name;
+        var property2Name;
+        var property1Value;
+        var property2Value;
+        var severity;
+        var performCheck;
+        var description;
+
+        if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
+            sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
+
+            var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+            var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+
+            property1Name = property1.Name;
+            property2Name = property2.Name;
+            property1Value = property1.Value;
+            property2Value = property2.Value;
+
+            // If both properties (Source A and Source B properties) do not have values, 
+            // show  'No Value' severity
+            if ((property1Value === undefined || property1Value === "") &&
+                (property2Value === undefined || property2Value === "")) {
+                severity = "No Value";
+                performCheck = false;
+                description = "Both properties have no values.";
+            }
+            else if ((property1Value === undefined || property1Value === "") ||
+                (property2Value === undefined || property2Value === "")) {
+                // If anyone of the properties has no value, then show 'Error'.
+                severity = "Error";
+                performCheck = false;
+
+                description = "One of the properties have no value.";
+            }
+            else {
+                severity = checkCaseMappingProperty.Severity;
+                performCheck = true;
+
+                description = "Property check performed";
+            }
+        }
+        else {
+            property1Name = checkCaseMappingProperty.SourceAName;
+            property2Name = checkCaseMappingProperty.SourceBName;
+            property1Value = "";
+            property2Value = "";
+            severity = "Error";
+            performCheck = false;
+
+            description = "Property match not found.";
+        }
+
+        var checkProperty = new CheckProperty(property1Name,
+            property1Value,
+            property2Name,
+            property2Value,
+            severity,
+            performCheck,
+            description);
+
+        return checkProperty;
+    }
+
+    CheckManager.prototype.getCheckComponentGroup = function (mainComponentClass) {
+        var checkComponentGroup;
+        if (this.CheckComponentsGroups &&
+            mainComponentClass in this.CheckComponentsGroups) {
+            checkComponentGroup = this.CheckComponentsGroups[mainComponentClass];
+        }
+        else {
+            checkComponentGroup = new CheckComponentGroup(mainComponentClass);
+            this.CheckComponentsGroups[mainComponentClass] = checkComponentGroup;
+        }
+        // if (!checkComponentGroup) {
+        //     continue;
+        // }
+
+        return checkComponentGroup;
+    }
+
+    CheckManager.prototype.isComponentMatch = function (sourceAComponentProperties,
+        sourceBComponentProperties) {
+        // check if components are match
+        if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
+            sourceAComponentProperties.MainComponentClass === sourceBComponentProperties.MainComponentClass &&
+            sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass) {
+
+            // if component is PipingNetworkSegment, check if source and destination properties are same
+            // because they may have same tag names
+            if (sourceAComponentProperties.MainComponentClass === "PipingNetworkSegment") {
+                var sourceASource = sourceAComponentProperties.getProperty('Source');
+                var sourceADestination = sourceAComponentProperties.getProperty('Destination');
+                var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
+
+                var sourceBSource = sourceBComponentProperties.getProperty('Source');
+                var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
+                var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
+
+                if (sourceASource === undefined ||
+                    sourceADestination === undefined ||
+                    sourceBSource === undefined ||
+                    sourceBDestination === undefined ||
+                    sourceAOwnerId === undefined ||
+                    sourceBOwnerId === undefined ||
+                    sourceASource.Value !== sourceBSource.Value ||
+                    sourceADestination.Value !== sourceBDestination.Value ||
+                    sourceAOwnerId.Value !== sourceBOwnerId.Value) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return true;
+        }
+
+        return false;
+    }    
 }
 
 
@@ -516,9 +555,9 @@ function CheckComponent(sourceAName,
         }
     }
 
-    CheckComponent.prototype.getCheckProperty = function (sourceAPropertyName, 
-                                                          sourceBPropertyName,
-                                                          complianceCheck) {
+    CheckComponent.prototype.getCheckProperty = function (sourceAPropertyName,
+        sourceBPropertyName,
+        complianceCheck) {
         for (var i = 0; i < this.CheckProperties.length; i++) {
             if (this.CheckProperties[i].SourceAName === sourceAPropertyName) {
                 if (!complianceCheck) {
@@ -530,30 +569,29 @@ function CheckComponent(sourceAName,
                 return this.CheckProperties[i];
             }
         }
-        
+
         return undefined;
     }
 
-     CheckComponent.prototype.restore = function (componentData) {
-        
-        if(componentData.Status.toLowerCase() === "no match")
-         {
-             // if component data having status as No match, there is no need 
-             // restore properties for this component
-             this.Status = "No Match";
-             return ;
-         }
+    CheckComponent.prototype.restore = function (componentData) {
+
+        if (componentData.Status.toLowerCase() === "no match") {
+            // if component data having status as No match, there is no need 
+            // restore properties for this component
+            this.Status = "No Match";
+            return;
+        }
 
         for (var i = 0; i < componentData.CheckProperties.length; i++) {
-           var checkPropertyData =  componentData.CheckProperties[i];
+            var checkPropertyData = componentData.CheckProperties[i];
 
-           var checkProperty = new CheckProperty(checkPropertyData.SourceAName,
-            checkPropertyData.SourceAValue,
-            checkPropertyData.SourceBName,
-            checkPropertyData.SourceBValue,
-            checkPropertyData.Severity,
-            checkPropertyData.PerformCheck,
-            checkPropertyData.Description);
+            var checkProperty = new CheckProperty(checkPropertyData.SourceAName,
+                checkPropertyData.SourceAValue,
+                checkPropertyData.SourceBName,
+                checkPropertyData.SourceBValue,
+                checkPropertyData.Severity,
+                checkPropertyData.PerformCheck,
+                checkPropertyData.Description);
 
             this.AddCheckProperty(checkProperty);
         }

@@ -13,8 +13,9 @@ var xCheckStudio;
                 this.NodeGroups = [];
 
                 this._createElements();
-
                 this._initEvents();
+
+                this.selectedCompoents = [];
             }
             ModelTree.prototype._createElements = function () {
                 var _this = this;
@@ -39,6 +40,11 @@ var xCheckStudio;
                 tableHeading.style.backgroundColor = "#3498db";
 
                 var td = document.createElement("td");
+                td.innerHTML = "Check";
+                td.style.fontSize = "12px";
+                tableHeading.appendChild(td);
+
+                td = document.createElement("td");
                 td.innerHTML = "Component";
                 td.style.fontSize = "12px";
                 tableHeading.appendChild(td);
@@ -105,6 +111,8 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) {
+                var _this = this;
+
                 var model = this._viewer.model;
                 var componentName = model.getNodeName(nodeId);
 
@@ -125,7 +133,18 @@ var xCheckStudio;
                 }
 
                 var td = document.createElement("td");
+                var checkBox = document.createElement("INPUT");
+                checkBox.setAttribute("type", "checkbox");
+                checkBox.checked = true;
+                td.appendChild(checkBox);
+                row.appendChild(td);
 
+                // select component check box state change event
+                checkBox.onchange = function () {
+                    _this.handleComponentCheck(this);
+                }
+
+                td = document.createElement("td");
                 if (nodeData != undefined) {
 
                     td.innerHTML = componentName;
@@ -212,14 +231,22 @@ var xCheckStudio;
                     row.appendChild(td);
                 }
 
-
+                // maintain track of selected components
+                var checkedComponent = {
+                    'Name': row.cells[1].textContent,
+                    'MainComponentClass': row.cells[2].textContent,
+                    'SubComponentClass': row.cells[3].textContent,
+                    'Source': row.cells[4].textContent,
+                    'Destination': row.cells[5].textContent,
+                    'Owner': row.cells[6].textContent
+                };
+                this.selectedCompoents.push(checkedComponent);
 
                 if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
                     this.NodeGroups.push(componentStyleClass);
                 }
 
-                // click event for each row
-                var _this = this;
+                // click event for each row               
                 row.onclick = function () {
 
                     if (_this.SelectedComponentRow === this) {
@@ -262,6 +289,120 @@ var xCheckStudio;
                 row.onmouseout = createMouseOutHandler(row);
             }
 
+
+            ModelTree.prototype.selectedCompoentExists = function (componentRow) {
+                for (var i = 0; i < this.selectedCompoents.length; i++) {
+                    var component = this.selectedCompoents[i];
+                    if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                        component['SubComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                        component['Source'] == componentRow.cells[4].textContent.trim() &&
+                        component['Destination'] === componentRow.cells[5].textContent.trim() &&
+                        component['Owner'] === componentRow.cells[6].textContent.trim()) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            
+            ModelTree.prototype.isComponentSelected = function(componentProperties)
+            {
+                for (var i = 0; i < this.selectedCompoents.length; i++) {
+                    var component = this.selectedCompoents[i];
+                    if (component['Name'] ===componentProperties.Name &&
+                        component['MainComponentClass'] === componentProperties.MainComponentClass &&
+                        component['SubComponentClass'] === componentProperties.SubComponentClass &&                        
+                        (componentProperties.Source === undefined  || component['Source'] == componentProperties.Source) &&
+                        (componentProperties.Destination === undefined  || component['Destination'] == componentProperties.Destination) &&
+                        (componentProperties.OwnerId === undefined  || component['Owner'] == componentProperties.OwnerId))
+                        return true;
+                    }              
+
+                return false;
+            }
+
+            ModelTree.prototype.removeFromselectedCompoents = function (componentRow) {
+                for (var i = 0; i < this.selectedCompoents.length; i++) {
+                    var component = this.selectedCompoents[i];
+                    if (component['Name']  === componentRow.cells[1].textContent.trim() &&
+                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                        component['SubComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                        component['Source'] === componentRow.cells[4].textContent.trim() &&
+                        component['Destination'] === componentRow.cells[5].textContent.trim() &&
+                        component['Owner'] === componentRow.cells[6].textContent.trim()) {
+
+                        this.selectedCompoents.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            ModelTree.prototype.handleComponentCheck = function (currentCheckBox) {
+
+                var currentCell = currentCheckBox.parentElement;
+                if (currentCell.tagName.toLowerCase() !== 'td') {
+                    return;
+                }
+
+                var currentRow = currentCell.parentElement;
+                if (currentRow.tagName.toLowerCase() !== 'tr' ||
+                    currentRow.cells.length < 2) {
+                    return;
+                }
+
+                // maintain track of selected/deselected components
+                if (currentCheckBox.checked &&
+                    !this.selectedCompoentExists(currentRow)) {
+
+                    var checkedComponent = {
+                        'Name': currentRow.cells[1].textContent.trim(),
+                        'MainComponentClass': currentRow.cells[2].textContent.trim(),
+                        'SubComponentClass': currentRow.cells[3].textContent.trim(),
+                        'Source': currentRow.cells[4].textContent.trim(),
+                        'Destination': currentRow.cells[5].textContent.trim(),
+                        'Owner': currentRow.cells[6].textContent.trim()
+                    };
+
+                    this.selectedCompoents.push(checkedComponent);
+                }
+                else if (this.selectedCompoentExists(currentRow)) {
+                    this.removeFromselectedCompoents(currentRow);
+                }
+
+                var currentTable = currentRow.parentElement;
+                if (currentTable.tagName.toLowerCase() !== 'table') {
+                    return;
+                }
+
+                var currentComponentCell = currentRow.cells[1];
+                var currentRowStyle = currentComponentCell.className;
+
+                //var currentClassList = currentRow.classList;
+                var currentClassName = currentRow.className;
+                var index = currentClassName.lastIndexOf(" ");
+
+                // check/uncheck all child and further child rows
+                var styleToCheck = currentClassName + " " + currentRowStyle;
+                for (var i = 0; i < currentTable.rows.length; i++) {
+
+                    var row = currentTable.rows[i];
+                    if (row === currentRow) {
+                        continue;
+                    }
+
+                    if (row.className === styleToCheck) {
+
+                        var checkBox = row.cells[0].children[0];
+                        if (checkBox.checked === currentCheckBox.checked) {
+                            continue;
+                        }
+
+                        checkBox.checked = currentCheckBox.checked;
+                        this.handleComponentCheck(checkBox);
+                    }
+                }
+            }
 
             ModelTree.prototype.selectComponentRow = function (componentIdentifier) {
                 if (this._viewer._params.containerId == "viewerContainer2") {
@@ -497,39 +638,39 @@ var xCheckStudio;
 
             ModelTree.prototype.HighlightModelBrowserRow = function (componentIdentifier) {
                 // if (checkManager != undefined) {
-                    browserTableRows = this.ModelBrowserTable.getElementsByTagName("tr");
-                    for (var i = 0; i < browserTableRows.length; i++) {
-                        var childRow = browserTableRows[i];
-                        var childRowColumns = childRow.cells;
-                        var rowIdentifier = childRowColumns[0].innerText;
-                        /*
-                        add comment
-                        */
-                        rowIdentifier = rowIdentifier.trim();
-                        if (childRowColumns.length > 0) {
-                            if (childRowColumns[1].innerHTML === "PipingNetworkSegment") {
-                                for (var j = 1; j < childRowColumns.length; j++) {
-                                    if ((j == 3 || j == 4 || j == 5) && childRowColumns[j].innerText != undefined) {
-                                        inner_Text = (childRowColumns[j].innerText);
-                                        inner_Text = inner_Text.trim();
-                                        rowIdentifier += "_" + inner_Text;
-                                    }
+                browserTableRows = this.ModelBrowserTable.getElementsByTagName("tr");
+                for (var i = 0; i < browserTableRows.length; i++) {
+                    var childRow = browserTableRows[i];
+                    var childRowColumns = childRow.cells;
+                    var rowIdentifier = childRowColumns[0].innerText;
+                    /*
+                    add comment
+                    */
+                    rowIdentifier = rowIdentifier.trim();
+                    if (childRowColumns.length > 0) {
+                        if (childRowColumns[1].innerHTML === "PipingNetworkSegment") {
+                            for (var j = 1; j < childRowColumns.length; j++) {
+                                if ((j == 3 || j == 4 || j == 5) && childRowColumns[j].innerText != undefined) {
+                                    inner_Text = (childRowColumns[j].innerText);
+                                    inner_Text = inner_Text.trim();
+                                    rowIdentifier += "_" + inner_Text;
                                 }
                             }
-                            if (componentIdentifier === rowIdentifier) {
-                                if (this.SelectedComponentRow) {
-                                    this.RestoreBackgroundColor(this.SelectedComponentRow);
-                                }
-
-                                this.ChangeBackgroundColor(childRow)
-                                this.SelectedComponentRow = childRow;
-
-                                break;
+                        }
+                        if (componentIdentifier === rowIdentifier) {
+                            if (this.SelectedComponentRow) {
+                                this.RestoreBackgroundColor(this.SelectedComponentRow);
                             }
 
+                            this.ChangeBackgroundColor(childRow)
+                            this.SelectedComponentRow = childRow;
+
+                            break;
                         }
 
                     }
+
+                }
                 // }
             }
 

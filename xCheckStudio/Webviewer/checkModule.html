@@ -220,7 +220,8 @@
                                 </td>
                                 <td>
                                     <label>Compliance<input id='complianceSourceACB' type='checkbox'></label>
-                                    <label>CheckAll<input id='checkAllSourceACB' type='checkbox' onclick='checkAll(this);'></label>
+                                    <label>Check All<input id='checkAllSourceACB' type='checkbox' onclick='checkAllCBClick(this,"modelTree1")'
+                                            checked></label>
                                 </td>
                             </tr>
                         </table>
@@ -269,7 +270,8 @@
                                 </td>
                                 <td>
                                     <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
-                                    <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAll(this);'></label>
+                                    <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
+                                            checked></label>
                                 </td>
                             </tr>
                         </table>
@@ -342,7 +344,8 @@
                             comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
                                 xCheckStudioInterface2.sourceProperties,
                                 checkType,
-                                true);
+                                true,
+                                undefined);
                         }
                     }
                     else {
@@ -356,7 +359,8 @@
                                     sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
                                         undefined,
                                         checkType,
-                                        false);
+                                        false,
+                                        xCheckStudioInterface1);
                                 }
                             }
                         }
@@ -372,7 +376,8 @@
                                     sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
                                         undefined,
                                         checkType,
-                                        false);
+                                        false,
+                                        xCheckStudioInterface2);
                                 }
                             }
                         }
@@ -628,9 +633,60 @@
             document.getElementById(tabName).style.display = "block";
         }
 
-        function checkAllCBClick(checkBox) {
+        function checkAllCBClick(checkBox, modelTreeContainer) {
 
-        }
+                var modelTreeContainerElement = document.getElementById(modelTreeContainer);
+                var modelTreeParentDiv = modelTreeContainerElement.children[0];
+                var currentTable = modelTreeParentDiv.children[0];
+
+                for (var i = 0; i < currentTable.rows.length; i++) {
+                var row = currentTable.rows[i];
+
+                var currentCheckBox = row.cells[0].children[0];
+                if (!currentCheckBox) {
+                    continue;
+                }
+
+                if (checkBox.checked === currentCheckBox.checked) {
+                    continue;
+                }
+
+                currentCheckBox.checked = checkBox.checked;
+                if (currentCheckBox.checked) {
+                    
+                    var checkedComponent = {
+                        'Name': row.cells[1].textContent.trim(),
+                        'MainComponentClass': row.cells[2].textContent.trim(),
+                        'SubComponentClass': row.cells[3].textContent.trim(),
+                        'Source': row.cells[4].textContent.trim(),
+                        'Destination': row.cells[5].textContent.trim(),
+                        'Owner': row.cells[6].textContent.trim()
+                    };                    
+
+                    if (checkBox.id === "checkAllSourceACB" &&
+                        xCheckStudioInterface1 &&
+                        !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {                        
+                            xCheckStudioInterface1._modelTree.selectedCompoents.push(checkedComponent);
+                    }
+                    else if (checkBox.id === "checkAllSourceBCB" &&
+                             xCheckStudioInterface2 &&
+                            !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
+                                xCheckStudioInterface2._modelTree.selectedCompoents.push(checkedComponent);
+                    }
+                }
+            }
+
+                if (!checkBox.checked) {
+                    if (checkBox.id === "checkAllSourceACB" &&
+                        xCheckStudioInterface1) {
+                        xCheckStudioInterface1._modelTree.selectedCompoents = [];
+                    }
+                    else if (checkBox.id === "checkAllSourceBCB" &&
+                        xCheckStudioInterface2) {
+                        xCheckStudioInterface2._modelTree.selectedCompoents = [];
+                    }
+                }
+            }
 
         function loadDataSource(event,
             dataSource,

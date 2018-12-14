@@ -39,7 +39,166 @@
 				</Component> -->
 		   </ComponentGroup>
 
-		    <ComponentGroup name="PipingNetworkSystem" >
+		   <ComponentGroup name="InstrumentComponent" >
+			  
+			  <ComponentClass name="InstrumentIndicator">
+			        <Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
+			 		<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
+					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+					<Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
+					<Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
+					<Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
+					<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
+					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
+					<Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+					<Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
+			        <Property sourceAName="Instrument_Description" sourceBName="Instrument_Description"  severity="Error"/>
+			        <Property sourceAName="Handle" sourceBName="Handle"  severity="Error"/>
+					<Property sourceAName="Symbol_Name" sourceBName="Symbol_Name"  severity="Error"/>
+			        <Property sourceAName="Pattern_Item" sourceBName="Pattern_Item"  severity="Error"/>
+			        <Property sourceAName="Panel_Prefix" sourceBName="Panel_Prefix"  severity="Error"/>
+			    
+					<Property sourceAName="Panel_Type" sourceBName="Panel_Type"  severity="Error"/>
+					<Property sourceAName="Panel_Numbers" sourceBName="Panel_Numbers"  severity="Error"/>
+					<Property sourceAName="Panel_Suffix" sourceBName="Panel_Suffix"  severity="Error"/>
+					<Property sourceAName="Conditioner" sourceBName="Conditioner"  severity="Error"/>
+					<Property sourceAName="Panel_Loop_Handle" sourceBName="Panel_Loop_Handle"  severity="Error"/>
+					
+					<Property sourceAName="Panel_Prefix_Handle" sourceBName="Panel_Prefix_Handle"  severity="Error"/>
+					<Property sourceAName="Panel_Suffix_Handle" sourceBName="Panel_Suffix_Handle"  severity="Error"/>
+					<Property sourceAName="Panel_Type_Handle" sourceBName="Panel_Type_Handle"  severity="Error"/>
+					<Property sourceAName="Alarm_Handles" sourceBName="Alarm_Handles"  severity="Error"/>
+					<Property sourceAName="Alarm_Labels" sourceBName="Alarm_Labels"  severity="Error"/>
+					
+					<Property sourceAName="Suffix_Handle" sourceBName="Suffix_Handle"  severity="Error"/>
+					<Property sourceAName="Function_Handle" sourceBName="Function_Handle"  severity="Error"/>
+					<Property sourceAName="Loop_Handle" sourceBName="Loop_Handle"  severity="Error"/>
+					<Property sourceAName="Prefix_Handle" sourceBName="Prefix_Handle"  severity="Error"/>
+					<Property sourceAName="Type_Handle" sourceBName="Type_Handle"  severity="Error"/>
+					
+					<Property sourceAName="Block_Handle" sourceBName="Block_Handle"  severity="Error"/>
+					<Property sourceAName="AType" sourceBName="AType"  severity="Error"/>
+					<Property sourceAName="Closure" sourceBName="Closure"  severity="Error"/>
+					<Property sourceAName="PDMS_Type" sourceBName="PDMS_Type"  severity="Error"/>
+					<Property sourceAName="PDMS_SubType" sourceBName="PDMS_SubType"  severity="Error"/>
+					
+					<Property sourceAName="SppPrefix" sourceBName="SppPrefix"  severity="Error"/>
+					<Property sourceAName="SppType" sourceBName="SppType"  severity="Error"/>
+					<Property sourceAName="SppNumber" sourceBName="SppNumber"  severity="Error"/>
+					<Property sourceAName="SppSuffix" sourceBName="SppSuffix"  severity="Error"/>
+					<Property sourceAName="CLASSNAME" sourceBName="CLASSNAME"  severity="Error"/>
+					
+					<Property sourceAName="TAGFORMAT" sourceBName="TAGFORMAT"  severity="Error"/>
+					<Property sourceAName="AREAPATH" sourceBName="AREAPATH"  severity="Error"/>
+					<Property sourceAName="INTERLOCK" sourceBName="INTERLOCK"  severity="Error"/>
+					<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
+					<Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Error"/>
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		   <ComponentGroup name="PipingComponent" >
+		      
+			  <ComponentClass name="BallValve">
+			        <Property sourceAName="BallValve" sourceBName="BallValve"  severity="Error"/>  
+					<Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
+					<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
+					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+					<Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
+					<Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
+					<Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
+					<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
+					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
+					<Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+					<Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
+					<Property sourceAName="ConnectionPoint" sourceBName="ConnectionPoint"  severity="Error"/>
+					<Property sourceAName="Closure" sourceBName="Closure"  severity="Error"/>
+					<Property sourceAName="Code" sourceBName="Code"  severity="Error"/>
+					<Property sourceAName="Tag" sourceBName="Tag"  severity="Error"/>
+					<Property sourceAName="Handle" sourceBName="Handle"  severity="Error"/>
+					<Property sourceAName="Symbol_Name" sourceBName="Symbol_Name"  severity="Error"/>
+					<Property sourceAName="BranchId" sourceBName="BranchId"  severity="Error"/>
+					<Property sourceAName="PDMS_Type" sourceBName="PDMS_Type"  severity="Error"/>
+					<Property sourceAName="PDMS_SubType" sourceBName="PDMS_SubType"  severity="Error"/>
+					<Property sourceAName="AType" sourceBName="AType"  severity="Error"/>
+					<Property sourceAName="Body" sourceBName="Body"  severity="Error"/>
+					<Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+					<Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Error"/>
+					<Property sourceAName="DS_VALVES_GTYPE" sourceBName="DS_VALVES_GTYPE"  severity="Error"/>
+					<Property sourceAName="DS_VALVES_Part_No" sourceBName="DS_VALVES_Part_No"  severity="Error"/>
+					<Property sourceAName="DS_VALVES_Part_No_Description" sourceBName="DS_VALVES_Part_No_Description"  severity="Error"/>
+			  </ComponentClass>
+			  
+		   </ComponentGroup>
+		   
+		   <ComponentGroup name="ProcessInstrument" >
+		      
+			  <ComponentClass name="InstrumentIndicator">
+			        <Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
+			 		<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
+					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+					<Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
+					<Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
+					<Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
+					<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
+					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
+					<Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+					<Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
+			        <Property sourceAName="Instrument_Description" sourceBName="Instrument_Description"  severity="Error"/>
+			        <Property sourceAName="Handle" sourceBName="Handle"  severity="Error"/>
+					<Property sourceAName="Symbol_Name" sourceBName="Symbol_Name"  severity="Error"/>
+			        <Property sourceAName="Pattern_Item" sourceBName="Pattern_Item"  severity="Error"/>
+			        <Property sourceAName="Panel_Prefix" sourceBName="Panel_Prefix"  severity="Error"/>
+			    
+					<Property sourceAName="Panel_Type" sourceBName="Panel_Type"  severity="Error"/>
+					<Property sourceAName="Panel_Numbers" sourceBName="Panel_Numbers"  severity="Error"/>
+					<Property sourceAName="Panel_Suffix" sourceBName="Panel_Suffix"  severity="Error"/>
+					<Property sourceAName="Conditioner" sourceBName="Conditioner"  severity="Error"/>
+					<Property sourceAName="Panel_Loop_Handle" sourceBName="Panel_Loop_Handle"  severity="Error"/>
+					
+					<Property sourceAName="Panel_Prefix_Handle" sourceBName="Panel_Prefix_Handle"  severity="Error"/>
+					<Property sourceAName="Panel_Suffix_Handle" sourceBName="Panel_Suffix_Handle"  severity="Error"/>
+					<Property sourceAName="Panel_Type_Handle" sourceBName="Panel_Type_Handle"  severity="Error"/>
+					<Property sourceAName="Alarm_Handles" sourceBName="Alarm_Handles"  severity="Error"/>
+					<Property sourceAName="Alarm_Labels" sourceBName="Alarm_Labels"  severity="Error"/>
+					
+					<Property sourceAName="Suffix_Handle" sourceBName="Suffix_Handle"  severity="Error"/>
+					<Property sourceAName="Function_Handle" sourceBName="Function_Handle"  severity="Error"/>
+					<Property sourceAName="Loop_Handle" sourceBName="Loop_Handle"  severity="Error"/>
+					<Property sourceAName="Prefix_Handle" sourceBName="Prefix_Handle"  severity="Error"/>
+					<Property sourceAName="Type_Handle" sourceBName="Type_Handle"  severity="Error"/>
+					
+					<Property sourceAName="Block_Handle" sourceBName="Block_Handle"  severity="Error"/>
+					<Property sourceAName="AType" sourceBName="AType"  severity="Error"/>
+					<Property sourceAName="Closure" sourceBName="Closure"  severity="Error"/>
+					<Property sourceAName="PDMS_Type" sourceBName="PDMS_Type"  severity="Error"/>
+					<Property sourceAName="PDMS_SubType" sourceBName="PDMS_SubType"  severity="Error"/>
+					
+					<Property sourceAName="SppPrefix" sourceBName="SppPrefix"  severity="Error"/>
+					<Property sourceAName="SppType" sourceBName="SppType"  severity="Error"/>
+					<Property sourceAName="SppNumber" sourceBName="SppNumber"  severity="Error"/>
+					<Property sourceAName="SppSuffix" sourceBName="SppSuffix"  severity="Error"/>
+					<Property sourceAName="CLASSNAME" sourceBName="CLASSNAME"  severity="Error"/>
+					
+					<Property sourceAName="TAGFORMAT" sourceBName="TAGFORMAT"  severity="Error"/>
+					<Property sourceAName="AREAPATH" sourceBName="AREAPATH"  severity="Error"/>
+					<Property sourceAName="INTERLOCK" sourceBName="INTERLOCK"  severity="Error"/>
+					<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
+					<Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Error"/>
+			  
+			  </ComponentClass>
+			  
+		   </ComponentGroup>
+		   
+		   
+		   <ComponentGroup name="PipingNetworkSystem" >
+		   
 		   
 		   <ComponentClass name="PipingSystem">
 				 <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
