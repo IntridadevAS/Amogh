@@ -12,11 +12,11 @@ var xCheckStudio;
             this.componentIdVsComponentData = {};
             this.nodeIdVsComponentData = {};
             this.sourceProperties = [];
-            
+
             this.excelReader = new ExcelReader(sourceType);
         }
 
-        xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId){
+        xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId) {
             this.excelReader.ReadFileData(file, containerId);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
@@ -161,6 +161,22 @@ var xCheckStudio;
                         }
                     }
 
+                    if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
+                        let data = this.nodeIdVsComponentData[this._selectedNodeId];
+                        if (data === undefined) {
+                            return;
+                        }
+                        if (this._selectedComponentId === data.NodeId) {
+                            return;
+                        }
+
+                        var componentIdentifier = data["Name"];
+                        if (data.MainComponentClass === "PipingNetworkSegment") {
+                            componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                        }
+                        // highlight corresponding component in model browser table
+                        this._modelTree.HighlightModelBrowserRow(componentIdentifier);
+                    }
                     // if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
                     //     let data = this.highlightManager.nodeIdVsComponentData[this._selectedNodeId];
                     //     if (data != undefined) {

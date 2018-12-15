@@ -1,5 +1,12 @@
-// <reference path="../hoops_web_viewer.d.ts"/>
-// <reference path="../common/Example.ts"/>
+var modelBrowserCheckColumn = 0;
+var modelBrowserComponentColumn = 1;
+var modelBrowserMainClassColumn = 2;
+var modelBrowserSubClassColumn = 3;
+var modelBrowserSourceColumn = 4;
+var modelBrowserDestinationColumn = 5;
+var modelBrowserOwnerColumn = 6;
+var modelBrowserNodeIdColumn = 7;
+
 var xCheckStudio;
 (function (xCheckStudio) {
     var Ui;
@@ -584,7 +591,8 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.OpenGroup = function (group_name, child_groupName) {
+            ModelTree.prototype.OpenGroup = function (group_name, 
+                                                      child_groupName) {
                 var _this = this;
                 if ($('img.' + group_name).hasClass('button_open')) {
                     // Open everything
@@ -642,15 +650,17 @@ var xCheckStudio;
                 for (var i = 0; i < browserTableRows.length; i++) {
                     var childRow = browserTableRows[i];
                     var childRowColumns = childRow.cells;
-                    var rowIdentifier = childRowColumns[0].innerText;
+                    var rowIdentifier = childRowColumns[modelBrowserComponentColumn].innerText;
                     /*
                     add comment
                     */
                     rowIdentifier = rowIdentifier.trim();
                     if (childRowColumns.length > 0) {
-                        if (childRowColumns[1].innerHTML === "PipingNetworkSegment") {
+                        if (childRowColumns[modelBrowserComponentColumn].innerHTML === "PipingNetworkSegment") {
                             for (var j = 1; j < childRowColumns.length; j++) {
-                                if ((j == 3 || j == 4 || j == 5) && childRowColumns[j].innerText != undefined) {
+                                if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserNodeIdColumn) && 
+                                     childRowColumns[j].innerText != undefined) {
+                                    
                                     inner_Text = (childRowColumns[j].innerText);
                                     inner_Text = inner_Text.trim();
                                     rowIdentifier += "_" + inner_Text;
@@ -664,7 +674,12 @@ var xCheckStudio;
 
                             this.ChangeBackgroundColor(childRow)
                             this.SelectedComponentRow = childRow;
+                            
+                            this.OpenHighlightedRow(childRow);
 
+                            // scroll to selected row
+                            this.ModelBrowserTable.focus();
+                            this.ModelBrowserTable.parentNode.scrollTop = childRow.offsetTop - childRow.offsetHeight;        
                             break;
                         }
 
@@ -672,6 +687,27 @@ var xCheckStudio;
 
                 }
                 // }
+            }
+
+            ModelTree.prototype.OpenHighlightedRow = function (currentRow) {
+                $(currentRow).show();
+
+                var currentClassName = currentRow.className;
+                var index = currentClassName.lastIndexOf(" ");
+
+                var inheritedStyle = currentClassName.substr(0, index);
+                var parentsStyle = currentClassName.substr(index+1);     
+                
+                var rows = document.getElementsByClassName(inheritedStyle);
+                for(var i = 0; i < rows.length; i++)
+                {
+                     if(parentsStyle === rows[i].cells[modelBrowserComponentColumn].className)
+                     {                         
+                         $(rows[i]).show();
+                         this.OpenHighlightedRow(rows[i]);
+                         break;
+                     }
+               }
             }
 
             return ModelTree;
