@@ -155,8 +155,8 @@
             <img src="images/Header.png">
 
         </th>
-        <tr style=" text-align: center">
-            <td colspan="2">
+        <tr style=" text-align: center; height:20px;">
+            <td colspan="2"  style="border:none;">
                 <!-- <iframe name="formDestination" height="100px"></iframe> -->
 
                 <button id="checkButton" disabled="true" onclick="goToReviewModule()"> Check Datasources</button>
@@ -165,23 +165,23 @@
             </td>
         </tr>
         <tr style="height: 5%;">
-            <td>
-                <div class="row" style="margin: auto; width: 50%;">
-                    <div class="column" onclick="openTab('b1');" style="background:LightSalmon ;border-radius: 10px">
+            <td style="width: 50%; border:none;">
+                <div class="row" style="width: 100%;">
+                    <div class="column" onclick="openTab('b1');" style="background:LightSalmon ; ">
                         Source A
                     </div>
                 </div>
             </td>
-            <td>
-                <div class="row" style="margin: auto; width: 50%">
-                    <div class="column" onclick="openTab('b2');" style="background:lightgreen ; border-radius: 10px">
+            <td style="width: 50%; border:none;">
+                <div class="row" style="width: 100%">
+                    <div class="column" onclick="openTab('b2');" style="background:lightgreen ;">
                         Source B
                     </div>
                 </div>
             </td>
         </tr>
         <tr style=" text-align: center">
-            <td colspan="2">
+            <td colspan="2" style="border:none;">
                 <!-- Full-width columns: (hidden by default) -->
                 <div id="b1" class="containerTab" style="display:none;background:LightSalmon; ">
                     <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
@@ -198,16 +198,16 @@
                             </tr>
 
                             <tr>
-                                <td valign="top">
+                                <td valign="top"  style="border:none;">
                                     <div id="modelTree1"></div>
                                 </td>
-                                <td>
+                                <td  style="border:none;">
                                     <div id="viewerContainer1" class="example-canvas-small"></div>
                                 </td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td>
+                                <td  style="border:none;"></td>
+                                <td  style="border:none;">
                                     <div class="viewOrientation2">
                                         <button id="Front1">Front</button>
                                         <button id="Back1">Back</button>
@@ -221,9 +221,9 @@
                             </tr>
 
                             <tr>
-                                <td>
+                                <td  style="border:none;">
                                 </td>
-                                <td>
+                                <td  style="border:none;">
                                     <label>Compliance<input id='complianceSourceACB' type='checkbox'></label>
                                     <label>Check All<input id='checkAllSourceACB' type='checkbox' onclick='checkAllCBClick(this,"modelTree1")'
                                             checked></label>
@@ -235,7 +235,7 @@
                 <div id="b2" class="containerTab" style="display:none;background:LightGreen ">
                     <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                     <h2>Source B</h2>
-                    <div>
+                   
                         <!-- second model tree and it's viewer -->
                         <table>
                             <tr colspan="2">
@@ -247,17 +247,17 @@
                             </tr>
 
                             <tr>
-                                <td valign="top">
+                                <td valign="top"  style="border:none;">
                                     <div id="modelTree2"></div>
                                 </td>
-                                <td>
+                                <td  style="border:none;">
                                     <div id="viewerContainer2" class="example-canvas-small"></div>
                                 </td>
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td></td>
-                                <td>
+                                <td  style="border:none;"></td>
+                                <td  style="border:none;">
                                     <div class="viewOrientation2">
                                         <button id="Front2">Front</button>
                                         <button id="Back2">Back</button>
@@ -271,20 +271,19 @@
                             </tr>
 
                             <tr>
-                                <td>
+                                <td  style="border:none;">
                                 </td>
-                                <td>
+                                <td  style="border:none;">
                                     <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
                                     <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
                                             checked></label>
                                 </td>
                             </tr>
-                        </table>
-                    </div>
+                        </table>                   
                 </div>
             </td>
         <tr>
-            <td>
+            <td  style="border:none;">
                 <label>Check Case <select id="checkCaseSelect"></select></label> <br>
                 <label>Comparison <input id='comparisonCB' type='checkbox'></label>
             </td>
