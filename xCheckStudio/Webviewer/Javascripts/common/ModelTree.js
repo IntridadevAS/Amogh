@@ -544,9 +544,11 @@ var xCheckStudio;
                 $('td.' + group_name).prepend("<img class='" + group_name + " button_closed'> ");
                 // Add Padding to Data
                 $('tr.' + group_name).each(function () {
-                    var first_td = $(this).children('td').first();
-                    var padding_left = parseInt($(first_td).css('padding-left'));
-                    $(first_td).css('padding-left', String(padding_left + 15) + 'px');
+                    //var first_td = $(this).children('td').first();
+                    var collapsibleButtonTd = $(this).find("td:eq(1)");
+
+                    var padding_left = parseInt($(collapsibleButtonTd).css('padding-left'));
+                    $(collapsibleButtonTd).css('padding-left', String(padding_left + 15) + 'px');
                 });
                 this.RestoreGroup(group_name);
 
