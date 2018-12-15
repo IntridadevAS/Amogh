@@ -105,7 +105,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 }
 
                 if (model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.BodyInstance) {
-                    let data = this.highlightManager.nodeIdVsComponentData[this.selectedNodeId];
+                    let data = this.highlightManager.NodeIdVsComponentData[this.selectedNodeId];
                     if (data != undefined) {
 
                         var componentIdentifier = data["Name"];

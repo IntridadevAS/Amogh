@@ -21,10 +21,10 @@ function CheckManager() {
     }
 
     CheckManager.prototype.performCheck = function (sourceProperties1,
-                                                    sourceProperties2,
-                                                    checkCaseType,
-                                                    comparisonCheck,
-                                                    interfaceObject) {
+        sourceProperties2,
+        checkCaseType,
+        comparisonCheck,
+        interfaceObject) {
 
         if (comparisonCheck) {
             this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
@@ -35,14 +35,14 @@ function CheckManager() {
     }
 
     CheckManager.prototype.checkDataSourceForCompliance = function (sourceProperties,
-                                                                    checkCaseType,
-                                                                    interfaceObject) {
+        checkCaseType,
+        interfaceObject) {
 
         for (var i = 0; i < sourceProperties.length; i++) {
             var sourceComponentProperties = sourceProperties[i];
 
-             // check if this property is checked or not, in Source A
-             if (!interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
+            // check if this property is checked or not, in Source A
+            if (!interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
                 continue;
             }
 
@@ -86,66 +86,9 @@ function CheckManager() {
                 if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
                     var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
 
-                    propertyName = property.Name;
-                    propertyValue = property.Value;
-                    result = true;
-            
-                    if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.None) {
-
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Must_Have_Value) {
-                        if (propertyValue === undefined || propertyValue === "") {
-                            result = false;
-                        }
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Number) {
-                        if (isNaN(propertyValue)) {
-                            result = false;
-                        }
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Start_With) {
-                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
-                        if (ruleArray.length < 2) {
-                            result = false;
-                        }
-                        else {
-                            var prefix = ruleArray[1];
-                            result = propertyValue.startsWith(prefix);
-                        }
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Contain) {
-                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
-                        if (ruleArray.length < 2) {
-                            result = false;
-                        }
-                        else {
-                            var substring = ruleArray[1];
-
-                            if (propertyValue.indexOf(substring) === -1) {
-                                result = value;
-                            }
-                        }
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Equal_To) {
-                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
-                        if (ruleArray.length < 2) {
-                            result = false;
-                        }
-                        else {
-                            var prefix = ruleArray[1];
-                            result = propertyValue === prefix;
-                        }
-                    }
-                    else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_End_With) {
-                        var ruleArray = checkCaseMappingProperty.RuleString.split("-");
-                        if (ruleArray.length < 2) {
-                            result = false;
-                        }
-                        else {
-                            var prefix = ruleArray[1];
-                            result = propertyValue.endsWith(prefix);
-                        }
-                    }                  
+                    var propertyName = property.Name;
+                    var propertyValue = property.Value;
+                    var result = this.checkComplianceRule(checkCaseMappingProperty, propertyValue);
 
                     performCheck = true;
                     var checkProperty = new CheckProperty(propertyName,
@@ -162,6 +105,127 @@ function CheckManager() {
                 }
             }
         }
+    }
+
+    CheckManager.prototype.checkComplianceRule = function (checkCaseMappingProperty, propertyValue) {
+        var result = true;
+
+        if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.None) {
+
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Must_Have_Value) {
+            if (propertyValue === undefined || propertyValue === "") {
+                result = false;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Number) {
+            if (isNaN(propertyValue)) {
+                result = false;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Number) {
+            if (!isNaN(propertyValue)) {
+                result = false;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Text) {
+            if (!(/^[a-z]+$/i.test(propertyValue))) {
+                result = false;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Text) {
+            if (/^[a-z]+$/i.test(propertyValue)) {
+                result = false;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Start_With) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = propertyValue.startsWith(prefix);
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Contain) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var substring = ruleArray[1];
+
+                if (propertyValue.indexOf(substring) === -1) {
+                    result = false;
+                }
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Equal_To) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = propertyValue === prefix;
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_End_With) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = propertyValue.endsWith(prefix);
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Start_With) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = !propertyValue.startsWith(prefix);
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_End_With) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = !propertyValue.endsWith(prefix);
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Contain) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var substring = ruleArray[1];
+
+                if (propertyValue.indexOf(substring) !== -1) {
+                    result = false;
+                }
+            }
+        }
+        else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Not_Equal_To) {
+            var ruleArray = checkCaseMappingProperty.RuleString.split("-");
+            if (ruleArray.length < 2) {
+                result = false;
+            }
+            else {
+                var prefix = ruleArray[1];
+                result = !(propertyValue === prefix);
+            }
+        }
+
+        return result;
     }
 
     CheckManager.prototype.checkDataSources = function (sourceAProperties,
@@ -332,14 +396,14 @@ function CheckManager() {
         var checkComponent;
         if (sourceAComponent) {
             checkComponent = new CheckComponent(sourceComponentProperties.Name,
-                                                "",
-                                                sourceComponentProperties.SubComponentClass);
+                "",
+                sourceComponentProperties.SubComponentClass);
         }
         else {
             checkComponent = new CheckComponent("",
-                                                sourceComponentProperties.Name,                
-                                                sourceComponentProperties.SubComponentClass);
-        } 
+                sourceComponentProperties.Name,
+                sourceComponentProperties.SubComponentClass);
+        }
 
         for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
             // get check case mapping property object
@@ -487,7 +551,7 @@ function CheckManager() {
         }
 
         return false;
-    }    
+    }
 }
 
 

@@ -315,6 +315,15 @@ function CheckCaseMappingProperty(sourceAName,
         else if (ruleString.toLowerCase() === "should be number") {
             this.Rule = ComplianceCheckRulesEnum.Should_Be_Number;
         }
+        else if (ruleString.toLowerCase() === "should not be number") {
+            this.Rule = ComplianceCheckRulesEnum.Should_Not_Be_Number;
+        }
+        else if (ruleString.toLowerCase() === "should be text") {
+            this.Rule = ComplianceCheckRulesEnum.Should_Be_Text;
+        }
+        else if (ruleString.toLowerCase() === "should not be text") {
+            this.Rule = ComplianceCheckRulesEnum.Should_Not_Be_Text;
+        }
         else {
             var ruleArray = ruleString.split("-");
             if (ruleArray[0].toLowerCase() === "should start with") {
@@ -328,6 +337,18 @@ function CheckCaseMappingProperty(sourceAName,
             }
             else if (ruleArray[0].toLowerCase() === "should end with") {
                 this.Rule = ComplianceCheckRulesEnum.Should_End_With;
+            }  
+            else if (ruleArray[0].toLowerCase() === "should not start with") {
+                this.Rule = ComplianceCheckRulesEnum.Should_Not_Start_With;
+            }
+            else if (ruleArray[0].toLowerCase() === "should not end with") {
+                this.Rule = ComplianceCheckRulesEnum.Should_Not_End_With;
+            }
+            else if (ruleArray[0].toLowerCase() === "should not contain") {
+                this.Rule = ComplianceCheckRulesEnum.Should_Not_Contain;
+            }
+            else if (ruleArray[0].toLowerCase() === "not equal to") {
+                this.Rule = ComplianceCheckRulesEnum.Not_Equal_To;
             }
         }
     }
