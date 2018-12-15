@@ -34,7 +34,7 @@
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
-    
+
 
 
     <script src='configurations\dir.php'></script>
@@ -119,7 +119,7 @@
             z-index: 100;
             background-image : url('/images/busySpinner.gif');
             background-color:#666;
-            opacity : 0.4;
+            opacity : 0.8;
             background-repeat : no-repeat;
             background-position : center;
             left : 0;
@@ -156,7 +156,7 @@
 
         </th>
         <tr style=" text-align: center; height:20px;">
-            <td colspan="2"  style="border:none;">
+            <td colspan="2" style="border:none;">
                 <!-- <iframe name="formDestination" height="100px"></iframe> -->
 
                 <button id="checkButton" disabled="true" onclick="goToReviewModule()"> Check Datasources</button>
@@ -198,16 +198,16 @@
                             </tr>
 
                             <tr>
-                                <td valign="top"  style="border:none;">
+                                <td valign="top" style="border:none;">
                                     <div id="modelTree1"></div>
                                 </td>
-                                <td  style="border:none;">
+                                <td style="border:none;">
                                     <div id="viewerContainer1" class="example-canvas-small"></div>
                                 </td>
                             </tr>
                             <tr>
-                                <td  style="border:none;"></td>
-                                <td  style="border:none;">
+                                <td style="border:none;"></td>
+                                <td style="border:none;">
                                     <div class="viewOrientation2">
                                         <button id="Front1">Front</button>
                                         <button id="Back1">Back</button>
@@ -221,9 +221,9 @@
                             </tr>
 
                             <tr>
-                                <td  style="border:none;">
+                                <td style="border:none;">
                                 </td>
-                                <td  style="border:none;">
+                                <td style="border:none;">
                                     <label>Compliance<input id='complianceSourceACB' type='checkbox'></label>
                                     <label>Check All<input id='checkAllSourceACB' type='checkbox' onclick='checkAllCBClick(this,"modelTree1")'
                                             checked></label>
@@ -235,55 +235,55 @@
                 <div id="b2" class="containerTab" style="display:none;background:LightGreen ">
                     <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                     <h2>Source B</h2>
-                   
-                        <!-- second model tree and it's viewer -->
-                        <table>
-                            <tr colspan="2">
-                                <form id="uploadDatasourceBForm" enctype="multipart/form-data">
-                                    <div>
-                                        <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')" />
-                                    </div>
-                                </form>
-                            </tr>
 
-                            <tr>
-                                <td valign="top"  style="border:none;">
-                                    <div id="modelTree2"></div>
-                                </td>
-                                <td  style="border:none;">
-                                    <div id="viewerContainer2" class="example-canvas-small"></div>
-                                </td>
-                            </tr>
-                            <tr></tr>
-                            <tr>
-                                <td  style="border:none;"></td>
-                                <td  style="border:none;">
-                                    <div class="viewOrientation2">
-                                        <button id="Front2">Front</button>
-                                        <button id="Back2">Back</button>
-                                        <button id="Top2">Top</button>
-                                        <button id="Bottom2">Bottom</button>
-                                        <button id="Left2">Left</button>
-                                        <button id="Right2">Right</button>
-                                        <button id="Iso2">Iso</button>
-                                    </div>
-                                </td>
-                            </tr>
+                    <!-- second model tree and it's viewer -->
+                    <table>
+                        <tr colspan="2">
+                            <form id="uploadDatasourceBForm" enctype="multipart/form-data">
+                                <div>
+                                    <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')" />
+                                </div>
+                            </form>
+                        </tr>
 
-                            <tr>
-                                <td  style="border:none;">
-                                </td>
-                                <td  style="border:none;">
-                                    <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
-                                    <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
-                                            checked></label>
-                                </td>
-                            </tr>
-                        </table>                   
+                        <tr>
+                            <td valign="top" style="border:none;">
+                                <div id="modelTree2"></div>
+                            </td>
+                            <td style="border:none;">
+                                <div id="viewerContainer2" class="example-canvas-small"></div>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="border:none;"></td>
+                            <td style="border:none;">
+                                <div class="viewOrientation2">
+                                    <button id="Front2">Front</button>
+                                    <button id="Back2">Back</button>
+                                    <button id="Top2">Top</button>
+                                    <button id="Bottom2">Bottom</button>
+                                    <button id="Left2">Left</button>
+                                    <button id="Right2">Right</button>
+                                    <button id="Iso2">Iso</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="border:none;">
+                            </td>
+                            <td style="border:none;">
+                                <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
+                                <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
+                                        checked></label>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </td>
         <tr>
-            <td  style="border:none;">
+            <td style="border:none;">
                 <label>Check Case <select id="checkCaseSelect"></select></label> <br>
                 <label>Comparison <input id='comparisonCB' type='checkbox'></label>
             </td>
@@ -295,9 +295,6 @@
     </table>
 
     <script type="text/javascript">
-        // var excelReader1;
-        // var excelReader2;
-        // var inputFileType;
 
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
@@ -309,12 +306,20 @@
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
 
+                // show busy loader
+                var busySpinner = document.getElementById("divLoading");
+                busySpinner.className = 'show';
+
                 sourceAComplianceCheckManager = undefined;
                 sourceBComplianceCheckManager = undefined;
                 comparisonCheckManager = undefined;
 
                 var checkCaseSelect = document.getElementById("checkCaseSelect");
                 if (checkCaseSelect.value === "None") {
+
+                    // hide busy spinner
+                    busySpinner.classList.remove('show');
+
                     alert("Please select check case from list.")
                     return;
                 }
@@ -326,6 +331,9 @@
                 if (!comparisonCB.checked &&
                     !complianceSourceACB.checked &&
                     !complianceSourceBCB.checked) {
+                    // hide busy spinner
+                    busySpinner.classList.remove('show');
+
                     alert("No selected check type found. Please select check type.")
                     return;
                 }
@@ -352,7 +360,7 @@
                                 undefined);
                         }
                     }
-                    else{
+                    else {
                         if (xCheckStudioInterface1) {
                             var complianceSourceACB = document.getElementById("complianceSourceACB");
                             if (checkType.Name.toLowerCase() === "compliance" &&
@@ -387,11 +395,28 @@
                         }
                     }
                 }
-                jsonObj = JSON.stringify(xCheckStudioInterface1.sourceProperties, null, 2);
+                //jsonObj = JSON.stringify(xCheckStudioInterface1.sourceProperties, null, 2);
+                // hide busy spinner
+                busySpinner.classList.remove('show');
 
-                postData();
-                window.open("/reviewModule.html", "_blank");
-                return false;
+                var result = confirm("Check complete.\nView results?");
+                if (result) {
+                    // OK clicked
+                    postData();
+                    //window.open("/reviewModule.html", "_blank");
+                    window.location = "/reviewModule.html";
+                    return false;
+                }
+                else {
+                    // Cancel clicked
+                    sourceAComplianceCheckManager = undefined;
+                    sourceBComplianceCheckManager = undefined;
+                    comparisonCheckManager = undefined;
+                }
+               
+                // postData();
+                // window.open("/reviewModule.html", "_blank");
+                // return false;
             };
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
@@ -531,21 +556,21 @@
             }
 
 
-//
+            //
 
 
-if (jsonObj) {
-    $.ajax({
-        url: 'postData/jsonwriter.php',
-        type: "POST",
-        async: false,
-        data: { "JSONDATA": JSON.stringify(jsonObj) },
-        success: function (data) {
-            //alert("success");
-            //$("#result").html(data);
-        }
-    });
-}
+            if (jsonObj) {
+                $.ajax({
+                    url: 'postData/jsonwriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "JSONDATA": JSON.stringify(jsonObj) },
+                    success: function (data) {
+                        //alert("success");
+                        //$("#result").html(data);
+                    }
+                });
+            }
             // post source A viewer data
             if (xCheckStudioInterface1) {
                 if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
@@ -593,9 +618,8 @@ if (jsonObj) {
                         });
                     }
                 }
-                
-                else if(xCheckStudioInterface1.SourceType.toLowerCase() === "xls")
-                {
+
+                else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
                     $.ajax({
                         url: 'postData/SourceASheetDataWriter.php',
                         type: "POST",
@@ -655,9 +679,8 @@ if (jsonObj) {
                         });
                     }
                 }
-           
-            else if(xCheckStudioInterface2.SourceType.toLowerCase() === "xls")
-                {
+
+                else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
                     $.ajax({
                         url: 'postData/SourceBSheetDataWriter.php',
                         type: "POST",
@@ -669,7 +692,7 @@ if (jsonObj) {
                         }
                     });
                 }
-				 }
+            }
         }
 
         function openTab(tabName) {
@@ -683,11 +706,11 @@ if (jsonObj) {
 
         function checkAllCBClick(checkBox, modelTreeContainer) {
 
-                var modelTreeContainerElement = document.getElementById(modelTreeContainer);
-                var modelTreeParentDiv = modelTreeContainerElement.children[0];
-                var currentTable = modelTreeParentDiv.children[0];
+            var modelTreeContainerElement = document.getElementById(modelTreeContainer);
+            var modelTreeParentDiv = modelTreeContainerElement.children[0];
+            var currentTable = modelTreeParentDiv.children[0];
 
-                for (var i = 0; i < currentTable.rows.length; i++) {
+            for (var i = 0; i < currentTable.rows.length; i++) {
                 var row = currentTable.rows[i];
 
                 var currentCheckBox = row.cells[0].children[0];
@@ -701,7 +724,7 @@ if (jsonObj) {
 
                 currentCheckBox.checked = checkBox.checked;
                 if (currentCheckBox.checked) {
-                    
+
                     var checkedComponent = {
                         'Name': row.cells[1].textContent.trim(),
                         'MainComponentClass': row.cells[2].textContent.trim(),
@@ -709,32 +732,32 @@ if (jsonObj) {
                         'Source': row.cells[4].textContent.trim(),
                         'Destination': row.cells[5].textContent.trim(),
                         'Owner': row.cells[6].textContent.trim()
-                    };                    
+                    };
 
                     if (checkBox.id === "checkAllSourceACB" &&
                         xCheckStudioInterface1 &&
-                        !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {                        
-                            xCheckStudioInterface1._modelTree.selectedCompoents.push(checkedComponent);
+                        !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {
+                        xCheckStudioInterface1._modelTree.selectedCompoents.push(checkedComponent);
                     }
                     else if (checkBox.id === "checkAllSourceBCB" &&
-                             xCheckStudioInterface2 &&
-                            !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
-                                xCheckStudioInterface2._modelTree.selectedCompoents.push(checkedComponent);
+                        xCheckStudioInterface2 &&
+                        !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
+                        xCheckStudioInterface2._modelTree.selectedCompoents.push(checkedComponent);
                     }
                 }
             }
 
-                if (!checkBox.checked) {
-                    if (checkBox.id === "checkAllSourceACB" &&
-                        xCheckStudioInterface1) {
-                        xCheckStudioInterface1._modelTree.selectedCompoents = [];
-                    }
-                    else if (checkBox.id === "checkAllSourceBCB" &&
-                        xCheckStudioInterface2) {
-                        xCheckStudioInterface2._modelTree.selectedCompoents = [];
-                    }
+            if (!checkBox.checked) {
+                if (checkBox.id === "checkAllSourceACB" &&
+                    xCheckStudioInterface1) {
+                    xCheckStudioInterface1._modelTree.selectedCompoents = [];
+                }
+                else if (checkBox.id === "checkAllSourceBCB" &&
+                    xCheckStudioInterface2) {
+                    xCheckStudioInterface2._modelTree.selectedCompoents = [];
                 }
             }
+        }
 
         function loadDataSource(event,
             dataSource,

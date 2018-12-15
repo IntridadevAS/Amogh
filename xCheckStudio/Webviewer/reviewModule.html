@@ -150,27 +150,27 @@
 
                     <!--tab buttons row-->
                     <tr style="height: 50px;">
-                
+
                         <!--Comparison button-->
-                        <td  style="width: 33%;">
+                        <td style="width: 33%;">
                             <div class="row" style="width: 100%;">
                                 <div class="column" onclick="openCheckResultTab('ComparisonTabPage');" style="background:BlueViolet ;width: 100%;">
                                     Comparison
                                 </div>
                             </div>
                         </td>
-                
+
                         <!--Source A Compliance button-->
-                        <td  style="width: 33%;">
+                        <td style="width: 33%;">
                             <div class="row" style="width: 100%;">
                                 <div class="column" onclick="openCheckResultTab('SourceAComplianceTabPage');" style="background:LightSalmon ;width: 100%;">
                                     Source A Compliance
                                 </div>
                             </div>
                         </td>
-                
+
                         <!--Source B Compliance button-->
-                        <td  style="width: 33%;">
+                        <td style="width: 33%;">
                             <div class="row" style="width: 100%;">
                                 <div class="column" onclick="openCheckResultTab('SourceBComplianceTabPage');" style="background:lightgreen ;width: 100%;">
                                     Source B Compliance
@@ -178,7 +178,7 @@
                             </div>
                         </td>
                     </tr>
-                
+
                     <!--tab pages row-->
                     <tr>
 
@@ -225,8 +225,7 @@
                                     <tbody style='height:400px;display:block;overflow:scroll'>
                                         <tr style="height: 50%;">
                                             <td style="border:none">
-                                                <div id="SourceAComplianceDetailedReviewCell" style="text-align:left;vertical-align:top;padding:0;width: 100%; height: 100%; border:none"
-                                                   ></div>
+                                                <div id="SourceAComplianceDetailedReviewCell" style="text-align:left;vertical-align:top;padding:0;width: 100%; height: 100%; border:none"></div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -292,7 +291,7 @@
                     </tr>
 
                     <!--tab pages row-->
-                    <tr >
+                    <tr>
 
                         <!--tab pages cell-->
                         <td colspan="2">
@@ -301,7 +300,7 @@
                             <div id="ChecksTabPage" class="viewContainerTab" style="display:none;background:BlueViolet; width: 100%; height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <div style="height:100%" class="scrollable">
-                                    <table id="checksViewTable" style="width: 100%; height: 800px; margin: auto;">          
+                                    <table id="checksViewTable" style="width: 100%; height: 800px; margin: auto;">
                                     </table>
                                 </div>
                             </div>
@@ -590,6 +589,7 @@
 
             // clear views before loading models into viewers
             if (comparisonReviewManager) {
+                // clear viewer for XMl data source
                 if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
                     comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
 
@@ -600,32 +600,39 @@
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                if (document.getElementById("viewerContainer1").getElementsByTagName("div")) {
-                    document.getElementById("viewerContainer1").innerHTML = ""
-                    // }
+
+                // clear for Excel data source
+                if (document.getElementById(sourceAViewerContainerId) &&
+                    document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
+                    document.getElementById(sourceAViewerContainerId).innerHTML = ""
                 }
-                if (document.getElementById("viewerContainer2").getElementsByTagName("div")) {
-                    document.getElementById("viewerContainer2").innerHTML = ""
-                    // divElements.innerHTML = "";
-                    }
-                
+                if (document.getElementById(sourceBViewerContainerId) &&
+                    document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
+                    document.getElementById(sourceBViewerContainerId).innerHTML = ""
+                }
             }
             if (sourceAComplianceReviewManager) {
+                // clear viewer for XMl data source
                 if (sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                if (document.getElementById("viewerContainer1").getElementsByTagName("div")) {
-                    document.getElementById("viewerContainer1").innerHTML = ""
+                // clear for Excel data source
+                if (document.getElementById(sourceAViewerContainerId) &&
+                    document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
+                    document.getElementById(sourceAViewerContainerId).innerHTML = ""
                 }
             }
             if (sourceBComplianceReviewManager) {
+                // clear viewer for XMl data source
                 if (sourceBComplianceReviewManager.ReviewModuleViewerInterface &&
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                if (document.getElementById("viewerContainer2").getElementsByTagName("div")) {
-                    document.getElementById("viewerContainer2").innerHTML = ""
+                // clear for Excel data source
+                if (document.getElementById(sourceBViewerContainerId) &&
+                    document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
+                    document.getElementById(sourceBViewerContainerId).innerHTML = ""
                 }
             }
 
