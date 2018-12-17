@@ -47,7 +47,7 @@ var xCheckStudio;
                 tableHeading.style.backgroundColor = "#3498db";
 
                 var td = document.createElement("td");
-                td.innerHTML = "Check";
+                //td.innerHTML = "Check";
                 td.style.fontSize = "12px";
                 tableHeading.appendChild(td);
 
@@ -59,31 +59,36 @@ var xCheckStudio;
                 td = document.createElement("td");
                 td.innerHTML = "MainComponentClass";
                 td.style.fontSize = "12px";
-                tableHeading.appendChild(td);
+                tableHeading.appendChild(td);                
 
                 td = document.createElement("td");
                 td.innerHTML = "SubComponentClass";
                 td.style.fontSize = "12px";
                 tableHeading.appendChild(td);
 
+                // extra comlumns for row item identification
                 td = document.createElement("td");
                 td.innerHTML = "Source"
                 td.style.fontSize = "12px";
+                td.style.display ='none';
                 tableHeading.appendChild(td);
 
                 td = document.createElement("td");
                 td.innerHTML = "Destination"
                 td.style.fontSize = "12px";
+                td.style.display ='none';
                 tableHeading.appendChild(td);
 
                 td = document.createElement("td");
                 td.innerHTML = "OwnerId"
                 td.style.fontSize = "12px";
+                td.style.display ='none';
                 tableHeading.appendChild(td);
 
                 td = document.createElement("td");
                 td.innerHTML = "NodeId "
                 td.style.fontSize = "12px";
+                td.style.display ='none';
                 tableHeading.appendChild(td);
 
                 this.ModelBrowserTable.appendChild(tableHeading);
@@ -172,27 +177,32 @@ var xCheckStudio;
 
                     td = document.createElement("td");
                     td.innerHTML = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-                    td.style.fontSize = "12px";
+                    td.style.fontSize = "12px";                    
                     row.appendChild(td);
 
+                    // extra cells for row item identification
                     td = document.createElement("td");
                     td.innerHTML = (nodeData.Source != undefined ? nodeData.Source : "");
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = (nodeData.Destination != undefined ? nodeData.Destination : "");
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = (nodeData.OwnerId != undefined ? nodeData.OwnerId : "");
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
                 }
                 else {
@@ -217,35 +227,40 @@ var xCheckStudio;
                     td.style.fontSize = "12px";
                     row.appendChild(td);
 
+                    // extra cells for row item identification
                     td = document.createElement("td");
                     td.innerHTML = ""
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = ""
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = ""
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
 
                     td = document.createElement("td");
                     td.innerHTML = ""
                     td.style.fontSize = "12px";
+                    td.style.display ='none';
                     row.appendChild(td);
                 }
 
                 // maintain track of selected components
                 var checkedComponent = {
-                    'Name': row.cells[1].textContent,
-                    'MainComponentClass': row.cells[2].textContent,
-                    'SubComponentClass': row.cells[3].textContent,
-                    'Source': row.cells[4].textContent,
-                    'Destination': row.cells[5].textContent,
-                    'Owner': row.cells[6].textContent
+                    'Name': row.cells[modelBrowserComponentColumn].textContent,
+                    'MainComponentClass': row.cells[modelBrowserMainClassColumn].textContent,
+                    'SubComponentClass': row.cells[modelBrowserSubClassColumn].textContent,
+                    'Source': row.cells[modelBrowserSourceColumn].textContent,
+                    'Destination': row.cells[modelBrowserDestinationColumn].textContent,
+                    'Owner': row.cells[modelBrowserOwnerColumn].textContent
                 };
                 this.selectedCompoents.push(checkedComponent);
 
@@ -363,12 +378,12 @@ var xCheckStudio;
                     !this.selectedCompoentExists(currentRow)) {
 
                     var checkedComponent = {
-                        'Name': currentRow.cells[1].textContent.trim(),
-                        'MainComponentClass': currentRow.cells[2].textContent.trim(),
-                        'SubComponentClass': currentRow.cells[3].textContent.trim(),
-                        'Source': currentRow.cells[4].textContent.trim(),
-                        'Destination': currentRow.cells[5].textContent.trim(),
-                        'Owner': currentRow.cells[6].textContent.trim()
+                        'Name': currentRow.cells[modelBrowserComponentColumn].textContent.trim(),
+                        'MainComponentClass': currentRow.cells[modelBrowserMainClassColumn].textContent.trim(),
+                        'SubComponentClass': currentRow.cells[modelBrowserSubClassColumn].textContent.trim(),
+                        'Source': currentRow.cells[modelBrowserSourceColumn].textContent.trim(),
+                        'Destination': currentRow.cells[modelBrowserDestinationColumn].textContent.trim(),
+                        'Owner': currentRow.cells[modelBrowserOwnerColumn].textContent.trim()
                     };
 
                     this.selectedCompoents.push(checkedComponent);
