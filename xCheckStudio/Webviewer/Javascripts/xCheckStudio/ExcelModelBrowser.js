@@ -227,15 +227,14 @@ function ExcelModeBrowser() {
             $(viewerContainer).jsGrid({ 
                 width: "780px" ,
                 height: "620px",
-                filtering: true,
-                autosearch: true, 
-                sorting: true,  
+                // filtering: true,
+                // autosearch: true, 
+                // sorting: true,  
                 autoload: true,     
                 data: tableData,
                 fields: columnHeaders,
                 margin: "0px",
                 rowClick: function(args) { 
-                    alert("clicked Item");
                     _this.HighlightRowInModelBrowser(args.event.currentTarget)
                 }
             });
@@ -399,13 +398,11 @@ function ExcelModeBrowser() {
 
         if (mainComponentClasseData !== {}) {
             if (browserRow.cells[1].innerText !== "" && browserRow.cells[2].innerText !== "") {
-                // if (currentSheetName === browserRow.cells[1].innerText.trim()) {
                     for (var subComponentClass in mainComponentClasseData) {
                         for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) {
                             properties.push(mainComponentClasseData[subComponentClass][i]);
                         }
                     }
-                // }
 
                 columnHeaders = [];
                 var sheetProperties;
@@ -418,12 +415,12 @@ function ExcelModeBrowser() {
                 var column = {};
                 for (var i = 0; i < sheetProperties.length; i++) {
                     columnHeader = {};
-                    var temp = {};
-                    if(i === sheetProperties.length-1)
-                    {
-                        temp["type"] = "control";
-                        columnHeaders.push(temp);
-                    }
+                    // var temp = {};
+                    // if(i === sheetProperties.length-1)
+                    // {
+                    //     temp["type"] = "control";
+                    //     columnHeaders.push(temp);
+                    // }
                     columnHeader["name"] = sheetProperties[i].Name;
                     var type ;
                     if(typeof(sheetProperties[i].Name) === "string")
