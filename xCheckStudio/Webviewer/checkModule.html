@@ -16,7 +16,6 @@
     <script type="text/javascript" src="Javascripts/common/require.js"></script>
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\xCheckStudioInterface.js"></script>
-    <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script> -->
     <script type="text/javascript" src="Javascripts\xCheckStudio\GenericProperties.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentNodeData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
@@ -26,7 +25,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
-
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleStringCollection.js"></script>
 
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
@@ -189,7 +188,8 @@
                             <tr colspan="2">
                                 <form id="uploadDatasourceAForm" enctype="multipart/form-data">
                                     <div>
-                                        <input id="dataSouresA" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresA', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')" />
+                                        <input id="dataSouresA" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresA', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
+                                            disabled />
                                     </div>
                                 </form>
                             </tr>
@@ -206,13 +206,13 @@
                                 <td style="border:none;"></td>
                                 <td style="border:none;">
                                     <div class="viewOrientation2">
-                                        <button id="Front1">Front</button>
-                                        <button id="Back1">Back</button>
-                                        <button id="Top1">Top</button>
-                                        <button id="Bottom1">Bottom</button>
-                                        <button id="Left1">Left</button>
-                                        <button id="Right1">Right</button>
-                                        <button id="Iso1">Iso</button>
+                                        <button id="Front1" disabled>Front</button>
+                                        <button id="Back1" disabled>Back</button>
+                                        <button id="Top1" disabled>Top</button>
+                                        <button id="Bottom1" disabled>Bottom</button>
+                                        <button id="Left1" disabled>Left</button>
+                                        <button id="Right1" disabled>Right</button>
+                                        <button id="Iso1" disabled>Iso</button>
                                     </div>
                                 </td>
                             </tr>
@@ -221,9 +221,9 @@
                                 <td style="border:none;">
                                 </td>
                                 <td style="border:none;">
-                                    <label>Compliance<input id='complianceSourceACB' type='checkbox'></label>
+                                    <label>Compliance<input id='complianceSourceACB' type='checkbox' disabled></label>
                                     <label>Check All<input id='checkAllSourceACB' type='checkbox' onclick='checkAllCBClick(this,"modelTree1")'
-                                            checked></label>
+                                            checked disabled></label>
                                 </td>
                             </tr>
                         </table>
@@ -238,7 +238,8 @@
                         <tr colspan="2">
                             <form id="uploadDatasourceBForm" enctype="multipart/form-data">
                                 <div>
-                                    <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')" />
+                                    <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')"
+                                        disabled />
                                 </div>
                             </form>
                         </tr>
@@ -256,13 +257,13 @@
                             <td style="border:none;"></td>
                             <td style="border:none;">
                                 <div class="viewOrientation2">
-                                    <button id="Front2">Front</button>
-                                    <button id="Back2">Back</button>
-                                    <button id="Top2">Top</button>
-                                    <button id="Bottom2">Bottom</button>
-                                    <button id="Left2">Left</button>
-                                    <button id="Right2">Right</button>
-                                    <button id="Iso2">Iso</button>
+                                    <button id="Front2" disabled>Front</button>
+                                    <button id="Back2" disabled>Back</button>
+                                    <button id="Top2" disabled>Top</button>
+                                    <button id="Bottom2" disabled>Bottom</button>
+                                    <button id="Left2" disabled>Left</button>
+                                    <button id="Right2" disabled>Right</button>
+                                    <button id="Iso2" disabled>Iso</button>
                                 </div>
                             </td>
                         </tr>
@@ -271,9 +272,9 @@
                             <td style="border:none;">
                             </td>
                             <td style="border:none;">
-                                <label>Compliance<input id='complianceSourceBCB' type='checkbox'></label>
+                                <label>Compliance<input id='complianceSourceBCB' type='checkbox' disabled></label>
                                 <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
-                                        checked></label>
+                                        checked disabled></label>
                             </td>
                         </tr>
                     </table>
@@ -282,7 +283,7 @@
         <tr>
             <td style="border:none;">
                 <label>Check Case <select id="checkCaseSelect"></select></label> <br>
-                <label>Comparison <input id='comparisonCB' type='checkbox'></label>
+                <label>Comparison <input id='comparisonCB' type='checkbox' disabled></label>
             </td>
         </tr>
 
@@ -399,7 +400,6 @@
                 if (result) {
                     // OK clicked
                     postData();
-                    //window.open("/reviewModule.html", "_blank");
                     window.location = "/reviewModule.html";
                     return false;
                 }
@@ -409,10 +409,6 @@
                     sourceBComplianceCheckManager = undefined;
                     comparisonCheckManager = undefined;
                 }
-               
-                // postData();
-                // window.open("/reviewModule.html", "_blank");
-                // return false;
             };
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
@@ -432,6 +428,10 @@
                 // read check case data from XML checkcase data file
                 checkCaseManager = new CheckCaseManager();
                 checkCaseManager.readCheckCaseData(fileName);
+
+                // enable source A load source buttton
+                var loadDataSourceAButton = document.getElementById("dataSouresA");
+                loadDataSourceAButton.disabled = false;
             }
 
             // read check cases files list
@@ -443,55 +443,41 @@
             dataSource,
             viewerContainer,
             modelTreeContainer) {
-            // if (!checkCaseManager ||
-            //     !checkCaseManager.CheckCase) {
-            //     //remove file from input 
-            //     event.target.value = "";
-            //     alert("CheckCaseManager not found.");
-            //     return;
-            // }
 
-            // if (event.target.id === "dataSoures1") {
             let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-            //inputFileType = fileExtension;
-            // if (fileExtension === "xls") {
+
             document.getElementById(modelTreeContainer).innerHTML = ""
             document.getElementById(viewerContainer).innerHTML = ""
             if (!xCheckStudioInterface1) {
                 xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
+
+                // enable source A controls
+                var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+                sourceAComplianceCB.disabled = false;
+
+                var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+                checkAllSourceACB.disabled = false;
+
+                // enable source B load data source button
+                var loadDataSourceBButton = document.getElementById("dataSouresB");
+                loadDataSourceBButton.disabled = false;
             }
             else {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
-            }
 
-            // }
-            // else if (fileExtension === "xml") {
-            //     document.getElementById('modelTree1').innerHTML = ""
-            //     document.getElementById('viewerContainer1').innerHTML = ""
-            //     document.getElementById("load1").disabled = false;
-            //     document.getElementById("upload1").disabled = false;
-            // }
-            // }
-            // else if (event.target.id === "dataSoures2") {
-            //     let fileName = event.target.files[0].name;
-            //     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-            //     inputFileType = fileExtension;
-            //     if (fileExtension === "xls") {
-            //         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            //         document.getElementById('modelTree2').innerHTML = ""
-            //         document.getElementById('viewerContainer2').innerHTML = ""
-            //         xCheckStudioInterface2.readExcelFileData(event, "modelTree2");
-            //     }
-            //     else if (fileExtention === "xml") {
-            //         document.getElementById('modelTree2').innerHTML = ""
-            //         document.getElementById('viewerContainer2').innerHTML = ""
-            //         document.getElementById("load2").disabled = false;
-            //         document.getElementById("upload2").disabled = false;
-            //     }
-            // }
+                // enable source B controls
+                var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+                sourceBComplianceCB.disabled = false;
+
+                var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+                checkAllSourceBCB.disabled = false;
+
+                var comparisonCB = document.getElementById("comparisonCB");
+                comparisonCB.disabled = false;
+            }
 
             document.getElementById("checkButton").disabled = false;
         }
@@ -900,8 +886,6 @@
             fileName += '.scs';
 
             var uri = "uploads/scs/" + fileName;
-            //var container_Id = viewerContainer.id;
-            //var model_Tree = modelTreeContainer.id;
 
             xCheckStudio.Util.fileExists(uri).then(function (success) {
                 if (success) {
@@ -915,10 +899,61 @@
                     if (viewerContainer === "viewerContainer1") {
                         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface1.setupViewer(viewerOptions, true);
+
+                        // enable source A controls
+                        var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+                        checkAllSourceACB.disabled = false;
+
+                        var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+                        sourceAComplianceCB.disabled = false;
+
+                        var sourceAFrontView = document.getElementById(sourceAFrontId);
+                        sourceAFrontView.disabled = false;
+                        var sourceABackView = document.getElementById(sourceABackId);
+                        sourceABackView.disabled = false;
+                        var sourceATopView = document.getElementById(sourceATopId);
+                        sourceATopView.disabled = false;
+                        var sourceABottomView = document.getElementById(sourceABottomId);
+                        sourceABottomView.disabled = false;
+                        var sourceALeftView = document.getElementById(sourceALeftId);
+                        sourceALeftView.disabled = false;
+                        var sourceARightView = document.getElementById(sourceARightId);
+                        sourceARightView.disabled = false;
+                        var sourceAIsoView = document.getElementById(sourceAIsoId);
+                        sourceAIsoView.disabled = false;
+
+                        // enable source B load data source button
+                        var loadDataSourceBButton = document.getElementById("dataSouresB");
+                        loadDataSourceBButton.disabled = false;
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
+
+                        // enable source B controls
+                        var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+                        sourceBComplianceCB.disabled = false;
+
+                        var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+                        checkAllSourceBCB.disabled = false;
+
+                        var sourceBFrontView = document.getElementById(sourceBFrontId);
+                        sourceBFrontView.disabled = false;
+                        var sourceBBackView = document.getElementById(sourceBBackId);
+                        sourceBBackView.disabled = false;
+                        var sourceBTopView = document.getElementById(sourceBTopId);
+                        sourceBTopView.disabled = false;
+                        var sourceBBottomView = document.getElementById(sourceBBottomId);
+                        sourceBBottomView.disabled = false;
+                        var sourceBLeftView = document.getElementById(sourceBLeftId);
+                        sourceBLeftView.disabled = false;
+                        var sourceBRightView = document.getElementById(sourceBRightId);
+                        sourceBRightView.disabled = false;
+                        var sourceBIsoView = document.getElementById(sourceBIsoId);
+                        sourceBIsoView.disabled = false;
+
+                        var comparisonCB = document.getElementById("comparisonCB");
+                        comparisonCB.disabled = false;
                     }
 
                 }
