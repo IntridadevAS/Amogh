@@ -42,9 +42,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceAReviewModuleViewerInterface.setupViewer();
         }
-        else if (this.SourceAProperties !== undefined) {
-            // createGridView(this.SourceAProperties, "viewerContainer1", 0, 0);
-        }
 
         if (this.SourceBViewerData !== undefined) {
             this.SourceBReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceBViewerData,
@@ -52,9 +49,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.SourceBNodeIdVsComponentData);
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceBReviewModuleViewerInterface.setupViewer();
-        }
-        else if (this.SourceBProperties !== undefined) {
-            // createGridView(this.SourceBProperties, "viewerContainer2", 0, 0);
         }
     }
 
@@ -253,15 +247,12 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     ComparisonReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
         var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
-        var mainComponentClasses;
         var mainComponentClasseData;
         var viewerContainerData = document.getElementById(viewerContainer);
         if (viewerContainer === "viewerContainer1") {
-            mainComponentClasses = Object.keys(this.SourceAProperties);
             mainComponentClasseData = this.SourceAProperties[currentSheetName];
         }
         else if (viewerContainer === "viewerContainer2") {
-            mainComponentClasses = Object.keys(this.SourceBProperties);
             mainComponentClasseData = this.SourceBProperties[currentSheetName];
         }
 
@@ -305,7 +296,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         sheetProperties = mainComponentClasseData[subComponent][0].properties;
                     }
                 }
-                // sheetProperties = mainComponentClasseData[thisRow.cells[1].innerText.trim()][0].properties;
             }
             var column = {};
             for (var i = 0; i < sheetProperties.length; i++) {
@@ -357,93 +347,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer2");
                 _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
             }
-
-
-            // if (thisRow.cells[0].innerText !== "" && thisRow.cells[2].innerText !== "") {
-
-            // var viewer1ContainerData = document.getElementById("viewerContainer1")
-
-            // if (viewer1ContainerData.innerHTML.length > 60) {
-            //     var containerChildren = viewer1ContainerData.children;
-            //     var columnHeaders = containerChildren[0].getElementsByTagName("span");
-            //     var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
-            //     var column = {};
-            //     for (var i = 0; i < columnHeaders.length; i++) {
-            //         columnHeader = columnHeaders[i];
-            //         if (columnHeader.innerHTML.trim() === "Name") {
-            //             column[columnHeader.innerHTML.trim()] = i;
-            //         }
-            //         if (Object.keys(column).length === 1) {
-            //             break;
-            //         }
-            //     }
-            //     for (var i = 1; i < mainComponentClassDataTable.length; i++) {
-            //         rowData = mainComponentClassDataTable[i];
-
-            //         if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
-            //             thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
-            //             if (this.SelectedComponentRowFromSheet1) {
-            //                 for (var j = 0; j < this.SelectedComponentRowFromSheet1.cells.length; j++) {
-            //                     cell = this.SelectedComponentRowFromSheet1.cells[j];
-            //                     cell.style.backgroundColor = "#ffffff"
-            //                 }
-            //             }
-
-            //             for (var j = 0; j < rowData.cells.length; j++) {
-            //                 cell = rowData.cells[j];
-            //                 cell.style.backgroundColor = "#B2BABB"
-            //             }
-
-            //             this.SelectedComponentRowFromSheet1 = rowData;
-
-
-            //         }
-            //     }
-            // }
-
-            // var viewer2ContainerData = document.getElementById("viewerContainer2")
-
-            // if (viewer2ContainerData.innerHTML.length > 60) {
-            //     var containerChildren = viewer2ContainerData.children;
-            //     var columnHeaders = containerChildren[0].getElementsByTagName("span");
-            //     var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
-            //     var column = {};
-            //     for (var i = 0; i < columnHeaders.length; i++) {
-            //         columnHeader = columnHeaders[i];
-            //         if (columnHeader.innerHTML.trim() === "Name") {
-            //             column[columnHeader.innerHTML.trim()] = i;
-            //         }
-            //         if (Object.keys(column).length === 1) {
-            //             break;
-            //         }
-            //     }
-            //     for (var i = 1; i < mainComponentClassDataTable.length; i++) {
-            //         rowData = mainComponentClassDataTable[i];
-
-            //         if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
-            //             thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
-            //             if (this.SelectedComponentRowFromSheet2) {
-            //                 for (var j = 0; j < this.SelectedComponentRowFromSheet2.cells.length; j++) {
-            //                     cell = this.SelectedComponentRowFromSheet2.cells[j];
-            //                     cell.style.backgroundColor = "#ffffff"
-            //                 }
-            //             }
-
-            //             for (var j = 0; j < rowData.cells.length; j++) {
-            //                 cell = rowData.cells[j];
-            //                 cell.style.backgroundColor = "#B2BABB"
-            //             }
-
-            //             this.SelectedComponentRowFromSheet2 = rowData;
-
-
-            //         }
-            //     }
-            // }
-            // // }
-
-
-
         }
     };
 
@@ -466,14 +369,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
 
             var reviewTableId = "ComparisonMainReviewCell";
-            // if(containerId === "viewerContainer1")
-            // {
-
-            // }
-            // else if(containerId === "viewerContainer2")
-            // {
-
-            // }
             var modelBrowserData = document.getElementById(reviewTableId);
             var modelBrowserRowsData = modelBrowserData.getElementsByTagName("tr");
 
@@ -493,9 +388,16 @@ function ComparisonReviewManager(comparisonCheckManager,
                     this.ChangeBackgroundColor(rowData);
                     this.SelectedComponentRow = rowData;
 
-                    if (this.SelectedComponentRowFromSheet) {
-                        for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheet.cells[j];
+                    if (this.SelectedComponentRowFromSheetA) {
+                        for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheetA.cells[j];
+                            cell.style.backgroundColor = "#ffffff"
+                        }
+                    }
+
+                    if (this.SelectedComponentRowFromSheetB) {
+                        for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheetB.cells[j];
                             cell.style.backgroundColor = "#ffffff"
                         }
                     }
@@ -505,7 +407,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                         cell.style.backgroundColor = "#B2BABB"
                     }
 
-                    this.SelectedComponentRowFromSheet = thisRow;
+                    this.SelectedComponentRowFromSheetA = thisRow;
+                    this.SelectedComponentRowFromSheetB = thisRow;
 
 
                 }
@@ -526,7 +429,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 fields: columnHeaders,
                 margin: "0px",
                 rowClick: function(args) { 
-                    // alert("clicked Item");
                     _this.HighlightRowInModelBrowser(args.event.currentTarget, viewerContainer)
                 }
             });

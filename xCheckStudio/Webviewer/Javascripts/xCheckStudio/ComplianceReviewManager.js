@@ -23,6 +23,8 @@ function ComplianceReviewManager(complianceCheckManager,
     this.ComponentIdVsComponentData = componentIdVsComponentData;
     this.NodeIdVsComponentData = nodeIdVsComponentData;
 
+    this.SelectedComponentRowFromSheet;
+
     ComplianceReviewManager.prototype.loadDatasource = function () {
         if (this.ViewerData !== undefined) {
             this.ReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.ViewerData,
@@ -31,9 +33,6 @@ function ComplianceReviewManager(complianceCheckManager,
             this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
 
             this.ReviewModuleViewerInterface.setupViewer();
-        }
-        else if (this.SourceProperties !== undefined) {
-            // createGridView(this.SourceProperties, "viewerContainer1", 0, 0);
         }
 
     }
@@ -230,131 +229,280 @@ function ComplianceReviewManager(complianceCheckManager,
     }
 
     ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
-        var currentSheetName = sheetName ;//thisRow.cells[0].innerText.trim();
+        var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
         var mainComponentClasses;
         var mainComponentClasseData;
-       if(viewerContainer === "viewerContainer1")
-       {
-         mainComponentClasses = Object.keys(this.SourceProperties);
-         mainComponentClasseData = this.SourceProperties[currentSheetName];
-       }
-       else if(viewerContainer === "viewerContainer2")
-       {
-         mainComponentClasses = Object.keys(this.SourceProperties);
-         mainComponentClasseData = this.SourceProperties[currentSheetName];
-       }
+        var viewerContainerData = document.getElementById(viewerContainer);
+        // if (viewerContainer === "viewerContainer1") {
+            mainComponentClasses = Object.keys(this.SourceProperties);
+            mainComponentClasseData = this.SourceProperties[currentSheetName];
+        // }
+        // else if (viewerContainer === "viewerContainer2") {
+        //     mainComponentClasses = Object.keys(this.SourceBProperties);
+        //     mainComponentClasseData = this.SourceBProperties[currentSheetName];
+        // }
+
+        if(viewerContainerData === null)
+        {
+            return;
+        }
+        if (viewerContainerData.childElementCount > 1 && 
+            viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
+            this.HighlightRowInSheetData(thisRow, viewerContainer);
+            return;
+        }
 
         //var mainComponentClasseData = this.SourceAProperties[currentSheetName];
         var properties = [];
 
+        if (Object.keys(mainComponentClasseData).length > 0) {
+            if (viewerContainerData.childElementCount > 1) {
+                for (var subComponentClass in mainComponentClasseData) {
+                    if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
+                        this.HighlightRowInSheetData(thisRow, viewerContainer);
+                        return;
+                    }
+                }
+            }
+        }
+
         if (mainComponentClasseData !== {}) {
-                    for (var subComponentClass in mainComponentClasseData) {
-                        for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) {
-                            properties.push(mainComponentClasseData[subComponentClass][i]);
-                        }
-                    }
-                createGridView(properties, viewerContainer, 0, 0);
+            for (var subComponentClass in mainComponentClasseData) {
+                for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) {
+                    properties.push(mainComponentClasseData[subComponentClass][i]);
+                }
+            }
 
-                if(thisRow.tagName.toLowerCase() !== "tr")
+            columnHeaders = [];
+            var sheetProperties;
+            if (mainComponentClasseData[currentSheetName] !== undefined) {
+                sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
+            }
+            else {
+                for(var subComponent in mainComponentClasseData)
                 {
-                    return;
-                }
-
-            // if (thisRow.cells[0].innerText !== "" && thisRow.cells[2].innerText !== "") {
-
-                var viewer1ContainerData = document.getElementById("viewerContainer1")
-                
-                if (viewer1ContainerData.innerHTML.length > 60) {
-                    var containerChildren = viewer1ContainerData.children;
-                    var columnHeaders = containerChildren[0].getElementsByTagName("span");
-                    var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
-                    var column = {};
-                    for (var i = 0; i < columnHeaders.length; i++) {
-                        columnHeader = columnHeaders[i];
-                        if (columnHeader.innerHTML.trim() === "Name") {
-                            column[columnHeader.innerHTML.trim()] = i;
-                        }
-                        if (Object.keys(column).length === 1) {
-                            break;
-                        }
-                    }
-                    for (var i = 1; i < mainComponentClassDataTable.length; i++) {
-                        rowData = mainComponentClassDataTable[i];
-
-                        if(thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
-                            thisRow.cells[1].innerText === rowData.cells[column.Name].innerText)
-                            {
-                                if(this.SelectedComponentRowFromSheet1)
-                                {
-                                    for(var j =0; j < this.SelectedComponentRowFromSheet1.cells.length; j++)
-                                    {
-                                        cell = this.SelectedComponentRowFromSheet1.cells[j];
-                                        cell.style.backgroundColor = "#ffffff"
-                                    }
-                                }
-
-                                for(var j =0; j < rowData.cells.length; j++)
-                                    {
-                                        cell = rowData.cells[j];
-                                        cell.style.backgroundColor = "#B2BABB"
-                                    }
-
-                                this.SelectedComponentRowFromSheet1 = rowData;
-                                
-
-                            }
+                    if(mainComponentClasseData[subComponent][0].Name === thisRow.cells[0].innerText.trim())
+                    {
+                        sheetProperties = mainComponentClasseData[subComponent][0].properties;
                     }
                 }
-
-                var viewer2ContainerData = document.getElementById("viewerContainer2")
-                
-                if (viewer2ContainerData.innerHTML.length > 60) {
-                    var containerChildren = viewer2ContainerData.children;
-                    var columnHeaders = containerChildren[0].getElementsByTagName("span");
-                    var mainComponentClassDataTable = containerChildren[0].getElementsByTagName("tr");
-                    var column = {};
-                    for (var i = 0; i < columnHeaders.length; i++) {
-                        columnHeader = columnHeaders[i];
-                        if (columnHeader.innerHTML.trim() === "Name") {
-                            column[columnHeader.innerHTML.trim()] = i;
-                        }
-                        if (Object.keys(column).length === 1) {
-                            break;
-                        }
-                    }
-                    for (var i = 1; i < mainComponentClassDataTable.length; i++) {
-                        rowData = mainComponentClassDataTable[i];
-
-                        if(thisRow.cells[0].innerText === rowData.cells[column.Name].innerText  ||
-                            thisRow.cells[1].innerText === rowData.cells[column.Name].innerText)
-                            {
-                                if(this.SelectedComponentRowFromSheet2)
-                                {
-                                    for(var j =0; j < this.SelectedComponentRowFromSheet2.cells.length; j++)
-                                    {
-                                        cell = this.SelectedComponentRowFromSheet2.cells[j];
-                                        cell.style.backgroundColor = "#ffffff"
-                                    }
-                                }
-
-                                for(var j =0; j < rowData.cells.length; j++)
-                                    {
-                                        cell = rowData.cells[j];
-                                        cell.style.backgroundColor = "#B2BABB"
-                                    }
-
-                                this.SelectedComponentRowFromSheet2 = rowData;
-                                
-
-                            }
+                // sheetProperties = mainComponentClasseData[thisRow.cells[1].innerText.trim()][0].properties;
+            }
+            var column = {};
+            for (var i = 0; i < sheetProperties.length; i++) {
+                columnHeader = {};
+                columnHeader["name"] = sheetProperties[i].Name;
+                var type ;
+                if(typeof(sheetProperties[i].Name) === "string")
+                {
+                    type = "text";
+                }
+                else if(typeof(sheetProperties[i].Name) === "number")
+                {
+                    type = "number";
+                }
+                columnHeader["type"] = type;
+                columnHeader["width"] = "100";
+                columnHeaders.push(columnHeader);
+                if (Object.keys(column).length <= 3) {
+                    if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
+                        column[sheetProperties[i].Name] = i;
                     }
                 }
-            // }
+            }
 
+            tableData = [];
+            for (var i = 0; i < properties.length; i++) {
+                tableRowContent = {};
+                property = properties[i].properties;
+                for (var j = 0; j < property.length; j++) {
+                    tableRowContent[columnHeaders[j].name] = property[j].Value;
+                }
+                tableData.push(tableRowContent);
 
-            
+            }
+
+            //createGridView(properties, viewerContainer, 0, 0);
+
+            if (thisRow.tagName.toLowerCase() !== "tr") {
+                return;
+            }
+
+            if (viewerContainer === "viewerContainer1") {
+                _this = this;
+                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer1");
+                _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
+            }
+            else if (viewerContainer === "viewerContainer2") {
+                _this = this;
+                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer2");
+                _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
+            }
         }
     };
+
+    ComplianceReviewManager.prototype.HighlightRowInModelBrowser = function (thisRow, viewerContainer) {
+        var containerId  = viewerContainer.replace("#", "");
+        var viewerContainerData = document.getElementById(containerId)
+        
+        if (viewerContainerData != undefined) {
+            var containerChildren = viewerContainerData.children;
+            var columnHeaders = containerChildren[0].getElementsByTagName("th");
+            var column = {};
+            for (var i = 0; i < columnHeaders.length; i++) {
+                columnHeader = columnHeaders[i];
+                if (columnHeader.innerHTML.trim() === "ComponentClass" || columnHeader.innerHTML.trim() === "Name" || columnHeader.innerHTML.trim() === "Description") {
+                    column[columnHeader.innerHTML.trim()] = i;
+                }
+                if (Object.keys(column).length === 3) {
+                    break;
+                }
+            }
+
+            var reviewTableId = "ComparisonMainReviewCell";
+            var modelBrowserData = document.getElementById(reviewTableId);
+            var modelBrowserRowsData = modelBrowserData.getElementsByTagName("tr");
+
+
+            for (var i = 0; i < modelBrowserRowsData.length; i++) {
+                rowData = modelBrowserRowsData[i];
+
+                if (thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
+                    if (this.SelectedComponentRow === rowData) {
+                        return;
+                    }
+        
+                    if (this.SelectedComponentRow) {
+                        this.RestoreBackgroundColor(_this.SelectedComponentRow);
+                    }
+
+                    this.ChangeBackgroundColor(rowData);
+                    this.SelectedComponentRow = rowData;
+
+                    if (this.SelectedComponentRowFromSheet) {
+                        for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheet.cells[j];
+                            cell.style.backgroundColor = "#ffffff"
+                        }
+                    }
+
+                    for (var j = 0; j < thisRow.cells.length; j++) {
+                        cell = thisRow.cells[j];
+                        cell.style.backgroundColor = "#B2BABB"
+                    }
+
+                    this.SelectedComponentRowFromSheet = thisRow;
+
+
+                }
+            }
+        }
+    }
+
+    ComplianceReviewManager.prototype.LoadTableData = function(_this, gridName,columnHeaders, tableData, modelTree, viewerContainer ) {
+        
+        $(function() {
+ 
+            $(viewerContainer).jsGrid({ 
+                width: "780px" ,
+                height: "620px",
+                sorting: true,  
+                autoload: true,     
+                data: tableData,
+                fields: columnHeaders,
+                margin: "0px",
+                rowClick: function(args) { 
+                    // alert("clicked Item");
+                    _this.HighlightRowInModelBrowser(args.event.currentTarget, viewerContainer)
+                }
+            });
+         
+        });
+
+
+        var container = document.getElementById(viewerContainer.replace("#", ""));
+        container.style.width = "780px"
+        container.style.height = "620px"
+        container.style.overflowX = "scroll";
+        container.style.overflowY = "scroll";
+        container.style.margin = "0px"
+    };
+
+    ComplianceReviewManager.prototype.HighlightRowInSheetData = function (thisRow, viewerContainer) {
+        var containerId = viewerContainer.replace("#", "");
+        var viewerContainerData = document.getElementById(containerId);
+        
+        if (viewerContainerData != undefined) {
+            var containerChildren = viewerContainerData.children;
+            var columnHeaders = containerChildren[0].getElementsByTagName("th");
+            var mainComponentClassDataTable = containerChildren[1].getElementsByTagName("tr");
+            var column = {};
+            for (var i = 0; i < columnHeaders.length; i++) {
+                columnHeader = columnHeaders[i];
+                if (columnHeader.innerHTML.trim() === "ComponentClass" || columnHeader.innerHTML.trim() === "Name" || columnHeader.innerHTML.trim() === "Description") {
+                    column[columnHeader.innerHTML.trim()] = i;
+                }
+                if (Object.keys(column).length === 3) {
+                    break;
+                }
+            }
+            for (var i = 0; i < mainComponentClassDataTable.length; i++) {
+                rowData = mainComponentClassDataTable[i];
+
+                if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
+                    thisRow.cells[1].innerText === rowData.cells[column.Name].innerText ) {
+                    if(containerId === "viewerContainer1")
+                    {
+                        if (this.SelectedComponentRowFromSheet) {
+                            for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheet.cells[j];
+                                cell.style.backgroundColor = "#ffffff"
+                            }
+                        }
+    
+                        this.SelectedComponentRowFromSheet = rowData;
+
+                        if(this.SelectedComponentRow)
+                        {
+                            this.RestoreBackgroundColor(this.SelectedComponentRow);
+                        }
+                        this.SelectedComponentRow = thisRow;
+                        this.ChangeBackgroundColor(this.SelectedComponentRow);
+    
+                        for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheet.cells[j];
+                            cell.style.backgroundColor = "#B2BABB"
+                        }
+                    }
+                    else if(containerId === "viewerContainer2")
+                    {
+                        
+                        if (this.SelectedComponentRowFromSheet) {
+                            for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheet.cells[j];
+                                cell.style.backgroundColor = "#ffffff"
+                            }
+                        }
+    
+                        this.SelectedComponentRowFromSheet = rowData;
+
+                        if(this.SelectedComponentRow)
+                        {
+                            this.RestoreBackgroundColor(this.SelectedComponentRow);
+                        }
+                        this.SelectedComponentRow = thisRow;
+                        this.ChangeBackgroundColor(this.SelectedComponentRow);
+    
+                        for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheet.cells[j];
+                            cell.style.backgroundColor = "#B2BABB"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     ComplianceReviewManager.prototype.populateDetailedReviewTable = function (row) {
 
         var parentTable = document.getElementById(this.DetailedReviewTableContainer);

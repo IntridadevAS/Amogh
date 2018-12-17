@@ -42,8 +42,14 @@ function CheckManager() {
             var sourceComponentProperties = sourceProperties[i];
 
             // check if this property is checked or not, in Source A
-            if (!interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
-                continue;
+
+            if(interfaceObject.SourceType.toLowerCase() === "xml" && 
+               !interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
+                    continue;
+            }
+            else if(interfaceObject.SourceType.toLowerCase() === "xls" && 
+                    !interfaceObject.excelReader.excelModelBrowser.isComponentSelected(sourceComponentProperties)) {
+                    continue;
             }
 
             // check if component class exists in checkcase
@@ -239,9 +245,15 @@ function CheckManager() {
             var sourceAComponentProperties = sourceAProperties[i];
 
             // check if this property is checked or not, in Source A
-            if (!xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
-                continue;
+            if(xCheckStudioInterface1.SourceType.toLowerCase() === "xml" && 
+               !xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
+                    continue;
             }
+            else if(xCheckStudioInterface1.SourceType.toLowerCase() === "xls" && 
+                    !xCheckStudioInterface1.excelReader.excelModelBrowser.isComponentSelected(sourceAComponentProperties)) {
+                    continue;
+            }
+            
 
             // check if component class exists in checkcase
             if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass)) {
@@ -325,8 +337,11 @@ function CheckManager() {
             }
 
             // check if this property is checked or not in SOurce BG
-            if (!xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
-                continue;
+            if(xCheckStudioInterface2.SourceType.toLowerCase() === "xml" && !xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
+                    continue;
+            }
+            else if(xCheckStudioInterface2.SourceType.toLowerCase() === "xls" && !xCheckStudioInterface2.excelReader.excelModelBrowser.isComponentSelected(sourceBComponentProperties)) {
+                    continue;
             }
 
             // check if component class exists in checkcase
