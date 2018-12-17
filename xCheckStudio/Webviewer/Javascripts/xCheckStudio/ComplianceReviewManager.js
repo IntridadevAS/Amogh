@@ -69,7 +69,6 @@ function ComplianceReviewManager(complianceCheckManager,
             th.innerHTML = "Source"
             tr.appendChild(th);
 
-
             th = document.createElement("th");
             th.innerHTML = "Status"
             tr.appendChild(th);
@@ -81,14 +80,17 @@ function ComplianceReviewManager(complianceCheckManager,
 
                 th = document.createElement("th");
                 th.innerHTML = "Source"
+                th.style.display ="none";
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "Destination"
+                th.style.display ="none";
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "OwnerId"
+                th.style.display ="none";
                 tr.appendChild(th);
             }
 
@@ -124,6 +126,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
+                    td.style.display ="none";
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -132,6 +135,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
+                    td.style.display ="none";
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -140,6 +144,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
+                    td.style.display ="none";
                     tr.appendChild(td);
                 }
 

@@ -100,19 +100,22 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             this.MainReviewTableStatusCell = tr.cells.length - 1;
 
-            // if component groupd is PipingNetworkSegment, create two hidden columns at end for Source and destination
+            // if component groupd is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid
             if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
 
                 th = document.createElement("th");
                 th.innerHTML = "Source"
+                th.style.display = "none"
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "Destination"
+                th.style.display = "none"
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "OwnerId"
+                th.style.display = "none"
                 tr.appendChild(th);
             }
 
@@ -152,6 +155,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
+                    td.style.display = "none"
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -160,6 +164,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
+                    td.style.display = "none"
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -168,6 +173,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
+                    td.style.display = "none"
                     tr.appendChild(td);
                 }
 
