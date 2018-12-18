@@ -24,26 +24,39 @@ var xCheckStudio;
                     }
                     else {
                         return resolve(true);
-                    }
-                    // return this.status != 404;
+                    }                
                 }
 
                 http.open('HEAD', fileURL, true);
                 http.send();
-            });
-
-            // var http = new XMLHttpRequest();
-
-            // http.onload = function (event) {
-            //   return this.status != 404;    
-            // }
-
-            // http.open('HEAD', fileURL, true);
-            // http.send();
-
-            //return http.status != 404;        
+            });   
         }
         Util.fileExists = fileExists;
+
+
+        function getComponentHexColor  (status) {
+            // var color;
+            if (status.toLowerCase() === ("OK").toLowerCase()) {
+                return SuccessColor;
+            }
+            else if (status.toLowerCase() === ("Error").toLowerCase()) {
+                return ErrorColor;
+            }
+            else if (status.toLowerCase() === ("Warning").toLowerCase()) {
+                return WarningColor;
+            }
+            else if (status.toLowerCase() === ("No Match").toLowerCase()) {
+                return NoMatchColor;
+            }
+            else if (status.toLowerCase() === ("No Value").toLowerCase()) {
+                return NoValueColor;
+            }
+            else {
+                return undefined;
+            }
+        }
+        Util.getComponentHexColor = getComponentHexColor;
+
 
         function rgbToHex(r, g, b) {
             return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);

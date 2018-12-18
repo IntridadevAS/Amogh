@@ -31,33 +31,12 @@ function HighlightManager(viewer,
         return nodeId;
     }
 
-    HighlightManager.prototype.getComponentHexColor = function (status) {
-        // var color;
-        if (status.toLowerCase() === ("OK").toLowerCase()) {
-            return SuccessColor;
-        }
-        else if (status.toLowerCase() === ("Error").toLowerCase()) {
-            return ErrorColor;
-        }
-        else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-            return WarningColor;
-        }
-        else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-            return NoMatchColor;
-        }
-        else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-            return NoValueColor;
-        }
-        else {
-            return undefined;
-        }
-    }
 
     HighlightManager.prototype.changeComponentColorInViewer = function (componentIdentifier,
         /*componentRow,*/
         status) {
 
-        var hexColor = this.getComponentHexColor(status);
+        var hexColor = xCheckStudio.Util.getComponentHexColor(status);
         if (hexColor === undefined) {
             return;
         }

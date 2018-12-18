@@ -38,19 +38,7 @@ ExcelReader.prototype.process_wb = function (wb, containerId) {
 
     
     //add model Browser Table
-    this.excelModelBrowser.createModelBrowserComponent(this.sourceDataSheet, containerId);
-    
-    // var sheetData = this.sourceDataSheet;
-    // for (var sheetName in sheetData) {
-    //     mainComponentClass = sheetName;
-    //     var mainComponentClassData = sheetData[sheetName];
-    //     for (var subcomponentClass in mainComponentClassData) {
-    //         var subComponentClassData = mainComponentClassData[subcomponentClass];
-    //         for (var i = 0; i < subComponentClassData.length; i++) {
-    //             this.sourceProperties.push(subComponentClassData[i]);
-    //         }
-    //     }
-    // }
+    this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 };
 
 ExcelReader.prototype.ChangeBackgroundColor = function (row) {
@@ -94,7 +82,12 @@ ExcelReader.prototype.ReadSheetData = function (sheetName) {
 
         // iterate node properties and add to generic properties object
         for (var key in row) {
-            var genericPropertyObject = new GenericProperty(key, "String", row[key]);
+            var value = row[key];
+            if(value === undefined)
+            {
+                value = "";
+            }
+            var genericPropertyObject = new GenericProperty(key, "String",value);
             genericPropertiesObject.addProperty(genericPropertyObject);
         }
 

@@ -32,15 +32,15 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         for (var componentId in this.ComponentIdStatusData) {
             if (this.ComponentIdStatusData.hasOwnProperty(componentId)) {
 
-                var tr = this.ComponentIdStatusData[componentId][0];
+                // var tr = this.ComponentIdStatusData[componentId][0];
                 var status = this.ComponentIdStatusData[componentId][1];
 
                 // set the component row color in main review table     
-                var hexColor = this.highlightManager.getComponentHexColor(status);
+                var hexColor = xCheckStudio.Util.getComponentHexColor(status);
                 if (hexColor === undefined) {
                     continue;
                 }
-                tr.style.backgroundColor = hexColor;
+                // tr.style.backgroundColor = hexColor;
 
                 this.highlightManager.changeComponentColorInViewer(componentId, status);
             }

@@ -8,11 +8,11 @@ function ComplianceReviewManager(complianceCheckManager,
     nodeIdVsComponentData) {
 
     this.ViewerData = viewerData;
-    
+
     this.SourceProperties = sourceProperties;
 
     this.ReviewModuleViewerInterface;
-   
+
     this.ComplianceCheckManager = complianceCheckManager;
 
     this.MainReviewTableContainer = mainReviewTableContainer;
@@ -79,17 +79,17 @@ function ComplianceReviewManager(complianceCheckManager,
 
                 th = document.createElement("th");
                 th.innerHTML = "Source"
-                th.style.display ="none";
+                th.style.display = "none";
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "Destination"
-                th.style.display ="none";
+                th.style.display = "none";
                 tr.appendChild(th);
 
                 th = document.createElement("th");
                 th.innerHTML = "OwnerId"
-                th.style.display ="none";
+                th.style.display = "none";
                 tr.appendChild(th);
             }
 
@@ -125,7 +125,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
-                    td.style.display ="none";
+                    td.style.display = "none";
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -134,7 +134,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
-                    td.style.display ="none";
+                    td.style.display = "none";
                     tr.appendChild(td);
 
                     td = document.createElement("td");
@@ -143,16 +143,23 @@ function ComplianceReviewManager(complianceCheckManager,
 
                         componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
-                    td.style.display ="none";
+                    td.style.display = "none";
                     tr.appendChild(td);
                 }
 
-                 // keep track of component id vs table row and status         
-                this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];               
+                //set row background color according to check result
+                var hexColor = xCheckStudio.Util.getComponentHexColor(component.Status);
+                if (hexColor === undefined) {
+                    continue;
+                }
+                tr.style.backgroundColor = hexColor;
+
+                // keep track of component id vs table row and status         
+                this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
             }
 
             this.bindEvents(table);
-        }        
+        }
     }
 
 
@@ -175,33 +182,30 @@ function ComplianceReviewManager(complianceCheckManager,
 
                     _this.populateDetailedReviewTable(row);
 
-                    if(_this.ReviewModuleViewerInterface !== undefined)
-                    {
-                    var reviewTableId = _this.getReviewTableId(row);
+                    if (_this.ReviewModuleViewerInterface !== undefined) {
+                        var reviewTableId = _this.getReviewTableId(row);
 
-                    var componentIdentifier = row.cells[0].innerHTML;
-                    if (reviewTableId === "PipingNetworkSegment") {
-                        var source = row.cells[_this.MainReviewTableStatusCell + 1].innerHTML;
-                        var destination = row.cells[_this.MainReviewTableStatusCell + 2].innerHTML;
-                        var ownerId = row.cells[_this.MainReviewTableStatusCell + 3].innerHTML;
-                        componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+                        var componentIdentifier = row.cells[0].innerHTML;
+                        if (reviewTableId === "PipingNetworkSegment") {
+                            var source = row.cells[_this.MainReviewTableStatusCell + 1].innerHTML;
+                            var destination = row.cells[_this.MainReviewTableStatusCell + 2].innerHTML;
+                            var ownerId = row.cells[_this.MainReviewTableStatusCell + 3].innerHTML;
+                            componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+                        }
+
+                        // highlight component in graphics view in both viewer
+                        _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);
                     }
-                   
-                    // highlight component in graphics view in both viewer
-                    _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);    
-                }               
-                 else{
+                    else {
                         var sheetName = row.parentElement.parentElement.id;
-                        if(typeof SourceAProperties !== 'undefined')
-                        {
+                        if (typeof SourceAProperties !== 'undefined') {
                             _this.showSelectedSheetData("viewerContainer1", sheetName, row);
                         }
-                        if(typeof SourceBProperties !== 'undefined')
-                        {
+                        if (typeof SourceBProperties !== 'undefined') {
                             _this.showSelectedSheetData("viewerContainer2", sheetName, row);
                         }
-                                               
-                    } 
+
+                    }
 
                     _this.SelectedComponentRow = row;
                 };
@@ -230,23 +234,20 @@ function ComplianceReviewManager(complianceCheckManager,
 
     ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
         var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
-        var mainComponentClasses;
         var mainComponentClasseData;
         var viewerContainerData = document.getElementById(viewerContainer);
         // if (viewerContainer === "viewerContainer1") {
-            mainComponentClasses = Object.keys(this.SourceProperties);
-            mainComponentClasseData = this.SourceProperties[currentSheetName];
+        mainComponentClasseData = this.SourceProperties[currentSheetName];
         // }
         // else if (viewerContainer === "viewerContainer2") {
         //     mainComponentClasses = Object.keys(this.SourceBProperties);
         //     mainComponentClasseData = this.SourceBProperties[currentSheetName];
         // }
 
-        if(viewerContainerData === null)
-        {
+        if (viewerContainerData === null) {
             return;
         }
-        if (viewerContainerData.childElementCount > 1 && 
+        if (viewerContainerData.childElementCount > 1 &&
             viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
             this.HighlightRowInSheetData(thisRow, viewerContainer);
             return;
@@ -279,10 +280,8 @@ function ComplianceReviewManager(complianceCheckManager,
                 sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
             }
             else {
-                for(var subComponent in mainComponentClasseData)
-                {
-                    if(mainComponentClasseData[subComponent][0].Name === thisRow.cells[0].innerText.trim())
-                    {
+                for (var subComponent in mainComponentClasseData) {
+                    if (mainComponentClasseData[subComponent][0].Name === thisRow.cells[0].innerText.trim()) {
                         sheetProperties = mainComponentClasseData[subComponent][0].properties;
                     }
                 }
@@ -292,13 +291,11 @@ function ComplianceReviewManager(complianceCheckManager,
             for (var i = 0; i < sheetProperties.length; i++) {
                 columnHeader = {};
                 columnHeader["name"] = sheetProperties[i].Name;
-                var type ;
-                if(typeof(sheetProperties[i].Name) === "string")
-                {
+                var type;
+                if (typeof (sheetProperties[i].Name) === "string") {
                     type = "text";
                 }
-                else if(typeof(sheetProperties[i].Name) === "number")
-                {
+                else if (typeof (sheetProperties[i].Name) === "number") {
                     type = "number";
                 }
                 columnHeader["type"] = type;
@@ -330,21 +327,21 @@ function ComplianceReviewManager(complianceCheckManager,
 
             if (viewerContainer === "viewerContainer1") {
                 _this = this;
-                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer1");
+                _this.LoadTableData(_this, columnHeaders, tableData, "#viewerContainer1", thisRow, column);
                 _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
             }
             else if (viewerContainer === "viewerContainer2") {
                 _this = this;
-                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer2");
+                _this.LoadTableData(_this, columnHeaders, tableData, "#viewerContainer2", thisRow, column);
                 _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
             }
         }
     };
 
-    ComplianceReviewManager.prototype.HighlightRowInModelBrowser = function (thisRow, viewerContainer) {
-        var containerId  = viewerContainer.replace("#", "");
+    ComplianceReviewManager.prototype.HighlightRowInModelBrowser = function (sheetDataRow, viewerContainer) {
+        var containerId = viewerContainer.replace("#", "");
         var viewerContainerData = document.getElementById(containerId)
-        
+
         if (viewerContainerData != undefined) {
             var containerChildren = viewerContainerData.children;
             var columnHeaders = containerChildren[0].getElementsByTagName("th");
@@ -359,39 +356,60 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
             }
 
-            var reviewTableId = "ComparisonMainReviewCell";
+            var reviewTableId;
+            if (containerId === "viewerContainer1") {
+                reviewTableId = "SourceAComplianceMainReviewCell";
+            }
+            else if (containerId === "viewerContainer2") {
+                reviewTableId = "SourceBComplianceMainReviewCell";
+            }
+
             var modelBrowserData = document.getElementById(reviewTableId);
             var modelBrowserRowsData = modelBrowserData.getElementsByTagName("tr");
 
 
             for (var i = 0; i < modelBrowserRowsData.length; i++) {
-                rowData = modelBrowserRowsData[i];
+                modelBrowserRow = modelBrowserRowsData[i];
 
-                if (thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
-                    if (this.SelectedComponentRow === rowData) {
+                if (sheetDataRow.cells[column.Name].innerText === modelBrowserRow.cells[0].innerText) {
+                    if (this.SelectedComponentRow === modelBrowserRow) {
                         return;
                     }
-        
+
                     if (this.SelectedComponentRow) {
                         this.RestoreBackgroundColor(_this.SelectedComponentRow);
                     }
 
-                    this.ChangeBackgroundColor(rowData);
-                    this.SelectedComponentRow = rowData;
+                    this.ChangeBackgroundColor(modelBrowserRow);
+                    this.SelectedComponentRow = modelBrowserRow;
 
-                    if (this.SelectedComponentRowFromSheet) {
-                        for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheet.cells[j];
-                            cell.style.backgroundColor = "#ffffff"
+                    if (containerId === "viewerContainer1") {
+                        if (this.SelectedComponentRowFromSheet) {
+                            for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheet.cells[j];
+                                cell.style.backgroundColor = "#ffffff"
+                            }
                         }
+
+                        this.SelectedComponentRowFromSheet = sheetDataRow;
+                    }
+                    else if (containerId === "viewerContainer2") {
+                        if (this.SelectedComponentRowFromSheet) {
+                            for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheet.cells[j];
+                                cell.style.backgroundColor = "#ffffff"
+                            }
+                        }
+
+                        this.SelectedComponentRowFromSheet = sheetDataRow;
                     }
 
-                    for (var j = 0; j < thisRow.cells.length; j++) {
-                        cell = thisRow.cells[j];
+                    for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
+                        cell = this.SelectedComponentRowFromSheet.cells[j];
                         cell.style.backgroundColor = "#B2BABB"
                     }
 
-                    this.SelectedComponentRowFromSheet = thisRow;
+
 
 
                 }
@@ -399,24 +417,50 @@ function ComplianceReviewManager(complianceCheckManager,
         }
     }
 
-    ComplianceReviewManager.prototype.LoadTableData = function(_this, gridName,columnHeaders, tableData, modelTree, viewerContainer ) {
-        
-        $(function() {
- 
-            $(viewerContainer).jsGrid({ 
-                width: "780px" ,
+    ComplianceReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, modelBrowserRow, column){
+        var modelBrowserTable = modelBrowserRow.parentElement;
+        var modelBrowserRows = modelBrowserTable.getElementsByTagName("tr");
+
+        var currentSheetDataTable = viewerContainer//document.getElementById(viewerContainer);
+        var currentSheetRows = currentSheetDataTable.children[1].getElementsByTagName("tr");
+
+        for(var i =0; i < modelBrowserRows.length; i++)
+        {
+            var modelBrowserRow = modelBrowserRows[i];
+            for(var j =0; j < currentSheetRows.length ; j++)
+            {
+                currentSheetRow = currentSheetRows[j];
+                if(modelBrowserRow.cells[0].innerText !== "" && modelBrowserRow.cells[0].innerText === currentSheetRow.cells[column.Name].innerText)
+                {
+                    var color = modelBrowserRow.style.backgroundColor;
+                    // var hexColor = xCheckStudio.Util.rgbToHex(color.)
+                    for (var j = 0; j < currentSheetRow.cells.length; j++) {
+                        cell = currentSheetRow.cells[j];
+                        cell.style.backgroundColor = color;
+                    }
+                }
+            }
+        }
+
+    }
+    ComplianceReviewManager.prototype.LoadTableData = function (_this, columnHeaders, tableData,  viewerContainer, modelBrowserRow, column) {
+
+        $(function () {
+
+            $(viewerContainer).jsGrid({
+                width: "780px",
                 height: "620px",
-                sorting: true,  
-                autoload: true,     
+                // sorting: true,
+                autoload: true,
                 data: tableData,
                 fields: columnHeaders,
                 margin: "0px",
-                rowClick: function(args) { 
+                rowClick: function (args) {
                     // alert("clicked Item");
                     _this.HighlightRowInModelBrowser(args.event.currentTarget, viewerContainer)
                 }
             });
-         
+
         });
 
 
@@ -425,13 +469,15 @@ function ComplianceReviewManager(complianceCheckManager,
         container.style.height = "620px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
-        container.style.margin = "0px"
+        container.style.margin = "0px";
+
+        _this.highlightSheetRowsFromCheckStatus(container,  modelBrowserRow , column);
     };
 
     ComplianceReviewManager.prototype.HighlightRowInSheetData = function (thisRow, viewerContainer) {
         var containerId = viewerContainer.replace("#", "");
         var viewerContainerData = document.getElementById(containerId);
-        
+
         if (viewerContainerData != undefined) {
             var containerChildren = viewerContainerData.children;
             var columnHeaders = containerChildren[0].getElementsByTagName("th");
@@ -450,49 +496,45 @@ function ComplianceReviewManager(complianceCheckManager,
                 rowData = mainComponentClassDataTable[i];
 
                 if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
-                    thisRow.cells[1].innerText === rowData.cells[column.Name].innerText ) {
-                    if(containerId === "viewerContainer1")
-                    {
+                    thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
+                    if (containerId === "viewerContainer1") {
                         if (this.SelectedComponentRowFromSheet) {
                             for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
                                 cell = this.SelectedComponentRowFromSheet.cells[j];
                                 cell.style.backgroundColor = "#ffffff"
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheet = rowData;
 
-                        if(this.SelectedComponentRow)
-                        {
+                        if (this.SelectedComponentRow) {
                             this.RestoreBackgroundColor(this.SelectedComponentRow);
                         }
                         this.SelectedComponentRow = thisRow;
                         this.ChangeBackgroundColor(this.SelectedComponentRow);
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheet.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
                         }
                     }
-                    else if(containerId === "viewerContainer2")
-                    {
-                        
+                    else if (containerId === "viewerContainer2") {
+
                         if (this.SelectedComponentRowFromSheet) {
                             for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
                                 cell = this.SelectedComponentRowFromSheet.cells[j];
                                 cell.style.backgroundColor = "#ffffff"
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheet = rowData;
 
-                        if(this.SelectedComponentRow)
-                        {
+                        if (this.SelectedComponentRow) {
                             this.RestoreBackgroundColor(this.SelectedComponentRow);
                         }
                         this.SelectedComponentRow = thisRow;
                         this.ChangeBackgroundColor(this.SelectedComponentRow);
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheet.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
@@ -648,7 +690,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
 
     ComplianceReviewManager.prototype.ChangeBackgroundColor = function (row) {
-        row.style.backgroundColor = "#9999ff";
+        row.style.backgroundColor = "#B2BABB";
     }
 
     ComplianceReviewManager.prototype.RestoreBackgroundColor = function (row) {

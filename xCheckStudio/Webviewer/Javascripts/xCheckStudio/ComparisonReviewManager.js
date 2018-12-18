@@ -171,6 +171,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                     tr.appendChild(td);
                 }
 
+                //set row background color according to check result
+                var hexColor = xCheckStudio.Util.getComponentHexColor(component.Status);
+                if (hexColor === undefined) {
+                    continue;
+                }
+                tr.style.backgroundColor = hexColor;
+
                 // keep track of component id vs table row and status               
                 this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
             }
@@ -245,7 +252,34 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     }
 
-    ComparisonReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
+    ComparisonReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, modelBrowserRow, column){
+        var modelBrowserTable = modelBrowserRow.parentElement;
+        var modelBrowserRows = modelBrowserTable.getElementsByTagName("tr");
+
+        var currentSheetDataTable = viewerContainer//document.getElementById(viewerContainer);
+        var currentSheetRows = currentSheetDataTable.children[1].getElementsByTagName("tr");
+
+        for(var i =0; i < modelBrowserRows.length; i++)
+        {
+            var modelBrowserRow = modelBrowserRows[i];
+            for(var j =0; j < currentSheetRows.length ; j++)
+            {
+                currentSheetRow = currentSheetRows[j];
+                if(modelBrowserRow.cells[0].innerText !== "" && modelBrowserRow.cells[0].innerText === currentSheetRow.cells[column.Name].innerText)
+                {
+                    var color = modelBrowserRow.style.backgroundColor;
+                    // var hexColor = xCheckStudio.Util.rgbToHex(color.)
+                    for (var j = 0; j < currentSheetRow.cells.length; j++) {
+                        cell = currentSheetRow.cells[j];
+                        cell.style.backgroundColor = color;
+                    }
+                }
+            }
+        }
+
+    }
+
+    ComparisonReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, modelBrowserRow) {
         var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
         var mainComponentClasseData;
         var viewerContainerData = document.getElementById(viewerContainer);
@@ -258,7 +292,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         if (viewerContainerData.childElementCount > 1 && 
             viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
-            this.HighlightRowInSheetData(thisRow, viewerContainer);
+            this.HighlightRowInSheetData(modelBrowserRow, viewerContainer);
             return;
         }
 
@@ -269,7 +303,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             if (viewerContainerData.childElementCount > 1) {
                 for (var subComponentClass in mainComponentClasseData) {
                     if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
-                        this.HighlightRowInSheetData(thisRow, viewerContainer);
+                        this.HighlightRowInSheetData(modelBrowserRow, viewerContainer);
                         return;
                     }
                 }
@@ -291,7 +325,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             else {
                 for(var subComponent in mainComponentClasseData)
                 {
-                    if(mainComponentClasseData[subComponent][0].Name === thisRow.cells[1].innerText.trim())
+                    if(mainComponentClasseData[subComponent][0].Name === modelBrowserRow.cells[1].innerText.trim())
                     {
                         sheetProperties = mainComponentClasseData[subComponent][0].properties;
                     }
@@ -333,24 +367,25 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             //createGridView(properties, viewerContainer, 0, 0);
 
-            if (thisRow.tagName.toLowerCase() !== "tr") {
+            if (modelBrowserRow.tagName.toLowerCase() !== "tr") {
                 return;
             }
 
             if (viewerContainer === "viewerContainer1") {
                 _this = this;
-                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer1");
-                _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
+                _this.LoadTableData(_this, columnHeaders, tableData, "#viewerContainer1", modelBrowserRow, column);
+                _this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer1");
+               
             }
             else if (viewerContainer === "viewerContainer2") {
                 _this = this;
-                _this.LoadTableData(_this, currentSheetName, columnHeaders, tableData, "", "#viewerContainer2");
-                _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
+                _this.LoadTableData(_this, columnHeaders, tableData, "#viewerContainer2", modelBrowserRow, column);
+                _this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer2");
             }
         }
     };
 
-    ComparisonReviewManager.prototype.HighlightRowInModelBrowser = function (thisRow, viewerContainer) {
+    ComparisonReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow, viewerContainer) {
         var containerId  = viewerContainer.replace("#", "");
         var viewerContainerData = document.getElementById(containerId)
         
@@ -374,10 +409,24 @@ function ComparisonReviewManager(comparisonCheckManager,
 
 
             for (var i = 0; i < modelBrowserRowsData.length; i++) {
-                rowData = modelBrowserRowsData[i];
+                modelBrowserRow = modelBrowserRowsData[i];
 
-                if (thisRow.cells[1].innerText === rowData.cells[column.Name].innerText) {
-                    if (this.SelectedComponentRow === rowData) {
+                if (sheetDataRow.cells[column.Name].innerText === modelBrowserRow.cells[1].innerText ||
+                    sheetDataRow.cells[column.Name].innerText === modelBrowserRow.cells[0].innerText) {
+                    if(containerId === "viewerContainer1")
+                    {
+                        
+
+                    if (this.SelectedComponentRowFromSheetA) {
+                        var color = modelBrowserRow.style.backgroundColor;
+                        for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                            cell = this.SelectedComponentRowFromSheetA.cells[j];
+                            cell.style.backgroundColor = "#ffffff"
+                        }
+                    }
+
+                    this.SelectedComponentRowFromSheetA = sheetDataRow;
+                    if (this.SelectedComponentRow === modelBrowserRow) {
                         return;
                     }
         
@@ -385,30 +434,39 @@ function ComparisonReviewManager(comparisonCheckManager,
                         this.RestoreBackgroundColor(_this.SelectedComponentRow);
                     }
 
-                    this.ChangeBackgroundColor(rowData);
-                    this.SelectedComponentRow = rowData;
-
-                    if (this.SelectedComponentRowFromSheetA) {
-                        for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheetA.cells[j];
-                            cell.style.backgroundColor = "#ffffff"
-                        }
-                    }
-
+                    this.ChangeBackgroundColor(modelBrowserRow);
+                    this.SelectedComponentRow = modelBrowserRow;
+                    
+                }
+                if(containerId === "viewerContainer2")
+                {
                     if (this.SelectedComponentRowFromSheetB) {
+                        var color = modelBrowserRow.style.backgroundColor;
                         for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetB.cells[j];
                             cell.style.backgroundColor = "#ffffff"
                         }
                     }
 
-                    for (var j = 0; j < thisRow.cells.length; j++) {
-                        cell = thisRow.cells[j];
+                    this.SelectedComponentRowFromSheetB = sheetDataRow;
+                }
+
+                    for (var j = 0; j < sheetDataRow.cells.length; j++) {
+                        cell = sheetDataRow.cells[j];
                         cell.style.backgroundColor = "#B2BABB"
                     }
 
-                    this.SelectedComponentRowFromSheetA = thisRow;
-                    this.SelectedComponentRowFromSheetB = thisRow;
+                    // this.SelectedComponentRowFromSheetA = sheetDataRow;
+                    // this.SelectedComponentRowFromSheetB = sheetDataRow;
+                    if(containerId === "viewerContainer1")
+                    {
+                        this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer2");
+                    }
+                    else if(containerId === "viewerContainer2")
+                    {
+                        this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer1");
+                    }
+                    
 
 
                 }
@@ -416,20 +474,20 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     }
 
-    ComparisonReviewManager.prototype.LoadTableData = function(_this, gridName,columnHeaders, tableData, modelTree, viewerContainer ) {
+    ComparisonReviewManager.prototype.LoadTableData = function(_this, columnHeaders, tableData,  viewerContainer, modelBrowserRow, column ) {
         
         $(function() {
  
             $(viewerContainer).jsGrid({ 
                 width: "780px" ,
                 height: "620px",
-                sorting: true,  
+                // sorting: true,  
                 autoload: true,     
                 data: tableData,
                 fields: columnHeaders,
                 margin: "0px",
                 rowClick: function(args) { 
-                    _this.HighlightRowInModelBrowser(args.event.currentTarget, viewerContainer)
+                    _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer)
                 }
             });
          
@@ -442,16 +500,18 @@ function ComparisonReviewManager(comparisonCheckManager,
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
         container.style.margin = "0px"
+
+        _this.highlightSheetRowsFromCheckStatus(container,  modelBrowserRow , column);
     };
 
-    ComparisonReviewManager.prototype.HighlightRowInSheetData = function (thisRow, viewerContainer) {
+    ComparisonReviewManager.prototype.HighlightRowInSheetData = function (modelBrowserRow, viewerContainer) {
         var containerId = viewerContainer.replace("#", "");
         var viewerContainerData = document.getElementById(containerId);
         
         if (viewerContainerData != undefined) {
             var containerChildren = viewerContainerData.children;
             var columnHeaders = containerChildren[0].getElementsByTagName("th");
-            var mainComponentClassDataTable = containerChildren[1].getElementsByTagName("tr");
+            var sourceDataViewTableRows = containerChildren[1].getElementsByTagName("tr");
             var column = {};
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
@@ -462,61 +522,72 @@ function ComparisonReviewManager(comparisonCheckManager,
                     break;
                 }
             }
-            for (var i = 0; i < mainComponentClassDataTable.length; i++) {
-                rowData = mainComponentClassDataTable[i];
+            for (var i = 0; i < sourceDataViewTableRows.length; i++) {
+                currentRowInSourceTable = sourceDataViewTableRows[i];
 
-                if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText ||
-                    thisRow.cells[1].innerText === rowData.cells[column.Name].innerText ) {
+                if (modelBrowserRow.cells[0].innerText === currentRowInSourceTable.cells[column.Name].innerText ||
+                    modelBrowserRow.cells[1].innerText === currentRowInSourceTable.cells[column.Name].innerText ) {
                     if(containerId === "viewerContainer1")
                     {
                         if (this.SelectedComponentRowFromSheetA) {
+                            var color = this.SelectedComponentRow.style.backgroundColor;
                             for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
                                 cell = this.SelectedComponentRowFromSheetA.cells[j];
                                 cell.style.backgroundColor = "#ffffff"
                             }
                         }
     
-                        this.SelectedComponentRowFromSheetA = rowData;
-
-                        if(this.SelectedComponentRow)
-                        {
-                            this.RestoreBackgroundColor(this.SelectedComponentRow);
-                        }
-                        this.SelectedComponentRow = thisRow;
-                        this.ChangeBackgroundColor(this.SelectedComponentRow);
+                        this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
     
                         for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetA.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
                         }
+
+                        if (this.SelectedComponentRow === modelBrowserRow) {
+                            return;
+                        }
+                        if(this.SelectedComponentRow)
+                        {
+                            this.RestoreBackgroundColor(this.SelectedComponentRow);
+                        }
+                        this.SelectedComponentRow = modelBrowserRow;
+                        this.ChangeBackgroundColor(this.SelectedComponentRow);
                     }
-                    else if(containerId === "viewerContainer2")
+                    if(containerId === "viewerContainer2")
                     {
                         
                         if (this.SelectedComponentRowFromSheetB) {
+                            var color = this.SelectedComponentRow.style.backgroundColor;
                             for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                                 cell = this.SelectedComponentRowFromSheetB.cells[j];
                                 cell.style.backgroundColor = "#ffffff"
                             }
                         }
     
-                        this.SelectedComponentRowFromSheetB = rowData;
+                        this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
 
-                        if(this.SelectedComponentRow)
-                        {
-                            this.RestoreBackgroundColor(this.SelectedComponentRow);
-                        }
-                        this.SelectedComponentRow = thisRow;
-                        this.ChangeBackgroundColor(this.SelectedComponentRow);
     
                         for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetB.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
                         }
+
+                        
+                        if (this.SelectedComponentRow === modelBrowserRow) {
+                            return;
+                        }
+                        if(this.SelectedComponentRow)
+                        {
+                            this.RestoreBackgroundColor(this.SelectedComponentRow);
+                        }
+                        this.SelectedComponentRow = modelBrowserRow;
+                        this.ChangeBackgroundColor(this.SelectedComponentRow);
                     }
                 }
             }
         }
+        
     }
 
     ComparisonReviewManager.prototype.populateDetailedReviewTable = function (row) {
