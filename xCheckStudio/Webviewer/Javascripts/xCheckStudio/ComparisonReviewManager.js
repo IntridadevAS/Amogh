@@ -34,6 +34,11 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SelectedComponentRowFromSheetA;
     this.SelectedComponentRowFromSheetB;
     this.SelectedComponentRow;
+
+    this.checkStatusArrayA = {};
+    this.checkStatusArrayB = {};
+
+
     ComparisonReviewManager.prototype.loadDatasources = function () {
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
@@ -224,6 +229,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     }
                     else {
                         var sheetName = row.parentElement.parentElement.id;
+                        this.checkStatusArrayA = {};
+                        this.checkStatusArrayB = {};
                         _this.showSelectedSheetData("viewerContainer1", sheetName, row);
                         _this.showSelectedSheetData("viewerContainer2", sheetName, row);
                     }
@@ -268,11 +275,20 @@ function ComparisonReviewManager(comparisonCheckManager,
                 if(modelBrowserRow.cells[0].innerText !== "" && modelBrowserRow.cells[0].innerText === currentSheetRow.cells[column.Name].innerText)
                 {
                     var color = modelBrowserRow.style.backgroundColor;
-                    // var hexColor = xCheckStudio.Util.rgbToHex(color.)
                     for (var j = 0; j < currentSheetRow.cells.length; j++) {
                         cell = currentSheetRow.cells[j];
                         cell.style.backgroundColor = color;
                     }
+
+                    if(viewerContainer.id === "viewerContainer1")
+                    {
+                        this.checkStatusArrayA[currentSheetRow.rowIndex] = modelBrowserRow.cells[2].innerHTML;
+                    }
+                    else if(viewerContainer.id === "viewerContainer2")
+                    {
+                        this.checkStatusArrayB[currentSheetRow.rowIndex] = modelBrowserRow.cells[2].innerHTML;
+                    }
+                    
                 }
             }
         }
@@ -418,10 +434,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                         
 
                     if (this.SelectedComponentRowFromSheetA) {
-                        var color = modelBrowserRow.style.backgroundColor;
-                        for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheetA.cells[j];
-                            cell.style.backgroundColor = "#ffffff"
+                        var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+                        var status = this.checkStatusArrayA[rowIndex];
+                        if (status === undefined) {
+                                
+                        }
+                        else {
+                            var color = this.getRowHighlightColor(status);
+                            for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheetA.cells[j];
+                                cell.style.backgroundColor = color;
+                            }
                         }
                     }
 
@@ -441,10 +464,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                 if(containerId === "viewerContainer2")
                 {
                     if (this.SelectedComponentRowFromSheetB) {
-                        var color = modelBrowserRow.style.backgroundColor;
-                        for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheetB.cells[j];
-                            cell.style.backgroundColor = "#ffffff"
+                        var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+                        var status = this.checkStatusArrayB[rowIndex];
+                        if (status === undefined) {
+                                
+                        }
+                        else {
+                            var color = this.getRowHighlightColor(status);
+                            for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                                cell = this.SelectedComponentRowFromSheetB.cells[j];
+                                cell.style.backgroundColor = color;
+                            }
                         }
                     }
 
@@ -456,8 +486,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         cell.style.backgroundColor = "#B2BABB"
                     }
 
-                    // this.SelectedComponentRowFromSheetA = sheetDataRow;
-                    // this.SelectedComponentRowFromSheetB = sheetDataRow;
                     if(containerId === "viewerContainer1")
                     {
                         this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer2");
@@ -466,10 +494,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                     {
                         this.HighlightRowInSheetData(modelBrowserRow, "viewerContainer1");
                     }
-                    
 
+                    var table = modelBrowserRow.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                    table.focus();
+                    table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
 
+                    this.populateDetailedReviewTable(modelBrowserRow);
+                    break;
                 }
+               
             }
         }
     }
@@ -511,7 +544,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (viewerContainerData != undefined) {
             var containerChildren = viewerContainerData.children;
             var columnHeaders = containerChildren[0].getElementsByTagName("th");
-            var sourceDataViewTableRows = containerChildren[1].getElementsByTagName("tr");
+            var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
+            var sourceDataViewTableRows = sheetDataTable.getElementsByTagName("tr");
             var column = {};
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
@@ -530,10 +564,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if(containerId === "viewerContainer1")
                     {
                         if (this.SelectedComponentRowFromSheetA) {
-                            var color = this.SelectedComponentRow.style.backgroundColor;
-                            for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                                cell = this.SelectedComponentRowFromSheetA.cells[j];
-                                cell.style.backgroundColor = "#ffffff"
+                            var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+                            var status = this.checkStatusArrayA[rowIndex];
+                            if (status === undefined) {
+                                
+                            }
+                            else {
+                                var color = this.getRowHighlightColor(status);
+                                for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                                    cell = this.SelectedComponentRowFromSheetA.cells[j];
+                                    cell.style.backgroundColor = color;
+                                }
                             }
                         }
     
@@ -544,24 +585,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                             cell.style.backgroundColor = "#B2BABB"
                         }
 
-                        if (this.SelectedComponentRow === modelBrowserRow) {
-                            return;
-                        }
-                        if(this.SelectedComponentRow)
-                        {
-                            this.RestoreBackgroundColor(this.SelectedComponentRow);
-                        }
-                        this.SelectedComponentRow = modelBrowserRow;
-                        this.ChangeBackgroundColor(this.SelectedComponentRow);
+                        var sheetDataTable1 = containerChildren[1].getElementsByTagName("table")[0];
+                        sheetDataTable1.focus();
+                        sheetDataTable1.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
                     }
                     if(containerId === "viewerContainer2")
                     {
                         
                         if (this.SelectedComponentRowFromSheetB) {
-                            var color = this.SelectedComponentRow.style.backgroundColor;
-                            for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                                cell = this.SelectedComponentRowFromSheetB.cells[j];
-                                cell.style.backgroundColor = "#ffffff"
+                            var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+                            var status = this.checkStatusArrayB[rowIndex];
+                            if (status === undefined) {
+                                
+                            }
+                            else {
+                                var color = this.getRowHighlightColor(status);
+                                for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                                    cell = this.SelectedComponentRowFromSheetB.cells[j];
+                                    cell.style.backgroundColor = color;
+                                }
                             }
                         }
     
@@ -573,17 +615,22 @@ function ComparisonReviewManager(comparisonCheckManager,
                             cell.style.backgroundColor = "#B2BABB"
                         }
 
-                        
-                        if (this.SelectedComponentRow === modelBrowserRow) {
-                            return;
-                        }
-                        if(this.SelectedComponentRow)
-                        {
-                            this.RestoreBackgroundColor(this.SelectedComponentRow);
-                        }
-                        this.SelectedComponentRow = modelBrowserRow;
-                        this.ChangeBackgroundColor(this.SelectedComponentRow);
+                        var sheetDataTable2 = containerChildren[1].getElementsByTagName("table")[0];
+                        sheetDataTable2.focus();
+                        sheetDataTable2.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
                     }
+
+                    if (this.SelectedComponentRow === modelBrowserRow) {
+                        return;
+                    }
+                    if(this.SelectedComponentRow)
+                    {
+                        this.RestoreBackgroundColor(this.SelectedComponentRow);
+                    }
+                    this.SelectedComponentRow = modelBrowserRow;
+                    this.ChangeBackgroundColor(this.SelectedComponentRow);
+
+                    break;
                 }
             }
         }
@@ -620,9 +667,14 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var source1NameCell = row.getElementsByTagName("td")[0];
                 var source2NameCell = row.getElementsByTagName("td")[1];
 
-                if (component.SourceAName !== source1NameCell.innerHTML &&
+                if (source1NameCell !== undefined ||
+                    source2NameCell !== undefined )
+                    {
+                        if(component.SourceAName !== source1NameCell.innerHTML &&
                     component.SourceBName !== source2NameCell.innerHTML) {
                     continue;
+                    }
+                    
                 }
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
