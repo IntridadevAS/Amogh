@@ -36,13 +36,8 @@ var xCheckStudio;
 
             _this._firstViewer = viewer;
 
-            // _this.sourceProperties = [];
-
             // construct model tree
             _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
-
-            // create highlight manager
-            // _this.highlightManager = new HighlightManager(viewer);
 
             // register viewer evenets
             _this._bindEvents(viewer, isFirstViewer);
@@ -172,51 +167,11 @@ var xCheckStudio;
 
                         var componentIdentifier = data["Name"];
                         if (data.MainComponentClass === "PipingNetworkSegment") {
-                            componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                            componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["NodeId"];
                         }
                         // highlight corresponding component in model browser table
                         this._modelTree.HighlightModelBrowserRow(componentIdentifier);
                     }
-                    // if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
-                    //     let data = this.highlightManager.nodeIdVsComponentData[this._selectedNodeId];
-                    //     if (data != undefined) {
-                    //         if (checkManager != undefined) {
-                    //             // get component identifier
-                    //             var componentIdentifier = data["Name"];
-                    //             if (data.MainComponentClass === "PipingNetworkSegment") {
-                    //                 componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
-                    //             }
-                    //             if (this._selectedComponentId === data.NodeId) {
-                    //                 return;
-                    //             }
-
-                    //             // highlight corresponding component in review table 
-                    //             reviewManager.HighlightReviewComponent(data);
-
-                    //             // highlight corresponding component in model browser table
-                    //             this._modelTree.HighlightModelBrowserRow(componentIdentifier);
-
-                    //             if (this._firstViewer._params.containerId == "viewerContainer2") {
-                    //                 xCheckStudioInterface1.highlightComponent(componentIdentifier);
-                    //                xCheckStudioInterface1._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    //             }
-                    //             else if (this._firstViewer._params.containerId == "viewerContainer1") {
-                    //                 xCheckStudioInterface2.highlightComponent(componentIdentifier);
-                    //                xCheckStudioInterface2._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    //             }
-                    //         }
-                    //         else {
-                    //             var componentIdentifier = data["Name"];
-                    //             if (data.MainComponentClass === "PipingNetworkSegment") {
-                    //                 componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
-                    //             }
-                    //             if (this._selectedComponentId === data.NodeId) {
-                    //                 return;
-                    //             }
-                    //             this._modelTree.HighlightModelBrowserRow(componentIdentifier);
-                    //         }
-                    //     }
-                    // }
                 }
             }
         };
@@ -330,7 +285,9 @@ var xCheckStudio;
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
                         if (_this.nodeIdArray.length == 0) {
-                            _this._modelTree.addModelBrowserComponent(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+                            // _this._modelTree.addModelBrowserComponent(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+                            _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+                            _this._modelTree.addClassesToModelBrowser();
                             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
                                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
                             }
@@ -341,17 +298,6 @@ var xCheckStudio;
             }
 
         };
-
-        // xCheckStudioInterface.prototype.highlightComponent = function (componentIdentifier) {
-        //     var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
-        //     if (nodeId === undefined) {
-        //         return;
-        //     }
-
-        //     this.highlightManager.highlightNodeInViewer(nodeId);
-
-        //     this._selectedNodeId = nodeId;
-        // };
 
 
         return xCheckStudioInterface;

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=1360, maximum-scale=1.0" name="viewport" />
+    <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
+    <meta content="Launchpad by Anima" name="author">
+    </meta>
+    <script type="text/javascript" src="Javascripts/common/Example.js"></script>
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+
+    <script src='postData/comparisonCheckpostDataReader.php'></script>
+    <script src='postData/sourceAComplianceDataReader.php'></script>
+    <script src='postData/sourceBComplianceDataReader.php'></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleCharts.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleLoaderCharts.js"></script>
+    <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\PDFExporter.js"></script> -->
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager.js"></script>
+    
+    <script type="text/javascript">
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', { 'packages': ['corechart'] });   
+    </script>
+  
+    <!-- <style>
+    	@media print {
+				body * {
+					visibility: hidden;
+				}
+				#wrapper, #wrapper * {
+					visibility: visible;
+				}
+				#wrapper {
+					top:0;
+					left:0;
+				}
+			}
+    </style> -->
+</head>
+
+<body style="margin: 0;
+ background: rgba(244, 244, 244, 1.0);">
+    <input id="anPageName" name="page" type="hidden" value="a011" />
+    <button onclick="generate()">Generate PDF</button>
+    <div class="a011" id="wrapper">
+        <div style="width: 1360px; height: 100%; position:relative; margin:auto;">
+            <div class="details">
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
+                <div class="datasource1datat">
+                    <span class="span1">Data Source 1 <br /><br />Data Type<br /><br /><br />Data Source 2 <br /><br />Data
+                        Type</span><span class="span2"><br /><br /><br /><br /></span>
+                </div>
+                <div class="checkcasexml2xls">
+                    <span class="span1">CheckCase                             </span><span class="span2" id="checkCase">xml-2-xls</span>
+                </div>
+                <div class="checkcasexml2xls1" id="checkCase1">
+                    
+                </div>
+                <div class="xyz123" id="dataSource1">
+                </div>
+                <div class="abc123" id="dataSource2">
+                </div>
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy22" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy23" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy24" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
+                <div class="details1">
+                    Details       <button id='print-pdf'>Convert to PDF</button>
+                </div>
+                <div class="group">
+                    <div class="rectangle1">
+                    </div>
+                    <div class="xlsx" id="extension1">
+                        .xlsx
+                    </div>
+                </div>
+                <div class="groupcopy">
+                    <div class="rectangle1">
+                    </div>
+                    <div class="xlsx" id="extension2">
+                        .xlsx
+                    </div>
+                </div>
+            </div>
+            <div class="block1" >
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-6.png" class="rectanglecopy6" src="/images/Analytics/01-1-rectangle-copy-6.png" />
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-4.png" class="rectanglecopy4" src="/images/Analytics/01-1-rectangle-copy-4.png" />
+                <div class="compare" id="compare" onclick="openCheckResultTab('ComparisonTab');">
+                    Compare
+                </div>
+                <div class="compliance" id="compliance" onclick="openCheckResultTab('ComplianceTab');">
+                    Compliance 
+                </div>
+                <div id="ComparisonTab" class="AnalyticsResultsContainerTab" style="display: none">
+                    
+                    <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
+                    <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
+                    <div class="piechart" id="PieChartButton"  onclick="openChartTab('PieChartTab');">
+                        Pie chart
+                    </div>
+                    <div class="barchart" id="BarChartButton" onclick="openChartTab('BarChartTab');">
+                        Bar chart
+                    </div>
+                    <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
+                        <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
+                        <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
+                        <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
+                    </div>
+                    <div class="thin0385graphpiechartstatistics">
+                        <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
+                        <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
+                    </div>
+                    <div id="PieChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                        <div class="group2" id="group2_pie" style="border: 0px">
+                    
+                        </div>
+                        <div class="group4" id="group4_pie" style="border: 0px">
+                    
+                        </div>
+                        <div class="group5" id="group5_pie" style="border: 0px">
+                    
+                        </div>
+                    
+                        <div class="a40" id="a40">
+                    
+                        </div>
+                        <div class="a30" id="a30">
+                    
+                        </div>
+                        <div class="a10" id="a10">
+                    
+                        </div>
+                        <div class="errors">
+                            ERRORS
+                        </div>
+                        <div class="warnings">
+                            WARNINGS
+                        </div>
+                        <div class="ok">
+                            OK
+                        </div>
+                    </div>
+                    <div id="BarChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                        <div class="group2" id="group2_bar" style="border: 0px; width: 610px">
+                    
+                        </div>
+                    </div>
+                </div>
+                <div id="ComplianceTab" class="AnalyticsResultsContainerTab" style="display: none">
+                    <button class="ComplianceA" id="compare" onclick="openSourceComplianceChartTab('ComplianceATab');">
+                        A 
+                    </button>
+                    <button class="ComplianceB" id="compliance" onclick="openSourceComplianceChartTab('ComplianceBTab');">
+                        B 
+                    </button>
+                    <div id="ComplianceATab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
+                        <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
+                        <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
+                        <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceAPieChartTab');">
+                            Pie chart
+                        </div>
+                        <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceABarChartTab');">
+                            Bar chart
+                        </div>
+                        <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
+                            <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
+                        </div>
+                        <div class="thin0385graphpiechartstatistics">
+                            <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
+                        </div>
+
+                        <div id="ComplianceAPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                            <div class="group2" id="SourceACompliance_pie2" style="border: 0px">
+                    
+                            </div>
+                            <div class="group4" id="SourceACompliance_pie4" style="border: 0px">
+                        
+                            </div>
+                            <div class="group5" id="SourceACompliance_pie5" style="border: 0px">
+                        
+                            </div>
+                        
+                            <div class="a40" id="a40_Apie">
+                        
+                            </div>
+                            <div class="a30" id="a30_Apie">
+                        
+                            </div>
+                            <div class="a10" id="a10_Apie">
+                        
+                            </div>
+                            <div class="errors">
+                                ERRORS
+                            </div>
+                            <div class="warnings">
+                                WARNINGS
+                            </div>
+                            <div class="ok">
+                                OK
+                            </div>
+
+                        </div>
+                        <div id="ComplianceABarChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                            <div class="group2" id="SourceACompliance_bar" style="border: 0px; width: 610px">
+                        
+                            </div>
+                        </div>
+                        
+                        <div class="a40" id="a40">
+
+                        </div>
+                    </div>
+                    <div id="ComplianceBTab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
+                        <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
+                        <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
+                        <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceBPieChartTab');">
+                            Pie chart
+                        </div>
+                        <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceBBarChartTab');">
+                            Bar chart
+                        </div>
+                        <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
+                            <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
+                        </div>
+                        <div class="thin0385graphpiechartstatistics">
+                            <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
+                            <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
+                        </div>
+
+                        <div id="ComplianceBPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                            <div class="group2" id="SourceBCompliance_pie2" style="border: 0px">
+                    
+                            </div>
+                            <div class="group4" id="SourceBCompliance_pie4" style="border: 0px">
+                        
+                            </div>
+                            <div class="group5" id="SourceBCompliance_pie5" style="border: 0px">
+                        
+                            </div>
+                        
+                            <div class="a40" id="a40_Bpie">
+                                
+                            </div>
+                            <div class="a30" id="a30_Bpie">
+                        
+                            </div>
+                            <div class="a10" id="a10_Bpie">
+                        
+                            </div>
+                            <div class="errors">
+                                ERRORS
+                            </div>
+                            <div class="warnings">
+                                WARNINGS
+                            </div>
+                            <div class="ok">
+                                OK
+                            </div>
+                        </div>
+                        <div id="ComplianceBBarChartTab" class="AnalyticsChartContainerTab" style="display: none">
+                            <div class="group2" id="SourceBCompliance_bar" style="border: 0px; width: 610px">
+                        
+                            </div>
+                        </div>
+                        
+                        <div class="a40" id="a40">
+
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <div class="severity">
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-17.png" class="rectanglecopy17" src="/images/Analytics/01-1-rectangle-copy-17.png" />
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-18.png" class="rectanglecopy18" src="/images/Analytics/01-1-rectangle-copy-18.png" />
+                <div class="projecthealth">
+                    PROJECT HEALTH
+                   
+                </div>
+                <div id="SeverityTab" class="AnalyticsProjectHealthTab" style="display: none; height: 350px; width: 1200px;">
+                        <div id="LineChart" style="height: 300px; width: 1200px; margin: 100px auto auto 100px">
+    
+                        </div>
+                    </div>
+                    <div  id="InfoTab" class="AnalyticsProjectHealthTab" style="display: none">
+    
+                    </div>
+                <div class="severity1" id="severity1" onclick="openProjectHealthTab('SeverityTab')">
+                    Severity
+                </div>
+                <div class="info" id="info" onclick="openProjectHealthTab('InfoTab')">
+                    Info
+                </div>
+            </div>
+            <div class="blocksummary">
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
+                <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy5" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
+                <div class="totalitemschecked">
+                    Total items checked
+                </div>
+                <div class="itemswitherrors">
+                    Items with errors
+                </div>
+                <div class="itemswithwarnings">
+                    Items with warnings
+                </div>
+                <div class="itemsu2018oku2019">
+                    Items ‘OK’
+                </div>
+                <div class="a37" id="a37">
+                </div>
+                <div class="a18" id="a18">
+                </div>
+                <div class="a13" id="a13">
+                </div>
+                <div class="a6" id="a6">
+                </div>
+                <div class="summary">
+                    Summary        
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+        var analyticsManager;
+
+        window.onload = function(){
+            analyticsManager = new AnalyticsManager();
+
+            var checkCase = localStorage.getItem("CheckCase");
+            document.getElementById("checkCase").innerHTML = checkCase;
+            document.getElementById("checkCase1").innerHTML = "CheckCase "+checkCase;
+            var source1 = localStorage.getItem("dataSouresA");
+            fileName1 = source1.split(".");
+            document.getElementById("dataSource1").innerHTML = fileName1[0];
+            document.getElementById("dataSource1").style.fontSize = "11px"
+            document.getElementById("extension1").innerHTML = fileName1[1];
+
+            var source2 = localStorage.getItem("dataSouresB");
+            fileName2 = source2.split(".");
+            document.getElementById("dataSource2").innerHTML = fileName2[0];
+            document.getElementById("dataSource2").style.fontSize = "11px";
+            document.getElementById("extension2").innerHTML = fileName2[1];
+
+            //load comparison pie chart default
+            var currentDiv = document.getElementById("compare");
+            currentDiv.style.fontSize = "22px";
+            currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+            var otherDiv = document.getElementById("compliance");
+            otherDiv.style.fontSize = "18px";
+            otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+            document.getElementById("ComparisonTab").style.display = "block";
+            document.getElementById("PieChartTab").style.display = "block";
+            analyticsManager.drawPieCharts("comparison");
+
+            //load severity line chart 
+            document.getElementById("SeverityTab").style.display = "block";
+            analyticsManager.drawLineCharts();
+
+            
+        }
+
+        function getData(newData) {
+            dataTable = new google.visualization.DataTable();
+            var numRows = newData.length;
+            var numCols = newData[0].length;
+            for (var i = 0; i < numCols; i++)
+                dataTable.addColumn(typeof (newData[1][i]), newData[0][i]);
+            for (var i = 1; i < numRows; i++) {
+                dataTable.addRow(newData[i]);
+            }
+        }
+
+        function openCheckResultTab(tabName) {
+            
+            var tabs = document.getElementsByClassName("AnalyticsResultsContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+
+            document.getElementById(tabName).style.display = "block";
+
+            if (tabName === "ComparisonTab") {
+                var currentDiv = document.getElementById("compare");
+                currentDiv.style.fontSize = "22px";
+                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+                var otherDiv = document.getElementById("compliance");
+                otherDiv.style.fontSize = "18px";
+                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+                document.getElementById("PieChartTab").style.display = "block";
+                analyticsManager.drawPieCharts("comparison");
+            }
+            if(tabName === "ComplianceTab")
+            {
+                var currentDiv = document.getElementById("compliance");
+                currentDiv.style.fontSize = "22px";
+                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+                var otherDiv = document.getElementById("compare");
+                otherDiv.style.fontSize = "18px";
+                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+                document.getElementById("ComplianceATab").style.display = "block";
+                document.getElementById("ComplianceAPieChartTab").style.display = "block";
+
+                var currentTab = document.getElementById("ComplianceATab");
+                var parentTab = currentTab.parentElement;
+
+                sourceAButton = parentTab.getElementsByClassName("ComplianceA");
+                sourceAButton[0].style.backgroundColor = "red";
+
+                sourceBButton = parentTab.getElementsByClassName("ComplianceB");
+                sourceBButton[0].style.backgroundColor = "white";
+
+                analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+            }
+        }
+
+        function openChartTab(tabName) {
+            var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+
+
+            document.getElementById(tabName).style.display = "block";
+            var currentTab = document.getElementById(tabName);
+            var parentTab = currentTab.parentElement;
+            //for comparison
+            if (tabName === "BarChartTab" ){
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+
+                
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                analyticsManager.drawBarCharts("comparison");
+            }
+            if (tabName === "PieChartTab" ){
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                analyticsManager.drawPieCharts("comparison");
+            }
+
+            //for compliance A
+            if (tabName === "ComplianceABarChartTab") {
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+
+                
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                analyticsManager.drawBarCharts("compliance", tabName);
+            }
+            if( tabName === "ComplianceAPieChartTab") {
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                analyticsManager.drawPieCharts("compliance", tabName);
+            }
+
+            //for compliance B
+            if (tabName === "ComplianceBBarChartTab") {
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+
+                
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+
+                analyticsManager.drawBarCharts("compliance", tabName);
+            }
+            if( tabName === "ComplianceBPieChartTab") {
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+                
+                analyticsManager.drawPieCharts("compliance", tabName);
+            }
+        }
+
+
+        function openSourceComplianceChartTab(tabName){
+            var tabs = document.getElementsByClassName("AnalyticsComplianceResultsContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            var tabs2 = document.getElementsByClassName("AnalyticsChartContainerTab");
+            for (var i = 0; i < tabs2.length; i++) {
+                tabs2[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+
+            var currentTab = document.getElementById(tabName);
+            var parentTab = currentTab.parentElement;
+
+            if(tabName === "ComplianceATab")
+            {
+                sourceAButton = parentTab.getElementsByClassName("ComplianceA");
+                sourceAButton[0].style.backgroundColor = "red";
+
+                sourceBButton = parentTab.getElementsByClassName("ComplianceB");
+                sourceBButton[0].style.backgroundColor = "white";
+
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                document.getElementById("ComplianceAPieChartTab").style.display = "block";
+                analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+            }
+            
+            if(tabName === "ComplianceBTab")
+            {
+                sourceAButton = parentTab.getElementsByClassName("ComplianceA");
+                sourceAButton[0].style.backgroundColor = "white";
+
+                sourceBButton = parentTab.getElementsByClassName("ComplianceB");
+                sourceBButton[0].style.backgroundColor = "red";
+
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[1];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[1];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                currentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                currentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+
+                document.getElementById("ComplianceBPieChartTab").style.display = "block";
+                analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
+            }
+            
+        }
+
+        function openProjectHealthTab(tabName){
+            var tabs = document.getElementsByClassName("AnalyticsProjectHealthTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+            if(tabName === "SeverityTab")
+            {
+                var currentDiv = document.getElementById("severity1");
+                currentDiv.style.fontSize = "22px";
+                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+                var otherDiv = document.getElementById("info");
+                otherDiv.style.fontSize = "18px";
+                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+                document.getElementById("SeverityTab").style.display = "block";
+                analyticsManager.drawLineCharts();
+            }
+            
+            if(tabName === "InfoTab")
+            {
+                var currentDiv = document.getElementById("info");
+                currentDiv.style.fontSize = "22px";
+                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+                var otherDiv = document.getElementById("severity1");
+                otherDiv.style.fontSize = "18px";
+                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+            }
+            
+        }
+    </script>
+
+
+</body>
+
+</html>

@@ -24,6 +24,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         this.bindEvents(viewer);
         this.setViewerBackgroundColor();
 
+        var viewerContainer = document.getElementById(viewerOptions[0]);
+        viewerContainer.style.width = "780px"
+        viewerContainer.style.height = "620px"
         // create highlight manager
         this.highlightManager = new HighlightManager(viewer, this.ComponentIdVsComponentData, this.NodeIdVsComponentData);
     }
@@ -32,7 +35,6 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         for (var componentId in this.ComponentIdStatusData) {
             if (this.ComponentIdStatusData.hasOwnProperty(componentId)) {
 
-                // var tr = this.ComponentIdStatusData[componentId][0];
                 var status = this.ComponentIdStatusData[componentId][1];
 
                 // set the component row color in main review table     
@@ -40,7 +42,6 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 if (hexColor === undefined) {
                     continue;
                 }
-                // tr.style.backgroundColor = hexColor;
 
                 this.highlightManager.changeComponentColorInViewer(componentId, status);
             }

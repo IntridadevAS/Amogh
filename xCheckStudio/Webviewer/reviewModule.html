@@ -131,11 +131,12 @@
 <body>
 
     <!-- Main window table -->
-    <table style="min-width: -webkit-fill-available; max-width: -webkit-fill-available;;height:-webkit-fill-available; margin: auto; border: none; ">
+    <table style="min-width: -webkit-fill-available; max-width: -webkit-fill-available;;height:-webkit-fill-available;max-height: -webkit-fill-available; margin: auto; border: none; ">
 
         <!-- top logo image -->
         <th colspan="2" style=" background-color: #333333; height: 5%; text-align: center;  border: none; ">
             <img src="images/Header.png">
+            <button onclick=gotoCheckModule() style="margin-right: 0">Back</button>
         </th>
 
         <!-- main table rows -->
@@ -185,19 +186,19 @@
                         <td colspan="3">
 
                             <!--Comparison Tab Page-->
-                            <div id="ComparisonTabPage" class="checkResultsContainerTab" style="display:none;background:BlueViolet;  height: 1200px">
+                            <div id="ComparisonTabPage" class="checkResultsContainerTab" style="display:none;background:BlueViolet;  height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Comparison</h2>
                                 <!-- <div style="height:100%" class="scrollable"> -->
                                 <table>
-                                    <tbody style='height:400px;display:block;overflow:scroll'>
+                                    <tbody id="ComparisonMainReviewTbody" style='height:300px;display:block;overflow:scroll'>
                                         <tr style="height: 50%;">
                                             <td style="border:none">
                                                 <div id="ComparisonMainReviewCell" style="text-align:left; vertical-align:top;width: 100%; height: 100%; border:none"></div>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody style='height:400px;display:block;overflow:scroll'>
+                                    <tbody id="ComparisonDetailedReviewTbody" style='height:300px;display:block;overflow:scroll'>
                                         <tr style="height: 50%;">
                                             <td style="border:none">
                                                 <div id="ComparisonDetailedReviewCell" style="border:none"></div>
@@ -209,12 +210,12 @@
                             </div>
 
                             <!--Source A Compliance Tab Page-->
-                            <div id="SourceAComplianceTabPage" class="checkResultsContainerTab" style="display:none;background:LightSalmon;   height: 1200px">
+                            <div id="SourceAComplianceTabPage" class="checkResultsContainerTab" style="display:none;background:LightSalmon;   height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Source A Compliance</h2>
                                 <!-- <div style="height:100%" class="scrollable"> -->
                                 <table>
-                                    <tbody style='height:400px;display:block;overflow:scroll'>
+                                    <tbody id="SourceAComplianceMainReviewTbody" style='height:300px;display:block;overflow:scroll'>
                                         <tr style="height: 50%;">
                                             <td style="border:none">
                                                 <div id="SourceAComplianceMainReviewCell" style="text-align:left;vertical-align:top;width: 100%; height: 100%; border:none"></div>
@@ -233,12 +234,12 @@
                             </div>
 
                             <!--Source B Compliance Tab Page-->
-                            <div id="SourceBComplianceTabPage" class="checkResultsContainerTab" style="display:none; background:lightgreen;  height: 1200px">
+                            <div id="SourceBComplianceTabPage" class="checkResultsContainerTab" style="display:none; background:lightgreen;  height: 100%">
                                 <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                                 <h2>Source B Compliance</h2>
                                 <!-- <div style="height:100%" class="scrollable"> -->
                                 <table>
-                                    <tbody style='height:400px;display:block;overflow:scroll'>
+                                    <tbody id="SourceBComplianceMainReviewTbody" style='height:300px;display:block;overflow:scroll'>
                                         <tr style="height: 50%;">
                                             <td style="border:none">
                                                 <div id="SourceBComplianceMainReviewCell" style="text-align:left;vertical-align:top; width: 100%; height: 100%; border:none;"></div>
@@ -306,7 +307,8 @@
 
                             <!--Analytics Tab Page-->
                             <div id="AnalyticsTabPage" class="viewContainerTab" style="display:none;background:LightSalmon;  width: 100%; height: 100%">
-                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                                <!-- <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span> -->
+                                <span  class="closebtn">&times;</span>
                                 <div style="height:100%" class="scrollable">
 
                                 </div>
@@ -332,6 +334,16 @@
         var comparisonReviewManager;
         var sourceAComplianceReviewManager;
         var sourceBComplianceReviewManager;
+
+    function showAnalytics() {
+        window.open("/analyticsModule.html", 'popUpWindow','height=800,width=1500,left=100,top=100, status=yes');
+
+        return false;
+    }
+        function gotoCheckModule(){
+            window.location = "/checkModule.html";
+            return false;
+        }
 
         window.onload = function () {
 
@@ -378,6 +390,22 @@
                         undefined,
                         undefined,
                         undefined);
+                }
+                else if (typeof SourceAProperties !== 'undefined' &&
+                    typeof SourceBViewerData !== 'undefined' &&
+                    SourceBComponentIdVsComponentData !== 'undefined' &&
+                    SourceBNodeIdVsComponentData !== 'undefined') {
+                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                        undefined,
+                        SourceBViewerData,
+                        SourceAProperties,
+                        undefined,
+                        "ComparisonMainReviewCell",
+                        "ComparisonDetailedReviewCell",
+                        undefined,
+                        undefined,
+                        SourceBComponentIdVsComponentData,
+                        SourceBNodeIdVsComponentData);
                 }
 
                 // populate review table
@@ -467,14 +495,6 @@
                 collapsibleRows[i].addEventListener("click", function () {
                     this.classList.toggle("active");
                     var content = this.nextElementSibling;
-                    // if (typeof SourceAProperties !== 'undefined') {
-                    //     var sheetName = this.innerText.trim();
-                    //     comparisonReviewManager.showSelectedSheetData("viewerContainer1", sheetName, this);
-                    // }
-                    // if (typeof SourceBProperties !== 'undefined') {
-                    //     var sheetName = this.innerText.trim();
-                    //     comparisonReviewManager.showSelectedSheetData("viewerContainer2", sheetName, this);
-                    // }
                     if (content.style.display === "block") {
                         content.style.display = "none";
                     } else {
@@ -654,6 +674,12 @@
             }
 
             document.getElementById(tabName).style.display = "block";
+
+            if(tabName === "AnalyticsTabPage")
+            {
+                showAnalytics() 
+            }
+            
         }
     </script>
 </body>

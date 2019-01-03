@@ -1,7 +1,7 @@
 function CheckCaseManager() {
     this.CheckCase;
 
-    this.Ready = true;
+    //this.Ready = true;
     // CheckCaseManager.prototype.addCheckCase = function (checkCase) {
     //     this.CheckCases.push(checkCase);
     // }
@@ -11,7 +11,7 @@ function CheckCaseManager() {
 
         // set ready flag to false, to hold the execution of dependent code
 
-        _this.Ready = false;
+        //  _this.Ready = false;
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -19,8 +19,8 @@ function CheckCaseManager() {
                 _this.readCheckCaseXml(this);
 
                 // set ready flag to true
-                _this.Ready = true;
-
+                //_this.Ready = true;
+                
                 // notify that check case data ready is complete
                 _this.onCheckCaseDataReadComplete();
             }
@@ -78,66 +78,123 @@ function CheckCaseManager() {
 
             var checkType = new CheckType(checkTypeName, sourceAType, sourceBType);
 
-            for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
-                var componentGroupElement = checkTypeElement.children[componentGroupIndex];
-                if (componentGroupElement.localName != "ComponentGroup") {
-                    continue;
-                }
-
-                // ComponentGroup object
-                var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
-
-                for (var j = 0; j < componentGroupElement.children.length; j++) {
-                    var componentElement = componentGroupElement.children[j];
-                    if (componentElement.localName != "ComponentClass") {
+            if (sourceAType === "XLS" && sourceBType === "XML") {
+                for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
+                    var componentGroupElement = checkTypeElement.children[componentGroupIndex];
+                    if (componentGroupElement.localName != "ComponentGroup") {
                         continue;
                     }
 
-                    // Component object
-                    var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
+                    // ComponentGroup object
+                    var checkCaseComponentGroups = new CheckCaseComponentGroups(componentGroupElement.getAttribute("sourceAGroupName"), componentGroupElement.getAttribute("sourceBGroupName"));
 
-                    for (var k = 0; k < componentElement.children.length; k++) {
-                        var propertyElement = componentElement.children[k];
-                        if (propertyElement.localName != "Property") {
+                    for (var j = 0; j < componentGroupElement.children.length; j++) {
+                        var componentElement = componentGroupElement.children[j];
+                        if (componentElement.localName != "ComponentClass") {
                             continue;
                         }
 
-                        var sourceAProperty = propertyElement.getAttribute("name");
-                        var sourceBProperty;
-                        var rule;
-                        if (sourceAProperty === undefined ||
-                            sourceAProperty === null) {
-                            sourceAProperty = propertyElement.getAttribute("sourceAName");
-                            sourceBProperty = propertyElement.getAttribute("sourceBName");
-                        }
-                        else {
-                            rule = propertyElement.getAttribute("rule");
+                        // Component object
+                        var checkCaseComponentClasses = new CheckCaseComponentClasses(componentElement.getAttribute("sourceAComponentClass"), componentElement.getAttribute("sourceBComponentClass"));
+
+                        for (var k = 0; k < componentElement.children.length; k++) {
+                            var propertyElement = componentElement.children[k];
+                            if (propertyElement.localName != "Property") {
+                                continue;
+                            }
+
+                            var sourceAProperty = propertyElement.getAttribute("name");
+                            var sourceBProperty;
+                            var rule;
+                            if (sourceAProperty === undefined ||
+                                sourceAProperty === null) {
+                                sourceAProperty = propertyElement.getAttribute("sourceAName");
+                                sourceBProperty = propertyElement.getAttribute("sourceBName");
+                            }
+                            else {
+                                rule = propertyElement.getAttribute("rule");
+                            }
+                            var severity = propertyElement.getAttribute("severity");
+                            var comment = propertyElement.getAttribute("comment");
+
+                            // create mapping property object 
+                            var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
+                                sourceBProperty,
+                                severity,
+                                rule,
+                                comment);
+                            checkCaseComponentClasses.addMappingProperty(checkCaseMappingProperty);
                         }
 
-                        // if (complianceCheck.toLowerCase() == "true".toLowerCase()) {
-                        //     sourceAProperty = propertyElement.getAttribute("name");
-                        //     rule = propertyElement.getAttribute("rule");
-                        // }
-                        // else {
-                        //     sourceAProperty = propertyElement.getAttribute("sourceAName");
-                        //     sourceBProperty = propertyElement.getAttribute("sourceBName");
-                        // }
-                        var severity = propertyElement.getAttribute("severity");
-                        var comment = propertyElement.getAttribute("comment");
-
-                        // create mapping property object 
-                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-                            sourceBProperty,
-                            severity,
-                            rule,
-                            comment);
-                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                        checkCaseComponentGroups.addComponent(checkCaseComponentClasses);
                     }
 
-                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+                    checkType.addComponentGroup(checkCaseComponentGroups);
                 }
+            }
 
-                checkType.addComponentGroup(checkCaseComponentGroup);
+            else if (sourceAType === sourceBType) {
+                for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
+                    var componentGroupElement = checkTypeElement.children[componentGroupIndex];
+                    if (componentGroupElement.localName != "ComponentGroup") {
+                        continue;
+                    }
+
+                    // ComponentGroup object
+                    var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
+
+                    for (var j = 0; j < componentGroupElement.children.length; j++) {
+                        var componentElement = componentGroupElement.children[j];
+                        if (componentElement.localName != "ComponentClass") {
+                            continue;
+                        }
+
+                        // Component object
+                        var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
+
+                        for (var k = 0; k < componentElement.children.length; k++) {
+                            var propertyElement = componentElement.children[k];
+                            if (propertyElement.localName != "Property") {
+                                continue;
+                            }
+
+                            var sourceAProperty = propertyElement.getAttribute("name");
+                            var sourceBProperty;
+                            var rule;
+                            if (sourceAProperty === undefined ||
+                                sourceAProperty === null) {
+                                sourceAProperty = propertyElement.getAttribute("sourceAName");
+                                sourceBProperty = propertyElement.getAttribute("sourceBName");
+                            }
+                            else {
+                                rule = propertyElement.getAttribute("rule");
+                            }
+
+                            // if (complianceCheck.toLowerCase() == "true".toLowerCase()) {
+                            //     sourceAProperty = propertyElement.getAttribute("name");
+                            //     rule = propertyElement.getAttribute("rule");
+                            // }
+                            // else {
+                            //     sourceAProperty = propertyElement.getAttribute("sourceAName");
+                            //     sourceBProperty = propertyElement.getAttribute("sourceBName");
+                            // }
+                            var severity = propertyElement.getAttribute("severity");
+                            var comment = propertyElement.getAttribute("comment");
+
+                            // create mapping property object 
+                            var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
+                                sourceBProperty,
+                                severity,
+                                rule,
+                                comment);
+                            checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                        }
+
+                        checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+                    }
+
+                    checkType.addComponentGroup(checkCaseComponentGroup);
+                }
             }
 
             checkCase.addCheckType(checkType);
@@ -179,9 +236,9 @@ function CheckCase(name/*, complianceCheck*/) {
     }
 }
 
-function CheckType(name, 
-                   sourceAType, 
-                   sourceBType) {
+function CheckType(name,
+    sourceAType,
+    sourceBType) {
     this.Name = name;
     this.SourceAType = sourceAType;
     this.SourceBType = sourceBType;
@@ -197,6 +254,10 @@ function CheckType(name,
             if (this.ComponentGroups[i].Name === componentClass) {
                 return true;
             }
+            else if(this.ComponentGroups[i].SourceAGroupName === componentClass || this.ComponentGroups[i].SourceBGroupName === componentClass)
+            {
+                return true;
+            }
         }
 
         return false;
@@ -206,6 +267,10 @@ function CheckType(name,
         for (var i = 0; i < this.ComponentGroups.length; i++) {
             if (this.ComponentGroups[i].Name === componentClass) {
                 return this.ComponentGroups[i];
+            }
+            else if(this.ComponentGroups[i].SourceAGroupName === componentClass || this.ComponentGroups[i].SourceBGroupName === componentClass )
+            {
+                    return this.ComponentGroups[i];
             }
         }
 
@@ -337,7 +402,7 @@ function CheckCaseMappingProperty(sourceAName,
             }
             else if (ruleArray[0].toLowerCase() === "should end with") {
                 this.Rule = ComplianceCheckRulesEnum.Should_End_With;
-            }  
+            }
             else if (ruleArray[0].toLowerCase() === "should not start with") {
                 this.Rule = ComplianceCheckRulesEnum.Should_Not_Start_With;
             }
@@ -351,5 +416,90 @@ function CheckCaseMappingProperty(sourceAName,
                 this.Rule = ComplianceCheckRulesEnum.Not_Equal_To;
             }
         }
+    }
+}
+
+
+function CheckCaseComponentGroups(nameA, nameB) {
+    this.SourceAGroupName = nameA;
+    this.SourceBGroupName = nameB;
+
+    this.ComponentClasses = [];
+
+    CheckCaseComponentGroups.prototype.addComponent = function (componentClass) {
+        this.ComponentClasses.push(componentClass);
+    }
+
+    CheckCaseComponentGroups.prototype.componentClassExists = function (className) {
+        for (var i = 0; i < this.ComponentClasses.length; i++) {
+            if (this.ComponentClasses[i].SourceAClassName === className || this.ComponentClasses[i].SourceBClassName === className) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CheckCaseComponentGroups.prototype.getComponentClass = function (className) {
+        for (var i = 0; i < this.ComponentClasses.length; i++) {
+            if (this.ComponentClasses[i].SourceAClassName === className || this.ComponentClasses[i].SourceBClassName === className) {
+                return this.ComponentClasses[i];
+            }
+        }
+
+        return undefined;
+    }
+}
+
+function CheckCaseComponentClasses(classAName, classBName) {
+    this.SourceAClassName = classAName;
+    this.SourceBClassName = classBName;
+
+    this.MappingProperties = [];
+
+    CheckCaseComponentClasses.prototype.addMappingProperty = function (mappingProperty) {
+        this.MappingProperties.push(mappingProperty);
+    }
+
+    CheckCaseComponentClasses.prototype.propertyExists = function (sourceApropertyName, sourceBpropertyName) {
+        for (var i = 0; i < this.MappingProperties.length; i++) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
+                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CheckCaseComponentClasses.prototype.sourceAPropertyExists = function (sourceApropertyName) {
+        for (var i = 0; i < this.MappingProperties.length; i++) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CheckCaseComponentClasses.prototype.sourceBPropertyExists = function (sourceBpropertyName) {
+        for (var i = 0; i < this.MappingProperties.length; i++) {
+            if (this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CheckCaseComponentClasses.prototype.getProperty = function (sourceApropertyName, sourceBpropertyName) {
+        for (var i = 0; i < this.MappingProperties.length; i++) {
+            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
+                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+                return this.MappingProperties[i];
+            }
+        }
+
+        return undefined;
     }
 }

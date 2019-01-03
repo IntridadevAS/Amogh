@@ -283,9 +283,56 @@ function CheckManager() {
                 var sourceBComponentProperties = sourceBProperties[j];
 
                 // check if components are match
-                if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
-                    continue;
+               if(checkCaseType.SourceAType !== checkCaseType.SourceBType){
+                var sourceAmainComponent = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass);
+                var sourceBmainComponent = checkCaseType.getComponentGroup(sourceBComponentProperties.MainComponentClass);
+                var sourceASubComponent = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass);
+                var sourceBSubComponent = checkCaseGroup.getComponentClass(sourceBComponentProperties.SubComponentClass);
+                if(sourceAmainComponent !== undefined)
+                {
+                    sourceAmainComponentClass = sourceAmainComponent.SourceAGroupName;
                 }
+                else{
+                    sourceAmainComponentClass = "";
+                }
+                if(sourceBmainComponent !== undefined)
+                {
+                    sourceBmainComponentClass = sourceBmainComponent.SourceBGroupName;
+                }
+                else{
+                    sourceBmainComponentClass = "";
+                }
+                if(sourceASubComponent !== undefined)
+                {
+                    sourceASubComponentClass = sourceASubComponent.SourceAClassName;
+                }
+                else{
+                    sourceASubComponentClass = "";
+                }
+                if(sourceBSubComponent !== undefined)
+                {
+                    sourceBSubComponentClass = sourceBSubComponent.SourceBClassName;
+                }
+                else{
+                    sourceBSubComponentClass = "";
+                }
+
+                // if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
+                //     sourceAComponentProperties.MainComponentClass === sourceAmainComponentClass &&
+                //     sourceBComponentProperties.MainComponentClass === sourceBmainComponentClass &&
+                //     sourceAComponentProperties.SubComponentClass === sourceASubComponentClass &&
+                //     sourceBComponentProperties.SubComponentClass === sourceBSubComponentClass) {
+                        if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties, sourceAmainComponentClass, sourceBmainComponentClass,
+                            sourceASubComponentClass, sourceBSubComponentClass)) {
+                            continue;
+                        }
+               }
+               else if (checkCaseType.SourceAType === checkCaseType.SourceBType) {
+                   if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                       continue;
+                   }
+               }
+             
 
                 // mark this source B proerty compoent as matched
                 comparedSourceBComponents.push(sourceBComponentProperties);
@@ -369,8 +416,42 @@ function CheckManager() {
             for (var j = 0; j < sourceAProperties.length; j++) {
                 var sourceAComponentProperties = sourceAProperties[j];
 
+                var sourceAmainComponent = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass);
+                var sourceBmainComponent = checkCaseType.getComponentGroup(sourceBComponentProperties.MainComponentClass);
+                var sourceASubComponent = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass);
+                var sourceBSubComponent = checkCaseGroup.getComponentClass(sourceBComponentProperties.SubComponentClass);
+                if(sourceAmainComponent !== undefined)
+                {
+                    sourceAmainComponentClass = sourceAmainComponent.SourceAGroupName;
+                }
+                else{
+                    sourceAmainComponentClass = "";
+                }
+                if(sourceBmainComponent !== undefined)
+                {
+                    sourceBmainComponentClass = sourceBmainComponent.SourceBGroupName;
+                }
+                else{
+                    sourceBmainComponentClass = "";
+                }
+                if(sourceASubComponent !== undefined)
+                {
+                    sourceASubComponentClass = sourceASubComponent.SourceAClassName;
+                }
+                else{
+                    sourceASubComponentClass = "";
+                }
+                if(sourceBSubComponent !== undefined)
+                {
+                    sourceBSubComponentClass = sourceBSubComponent.SourceBClassName;
+                }
+                else{
+                    sourceBSubComponentClass = "";
+                }
+
                 // check if components are match
-                if (!this.isComponentMatch(sourceBComponentProperties, sourceAComponentProperties)) {
+                if (!this.isComponentMatch(sourceBComponentProperties, sourceAComponentProperties, sourceBmainComponentClass, sourceAmainComponentClass,
+                            sourceBSubComponentClass, sourceASubComponentClass)) {
                     continue;
                 }
 
@@ -530,11 +611,49 @@ function CheckManager() {
     }
 
     CheckManager.prototype.isComponentMatch = function (sourceAComponentProperties,
-        sourceBComponentProperties) {
+        sourceBComponentProperties, sourceAmainComponentClass, sourceBmainComponentClass,
+        sourceASubComponentClass, sourceBSubComponentClass) {
         // check if components are match
-        if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
+        // if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
+        //     sourceAComponentProperties.MainComponentClass === sourceBComponentProperties.MainComponentClass &&
+        //     sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass) {
+     if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
+                    sourceAComponentProperties.MainComponentClass === sourceAmainComponentClass &&
+                    sourceBComponentProperties.MainComponentClass === sourceBmainComponentClass &&
+                    sourceAComponentProperties.SubComponentClass === sourceASubComponentClass &&
+                    sourceBComponentProperties.SubComponentClass === sourceBSubComponentClass){
+
+            // if component is PipingNetworkSegment, check if source and destination properties are same
+            // because they may have same tag names
+            if (sourceAComponentProperties.MainComponentClass === "PipingNetworkSegment") {
+                var sourceASource = sourceAComponentProperties.getProperty('Source');
+                var sourceADestination = sourceAComponentProperties.getProperty('Destination');
+                var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
+
+                var sourceBSource = sourceBComponentProperties.getProperty('Source');
+                var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
+                var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
+
+                if (sourceASource === undefined ||
+                    sourceADestination === undefined ||
+                    sourceBSource === undefined ||
+                    sourceBDestination === undefined ||
+                    sourceAOwnerId === undefined ||
+                    sourceBOwnerId === undefined ||
+                    sourceASource.Value !== sourceBSource.Value ||
+                    sourceADestination.Value !== sourceBDestination.Value ||
+                    sourceAOwnerId.Value !== sourceBOwnerId.Value) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return true;
+        }
+        else if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
             sourceAComponentProperties.MainComponentClass === sourceBComponentProperties.MainComponentClass &&
-            sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass) {
+            sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass){
 
             // if component is PipingNetworkSegment, check if source and destination properties are same
             // because they may have same tag names

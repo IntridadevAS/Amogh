@@ -1,5 +1,3 @@
-// // var XLSX = require('xlsx');
-
 function ExcelReader(sourceType) {
     this.SourceType = sourceType;
 
@@ -12,10 +10,7 @@ function ExcelReader(sourceType) {
 }
 
 ExcelReader.prototype.ReadFileData = function (file, containerId) {
-    // removeAllOptions(dynamic_select);
     this.containerId = containerId;
-    //var files = event.target.files;
-    //var file = files[0];
     if (file) {
         var reader = new FileReader();
         var _this = this;
@@ -35,8 +30,6 @@ ExcelReader.prototype.process_wb = function (wb, containerId) {
     wb.SheetNames.forEach(function (sheetName) {
         _this.ReadSheetData(sheetName);
     });
-
-    
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 };
@@ -59,9 +52,25 @@ ExcelReader.prototype.ReadSheetData = function (sheetName) {
     var sourcePropertiesTemp = {};
     for (var i = 0; i < formattedExcelData.length; i++) {
         var row = formattedExcelData[i];
-        var name = row.Name;
+        var name ;
+        if(row.Name !== undefined)
+        {
+            name = row.Name;
+        }
+        else if(row.Tagnumber !== undefined)
+        {
+            name = row.Tagnumber;
+        }
         var mainComponentClass = sheetName;
-        var subComponentClass = row.Class;
+        var subComponentClass ;
+        if(row["Component Class"])
+        {
+            subComponentClass = row["Component Class"];
+        }
+        else if(row.Class)
+        {
+            subComponentClass = row.Class;
+        }
         var source = "";
         var destination = "";
         var ownerId = "";
