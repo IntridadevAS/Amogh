@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
+
     <link href="/images/UIPackage/favicon.png" rel="shortcut icon" />
     <meta charset="utf-8" />
     <meta content="width=1280, maximum-scale=1.0" name="viewport" />
@@ -30,6 +32,8 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleStringCollection.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
 
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
@@ -191,6 +195,23 @@
  background: rgba(255, 255, 255, 1.0);">
     <div id="divLoading">
     </div>
+
+    <div id="menu">
+        <a href="#" onclick="hide()">
+            <img src="images/hide.png" />Hide<span>Ctrl + ?!</span>
+        </a>
+        <hr />
+        <a href="#" onclick="showAll()">
+            <img src="images/show.png" /> Show All <span>Ctrl + ?!</span>
+        </a>
+        <a href="#" onclick="startExplode()">
+            <img /> Start Explode <span>Ctrl + ?!</span>
+        </a>
+        <a href="#" onclick="stopExplode()">
+            <img /> Stop Explode <span>Ctrl + ?!</span>
+        </a>
+    </div>
+
     <input id="anPageName" name="page" type="hidden" value="module1" />
     <div class="module1" controls id="fullscreen">
         <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
@@ -203,15 +224,15 @@
                 <div class="bg1">
                 </div>
                 <div class="downloadbtn" onclick="clearData()">
-                    <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="bg2"/>
+                    <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="bg2" />
                 </div>
-				<div class="search">
-				<div class="bg2">
-                       </div>
-                        <input class="typeu2026" id="searchtext" type="text" placeholder="Type.."> 
-                       
-                        <img src="/images/UIPackage/create-project-with-open-menu-search-icon@2x.png" class="searchicon"/>
+                <div class="search">
+                    <div class="bg2">
                     </div>
+                    <input class="typeu2026" id="searchtext" type="text" placeholder="Type..">
+
+                    <img src="/images/UIPackage/create-project-with-open-menu-search-icon@2x.png" class="searchicon" />
+                </div>
                 <a href="https://www.intrida.com/" target="_blank">
                     <div class="helpbtn">
                         <img src="/images/UIPackage/module2-bg 2@2x.png" class="bg2" />
@@ -228,10 +249,10 @@
                 <div class="check">
                     CHECK
                 </div>
-                    <div class="btn1" onclick="OnShowHideMenu()" onMouseOver="this.style.cursor='pointer'">
-                        <img src="/images/UIPackage/landing-page-bg 1@2x.png" class="bg1" />
-                        <img src="/images/UIPackage/module2-with-open-menu-icon-check@2x.png" class="iconcheck" />
-                    </div>
+                <div class="btn1" onclick="OnShowHideMenu()" onMouseOver="this.style.cursor='pointer'">
+                    <img src="/images/UIPackage/landing-page-bg 1@2x.png" class="bg1" />
+                    <img src="/images/UIPackage/module2-with-open-menu-icon-check@2x.png" class="iconcheck" />
+                </div>
                 <img src="/images/UIPackage/create-project-arrow@2x.png" class="arrow" />
             </div>
             <div class="footer">
@@ -266,7 +287,7 @@
                     </div>
                 </div>
                 <div class="tab" id="tab1Parent" onclick="OpenTab('tab1')">
-                    <div class="tab1" id="tab1" >
+                    <div class="tab1" id="tab1">
                         <div id="dataSource1ModelBrowserTab" style="align-content: center">
                             Source 1
                         </div>
@@ -381,7 +402,8 @@
                             }
                         </style>
                     <div id="csB8xgZ">
-                        <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceACB" >
+                        <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ"
+                            id="checkAllSourceACB">
                             <div class="bg1 " data-name="bg1beP8csB8xgZ">
                             </div>
                             <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
@@ -491,7 +513,7 @@
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
                                         addClass(component, 'state1-to-state2');
-                                        checkAllCBClick(true,"modelTree1", "checkAllSourceACB")
+                                        checkAllCBClick(true, "modelTree1", "checkAllSourceACB")
                                     }, 0);
                                 } catch (e) {
                                     console.log(e);
@@ -532,7 +554,7 @@
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
                                         addClass(component, 'state2-to-state1');
-                                        checkAllCBClick(false,"modelTree1", "checkAllSourceACB")
+                                        checkAllCBClick(false, "modelTree1", "checkAllSourceACB")
                                     }, 0);
                                 } catch (e) {
                                     console.log(e);
@@ -640,7 +662,8 @@
                             }
                         </style>
                     <div id="S0BCR4u">
-                        <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u" id='complianceSourceACB'>
+                        <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u"
+                            id='complianceSourceACB'>
                             <div class="bg2 " data-name="bg2FqZPS0BCR4u">
                             </div>
                             <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
@@ -832,7 +855,7 @@
                 <div class="line"></div>
                 <div class="checkallswitch">
                     <div class="checkall">
-                        Check all 
+                        Check all
                     </div>
                     <style>
                         .module1 .group2 .checkallswitch .toggle-KJzr2 * {
@@ -925,7 +948,8 @@
                                 }
                             </style>
                     <div id="csB8xgZ">
-                        <div class="toggle-KJzr2 component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceBCB">
+                        <div class="toggle-KJzr2 component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ"
+                            id="checkAllSourceBCB">
                             <div class="bg1 " data-name="bg1beP8csB8xgZ">
                             </div>
                             <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
@@ -1035,7 +1059,7 @@
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
                                         addClass(component, 'state1-to-state2');
-                                        checkAllCBClick(true,"modelTree2", "checkAllSourceBCB")
+                                        checkAllCBClick(true, "modelTree2", "checkAllSourceBCB")
                                     }, 0);
                                 } catch (e) {
                                     console.log(e);
@@ -1076,7 +1100,7 @@
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
                                         addClass(component, 'state2-to-state1');
-                                        checkAllCBClick(false,"modelTree2", "checkAllSourceBCB")
+                                        checkAllCBClick(false, "modelTree2", "checkAllSourceBCB")
                                     }, 0);
                                 } catch (e) {
                                     console.log(e);
@@ -1100,7 +1124,7 @@
                 </div>
                 <div class="complianceswitch">
                     <div class="compliance">
-                        Compliance 
+                        Compliance
                     </div>
                     <style>
                         .module1 .group2 .complianceswitch .toggle-Hm8P2 * {
@@ -1184,7 +1208,8 @@
                                 }
                             </style>
                     <div id="S0BCR4u">
-                        <div class="toggle-Hm8P2 component state2" data-initial-state="state2" data-name="toggleHm8P2S0BCR4u" id='complianceSourceBCB'>
+                        <div class="toggle-Hm8P2 component state2" data-initial-state="state2" data-name="toggleHm8P2S0BCR4u"
+                            id='complianceSourceBCB'>
                             <div class="bg2 " data-name="bg2FqZPS0BCR4u">
                             </div>
                             <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
@@ -1466,7 +1491,8 @@
                             }
                         </style>
                     <div id="lGv4xgM">
-                        <div class="toggle-2udj component state1" data-initial-state="state1" data-name="toggle2udjlGv4xgM" id="comparisonCB">
+                        <div class="toggle-2udj component state1" data-initial-state="state1" data-name="toggle2udjlGv4xgM"
+                            id="comparisonCB">
                             <div class="bg12 " data-name="bg12Z4CZlGv4xgM">
                             </div>
                             <div class="bg11 " data-name="bg11aa7ElGv4xgM">
@@ -1638,10 +1664,10 @@
                     </script>
                 </div>
                 <!-- <a href="/reviewModule.html" id="checkButton"> -->
-                    <div class="play" id="checkButton" onMouseOver="this.style.cursor='pointer'">
-                        <img src="/images/UIPackage/module1-bg 8@2x.png" class="bg2" />
-                        <img src="/images/UIPackage/module1-triangle 1@2x.png" class="triangle" />
-                    </div>
+                <div class="play" id="checkButton" onMouseOver="this.style.cursor='pointer'">
+                    <img src="/images/UIPackage/module1-bg 8@2x.png" class="bg2" />
+                    <img src="/images/UIPackage/module1-triangle 1@2x.png" class="triangle" />
+                </div>
                 <!-- </a> -->
             </div>
             <div class="infoleft">
@@ -1656,9 +1682,9 @@
                 <div class="units">
                     UNITS:
                 </div>
-                <select  class="mks" style="background-color: #000">
-                    <option >MKS</option>
-                    <option >IPS</option>
+                <select class="mks" style="background-color: #000">
+                    <option>MKS</option>
+                    <option>IPS</option>
                     <option>Custom</option>
                 </select>
                 <img src="/images/UIPackage/module1-with-open-menu-triangle 2@2x.png" style="left: 114px" class="triangle" />
@@ -1694,7 +1720,7 @@
                 <div class="viewdatagraphics">
                     View data graphics
                 </div>
-				<div class="openmenu" id="openmenu">
+                <div class="openmenu" id="openmenu">
                     <img src="/images/UIPackage/module2-with-open-menu-bg-llist.png" class="bgllist" />
                     <a href="createprojectwithopenmenu.html">
                         <div class="projects">
@@ -1825,7 +1851,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- The Modal -->
             <div id="projectselectiondialogModal" class="modal">
                 <!-- Modal content -->
@@ -1867,7 +1893,10 @@
                                     <label for="file-input" class="input-label">
                                         <img src="/images/UIPackage/output-data-dialog-bg 3@2x.png" class="bg1" />
                                         <img src="/images/UIPackage/load-data-dialog-icon@2x.png" class="icon" />
-                                        <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">
+                                        <!-- <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">  -->
+                                        <input id="file-input" name="dataSouresName[]" multiple="multiple" type="file"
+                                            onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
+                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm" />
                                     </label>
                                 </div>
                             </form>
@@ -1906,7 +1935,7 @@
     </script>
     <!-- Scripts -->
     <script>
-        function AnalyticsData(checkCaseName, sourceAName, sourceBName){
+        function AnalyticsData(checkCaseName, sourceAName, sourceBName) {
             this.CheckCaseName = checkCaseName;
             this.SourceAName = sourceAName;
             this.SourceBName = sourceBName;
@@ -1917,19 +1946,81 @@
         var checkCaseManager;
         var checkCaseFilesData;
 
+        var hiidenEntities = [];
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
+
+        // window.onclick = function (event) {
+        //     var i = document.getElementById("menu").style;
+        //     if (i.visibility === "visible") {
+        //         i.visibility = "hidden";
+        //         currentViewer = undefined;
+        //     }
+        // }
+
+        function hide() {
+            if (currentViewer) {
+
+                var results = currentViewer.selectionManager.getResults();
+                //currentViewer.model.setNodesVisibilities(boolMap);
+                var map = {};
+                for (var i = 0; i < results.length; i++) {
+                    var selectedItem = results[i];
+                    map[selectedItem._nodeId] = false;
+                    hiidenEntities.push(selectedItem._nodeId);
+                }
+
+                currentViewer.model.setNodesVisibilities(map);
+            }
+        }
+
+        function showAll() {
+            if (currentViewer && hiidenEntities.length > 0) {
+                var map = {};
+                for (var i = 0; i < hiidenEntities.length; i++) {
+                    var hiddenEntity = hiidenEntities[i];
+                    map[hiddenEntity] = true;
+                }
+
+                currentViewer.model.setNodesVisibilities(map);
+                hiidenEntities = [];
+            }
+        }
+
+        function startExplode() {
+            if (currentViewer) {
+                var explodeManager = currentViewer.getExplodeManager();
+                explodeManager.setMagnitude(2);
+                explodeManager.start().then(function () {
+
+                });
+            }
+        }
+
+        function stopExplode() {
+            if (currentViewer) {
+                var explodeManager = currentViewer.getExplodeManager();
+                if (explodeManager.getActive()) {
+                    explodeManager.stop();
+                }
+            }
+        }
+
         window.onload = function () {
-            
+
             var project = getCookie("checkprojectname");
-			var powerplantdiv  = document.getElementById("powerplant");
-			if (project != "" && powerplantdiv != null)
+            var powerplantdiv = document.getElementById("powerplant");
+            if (project != "" && powerplantdiv != null)
                 powerplant.innerHTML = project;
-				
-			var username = getCookie("username");
-			var pierrediv  = document.getElementById("pierre");
-			if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;	
-				
-                
+
+            var username = getCookie("username");
+            var pierrediv = document.getElementById("pierre");
+            if (username != "" && pierrediv != null)
+                pierrediv.innerHTML = username;
+
+
             //delete checkResultsArray from local storage
             delete (localStorage["CheckResultArray"]);
 
@@ -1965,7 +2056,7 @@
 
                 //var checkMethod;
                 for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];                  
+                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
                     var comparisonCB = document.getElementById('comparisonCB');
                     if (checkType.Name.toLowerCase() === "comparison" &&
                         xCheckStudioInterface1 &&
@@ -2037,7 +2128,7 @@
                     // OK clicked
                     postData();
                     // window.location = "/reviewModule.html";
-                    window.location = "/module2.html"; 
+                    window.location = "/module2.html";
                     return false;
                 }
                 else {
@@ -2091,38 +2182,38 @@
                 }
             });
 
-           
-            var checkCaseName ;
+
+            var checkCaseName;
             var sourceAFileName;
             var sourceBFileName;
             checkCaseName = checkCaseManager.CheckCase.Name;
-        //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
-        //    if(sourceEndPointUri !== undefined)
-        //    {
-        //     var tempArray = sourceEndPointUri.split("/");
-        //     var sourceAFileName = tempArray[tempArray.length-1];
-        //     sourceAFileName = sourceAFileName;
-        //    }
-            
-        //     sourceEndPointUri = xCheckStudioInterface2._firstViewer._params.endpointUri;
-        //     if(sourceEndPointUri !== undefined)
-        //    {
-        //     tempArray = sourceEndPointUri.split("/");
-        //     sourceBFileName = tempArray[tempArray.length-1];
-        //     sourceBFileName = sourceBFileName;
-        //    }
+            //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
+            //    if(sourceEndPointUri !== undefined)
+            //    {
+            //     var tempArray = sourceEndPointUri.split("/");
+            //     var sourceAFileName = tempArray[tempArray.length-1];
+            //     sourceAFileName = sourceAFileName;
+            //    }
 
-           var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName);
+            //     sourceEndPointUri = xCheckStudioInterface2._firstViewer._params.endpointUri;
+            //     if(sourceEndPointUri !== undefined)
+            //    {
+            //     tempArray = sourceEndPointUri.split("/");
+            //     sourceBFileName = tempArray[tempArray.length-1];
+            //     sourceBFileName = sourceBFileName;
+            //    }
 
-                $.ajax({
-                    url: 'postData/analyticsDetailsDataWriter.php',
-                    type: "POST",
-                    async: false,
-                    data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
-                    success: function (data) {
-                        // alert("success");
-                    }
-                });
+            var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName);
+
+            $.ajax({
+                url: 'postData/analyticsDetailsDataWriter.php',
+                type: "POST",
+                async: false,
+                data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+                success: function (data) {
+                    // alert("success");
+                }
+            });
 
             // post comparison data
             if (comparisonCheckManager) {
@@ -2165,10 +2256,11 @@
                     }
                 });
             }
-            
+
             // post source A viewer data
             if (xCheckStudioInterface1) {
-                if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
+                if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -2230,7 +2322,8 @@
             }
 
             if (xCheckStudioInterface2) {
-                if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
+                if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
+                    xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
@@ -2413,6 +2506,12 @@
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
+
+                var i = document.getElementById("menu").style;
+                if (i.visibility === "visible") {
+                    i.visibility = "hidden";
+                    currentViewer = undefined;
+                }
             }
         }
 
@@ -2438,9 +2537,18 @@
                 return;
             }
 
-            var file = event.target.files[0];
-            let fileName = file.name;
-            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+
+            var fileName = xCheckStudio.UploadManager.getSourceName(event.target.files);
+            if (fileName === undefined) {
+                alert("Valid data source not found");
+                return;
+            }
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
+            if (!xCheckStudio.UploadManager.validateSource(fileExtension, event.target.files)) {
+                alert("valid data source not found");
+                return;
+            }
+
             var tabHeader;
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
@@ -2449,11 +2557,13 @@
                 tabHeader = document.getElementById("dataSource2ModelBrowserTab");
             }
             tabHeader.innerText = fileName;
+
             //*******
             localStorage.setItem(dataSource, fileName);
             //*******
 
-            if (fileExtension.toLowerCase() === "xml" || fileExtension.toLowerCase() === "rvm") {
+            if (fileExtension.toLowerCase() === "xml" ||
+                fileExtension.toLowerCase() === "rvm") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
@@ -2461,7 +2571,7 @@
                 xhr.open("POST", "uploads/uploadfiles.php", true);
                 xhr.onload = function (event) {
                     alert("The server says: " + event.target.response);
-                    if (loadModel(dataSource, viewerContainer, modelTreeContainer)) {
+                    if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
                         document.getElementById(dataSource).disabled = true;
                     }
                     else {
@@ -2483,13 +2593,23 @@
             }
         }
 
-        function loadModel(dataSource, viewerContainer, modelTreeContainer) {
+        function loadModel(dataSource,
+            fileName,
+            viewerContainer,
+            modelTreeContainer) {
 
-            let selectedFiles = document.getElementById(dataSource).files;
-            let selectedFilesCount = selectedFiles.length;
 
-            let fileName = selectedFiles[0].name;
-            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            if (!checkCaseManager ||
+                !checkCaseManager.CheckCase) {
+                alert("CheckCaseManager not found.");
+                return false;
+            }
+
+            // let selectedFiles = document.getElementById(dataSource).files;
+            // let selectedFilesCount = selectedFiles.length;
+
+            // let fileName = selectedFiles[0].name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
             var sourceAType;
             var sourceBType;
@@ -2632,15 +2752,26 @@
                     var checkedComponent;
 
                     if (xCheckStudioInterface1) {
-                        if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'MainComponentClass': row.cells[2].textContent.trim(),
-                                'SubComponentClass': row.cells[3].textContent.trim(),
-                                'Source': row.cells[4].textContent.trim(),
-                                'Destination': row.cells[5].textContent.trim(),
-                                'Owner': row.cells[6].textContent.trim()
-                            };
+                        if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") {
+
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType);
+                            var checkedComponent = {};
+                            checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
+                            checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
+                            checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+
+                            // checkedComponent = {
+                            //     'Name': row.cells[1].textContent.trim(),
+                            //     'MainComponentClass': row.cells[2].textContent.trim(),
+                            //     'SubComponentClass': row.cells[3].textContent.trim(),
+                            //     'Source': row.cells[4].textContent.trim(),
+                            //     'Destination': row.cells[5].textContent.trim(),
+                            //     'Owner': row.cells[6].textContent.trim()
+                            // };
 
                             if (checkBoxId === "checkAllSourceACB" &&
                                 xCheckStudioInterface1 &&
@@ -2665,15 +2796,26 @@
 
                     }
                     if (xCheckStudioInterface2) {
-                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'MainComponentClass': row.cells[2].textContent.trim(),
-                                'SubComponentClass': row.cells[3].textContent.trim(),
-                                'Source': row.cells[4].textContent.trim(),
-                                'Destination': row.cells[5].textContent.trim(),
-                                'Owner': row.cells[6].textContent.trim()
-                            };
+                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml"||
+                            xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
+                           
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType);
+                            var checkedComponent = {};
+                            checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
+                            checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
+                            checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+
+                            // checkedComponent = {
+                            //     'Name': row.cells[1].textContent.trim(),
+                            //     'MainComponentClass': row.cells[2].textContent.trim(),
+                            //     'SubComponentClass': row.cells[3].textContent.trim(),
+                            //     'Source': row.cells[4].textContent.trim(),
+                            //     'Destination': row.cells[5].textContent.trim(),
+                            //     'Owner': row.cells[6].textContent.trim()
+                            // };
 
                             if (checkBoxId === "checkAllSourceBCB" &&
                                 xCheckStudioInterface2 &&
@@ -2929,7 +3071,7 @@
             }
         }
 
-        
+
         function returnViewer(viewerdata) {
             var container = document.getElementById("dataSourceViewer");
             viewerContainer = container.getElementsByClassName("bg1");
@@ -2950,45 +3092,45 @@
             if (elem.style.display === "block") {
                 // if (elem.requestFullscreen) 
                 // {
-                    var modal = document.getElementById('maximizeViewerContainer');
-                    // When the user clicks the button, open the modal 
-                    modal.style.display = "block";
-                    var viewerdata = document.getElementById("viewerContainer1")
-                    var modalViewer = document.getElementById("maximizeViewerContainer-content");
-                    modalViewer.appendChild(viewerdata);
-                    var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
-                    modalViewerContainer.style.width = "100%";
-                    modalViewerContainer.style.height = "100%";
-                    modalViewerContainer.style.margin = "auto";
-                    // When the user clicks anywhere outside of the modal, close it
-                    window.onclick = function (event) {
-                        if (event.target == modal) {
-                            returnViewer(viewerdata);
-                            modal.style.display = "none";
-                        }
+                var modal = document.getElementById('maximizeViewerContainer');
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                var viewerdata = document.getElementById("viewerContainer1")
+                var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                modalViewer.appendChild(viewerdata);
+                var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
+                modalViewerContainer.style.width = "100%";
+                modalViewerContainer.style.height = "100%";
+                modalViewerContainer.style.margin = "auto";
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        returnViewer(viewerdata);
+                        modal.style.display = "none";
                     }
+                }
             }
 
             var elem2 = document.getElementById("viewerContainer2");
 
             if (elem2.style.display === "block") {
                 var modal = document.getElementById('maximizeViewerContainer');
-                    // When the user clicks the button, open the modal 
-                    modal.style.display = "block";
-                    var viewerdata = document.getElementById("viewerContainer2")
-                    var modalViewer = document.getElementById("maximizeViewerContainer-content");
-                    modalViewer.appendChild(viewerdata);
-                    var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
-                    modalViewerContainer.style.width = "100%";
-                    modalViewerContainer.style.height = "100%";
-                    modalViewerContainer.style.margin = "auto";
-                    // When the user clicks anywhere outside of the modal, close it
-                    window.onclick = function (event) {
-                        if (event.target == modal) {
-                            returnViewer(viewerdata);
-                            modal.style.display = "none";
-                        }
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                var viewerdata = document.getElementById("viewerContainer2")
+                var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                modalViewer.appendChild(viewerdata);
+                var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
+                modalViewerContainer.style.width = "100%";
+                modalViewerContainer.style.height = "100%";
+                modalViewerContainer.style.margin = "auto";
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        returnViewer(viewerdata);
+                        modal.style.display = "none";
                     }
+                }
             }
         }
         function OnExitFullScreen() {
@@ -3012,30 +3154,30 @@
                 document.getElementById("modelTree2").style.display = "none";
                 document.getElementById("viewerContainer2").style.display = "none";
                 document.getElementById("SourceBComponentCount").style.display = "none"
-                document.getElementById("tab2").style.backgroundColor =  "lightgray";
-                document.getElementById("tab2Viewer").style.backgroundColor =  "lightgray";
+                document.getElementById("tab2").style.backgroundColor = "lightgray";
+                document.getElementById("tab2Viewer").style.backgroundColor = "lightgray";
 
                 document.getElementById("dataSource1").style.display = "block";
                 document.getElementById("modelTree1").style.display = "block";
                 document.getElementById("viewerContainer1").style.display = "block";
                 document.getElementById("SourceAComponentCount").style.display = "block"
-                document.getElementById("tab1").style.backgroundColor =  "#F3F0F4";
-                document.getElementById("tab1Viewer").style.backgroundColor =  "#F3F0F4";
+                document.getElementById("tab1").style.backgroundColor = "#F3F0F4";
+                document.getElementById("tab1Viewer").style.backgroundColor = "#F3F0F4";
             }
-            else if (tabName === "tab2" ||  tabName === "tab2Viewer") {
+            else if (tabName === "tab2" || tabName === "tab2Viewer") {
                 document.getElementById("dataSource1").style.display = "none";
                 document.getElementById("modelTree1").style.display = "none";
                 document.getElementById("viewerContainer1").style.display = "none";
                 document.getElementById("SourceAComponentCount").style.display = "none"
-                document.getElementById("tab1").style.backgroundColor =  "lightgray";
-                document.getElementById("tab1Viewer").style.backgroundColor =  "lightgray";
+                document.getElementById("tab1").style.backgroundColor = "lightgray";
+                document.getElementById("tab1Viewer").style.backgroundColor = "lightgray";
 
                 document.getElementById("dataSource2").style.display = "block";
                 document.getElementById("modelTree2").style.display = "block";
                 document.getElementById("viewerContainer2").style.display = "block";
                 document.getElementById("SourceBComponentCount").style.display = "block"
-                document.getElementById("tab2").style.backgroundColor =  "#F3F0F4";
-                document.getElementById("tab2Viewer").style.backgroundColor =  "#F3F0F4";
+                document.getElementById("tab2").style.backgroundColor = "#F3F0F4";
+                document.getElementById("tab2Viewer").style.backgroundColor = "#F3F0F4";
             }
 
         }
@@ -3059,44 +3201,42 @@
             // // alert("Check Clicked");
         }
     </script>
-	<script>
-		function getCookie(cname) 
-		{
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-			  for(var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-				  c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-				  return c.substring(name.length, c.length);
-				}
-			}
-			return "";
-		}
-		// window.onload = function() {
-		// 	var project = getCookie("checkprojectname");
-		// 	var powerplantdiv  = document.getElementById("powerplant");
-		// 	if (project != "" && powerplantdiv != null)
-		// 		powerplant.innerHTML = project;
-		// };
-		function OnShowHideMenu()
-		{
-			var x = document.getElementById("openmenu");
-			if (x.style.display === "none") {
-			x.style.display = "block";
-			} else {
-				x.style.display = "none";
-			}
-			
+    <script>
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
         }
-        
+        // window.onload = function() {
+        // 	var project = getCookie("checkprojectname");
+        // 	var powerplantdiv  = document.getElementById("powerplant");
+        // 	if (project != "" && powerplantdiv != null)
+        // 		powerplant.innerHTML = project;
+        // };
+        function OnShowHideMenu() {
+            var x = document.getElementById("openmenu");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+
+        }
+
         function clearData() {
             window.location.reload();
         }
-	</script>
+    </script>
     <!-- End of Scripts -->
 </body>
 

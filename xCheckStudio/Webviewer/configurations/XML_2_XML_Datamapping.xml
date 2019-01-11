@@ -24,7 +24,7 @@
  
          <Check type="Comparison" sourceAType="XML" sourceBType="XML">
 
-  		    <ComponentGroup name="Drawing">
+  		    <ComponentGroup sourceAGroupName="Drawing" sourceBGroupName="Drawing">
 				<!--<Component id="905676">
 					   <Property sourceAName="Drawing_Number" sourceBName="Drawing_Number1"  severity="Error"/>
 						<Property sourceAName="Revision" sourceBName="Revision1" severity="Warning"/>
@@ -47,9 +47,9 @@
 				</Component> -->
 		   </ComponentGroup>
 
-		   <ComponentGroup name="InstrumentComponent" >
+		   <ComponentGroup sourceAGroupName="InstrumentComponent"  sourceBGroupName="InstrumentComponent">
 			  
-			  <ComponentClass name="InstrumentIndicator">
+			  <ComponentClass sourceAComponentClass="InstrumentIndicator"  sourceBComponentClass="InstrumentIndicator">
 			        <Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
 			 		<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -107,9 +107,9 @@
 			   
 		   </ComponentGroup>
 		   
-		   <ComponentGroup name="PipingComponent" >
+		   <ComponentGroup sourceAGroupName="PipingComponent" sourceBGroupName="PipingComponent">
 		      
-			  <ComponentClass name="BallValve">
+			  <ComponentClass sourceAComponentClass="BallValve"  sourceBComponentClass="BallValve">
 			        <Property sourceAName="BallValve" sourceBName="BallValve"  severity="Error"/>  
 					<Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
 					<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
@@ -143,9 +143,9 @@
 			  
 		   </ComponentGroup>
 		   
-		   <ComponentGroup name="ProcessInstrument" >
+		   <ComponentGroup sourceAGroupName="ProcessInstrument" sourceBGroupName="ProcessInstrument" >
 		      
-			  <ComponentClass name="InstrumentIndicator">
+			  <ComponentClass sourceAComponentClass="InstrumentIndicator"  sourceBComponentClass="InstrumentIndicator">
 			        <Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
 			 		<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -205,10 +205,10 @@
 		   </ComponentGroup>
 		   
 		   
-		   <ComponentGroup name="PipingNetworkSystem" >
+		   <ComponentGroup sourceAGroupName="PipingNetworkSystem"  sourceBGroupName="PipingNetworkSystem">
 		   
 		   
-		   <ComponentClass name="PipingSystem">
+		   <ComponentClass sourceAComponentClass="PipingSystem"  sourceBComponentClass="PipingSystem">
 				 <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
 				 <Property sourceAName="REMARKS" sourceBName="REMARKS"  severity="Warning"/>  
 				 <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Warning"/>
@@ -238,9 +238,9 @@
 			
 		   </ComponentGroup>
 		   
-			 <ComponentGroup name="PipingNetworkSegment">
+			 <ComponentGroup sourceAGroupName="PipingNetworkSegment" sourceBGroupName="PipingNetworkSegment">
 				
-				<ComponentClass name="PipeLine">
+				<ComponentClass sourceAComponentClass="PipeLine"  sourceBComponentClass="PipeLine">
 					 <Property sourceAName="BranchId" sourceBName="BranchId"  severity="Warning"/>  
 					 <Property sourceAName="Source" sourceBName="Source"  severity="Warning"/>  
 					 <Property sourceAName="Destination" sourceBName="Destination"  severity="Warning"/>  
@@ -284,9 +284,9 @@
 				</ComponentClass>       
 			</ComponentGroup>
 			
-			 <ComponentGroup name="Equipment">
+			 <ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="Equipment">
 				
-				<ComponentClass name="Vessel/Column">	
+				<ComponentClass sourceAComponentClass="Vessel/Column"  sourceBComponentClass="Vessel/Column">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -328,7 +328,7 @@
 					   <Property sourceAName="Trim_1" sourceBName="Trim_1"  severity="Error"/>			   
 				</ComponentClass>
 				
-				<ComponentClass name="BlindFlange">	
+				<ComponentClass sourceAComponentClass="BlindFlange"  sourceBComponentClass="BlindFlange">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -359,7 +359,7 @@
 						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>					
 
 				</ComponentClass>
-				<ComponentClass name="Condenser/Cooler">
+				<ComponentClass sourceAComponentClass="Condenser/Cooler"  sourceBComponentClass="Condenser/Cooler">
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -395,7 +395,7 @@
 					   <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 					   
 				</ComponentClass>
-				<ComponentClass name="Motor">	
+				<ComponentClass sourceAComponentClass="Motor"  sourceBComponentClass="Motor">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -429,7 +429,7 @@
 					   <Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
 					   <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 				</ComponentClass>
-				<ComponentClass name="Vessel/Knock-OutDrum">	
+				<ComponentClass sourceAComponentClass="Vessel/Knock-OutDrum"  sourceBComponentClass="Vessel/Knock-OutDrum">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -467,7 +467,7 @@
 					   <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 					   <Property sourceAName="Trim_1" sourceBName="Trim_1"  severity="Warning"/>
 				</ComponentClass>
-				<ComponentClass name="EndCap">	
+				<ComponentClass sourceAComponentClass="EndCap"  sourceBComponentClass="EndCap">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -497,7 +497,7 @@
 						<Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
 						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 				</ComponentClass>
-				<ComponentClass name="Pump">	
+				<ComponentClass sourceAComponentClass="Pump"  sourceBComponentClass="Pump">	
 					 <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -530,7 +530,7 @@
 						<Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
 						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 				</ComponentClass>
-				<ComponentClass name="Vessel/Re-Boiler">	
+				<ComponentClass sourceAComponentClass="Vessel/Re-Boiler"  sourceBComponentClass="Vessel/Re-Boiler">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -562,7 +562,7 @@
 					   <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 					   <Property sourceAName="Trim_1" sourceBName="Trim_1"  severity="Error"/>
 				</ComponentClass>
-				<ComponentClass name="Strainer">
+				<ComponentClass sourceAComponentClass="Strainer"  sourceBComponentClass="Strainer">
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -596,7 +596,7 @@
 					   <Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
 					   <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 				</ComponentClass>
-				<ComponentClass name="Plug">
+				<ComponentClass sourceAComponentClass="Plug"  sourceBComponentClass="Plug">
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -624,7 +624,7 @@
 						<Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
 						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>		
 				</ComponentClass>
-				<ComponentClass name="Vessel/Dryer">	
+				<ComponentClass sourceAComponentClass="Vessel/Dryer"  sourceBComponentClass="Vessel/Dryer">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -665,9 +665,9 @@
 				
 			</ComponentGroup>
 			
-			 <ComponentGroup name="PipeConnectorSymbol">
+			 <ComponentGroup sourceAGroupName="PipeConnectorSymbol" sourceBGroupName="PipeConnectorSymbol">
 				
-				<ComponentClass name="PipeConnectionFlagInbound">
+				<ComponentClass sourceAComponentClass="PipeConnectionFlagInbound"  sourceBComponentClass="PipeConnectionFlagInbound">
 				
 					<Property sourceAName="Sheet_Number" sourceBName="Sheet_Number"  severity="Warning"/>			
 					<Property sourceAName="DS_OPCLABELS_Area" sourceBName="DS_OPCLABELS_Area"  severity="Error"/>
@@ -698,7 +698,7 @@
 
 				</ComponentClass>
 				
-				<ComponentClass name="PipeConnectionFlagOutbound">
+				<ComponentClass sourceAComponentClass="PipeConnectionFlagOutbound"  sourceBComponentClass="PipeConnectionFlagOutbound">
 					 <Property sourceAName="Sheet_Number" sourceBName="Sheet_Number"  severity="Warning"/>			
 					<Property sourceAName="DS_OPCLABELS_Area" sourceBName="DS_OPCLABELS_Area"  severity="Error"/>
 					<Property sourceAName="DS_OPCLABELS_Area_Description" sourceBName="DS_OPCLABELS_Area_Description"  severity="Error"/>

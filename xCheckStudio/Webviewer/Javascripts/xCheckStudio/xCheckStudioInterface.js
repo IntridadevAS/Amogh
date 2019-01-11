@@ -1,4 +1,4 @@
-
+var currentViewer;
 var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
@@ -47,7 +47,7 @@ var xCheckStudio;
             _this._firstViewer = viewer;
 
             // construct model tree
-            _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer);
+            _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, this.SourceType);
 
             // register viewer evenets
             _this._bindEvents(viewer, isFirstViewer);
@@ -71,7 +71,9 @@ var xCheckStudio;
                 firstModelLoaded: function () {
                     viewer.view.fitWorld();
                     _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
-                    _this.readProperties(viewer.model.getAbsoluteRootNode(), 0);
+
+                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
+                    _this.readProperties(viewer.model.getAbsoluteRootNode(), identifierProperties);
 
                 },
                 selectionArray: function (selections) {
@@ -81,16 +83,30 @@ var xCheckStudio;
                         var sel = selection.getSelection();
 
                         if (_this._selectedNodeId !== sel.getNodeId()) {
-                            _this._onSelection(selection);
+                            _this._onSelection(selection);                            
                         }
                     }
                 },
 
+                contextMenu: function (position) {
+                    //alert("contextMenu: " + position.x + ", " + position.y);                
+                    // _this.menu(position.x, position.y);
+                    currentViewer = viewer;
+                    _this.menu(event.clientX, event.clientY);                   
+                }
             });
 
             // viewer operators            
             //_this.registerViewerOperators(isFirstViewer);
         };
+
+        xCheckStudioInterface.prototype.menu = function (x, y) {
+            var i = document.getElementById("menu").style;
+            i.top = y + "px";
+            i.left = x + "px";
+            i.visibility = "visible";
+            i.opacity = "1";
+        }
 
         xCheckStudioInterface.prototype.registerViewerOperators = function (isFirstViewer) {
             var _this = this;
@@ -155,8 +171,13 @@ var xCheckStudio;
         xCheckStudioInterface.prototype._onSelection = function (selectionEvent) {
             var selection = selectionEvent.getSelection();
             if (selection.isNodeSelection()) {
+                if (selection.getNodeId() === this._selectedNodeId) {
+                    return;
+                }
+
                 this._selectedNodeId = selection.getNodeId();
                 var model = this._firstViewer.model;
+
                 if (model.isNodeLoaded(this._selectedNodeId)) {
                     // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
                     if (model.getNodeType(this._selectedNodeId) === Communicator.NodeType.BodyInstance) {
@@ -205,7 +226,7 @@ var xCheckStudio;
             }
         }
 
-        xCheckStudioInterface.prototype.readProperties = function (nodeId) {
+        xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties) {
             var _this = this;
             if (nodeId !== null &&
                 (_this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
@@ -218,21 +239,22 @@ var xCheckStudio;
                     _this._firstViewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0) {
-                            var mainComponentClass = nodeProperties["Intrida Data/MainComponentClass"];
-                            var name = nodeProperties["Intrida Data/Name"];
-                            var subComponentClass = nodeProperties["Intrida Data/SubComponentClass"];
+
+                            var mainComponentClass = nodeProperties[identifierProperties.mainCategory];
+                            var name = nodeProperties[identifierProperties.name];
+                            var subComponentClass = nodeProperties[identifierProperties.subClass];
 
                             // check if source, destination and ownerid properties exists to uniquely identify
                             // PipingNetworkSegment
                             var source;
                             var destination;
                             var ownerId;
-                            if ("Intrida Data/Source" in nodeProperties &&
-                                "Intrida Data/Destination" in nodeProperties &&
-                                "Intrida Data/OwnerId" in nodeProperties) {
-                                source = nodeProperties["Intrida Data/Source"];
-                                destination = nodeProperties["Intrida Data/Destination"];
-                                ownerId = nodeProperties["Intrida Data/OwnerId"];
+                            if (xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty in nodeProperties &&
+                                xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty in nodeProperties &&
+                                xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty in nodeProperties) {
+                                source = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty];
+                                destination = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty];
+                                ownerId = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty];
                             }
 
                             // create generic properties object
@@ -286,7 +308,7 @@ var xCheckStudio;
                                     (_this._firstViewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
-                                    _this.readProperties(child)
+                                    _this.readProperties(child, identifierProperties)
                                 }
                             }
                         }
@@ -295,12 +317,20 @@ var xCheckStudio;
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
                         if (_this.nodeIdArray.length == 0) {
-                            // _this._modelTree.addModelBrowserComponent(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+
+
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
                             _this._modelTree.addClassesToModelBrowser();
                             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
                                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
                             }
+
+                            // _this.asyncLoop(_this._modelTree.NodeGroups, function () {
+                            //     //do after loop  
+                            //     alert('loop executed');
+                            // });
+
+
 
                         }
                     });
@@ -309,6 +339,63 @@ var xCheckStudio;
 
         };
 
+
+        // xCheckStudioInterface.prototype.asyncLoop = function (arr, callback) {
+        //     var _this = this;
+        //     (function loop(i) {
+        //         //do stuff here  
+        //         _this._modelTree.CreateGroup(arr[i]);
+
+        //         if (i < arr.length) {                      //the condition
+        //             setTimeout(function () { loop(++i) }, 0.0000005); //rerun when condition is true
+        //         }
+        //         else {
+        //             callback();                            //callback when the loop ends
+        //         }
+        //     }(0));                                         //start with 0
+        // }
+
+
+        // //var backGroundWorker;
+        // xCheckStudioInterface.prototype.createModelBrowser = function () {
+        //     var _this = this;
+        //     var backGroundWorker = new Worker('Javascripts/xCheckStudio/BackgroundWorker.js');
+
+        //     var modelTree = JSON.parse(JSON.stringify(this._modelTree));
+        //     var viewer = JSON.parse(JSON.stringify(this._firstViewer));
+        //     backGroundWorker.postMessage({ 'Tree': modelTree, 'Viewer': viewer });
+
+        //     // if (typeof (Worker) !== "undefined") {
+        //     //     var backGroundWorker = new Worker('BackgroundWorker.js');
+
+        //     //     if (typeof (backGroundWorker) == "undefined") {
+        //     //         backGroundWorker = new Worker(function () {
+        //     //             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+        //     //             _this._modelTree.addClassesToModelBrowser();
+        //     //             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
+        //     //                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
+        //     //             }
+        //     //         });
+        //     //     }
+        //     //     backGroundWorker.onmessage = function (event) {
+        //     //         alert(event.data);
+        //     //     };
+        //     // }
+        //     // else {
+        //     //     alert("Sorry, your browser does not support Web Workers...");
+        //     // }
+
+
+        //     // return new Promise(function (resolve, reject) {
+        //     //     _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
+        //     //     _this._modelTree.addClassesToModelBrowser();
+        //     //     for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
+        //     //         _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
+        //     //     }
+
+        //     //     resolve(true);
+        //     // });
+        // };
 
         return xCheckStudioInterface;
     }());

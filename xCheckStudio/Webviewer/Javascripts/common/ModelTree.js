@@ -12,10 +12,11 @@ var xCheckStudio;
     var Ui;
     (function (Ui) {
         var ModelTree = /** @class */ (function () {
-            function ModelTree(elementId, viewer) {
+            function ModelTree(elementId, viewer, sourceType) {
                 this._size = new Communicator.Point2(556, 300);
                 this._elementId = elementId;
                 this._viewer = viewer;
+                this.SourceType = sourceType;
 
                 this.NodeIdVsCellClassList = {};
                 this.RowIndexVsRowClassList = {};
@@ -256,47 +257,63 @@ var xCheckStudio;
 
 
             ModelTree.prototype.selectedCompoentExists = function (componentRow) {
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-                        component['SubComponentClass'] === componentRow.cells[3].textContent.trim() &&
-                        component['Source'] == componentRow.cells[4].textContent.trim() &&
-                        component['Destination'] === componentRow.cells[5].textContent.trim() &&
-                        component['Owner'] === componentRow.cells[6].textContent.trim()) {
+                    if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
+                        component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
+                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
                         return true;
                     }
                 }
 
                 return false;
             }
-            
-            ModelTree.prototype.isComponentSelected = function(componentProperties)
-            {
+
+            ModelTree.prototype.isComponentSelected = function (componentProperties) {
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component['Name'] ===componentProperties.Name &&
-                        component['MainComponentClass'] === componentProperties.MainComponentClass &&
-                        component['SubComponentClass'] === componentProperties.SubComponentClass &&                        
-                        (componentProperties.Source === undefined  || component['Source'] == componentProperties.Source) &&
-                        (componentProperties.Destination === undefined  || component['Destination'] == componentProperties.Destination) &&
-                        (componentProperties.OwnerId === undefined  || component['Owner'] == componentProperties.OwnerId))
-                        return true;
-                    }              
+                    if (component[identifierProperties.name] === componentProperties.Name &&
+                        component[identifierProperties.mainCategory] === componentProperties.MainComponentClass &&
+                        component[identifierProperties.subClass] === componentProperties.SubComponentClass) {
+
+                        if (this.SourceType.toLowerCase() === "xml") {
+                            // if source is xml check for addition identifying properties
+                            if ((componentProperties.Source === undefined ||
+                                component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentProperties.Source) &&
+                                (componentProperties.Destination === undefined ||
+                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentProperties.Destination) &&
+                                (componentProperties.OwnerId === undefined ||
+                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId)) {
+                                return true;
+                            }
+                        }
+                        else {
+                            return true;
+                        }
+
+                    }
+                }
 
                 return false;
             }
 
             ModelTree.prototype.removeFromselectedCompoents = function (componentRow) {
+
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component['Name']  === componentRow.cells[1].textContent.trim() &&
-                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-                        component['SubComponentClass'] === componentRow.cells[3].textContent.trim() &&
-                        component['Source'] === componentRow.cells[4].textContent.trim() &&
-                        component['Destination'] === componentRow.cells[5].textContent.trim() &&
-                        component['Owner'] === componentRow.cells[6].textContent.trim()) {
-
+                    if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
+                        component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
+                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
                         this.selectedCompoents.splice(i, 1);
                         break;
                     }
@@ -320,14 +337,14 @@ var xCheckStudio;
                 if (currentCheckBox.checked &&
                     !this.selectedCompoentExists(currentRow)) {
 
-                    var checkedComponent = {
-                        'Name': currentRow.cells[modelBrowserComponentColumn].textContent.trim(),
-                        'MainComponentClass': currentRow.cells[modelBrowserMainClassColumn].textContent.trim(),
-                        'SubComponentClass': currentRow.cells[modelBrowserSubClassColumn].textContent.trim(),
-                        'Source': currentRow.cells[modelBrowserSourceColumn].textContent.trim(),
-                        'Destination': currentRow.cells[modelBrowserDestinationColumn].textContent.trim(),
-                        'Owner': currentRow.cells[modelBrowserOwnerColumn].textContent.trim()
-                    };
+                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                    var checkedComponent = {};
+                    checkedComponent[identifierProperties.name] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
+                    checkedComponent[identifierProperties.mainCategory] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
+                    checkedComponent[identifierProperties.subClass] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
+                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = currentRow.cells[modelBrowserSourceColumn].textContent.trim();
+                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = currentRow.cells[modelBrowserDestinationColumn].textContent.trim();
+                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = currentRow.cells[modelBrowserOwnerColumn].textContent.trim();
 
                     this.selectedCompoents.push(checkedComponent);
                 }
@@ -417,6 +434,18 @@ var xCheckStudio;
 
             ModelTree.prototype.BrowserItemClick = function (nodeId, thisRow) {
                 var nodeID = parseInt(nodeId)
+                if (isNaN(nodeID)) {
+                    return;
+                }
+
+                // keep track of graphically selected node
+                if (this._viewer._params.containerId === "viewerContainer1") {
+                    xCheckStudioInterface1._selectedNodeId = nodeID;
+                }
+                else if (this._viewer._params.containerId === "viewerContainer2") {
+                    xCheckStudioInterface2._selectedNodeId = nodeID;
+                }
+
                 this._viewer.selectPart(nodeID);
                 this._viewer.view.fitNodes([nodeID]);
             };
@@ -452,8 +481,8 @@ var xCheckStudio;
 
             ModelTree.prototype.addModelBrowser = function (nodeId, styleList) {
                 this.addModelBrowserComponent(nodeId, styleList);
-                var elementId = "#"+this._elementId;
-                this.LoadModelBrowserTable(this, this.modelTreeColumnHeaders, this.modelTreeRowData, elementId);
+
+                this.loadModelBrowserTable();
 
                 var modelBrowserData = document.getElementById(this._elementId);
                 var modelBrowserDataTable = modelBrowserData.children[1];
@@ -505,6 +534,7 @@ var xCheckStudio;
                         var componentName = model.getNodeName(nodeId);
 
                         var componentStyleClass = this.getComponentstyleClass(componentName);
+                        componentStyleClass = componentStyleClass.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
 
                         this.addComponentRow(nodeId, styleList, componentStyleClass);
 
@@ -518,6 +548,7 @@ var xCheckStudio;
                             else {
                                 collapsibleCellStyle = componentStyleClass;
                             }
+                            collapsibleCellStyle = collapsibleCellStyle.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
                             this.addModelBrowserComponent(child, collapsibleCellStyle);
                         }
                     }
@@ -526,8 +557,13 @@ var xCheckStudio;
 
             };
 
-            ModelTree.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData, viewerContainer) {
-        
+            ModelTree.prototype.loadModelBrowserTable = function () {
+
+                var _this = this;
+                var viewerContainer = "#" + _this._elementId;
+                var columnHeaders = _this.modelTreeColumnHeaders;
+                var tableData = _this.modelTreeRowData;
+
                 $(function () {
                     var db = {
                         loadData: filter => {
@@ -723,8 +759,11 @@ var xCheckStudio;
             //https://jsfiddle.net/y4Mdy/1372/
             ModelTree.prototype.CreateGroup = function (group_name) {
                 var _this = this;
+
+                var imageClass = group_name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+
                 // Create Button(Image)
-                $('td.' + group_name).prepend("<img class='" + group_name + " button_closed'> ");
+                $('td.' + group_name).prepend("<img class='" + imageClass + " button_closed'> ");
                 // Add Padding to Data
                 $('tr.' + group_name).each(function () {
                     //var first_td = $(this).children('td').first();
@@ -736,7 +775,7 @@ var xCheckStudio;
                 this.RestoreGroup(group_name);
 
                 // Tie toggle function to the button
-                $('img.' + group_name).click(function () {
+                $('img.' + imageClass).click(function () {
                     _this.ToggleGroup(group_name);
                 });
             }

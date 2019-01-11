@@ -1,0 +1,936 @@
+
+<!--
+       Intrida Compliance check rules keywords.
+       
+       ""
+       Must have value
+       Should start with-somevalue
+	   Should Not Start With-somevalue
+       Should be number
+	   Should not be number
+	   Should be text
+	   Should not be text
+       Equal to-somevalue
+	   Not Equal to-somevalue
+       Should end with-somevalue
+	   Should Not End With-somevalue
+	   Should contain-somevalue
+	   Should not contain-somevalue
+	   
+	   Note: These keywords are not case sensitive.
+-->
+
+ <CheckCase name="RVM_2_RVM">
+ 
+        <Check type="Comparison" sourceAType="RVM" sourceBType="RVM">
+
+
+		   <ComponentGroup sourceAGroupName="SITE"  sourceBGroupName="SITE">
+			  
+			  <ComponentClass sourceAComponentClass="SITE" sourceBComponentClass="SITE">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="Area" sourceBName="Area"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					<Property sourceAName="Rlstored" sourceBName="Rlstored"  severity="Error"/>
+					<Property sourceAName=":UTFTEST" sourceBName=":UTFTEST"  severity="Error"/>
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+			        <Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>
+			        <Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>			    
+					<Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>					
+			   </ComponentClass>
+			   
+		   </ComponentGroup>	
+		   
+		    <ComponentGroup sourceAGroupName="ZONE" sourceBGroupName="ZONE">
+			  
+				<ComponentClass sourceAComponentClass="ZONE" sourceBComponentClass="ZONE">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="Area" sourceBName="Area"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					<Property sourceAName="DUnion" sourceBName="DUnion"  severity="Error"/>
+					<Property sourceAName="Rlstored" sourceBName="Rlstored"  severity="Error"/>					
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+			        <Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>
+			        <Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>			    
+					<Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>					
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		   <ComponentGroup sourceAGroupName="PIPE"  sourceBGroupName="PIPE">
+			  
+				<ComponentClass sourceAComponentClass="PIPE" sourceBComponentClass="PIPE">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Bore" sourceBName="Bore"  severity="Error"/>
+					<Property sourceAName="Temperature" sourceBName="Temperature"  severity="Error"/>
+					<Property sourceAName="Pressure" sourceBName="Pressure"  severity="Error"/>
+					<Property sourceAName="Pspec" sourceBName="Pspec"  severity="Error"/>
+					<Property sourceAName="Ccentre" sourceBName="Ccentre"  severity="Error"/>
+					<Property sourceAName="Cclass" sourceBName="Cclass"  severity="Error"/>
+					<Property sourceAName="Erection" sourceBName="Erection"  severity="Error"/>					
+					<Property sourceAName="Rev" sourceBName="Rev"  severity="Error"/>
+					<Property sourceAName="Safclass" sourceBName="Safclass"  severity="Error"/>
+			        <Property sourceAName="Lissue" sourceBName="Lissue"  severity="Error"/>
+			        <Property sourceAName="Wmaximum" sourceBName="Wmaximum"  severity="Error"/>
+					<Property sourceAName="Pmaximum" sourceBName="Pmaximum"  severity="Error"/>
+			        <Property sourceAName="Smaximum" sourceBName="Smaximum"  severity="Error"/>
+			        <Property sourceAName="Jmaximum" sourceBName="Jmaximum"  severity="Error"/>			    
+					<Property sourceAName="Rlstored" sourceBName="Rlstored"  severity="Error"/>	
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>		
+					<Property sourceAName=":EDF.FIT" sourceBName=":EDF.FIT"  severity="Error"/>		
+					<Property sourceAName=":ETAT" sourceBName=":ETAT"  severity="Error"/>		
+					<Property sourceAName=":EDF.DATEXTR" sourceBName=":EDF.DATEXTR"  severity="Error"/>		
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>		
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>		
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>		
+					<Property sourceAName=":EDF.SEISME" sourceBName=":EDF.SEISME"  severity="Error"/>		
+					<Property sourceAName=":EDF.DATE" sourceBName=":EDF.DATE"  severity="Error"/>		
+					<Property sourceAName=":EDF.DADAEXT" sourceBName=":EDF.DADAEXT"  severity="Error"/>		
+					<Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>		
+					<Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>		
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>		
+					<Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>		
+					<Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>		
+					<Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>		
+					<Property sourceAName=":EDF.INCLASS" sourceBName=":EDF.INCLASS"  severity="Error"/>				
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		   <ComponentGroup sourceAGroupName="BRAN"  sourceBGroupName="BRAN">
+			  
+				<ComponentClass sourceAComponentClass="BRAN" sourceBComponentClass="BRAN">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					
+					<Property sourceAName="Hposition" sourceBName="Hposition"  severity="Error"/>
+					<Property sourceAName="Tposition" sourceBName="Tposition"  severity="Error"/>
+					<Property sourceAName="Hdirection" sourceBName="Hdirection"  severity="Error"/>
+					<Property sourceAName="Tdirection" sourceBName="Tdirection"  severity="Error"/>
+					<Property sourceAName="Href" sourceBName="Href"  severity="Error"/>
+					<Property sourceAName="Tref" sourceBName="Tref"  severity="Error"/>
+					<Property sourceAName="Lhead" sourceBName="Lhead"  severity="Error"/>					
+					<Property sourceAName="Ltail" sourceBName="Ltail"  severity="Error"/>
+					<Property sourceAName="Hbore" sourceBName="Hbore"  severity="Error"/>
+			        <Property sourceAName="Tbore" sourceBName="Tbore"  severity="Error"/>
+			        <Property sourceAName="Hconnect" sourceBName="Hconnect"  severity="Error"/>
+					<Property sourceAName="Tconnect" sourceBName="Tconnect"  severity="Error"/>
+			        <Property sourceAName="Detail" sourceBName="Detail"  severity="Error"/>
+			        <Property sourceAName="Lstressed" sourceBName="Lstressed"  severity="Error"/>			    
+					<Property sourceAName="Erection" sourceBName="Erection"  severity="Error"/>	
+					<Property sourceAName="Temperature" sourceBName="Temperature"  severity="Error"/>		
+					<Property sourceAName="Pressure" sourceBName="Pressure"  severity="Error"/>		
+					
+					<Property sourceAName="Hstube" sourceBName="Hstube"  severity="Error"/>
+					<Property sourceAName="Ccentre" sourceBName="Ccentre"  severity="Error"/>
+					<Property sourceAName="Cclass" sourceBName="Cclass"  severity="Error"/>
+					<Property sourceAName="Safclass" sourceBName="Safclass"  severity="Error"/>
+					<Property sourceAName="Pspec" sourceBName="Pspec"  severity="Error"/>
+					<Property sourceAName="Lissue" sourceBName="Lissue"  severity="Error"/>
+					<Property sourceAName="Wmaximum" sourceBName="Wmaximum"  severity="Error"/>					
+					<Property sourceAName="Pmaximum" sourceBName="Pmaximum"  severity="Error"/>
+					<Property sourceAName="Ptnhead" sourceBName="Ptnhead"  severity="Error"/>
+			        <Property sourceAName="Smaximum" sourceBName="Smaximum"  severity="Error"/>
+			        <Property sourceAName="Jmaximum" sourceBName="Jmaximum"  severity="Error"/>
+					<Property sourceAName="Bstatus" sourceBName="Bstatus"  severity="Error"/>
+			        <Property sourceAName="Brlock" sourceBName="Brlock"  severity="Error"/>
+			        <Property sourceAName="Rlstored" sourceBName="Rlstored"  severity="Error"/>			    
+					<Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>	
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>		
+					
+					<Property sourceAName=":EDF.FIT" sourceBName=":EDF.FIT"  severity="Error"/>
+					<Property sourceAName=":ETAT" sourceBName=":ETAT"  severity="Error"/>
+					<Property sourceAName=":EDF.DATEXTR" sourceBName=":EDF.DATEXTR"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+					<Property sourceAName=":EDF.SEISME" sourceBName=":EDF.SEISME"  severity="Error"/>				
+					<Property sourceAName=":EDF.DATE" sourceBName=":EDF.DATE"  severity="Error"/>
+					<Property sourceAName=":EDF.DADAEXT" sourceBName=":EDF.DADAEXT"  severity="Error"/>
+			        <Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>
+			        <Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>			    
+					<Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>	
+					<Property sourceAName=":EDF.AMONT" sourceBName=":EDF.AMONT"  severity="Error"/>	
+                    <Property sourceAName=":EDF.PMONT" sourceBName=":EDF.PMONT"  severity="Error"/>
+			        <Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>		    
+					<Property sourceAName=":EDF.PIPE_DN" sourceBName=":EDF.PIPE_DN"  severity="Error"/>	
+					<Property sourceAName=":EDF-REFNTCAL" sourceBName=":EDF-REFNTCAL"  severity="Error"/>							
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		   <ComponentGroup sourceAGroupName="GASK"  sourceBGroupName="GASK">
+			  
+				<ComponentClass sourceAComponentClass="GASK" sourceBComponentClass="GASK">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Height" sourceBName="Height"  severity="Error"/>
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+			        <Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>	
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>		
+					
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+					<Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		   	<ComponentGroup sourceAGroupName="FLAN"  sourceBGroupName="FLAN">
+			  
+				<ComponentClass sourceAComponentClass="FLAN" sourceBComponentClass="FLAN">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Height" sourceBName="Height"  severity="Error"/>
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+			        <Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>	
+					<Property sourceAName="Allowance" sourceBName="Allowance"  severity="Error"/>	
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>		
+					
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+					<Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		
+		    <ComponentGroup sourceAGroupName="ELBO"  sourceBGroupName="ELBO">
+			  
+				<ComponentClass  sourceAComponentClass="ELBO" sourceBComponentClass="ELBO">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Angle" sourceBName="Angle"  severity="Error"/>
+			        <Property sourceAName="Radius" sourceBName="Radius"  severity="Error"/>
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+					<Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>	
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>						
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>		
+					
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+					<Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		    <ComponentGroup sourceAGroupName="VALV"  sourceBGroupName="VALV">
+			  
+				<ComponentClass sourceAComponentClass="VALV" sourceBComponentClass="VALV">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Angle" sourceBName="Angle"  severity="Error"/>
+					<Property sourceAName="Height" sourceBName="Height"  severity="Error"/>
+			        <Property sourceAName="Radius" sourceBName="Radius"  severity="Error"/>
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+					<Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>	
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>						
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>		
+					
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+					<Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>	
+					<Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>			    
+					<Property sourceAName=":EDF.SUPPVALV" sourceBName=":EDF.SUPPVALV"  severity="Error"/>			
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>		
+					<Property sourceAName=":EDF-REFNTCAL" sourceBName=":EDF-REFNTCAL"  severity="Error"/>		
+					<Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+	 
+		    <ComponentGroup sourceAGroupName="ATTA"  sourceBGroupName="ATTA">
+			  
+				<ComponentClass sourceAComponentClass="ATTA" sourceBComponentClass="ATTA">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Laxes" sourceBName="Laxes"  severity="Error"/>
+					<Property sourceAName="Lend" sourceBName="Lend"  severity="Error"/>
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+			        <Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>					
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>						
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>		
+					<Property sourceAName="Spkbrk" sourceBName="Spkbrk"  severity="Error"/>	
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":ETAT" sourceBName=":ETAT"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+					<Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>	
+					<Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>			    
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+				    <Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		   
+		    <ComponentGroup sourceAGroupName="OLET"  sourceBGroupName="OLET">
+			  
+				<ComponentClass sourceAComponentClass="OLET" sourceBComponentClass="OLET">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Angle" sourceBName="Angle"  severity="Error"/>
+					<Property sourceAName="Height" sourceBName="Height"  severity="Error"/>
+					 <Property sourceAName="Radius" sourceBName="Radius"  severity="Error"/>
+			        <Property sourceAName="Loffline" sourceBName="Loffline"  severity="Error"/>		
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+			        <Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>					
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Nwelds" sourceBName="Nwelds"  severity="Error"/>						
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>
+					<Property sourceAName=":EDF.N_AFFAIR" sourceBName=":EDF.N_AFFAIR"  severity="Error"/>
+					<Property sourceAName=":EDF.SAVING" sourceBName=":EDF.SAVING"  severity="Error"/>
+					<Property sourceAName=":EDF.EPR_REF" sourceBName=":EDF.EPR_REF"  severity="Error"/>
+					<Property sourceAName=":EDF.DOMAINE" sourceBName=":EDF.DOMAINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.FAMILLE" sourceBName=":EDF.FAMILLE"  severity="Error"/>
+					<Property sourceAName=":EDF.TYPE" sourceBName=":EDF.TYPE"  severity="Error"/>	
+					<Property sourceAName=":EDF.CODE" sourceBName=":EDF.CODE"  severity="Error"/>
+			        <Property sourceAName=":EDF.ORIGINE" sourceBName=":EDF.ORIGINE"  severity="Error"/>
+			        <Property sourceAName=":EDF.KKS" sourceBName=":EDF.KKS"  severity="Error"/>			    
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+				    <Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		
+		    <ComponentGroup sourceAGroupName="WELD"  sourceBGroupName="WELD">
+			  
+				<ComponentClass sourceAComponentClass="WELD" sourceBComponentClass="WELD">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Lock" sourceBName="Lock"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Position" sourceBName="Position"  severity="Error"/>
+					<Property sourceAName="Orientation" sourceBName="Orientation"  severity="Error"/>
+					
+					<Property sourceAName="Built" sourceBName="Built"  severity="Error"/>
+					<Property sourceAName="Shop" sourceBName="Shop"  severity="Error"/>
+					<Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+					<Property sourceAName="Lstube" sourceBName="Lstube"  severity="Error"/>
+					<Property sourceAName="Arrive" sourceBName="Arrive"  severity="Error"/>
+					<Property sourceAName="Leave" sourceBName="Leave"  severity="Error"/>
+					<Property sourceAName="Oriflag" sourceBName="Oriflag"  severity="Error"/>					
+					<Property sourceAName="Posflag" sourceBName="Posflag"  severity="Error"/>
+					<Property sourceAName="Angle" sourceBName="Angle"  severity="Error"/>
+					<Property sourceAName="Height" sourceBName="Height"  severity="Error"/>
+					 <Property sourceAName="Allowance" sourceBName="Allowance"  severity="Error"/>
+			        <Property sourceAName="Loffline" sourceBName="Loffline"  severity="Error"/>		
+			        <Property sourceAName="Csfbreak" sourceBName="Csfbreak"  severity="Error"/>
+			        <Property sourceAName="Tsfbreak" sourceBName="Tsfbreak"  severity="Error"/>					
+					<Property sourceAName="Ptno" sourceBName="Ptno"  severity="Error"/>
+			        <Property sourceAName="Ptntube" sourceBName="Ptntube"  severity="Error"/>
+			        <Property sourceAName="Dpgridref" sourceBName="Dpgridref"  severity="Error"/>			    
+					<Property sourceAName="Wldnumber" sourceBName="Wldnumber"  severity="Error"/>	
+					<Property sourceAName="Rlock" sourceBName="Rlock"  severity="Error"/>		
+					<Property sourceAName="Hrelative" sourceBName="Hrelative"  severity="Error"/>
+					<Property sourceAName="Deldsg" sourceBName="Deldsg"  severity="Error"/>    
+					<Property sourceAName=":EDF.EBRANLMT" sourceBName=":EDF.EBRANLMT"  severity="Error"/>
+				    <Property sourceAName="APOS" sourceBName="APOS"  severity="Error"/>
+					<Property sourceAName="LPOS" sourceBName="LPOS"  severity="Error"/>									
+			   </ComponentClass>
+			   
+		   </ComponentGroup>
+		</Check>
+
+        	 <Check type="Compliance" sourceType="RVM" >     
+				   <ComponentGroup name="SITE">
+					   <ComponentClass name="SITE">
+							 <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Number" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Area" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Position" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Orientation" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Rlstored" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 
+							 <Property name=":UTFTEST" rule="Should end with-02" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.SAVING" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EPR_REF" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DOMAINE" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.FAMILLE" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.TYPE" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.CODE" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.KKS" rule="Must have value" severity="Error" comment="Property must have value." />					 			
+						
+					   </ComponentClass>
+				   </ComponentGroup>	
+
+					<ComponentGroup name="ZONE">
+					  
+						<ComponentClass name="ZONE">
+     						 <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Number" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Area" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Position" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Orientation" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="DUnion" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Rlstored" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.SAVING" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EPR_REF" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DOMAINE" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.FAMILLE" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.TYPE" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.CODE" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.KKS" rule="Must have value" severity="Error" comment="Property must have value." />							 
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+				   
+					<ComponentGroup name="PIPE" >
+					  
+						<ComponentClass name="PIPE">
+						     <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Built" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Shop" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Bore" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Temperature" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Pressure" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Pspec" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Ccentre" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name="Cclass" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name="Erection" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Rev" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name="Safclass" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Lissue" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Wmaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Pmaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Smaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Jmaximum" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Rlstored" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name=":EDF.FIT" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":ETAT" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.DATEXTR" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EPR_REF" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF.SEISME" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DATE" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.DADAEXT" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DOMAINE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name=":EDF.FAMILLE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.TYPE" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF.CODE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.KKS" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.INCLASS" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 		
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+				   
+				  <ComponentGroup name="BRAN">
+			  
+						<ComponentClass name="BRAN">
+							 <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Built" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Shop" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Hposition" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Tposition" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Hdirection" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Tdirection" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Href" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name="Tref" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name="Lhead" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Ltail" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name="Hbore" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Tbore" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Hconnect" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Tconnect" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Detail" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Lstressed" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Erection" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Temperature" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Pressure" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Hstube" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Ccentre" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Cclass" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Safclass" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Pspec" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name="Lissue" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Wmaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Pmaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Ptnhead" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Smaximum" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Jmaximum" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name="Bstatus" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Brlock" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Rlstored" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />							
+						     <Property name=":EDF.FIT" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":ETAT" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DATEXTR" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF.EPR_REF" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.SEISME" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.DATE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.DADAEXT" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name=":EDF.DOMAINE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.FAMILLE" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF.TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.CODE" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.KKS" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF.AMONT" rule="Must have value" severity="Error" comment="Property must have value." />			
+							 <Property name=":EDF.PMONT" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.PIPE_DN" rule="Must have value" severity="Error" comment="Property must have value." />	
+							 <Property name=":EDF-REFNTCAL" rule="Must have value" severity="Error" comment="Property must have value." />													
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+		   
+					<ComponentGroup name="GASK"  >
+					  
+						<ComponentClass name="GASK">
+						     <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name="Height" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Csfbreak" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="APOS" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />							 							
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+		   
+					<ComponentGroup name="FLAN" >
+				  
+						<ComponentClass name="FLAN">
+						     <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name="Height" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Csfbreak" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Allowance" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="APOS" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />	 
+					
+					   </ComponentClass>
+				   
+			   </ComponentGroup>
+		   
+					<ComponentGroup name="ELBO" >
+				  
+						<ComponentClass  name="ELBO" >
+						     <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+							 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+							 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+							 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+							 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+							 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+							 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+							 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+							 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+							 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+							 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+							 <Property name="Angle" rule="Should contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Radius" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+							 <Property name="Csfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+                             <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />								 
+							 <Property name="APOS" rule="Must have value" severity="Error" comment="Property must have value." />
+							 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />						 
+				        </ComponentClass>
+				   
+			        </ComponentGroup>
+		   
+					<ComponentGroup name="VALV" >
+					  
+							<ComponentClass name="VALV">
+								 <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+								 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+								 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+								 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+								 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+								 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+								 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+								 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+								 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+								 <Property name="Angle" rule="Should contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Height" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Radius" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Csfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EPR_REF" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.DOMAINE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.FAMILLE" rule="Must have value" severity="Error" comment="Property must have value." />						 								
+								 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.TYPE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.CODE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />	
+                                 <Property name=":EDF.KKS" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.SUPPVALV" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF-REFNTCAL" rule="Must have value" severity="Error" comment="Property must have value." />									 
+								 <Property name="APOS" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />
+								 							
+						   </ComponentClass>
+						   
+				   </ComponentGroup>
+		   
+		   		    <ComponentGroup name="ATTA" >
+			  
+						<ComponentClass name="ATTA" >
+						         <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+								 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+								 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+								 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+								 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+								 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+								 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+								 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+								 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+								 <Property name="Laxes" rule="Should contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Lend" rule="Should not contain-k" severity="Error" comment="Property must have value." />								 
+								 <Property name="Csfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Spkbrk" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+							     <Property name=":ETAT" rule="Should not contain-k" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EPR_REF" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.DOMAINE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.FAMILLE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.CODE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.KKS" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />
+							     <Property name="APOS" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />									
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+		   
+				   <ComponentGroup name="OLET"  >
+					  
+						<ComponentClass name="OLET" >
+						         <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+								 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+								 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+								 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+								 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+								 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+								 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+								 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+								 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+								 <Property name="Angle" rule="Should contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Height" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+                                 <Property name="Radius" rule="Should not contain-k" severity="Error" comment="Property must have value." />	
+                                 <Property name="Loffline" rule="Should not contain-k" severity="Error" comment="Property must have value." />									 
+								 <Property name="Csfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Nwelds" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Spkbrk" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+							     <Property name=":ETAT" rule="Should not contain-k" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.N_AFFAIR" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.SAVING" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EPR_REF" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.DOMAINE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.FAMILLE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.CODE" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name=":EDF.ORIGINE" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.KKS" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />
+							     <Property name="APOS" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />							
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+		   
+		            <ComponentGroup name="WELD" >
+			  
+						<ComponentClass name="WELD" >
+						         <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
+								 <Property name="Type" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+								 <Property name="Lock" rule="Should Not Start With-S" severity="Error"    comment="Property must have value." />
+								 <Property name="Owner" rule="Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Position" rule="Should be number" severity="Error" comment="Should be number." />
+								 <Property name="Orientation" rule="Should end with-xyz" severity="Error" comment="Property must have value." />
+								 <Property name="Built" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Shop" rule="Equal to-E" severity="Error" comment="Property must have value." />
+								 <Property name="Spref" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Lstube" rule="Should not be number" severity="Error" comment="Property must have value." />
+								 <Property name="Arrive" rule="Should be text" severity="Error" comment="Property must have value." />
+								 <Property name="Leave" rule="Should not be text" severity="Error" comment="Property must have value." />
+								 <Property name="Oriflag" rule="Not Equal to-abc" severity="Error" comment="Property must have value." />
+								 <Property name="Posflag" rule="Should Not End With-j" severity="Error" comment="Property must have value." />
+								 <Property name="Angle" rule="Should contain-k" severity="Error" comment="Property must have value." />
+								 <Property name="Height" rule="Should not contain-k" severity="Error" comment="Property must have value." />
+                                 <Property name="Allowance" rule="Should not contain-k" severity="Error" comment="Property must have value." />	
+                                 <Property name="Loffline" rule="Should not contain-k" severity="Error" comment="Property must have value." />									 
+								 <Property name="Csfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Tsfbreak" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptno" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Ptntube" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Dpgridref" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Wldnumber" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name="Rlock" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Hrelative" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="Deldsg" rule="Must have value" severity="Error" comment="Property must have value." />
+								 <Property name=":EDF.EBRANLMT" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="APOS" rule="Must have value" severity="Error" comment="Property must have value." />								 
+								 <Property name="LPOS" rule="Must have value" severity="Error" comment="Property must have value." />						 
+					   </ComponentClass>
+					   
+				   </ComponentGroup>
+			</Check>
+</CheckCase>

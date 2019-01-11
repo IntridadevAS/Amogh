@@ -114,7 +114,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 tableRowContent[columnHeaders[1].name] = component.Status;
 
                 // construct component identifier 
-                var componentIdentifier = component.SourceAName;
+                //var componentIdentifier = component.SourceAName;
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     var checkPropertySource = component.getCheckProperty('Source', '', true);
@@ -124,25 +124,25 @@ function ComplianceReviewManager(complianceCheckManager,
                     if (checkPropertySource != undefined) {
                         tableRowContent[columnHeaders[2].name] = checkPropertySource.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertySource.SourceAValue;
+                        // componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
                     if (checkPropertyDestination != undefined) {
                         tableRowContent[columnHeaders[3].name] = checkPropertyDestination.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
+                        //componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
 
                     if (checkPropertyOwnerId != undefined) {
                         tableRowContent[columnHeaders[4].name] = checkPropertyOwnerId.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
+                        //componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
                 }
 
                 tableData.push(tableRowContent);
 
-                // keep track of component id vs table row and status         
-                // this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
+                // // keep track of component id vs table row and status         
+                //  this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
             }
 
             var id = "#" + div.id;
@@ -168,9 +168,27 @@ function ComplianceReviewManager(complianceCheckManager,
                     if (i === 2 || i === 3 || i === 4 ) {
                         currentRow.cells[i].style.display = "none";
                     }
-                }
+                }               
+               
             }
 
+             // keep track of component id vs table row and status     
+            var modelBrowserDataTable = modelBrowserData.children[1];
+            var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
+            for (var j = 0; j < modelBrowserDataRows.length; j++) {
+                var currentRow = modelBrowserDataRows[j];
+
+                var componentIdentifier = currentRow.cells[0].innerText;
+                if(currentRow.cells.length === 5)
+                {
+                 componentIdentifier += "_" + currentRow.cells[2].innerText;
+                 componentIdentifier += "_" + currentRow.cells[3].innerText;
+                 componentIdentifier += "_" + currentRow.cells[4].innerText;
+                }  
+
+                var status = currentRow.cells[1].innerText;
+                this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
+            }
 
             modelBrowserDataTable.style.position = "static"
             modelBrowserDataTable.style.width = "578px";

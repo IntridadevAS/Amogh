@@ -141,7 +141,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 tableRowContent[columnHeaders[2].name] = component.Status;
 
                 // construct component identifier 
-                var componentIdentifier = component.SourceAName;
+                //var componentIdentifier = component.SourceAName;
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
@@ -151,22 +151,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (checkPropertySource != undefined) {
                         tableRowContent[columnHeaders[3].name] = checkPropertySource.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertySource.SourceAValue;
+                        //componentIdentifier += "_" + checkPropertySource.SourceAValue;
                     }
                     if (checkPropertyDestination != undefined) {
                         tableRowContent[columnHeaders[4].name] = checkPropertyDestination.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
+                        //componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
                     }
 
                     if (checkPropertyOwnerId != undefined) {
                         tableRowContent[columnHeaders[5].name] = checkPropertyOwnerId.SourceAValue;
 
-                        componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
+                        //componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
                 }
 
                 tableData.push(tableRowContent);
+
+                //  // keep track of component id vs table row and status         
+                //  this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
             }
 
             var id = "#" + div.id;
@@ -189,9 +192,27 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (i === 4 || i === 5 ||  i === 3) {
                         currentRow.cells[i].style.display = "none";
                     }
-                }
+                }               
             }
 
+
+             // keep track of component id vs table row and status     
+             var modelBrowserDataTable = modelBrowserData.children[1];
+             var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
+             for (var j = 0; j < modelBrowserDataRows.length; j++) {
+                 var currentRow = modelBrowserDataRows[j];
+ 
+                 var componentIdentifier = currentRow.cells[0].innerText;
+                 if(currentRow.cells.length === 6)
+                 {                  
+                  componentIdentifier += "_" + currentRow.cells[3].innerText;
+                  componentIdentifier += "_" + currentRow.cells[4].innerText;
+                  componentIdentifier += "_" + currentRow.cells[5].innerText;
+                 }           
+                 
+                 var status = currentRow.cells[2].innerText;
+                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
+             }
 
             modelBrowserDataTable.style.position = "static"
             modelBrowserDataTable.style.width = "578px";
