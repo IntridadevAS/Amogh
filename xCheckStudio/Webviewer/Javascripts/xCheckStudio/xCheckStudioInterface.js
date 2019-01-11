@@ -34,6 +34,16 @@ var xCheckStudio;
 
             viewer.start();
 
+            var excelSheetParentContainer = document.getElementById("dataSourceViewer") ;
+            for(var i = 0; i < excelSheetParentContainer.childElementCount; i++)
+            {
+                currentChild = excelSheetParentContainer.children[i];
+                if(currentChild.className === "viewdatagraphics" )
+                {
+                    currentChild.style.display = "none";
+                }
+            }
+
             _this._firstViewer = viewer;
 
             // construct model tree
@@ -79,7 +89,7 @@ var xCheckStudio;
             });
 
             // viewer operators            
-            _this.registerViewerOperators(isFirstViewer);
+            //_this.registerViewerOperators(isFirstViewer);
         };
 
         xCheckStudioInterface.prototype.registerViewerOperators = function (isFirstViewer) {

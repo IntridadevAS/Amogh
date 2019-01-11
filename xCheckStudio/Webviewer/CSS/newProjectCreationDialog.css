@@ -1,0 +1,471 @@
+
+
+.newprojectcreationdialog {
+  width               : 100%;
+  min-width           : 682px;
+  height              : 392px;
+  min-height          : 390px;
+  position            : relative;
+  overflow            : hidden;
+  margin              : 0px;
+  background-color    : rgba(255, 255, 255, 1.0);
+}
+a {
+  text-decoration     : none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+.newprojectcreationdialog .projectcreationdialoggroup {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 390px;
+  width               : 682px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .bg {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 52px;
+  height              : 338px;
+  box-sizing          : border-box;
+  width               : 682px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  border-style        : solid;
+  border-width        : 1px;
+  border-color        : rgba(199, 199, 199, 1.0);
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 69px;
+  height              : 320px;
+  width               : 682px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .bg1 {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 0px;
+  height              : 236px;
+  box-sizing          : border-box;
+  width               : 654px;
+  position            : absolute;
+  margin              : 0;
+  left                : 14px;
+  border-style        : solid;
+  border-width        : 1px;
+  border-color        : rgba(199, 199, 199, 1.0);
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .properties1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 23px;
+  height              : auto;
+  width               : 153px;
+  position            : absolute;
+  margin              : 0;
+  left                : 24px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .footer {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 306px;
+  height              : 14px;
+  width               : 682px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .textfieldprojectname {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 79px;
+  height              : 30px;
+  width               : 419px;
+  position            : absolute;
+  margin              : 0;
+  left                : 234px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .textfieldprojectname .textfieldprojectname1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 419px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .projectname {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 86px;
+  height              : auto;
+  width               : 159px;
+  position            : absolute;
+  margin              : 0;
+  left                : 25px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .description {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 130px;
+  height              : 41px;
+  width               : 629px;
+  position            : absolute;
+  margin              : 0;
+  left                : 24px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .description .textfielddescription {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 1px;
+  height              : 30px;
+  width               : 419px;
+  position            : absolute;
+  margin              : 0;
+  left                : 210px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .description .textfielddescription .textfielddescription1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 419px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .description .description1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 8px;
+  height              : auto;
+  width               : 155px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .function {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 183px;
+  height              : 41px;
+  width               : 629px;
+  position            : absolute;
+  margin              : 0;
+  left                : 24px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .function .textfieldfunction {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 419px;
+  position            : absolute;
+  margin              : 0;
+  left                : 210px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .function .textfieldfunction .textfieldfunction1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 419px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .function .function1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 9px;
+  height              : auto;
+  width               : 111px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .cancelbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 261px;
+  height              : 40px;
+  width               : 128px;
+  position            : absolute;
+  margin              : 0;
+  left                : 11px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .cancelbtn:hover {
+  transform           : scale(0.9);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .cancelbtn .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 128px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .cancelbtn .bg2:hover {
+  box-shadow          : 0px 0px 10px 2px rgba(0,0,0,0.2);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .cancelbtn .cancel {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 9px;
+  height              : auto;
+  width               : 51px;
+  position            : absolute;
+  margin              : 0;
+  left                : 38px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : center;
+  line-height         : 18.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .createbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 260px;
+  height              : 40px;
+  width               : 128px;
+  position            : absolute;
+  margin              : 0;
+  left                : 546px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .createbtn:hover {
+  filter              : grayscale(100%);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .createbtn .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 128px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .createbtn .bg2:hover {
+  box-shadow          : 0px 0px 10px 2px rgba(0,0,0,0.2);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .properties .createbtn .create {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 9px;
+  height              : auto;
+  width               : 51px;
+  position            : absolute;
+  margin              : 0;
+  left                : 38px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : center;
+  line-height         : 18.0px;
+}
+.newprojectcreationdialog .projectcreationdialoggroup .header {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 54px;
+  width               : 682px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .header .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 0px;
+  height              : 54px;
+  width               : 682px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.newprojectcreationdialog .projectcreationdialoggroup .header .newproject {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 17px;
+  height              : auto;
+  width               : 128px;
+  position            : absolute;
+  margin              : 0;
+  left                : 11px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 17.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 20.0px;
+}
+/* .anima-animate-appear prefix for appear animations */
+.anima-animate-appear {
+  opacity             : 0;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 normal forwards;
+}
+.anima-animate-disappear {
+  opacity             : 1;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+}
+.anima-animate-nodelay {
+  -webkit-animation-delay: 0;
+  -moz-animation-delay: 0;
+  -o-animation-delay  : 0;
+  animation-delay     : 0;
+}
+@-webkit-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-moz-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-o-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}

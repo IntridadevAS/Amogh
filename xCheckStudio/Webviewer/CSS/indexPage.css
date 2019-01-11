@@ -1,0 +1,498 @@
+
+
+.loginpage {
+  width               : 100%;
+  min-width           : 1280px;
+  height              : 100vh;
+  min-height          : 720px;
+  position            : relative;
+  overflow            : hidden;
+  margin              : 0px;
+  background-color    : rgba(255, 255, 255, 1.0);
+}
+a {
+  text-decoration     : none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+.loginpage .bg {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 1180px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .bg .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 720px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .bg .symbol {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 122px;
+  height              : 1058px;
+  width               : 1195px;
+  position            : absolute;
+  margin              : 0;
+  left                : 43px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  opacity             : 0.1;
+}
+.loginpage .header {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 75px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 0px;
+  height              : 75px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .helpbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 17px;
+  height              : 44px;
+  width               : 44px;
+  position            : absolute;
+  margin              : 0;
+  left                : 1213px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.loginpage .header .helpbtn:hover {
+  transform           : scale(1.1);
+}
+.loginpage .header .helpbtn .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 44px;
+  width               : 44px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .helpbtn .icon {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 12px;
+  height              : 18px;
+  width               : 12px;
+  position            : absolute;
+  margin              : 0;
+  left                : 16px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .logo {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 20px;
+  height              : 36px;
+  width               : 212px;
+  position            : absolute;
+  margin              : 0;
+  left                : 534px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .logo .check {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 10px;
+  height              : 14px;
+  width               : 71px;
+  position            : absolute;
+  margin              : 0;
+  left                : 41px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .logo .studio {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 11px;
+  height              : 13px;
+  width               : 93px;
+  position            : absolute;
+  margin              : 0;
+  left                : 118px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .header .logo .symbol {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 36px;
+  width               : 41px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .footer {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 680px;
+  height              : 40px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .footer .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 1280px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 282px;
+  height              : 303px;
+  width               : 360px;
+  position            : absolute;
+  margin              : 0;
+  left                : 460px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form .username {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 355px;
+  position            : absolute;
+  margin              : -15px;
+  left                : 3px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.loginpage .form .username:hover {
+  box-shadow          : 0px 0px 10px 2px rgba(0,0,0,0.2);
+}
+.loginpage .form .username .bg1 {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 355px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  border-radius       : 3px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form .username .username1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 8px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 15px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(189, 189, 189, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.loginpage .form .password {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 53px;
+  height              : 40px;
+  width               : 355px;
+  position            : absolute;
+  margin              : -15px;
+  left                : 3px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.loginpage .form .password:hover {
+  box-shadow          : 0px 0px 10px 2px rgba(0,0,0,0.2);
+}
+.loginpage .form .password .bg1 {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 355px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  border-radius       : 3px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form .password .password1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 8px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 15px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(189, 189, 189, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.loginpage .form .loginbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 117px;
+  height              : 56px;
+  width               : 360px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.loginpage .form .loginbtn:hover {
+  box-shadow          : 0px 0px 10px 2px rgba(0,0,0,0.2);
+}
+.loginpage .form .loginbtn .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 56px;
+  width               : 360px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form .loginbtn .login {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 14px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 149px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : center;
+  line-height         : 24.0px;
+}
+.loginpage .form .forgottenpassword {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 244px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 109px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : center;
+  line-height         : 18.0px;
+  text-decoration     : underline;
+}
+.loginpage .form .lang {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 279px;
+  height              : 24px;
+  width               : 192px;
+  position            : absolute;
+  margin              : 0;
+  left                : 84px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loginpage .form .lang .language {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.loginpage .form .lang .english {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 95px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.loginpage .form .lang .triangle {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 6px;
+  height              : 15px;
+  width               : 18px;
+  position            : absolute;
+  margin              : 0;
+  left                : 174px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+/* .anima-animate-appear prefix for appear animations */
+.anima-animate-appear {
+  opacity             : 0;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 normal forwards;
+}
+.anima-animate-disappear {
+  opacity             : 1;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+}
+.anima-animate-nodelay {
+  -webkit-animation-delay: 0;
+  -moz-animation-delay: 0;
+  -o-animation-delay  : 0;
+  animation-delay     : 0;
+}
+@-webkit-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-moz-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-o-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}

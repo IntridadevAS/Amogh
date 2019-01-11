@@ -1,0 +1,848 @@
+
+
+.createproject {
+  width               : 100%;
+  min-width           : 1280px;
+  height              : 100vh;
+  min-height          : 720px;
+  position            : relative;
+  overflow            : hidden;
+  margin              : 0px;
+  background-color    : rgba(255, 255, 255, 1.0);
+}
+a {
+  text-decoration     : none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+.createproject .bg {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 1180px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .bg .bg1 {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 0px;
+  height              : 720px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .bg .symbol {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 122px;
+  height              : 1058px;
+  width               : 1195px;
+  position            : absolute;
+  margin              : 0;
+  left                : 43px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  opacity             : 0.05;
+}
+.createproject .header {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 75px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 0px;
+  height              : 75px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .helpbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 17px;
+  height              : 44px;
+  width               : 44px;
+  position            : absolute;
+  margin              : 0;
+  left                : 1213px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .header .helpbtn:hover {
+  transform           : scale(1.1);
+}
+.createproject .header .helpbtn .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 44px;
+  width               : 44px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .helpbtn .icon {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 12px;
+  height              : 18px;
+  width               : 12px;
+  position            : absolute;
+  margin              : 0;
+  left                : 16px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .search {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 18px;
+  height              : 40px;
+  width               : 50px;
+  position            : absolute;
+  margin              : 0;
+  left                : 1076px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .search .bg2 {
+  background-color    : rgba(200, 200, 200, 1.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 123px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  border-radius       : 20px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .search .typeu2026 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 40px;
+  width               : 90px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Oblique", Helvetica, Arial, serif;
+  font-size           : 14.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : left;
+  line-height         : 17.0px;
+  border-radius 	  : 15px;
+  padding-left        : 35px;
+  border-width        : 0px;
+}
+.module1 .header .search:focus {
+	outline-width: 0;
+	outline: none;
+}
+.createproject .header .search .searchicon {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 12px;
+  height              : 20px;
+  width               : 19px;
+  position            : absolute;
+  margin              : 0;
+  left                : 13px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .logo {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 20px;
+  height              : 36px;
+  width               : 212px;
+  position            : absolute;
+  margin              : 0;
+  left                : 534px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .logo .check {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 10px;
+  height              : 14px;
+  width               : 71px;
+  position            : absolute;
+  margin              : 0;
+  left                : 41px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .logo .studio {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 11px;
+  height              : 13px;
+  width               : 93px;
+  position            : absolute;
+  margin              : 0;
+  left                : 118px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .header .logo .symbol {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 36px;
+  width               : 41px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .btn-view {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 11px;
+  height              : 56px;
+  width               : 194px;
+  position            : absolute;
+  margin              : 0;
+  left                : 23px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .btn-view .projects {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 15px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 88px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 24.0px;
+}
+.createproject .btn-view .btn1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 56px;
+  width               : 56px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .btn-view .btn1:hover {
+  transform           : scale(1.1);
+}
+.createproject .btn-view .btn1 .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 56px;
+  width               : 56px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .btn-view .btn1 .iconprojects {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 23px;
+  height              : 8px;
+  width               : 28px;
+  position            : absolute;
+  margin              : 0;
+  left                : 14px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .btn-view .arrow {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 18px;
+  height              : 10px;
+  width               : 10px;
+  position            : absolute;
+  margin              : 0;
+  left                : 62px;
+  -ms-transform       : rotate(45deg); /* IE 9 */
+  -webkit-transform   : rotate(45deg); /* Chrome, Safari, Opera */
+  transform           : rotate(45deg);
+}
+.createproject .footer {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 661px;
+  height              : 58px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .footer .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 19px;
+  height              : 40px;
+  width               : 1280px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .footer .inforight {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 52px;
+  width               : 163px;
+  position            : absolute;
+  margin              : 0;
+  left                : 1094px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .footer .inforight .user {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 30px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .footer .inforight .user:hover {
+  transform           : scale(1.1);
+}
+.createproject .footer .inforight .user .span1 {
+  
+}
+.createproject .footer .inforight .user .span2 {
+  font-family         : "Helvetica", Helvetica, Arial, serif;
+}
+.createproject .footer .inforight .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 52px;
+  width               : 52px;
+  position            : absolute;
+  margin              : 0;
+  left                : 111px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .footer .inforight .path {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 3px;
+  height              : 44px;
+  width               : 44px;
+  position            : absolute;
+  margin              : 0;
+  left                : 115px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .footer .inforight .path:hover {
+  transform           : scale(1.1);
+}
+.createproject .footer .inforight .path .path1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 44px;
+  width               : 44px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .footer .inforight .path .path1:hover {
+  transform           : scale(1.1);
+}
+.createproject .footer .inforight .pierre {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 30px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 50px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .project1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 256px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 157px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .project1:hover {
+  transform           : scale(0.9);
+}
+.createproject .project1 .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .project1 .bitmap {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 144px;
+  height              : 80px;
+  width               : 223px;
+  position            : absolute;
+  margin              : 0;
+  left                : 18px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .project1 .loadu2018powerplantu2019 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 27px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 53px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 25.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : center;
+  line-height         : 30.0px;
+}
+.createproject .project2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 256px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 511px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .project2:hover {
+  transform           : scale(0.9);
+}
+.createproject .project2 .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .project2 .bitmap {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 144px;
+  height              : 80px;
+  width               : 224px;
+  position            : absolute;
+  margin              : 0;
+  left                : 16px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .project2 .loadu2018project2u2019 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 27px;
+  height              : auto;
+  width               : 127px;
+  position            : absolute;
+  margin              : 0;
+  left                : 65px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 25.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : center;
+  line-height         : 30.0px;
+}
+.createproject .createnew {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 256px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 865px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.createproject .createnew:hover {
+  transform           : scale(0.9);
+}
+.createproject .createnew .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 258px;
+  width               : 258px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .createnew .createbtn {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 134px;
+  height              : 75px;
+  width               : 74px;
+  position            : absolute;
+  margin              : 0;
+  left                : 88px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .createnew .createbtn .bg2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 75px;
+  width               : 74px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .createnew .createbtn .createicon {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 18px;
+  height              : 37px;
+  width               : 37px;
+  position            : absolute;
+  margin              : 0;
+  left                : 19px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .createnew .createnewproject {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 27px;
+  height              : auto;
+  width               : 141px;
+  position            : absolute;
+  margin              : 0;
+  left                : 59px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 25.0px;
+  color               : rgba(0, 0, 0, 1.0);
+  text-align          : center;
+  line-height         : 30.0px;
+}
+.createproject .selectorcreateap {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 167px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 502px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-LightOblique", Helvetica, Arial, serif;
+  font-size           : 24.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : center;
+  line-height         : 29.0px;
+}
+.createproject .infoleft {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 691px;
+  height              : 18px;
+  width               : 205px;
+  position            : absolute;
+  margin              : 0;
+  left                : 25px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .infoleft .project {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .infoleft .selectaproject {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 80px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .infoleft .selectaproject:hover {
+  transform           : scale(1.1);
+}
+.createproject .infoleft .selectaproject .span1 {
+  
+}
+.createproject .infoleft .selectaproject .span2 {
+  font-family         : "Helvetica-LightOblique", Helvetica, Arial, serif;
+}
+.createproject .infoleft .selectaproject .span3 {
+  
+}
+.createproject .infomid {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 691px;
+  height              : 19px;
+  width               : 104px;
+  position            : absolute;
+  margin              : 0;
+  left                : 582px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.createproject .infomid .units {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .infomid .mks {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 1px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 54px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+}
+.createproject .infomid .mks:hover {
+  transform           : scale(1.1);
+}
+.createproject .infomid .triangle {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 7px;
+  height              : 6px;
+  width               : 12px;
+  position            : absolute;
+  margin              : 0;
+  left                : 92px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+/* .anima-animate-appear prefix for appear animations */
+.anima-animate-appear {
+  opacity             : 0;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 normal forwards;
+}
+.anima-animate-disappear {
+  opacity             : 1;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+}
+.anima-animate-nodelay {
+  -webkit-animation-delay: 0;
+  -moz-animation-delay: 0;
+  -o-animation-delay  : 0;
+  animation-delay     : 0;
+}
+@-webkit-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-moz-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-o-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}

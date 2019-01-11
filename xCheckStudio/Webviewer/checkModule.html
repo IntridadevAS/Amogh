@@ -1,10 +1,14 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>xCheckStudio</title>
-    <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" />
-    <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
-
+    <link href="/images/UIPackage/favicon.png" rel="shortcut icon" />
+    <meta charset="utf-8" />
+    <meta content="width=1280, maximum-scale=1.0" name="viewport" />
+    <link href="CSS\loadDataDialog.css" rel="stylesheet" type="text/css" />
+    <link href="CSS\checkModule.css" rel="stylesheet" type="text/css" />
+    <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
+    <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
@@ -30,34 +34,85 @@
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
-
-
-
     <script src='configurations\dir.php'></script>
+
+    </meta>
+    </meta>
+
     <style>
-        /* The grid: Three equal columns that floats next to each other */
-        .column {
-            float: left;
-            text-align: center;
-            width: 100%;
-            font-size: 25px;
-            cursor: pointer;
-            color: white;
+        /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: absolute; /* Stay in place */
+      padding: auto; /* Location of the box */
+      width: 1280px; /* Full width */
+      height: 720px; /* Full height */
+      margin: 0 432px 0 0;
+      top: 0px;
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      border: 1px solid #888;
+      width: 416px;
+      height: 179px;
+      margin-left: 333px;
+      margin-top: 214px;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #file-input {
+        cursor: pointer;
+        outline: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        filter: alpha(opacity=0); /* IE < 9 */
+        opacity: 0;
+        }
+        .input-label {
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
         }
 
-        .containerTab {
-            padding: 20px;
-            color: white;
+        #dataSourceViewer, #dataSource1, #dataSource2{
+            font-size: 8px;
+            color: #000;
+        }
+        
+        td{
+            height: 5px;
         }
 
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
+        #dataSource1 ::-webkit-scrollbar-thumb {
+            width: 10px;
         }
 
-        /* Closable button inside the container tab */
+        #dataSource2 ::-webkit-scrollbar {
+            width: 10px;
+        }
+
         .closebtn {
             float: right;
             color: white;
@@ -99,11 +154,6 @@
             content: url('images/button-closed.png');
             cursor: pointer;
         }
-
-        .scrollable {
-            overflow: auto;
-        }
-
         #divLoading
         {
             display : none;
@@ -134,174 +184,1733 @@
             margin-left : -16px;
             margin-top : -16px;
         }
-        div.content {
-        width : 1000px;
-        height : 1000px;
-        }
-
-        </style>
+    </style>
 </head>
 
-<body>
+<body style="margin: 0;
+ background: rgba(255, 255, 255, 1.0);">
     <div id="divLoading">
     </div>
-
-    <table style="width: -webkit-fill-available; height:-webkit-fill-available; margin: auto; max-height: -webkit-fill-available;">
-        <th colspan="2" style=" background-color: #333333; height: 10%;  text-align: center">
-            <img src="images/Header.png">
-        </th>
-        <tr style=" text-align: center; height:20px;">
-            <td colspan="2" style="border:none;">
-                <!-- <iframe name="formDestination" height="100px"></iframe> -->
-
-                <button id="checkButton" disabled="true" onclick="goToReviewModule()"> Check Datasources</button>
-                <button onclick="clearData()" id="ClearButton">Clear data</button>
-
-            </td>
-        </tr>
-        <tr style="height: 5%;">
-            <td style="width: 50%; border:none;">
-                <div class="row" style="width: 100%;">
-                    <div class="column" onclick="openTab('b1');" style="background:LightSalmon ; ">
-                        Source A
+    <input id="anPageName" name="page" type="hidden" value="module1" />
+    <div class="module1" controls id="fullscreen">
+        <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
+            <div class="bg">
+                <div class="bg1">
+                </div>
+                <img src="/images/UIPackage/landing-page-symbol.png" class="symbol" />
+            </div>
+            <div class="header">
+                <div class="bg1">
+                </div>
+                <div class="downloadbtn" onclick="clearData()">
+                    <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="bg2"/>
+                </div>
+				<div class="search">
+				<div class="bg2">
+                       </div>
+                        <input class="typeu2026" id="searchtext" type="text" placeholder="Type.."> 
+                       
+                        <img src="/images/UIPackage/create-project-with-open-menu-search-icon@2x.png" class="searchicon"/>
+                    </div>
+                <a href="https://www.intrida.com/" target="_blank">
+                    <div class="helpbtn">
+                        <img src="/images/UIPackage/module2-bg 2@2x.png" class="bg2" />
+                        <img src="/images/UIPackage/prep-home-page-icon@2x.png" class="icon" />
+                    </div>
+                </a>
+                <div class="logo">
+                    <img src="/images/UIPackage/module2-with-open-menu-check@2x.png" class="check" />
+                    <img src="/images/UIPackage/landing-page-studio@2x.png" class="studio" />
+                    <img src="/images/UIPackage/module1-symbol 1@2x.png" class="symbol" />
+                </div>
+            </div>
+            <div class="btn-view">
+                <div class="check">
+                    CHECK
+                </div>
+                    <div class="btn1" onclick="OnShowHideMenu()" onMouseOver="this.style.cursor='pointer'">
+                        <img src="/images/UIPackage/landing-page-bg 1@2x.png" class="bg1" />
+                        <img src="/images/UIPackage/module2-with-open-menu-icon-check@2x.png" class="iconcheck" />
+                    </div>
+                <img src="/images/UIPackage/create-project-arrow@2x.png" class="arrow" />
+            </div>
+            <div class="footer">
+                <div class="bg1">
+                </div>
+                <div class="inforight">
+                    <div class="user">
+                        USER
+                    </div>
+                    <img src="/images/UIPackage/create-project-with-open-menu-bg 2@2x.png" class="bg2" />
+                    <div class="path">
+                        <img src="/images/UIPackage/landing-page-path@2x.png" class="path1" />
+                    </div>
+                    <div class="pierre" id="pierre">
+                        Pierre
                     </div>
                 </div>
-            </td>
-            <td style="width: 50%; border:none;">
-                <div class="row" style="width: 100%">
-                    <div class="column" onclick="openTab('b2');" style="background:lightgreen ;">
-                        Source B
+            </div>
+            <div class="group3">
+                <div class="bg1">
+                </div>
+            </div>
+            <div class="white">
+                <img src="/images/UIPackage/module1-with-open-menu-bg 4.png" class="bg1" />
+                <div class="panel">
+                    <div class="bg2">
+                    </div>
+                    <div class="createtab" id="createTab" onclick="CreateNewTab()" style="cursor: pointer; ">
+                    </div>
+                    <div class="createbtn">
+                        <img src="/images/UIPackage/module1-with-open-menu-create-icon@2x.png" class="createicon" />
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr style=" text-align: center;">
-            <td colspan="2" style="border:none;">
-                <!-- Full-width columns: (hidden by default) -->
-                <div id="b1" class="containerTab" style="display:none;background:LightSalmon; ">
-                    <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-                    <h2>Source A</h2>
-                    <div>
-                        <!-- First model tree and it's viewer -->
-                        <table>
-                            <tr colspan="2">
-                                <form id="uploadDatasourceAForm" enctype="multipart/form-data">
-                                    <div>
-                                        <input id="dataSouresA" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresA', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
-                                            disabled />
-                                    </div>
-                                </form>
-                            </tr>
-
-                            <tr>
-                                <td valign="top" style="border:none;">
-                                    <div id="modelTree1"></div>
-                                </td>
-                                <td style="border:none;">
-                                    <div id="viewerContainer1" class="example-canvas-small"></div>
-                                </td>
-                                <tr style="font-size: 12px">
-                                    <td >
-                                            <div id="totalComponentCount1"></div>
-                                    </td>
-                                </tr>
-                            </tr>
-                            <tr>
-                                <td style="border:none;"></td>
-                                <td style="border:none;">
-                                    <div class="viewOrientation2">
-                                        <button id="Front1" disabled>Front</button>
-                                        <button id="Back1" disabled>Back</button>
-                                        <button id="Top1" disabled>Top</button>
-                                        <button id="Bottom1" disabled>Bottom</button>
-                                        <button id="Left1" disabled>Left</button>
-                                        <button id="Right1" disabled>Right</button>
-                                        <button id="Iso1" disabled>Iso</button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="border:none;">
-                                </td>
-                                <td style="border:none;">
-                                    <label>Compliance<input id='complianceSourceACB' type='checkbox' disabled></label>
-                                    <label>Check All<input id='checkAllSourceACB' type='checkbox' onclick='checkAllCBClick(this,"modelTree1")'
-                                            checked disabled></label>
-                                </td>
-                            </tr>
-                        </table>
+                <div class="tab" id="tab1Parent" onclick="OpenTab('tab1')">
+                    <div class="tab1" id="tab1" >
+                        <div id="dataSource1ModelBrowserTab" style="align-content: center">
+                            Source 1
+                        </div>
                     </div>
                 </div>
-                <div id="b2" class="containerTab" style="display:none;background:LightGreen ">
-                    <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-                    <h2>Source B</h2>
+                <div class="tab" id="tab2Parent" style="left: 291px; display: none" onclick="OpenTab('tab2')">
+                    <div class="tab2" id="tab2" style="display: none;">
+                        <div id="dataSource2ModelBrowserTab" style="align-content: center">
+                            Source 2
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="group1" id="dataSource1">
+                <div id="modelTree1">
 
-                    <!-- second model tree and it's viewer -->
-                    <table>
-                        <tr colspan="2">
-                            <form id="uploadDatasourceBForm" enctype="multipart/form-data">
-                                <div>
-                                    <input id="dataSouresB" name="dataSouresName" type="file" onchange="loadDataSource(event, 'dataSouresB', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')"
-                                        disabled />
+                </div>
+                <div class="line">
+                </div>
+                <div class="checkallswitch">
+                    <div class="checkall">
+                        Check all
+                    </div>
+                    <style>
+                        .module1 .group1 .checkallswitch .toggle-KJzr * {
+                                box-sizing          : border-box;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                right               : 0%;
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 17.53%;
+                                position            : absolute;
+                                margin              : 0;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr .bg1 {
+                                pointer-events      : none;
+                                background-color    : rgba(233, 79, 28, 1.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr .bg11 {
+                                pointer-events      : none;
+                                background-color    : rgba(51, 51, 51, 1.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr .btn1 {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                top                 : 2px;
+                                height              : 20px;
+                                width               : 20px;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 2px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                width               : 45.45%;
+                                top                 : 8.33%;
+                                left                : 50.00%;
+                                height              : 83.33%;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .bg11 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 0;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                width               : 20px;
+                                top                 : 2px;
+                                left                : 2px;
+                                height              : 20px;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .bg11 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 1;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state2 .bg11 {
+                                opacity             : 0.0052;
+                            }
+                            .module1 .group1 .checkallswitch .toggle-KJzr.state2 .btn1 {
+                                top                 : 8.33%;
+                                height              : 83.33%;
+                                width               : 45.45%;
+                                left                : 50.00%;
+                            }
+                        </style>
+                    <div id="csB8xgZ">
+                        <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceACB" >
+                            <div class="bg1 " data-name="bg1beP8csB8xgZ">
+                            </div>
+                            <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
+                            </div>
+                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                        </div>
+                    </div>
+                    <script>
+                        if (typeof String.prototype.endsWith !== 'function') {
+                            String.prototype.endsWith = function (suffix) {
+                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                            };
+                        }
+                        if (!String.prototype.startsWith) {
+                            String.prototype.startsWith = function (searchString, position) {
+                                position = position || 0;
+                                return this.indexOf(searchString, position) === position;
+                            };
+                        }
+                        if (!Array.prototype.forEach) {
+                            Array.prototype.forEach = function (callback) {
+                                var T, k;
+                                if (this == null) {
+                                    throw new TypeError('this is null or not defined');
+                                }
+                                var O = Object(this);
+                                var len = O.length >>> 0;
+                                if (typeof callback !== 'function') {
+                                    throw new TypeError(callback + ' is not a function');
+                                }
+                                if (arguments.length > 1) {
+                                    T = arguments[1];
+                                }
+                                k = 0;
+                                while (k < len) {
+                                    var kValue;
+                                    if (k in O) {
+                                        kValue = O[k];
+                                        callback.call(T, kValue, k, O);
+                                    }
+                                    k++;
+                                }
+                            };
+                        }
+                        function toArray(obj) {
+                            var array = [];
+                            for (var i = obj.length >>> 0; i--;) {
+                                array[i] = obj[i];
+                            }
+                            return array;
+                        }
+                        function addClass(object, className) {
+                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                        }
+                        function removeAllClassesButFirst(component, skipClass) {
+                            var classList = component.classList;
+                            var componentClass = classList.item(0);
+                            var toRemove = [];
+                            var beforeComponent = true;
+                            toArray(classList).forEach(function (className) {
+                                beforeComponent = beforeComponent && className != 'component';
+                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                    toRemove.push(className);
+                                }
+                            });
+                            toRemove.forEach(function (className) {
+                                classList.remove(className);
+                            });
+                        }
+                        function applyState(component, stateClass) {
+                            var componentClass = component.classList.item(0);
+                            component.className = componentClass;
+                            component.classList.add(stateClass);
+                        }
+                        function isCurrentState(component, state) {
+                            var classList = component.classList;
+                            var rv = false;
+                            toArray(classList).forEach(function (className) {
+                                if (className.endsWith(state)) {
+                                    rv = true;
+                                }
+                            });
+                            return rv;
+                        }
+                        function whichTransitionEvent() {
+                            var t, el = document.createElement("fakeelement");
+                            var transitions = {
+                                "transition": "transitionend",
+                                "OTransition": "oTransitionEnd",
+                                "MozTransition": "transitionend",
+                                "WebkitTransition": "webkitTransitionEnd"
+                            };
+                            for (t in transitions) {
+                                if (el.style[t] !== undefined) {
+                                    return transitions[t];
+                                }
+                            }
+                        }
+                        var transitionEvent = whichTransitionEvent();
+                        function clicktoggleKJzrcsB8xgZ1Handler(event) {
+                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                            if (isCurrentState(component, 'state1')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                                        removeAllClassesButFirst(component, 'state1-to-state2');
+                                        addClass(component, 'state2');
+                                        addClass(component, 'state1-to-state2');
+                                        checkAllCBClick(true,"modelTree1", "checkAllSourceACB")
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ1Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                        }
+                        function resettoggleKJzrcsB8xgZ() {
+                            console.log('reset');
+                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                            if (!component) {
+                                return;
+                            }
+                            component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                            removeAllClassesButFirst(component, 'state1-to-state2');
+                            addClass(component, 'state2');
+                            addClass(component, 'state1-to-state2');
+                        }
+                        function clicktoggleKJzrcsB8xgZ2Handler(event) {
+                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                            if (isCurrentState(component, 'state2')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                                        removeAllClassesButFirst(component, 'state2-to-state1');
+                                        addClass(component, 'state1');
+                                        addClass(component, 'state2-to-state1');
+                                        checkAllCBClick(false,"modelTree1", "checkAllSourceACB")
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ2Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                        }
+                    </script>
+                </div>
+                <div class="complianceswitch">
+                    <div class="compliance">
+                        Compliance
+                    </div>
+                    <style>
+                        .module1 .group1 .complianceswitch .toggle-Hm8P * {
+                                box-sizing          : border-box;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                right               : 0%;
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 17.53%;
+                                position            : absolute;
+                                margin              : 0;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P .bg2 {
+                                pointer-events      : none;
+                                background-color    : rgba(24, 23, 23, 1.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P .bg1 {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P .btn1 {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                top                 : 2px;
+                                height              : 20px;
+                                width               : 20px;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 22px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                left                : 22px;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .bg1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 1;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                left                : 2px;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .bg1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 0;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .bg1 {
+                                opacity             : 0.0029;
+                            }
+                            .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .btn1 {
+                                left                : 2px;
+                            }
+                        </style>
+                    <div id="S0BCR4u">
+                        <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u" id='complianceSourceACB'>
+                            <div class="bg2 " data-name="bg2FqZPS0BCR4u">
+                            </div>
+                            <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
+                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                            </img>
+                        </div>
+                    </div>
+                    <script>
+                        if (typeof String.prototype.endsWith !== 'function') {
+                            String.prototype.endsWith = function (suffix) {
+                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                            };
+                        }
+                        if (!String.prototype.startsWith) {
+                            String.prototype.startsWith = function (searchString, position) {
+                                position = position || 0;
+                                return this.indexOf(searchString, position) === position;
+                            };
+                        }
+                        if (!Array.prototype.forEach) {
+                            Array.prototype.forEach = function (callback) {
+                                var T, k;
+                                if (this == null) {
+                                    throw new TypeError('this is null or not defined');
+                                }
+                                var O = Object(this);
+                                var len = O.length >>> 0;
+                                if (typeof callback !== 'function') {
+                                    throw new TypeError(callback + ' is not a function');
+                                }
+                                if (arguments.length > 1) {
+                                    T = arguments[1];
+                                }
+                                k = 0;
+                                while (k < len) {
+                                    var kValue;
+                                    if (k in O) {
+                                        kValue = O[k];
+                                        callback.call(T, kValue, k, O);
+                                    }
+                                    k++;
+                                }
+                            };
+                        }
+                        function toArray(obj) {
+                            var array = [];
+                            for (var i = obj.length >>> 0; i--;) {
+                                array[i] = obj[i];
+                            }
+                            return array;
+                        }
+                        function addClass(object, className) {
+                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                        }
+                        function removeAllClassesButFirst(component, skipClass) {
+                            var classList = component.classList;
+                            var componentClass = classList.item(0);
+                            var toRemove = [];
+                            var beforeComponent = true;
+                            toArray(classList).forEach(function (className) {
+                                beforeComponent = beforeComponent && className != 'component';
+                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                    toRemove.push(className);
+                                }
+                            });
+                            toRemove.forEach(function (className) {
+                                classList.remove(className);
+                            });
+                        }
+                        function applyState(component, stateClass) {
+                            var componentClass = component.classList.item(0);
+                            component.className = componentClass;
+                            component.classList.add(stateClass);
+                        }
+                        function isCurrentState(component, state) {
+                            var classList = component.classList;
+                            var rv = false;
+                            toArray(classList).forEach(function (className) {
+                                if (className.endsWith(state)) {
+                                    rv = true;
+                                }
+                            });
+                            return rv;
+                        }
+                        function whichTransitionEvent() {
+                            var t, el = document.createElement("fakeelement");
+                            var transitions = {
+                                "transition": "transitionend",
+                                "OTransition": "oTransitionEnd",
+                                "MozTransition": "transitionend",
+                                "WebkitTransition": "webkitTransitionEnd"
+                            };
+                            for (t in transitions) {
+                                if (el.style[t] !== undefined) {
+                                    return transitions[t];
+                                }
+                            }
+                        }
+                        var transitionEvent = whichTransitionEvent();
+                        function clicktoggleHm8PS0BCR4u1Handler(event) {
+                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                            if (isCurrentState(component, 'state2')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+                                        removeAllClassesButFirst(component, 'state2-to-state1');
+                                        addClass(component, 'state1');
+                                        addClass(component, 'state2-to-state1');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleHm8PS0BCR4u1Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                        }
+                        function clicktoggleHm8PS0BCR4u2Handler(event) {
+                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                            if (isCurrentState(component, 'state1')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                                        removeAllClassesButFirst(component, 'state1-to-state2');
+                                        addClass(component, 'state2');
+                                        addClass(component, 'state1-to-state2');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleHm8PS0BCR4u2Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                        }
+                        function resettoggleHm8PS0BCR4u() {
+                            console.log('reset');
+                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                            if (!component) {
+                                return;
+                            }
+                            component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                            removeAllClassesButFirst(component, 'state1-to-state2');
+                            addClass(component, 'state2');
+                            addClass(component, 'state1-to-state2');
+                        }
+                    </script>
+                </div>
+                <div class="createbtn" id="createbtnA" onclick="OnLoadClick('true')" style="cursor: pointer;">
+                    <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
+                    <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
+                </div>
+                <div class="info">
+                    <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
+                    <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
+                </div>
+                <div class="loaddata">
+                    Load data
+                </div>
+                <div id="SourceAComponentCount" class="checkall">
+
+                </div>
+            </div>
+            <div class="group2" id="dataSource2" style="display: none">
+                <div id="modelTree2">
+                </div>
+                <div class="line"></div>
+                <div class="checkallswitch">
+                    <div class="checkall">
+                        Check all 
+                    </div>
+                    <style>
+                        .module1 .group2 .checkallswitch .toggle-KJzr2 * {
+                                    box-sizing          : border-box;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(255,255,255,0.0);
+                                    right               : 0%;
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 17.53%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2 .bg1 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(233, 79, 28, 1.0);
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 100%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 0%;
+                                    border-radius       : 12px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2 .bg11 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(51, 51, 51, 1.0);
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 100%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 0%;
+                                    border-radius       : 12px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2 .btn1 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(255,255,255,0.0);
+                                    top                 : 2px;
+                                    height              : 20px;
+                                    width               : 20px;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 2px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state1-to-state2 .btn1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    width               : 45.45%;
+                                    top                 : 8.33%;
+                                    left                : 50.00%;
+                                    height              : 83.33%;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state1-to-state2 .bg11 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    opacity             : 0;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state2-to-state1 .btn1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    width               : 20px;
+                                    top                 : 2px;
+                                    left                : 2px;
+                                    height              : 20px;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state2-to-state1 .bg11 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    opacity             : 1;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state2 .bg11 {
+                                    opacity             : 0.0052;
+                                }
+                                .module1 .group2 .checkallswitch .toggle-KJzr2.state2 .btn1 {
+                                    top                 : 8.33%;
+                                    height              : 83.33%;
+                                    width               : 45.45%;
+                                    left                : 50.00%;
+                                }
+                            </style>
+                    <div id="csB8xgZ">
+                        <div class="toggle-KJzr2 component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceBCB">
+                            <div class="bg1 " data-name="bg1beP8csB8xgZ">
+                            </div>
+                            <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
+                            </div>
+                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                        </div>
+                    </div>
+                    <script>
+                        if (typeof String.prototype.endsWith !== 'function') {
+                            String.prototype.endsWith = function (suffix) {
+                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                            };
+                        }
+                        if (!String.prototype.startsWith) {
+                            String.prototype.startsWith = function (searchString, position) {
+                                position = position || 0;
+                                return this.indexOf(searchString, position) === position;
+                            };
+                        }
+                        if (!Array.prototype.forEach) {
+                            Array.prototype.forEach = function (callback) {
+                                var T, k;
+                                if (this == null) {
+                                    throw new TypeError('this is null or not defined');
+                                }
+                                var O = Object(this);
+                                var len = O.length >>> 0;
+                                if (typeof callback !== 'function') {
+                                    throw new TypeError(callback + ' is not a function');
+                                }
+                                if (arguments.length > 1) {
+                                    T = arguments[1];
+                                }
+                                k = 0;
+                                while (k < len) {
+                                    var kValue;
+                                    if (k in O) {
+                                        kValue = O[k];
+                                        callback.call(T, kValue, k, O);
+                                    }
+                                    k++;
+                                }
+                            };
+                        }
+                        function toArray(obj) {
+                            var array = [];
+                            for (var i = obj.length >>> 0; i--;) {
+                                array[i] = obj[i];
+                            }
+                            return array;
+                        }
+                        function addClass(object, className) {
+                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                        }
+                        function removeAllClassesButFirst(component, skipClass) {
+                            var classList = component.classList;
+                            var componentClass = classList.item(0);
+                            var toRemove = [];
+                            var beforeComponent = true;
+                            toArray(classList).forEach(function (className) {
+                                beforeComponent = beforeComponent && className != 'component';
+                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                    toRemove.push(className);
+                                }
+                            });
+                            toRemove.forEach(function (className) {
+                                classList.remove(className);
+                            });
+                        }
+                        function applyState(component, stateClass) {
+                            var componentClass = component.classList.item(0);
+                            component.className = componentClass;
+                            component.classList.add(stateClass);
+                        }
+                        function isCurrentState(component, state) {
+                            var classList = component.classList;
+                            var rv = false;
+                            toArray(classList).forEach(function (className) {
+                                if (className.endsWith(state)) {
+                                    rv = true;
+                                }
+                            });
+                            return rv;
+                        }
+                        function whichTransitionEvent() {
+                            var t, el = document.createElement("fakeelement");
+                            var transitions = {
+                                "transition": "transitionend",
+                                "OTransition": "oTransitionEnd",
+                                "MozTransition": "transitionend",
+                                "WebkitTransition": "webkitTransitionEnd"
+                            };
+                            for (t in transitions) {
+                                if (el.style[t] !== undefined) {
+                                    return transitions[t];
+                                }
+                            }
+                        }
+                        var transitionEvent = whichTransitionEvent();
+                        function clicktoggleKJzrcsB8xgZ1Handler(event) {
+                            var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                            if (isCurrentState(component, 'state1')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                                        removeAllClassesButFirst(component, 'state1-to-state2');
+                                        addClass(component, 'state2');
+                                        addClass(component, 'state1-to-state2');
+                                        checkAllCBClick(true,"modelTree2", "checkAllSourceBCB")
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2 .bg1');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ1Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group2 .checkallswitch .toggle-KJzr2 .bg1');
+                        }
+                        function resettoggleKJzrcsB8xgZ() {
+                            console.log('reset');
+                            var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                            if (!component) {
+                                return;
+                            }
+                            component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                            removeAllClassesButFirst(component, 'state1-to-state2');
+                            addClass(component, 'state2');
+                            addClass(component, 'state1-to-state2');
+                        }
+                        function clicktoggleKJzrcsB8xgZ2Handler(event) {
+                            var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                            if (isCurrentState(component, 'state2')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                                        removeAllClassesButFirst(component, 'state2-to-state1');
+                                        addClass(component, 'state1');
+                                        addClass(component, 'state2-to-state1');
+                                        checkAllCBClick(false,"modelTree2", "checkAllSourceBCB")
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2 .bg1');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ2Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group2 .checkallswitch .toggle-KJzr2 .bg1');
+                        }
+                    </script>
+                </div>
+                <div class="complianceswitch">
+                    <div class="compliance">
+                        Compliance 
+                    </div>
+                    <style>
+                        .module1 .group2 .complianceswitch .toggle-Hm8P2 * {
+                                    box-sizing          : border-box;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(255,255,255,0.0);
+                                    right               : 0%;
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 17.53%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(24, 23, 23, 1.0);
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 100%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 0%;
+                                    border-radius       : 12px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg1 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(255,255,255,0.0);
+                                    top                 : 0%;
+                                    height              : 100%;
+                                    width               : 100%;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 0%;
+                                    border-radius       : 12px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2 .btn1 {
+                                    pointer-events      : none;
+                                    background-color    : rgba(255,255,255,0.0);
+                                    top                 : 2px;
+                                    height              : 20px;
+                                    width               : 20px;
+                                    position            : absolute;
+                                    margin              : 0;
+                                    left                : 22px;
+                                    -ms-transform       : rotate(0deg); /* IE 9 */
+                                    -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform           : rotate(0deg);
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state2-to-state1 .btn1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    left                : 22px;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state2-to-state1 .bg1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    opacity             : 1;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state1-to-state2 .btn1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    left                : 2px;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state1-to-state2 .bg1 {
+                                    transition          : all 0.2s ease-in-out 0.0s;
+                                    opacity             : 0;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state2 .bg1 {
+                                    opacity             : 0.0029;
+                                }
+                                .module1 .group2 .complianceswitch .toggle-Hm8P2.state2 .btn1 {
+                                    left                : 2px;
+                                }
+                            </style>
+                    <div id="S0BCR4u">
+                        <div class="toggle-Hm8P2 component state2" data-initial-state="state2" data-name="toggleHm8P2S0BCR4u" id='complianceSourceBCB'>
+                            <div class="bg2 " data-name="bg2FqZPS0BCR4u">
+                            </div>
+                            <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
+                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                            </img>
+                        </div>
+                    </div>
+                    <script>
+                        if (typeof String.prototype.endsWith !== 'function') {
+                            String.prototype.endsWith = function (suffix) {
+                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                            };
+                        }
+                        if (!String.prototype.startsWith) {
+                            String.prototype.startsWith = function (searchString, position) {
+                                position = position || 0;
+                                return this.indexOf(searchString, position) === position;
+                            };
+                        }
+                        if (!Array.prototype.forEach) {
+                            Array.prototype.forEach = function (callback) {
+                                var T, k;
+                                if (this == null) {
+                                    throw new TypeError('this is null or not defined');
+                                }
+                                var O = Object(this);
+                                var len = O.length >>> 0;
+                                if (typeof callback !== 'function') {
+                                    throw new TypeError(callback + ' is not a function');
+                                }
+                                if (arguments.length > 1) {
+                                    T = arguments[1];
+                                }
+                                k = 0;
+                                while (k < len) {
+                                    var kValue;
+                                    if (k in O) {
+                                        kValue = O[k];
+                                        callback.call(T, kValue, k, O);
+                                    }
+                                    k++;
+                                }
+                            };
+                        }
+                        function toArray(obj) {
+                            var array = [];
+                            for (var i = obj.length >>> 0; i--;) {
+                                array[i] = obj[i];
+                            }
+                            return array;
+                        }
+                        function addClass(object, className) {
+                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                        }
+                        function removeAllClassesButFirst(component, skipClass) {
+                            var classList = component.classList;
+                            var componentClass = classList.item(0);
+                            var toRemove = [];
+                            var beforeComponent = true;
+                            toArray(classList).forEach(function (className) {
+                                beforeComponent = beforeComponent && className != 'component';
+                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                    toRemove.push(className);
+                                }
+                            });
+                            toRemove.forEach(function (className) {
+                                classList.remove(className);
+                            });
+                        }
+                        function applyState(component, stateClass) {
+                            var componentClass = component.classList.item(0);
+                            component.className = componentClass;
+                            component.classList.add(stateClass);
+                        }
+                        function isCurrentState(component, state) {
+                            var classList = component.classList;
+                            var rv = false;
+                            toArray(classList).forEach(function (className) {
+                                if (className.endsWith(state)) {
+                                    rv = true;
+                                }
+                            });
+                            return rv;
+                        }
+                        function whichTransitionEvent() {
+                            var t, el = document.createElement("fakeelement");
+                            var transitions = {
+                                "transition": "transitionend",
+                                "OTransition": "oTransitionEnd",
+                                "MozTransition": "transitionend",
+                                "WebkitTransition": "webkitTransitionEnd"
+                            };
+                            for (t in transitions) {
+                                if (el.style[t] !== undefined) {
+                                    return transitions[t];
+                                }
+                            }
+                        }
+                        var transitionEvent = whichTransitionEvent();
+                        function clicktoggleHm8P2S0BCR4u1Handler(event) {
+                            var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                            if (isCurrentState(component, 'state2')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                        component.addEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate2tostate1EndedHandler);
+                                        removeAllClassesButFirst(component, 'state2-to-state1');
+                                        addClass(component, 'state1');
+                                        addClass(component, 'state2-to-state1');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleHm8P2S0BCR4ustate2tostate1EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                component.removeEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate2tostate1EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleHm8P2S0BCR4u1Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2');
+                        }
+                        function clicktoggleHm8P2S0BCR4u2Handler(event) {
+                            var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                            if (isCurrentState(component, 'state1')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                        component.addEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate1tostate2EndedHandler);
+                                        removeAllClassesButFirst(component, 'state1-to-state2');
+                                        addClass(component, 'state2');
+                                        addClass(component, 'state1-to-state2');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggleHm8P2S0BCR4ustate1tostate2EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                component.removeEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate1tostate2EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggleHm8P2S0BCR4u2Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2');
+                        }
+                        function resettoggleHm8P2S0BCR4u() {
+                            console.log('reset');
+                            var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                            if (!component) {
+                                return;
+                            }
+                            component.addEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate1tostate2EndedHandler);
+                            removeAllClassesButFirst(component, 'state1-to-state2');
+                            addClass(component, 'state2');
+                            addClass(component, 'state1-to-state2');
+                        }
+                    </script>
+                </div>
+                <div class="createbtn2" id="createbtnB" onclick="OnLoadClick('false')" style="cursor: pointer;">
+                    <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
+                    <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
+                </div>
+                <div class="info">
+                    <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
+                    <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
+                </div>
+                <div class="loaddata">
+                    Load data
+                </div>
+                <div id="SourceBComponentCount" class="checkall" style="display: none">
+
+                </div>
+            </div>
+            <div class="group31">
+                <div class="bg1">
+                </div>
+                <div class="dropdown-view">
+                    <div class="checkcase">
+                        Check Case
+                    </div>
+                    <select class="rectangle" id="checkCaseSelect" style="font-size: 20px; margin-left: 7px"></select>
+                    <img src="/images/UIPackage/module1-triangle@2x.png" class="triangle" />
+                </div>
+                <div class="comparisonswitch">
+                    <div class="comparison">
+                        Comparison
+                    </div>
+                    <style>
+                        .module1 .group31 .comparisonswitch .toggle-2udj * {
+                                box-sizing          : border-box;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                bottom              : 0%;
+                                height              : 44.44%;
+                                width               : 40.74%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 29.63%;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj .bg12 {
+                                pointer-events      : none;
+                                background-color    : rgba(233, 79, 28, 1.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj .bg11 {
+                                pointer-events      : none;
+                                background-color    : rgba(51, 51, 51, 1.0);
+                                top                 : 0%;
+                                height              : 100%;
+                                width               : 100%;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 0%;
+                                border-radius       : 12px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj .btn1 {
+                                pointer-events      : none;
+                                background-color    : rgba(255,255,255,0.0);
+                                top                 : 2px;
+                                height              : 20px;
+                                width               : 20px;
+                                position            : absolute;
+                                margin              : 0;
+                                left                : 2px;
+                                -ms-transform       : rotate(0deg); /* IE 9 */
+                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+                                transform           : rotate(0deg);
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                left                : 22px;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .bg11 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 0;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .btn1 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                left                : 2px;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .bg11 {
+                                transition          : all 0.2s ease-in-out 0.0s;
+                                opacity             : 1;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state2 .bg11 {
+                                opacity             : 0.0080;
+                            }
+                            .module1 .group31 .comparisonswitch .toggle-2udj.state2 .btn1 {
+                                left                : 22px;
+                            }
+                        </style>
+                    <div id="lGv4xgM">
+                        <div class="toggle-2udj component state1" data-initial-state="state1" data-name="toggle2udjlGv4xgM" id="comparisonCB">
+                            <div class="bg12 " data-name="bg12Z4CZlGv4xgM">
+                            </div>
+                            <div class="bg11 " data-name="bg11aa7ElGv4xgM">
+                            </div>
+                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                        </div>
+                    </div>
+                    <script>
+                        if (typeof String.prototype.endsWith !== 'function') {
+                            String.prototype.endsWith = function (suffix) {
+                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                            };
+                        }
+                        if (!String.prototype.startsWith) {
+                            String.prototype.startsWith = function (searchString, position) {
+                                position = position || 0;
+                                return this.indexOf(searchString, position) === position;
+                            };
+                        }
+                        if (!Array.prototype.forEach) {
+                            Array.prototype.forEach = function (callback) {
+                                var T, k;
+                                if (this == null) {
+                                    throw new TypeError('this is null or not defined');
+                                }
+                                var O = Object(this);
+                                var len = O.length >>> 0;
+                                if (typeof callback !== 'function') {
+                                    throw new TypeError(callback + ' is not a function');
+                                }
+                                if (arguments.length > 1) {
+                                    T = arguments[1];
+                                }
+                                k = 0;
+                                while (k < len) {
+                                    var kValue;
+                                    if (k in O) {
+                                        kValue = O[k];
+                                        callback.call(T, kValue, k, O);
+                                    }
+                                    k++;
+                                }
+                            };
+                        }
+                        function toArray(obj) {
+                            var array = [];
+                            for (var i = obj.length >>> 0; i--;) {
+                                array[i] = obj[i];
+                            }
+                            return array;
+                        }
+                        function addClass(object, className) {
+                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                        }
+                        function removeAllClassesButFirst(component, skipClass) {
+                            var classList = component.classList;
+                            var componentClass = classList.item(0);
+                            var toRemove = [];
+                            var beforeComponent = true;
+                            toArray(classList).forEach(function (className) {
+                                beforeComponent = beforeComponent && className != 'component';
+                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                    toRemove.push(className);
+                                }
+                            });
+                            toRemove.forEach(function (className) {
+                                classList.remove(className);
+                            });
+                        }
+                        function applyState(component, stateClass) {
+                            var componentClass = component.classList.item(0);
+                            component.className = componentClass;
+                            component.classList.add(stateClass);
+                        }
+                        function isCurrentState(component, state) {
+                            var classList = component.classList;
+                            var rv = false;
+                            toArray(classList).forEach(function (className) {
+                                if (className.endsWith(state)) {
+                                    rv = true;
+                                }
+                            });
+                            return rv;
+                        }
+                        function whichTransitionEvent() {
+                            var t, el = document.createElement("fakeelement");
+                            var transitions = {
+                                "transition": "transitionend",
+                                "OTransition": "oTransitionEnd",
+                                "MozTransition": "transitionend",
+                                "WebkitTransition": "webkitTransitionEnd"
+                            };
+                            for (t in transitions) {
+                                if (el.style[t] !== undefined) {
+                                    return transitions[t];
+                                }
+                            }
+                        }
+                        var transitionEvent = whichTransitionEvent();
+                        function clicktoggle2udjlGv4xgM1Handler(event) {
+                            var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                            if (isCurrentState(component, 'state1')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                        component.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler);
+                                        removeAllClassesButFirst(component, 'state1-to-state2');
+                                        addClass(component, 'state2');
+                                        addClass(component, 'state1-to-state2');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                component.removeEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj .bg12');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggle2udjlGv4xgM1Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group31 .comparisonswitch .toggle-2udj .bg12');
+                        }
+                        function resettoggle2udjlGv4xgM() {
+                            console.log('reset');
+                            var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                            if (!component) {
+                                return;
+                            }
+                            component.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler);
+                            removeAllClassesButFirst(component, 'state1-to-state2');
+                            addClass(component, 'state2');
+                            addClass(component, 'state1-to-state2');
+                        }
+                        function clicktoggle2udjlGv4xgM2Handler(event) {
+                            var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                            if (isCurrentState(component, 'state2')) {
+                                try {
+                                    setTimeout(function () {
+                                        var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                        component.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate2tostate1EndedHandler);
+                                        removeAllClassesButFirst(component, 'state2-to-state1');
+                                        addClass(component, 'state1');
+                                        addClass(component, 'state2-to-state1');
+                                    }, 0);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
+                        }
+                        function transitiontoggle2udjlGv4xgMstate2tostate1EndedHandler(event) {
+                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                component.removeEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate2tostate1EndedHandler);
+                            }
+                        }
+                        child = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj .bg12');
+                        if (child) {
+                            child.style['pointer-events'] = 'auto';
+                            child.addEventListener('click', clicktoggle2udjlGv4xgM2Handler);
+                        } else {
+                            console.log('Could not find element at: .module1 .group31 .comparisonswitch .toggle-2udj .bg12');
+                        }
+                    </script>
+                </div>
+                <!-- <a href="/reviewModule.html" id="checkButton"> -->
+                    <div class="play" id="checkButton" onMouseOver="this.style.cursor='pointer'">
+                        <img src="/images/UIPackage/module1-bg 8@2x.png" class="bg2" />
+                        <img src="/images/UIPackage/module1-triangle 1@2x.png" class="triangle" />
+                    </div>
+                <!-- </a> -->
+            </div>
+            <div class="infoleft">
+                <div class="project">
+                    PROJECT:
+                </div>
+                <div class="powerplant" id="powerplant">
+                    PowerPlant
+                </div>
+            </div>
+            <div class="infomid">
+                <div class="units">
+                    UNITS:
+                </div>
+                <select  class="mks" style="background-color: #000">
+                    <option >MKS</option>
+                    <option >IPS</option>
+                    <option>Custom</option>
+                </select>
+                <img src="/images/UIPackage/module1-with-open-menu-triangle 2@2x.png" style="left: 114px" class="triangle" />
+            </div>
+            <div class="group">
+                <div class="iconfullscreenfilled" onclick="OnFullScreen()">
+                    <img src="/images/UIPackage/module1-icon--fullscreen--filled@2x.png" class="iconfullscreenfilled1" />
+                </div>
+                <div class="iconfullscreenexitfilled" onclick="OnExitFullScreen()">
+                    <img src="/images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png" class="iconfullscreenexitfilled1" />
+                </div>
+                <div class="icon1">
+                    <img src="/images/UIPackage/module1-icon-3-bg2@2x.png" class="icon1bg2" />
+                    <img src="/images/UIPackage/module2-with-open-menu-icon-1-bg1@2x.png" class="icon1bg1" />
+                    <img src="/images/UIPackage/module2-with-open-menu-icon-1-black@2x.png" class="icon1black" />
+                </div>
+                <div class="icon3">
+                    <img src="/images/UIPackage/module1-icon-3-bg2@2x.png" class="icon3bg2" />
+                    <img src="/images/UIPackage/module1-with-open-menu-icon-3-black@2x.png" class="icon3black" />
+                </div>
+            </div>
+            <div class="group32" id="dataSourceViewer" style="opacity: 0.99">
+                <div class="bg1">
+                    <div id="viewerContainer1" style="height: 350px; width: 560px;margin: 20px 0 0 20px; display: block"
+                        class="example-canvas-small">
+
+                    </div>
+                    <div id="viewerContainer2" style="height: 350px; width: 560px; margin: 20px 0 0 20px; display: none"
+                        class="example-canvas-small">
+
+                    </div>
+                </div>
+                <div class="viewdatagraphics">
+                    View data graphics
+                </div>
+				<div class="openmenu" id="openmenu">
+                    <img src="/images/UIPackage/module2-with-open-menu-bg-llist.png" class="bgllist" />
+                    <a href="createprojectwithopenmenu.html">
+                        <div class="projects">
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedprojects" />
+                            <div class="hoverprojects">
+                            </div>
+                            <div class="label">
+                                <div class="labelbg">
+                                </div>
+                                <div class="label1">
+                                    Label
+                                </div>
+                            </div>
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-projects@2x.png" class="iconprojects" />
+                        </div>
+                    </a>
+                    <a href="prephomepage.html">
+                        <div class="prep">
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedprep" />
+                            <div class="hoverprep">
+                            </div>
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-prep@2x.png" class="iconprep" />
+                        </div>
+                    </a>
+                    <a href="module2withopenmenu.html">
+                        <div class="review">
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedreview" />
+                            <div class="hoverreview">
+                            </div>
+                            <div class="label">
+                                <div class="labelbg">
+                                </div>
+                                <div class="label1">
+                                    Label
+                                </div>
+                            </div>
+                            <img src="/images/UIPackage/module2-icon-review@2x.png" class="iconreview" />
+                        </div>
+                    </a>
+                    <div class="reports">
+                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedstat" />
+                        <div class="hoverstat">
+                        </div>
+                        <div class="label">
+                            <div class="labelbg">
+                            </div>
+                            <div class="label1">
+                                Label
+                            </div>
+                        </div>
+                        <img src="/images/UIPackage/create-project-with-open-menu-icon-stat@2x.png" class="iconstat" />
+                    </div>
+                    <div class="export">
+                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedexport" />
+                        <div class="hoverexport">
+                        </div>
+                        <div class="label">
+                            <div class="labelbg">
+                            </div>
+                            <div class="label1">
+                                Label
+                            </div>
+                        </div>
+                        <img src="/images/UIPackage/landing-page-with-open-menu-icon-export@2x.png" class="iconexport" />
+                    </div>
+                    <a href="loginpage.html">
+                        <div class="logout">
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedlogout" />
+                            <div class="hoverlogout">
+                            </div>
+                            <div class="label">
+                                <div class="labelbg">
+                                </div>
+                                <div class="label1">
+                                    Label
+                                </div>
+                            </div>
+                            <img src="/images/UIPackage/module1-with-open-menu-icon-logout@2x.png" class="iconlogout" />
+                        </div>
+                    </a>
+                    <a href="landingpage.html">
+                        <div class="home">
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedhome" />
+                            <div class="hoverhome">
+                            </div>
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-home@2x.png" class="iconhome" />
+                        </div>
+                    </a>
+                    <a href="module1.html">
+                        <div class="checkpressed">
+                            <div class="label">
+                                <div class="labelbg">
+                                </div>
+                                <div class="check">
+                                    Check
+                                </div>
+                            </div>
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedcheck" />
+                            <div class="hovercheck">
+                            </div>
+                            <img src="/images/UIPackage/module2-with-open-menu-icon-check@2x.png" class="iconcheck" />
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="white1">
+                <div class="panel">
+                    <div class="bg2">
+                    </div>
+                    <div class="createtab" id="createTab1" onclick="CreateNewTab()" style="cursor: pointer; ">
+                    </div>
+                    <div class="createbtn">
+                        <img src="/images/UIPackage/module1-with-open-menu-create-icon 2@2x.png" class="createicon" />
+                    </div>
+                </div>
+                <div class="tab" id="tab1ViewerParent" onclick="OpenTab('tab1Viewer')">
+                    <div class="tab1" id="tab1Viewer" style="background-color: #F3F0F4">
+                        <div id="dataSource1ViewerContainerTab" style="align-content: center">
+                            Source 1
+                        </div>
+                    </div>
+                </div>
+                <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none" onclick="OpenTab('tab2Viewer')">
+                    <div class="tab2" id="tab2Viewer" style="display: none;">
+                        <div id="dataSource2ViewerContainerTab" style="align-content: center">
+                            Source 2
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- The Modal -->
+            <div id="projectselectiondialogModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content" id="projectselectiondialog-content">
+
+                </div>
+            </div>
+            <div id="maximizeViewerContainer" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content" id="maximizeViewerContainer-content" style="width: 700px; height: 550px; margin-left: 300px; margin-top: 80px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="anima-overlay" id="overlay-loaddatadialog" style="min-height:720px; position:fixed;">
+        <div class="loaddatadialog" id="loaddatadialog">
+            <div style="width: 614px; height: 100%; position:relative; margin:auto;">
+                <div class="loaddatadialog1">
+                    <div class="loaddatadialog2" id="loaddatadialog2">
+                        <div class="bg">
+                        </div>
+                        <div class="line">
+                        </div>
+                        <div class="header">
+                            <div class="bg1">
+                            </div>
+                            <a href="checkModule.html">
+                                <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close" />
+                            </a>
+                            <div class="loaddata">
+                                LOAD DATA
+                            </div>
+                        </div>
+                        <div class="browse" id="browse">
+                            <form id="uploadDatasourceAForm" enctype="multipart/form-data">
+                                <div class="group">
+
+                                    <label for="file-input" class="input-label">
+                                        <img src="/images/UIPackage/output-data-dialog-bg 3@2x.png" class="bg1" />
+                                        <img src="/images/UIPackage/load-data-dialog-icon@2x.png" class="icon" />
+                                        <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">
+                                    </label>
                                 </div>
                             </form>
-                        </tr>
-
-                        <tr>
-                            <td valign="top" style="border:none;">
-                                <div id="modelTree2"></div>
-                            </td>
-                            <td style="border:none;">
-                                <div id="viewerContainer2" class="example-canvas-small"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                                <td >
-                                        <div id="totalComponentCount2"></div>
-                                </td>
-                        </tr>
-                        <tr></tr>
-                        <tr>
-                            <td style="border:none;"></td>
-                            <td style="border:none;">
-                                <div class="viewOrientation2">
-                                    <button id="Front2" disabled>Front</button>
-                                    <button id="Back2" disabled>Back</button>
-                                    <button id="Top2" disabled>Top</button>
-                                    <button id="Bottom2" disabled>Bottom</button>
-                                    <button id="Left2" disabled>Left</button>
-                                    <button id="Right2" disabled>Right</button>
-                                    <button id="Iso2" disabled>Iso</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="border:none;">
-                            </td>
-                            <td style="border:none;">
-                                <label>Compliance<input id='complianceSourceBCB' type='checkbox' disabled></label>
-                                <label>Check All<input id='checkAllSourceBCB' type='checkbox' onclick='checkAllCBClick(this, "modelTree2");'
-                                        checked disabled></label>
-                            </td>
-                        </tr>
-                    </table>
+                            <div class="browse1">
+                                Browse
+                            </div>
+                        </div>
+                        <div class="saveas">
+                            <img src="/images/UIPackage/load-data-dialog-icon-1@2x.png" class="icon1" />
+                            <img src="/images/UIPackage/load-data-dialog-icon-2@2x.png" class="icon2" />
+                            <img src="/images/UIPackage/load-data-dialog-icon-3@2x.png" class="icon3" />
+                            <img src="/images/UIPackage/load-data-dialog-icon-4@2x.png" class="icon4" />
+                            <div class="connecttodatasour">
+                                Connect to data source
+                            </div>
+                            <div class="moresourcesu2026">
+                                More sources…
+                            </div>
+                        </div>
+                        <div class="footer">
+                        </div>
+                    </div>
                 </div>
-            </td>
-        <tr>
-            <td style="border:none;">
-                <label>Check Case <select id="checkCaseSelect"></select></label> <br>
-                <label>Comparison <input id='comparisonCB' type='checkbox' disabled></label>
-            </td>
-        </tr>
-
-        </tr>
-        <th colspan="2" style=" background-color: #333333;  height: 10%;">
-        </th>
-    </table>
-
-    <script type="text/javascript">
+            </div>
+        </div>
+    </div>
+    <script>
+        var overlay_id = "overlay-loaddatadialog";
+        document.getElementById(overlay_id).addEventListener("click", function (event) {
+            var e = event || window.event;
+            var clickedDiv = e.toElement || e.target;
+            if (clickedDiv.parentElement.id == overlay_id) {
+                animaHideOverlay('loaddatadialog', 'anima-animate-disappear');
+            }
+        }, false);
+    </script>
+    <!-- Scripts -->
+    <script>
+        function AnalyticsData(checkCaseName, sourceAName, sourceBName){
+            this.CheckCaseName = checkCaseName;
+            this.SourceAName = sourceAName;
+            this.SourceBName = sourceBName;
+        }
 
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
@@ -309,37 +1918,44 @@
         var checkCaseFilesData;
 
         window.onload = function () {
+            
+            var project = getCookie("checkprojectname");
+			var powerplantdiv  = document.getElementById("powerplant");
+			if (project != "" && powerplantdiv != null)
+                powerplant.innerHTML = project;
+				
+			var username = getCookie("username");
+			var pierrediv  = document.getElementById("pierre");
+			if (username != "" && pierrediv != null)
+                pierrediv.innerHTML = username;	
+				
+                
             //delete checkResultsArray from local storage
-            delete(localStorage["CheckResultArray"]);
+            delete (localStorage["CheckResultArray"]);
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
-
                 // show busy loader
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
-
                 sourceAComplianceCheckManager = undefined;
                 sourceBComplianceCheckManager = undefined;
                 comparisonCheckManager = undefined;
-
                 var checkCaseSelect = document.getElementById("checkCaseSelect");
                 if (checkCaseSelect.value === "None") {
-
                     // hide busy spinner
                     busySpinner.classList.remove('show');
-
                     alert("Please select check case from list.")
                     return;
                 }
 
                 // check if any check case type is selected
-                var comparisonCB = document.getElementById("comparisonCB");
-                var complianceSourceACB = document.getElementById("complianceSourceACB");
-                var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                if (!comparisonCB.checked &&
-                    !complianceSourceACB.checked &&
-                    !complianceSourceBCB.checked) {
+                var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                var complianceSourceBCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                if (!comparisonCB.classList.contains("state2") &&
+                    !complianceSourceACB.classList.contains("state1") &&
+                    !complianceSourceBCB.classList.contains("state1")) {
                     // hide busy spinner
                     busySpinner.classList.remove('show');
 
@@ -349,62 +1965,70 @@
 
                 //var checkMethod;
                 for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-
+                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];                  
                     var comparisonCB = document.getElementById('comparisonCB');
-                    if (comparisonCB.checked &&
-                        checkType.Name.toLowerCase() === "comparison" &&
+                    if (checkType.Name.toLowerCase() === "comparison" &&
                         xCheckStudioInterface1 &&
                         xCheckStudioInterface2 &&
                         checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
                         checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
-                        // checkMethod = checkType.Name;
-                        // break;
-                        if (!comparisonCheckManager) {
-                            comparisonCheckManager = new CheckManager();
-                            comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                xCheckStudioInterface2.sourceProperties,
-                                checkType,
-                                true,
-                                undefined);
+                        var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                        if (component.classList.contains("state2")) {
+                            // checkMethod = checkType.Name;
+                            // break;
+                            if (!comparisonCheckManager) {
+                                comparisonCheckManager = new CheckManager();
+                                comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                    xCheckStudioInterface2.sourceProperties,
+                                    checkType,
+                                    true,
+                                    undefined);
+                            }
                         }
                     }
+
                     else {
                         if (xCheckStudioInterface1) {
                             var complianceSourceACB = document.getElementById("complianceSourceACB");
-                            if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourcea")
-                            if(checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
-                                complianceSourceACB.checked) {
-                                if (!sourceAComplianceCheckManager) {
-                                    sourceAComplianceCheckManager = new CheckManager();
-                                    sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                        undefined,
-                                        checkType,
-                                        false,
-                                        xCheckStudioInterface1);
+                            if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourcea") {
+                                if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase()) {
+                                    var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                    if (component.classList.contains("state1")) {
+                                        if (!sourceAComplianceCheckManager) {
+                                            sourceAComplianceCheckManager = new CheckManager();
+                                            sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                                                undefined,
+                                                checkType,
+                                                false,
+                                                xCheckStudioInterface1);
+                                        }
+                                    }
+
                                 }
                             }
                         }
 
                         if (xCheckStudioInterface2) {
                             var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                            if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourceb")
-                            if(checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase() &&
-                                complianceSourceBCB.checked) {
-                                if (!sourceBComplianceCheckManager) {
+                            if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourceb") {
+                                if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
+                                    var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                    if (component.classList.contains("state1")) {
+                                        if (!sourceBComplianceCheckManager) {
+                                            sourceBComplianceCheckManager = new CheckManager();
+                                            sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
+                                                undefined,
+                                                checkType,
+                                                false,
+                                                xCheckStudioInterface2);
+                                        }
+                                    }
 
-                                    sourceBComplianceCheckManager = new CheckManager();
-                                    sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
-                                        undefined,
-                                        checkType,
-                                        false,
-                                        xCheckStudioInterface2);
                                 }
                             }
                         }
                     }
                 }
-                //jsonObj = JSON.stringify(xCheckStudioInterface1.sourceProperties, null, 2);
                 // hide busy spinner
                 busySpinner.classList.remove('show');
 
@@ -412,7 +2036,8 @@
                 if (result) {
                     // OK clicked
                     postData();
-                    window.location = "/reviewModule.html";
+                    // window.location = "/reviewModule.html";
+                    window.location = "/module2.html"; 
                     return false;
                 }
                 else {
@@ -443,60 +2068,16 @@
 
 
                 // enable source A load source buttton
-                var loadDataSourceAButton = document.getElementById("dataSouresA");
-                loadDataSourceAButton.disabled = false;
+                // var loadDataSourceAButton = document.getElementById("dataSouresA");
+                // loadDataSourceAButton.disabled = false;
             }
 
             // read check cases files list
             checkCaseFilesData = new CheckCaseFilesData();
             checkCaseFilesData.readCheckCaseFiles();
 
-            
+
         };
-
-        function readExcelDataSource(file,
-            dataSource,
-            viewerContainer,
-            modelTreeContainer) {
-
-            let fileName = file.name;
-            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-
-            document.getElementById(modelTreeContainer).innerHTML = ""
-            document.getElementById(viewerContainer).innerHTML = ""
-            if (!xCheckStudioInterface1) {
-                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
-
-                // enable source A controls
-                var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-                sourceAComplianceCB.disabled = false;
-
-                var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-                checkAllSourceACB.disabled = false;
-
-                // enable source B load data source button
-                var loadDataSourceBButton = document.getElementById("dataSouresB");
-                loadDataSourceBButton.disabled = false;
-            }
-            else {
-                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
-
-                // enable source B controls
-                var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-                sourceBComplianceCB.disabled = false;
-
-                var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-                checkAllSourceBCB.disabled = false;
-
-                var comparisonCB = document.getElementById("comparisonCB");
-                comparisonCB.disabled = false;
-            }
-
-            document.getElementById("checkButton").disabled = false;
-        }
-
 
         function postData(url, method) {
             // remove post data js files from server from earlier check results, if any
@@ -510,6 +2091,39 @@
                 }
             });
 
+           
+            var checkCaseName ;
+            var sourceAFileName;
+            var sourceBFileName;
+            checkCaseName = checkCaseManager.CheckCase.Name;
+        //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
+        //    if(sourceEndPointUri !== undefined)
+        //    {
+        //     var tempArray = sourceEndPointUri.split("/");
+        //     var sourceAFileName = tempArray[tempArray.length-1];
+        //     sourceAFileName = sourceAFileName;
+        //    }
+            
+        //     sourceEndPointUri = xCheckStudioInterface2._firstViewer._params.endpointUri;
+        //     if(sourceEndPointUri !== undefined)
+        //    {
+        //     tempArray = sourceEndPointUri.split("/");
+        //     sourceBFileName = tempArray[tempArray.length-1];
+        //     sourceBFileName = sourceBFileName;
+        //    }
+
+           var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName);
+
+                $.ajax({
+                    url: 'postData/analyticsDetailsDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+                    success: function (data) {
+                        // alert("success");
+                    }
+                });
+
             // post comparison data
             if (comparisonCheckManager) {
                 $.ajax({
@@ -518,7 +2132,7 @@
                     async: false,
                     data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
                     success: function (data) {
-                        //alert("success");
+                        // alert("success");
                         //$("#result").html(data);
                     }
                 });
@@ -676,132 +2290,128 @@
             }
         }
 
-        function openTab(tabName) {
-            var tabs = document.getElementsByClassName("containerTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
+        function CreateNewTab() {
+            var parent = document.getElementById("tab2Parent");
+            parent.style.display = "block";
+            var tab2 = document.getElementById("tab2");
+            tab2.style.display = "block";
+            tab2.style.backgroundColor = "#F3F0F4";
 
-            document.getElementById(tabName).style.display = "block";
+            //modelbrowser2
+            var dataSourceTab = document.getElementById("dataSource2");
+            dataSourceTab.style.display = "block";
+
+            var parentViewer = document.getElementById("tab2ViewerParent");
+            parentViewer.style.display = "block";
+            var tab2Viewer = document.getElementById("tab2Viewer");
+            tab2Viewer.style.display = "block";
+            tab2Viewer.style.backgroundColor = "#F3F0F4";
+
+            //viewerContainer2
+            var viewerContainer2 = document.getElementById("viewerContainer2")
+            viewerContainer2.style.display = "block";
+
+            //tab1
+            var tab2 = document.getElementById("tab1");
+            tab2.style.display = "block";
+            tab2.style.backgroundColor = "lightgray";
+            //viewertab
+            var tab1Viewer = document.getElementById("tab1Viewer");
+            tab1Viewer.style.display = "block";
+            tab1Viewer.style.backgroundColor = "lightgray";
+            //modelBrowser1
+            var dataSource1Tab = document.getElementById("modelTree1");
+            dataSource1Tab.style.display = "none";
+            //viewerContainer1
+            var viewerContainer1 = document.getElementById("viewerContainer1")
+            viewerContainer1.style.display = "none";
+            //count
+            var elementCountTab = document.getElementById("SourceAComponentCount");
+            elementCountTab.style.display = "none";
         }
 
-        function checkAllCBClick(checkBox, modelTreeContainer) {
+        function readExcelDataSource(file,
+            dataSource,
+            viewerContainer,
+            modelTreeContainer) {
 
-            var modelTreeContainerElement = document.getElementById(modelTreeContainer);
-            var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-            var modelBrowserTable = modelTreeContainerElement.children[1];
+            // document.getElementById(modelTreeContainer).innerHTML = ""
+            // document.getElementById(viewerContainer).innerHTML = ""
+            // if (!xCheckStudioInterface1) {
+            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
 
-            var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
-            // var currentTable = modelTreeParentDiv.children[0];
+            // enable source A controls
+            // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+            // sourceAComplianceCB.disabled = false;
 
-            for (var i = 0; i < modelBrowserTableRows.length; i++) {
-                var row = modelBrowserTableRows[i];
+            // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+            // checkAllSourceACB.disabled = false;
 
-                var currentCheckBox = row.cells[0].children[0];
-                if (!currentCheckBox) {
-                    continue;
-                }
+            // // enable source B load data source button
+            // var loadDataSourceBButton = document.getElementById("dataSouresB");
+            // loadDataSourceBButton.disabled = false;
+            // }
+            // else {
+            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            //     xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
 
-                if (checkBox.checked === currentCheckBox.checked) {
-                    continue;
-                }
+            //     // enable source B controls
+            //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+            //     sourceBComplianceCB.disabled = false;
 
-                currentCheckBox.checked = checkBox.checked;
-                if (currentCheckBox.checked) {
-                    var checkedComponent;
+            //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+            //     checkAllSourceBCB.disabled = false;
 
-                    if (xCheckStudioInterface1) {
-                        if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'MainComponentClass': row.cells[2].textContent.trim(),
-                                'SubComponentClass': row.cells[3].textContent.trim(),
-                                'Source': row.cells[4].textContent.trim(),
-                                'Destination': row.cells[5].textContent.trim(),
-                                'Owner': row.cells[6].textContent.trim()
-                            };
+            //     var comparisonCB = document.getElementById("comparisonCB");
+            //     comparisonCB.disabled = false;
+            // }
 
-                            if (checkBox.id === "checkAllSourceACB" &&
-                                xCheckStudioInterface1 &&
-                                !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {
-                                xCheckStudioInterface1._modelTree.selectedCompoents.push(checkedComponent);
-                            }
-                        }
-                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'Category': row.cells[2].textContent.trim(),
-                                'ComponentClass': row.cells[3].textContent.trim(),
-                                'Description': row.cells[4].textContent.trim()
-                            };
+            // document.getElementById("checkButton").disabled = false;
+        }
 
-                            if (checkBox.id === "checkAllSourceACB" &&
-                                xCheckStudioInterface1 &&
-                                !xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
-                                xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
-                            }
-                        }
-                        
-                    }
-                    if (xCheckStudioInterface2) {
-                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'MainComponentClass': row.cells[2].textContent.trim(),
-                                'SubComponentClass': row.cells[3].textContent.trim(),
-                                'Source': row.cells[4].textContent.trim(),
-                                'Destination': row.cells[5].textContent.trim(),
-                                'Owner': row.cells[6].textContent.trim()
-                            };
+        //open windows file selector dialog
+        function OnLoadClick(isFirstDataSource) {
+            var modal;
+            if (isFirstDataSource === "true") {
+                modal = document.getElementById('projectselectiondialogModal');
 
-                            if (checkBox.id === "checkAllSourceBCB" &&
-                            xCheckStudioInterface2 &&
-                                !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
-                                    xCheckStudioInterface2._modelTree.selectedCompoents.push(checkedComponent);
-                            }
-                        }
-                        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
-                            checkedComponent = {
-                                'Name': row.cells[1].textContent.trim(),
-                                'Category': row.cells[2].textContent.trim(),
-                                'ComponentClass': row.cells[3].textContent.trim(),
-                                'Description': row.cells[4].textContent.trim()
-                            };
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                document.getElementById("projectselectiondialog-content").innerHTML = "";
+                $('#loaddatadialog').clone().appendTo('#projectselectiondialog-content');
 
-                            if (checkBox.id === "checkAllSourceBCB" &&
-                            xCheckStudioInterface2 &&
-                                !xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
-                                    xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
-                            }
-                        }
-                    }
-                }
+                var loadDataDialogContent = document.getElementsByClassName("loaddatadialog2")[0];
+                var browseDivContent = loadDataDialogContent.getElementsByClassName("browse")[0];
+                var formContent = browseDivContent.getElementsByTagName("form")[0];
+                formContent.id = "uploadDatasourceAForm";
+                var inputContent = formContent.getElementsByTagName("input")[0];
+                var onchnageString = "loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')";
+                inputContent.setAttribute("onchange", onchnageString);
+            }
+            else if (isFirstDataSource === "false") {
+                modal = document.getElementById('projectselectiondialogModal');
+
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                document.getElementById("projectselectiondialog-content").innerHTML = "";
+                $('#loaddatadialog').clone().appendTo('#projectselectiondialog-content');
+                var loadDataDialogContent = document.getElementsByClassName("loaddatadialog2")[0];
+                var browseDivContent = loadDataDialogContent.getElementsByClassName("browse")[0];
+                var formContent = browseDivContent.getElementsByTagName("form")[0];
+                formContent.id = "uploadDatasourceBForm";
+                var inputContent = formContent.getElementsByTagName("input")[0];
+                var onchnageString = "loadDataSource(event, 'file-input', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')"
+                inputContent.setAttribute("onchange", onchnageString);
             }
 
-            if (!checkBox.checked) {
-                if (checkBox.id === "checkAllSourceACB" &&
-                    xCheckStudioInterface1) {
-                        if(xCheckStudioInterface1.SourceType.toLowerCase() === "xml")
-                        {
-                            xCheckStudioInterface1._modelTree.selectedCompoents = [];
-                        }
-                        else if(xCheckStudioInterface1.SourceType.toLowerCase() === "xls")
-                        {
-                            xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents = [];
-                        }
-                    
-                }
-                else if (checkBox.id === "checkAllSourceBCB" &&
-                    xCheckStudioInterface2) {
-                        if(xCheckStudioInterface2.SourceType.toLowerCase() === "xml")
-                        {
-                            xCheckStudioInterface2._modelTree.selectedCompoents = [];
-                        }
-                        else if(xCheckStudioInterface2.SourceType.toLowerCase() === "xls")
-                        {
-                            xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents = [];
-                        }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
                 }
             }
         }
@@ -818,6 +2428,8 @@
                 document.getElementById(formId).reset();
                 return;
             }
+            var modal = document.getElementById('projectselectiondialogModal');
+            modal.style.display = "none";
 
             let selectedFiles = document.getElementById(dataSource).files;
             let selectedFilesCount = selectedFiles.length;
@@ -829,7 +2441,14 @@
             var file = event.target.files[0];
             let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-
+            var tabHeader;
+            if (modelTreeContainer === "modelTree1") {
+                tabHeader = document.getElementById("dataSource1ModelBrowserTab");
+            }
+            else if (modelTreeContainer === "modelTree2") {
+                tabHeader = document.getElementById("dataSource2ModelBrowserTab");
+            }
+            tabHeader.innerText = fileName;
             //*******
             localStorage.setItem(dataSource, fileName);
             //*******
@@ -866,11 +2485,6 @@
 
         function loadModel(dataSource, viewerContainer, modelTreeContainer) {
 
-            if (!checkCaseManager ||
-                !checkCaseManager.CheckCase) {
-                alert("CheckCaseManager not found.");
-                return false;
-            }
             let selectedFiles = document.getElementById(dataSource).files;
             let selectedFilesCount = selectedFiles.length;
 
@@ -924,59 +2538,59 @@
                         xCheckStudioInterface1.setupViewer(viewerOptions, true);
 
                         // enable source A controls
-                        var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-                        checkAllSourceACB.disabled = false;
+                        // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+                        // checkAllSourceACB.disabled = false;
 
-                        var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-                        sourceAComplianceCB.disabled = false;
+                        // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+                        // sourceAComplianceCB.disabled = false;
 
-                        var sourceAFrontView = document.getElementById(sourceAFrontId);
-                        sourceAFrontView.disabled = false;
-                        var sourceABackView = document.getElementById(sourceABackId);
-                        sourceABackView.disabled = false;
-                        var sourceATopView = document.getElementById(sourceATopId);
-                        sourceATopView.disabled = false;
-                        var sourceABottomView = document.getElementById(sourceABottomId);
-                        sourceABottomView.disabled = false;
-                        var sourceALeftView = document.getElementById(sourceALeftId);
-                        sourceALeftView.disabled = false;
-                        var sourceARightView = document.getElementById(sourceARightId);
-                        sourceARightView.disabled = false;
-                        var sourceAIsoView = document.getElementById(sourceAIsoId);
-                        sourceAIsoView.disabled = false;
+                        // var sourceAFrontView = document.getElementById(sourceAFrontId);
+                        // sourceAFrontView.disabled = false;
+                        // var sourceABackView = document.getElementById(sourceABackId);
+                        // sourceABackView.disabled = false;
+                        // var sourceATopView = document.getElementById(sourceATopId);
+                        // sourceATopView.disabled = false;
+                        // var sourceABottomView = document.getElementById(sourceABottomId);
+                        // sourceABottomView.disabled = false;
+                        // var sourceALeftView = document.getElementById(sourceALeftId);
+                        // sourceALeftView.disabled = false;
+                        // var sourceARightView = document.getElementById(sourceARightId);
+                        // sourceARightView.disabled = false;
+                        // var sourceAIsoView = document.getElementById(sourceAIsoId);
+                        // sourceAIsoView.disabled = false;
 
-                        // enable source B load data source button
-                        var loadDataSourceBButton = document.getElementById("dataSouresB");
-                        loadDataSourceBButton.disabled = false;
+                        // // enable source B load data source button
+                        // var loadDataSourceBButton = document.getElementById("dataSouresB");
+                        // loadDataSourceBButton.disabled = false;
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
 
                         // enable source B controls
-                        var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-                        sourceBComplianceCB.disabled = false;
+                        // var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+                        // sourceBComplianceCB.disabled = false;
 
-                        var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-                        checkAllSourceBCB.disabled = false;
+                        // var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+                        // checkAllSourceBCB.disabled = false;
 
-                        var sourceBFrontView = document.getElementById(sourceBFrontId);
-                        sourceBFrontView.disabled = false;
-                        var sourceBBackView = document.getElementById(sourceBBackId);
-                        sourceBBackView.disabled = false;
-                        var sourceBTopView = document.getElementById(sourceBTopId);
-                        sourceBTopView.disabled = false;
-                        var sourceBBottomView = document.getElementById(sourceBBottomId);
-                        sourceBBottomView.disabled = false;
-                        var sourceBLeftView = document.getElementById(sourceBLeftId);
-                        sourceBLeftView.disabled = false;
-                        var sourceBRightView = document.getElementById(sourceBRightId);
-                        sourceBRightView.disabled = false;
-                        var sourceBIsoView = document.getElementById(sourceBIsoId);
-                        sourceBIsoView.disabled = false;
+                        // var sourceBFrontView = document.getElementById(sourceBFrontId);
+                        // sourceBFrontView.disabled = false;
+                        // var sourceBBackView = document.getElementById(sourceBBackId);
+                        // sourceBBackView.disabled = false;
+                        // var sourceBTopView = document.getElementById(sourceBTopId);
+                        // sourceBTopView.disabled = false;
+                        // var sourceBBottomView = document.getElementById(sourceBBottomId);
+                        // sourceBBottomView.disabled = false;
+                        // var sourceBLeftView = document.getElementById(sourceBLeftId);
+                        // sourceBLeftView.disabled = false;
+                        // var sourceBRightView = document.getElementById(sourceBRightId);
+                        // sourceBRightView.disabled = false;
+                        // var sourceBIsoView = document.getElementById(sourceBIsoId);
+                        // sourceBIsoView.disabled = false;
 
-                        var comparisonCB = document.getElementById("comparisonCB");
-                        comparisonCB.disabled = false;
+                        // var comparisonCB = document.getElementById("comparisonCB");
+                        // comparisonCB.disabled = false;
                     }
 
                 }
@@ -987,15 +2601,503 @@
             });
 
             //enable check Button
-            document.getElementById("checkButton").disabled = false;
+            // document.getElementById("checkButton").disabled = false;
             return true;
         }
 
+        function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
+
+            var modelTreeContainerElement = document.getElementById(modelTreeContainer);
+            var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
+
+            var modelBrowserTable = modelTreeContainerElement.children[1];
+
+            var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
+            // var currentTable = modelTreeParentDiv.children[0];
+
+            for (var i = 0; i < modelBrowserTableRows.length; i++) {
+                var row = modelBrowserTableRows[i];
+
+                var currentCheckBox = row.cells[0].children[0];
+                if (!currentCheckBox) {
+                    continue;
+                }
+
+                if (checkBox === currentCheckBox.checked) {
+                    continue;
+                }
+
+                currentCheckBox.checked = checkBox;
+                if (currentCheckBox.checked) {
+                    var checkedComponent;
+
+                    if (xCheckStudioInterface1) {
+                        if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
+                                'SubComponentClass': row.cells[3].textContent.trim(),
+                                'Source': row.cells[4].textContent.trim(),
+                                'Destination': row.cells[5].textContent.trim(),
+                                'Owner': row.cells[6].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceACB" &&
+                                xCheckStudioInterface1 &&
+                                !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {
+                                xCheckStudioInterface1._modelTree.selectedCompoents.push(checkedComponent);
+                            }
+                        }
+                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'Category': row.cells[2].textContent.trim(),
+                                'ComponentClass': row.cells[3].textContent.trim(),
+                                'Description': row.cells[4].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceACB" &&
+                                xCheckStudioInterface1 &&
+                                !xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
+                                xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
+                            }
+                        }
+
+                    }
+                    if (xCheckStudioInterface2) {
+                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
+                                'SubComponentClass': row.cells[3].textContent.trim(),
+                                'Source': row.cells[4].textContent.trim(),
+                                'Destination': row.cells[5].textContent.trim(),
+                                'Owner': row.cells[6].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceBCB" &&
+                                xCheckStudioInterface2 &&
+                                !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
+                                xCheckStudioInterface2._modelTree.selectedCompoents.push(checkedComponent);
+                            }
+                        }
+                        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'Category': row.cells[2].textContent.trim(),
+                                'ComponentClass': row.cells[3].textContent.trim(),
+                                'Description': row.cells[4].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceBCB" &&
+                                xCheckStudioInterface2 &&
+                                !xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
+                                xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!checkBox) {
+                if (checkBoxId === "checkAllSourceACB" &&
+                    xCheckStudioInterface1) {
+                    if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
+                        xCheckStudioInterface1._modelTree.selectedCompoents = [];
+                    }
+                    else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+                        xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents = [];
+                    }
+
+                }
+                else if (checkBoxId === "checkAllSourceBCB" &&
+                    xCheckStudioInterface2) {
+                    if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
+                        xCheckStudioInterface2._modelTree.selectedCompoents = [];
+                    }
+                    else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+                        xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents = [];
+                    }
+                }
+            }
+        }
+
+        anima_isHidden = function (e) {
+            if (!(e instanceof HTMLElement)) return !1;
+            if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;
+            return !1;
+        };
+        anima_loadAsyncSrcForTag = function (tag) {
+            var elements = document.getElementsByTagName(tag);
+            var toLoad = [];
+            for (var i = 0; i < elements.length; i++) {
+                var e = elements[i];
+                var src = e.getAttribute("src");
+                var loaded = (src != undefined && src.length > 0 && src != 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+                if (loaded) continue;
+                var asyncSrc = e.getAttribute("src");
+                if (asyncSrc == undefined || asyncSrc.length == 0) continue;
+                if (anima_isHidden(e)) continue;
+                toLoad.push(e);
+            }
+            toLoad.sort(function (a, b) {
+                return anima_getTop(a) - anima_getTop(b);
+            });
+            for (var i = 0; i < toLoad.length; i++) {
+                var e = toLoad[i];
+                var asyncSrc = e.getAttribute("src");
+                e.setAttribute("src", asyncSrc);
+            }
+        };
+        anima_pauseHiddenVideos = function (tag) {
+            var elements = document.getElementsByTagName("video");
+            for (var i = 0; i < elements.length; i++) {
+                var e = elements[i];
+                var isPlaying = !!(e.currentTime > 0 && !e.paused && !e.ended && e.readyState > 2);
+                var isHidden = anima_isHidden(e);
+                if (!isPlaying && !isHidden && e.getAttribute("autoplay") == "autoplay") {
+                    e.play();
+                } else if (isPlaying && isHidden) {
+                    e.pause();
+                }
+            }
+        };
+        anima_loadAsyncSrc = function (tag) {
+            anima_loadAsyncSrcForTag("img");
+            anima_loadAsyncSrcForTag("iframe");
+            anima_loadAsyncSrcForTag("video");
+            anima_pauseHiddenVideos();
+        };
+        var anima_getTop = function (e) {
+            var top = 0;
+            do {
+                top += e.offsetTop || 0;
+                e = e.offsetParent;
+            } while (e);
+            return top;
+        };
+        anima_loadAsyncSrc();
+        anima_old_onResize = window.onresize;
+        anima_new_onResize = undefined;
+        anima_updateOnResize = function () {
+            if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
+                anima_new_onResize = function (x) {
+                    if (anima_old_onResize != undefined) anima_old_onResize(x);
+                    anima_loadAsyncSrc();
+                };
+                window.onresize = anima_new_onResize;
+                setTimeout(function () {
+                    anima_updateOnResize();
+                }, 3000);
+            }
+        };
+        anima_updateOnResize();
+        setTimeout(function () {
+            anima_loadAsyncSrc();
+        }, 200);
+    </script>
+    <script>
+        function AnimaShowOnScroll() {
+            this.toShow = [];
+            this.nextEventY = undefined;
+        }
+        AnimaShowOnScroll.prototype.show = function (e) {
+            e.style.display = "";
+        };
+        AnimaShowOnScroll.prototype.hide = function (e) {
+            e.style.display = "none";
+        };
+        AnimaShowOnScroll.prototype.getTop = function (e) {
+            if (e.animaTop != undefined && e.animaTop != 0) {
+                return e.animaTop;
+            }
+            var top = 0;
+            var iter = e;
+            do {
+                top += iter.offsetTop || 0;
+                iter = iter.offsetParent;
+            } while (iter);
+            e.animaTop = top;
+            return top;
+        };
+        AnimaShowOnScroll.prototype.onScroll = function () {
+            var screenBottom = window.pageYOffset + window.innerHeight;
+            if (this.nextEventY == undefined || this.nextEventY > screenBottom) {
+                return;
+            }
+            this.nextEventY = undefined;
+            for (var i = 0; i < this.toShow.length; i++) {
+                var e = this.toShow[i];
+                var top = this.getTop(e);
+                if (top < screenBottom) {
+                    this.show(e);
+                    this.toShow.shift();
+                    i--;
+                } else {
+                    this.nextEventY = top;
+                    break;
+                }
+            }
+        };
+        AnimaShowOnScroll.prototype.resetScrolling = function () {
+            var screenBottom = window.pageYOffset + window.innerHeight;
+            for (var i = 0; i < this.toShow.length; i++) {
+                var e = this.toShow[i];
+                this.show(e);
+            }
+            this.toShow = [];
+            this.nextEventY == undefined;
+            var itemsToShowOnScroll = Array.prototype.slice.call(document.getElementsByTagName("*"));
+            itemsToShowOnScroll = itemsToShowOnScroll.filter(function (e) {
+                return e.getAttribute("anima-show-on-scroll") != undefined;
+            });
+            var getTop = this.getTop;
+            itemsToShowOnScroll.sort(function (a, b) {
+                return getTop(a) - getTop(b);
+            });
+            for (var i = 0; i < itemsToShowOnScroll.length; i++) {
+                var e = itemsToShowOnScroll[i];
+                var top = this.getTop(e);
+                if (top < screenBottom) {
+                    continue;
+                }
+                this.toShow.push(e);
+                this.hide(e);
+                this.nextEventY = this.nextEventY != undefined ? this.nextEventY : top;
+            }
+        };
+        AnimaShowOnScroll.prototype.handleEvent = function (e) {
+            switch (e.type) {
+                case "scroll":
+                    this.onScroll();
+                    break;
+                case "resize":
+                    this.resetScrolling();
+                    break;
+            }
+        };
+        AnimaShowOnScroll.prototype.init = function () {
+            this.resetScrolling();
+            window.addEventListener("scroll", this);
+            window.addEventListener("resize", this);
+        };
+        setTimeout(function () {
+            var animaShowOnScroll = new AnimaShowOnScroll();
+            animaShowOnScroll.init();
+        }, 250);
+    </script>
+    <script>
+        animaShowOverlay = function (overlayName, animationName) {
+            overlayName = 'overlay-' + overlayName;
+            var cssClasses = document.getElementById(overlayName).className.split(' ');
+            var last = cssClasses.slice(-1)[0];
+            if (last.lastIndexOf('anima-animate') == -1) {
+                document.getElementById(overlayName).className = document.getElementById(overlayName).className + " " + animationName;
+            }
+            if (anima_loadAsyncSrc != undefined) {
+                anima_loadAsyncSrc();
+            }
+        };
+        animaHideOverlay = function (overlayName, animationName) {
+            overlayName = 'overlay-' + overlayName;
+            var cssClasses = document.getElementById(overlayName).className.split(' ');
+            var last = cssClasses.slice(-1)[0];
+            if (last.lastIndexOf('anima-animate') != -1) {
+                cssClasses.splice(-1);
+                cssClasses.push(animationName);
+                document.getElementById(overlayName).className = cssClasses.join(' ');
+                cssClasses.splice(-1);
+                setTimeout(function () {
+                    document.getElementById(overlayName).className = cssClasses.join(' ');
+                }, 1100);
+            }
+            var vids = document.getElementsByTagName('video');
+            if (vids) {
+                for (var i = 0; i < vids.length; i++) {
+                    var video = vids.item(i);
+                    video.pause();
+                }
+            }
+        };
+    </script>
+    <script>
+        function closePopout() {
+            if (this._poppedOutWindow) {
+                this._poppedOutWindow.close();
+                this._poppedOutWindow = null;
+                this.returnViewer();
+            }
+        }
+
+        
+        function returnViewer(viewerdata) {
+            var container = document.getElementById("dataSourceViewer");
+            viewerContainer = container.getElementsByClassName("bg1");
+            viewerdata.style.width = "560px"
+            viewerdata.style.height = "350px";
+            viewerdata.style.margin = "20px 0 0 20px";
+            //margin: 20px 0 0 20px
+            viewerContainer[0].appendChild(viewerdata);
+            // this._viewer.moveToWindow(window);
+            // this._viewer.resizeCanvas();
+            // window.setTimeout(function () {
+            //     _this._viewer.redraw();
+            // }, 500);
+        };
+
+        function OnFullScreen() {
+            var elem = document.getElementById("viewerContainer1");
+            if (elem.style.display === "block") {
+                // if (elem.requestFullscreen) 
+                // {
+                    var modal = document.getElementById('maximizeViewerContainer');
+                    // When the user clicks the button, open the modal 
+                    modal.style.display = "block";
+                    var viewerdata = document.getElementById("viewerContainer1")
+                    var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                    modalViewer.appendChild(viewerdata);
+                    var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
+                    modalViewerContainer.style.width = "100%";
+                    modalViewerContainer.style.height = "100%";
+                    modalViewerContainer.style.margin = "auto";
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            returnViewer(viewerdata);
+                            modal.style.display = "none";
+                        }
+                    }
+            }
+
+            var elem2 = document.getElementById("viewerContainer2");
+
+            if (elem2.style.display === "block") {
+                var modal = document.getElementById('maximizeViewerContainer');
+                    // When the user clicks the button, open the modal 
+                    modal.style.display = "block";
+                    var viewerdata = document.getElementById("viewerContainer2")
+                    var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                    modalViewer.appendChild(viewerdata);
+                    var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
+                    modalViewerContainer.style.width = "100%";
+                    modalViewerContainer.style.height = "100%";
+                    modalViewerContainer.style.margin = "auto";
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            returnViewer(viewerdata);
+                            modal.style.display = "none";
+                        }
+                    }
+            }
+        }
+        function OnExitFullScreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    </script>
+
+    <script>
+
+        function OpenTab(tabName) {
+            if (tabName === "tab1" || tabName === "tab1Viewer") {
+                document.getElementById("dataSource2").style.display = "none";
+                document.getElementById("modelTree2").style.display = "none";
+                document.getElementById("viewerContainer2").style.display = "none";
+                document.getElementById("SourceBComponentCount").style.display = "none"
+                document.getElementById("tab2").style.backgroundColor =  "lightgray";
+                document.getElementById("tab2Viewer").style.backgroundColor =  "lightgray";
+
+                document.getElementById("dataSource1").style.display = "block";
+                document.getElementById("modelTree1").style.display = "block";
+                document.getElementById("viewerContainer1").style.display = "block";
+                document.getElementById("SourceAComponentCount").style.display = "block"
+                document.getElementById("tab1").style.backgroundColor =  "#F3F0F4";
+                document.getElementById("tab1Viewer").style.backgroundColor =  "#F3F0F4";
+            }
+            else if (tabName === "tab2" ||  tabName === "tab2Viewer") {
+                document.getElementById("dataSource1").style.display = "none";
+                document.getElementById("modelTree1").style.display = "none";
+                document.getElementById("viewerContainer1").style.display = "none";
+                document.getElementById("SourceAComponentCount").style.display = "none"
+                document.getElementById("tab1").style.backgroundColor =  "lightgray";
+                document.getElementById("tab1Viewer").style.backgroundColor =  "lightgray";
+
+                document.getElementById("dataSource2").style.display = "block";
+                document.getElementById("modelTree2").style.display = "block";
+                document.getElementById("viewerContainer2").style.display = "block";
+                document.getElementById("SourceBComponentCount").style.display = "block"
+                document.getElementById("tab2").style.backgroundColor =  "#F3F0F4";
+                document.getElementById("tab2Viewer").style.backgroundColor =  "#F3F0F4";
+            }
+
+        }
+        function OnCheckClicked() {
+            // Get the modal
+            var modal = document.getElementById('projectselectiondialogModal');
+
+            // When the user clicks the button, open the modal 
+
+            modal.style.display = "block";
+            $('#projectselectiondialog-content').load("/projectselectiondialog.html")
+
+            // When the user clicks anywhere outside of the modal, close it
+            // window.onclick = function (event) {
+            //     if (event.target == modal) {
+            //         modal.style.display = "none";
+            //     }
+            // }
+            // window.location = "/checkModule.html";
+            // return false;
+            // // alert("Check Clicked");
+        }
+    </script>
+	<script>
+		function getCookie(cname) 
+		{
+				var name = cname + "=";
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+			  for(var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+				  c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+				  return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		// window.onload = function() {
+		// 	var project = getCookie("checkprojectname");
+		// 	var powerplantdiv  = document.getElementById("powerplant");
+		// 	if (project != "" && powerplantdiv != null)
+		// 		powerplant.innerHTML = project;
+		// };
+		function OnShowHideMenu()
+		{
+			var x = document.getElementById("openmenu");
+			if (x.style.display === "none") {
+			x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+			
+        }
+        
         function clearData() {
             window.location.reload();
         }
-
-    </script>
+	</script>
+    <!-- End of Scripts -->
 </body>
 
 </html>

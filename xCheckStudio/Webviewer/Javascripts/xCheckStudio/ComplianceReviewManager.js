@@ -36,7 +36,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 this.NodeIdVsComponentData);
             this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
 
-            this.ReviewModuleViewerInterface.setupViewer();
+            this.ReviewModuleViewerInterface.setupViewer(550, 300);
         }
 
     }
@@ -75,7 +75,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "80";
+                columnHeader["width"] = "20";
                 columnHeaders.push(columnHeader);
             }
 
@@ -159,8 +159,8 @@ function ComplianceReviewManager(complianceCheckManager,
 
             var modelBrowserHeaderTable = modelBrowserData.children[0];
             modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "760px";
-            modelBrowserHeaderTable.style.overflowX = "hide";
+            modelBrowserHeaderTable.style.width = "578px";
+            modelBrowserHeaderTable.style.overflowX = "hidden";
             var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
                 var currentRow = modelBrowserHeaderTableRows[j];
@@ -173,13 +173,13 @@ function ComplianceReviewManager(complianceCheckManager,
 
 
             modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width = "760px";
-            modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+            modelBrowserDataTable.style.width = "578px";
+            modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
             var div2 = document.createElement("DIV");
             div2.id = componentsGroup.ComponentClass+"_child";
             div2.innerText =  "Count :" + modelBrowserTableRows.length;
-            div2.style.fontSize = "18px";
+            div2.style.fontSize = "10px";
             div.appendChild(div2);
         }
     }
@@ -207,7 +207,7 @@ function ComplianceReviewManager(complianceCheckManager,
         $(function () {
             var db = {
                 loadData: filter => {
-                  console.debug("Filter: ", filter);
+                //   console.debug("Filter: ", filter);
                   let source = (filter.Source || "").toLowerCase();
                   let status = (filter.Status || "").toLowerCase();
                   let dmy = parseInt(filter.dummy, 10);
@@ -221,8 +221,6 @@ function ComplianceReviewManager(complianceCheckManager,
               };
 
             $(viewerContainer).jsGrid({
-                width: "780px",
-                height: "280px",
                 sorting: true,
                 filtering: true,
                 autoload: true,
@@ -232,6 +230,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 margin: "0px",
                 onRefreshed: function (config) {
                     var id = viewerContainer.replace("#", "");
+                    document.getElementById(id).style.width = "578px";
                     _this.highlightMainReviewTableFromCheckStatus(id);
                 },
                 rowClick: function (args) {
@@ -260,10 +259,10 @@ function ComplianceReviewManager(complianceCheckManager,
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "280px"
+        container.style.width = "592px"
+        container.style.height = "202px"
         container.style.margin = "0px"
-        container.style.overflowX = "hide";
+        container.style.overflowX = "hidden";
         container.style.overflowY = "scroll";
         container.style.padding = "0";
     };
@@ -424,7 +423,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     type = "number";
                 }
                 columnHeader["type"] = type;
-                columnHeader["width"] = "100";
+                columnHeader["width"] = "80";
                 columnHeaders.push(columnHeader);
                 if (Object.keys(column).length <= 3) {
                     if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
@@ -469,8 +468,6 @@ function ComplianceReviewManager(complianceCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    width: "780px",
-                    height: "620px", 
                     autoload: true,
                     data: tableData,
                     fields: columnHeaders,
@@ -485,11 +482,13 @@ function ComplianceReviewManager(complianceCheckManager,
         }
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "620px"
+        container.style.width = "560px"
+        container.style.height = "450px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
-        container.style.margin = "0px"
+        container.style.margin = "0px";
+        container.style.top = "50px"
+        
 
     };
 
@@ -624,6 +623,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     for (var j = 0; j < currentSheetRow.cells.length; j++) {
                         cell = currentSheetRow.cells[j];
                         cell.style.backgroundColor = color;
+                        cell.style.height = "10px"
                     }
                     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
                 }
@@ -819,7 +819,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     columnHeader["name"] = name;
                     columnHeader["title"] = title;
                     columnHeader["type"] = "text";
-                    columnHeader["width"] = "80";
+                    columnHeader["width"] = "30";
                     columnHeaders.push(columnHeader);
                 }
 
@@ -849,13 +849,13 @@ function ComplianceReviewManager(complianceCheckManager,
                 var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "780px";
-                modelBrowserHeaderTable.style.overflowX = "hide";
+                modelBrowserHeaderTable.style.width= "579px";
+                modelBrowserHeaderTable.style.overflowX = "hidden";
 
                 var modelBrowserDataTable = modelBrowserData.children[1]
                 modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width= "780px";
-                modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+                modelBrowserDataTable.style.width= "579px";
+                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
                 
                 break;
             }
@@ -894,7 +894,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
             var db = {
                 loadData: filter => {
-                  console.debug("Filter: ", filter);
+                //   console.debug("Filter: ", filter);
                   let property = (filter.Property || "").toLowerCase();
                   let value = (filter.Value || "").toLowerCase();
                   let status = (filter.Status || "").toLowerCase();
@@ -910,8 +910,6 @@ function ComplianceReviewManager(complianceCheckManager,
               };
 
             $(viewerContainer).jsGrid({
-                width: "780px",
-                height: "280px",
                 sorting: true,
                 filtering: true,
                 autoload: true,
@@ -921,6 +919,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 margin: "0px",
                 onRefreshed: function (config) {
                     var id = viewerContainer.replace("#", "");
+                    document.getElementById(id).style.width = "579px";
                     _this.highlightDetailedReviewTableFromCheckStatus(id);
                 }
             });
@@ -928,9 +927,11 @@ function ComplianceReviewManager(complianceCheckManager,
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "620px"
+        container.style.width = "579px"
+        container.style.height = "202px"
         container.style.margin = "0px"
+        container.style.overflowX = "hidden";
+        container.style.overflowY = "scroll";
 
     };
 

@@ -44,7 +44,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.SourceAComponentIdVsComponentData,
                 this.SourceANodeIdVsComponentData);
             this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
-            this.SourceAReviewModuleViewerInterface.setupViewer();
+            this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);
         }
 
         if (this.SourceBViewerData !== undefined) {
@@ -52,7 +52,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.SourceBComponentIdVsComponentData,
                 this.SourceBNodeIdVsComponentData);
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
-            this.SourceBReviewModuleViewerInterface.setupViewer();
+            this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
         }
     }
 
@@ -75,6 +75,11 @@ function ComparisonReviewManager(comparisonCheckManager,
             div.id = componentsGroup.ComponentClass;
             parentTable.appendChild(div);
 
+            var div2 = document.createElement("DIV");
+            div2.id = componentsGroup.ComponentClass+"_child";
+            div2.style.fontSize = "10px";
+            div.appendChild(div2);
+
             var tableData = [];
             var columnHeaders = [];
 
@@ -84,17 +89,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                 if (i === 0) {
                     title = "Source A";
                     name = "SourceA";
-                    width = "150";
+                    width = "30";
                 }
                 else if (i === 1) {
                     title = "Source B";
                     name = "SourceB";
-                    width= "150";
+                    width= "30";
                 }
                 else if (i === 2) {
                     title = "Status";
                     name = "Status"
-                    width = "90";
+                    width = "30";
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
@@ -175,7 +180,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             var modelBrowserHeaderTable = modelBrowserData.children[0];
             modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "760px";
+            modelBrowserHeaderTable.style.width = "578px";
             modelBrowserHeaderTable.style.overflowX = "hide";
             var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
@@ -189,16 +194,33 @@ function ComparisonReviewManager(comparisonCheckManager,
 
 
             modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width = "760px";
-            modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+            modelBrowserDataTable.style.width = "578px";
+            modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
             var div2 = document.createElement("DIV");
             div2.id = componentsGroup.ComponentClass+"_child";
             div2.innerText =  "Count :" + modelBrowserTableRows.length;
-            div2.style.fontSize = "18px";
+            div2.style.fontSize = "10px";
             div.appendChild(div2);
         }
 
+    }
+
+    ComparisonReviewManager.prototype.AddTableContentCount = function(containerId){
+        var modelBrowserData = document.getElementById(containerId);
+        var modelBrowserDataTable = modelBrowserData.children[1];
+        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+       
+        // var countBox;
+        var id = containerId+"_child";
+        var countBox = document.getElementById(id);
+        // if (containerId === "modelTree1") {
+        //     countBox = document.getElementById("SourceAComponentCount");
+        // }
+        // if (containerId === "modelTree2") {
+        //     countBox = document.getElementById("SourceBComponentCount");
+        // }
+        countBox.innerText = "Count :" + modelBrowserTableRows.length;
     }
 
     ComparisonReviewManager.prototype.bindEvents = function (table) {
@@ -375,7 +397,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     type = "number";
                 }
                 columnHeader["type"] = type;
-                columnHeader["width"] = "100";
+                columnHeader["width"] = "90";
                 columnHeaders.push(columnHeader);
                 if (Object.keys(column).length <= 3) {
                     if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
@@ -513,8 +535,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    width: "780px",
-                    height: "620px",
                     autoload: true,
                     data: tableData,
                     fields: columnHeaders,
@@ -529,11 +549,12 @@ function ComparisonReviewManager(comparisonCheckManager,
         }        
         
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "620px"
+        container.style.width = "560px"
+        container.style.height = "450px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
-        container.style.margin = "0px"
+        container.style.margin = "0px";
+        container.style.top = "50px"
 
     };
 
@@ -541,7 +562,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             $(function () {
                 var db = {
                     loadData: filter => {
-                      console.debug("Filter: ", filter);
+                    //   console.debug("Filter: ", filter);
                       let sourceA = (filter.SourceA || "").toLowerCase();
                       let sourceB = (filter.SourceB || "").toLowerCase();
                       let status = (filter.Status || "").toLowerCase();
@@ -557,8 +578,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                   };
 
                 $(viewerContainer).jsGrid({
-                    width: "780px",
-                    width: "280px",
                     filtering: true,
                     autoload: true,
                     controller: db,
@@ -568,6 +587,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     margin: "0px",
                     onRefreshed: function(config) {
                         var id = viewerContainer.replace("#", "");
+                        // _this.AddTableContentCount(this._container.context.id);
+                        document.getElementById(id).style.width = "578px";
                         _this.highlightMainReviewTableFromCheckStatus(id);
                         
                     },
@@ -597,10 +618,10 @@ function ComparisonReviewManager(comparisonCheckManager,
             });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "760px"
-        container.style.height = "620px"
+        container.style.width = "578px"
+        container.style.height = "202px"
         container.style.margin = "0px"
-        container.style.overflowX = "hide";
+        container.style.overflowX = "hidden";
         container.style.overflowY = "scroll";
         container.style.padding = "0";
 
@@ -608,14 +629,15 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {
         var reviewTableId = this.getReviewTableId(currentReviewTableRow);
-
-        if(this.SourceAViewerData !== undefined)
+        
+        var componentIdentifier ;
+        if(this.SourceAViewerData !== undefined && currentReviewTableRow.cells[0].innerHTML !== "")
         {
-            var componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
+            componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
         }
-        else if(this.SourceBViewerData !== undefined)
+        else if(this.SourceBViewerData !== undefined && currentReviewTableRow.cells[1].innerHTML !== "")
         {
-            var componentIdentifier = currentReviewTableRow.cells[1].innerHTML;
+            componentIdentifier = currentReviewTableRow.cells[1].innerHTML;
         }
         
         if (reviewTableId.indexOf("PipingNetworkSegment") !== -1) {
@@ -652,7 +674,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         $(function () {
             var db = {
                 loadData: filter => {
-                  console.debug("Filter: ", filter);
+                //   console.debug("Filter: ", filter);
                   let A_property = (filter.A_Property || "").toLowerCase();
                   let A_value = (filter.A_Value || "").toLowerCase();
                   let B_property = (filter.B_Property || "").toLowerCase();
@@ -673,8 +695,6 @@ function ComparisonReviewManager(comparisonCheckManager,
               };
 
             $(viewerContainer).jsGrid({
-                width: "780px",
-                height: "280px",
                 filtering: true,
                 autoload: true,
                 controller: db,
@@ -684,6 +704,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 margin: "0px",
                 onRefreshed: function(config) {
                     var id = viewerContainer.replace("#", "");
+                    document.getElementById(id).style.width = "579px";
                     _this.highlightDetailedReviewTableFromCheckStatus(id);
                 }
             });
@@ -691,9 +712,11 @@ function ComparisonReviewManager(comparisonCheckManager,
         });
 
     var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.width = "780px"
-    container.style.height = "620px"
+    container.style.width = "579px"
+    container.style.height = "202px"
     container.style.margin = "0px"
+    container.style.overflowX = "hidden";
+    container.style.overflowY = "scroll";
 
 };
 
@@ -926,7 +949,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
                     columnHeader["type"] = "text";
-                    columnHeader["width"] = "80";
+                    columnHeader["width"] = "30";
                     columnHeaders.push(columnHeader);
                 }
 
@@ -955,7 +978,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var modelBrowserData = document.getElementById("ComparisonDetailedReviewCell");
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "780px";
+                modelBrowserHeaderTable.style.width= "579px";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
                 for(var j =0; j < modelBrowserHeaderTableRows.length; j++)
@@ -973,8 +996,8 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 var modelBrowserDataTable = modelBrowserData.children[1]
                 modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width= "780px";
-                modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+                modelBrowserDataTable.style.width= "579px";
+                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
                 
                 break;
             }

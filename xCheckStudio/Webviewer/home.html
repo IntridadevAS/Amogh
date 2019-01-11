@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
 
 <head>
 
@@ -11,9 +11,6 @@
         </th>
         <tr style=" text-align: center; height: 70%;">
             <td>
-                <!-- <button style="height: 50%; width:20%;">Prep</button>
-                <button  style="height: 50%; width:20%;" onclick="goToCheck()">Check</button>
-                <button  style="height: 50%; width:20%;" >Review</button> -->
 
                 <img height="50%" src="images/Prep.png">
                 <img height="50%" onclick="goToCheck()" src="images/Check.png">
@@ -21,7 +18,6 @@
             </td>
         </tr>
         <th style=" background-color: #333333; height: 15%;">
-            <!-- <span> <h1 style="text-align: center"> Footer</h1></span> -->
         </th>
     </table>
 </body>
@@ -31,4 +27,467 @@
     }
 </script>
 
+</html> -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/images/UIPackage/favicon.png" rel="shortcut icon"/>
+        <meta charset="utf-8"/>
+        <meta content="width=1280, maximum-scale=1.0" name="viewport"/>
+        <link href="CSS\projectSelectionDialog.css" rel="stylesheet" type="text/css"/>
+        <link href="CSS\landingPage.css" rel="stylesheet" type="text/css"/>
+        <meta content="Launchpad by Anima" name="author">
+        <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+        </meta>
+		<style>
+            /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: absolute; /* Stay in place */
+  padding: auto; /* Location of the box */
+  width: 1280px; /* Full width */
+  height: 720px; /* Full height */
+  margin: 0 432px 0 0;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  border: 1px solid #888;
+  width: 416px;
+  height: 179px;
+  margin-left: 432px;
+  margin-top: 270px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+		</style>
+    </head>
+    <body style="margin: 0;
+ background: rgba(255, 255, 255, 1.0);">
+        <input id="anPageName" name="page" type="hidden" value="landingpage"/>
+		
+        <div class="landingpage">
+            <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
+                <div class="bg">
+                    <div class="bg1">
+                    </div>
+                    <img src="/images/UIPackage/landing-page-symbol.png" class="symbol" />
+                </div>
+                <div class="header">
+                    <div class="bg1">
+                    </div>
+                    <a href="https://www.intrida.com/" target="_blank">
+                        <div class="helpbtn">
+                            <img src="/images/UIPackage/module2-bg 2@2x.png" class="bg2" />
+                            <img src="/images/UIPackage/prep-home-page-icon@2x.png" class="icon" />
+                        </div>
+                    </a>
+                    <div class="logo">
+                        <img src="/images/UIPackage/module2-with-open-menu-check@2x.png" class="check1" />
+                        <img src="/images/UIPackage/landing-page-studio@2x.png" class="studio" />
+                        <img src="/images/UIPackage/module1-symbol 1@2x.png" class="symbol" />
+                    </div>
+                </div>
+                <div class="btn-view">
+                    <div class="home">
+                        HOME
+                    </div>
+                    <a href="landingpagewithopenmenu.html">
+                        <div class="btn1">
+                            <img src="/images/UIPackage/landing-page-bg 1@2x.png" class="bg1" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-icon 1@2x.png" class="icon" />
+                        </div>
+                    </a>
+                    <img src="/images/UIPackage/create-project-arrow@2x.png" class="arrow" />
+                </div>
+                <div class="footer">
+                    <div class="bg1">
+                    </div>
+                    <div class="infoleft">
+                        <div class="project">
+                            PROJECT:
+                        </div>
+                        <div class="selectaproject">
+                            <span class="span1">| </span><span class="span2">Select a Project</span><span class="span3">  |</span>
+                        </div>
+                    </div>
+                    <div class="inforight">
+                        <div class="user">
+                            USER:
+                        </div>
+                        <img src="/images/UIPackage/create-project-with-open-menu-bg 2@2x.png" class="bg2" />
+                        <div class="path">
+                            <img src="/images/UIPackage/landing-page-path@2x.png" class="path1" />
+                        </div>
+                        <div class="pierre" id="pierre">
+                            Pierre
+                        </div>
+                    </div>
+                    <div class="infomid">
+                        <div class="units">
+                            UNITS:
+                        </div>
+                        <select  class="mks" style="background-color: #000">
+                                <option >MKS</option>
+                                <option >IPS</option>
+                                <option>Custom</option>
+                            </select>
+                            <img src="/images/UIPackage/module1-with-open-menu-triangle 2@2x.png" style="left: 114px" class="triangle" />
+                    </div>
+                </div>
+                <!--<a href="prephomepage.html" >-->
+                    <div class="prep" onclick="OnPrepCliked()" style="cursor: pointer;">
+                        <img src="/images/UIPackage/landing-page-with-open-menu-bg 4@2x.png" class="bg1" />
+                        <img src="/images/UIPackage/landing-page-with-open-menu-prep-icon@2x.png" class="prepicon" />
+                        <div class="prep1">
+                            PREP
+                        </div>
+                    </div>
+                <!--</a>-->
+                <!--<a href="projectselectiondialog.html">-->
+                    <div class="check" onclick="OnCheckClick()" style="cursor: pointer;">
+                        <img src="/images/UIPackage/landing-page-with-open-menu-bg 4@2x.png" class="bg1" />
+                        <img src="/images/UIPackage/landing-page-check-icon@2x.png" class="checkicon"/>
+                        <div class="check1" >
+                            CHECK
+                        </div>
+                    </div>
+                   
+                <!--</a>-->
+                <!--<a href="javascript:animaShowOverlay('projectselectiondialog', 'an-animation-enter'); anima_loadAsyncSrc(); ">-->
+                    <div class="review" onclick="OnReviewClicked()" style="cursor: pointer;">
+                        <img src="/images/UIPackage/landing-page-with-open-menu-bg 4@2x.png" class="bg1"/>
+                        <img src="/images/UIPackage/landing-page-review-icon@2x.png" class="reviewicon" />
+                        <div class="review1">
+                            REVIEW
+                        </div>
+                    </div>
+                <!--</a>-->
+             <!-- The Modal -->
+                    <div id="projectselectiondialogModal" class="modal">
+                        <!-- Modal content -->
+                        <div class="modal-content" id="projectselectiondialog-content">
+                        </div>
+                    
+                    </div>
+			</div>
+        </div>
+        <div class="anima-overlay" id="overlay-projectselectiondialog" style="min-height:720px; position:fixed;">
+            <div class="projectselectiondialog">
+                <div style="width: 416px; height: 100%; position:relative; margin:auto;">
+                    <div class="newprojectmodal">
+                        <div class="bg">
+                        </div>
+                        <div class="selectorcreateap">
+                            Select or Create a project
+                        </div>
+                        <div class="footer">
+                        </div>
+                        <a href="createproject.html">
+                            <div class="okbtn">
+                                <img src="/images/UIPackage/project-selection-dialog-bg@2x.png" class="bg1" />
+                                <div class="ok">
+                                    OK
+                                </div>
+                            </div>
+                        </a>
+                        <div class="header">
+                            <div class="bg1">
+                            </div>
+                            <div class="project">
+                                PROJECT
+                            </div>
+                        </div>
+                    </div>
+                    <a href="landingpage.html">
+                        <div class="cancelbtn">
+                            <img src="/images/UIPackage/project-selection-dialog-bg 1@2x.png" class="bg" />
+                            <div class="cancel">
+                                Cancel
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script>
+            var overlay_id = "overlay-projectselectiondialog";
+            document.getElementById(overlay_id).addEventListener("click", function(event) {
+                var e = event || window.event;
+                var clickedDiv = e.toElement || e.target;
+                if (clickedDiv.parentElement.id == overlay_id) {
+                    animaHideOverlay('projectselectiondialog', 'anima-animate-disappear');
+                }
+            }, false);
+        </script>
+        <!-- Scripts -->
+        <script>
+            anima_isHidden = function(e) {
+                if (!(e instanceof HTMLElement)) return !1;
+                if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;
+                return !1;
+            };
+            anima_loadAsyncSrcForTag = function(tag) {
+                var elements = document.getElementsByTagName(tag);
+                var toLoad = [];
+                for (var i = 0; i < elements.length; i++) {
+                    var e = elements[i];
+                    var src = e.getAttribute("src");
+                    var loaded = (src != undefined && src.length > 0 && src != 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+                    if (loaded) continue;
+                    var asyncSrc = e.getAttribute("src");
+                    if (asyncSrc == undefined || asyncSrc.length == 0) continue;
+                    if (anima_isHidden(e)) continue;
+                    toLoad.push(e);
+                }
+                toLoad.sort(function(a, b) {
+                    return anima_getTop(a) - anima_getTop(b);
+                });
+                for (var i = 0; i < toLoad.length; i++) {
+                    var e = toLoad[i];
+                    var asyncSrc = e.getAttribute("src");
+                    e.setAttribute("src", asyncSrc);
+                }
+            };
+            anima_pauseHiddenVideos = function(tag) {
+                var elements = document.getElementsByTagName("video");
+                for (var i = 0; i < elements.length; i++) {
+                    var e = elements[i];
+                    var isPlaying = !!(e.currentTime > 0 && !e.paused && !e.ended && e.readyState > 2);
+                    var isHidden = anima_isHidden(e);
+                    if (!isPlaying && !isHidden && e.getAttribute("autoplay") == "autoplay") {
+                        e.play();
+                    } else if (isPlaying && isHidden) {
+                        e.pause();
+                    }
+                }
+            };
+            anima_loadAsyncSrc = function(tag) {
+                anima_loadAsyncSrcForTag("img");
+                anima_loadAsyncSrcForTag("iframe");
+                anima_loadAsyncSrcForTag("video");
+                anima_pauseHiddenVideos();
+            };
+            var anima_getTop = function(e) {
+                var top = 0;
+                do {
+                    top += e.offsetTop || 0;
+                    e = e.offsetParent;
+                } while (e);
+                return top;
+            };
+            anima_loadAsyncSrc();
+            anima_old_onResize = window.onresize;
+            anima_new_onResize = undefined;
+            anima_updateOnResize = function() {
+                if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
+                    anima_new_onResize = function(x) {
+                        if (anima_old_onResize != undefined) anima_old_onResize(x);
+                        anima_loadAsyncSrc();
+                    };
+                    window.onresize = anima_new_onResize;
+                    setTimeout(function() {
+                        anima_updateOnResize();
+                    }, 3000);
+                }
+            };
+            anima_updateOnResize();
+            setTimeout(function() {
+                anima_loadAsyncSrc();
+            }, 200);
+        </script>
+        <script>
+            function AnimaShowOnScroll() {
+                this.toShow = [];
+                this.nextEventY = undefined;
+            }
+            AnimaShowOnScroll.prototype.show = function(e) {
+                e.style.display = "";
+            };
+            AnimaShowOnScroll.prototype.hide = function(e) {
+                e.style.display = "none";
+            };
+            AnimaShowOnScroll.prototype.getTop = function(e) {
+                if (e.animaTop != undefined && e.animaTop != 0) {
+                    return e.animaTop;
+                }
+                var top = 0;
+                var iter = e;
+                do {
+                    top += iter.offsetTop || 0;
+                    iter = iter.offsetParent;
+                } while (iter);
+                e.animaTop = top;
+                return top;
+            };
+            AnimaShowOnScroll.prototype.onScroll = function() {
+                var screenBottom = window.pageYOffset + window.innerHeight;
+                if (this.nextEventY == undefined || this.nextEventY > screenBottom) {
+                    return;
+                }
+                this.nextEventY = undefined;
+                for (var i = 0; i < this.toShow.length; i++) {
+                    var e = this.toShow[i];
+                    var top = this.getTop(e);
+                    if (top < screenBottom) {
+                        this.show(e);
+                        this.toShow.shift();
+                        i--;
+                    } else {
+                        this.nextEventY = top;
+                        break;
+                    }
+                }
+            };
+            AnimaShowOnScroll.prototype.resetScrolling = function() {
+                var screenBottom = window.pageYOffset + window.innerHeight;
+                for (var i = 0; i < this.toShow.length; i++) {
+                    var e = this.toShow[i];
+                    this.show(e);
+                }
+                this.toShow = [];
+                this.nextEventY == undefined;
+                var itemsToShowOnScroll = Array.prototype.slice.call(document.getElementsByTagName("*"));
+                itemsToShowOnScroll = itemsToShowOnScroll.filter(function(e) {
+                    return e.getAttribute("anima-show-on-scroll") != undefined;
+                });
+                var getTop = this.getTop;
+                itemsToShowOnScroll.sort(function(a, b) {
+                    return getTop(a) - getTop(b);
+                });
+                for (var i = 0; i < itemsToShowOnScroll.length; i++) {
+                    var e = itemsToShowOnScroll[i];
+                    var top = this.getTop(e);
+                    if (top < screenBottom) {
+                        continue;
+                    }
+                    this.toShow.push(e);
+                    this.hide(e);
+                    this.nextEventY = this.nextEventY != undefined ? this.nextEventY : top;
+                }
+            };
+            AnimaShowOnScroll.prototype.handleEvent = function(e) {
+                switch (e.type) {
+                    case "scroll":
+                        this.onScroll();
+                        break;
+                    case "resize":
+                        this.resetScrolling();
+                        break;
+                }
+            };
+            AnimaShowOnScroll.prototype.init = function() {
+                this.resetScrolling();
+                window.addEventListener("scroll", this);
+                window.addEventListener("resize", this);
+            };
+            setTimeout(function() {
+                var animaShowOnScroll = new AnimaShowOnScroll();
+                animaShowOnScroll.init();
+            }, 250);
+        </script>
+        <script>
+            animaShowOverlay = function(overlayName, animationName) {
+                overlayName = 'overlay-' + overlayName;
+                var cssClasses = document.getElementById(overlayName).className.split(' ');
+                var last = cssClasses.slice(-1)[0];
+                if (last.lastIndexOf('anima-animate') == -1) {
+                    document.getElementById(overlayName).className = document.getElementById(overlayName).className + " " + animationName;
+                }
+                if (anima_loadAsyncSrc != undefined) {
+                    anima_loadAsyncSrc();
+                }
+            };
+            animaHideOverlay = function(overlayName, animationName) {
+                overlayName = 'overlay-' + overlayName;
+                var cssClasses = document.getElementById(overlayName).className.split(' ');
+                var last = cssClasses.slice(-1)[0];
+                if (last.lastIndexOf('anima-animate') != -1) {
+                    cssClasses.splice(-1);
+                    cssClasses.push(animationName);
+                    document.getElementById(overlayName).className = cssClasses.join(' ');
+                    cssClasses.splice(-1);
+                    setTimeout(function() {
+                        document.getElementById(overlayName).className = cssClasses.join(' ');
+                    }, 1100);
+                }
+                var vids = document.getElementsByTagName('video');
+                if (vids) {
+                    for (var i = 0; i < vids.length; i++) {
+                        var video = vids.item(i);
+                        video.pause();
+                    }
+                }
+            };
+        </script>
+		<script>
+		function OnCheckClick() {
+                // Get the modal
+                var modal = document.getElementById('projectselectiondialogModal');
+
+                // When the user clicks the button, open the modal 
+               
+                    modal.style.display = "block";
+                    $('#projectselectiondialog-content').load("/projectselectiondialog.html")
+
+                // When the user clicks anywhere outside of the modal, close it
+                // window.onclick = function (event) {
+                //     if (event.target == modal) {
+                //         modal.style.display = "none";
+                //     }
+                // }
+            // window.location = "/checkModule.html";
+            // return false;
+			// // alert("Check Clicked");
+		}
+		function OnPrepCliked()
+		{
+			alert("Prep Clicked");
+		}
+		function OnReviewClicked()
+		{
+			alert("Review Clicked");
+		}
+		window.onload = function () {
+			var username = getCookie("username");
+			var pierrediv  = document.getElementById("pierre");
+			if (username != "" && pierrediv != null)
+                pierrediv.innerHTML = username;	
+		}
+		function getCookie(cname) 
+		{
+				var name = cname + "=";
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+			  for(var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+				  c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+				  return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		</script>
+        <!-- End of Scripts -->
+    </body>
 </html>

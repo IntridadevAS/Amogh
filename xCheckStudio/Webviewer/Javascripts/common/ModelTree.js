@@ -13,7 +13,7 @@ var xCheckStudio;
     (function (Ui) {
         var ModelTree = /** @class */ (function () {
             function ModelTree(elementId, viewer) {
-                this._size = new Communicator.Point2(768, 570);
+                this._size = new Communicator.Point2(556, 300);
                 this._elementId = elementId;
                 this._viewer = viewer;
 
@@ -51,7 +51,7 @@ var xCheckStudio;
                 columnHeader["title"] = "";
                 columnHeader["name"] = "checkBox";
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "40";
+                columnHeader["width"] = "20";
                 columnHeader["filtering"] = "false";
                 columnHeader["sorting"] = "false";
                 _this.modelTreeColumnHeaders.push(columnHeader);
@@ -60,21 +60,21 @@ var xCheckStudio;
                 columnHeader["title"] = "Item";
                 columnHeader["name"] = "Component";
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "150";
+                columnHeader["width"] = "100";
                 _this.modelTreeColumnHeaders.push(columnHeader);
 
                 columnHeader = {};
                 columnHeader["title"] = "Category";
                 columnHeader["name"] = "MainComponentClass";
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "150";
+                columnHeader["width"] = "100";
                 _this.modelTreeColumnHeaders.push(columnHeader);             
 
                 columnHeader = {};
                 columnHeader["title"] = "Item Class";
                 columnHeader["name"] = "SubComponentClass";
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "120";
+                columnHeader["width"] = "100";
                 _this.modelTreeColumnHeaders.push(columnHeader);
 
                 columnHeader = {};
@@ -193,7 +193,7 @@ var xCheckStudio;
                 tableRowContent = {};
                 var checkBox = document.createElement("INPUT");
                 checkBox.setAttribute("type", "checkbox");
-                checkBox.checked = true;
+                checkBox.checked = false;
 
                 tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
 
@@ -419,7 +419,6 @@ var xCheckStudio;
                 var nodeID = parseInt(nodeId)
                 this._viewer.selectPart(nodeID);
                 this._viewer.view.fitNodes([nodeID]);
-
             };
 
             ModelTree.prototype.ChangeBackgroundColor = function (row) {
@@ -458,21 +457,21 @@ var xCheckStudio;
 
                 var modelBrowserData = document.getElementById(this._elementId);
                 var modelBrowserDataTable = modelBrowserData.children[1];
-                var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-                var  countBox;
-                if (this._elementId === "modelTree1") {
-                    countBox = document.getElementById("totalComponentCount1");
-                }
-                if (this._elementId === "modelTree2") {
-                    countBox = document.getElementById("totalComponentCount2");
-                }
-                countBox.innerText =  "Count :" + modelBrowserTableRows.length;
-                countBox.style.fontSize = "20px";
+                // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+                // var  countBox;
+                // if (this._elementId === "modelTree1") {
+                //     countBox = document.getElementById("totalComponentCount1");
+                // }
+                // if (this._elementId === "modelTree2") {
+                //     countBox = document.getElementById("totalComponentCount2");
+                // }
+                // // countBox.innerText =  "Count :" + modelBrowserTableRows.length;
+                // // countBox.style.fontSize = "20px";
 
 
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "780px";
+                modelBrowserHeaderTable.style.width= "554px";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
                 for(var j =0; j < modelBrowserHeaderTableRows.length; j++)
@@ -493,8 +492,8 @@ var xCheckStudio;
 
     
                 modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width= "780px";
-                modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+                modelBrowserDataTable.style.width= "556px";
+                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
             };
 
             ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
@@ -532,27 +531,27 @@ var xCheckStudio;
                 $(function () {
                     var db = {
                         loadData: filter => {
-                         if(filter.Component === "" && filter.MainComponentClass === "" && filter.SubComponentClass === "")
-                         {
-                             if(xCheckStudioInterface1 !== undefined && xCheckStudioInterface1._modelTree !== undefined)
-                             {
-                                // xCheckStudioInterface1._modelTree.addModelBrowser(xCheckStudioInterface1._firstViewer.model.getAbsoluteRootNode(), undefined);
-                                // xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
-                                // for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
-                                //     xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
-                                // }
-                             }
-                             else if(xCheckStudioInterface2 !== undefined && xCheckStudioInterface2._modelTree !== undefined)
-                             {
-                                // xCheckStudioInterface2._modelTree.addModelBrowser(xCheckStudioInterface2._firstViewer.model.getAbsoluteRootNode(), undefined);
-                                // xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
-                                // for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
-                                //     xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
-                                // }
-                             }
+                        //  if(filter.Component === "" && filter.MainComponentClass === "" && filter.SubComponentClass === "")
+                        //  {
+                        //      if(xCheckStudioInterface1 !== undefined && xCheckStudioInterface1._modelTree !== undefined)
+                        //      {
+                        //         // xCheckStudioInterface1._modelTree.addModelBrowser(xCheckStudioInterface1._firstViewer.model.getAbsoluteRootNode(), undefined);
+                        //         // xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
+                        //         // for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
+                        //         //     xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
+                        //         // }
+                        //      }
+                        //      else if(xCheckStudioInterface2 !== undefined && xCheckStudioInterface2._modelTree !== undefined)
+                        //      {
+                        //         // xCheckStudioInterface2._modelTree.addModelBrowser(xCheckStudioInterface2._firstViewer.model.getAbsoluteRootNode(), undefined);
+                        //         // xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
+                        //         // for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
+                        //         //     xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
+                        //         // }
+                        //      }
                             
-                         }
-                         else{
+                        //  }
+                        //  else{
                             console.debug("Filter: ", filter);
                             let Component = (filter.Component || "").toLowerCase();
                             let MainComponentClass = (filter.MainComponentClass || "").toLowerCase();
@@ -565,13 +564,13 @@ var xCheckStudio;
                               && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
                               && (isNaN(dmy) || row.dummy === dmy);
                             });
-                         }
+                        //  }
                         }
                       };
     
                     $(viewerContainer).jsGrid({
-                        width: "780px",
-                        height: "560px",  
+                        width: "556px",
+                        height: "300px",  
                         filtering: true,
                         sorting: true,
                         autoload: true,
@@ -580,12 +579,34 @@ var xCheckStudio;
                         fields: columnHeaders,
                         margin: "0px",
                         checked: true,
-                        onRefreshed: function(config) {
-                            // _this.addClassesToModelBrowser();
-                            // for (var i = 0; i < _this.NodeGroups.length; i++) {
-                            //     _this.CreateGroup(_this.NodeGroups[i]);
-                            // }       
-                            _this.AddTableContentCount(this._container.context.id);                     
+                        onRefreshed: function(config) {      
+                            _this.AddTableContentCount(this._container.context.id);
+                            var modelTreeParentContainer;
+                            if(this._container.context.id === "modelTree1")
+                            {
+                                modelTreeParentContainer = document.getElementById("dataSource1") ;
+                                for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                                {
+                                    currentChild = modelTreeParentContainer.children[i];
+                                    if(currentChild.className === "loaddata" || currentChild.className === "createbtn")
+                                    {
+                                        currentChild.style.display = "none";
+                                    }
+                                }  
+                            }
+                            else if(this._container.context.id === "modelTree2")
+                            {
+                                modelTreeParentContainer = document.getElementById("dataSource2") ;
+                                for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                                {
+                                    currentChild = modelTreeParentContainer.children[i];
+                                    if(currentChild.className === "loaddata" || currentChild.className === "createbtn2")
+                                    {
+                                        currentChild.style.display = "none";
+                                    }
+                                }  
+                            }
+                                              
                         },
                         rowClick: function (args) {
                             if (args.event.target.type === "checkbox") {
@@ -618,7 +639,7 @@ var xCheckStudio;
                 });
     
                 //add all rows to this.selectedComponents array
-                this.addselectedRowsToArray(viewerContainer)
+                // this.addselectedRowsToArray(viewerContainer)
     
     
             var container = document.getElementById(viewerContainer.replace("#", ""));
@@ -639,8 +660,8 @@ var xCheckStudio;
                 
                 
             // }
-            container.style.width = "780px"
-            container.style.height = "620px"
+            container.style.width = "556px"
+            container.style.height = "300px"
             container.style.margin = "0px"
             container.style.overflowX = "hide";
             container.style.overflowY = "scroll";
@@ -654,13 +675,12 @@ var xCheckStudio;
            
             var countBox;
             if (containerId === "modelTree1") {
-                countBox = document.getElementById("totalComponentCount1");
+                countBox = document.getElementById("SourceAComponentCount");
             }
             if (containerId === "modelTree2") {
-                countBox = document.getElementById("totalComponentCount2");
+                countBox = document.getElementById("SourceBComponentCount");
             }
             countBox.innerText = "Count :" + modelBrowserTableRows.length;
-            countBox.style.fontSize = "20px";
         }
 
         ModelTree.prototype.addselectedRowsToArray = function (viewerContainer){

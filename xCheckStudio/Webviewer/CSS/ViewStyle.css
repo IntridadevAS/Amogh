@@ -11,15 +11,15 @@ body {
 }
 
 .example-canvas-small {
-    width: 768px;
-    height: 576px;
+    width: 560px;
+    height: 370px;
     position: relative;
-    border: 1px solid gray;
+    margin: 60px 0 0 20px;
 }
 
 .example-canvas-tiny {
-    width: 80%;
-    height: 100%;
+    /* width: 550px;
+    height: 270px; */
     position: relative;
     border: 1px solid gray;
     margin: auto;

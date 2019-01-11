@@ -1,7 +1,7 @@
-var SuccessColor = "#70db70";
-var ErrorColor = "#ff4d4d";
-var WarningColor = "#ffff99";
-var NoMatchColor = "#ccccff";
+var SuccessColor = "#c6f2cb";//"#70db70";
+var ErrorColor = "#fad9d7";//"#ff4d4d";
+var WarningColor = "#f9ffc7";//"#ffff99";
+var NoMatchColor = "#dddbff"//"#ccccff";
 var NoValueColor = "#f2f2f2";
 
 function HighlightManager(viewer,

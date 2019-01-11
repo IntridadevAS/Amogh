@@ -1,0 +1,381 @@
+
+
+.loaddatadialog {
+  width               : 100%;
+  min-width           : 614px;
+  height              : 292px;
+  min-height          : 292px;
+  position            : relative;
+  overflow            : hidden;
+  margin              : 0px;
+  background-color    : rgba(255, 255, 255, 1.0);
+}
+a {
+  text-decoration     : none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+div {
+  -webkit-text-size-adjust: none;
+}
+.loaddatadialog .loaddatadialog1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 292px;
+  width               : 614px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 292px;
+  width               : 614px;
+  position            : relative;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .bg {
+  background-color    : rgba(255, 255, 255, 1.0);
+  top                 : 56px;
+  height              : 216px;
+  box-sizing          : border-box;
+  width               : 614px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  border-style        : solid;
+  border-width        : 1px;
+  border-color        : rgba(199, 199, 199, 1.0);
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .line {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 81px;
+  height              : 166px;
+  width               : 1px;
+  position            : absolute;
+  margin              : 0;
+  left                : 173px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  opacity             : 0.5;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .header {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 56px;
+  width               : 614px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .header .bg1 {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 0px;
+  height              : 56px;
+  width               : 614px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .header .close {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 8px;
+  height              : 40px;
+  width               : 40px;
+  position            : absolute;
+  margin              : 0;
+  left                : 558px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .header .loaddata {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 18px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 16px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 17.0px;
+  color               : rgba(255, 255, 255, 1.0);
+  text-align          : left;
+  line-height         : 20.0px;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 91px;
+  height              : 127px;
+  width               : 87px;
+  position            : absolute;
+  margin              : 0;
+  left                : 37px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse .group {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 40px;
+  height              : 87px;
+  width               : 87px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse .group:hover {
+  transform           : scale(0.9);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse .group .bg1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 87px;
+  width               : 87px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse .group .icon {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 35px;
+  height              : 15px;
+  width               : 60px;
+  position            : absolute;
+  margin              : 0;
+  left                : 14px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .browse .browse1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 6px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : center;
+  line-height         : 24.0px;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 91px;
+  height              : 174px;
+  width               : 386px;
+  position            : absolute;
+  margin              : 0;
+  left                : 219px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .icon1 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 63px;
+  height              : 59px;
+  width               : 68px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .icon2 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 61px;
+  height              : 63px;
+  width               : 52px;
+  position            : absolute;
+  margin              : 0;
+  left                : 114px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .icon3 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 65px;
+  height              : 56px;
+  width               : 51px;
+  position            : absolute;
+  margin              : 0;
+  left                : 211px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .icon4 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 67px;
+  height              : 51px;
+  width               : 55px;
+  position            : absolute;
+  margin              : 0;
+  left                : 308px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .connecttodatasour {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 70px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
+  font-size           : 20.0px;
+  color               : rgba(51, 51, 51, 1.0);
+  text-align          : center;
+  line-height         : 24.0px;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .saveas .moresourcesu2026 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 152px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 248px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Helvetica-BoldOblique", Helvetica, Arial, serif;
+  font-size           : 18.0px;
+  color               : rgba(100, 132, 164, 1.0);
+  text-align          : right;
+  line-height         : 22.0px;
+}
+.loaddatadialog .loaddatadialog1 .loaddatadialog2 .footer {
+  background-color    : rgba(51, 51, 51, 1.0);
+  top                 : 272px;
+  height              : 20px;
+  width               : 614px;
+  position            : absolute;
+  margin              : 0;
+  left                : 0px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+/* .anima-animate-appear prefix for appear animations */
+.anima-animate-appear {
+  opacity             : 0;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 normal forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 normal forwards;
+}
+.anima-animate-disappear {
+  opacity             : 1;
+  display             : block;
+  -webkit-animation   : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  -moz-animation      : anima-reveal 0.3s ease-in 1 normal forwards;
+  -o-animation        : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+  animation           : anima-reveal 0.3s ease-in-out 1 reverse forwards;
+}
+.anima-animate-nodelay {
+  -webkit-animation-delay: 0;
+  -moz-animation-delay: 0;
+  -o-animation-delay  : 0;
+  animation-delay     : 0;
+}
+@-webkit-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-moz-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@-o-keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}
+@keyframes anima-reveal {
+  0%
+   
+  {
+      opacity: 0;
+    }
+  
+    
+  100%
+   
+  {
+      opacity: 1;
+    }
+}

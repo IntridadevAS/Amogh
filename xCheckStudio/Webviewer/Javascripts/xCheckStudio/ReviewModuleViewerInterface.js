@@ -11,7 +11,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     this.NodeIdVsComponentData = nodeIdVsComponentData;
     this.ComponentIdStatusData = {};
 
-    ReviewModuleViewerInterface.prototype.setupViewer = function () {
+    ReviewModuleViewerInterface.prototype.setupViewer = function (width, height) {
 
         // create and start viewer
         var viewer = new Communicator.WebViewer({
@@ -25,8 +25,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         this.setViewerBackgroundColor();
 
         var viewerContainer = document.getElementById(viewerOptions[0]);
-        viewerContainer.style.width = "780px"
-        viewerContainer.style.height = "620px"
+        viewerContainer.style.width = width;//"550px"
+        viewerContainer.style.height = height;//"250px"
         // create highlight manager
         this.highlightManager = new HighlightManager(viewer, this.ComponentIdVsComponentData, this.NodeIdVsComponentData);
     }

@@ -106,6 +106,11 @@ var CheckCaseFilesData = function () {
 
             checkCaseSelect.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
         }
+
+        for (var i = 0; i < checkCaseSelect.options.length; i++) {
+            var checkCaseOption = checkCaseSelect.options[i];
+            checkCaseOption.className = "casesppidvspdm";
+        }
     }
 
     CheckCaseFilesData.prototype.readCheckCaseFileData = function (xml) {

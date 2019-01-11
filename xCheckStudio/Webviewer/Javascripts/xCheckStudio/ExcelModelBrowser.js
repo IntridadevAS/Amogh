@@ -23,6 +23,7 @@ function ExcelModeBrowser() {
                 {
                     temp["title"] = "";
                     temp["name"] = "checkbox";
+                    temp["width"] = "20";
                     columnHeaders.push(temp);
                 }
                 var title ;
@@ -30,26 +31,30 @@ function ExcelModeBrowser() {
                 {
                     name = "Name";
                     title = "Item";
+                    width  = "40";
                 }
                 else if(i === 1)
                 {
                     name = "Category";
                     title = "Category";
+                    width  = "100";
                 }
                 else if(i === 2)
                 {
                     name = "ComponentClass";
                     title = "Item Class";
+                    width  = "100";
                 }
                 else if(i === 3)
                 {
                     name = "Description";
                     title = "Description";
+                    width  = "100";
                 }
                 columnHeader["name"] = name;
                 columnHeader["title"] = title;
                 columnHeader["type"] = "text";
-                columnHeader["width"] = "100";
+                columnHeader["width"] = width;
                 columnHeaders.push(columnHeader);
             }
             tableData = [];
@@ -101,7 +106,7 @@ function ExcelModeBrowser() {
                             tableRowContent = {};
                             var checkBox = document.createElement("INPUT");
                             checkBox.setAttribute("type", "checkbox");
-                            checkBox.checked = true;
+                            checkBox.checked = false;
 
                             tableRowContent[columnHeaders[0].name] = checkBox;
                             tableRowContent[columnHeaders[1].name] = name;
@@ -148,16 +153,16 @@ function ExcelModeBrowser() {
             if (containerId === "modelTree2") {
                 countBox = document.getElementById("totalComponentCount2");
             }
-            countBox.innerText =  "Count :" + modelBrowserTableRows.length;
-            countBox.style.fontSize = "20px";
+            // countBox.innerText =  "Count :" + modelBrowserTableRows.length;
+            // countBox.style.fontSize = "20px";
 
             var modelBrowserHeaderTable = modelBrowserData.children[0];
             modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width= "780px";
+            modelBrowserHeaderTable.style.width= "554px";
 
             modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width= "780px";
-            modelBrowserDataTable.style.margin = "60px 0px 0px 0px"
+            modelBrowserDataTable.style.width= "556px";
+            modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
         }
 
     };
@@ -187,7 +192,7 @@ function ExcelModeBrowser() {
         var td = document.createElement("td");
         var checkBox = document.createElement("INPUT");
         checkBox.setAttribute("type", "checkbox");
-        checkBox.checked = true;
+        checkBox.checked = false;
         td.appendChild(checkBox);
         row.appendChild(td);
 
@@ -426,8 +431,8 @@ function ExcelModeBrowser() {
                   };
 
                 $(viewerContainer).jsGrid({
-                    width: "780px",
-                    height: "560px",  
+                    height: "310px",
+                    width: "556",
                     filtering: true,
                     sorting: true,
                     autoload: true,
@@ -443,7 +448,59 @@ function ExcelModeBrowser() {
                         // }   
 
                         //add components count 
+                        // _this.AddTableContentCount(this._container.context.id);
+                        // var modelTreeParentContainer = document.getElementById("dataSource1") ;
+                        // for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                        // {
+                        //     currentChild = modelTreeParentContainer.children[i];
+                        //     if(currentChild.className === "loaddata" || currentChild.className === "createbtn")
+                        //     {
+                        //         currentChild.style.display = "none";
+                        //     }
+                        // }
+                        var modelTreeParentContainer;
+                            if(this._container.context.id === "modelTree1")
+                            {
+                                modelTreeParentContainer = document.getElementById("dataSource1") ;
+                            }
+                            else if(this._container.context.id === "modelTree2")
+                            {
+                                modelTreeParentContainer = document.getElementById("dataSource2") ;
+                            }
+                            for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                            {
+                                currentChild = modelTreeParentContainer.children[i];
+                                if(currentChild.className === "loaddata" || currentChild.className === "createbtn" || currentChild.className === "createbtn2")
+                                {
+                                    currentChild.style.display = "none";
+                                }
+                            }  
                         _this.AddTableContentCount(this._container.context.id);
+                            // var modelTreeParentContainer;
+                            // if(this._container.context.id === "modelTree1")
+                            // {
+                            //     modelTreeParentContainer = document.getElementById("dataSource1") ;
+                            //     for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                            //     {
+                            //         currentChild = modelTreeParentContainer.children[i];
+                            //         if(currentChild.className === "loaddata" || currentChild.className === "createbtn")
+                            //         {
+                            //             currentChild.style.display = "none";
+                            //         }
+                            //     }  
+                            // }
+                            // else if(this._container.context.id === "modelTree2")
+                            // {
+                            //     modelTreeParentContainer = document.getElementById("dataSource2") ;
+                            //     for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
+                            //     {
+                            //         currentChild = modelTreeParentContainer.children[i];
+                            //         if(currentChild.className === "loaddata" || currentChild.className === "createbtn2")
+                            //         {
+                            //             currentChild.style.display = "none";
+                            //         }
+                            //     }  
+                            // }
                      
                     },
                     rowClick: function (args) {
@@ -477,12 +534,12 @@ function ExcelModeBrowser() {
             });
 
             //add all rows to this.selectedComponents array
-            this.addselectedRowsToArray(viewerContainer)
+            // this.addselectedRowsToArray(viewerContainer)
 
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "620px"
+        container.style.width = "556px"
+        container.style.height = "310px"
         container.style.margin = "0px"
         container.style.overflowX = "hide";
         container.style.overflowY = "scroll";
@@ -496,13 +553,12 @@ function ExcelModeBrowser() {
        
         var countBox;
         if (containerId === "modelTree1") {
-            countBox = document.getElementById("totalComponentCount1");
+            countBox = document.getElementById("SourceAComponentCount");
         }
         if (containerId === "modelTree2") {
-            countBox = document.getElementById("totalComponentCount2");
+            countBox = document.getElementById("SourceBComponentCount");
         }
         countBox.innerText = "Count :" + modelBrowserTableRows.length;
-        countBox.style.fontSize = "20px";
     }
 
     ExcelModeBrowser.prototype.LoadSheetDataTable = function (_this, columnHeaders, tableData, viewerContainer) {
@@ -510,13 +566,25 @@ function ExcelModeBrowser() {
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    width: "780px",
-                    height: "620px", 
+                    width: "590px",
+                    height: "370px", 
                     sorting: true,  
                     autoload: true,
+                    height: "10px",
                     data: tableData,
                     fields: columnHeaders,
                     margin: "0px",
+                    onRefreshed: function (config) {
+                        var excelSheetParentContainer = document.getElementById("dataSourceViewer") ;
+                        for(var i = 0; i < excelSheetParentContainer.childElementCount; i++)
+                        {
+                            currentChild = excelSheetParentContainer.children[i];
+                            if(currentChild.className === "viewdatagraphics" )
+                            {
+                                currentChild.style.display = "none";
+                            }
+                        }                     
+                    },
                     rowClick: function (args) {
                         _this.HighlightRowInModelBrowser(args.event.currentTarget)
                     }
@@ -527,11 +595,10 @@ function ExcelModeBrowser() {
 
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "780px"
-        container.style.height = "620px"
+        container.style.width = "570px"
+        container.style.height = "350px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
-        container.style.margin = "0px"
     };
 
 
