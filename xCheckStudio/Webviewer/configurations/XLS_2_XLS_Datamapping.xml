@@ -1,9 +1,9 @@
 <CheckCase name="XLS_2_XLS">
 
 	<Check type="Comparison" sourceAType="XLS" sourceBType="XLS">
-	   <ComponentGroup name="PipeLine" >
+	   <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipeLine">
 	   
-		   <ComponentClass name="PipeLine">
+		   <ComponentClass sourceAComponentClass="PipeLine" sourceBComponentClass="PipeLine">
 				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>  
 				 <Property sourceAName="Class" sourceBName="Class"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
@@ -30,9 +30,9 @@
 		   </ComponentClass>  
 		</ComponentGroup>
 	   
-		<ComponentGroup name="Branch">
+		<ComponentGroup sourceAGroupName="Branch" sourceBGroupName="Branch">
 			
-			<ComponentClass name="Branch">
+			<ComponentClass sourceAComponentClass="Branch" sourceBComponentClass="Branch">
 				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>  
 				 <Property sourceAName="Class" sourceBName="Class"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Warning"/>
@@ -60,9 +60,9 @@
 			</ComponentClass>       
 		</ComponentGroup>
 		
-		<ComponentGroup name="Equipment">
+		<ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="Equipment">
 			
-			<ComponentClass name="Equipment">	
+			<ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Equipment">	
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 				   <Property sourceAName="Tag Prefix" sourceBName="Tag Prefix"  severity="Error"/>
 				   <Property sourceAName="Tag Letter" sourceBName="Tag Letter"  severity="Error"/>
@@ -93,9 +93,9 @@
 			</ComponentClass>
 		</ComponentGroup>
 		
-		<ComponentGroup name="Nozzle">
+		<ComponentGroup sourceAGroupName="Nozzle" sourceBGroupName="Nozzle">
 			
-			<ComponentClass name="Flanged Nozzle">
+			<ComponentClass sourceAComponentClass="Flanged Nozzle" sourceBComponentClass="Flanged Nozzle">
 			
 				<Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>			
 				<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
@@ -108,7 +108,7 @@
 				<Property sourceAName="System" sourceBName="System"  severity="Error"/>
 			</ComponentClass>
 			
-			<ComponentClass name="Manway">
+			<ComponentClass sourceAComponentClass="Manway" sourceBComponentClass="Manway">
 				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>			
 				<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
 				<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>

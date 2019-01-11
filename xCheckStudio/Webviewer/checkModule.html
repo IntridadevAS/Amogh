@@ -2433,35 +2433,35 @@
 
             // document.getElementById(modelTreeContainer).innerHTML = ""
             // document.getElementById(viewerContainer).innerHTML = ""
-            // if (!xCheckStudioInterface1) {
-            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
+            if (!xCheckStudioInterface1) {
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
 
-            // enable source A controls
-            // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-            // sourceAComplianceCB.disabled = false;
+                // enable source A controls
+                // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+                // sourceAComplianceCB.disabled = false;
 
-            // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-            // checkAllSourceACB.disabled = false;
+                // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+                // checkAllSourceACB.disabled = false;
 
-            // // enable source B load data source button
-            // var loadDataSourceBButton = document.getElementById("dataSouresB");
-            // loadDataSourceBButton.disabled = false;
-            // }
-            // else {
-            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            //     xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
+                // // enable source B load data source button
+                // var loadDataSourceBButton = document.getElementById("dataSouresB");
+                // loadDataSourceBButton.disabled = false;
+            }
+            else {
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
 
-            //     // enable source B controls
-            //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-            //     sourceBComplianceCB.disabled = false;
+                //     // enable source B controls
+                //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+                //     sourceBComplianceCB.disabled = false;
 
-            //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-            //     checkAllSourceBCB.disabled = false;
+                //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+                //     checkAllSourceBCB.disabled = false;
 
-            //     var comparisonCB = document.getElementById("comparisonCB");
-            //     comparisonCB.disabled = false;
-            // }
+                //     var comparisonCB = document.getElementById("comparisonCB");
+                //     comparisonCB.disabled = false;
+            }
 
             // document.getElementById("checkButton").disabled = false;
         }
@@ -2585,7 +2585,7 @@
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                    readExcelDataSource(file,
+                    readExcelDataSource(event.target.files[0],
                         dataSource,
                         viewerContainer,
                         modelTreeContainer);
@@ -2796,9 +2796,9 @@
 
                     }
                     if (xCheckStudioInterface2) {
-                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml"||
+                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
-                           
+
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType);
                             var checkedComponent = {};
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
