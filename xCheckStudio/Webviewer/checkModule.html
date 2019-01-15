@@ -2428,7 +2428,7 @@
             viewerContainer,
             modelTreeContainer) {
 
-            let fileName = file;
+            let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
             // document.getElementById(modelTreeContainer).innerHTML = ""
@@ -2538,11 +2538,13 @@
             }
 
 
-            var fileName = xCheckStudio.UploadManager.getSourceName(event.target.files);
-            if (fileName === undefined) {
+            var file = xCheckStudio.UploadManager.getSourceData(event.target.files);            
+            if (file === undefined) {
                 alert("Valid data source not found");
                 return;
             }
+
+            var fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
             if (!xCheckStudio.UploadManager.validateSource(fileExtension, event.target.files)) {
                 alert("valid data source not found");
@@ -2589,7 +2591,7 @@
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                    readExcelDataSource(fileName,
+                    readExcelDataSource(file,
                         dataSource,
                         viewerContainer,
                         modelTreeContainer);

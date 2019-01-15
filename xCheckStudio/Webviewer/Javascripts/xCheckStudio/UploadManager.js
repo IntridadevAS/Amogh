@@ -54,7 +54,7 @@ var xCheckStudio;
         }      
        UploadManager.validateSource = validateSource;
 
-        function getSourceName(files) {
+        function getSourceData(files) {
             if (files.length > 0) {
 
                 for (var i = 0; i < files.length; i++) {
@@ -65,14 +65,14 @@ var xCheckStudio;
 
                     if (ValidDataSources.indexOf(fileExtension) > -1) {
                         // valid datasource found
-                        return file.name;
+                        return file;
                     }
                 }
             }
 
             return undefined;
         }
-        UploadManager.getSourceName = getSourceName;
+        UploadManager.getSourceData = getSourceData;
 
     })(UploadManager = xCheckStudio.UploadManager || (xCheckStudio.UploadManager = {}));
 })(xCheckStudio || (xCheckStudio = {}));
