@@ -498,7 +498,7 @@ function ComplianceReviewManager(complianceCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    width: "560px",
+                    width: "550px",
                     height: "450px",
                     autoload: true,
                     data: tableData,
@@ -514,7 +514,7 @@ function ComplianceReviewManager(complianceCheckManager,
         }
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "560px"
+        container.style.width = "550px"
         container.style.height = "450px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
