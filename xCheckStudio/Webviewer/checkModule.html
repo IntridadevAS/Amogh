@@ -44,6 +44,12 @@
     </meta>
 
     <style>
+        /* disable the div contents */
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
         /* The Modal (background) */
     .modal {
       display: none; /* Hidden by default */
@@ -509,6 +515,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
@@ -550,6 +560,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
@@ -769,6 +783,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
@@ -798,6 +816,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
@@ -1055,6 +1077,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
@@ -1096,6 +1122,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
@@ -1315,6 +1345,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate2tostate1EndedHandler);
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
@@ -1344,6 +1378,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggleHm8P2S0BCR4ustate1tostate2EndedHandler);
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
@@ -1598,6 +1636,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler);
                                         removeAllClassesButFirst(component, 'state1-to-state2');
                                         addClass(component, 'state2');
@@ -1638,6 +1680,10 @@
                                 try {
                                     setTimeout(function () {
                                         var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                                        if (component.classList.contains("disabledbutton")) {
+                                            return;
+                                        }
+
                                         component.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate2tostate1EndedHandler);
                                         removeAllClassesButFirst(component, 'state2-to-state1');
                                         addClass(component, 'state1');
@@ -2008,7 +2054,44 @@
             }
         }
 
+        function disableControlsOnLoad() {
+            // diable check all CB for source A
+            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+            addClass(component, 'disabledbutton');
+
+            // diable compliance CB for source A
+            component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+            addClass(component, 'disabledbutton');
+
+            // diable check all CB for source B
+            component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+            addClass(component, 'disabledbutton');
+
+            // diable compliance CB for source B
+            component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+            addClass(component, 'disabledbutton');
+
+            // diable comparison switch
+            component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+            addClass(component, 'disabledbutton');
+
+            // disable source A load button
+            component = document.getElementById('createbtnA');
+            addClass(component, 'disabledbutton');
+
+            // disable source B load button
+            component = document.getElementById('createbtnB');
+            addClass(component, 'disabledbutton');
+
+            // disable check button            
+            component = document.getElementById('checkButton');
+            addClass(component, 'disabledbutton');
+        }
+
         window.onload = function () {
+
+            // disable controls on load
+            disableControlsOnLoad();
 
             var project = getCookie("checkprojectname");
             var powerplantdiv = document.getElementById("powerplant");
@@ -2029,9 +2112,11 @@
                 // show busy loader
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
+
                 sourceAComplianceCheckManager = undefined;
                 sourceBComplianceCheckManager = undefined;
                 comparisonCheckManager = undefined;
+
                 var checkCaseSelect = document.getElementById("checkCaseSelect");
                 if (checkCaseSelect.value === "None") {
                     // hide busy spinner
@@ -2043,14 +2128,14 @@
                 // check if any check case type is selected
                 var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
                 var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                var complianceSourceBCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
                 if (!comparisonCB.classList.contains("state2") &&
                     !complianceSourceACB.classList.contains("state1") &&
                     !complianceSourceBCB.classList.contains("state1")) {
                     // hide busy spinner
                     busySpinner.classList.remove('show');
 
-                    alert("No selected check type found. Please select check type.")
+                    alert("No selected check type found. Please select check type.");
                     return;
                 }
 
@@ -2141,6 +2226,13 @@
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
             checkCaseSelect.onchange = function () {
+                if (this.value === "None") {
+                    // disable controls
+                    disableControlsOnLoad();
+
+                    return;
+                }
+
                 var fileName;
                 for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
                     var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
@@ -2158,9 +2250,11 @@
                 checkCaseManager.readCheckCaseData(fileName);
 
 
-                // enable source A load source buttton
-                // var loadDataSourceAButton = document.getElementById("dataSouresA");
-                // loadDataSourceAButton.disabled = false;
+                // if valid check case is selected, then enable source A controls              
+                var component = document.getElementById('createbtnA');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
             }
 
             // read check cases files list
@@ -2484,6 +2578,31 @@
                 var inputContent = formContent.getElementsByTagName("input")[0];
                 var onchnageString = "loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')";
                 inputContent.setAttribute("onchange", onchnageString);
+
+                // enable source a controls
+                // diable check all CB for source A
+                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // diable compliance CB for source A
+                component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // enable source B, load button
+                component = document.getElementById('createbtnB');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // enable check button
+                component = document.getElementById('checkButton');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
             }
             else if (isFirstDataSource === "false") {
                 modal = document.getElementById('projectselectiondialogModal');
@@ -2499,6 +2618,25 @@
                 var inputContent = formContent.getElementsByTagName("input")[0];
                 var onchnageString = "loadDataSource(event, 'file-input', 'uploadDatasourceBForm', 'viewerContainer2', 'modelTree2')"
                 inputContent.setAttribute("onchange", onchnageString);
+
+                // enable source B controls
+                // diable check all CB for source B
+                component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // diable compliance CB for source B
+                component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // diable comparison switch
+                component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
             }
 
             // When the user clicks anywhere outside of the modal, close it
@@ -2538,7 +2676,7 @@
             }
 
 
-            var file = xCheckStudio.UploadManager.getSourceData(event.target.files);            
+            var file = xCheckStudio.UploadManager.getSourceData(event.target.files);
             if (file === undefined) {
                 alert("Valid data source not found");
                 return;
@@ -2734,9 +2872,19 @@
         function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
 
             var modelTreeContainerElement = document.getElementById(modelTreeContainer);
+            if (!modelTreeContainerElement) {
+                return;
+            }
+
             var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
+            if (!modelTreeHeaderDiv) {
+                return;
+            }
 
             var modelBrowserTable = modelTreeContainerElement.children[1];
+            if (!modelBrowserTable) {
+                return;
+            }
 
             var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
             // var currentTable = modelTreeParentDiv.children[0];
@@ -2802,9 +2950,9 @@
 
                     }
                     if (xCheckStudioInterface2) {
-                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml"||
+                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
-                           
+
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType);
                             var checkedComponent = {};
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
@@ -3139,7 +3287,7 @@
                 }
             }
         }
-        
+
         function OnExitFullScreen() {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
