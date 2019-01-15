@@ -91,6 +91,11 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         this._selectedNodeId = nodeId;
     };
 
+    ReviewModuleViewerInterface.prototype.unHighlightComponent = function () {
+        this.highlightManager.clearSelection();
+        this._selectedNodeId = undefined;
+    }
+
     ReviewModuleViewerInterface.prototype.onSelection = function (selectionEvent) {
         var selection = selectionEvent.getSelection();
         if (selection.isNodeSelection()) {

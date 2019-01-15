@@ -57,4 +57,9 @@ function HighlightManager(viewer,
         this.Viewer.selectionManager.selectNode(nodeId);
         this.Viewer.view.fitNodes([nodeId]);
     }
+
+    HighlightManager.prototype.clearSelection = function () {
+        this.Viewer.selectionManager.clear();  
+        this._selectedComponentId = "";      
+    }
 }
