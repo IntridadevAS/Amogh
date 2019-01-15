@@ -1861,7 +1861,7 @@
             </div>
             <div id="maximizeViewerContainer" class="modal">
                 <!-- Modal content -->
-                <div class="modal-content" id="maximizeViewerContainer-content" style="width: 700px; height: 550px; margin-left: 300px; margin-top: 80px;">
+                <div class="modal-content" id="maximizeViewerContainer-content" style="width: 800px; height: 550px; margin-left: 400px; margin-top: 80px;">
 
                 </div>
             </div>
@@ -2428,40 +2428,40 @@
             viewerContainer,
             modelTreeContainer) {
 
-            let fileName = file.name;
+            let fileName = file;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
             // document.getElementById(modelTreeContainer).innerHTML = ""
             // document.getElementById(viewerContainer).innerHTML = ""
-            if (!xCheckStudioInterface1) {
-                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
+            // if (!xCheckStudioInterface1) {
+            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
 
-                // enable source A controls
-                // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-                // sourceAComplianceCB.disabled = false;
+            // enable source A controls
+            // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+            // sourceAComplianceCB.disabled = false;
 
-                // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-                // checkAllSourceACB.disabled = false;
+            // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+            // checkAllSourceACB.disabled = false;
 
-                // // enable source B load data source button
-                // var loadDataSourceBButton = document.getElementById("dataSouresB");
-                // loadDataSourceBButton.disabled = false;
-            }
-            else {
-                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
+            // // enable source B load data source button
+            // var loadDataSourceBButton = document.getElementById("dataSouresB");
+            // loadDataSourceBButton.disabled = false;
+            // }
+            // else {
+            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            //     xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
 
-                //     // enable source B controls
-                //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-                //     sourceBComplianceCB.disabled = false;
+            //     // enable source B controls
+            //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+            //     sourceBComplianceCB.disabled = false;
 
-                //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-                //     checkAllSourceBCB.disabled = false;
+            //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+            //     checkAllSourceBCB.disabled = false;
 
-                //     var comparisonCB = document.getElementById("comparisonCB");
-                //     comparisonCB.disabled = false;
-            }
+            //     var comparisonCB = document.getElementById("comparisonCB");
+            //     comparisonCB.disabled = false;
+            // }
 
             // document.getElementById("checkButton").disabled = false;
         }
@@ -2552,14 +2552,18 @@
             var tabHeader;
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
+                localStorage.setItem("SourceAName", fileName);
+                document.getElementById("dataSource1ViewerContainerTab").innerText = fileName;
             }
             else if (modelTreeContainer === "modelTree2") {
                 tabHeader = document.getElementById("dataSource2ModelBrowserTab");
+                localStorage.setItem("SourceBName", fileName);
+                document.getElementById("dataSource2ViewerContainerTab").innerText = fileName;
             }
             tabHeader.innerText = fileName;
 
             //*******
-            localStorage.setItem(dataSource, fileName);
+            // localStorage.setItem(dataSource, fileName);
             //*******
 
             if (fileExtension.toLowerCase() === "xml" ||
@@ -2585,7 +2589,7 @@
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                    readExcelDataSource(event.target.files[0],
+                    readExcelDataSource(fileName,
                         dataSource,
                         viewerContainer,
                         modelTreeContainer);
@@ -2796,9 +2800,9 @@
 
                     }
                     if (xCheckStudioInterface2) {
-                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
+                        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml"||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
-
+                           
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType);
                             var checkedComponent = {};
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
@@ -3133,6 +3137,7 @@
                 }
             }
         }
+        
         function OnExitFullScreen() {
             if (document.exitFullscreen) {
                 document.exitFullscreen();

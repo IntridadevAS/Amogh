@@ -159,6 +159,38 @@
             td{
                 height: 10px;
             }
+
+               /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: absolute; /* Stay in place */
+      padding: auto; /* Location of the box */
+      width: 1280px; /* Full width */
+      height: 760px; /* Full height */
+      margin: 0 432px 0 0;
+      top: 0px;
+      left: 320px;
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      border: 1px solid #888;
+      width: 416px;
+      height: 179px;
+      margin-left: 333px;
+      margin-top: 214px;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
         </style>
     </head>
     <body style="margin: 0;
@@ -539,7 +571,8 @@
                                 </div> 
                             
                             </div> -->
-                            <div style="border: solid black; margin: 70px 0 0 0; height: 105%; width: 101%;">
+                            
+                            <!-- <div style="border: solid black; margin: 70px 0 0 0; height: 105%; width: 101%;">
                                 <div style="border: solid black;height: 50%; width: 100%;">
                                     <div style="color: black"> 
                                         <div class="compare" id="compare" style="border: solid 1px;height: 5%; width: 20%;" onclick="openCheckResultTab('ComparisonTab');">
@@ -550,23 +583,12 @@
                                         </div>
                                         <div id="ComparisonTab"  style="border: solid 1px;height: 80%; width: 100%; margin-top: 10px" class="AnalyticsResultsContainerTab" style="display: none">
                                         
-                                            <!-- <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                            <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" /> -->
                                             <div class="piechart" id="PieChartButton" style="border: solid 1px;height: 5%; width: 15%; margin-left: 65%; margin-top: 0px" onclick="openChartTab('PieChartTab');">
                                                 Pie chart
                                             </div>
                                             <div class="barchart" id="BarChartButton" style="border: solid 1px;height: 5%; width: 15%; margin-left: 83%; margin-top: -22px" onclick="openChartTab('BarChartTab');">
                                                 Bar chart
                                             </div>
-                                            <!-- <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                            </div> -->
-                                            <!-- <div class="thin0385graphpiechartstatistics">
-                                                <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                            </div> -->
                                             <div id="PieChartTab" class="AnalyticsChartContainerTab" style="display: none">
                                                 <div class="group2" id="group2_pie" style="border: 0px">
                                         
@@ -734,7 +756,7 @@
                                 </div>
                                 <div style="border: solid black;height: 50%; width: 100%">
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="white1">
@@ -888,7 +910,7 @@
                     </div>
                 </div> -->
                 <div class="group">
-                    <div class="iconfullscreenfilled">
+                    <div class="iconfullscreenfilled"  onclick="OnFullScreen()">
                         <img src="/images/UIPackage/module1-icon--fullscreen--filled@2x.png" class="iconfullscreenfilled1" />
                     </div>
                     <div class="iconfullscreenexitfilled">
@@ -912,6 +934,19 @@
                 </div> -->
                 <!-- <img src="/images/UIPackage/module2-with-open-menu-bitmap.png" class="bitmap" /> -->
             </div>
+             <!-- The Modal -->
+             <div id="projectselectiondialogModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content" id="projectselectiondialog-content">
+    
+                    </div>
+                </div>
+                <div id="maximizeViewerContainer" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content" id="maximizeViewerContainer-content" style="width: 700px; height: 550px; margin-left: 300px; margin-top: 80px;">
+    
+                    </div>
+                </div>
         </div>
         <!-- Scripts -->
         <script>
@@ -1057,17 +1092,63 @@
                 setButtonsCollapsible();
                 // openCheckResultTab("checkResultsContainerTab");
                 // remove post data js files from server from earlier check results, if any
-                // $.ajax({
-                //     data: '',
-                //     url: 'postData/postDataCleaner.php',
-                //     method: 'POST', // or GET
-                //     async: false,
-                //     success: function (msg) {
-                //         //alert('Post Data files deleted');
-                //     }
-                // });
+                $.ajax({
+                    data: '',
+                    url: 'postData/postDataCleaner.php',
+                    method: 'POST', // or GET
+                    async: false,
+                    success: function (msg) {
+                        //alert('Post Data files deleted');
+                    }
+                });
+
+                postData(comparisonCheckManager,sourceAComplianceCheckManager, sourceBComplianceCheckManager );
             };
 
+            function postData(comparisonCheckManager,sourceAComplianceCheckManager, sourceBComplianceCheckManager ) {
+                    // post comparison data
+                    if (comparisonCheckManager) {
+                        $.ajax({
+                            url: 'postData/comparisonCheckpostDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+                            success: function (data) {
+                                // alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+
+                    // post source A compliance data
+                    if (sourceAComplianceCheckManager) {
+                        $.ajax({
+                            url: 'postData/sourceAComplianceDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "SourceAComplianceCheckManager": JSON.stringify(sourceAComplianceCheckManager) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+
+                    // post source B compliance data
+                    if (sourceBComplianceCheckManager) {
+                        $.ajax({
+                            url: 'postData/sourceBComplianceDataWriter.php',
+                            type: "POST",
+                            async: false,
+                            data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+                            success: function (data) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                        });
+                    }
+                }
+            
             function loadAnalyticsData() {
                     analyticsManager = new AnalyticsManager();
 
@@ -1360,8 +1441,15 @@
                     {
                         document.getElementById("AnalyticsViewTab").style.backgroundColor = "#F3F0F4";
                         document.getElementById("ChecksViewTab").style.backgroundColor = "lightgray";
-                        loadAnalyticsData();
+                        // loadAnalyticsData();
                         // $("#analyticsContent").load("/analyticsModule.html");
+                        // modal = document.getElementById('projectselectiondialogModal');
+
+                        // // When the user clicks the button, open the modal 
+                        // modal.style.display = "block";
+                        // document.getElementById("projectselectiondialog-content").innerHTML = "";
+                        // $('#projectselectiondialog-content').load('/analyticsModule.html');
+                        window.open("/analyticsModule.html", 'popUpWindow','height=800,width=1500,left=100,top=100, status=yes');
                     }
                     else if(tabName === "ChecksTabPage")
                     {
@@ -1625,7 +1713,58 @@
 		// 	var powerplantdiv  = document.getElementById("powerplant");
 		// 	if (project != "" && powerplantdiv != null)
 		// 		powerplant.innerHTML = project;
-		// };
+        // };
+        
+        function closePopout() {
+            if (this._poppedOutWindow) {
+                this._poppedOutWindow.close();
+                this._poppedOutWindow = null;
+                this.returnViewer();
+            }
+        }
+
+
+        function returnViewer(viewerdata) {
+            // var container = document.getElementById("dataSourceViewer");
+            viewerContainer = document.getElementsByClassName("viewContainerTab");
+            viewerdata.style.width = "100%"
+            viewerdata.style.height = "200px";
+            viewerdata.style.margin = "auto";
+            //margin: 20px 0 0 20px
+            //viewerContainer[0].appendChild(viewerdata);
+            viewerContainer[0].children[1].appendChild(viewerdata);
+            // this._viewer.moveToWindow(window);
+            // this._viewer.resizeCanvas();
+            // window.setTimeout(function () {
+            //     _this._viewer.redraw();
+            // }, 500);
+        };
+
+        function OnFullScreen() {
+            var elem = document.getElementById("checksViewTable");
+            // if (elem.style.display === "block") {
+                // if (elem.requestFullscreen) 
+                // {
+                var modal = document.getElementById('maximizeViewerContainer');
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                var viewerdata = document.getElementById("checksViewTable")
+                var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                modalViewer.appendChild(viewerdata);
+                // var modalViewerContainer = document.getElementById("checksViewTable");
+                viewerdata.style.width = "100%";
+                viewerdata.style.height = "100%";
+                viewerdata.style.margin = "auto";
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        returnViewer(viewerdata);
+                        modal.style.display = "none";
+                    }
+                }
+            // }
+        }
+        
             anima_isHidden = function(e) {
                 if (!(e instanceof HTMLElement)) return !1;
                 if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;

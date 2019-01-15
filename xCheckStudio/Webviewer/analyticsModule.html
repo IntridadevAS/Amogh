@@ -337,13 +337,13 @@
             var checkCase = localStorage.getItem("CheckCase");
             document.getElementById("checkCase").innerHTML = checkCase;
             document.getElementById("checkCase1").innerHTML = "CheckCase "+checkCase;
-            var source1 = localStorage.getItem("dataSouresA");
+            var source1 = localStorage.getItem("SourceAName");
             fileName1 = source1.split(".");
             document.getElementById("dataSource1").innerHTML = fileName1[0];
             document.getElementById("dataSource1").style.fontSize = "11px"
             document.getElementById("extension1").innerHTML = fileName1[1];
 
-            var source2 = localStorage.getItem("dataSouresB");
+            var source2 = localStorage.getItem("SourceBName");
             fileName2 = source2.split(".");
             document.getElementById("dataSource2").innerHTML = fileName2[0];
             document.getElementById("dataSource2").style.fontSize = "11px";

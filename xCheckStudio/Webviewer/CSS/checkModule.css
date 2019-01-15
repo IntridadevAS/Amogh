@@ -684,6 +684,8 @@ div {
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
+  text-align : center;
+  line-height: 2;
 }
 .module1 .white .tab .tab1 {
   background-color    : #F2F0F3;
@@ -697,6 +699,8 @@ div {
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
+  text-align : center;
+  line-height: 2;
 }
 
 .module1 .group1 {
@@ -1892,6 +1896,8 @@ div {
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
+  text-align : center;
+  line-height: 2;
 }
 .module1 .white1 .tab .tab1 {
   background-color    : #F2F0F3;
@@ -1905,6 +1911,8 @@ div {
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
+  text-align : center;
+  line-height: 2;
 }
 .module1 .group32 {
   background-color    : rgba(255,255,255,0.0);
