@@ -169,7 +169,7 @@
       height: 760px; /* Full height */
       margin: 0 432px 0 0;
       top: 0px;
-      left: 320px;
+      left: 232px;
       background-color: rgb(0,0,0); /* Fallback color */
       background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     }
@@ -180,7 +180,7 @@
       border: 1px solid #888;
       width: 416px;
       height: 179px;
-      margin-left: 333px;
+      margin-left: 250px;
       margin-top: 214px;
     }
     
@@ -216,7 +216,7 @@
                         <img src="/images/UIPackage/module2-bg 2@2x.png" class="bg3" />
                         <img src="/images/UIPackage/prep-create-a-configuration-page-icon 1@2x.png" class="icon" />
                     </div>
-                    <div class="refreshbtn">
+                    <div class="refreshbtn" onclick="gotoCheckModule()">
                         <img src="/images/UIPackage/module2-bg 2@2x.png" class="bg3" />
                         <img src="/images/UIPackage/module2-icon 2@2x.png" class="icon" />
                     </div>
@@ -322,12 +322,12 @@
                     <div class="review">
                         REVIEW
                     </div>
-                    <a href="module2withopenmenu.html">
-                        <div class="btn1">
+                    <!-- <a href="module2withopenmenu.html"> -->
+                        <div class="btn1" >
                             <img src="/images/UIPackage/landing-page-bg 1@2x.png" class="bg2" />
                             <img src="/images/UIPackage/module2-icon-review@2x.png" class="iconreview" />
                         </div>
-                    </a>
+                    <!-- </a> -->
                     <img src="/images/UIPackage/create-project-arrow@2x.png" class="arrow" />
                 </div>
                 <div class="footer">
@@ -475,7 +475,7 @@
                 </div>
                 <div id="maximizeViewerContainer" class="modal">
                     <!-- Modal content -->
-                    <div class="modal-content" id="maximizeViewerContainer-content" style="width: 700px; height: 550px; margin-left: 300px; margin-top: 80px;">
+                    <div class="modal-content" id="maximizeViewerContainer-content" style="width: 554px; height: 550px; margin-left: 350px; margin-top: 80px;">
     
                     </div>
                 </div>
@@ -1261,7 +1261,13 @@
 				}
 			}
 			return "";
-		}
+        }
+        
+        function gotoCheckModule()
+        {
+            window.location = "/checkModule.html";
+            return false;
+        }
 		// window.onload = function() {
 		// 	var project = getCookie("checkprojectname");
 		// 	var powerplantdiv  = document.getElementById("powerplant");
@@ -1284,9 +1290,10 @@
             viewerdata.style.width = "100%"
             viewerdata.style.height = "200px";
             viewerdata.style.margin = "auto";
+            viewerdata.style.top = "120px";
             //margin: 20px 0 0 20px
             //viewerContainer[0].appendChild(viewerdata);
-            viewerContainer[0].children[1].appendChild(viewerdata);
+            viewerContainer[0].children[0].appendChild(viewerdata);
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
             // window.setTimeout(function () {
@@ -1305,10 +1312,20 @@
                 var viewerdata = document.getElementById("checksViewTable")
                 var modalViewer = document.getElementById("maximizeViewerContainer-content");
                 modalViewer.appendChild(viewerdata);
+                
                 // var modalViewerContainer = document.getElementById("checksViewTable");
                 viewerdata.style.width = "100%";
                 viewerdata.style.height = "100%";
                 viewerdata.style.margin = "auto";
+                if(document.getElementById("viewerContainer1") !== null)
+                {
+                    document.getElementById("viewerContainer1").style.top = "10px";
+                }
+                else if(document.getElementById("viewerContainer2") !== null)
+                {
+                    document.getElementById("viewerContainer2").style.top = "10px";
+                }
+                
                 // When the user clicks anywhere outside of the modal, close it
                 window.onclick = function (event) {
                     if (event.target == modal) {
