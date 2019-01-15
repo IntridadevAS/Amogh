@@ -403,7 +403,7 @@ function CheckManager() {
             }
 
                // check if component class exists in checkcase for Source B
-               if (!checkCaseType.componentGroupExists(undefined, sourceAComponentProperties.MainComponentClass)) 
+               if (!checkCaseType.componentGroupExists(undefined, sourceBComponentProperties.MainComponentClass)) 
                {
                    continue;
                }
