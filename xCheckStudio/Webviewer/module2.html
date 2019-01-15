@@ -639,6 +639,10 @@
                 });
 
                 postData(comparisonCheckManager,sourceAComplianceCheckManager, sourceBComplianceCheckManager );
+
+                // trigger comparison tab click manually
+                var tab1 = document.getElementById("tab1Parent");
+                tab1.click();
             };
 
             function postData(comparisonCheckManager,sourceAComplianceCheckManager, sourceBComplianceCheckManager ) {
