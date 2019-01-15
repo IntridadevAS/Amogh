@@ -5,7 +5,8 @@ function ComplianceReviewManager(complianceCheckManager,
     mainReviewTableContainer,
     detailedReviewTableContainer,
     componentIdVsComponentData,
-    nodeIdVsComponentData) {
+    nodeIdVsComponentData,
+    detailedReviewRowCommentDiv) {
 
     this.ViewerData = viewerData;
 
@@ -28,6 +29,9 @@ function ComplianceReviewManager(complianceCheckManager,
     this.SelectedComponentRowFromSheetB;
 
     this.checkStatusArray = {};
+
+    this.detailedReviewRowComments = {};
+    this.DetailedReviewRowCommentDiv = detailedReviewRowCommentDiv;
 
     ComplianceReviewManager.prototype.loadDatasource = function () {
         if (this.ViewerData !== undefined) {
@@ -254,6 +258,12 @@ function ComplianceReviewManager(complianceCheckManager,
                     _this.highlightMainReviewTableFromCheckStatus(id);
                 },
                 rowClick: function (args) {
+                    var commentDiv = document.getElementById( _this.DetailedReviewRowCommentDiv);
+                    commentDiv.innerHTML = "";
+
+                    _this.detailedReviewRowComments = {};
+
+
                     _this.populateDetailedReviewTable(args.event.currentTarget);
                     var tempString = "_" + _this.MainReviewTableContainer;
                     viewerContainer = viewerContainer.replace("#", "");
@@ -852,13 +862,18 @@ function ComplianceReviewManager(complianceCheckManager,
                     component.SubComponentClass,
                     "",
                     true,
-                    "");
+                    "Match");
+
+                this.detailedReviewRowComments[0] = property.Description;
+
                 tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
                 tableData.push(tableRowContent);
                 // tbody.appendChild(tr);
 
                 for (var j = 0; j < component.CheckProperties.length; j++) {
                     property = component.CheckProperties[j];
+
+                    this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
 
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
                     tableData.push(tableRowContent);
@@ -933,7 +948,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
             $(viewerContainer).jsGrid({
                 width: "579px",
-                height: "202px",
+                height: "180px",
                 sorting: true,
                 filtering: true,
                 autoload: true,
@@ -945,6 +960,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     var id = viewerContainer.replace("#", "");
                     document.getElementById(id).style.width = "579px";
                     _this.highlightDetailedReviewTableFromCheckStatus(id);
+                },
+                rowClick: function (args) {
+                    var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
+                    var commentDiv = document.getElementById(_this.DetailedReviewRowCommentDiv);
+                    commentDiv.innerHTML = "Comment : <br>" + comment;
                 }
             });
 
@@ -952,7 +972,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "579px"
-        container.style.height = "202px"
+        container.style.height = "180px"
         container.style.margin = "0px"
         container.style.overflowX = "hidden";
         container.style.overflowY = "scroll";

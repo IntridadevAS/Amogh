@@ -38,6 +38,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.checkStatusArrayA = {};
     this.checkStatusArrayB = {};
 
+    this.detailedReviewRowComments = {};
+
     ComparisonReviewManager.prototype.loadDatasources = function () {
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
@@ -609,6 +611,11 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 },
                 rowClick: function (args) {
+                    var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+                    commentDiv.innerHTML = "";
+
+                    _this.detailedReviewRowComments = {};
+
                     _this.populateDetailedReviewTable(args.event.currentTarget);
                     var sheetName = viewerContainer.replace("#", "");
 
@@ -696,6 +703,8 @@ function ComparisonReviewManager(comparisonCheckManager,
 
 
     ComparisonReviewManager.prototype.LoadDetailedReviewTableData = function (_this, columnHeaders, tableData, viewerContainer) {
+        //var _this = this;
+
         $(function () {
             var db = {
                 loadData: filter => {
@@ -721,7 +730,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             $(viewerContainer).jsGrid({
                 width: "576px",
-                height: "202px",
+                height: "180px",
                 filtering: true,
                 autoload: true,
                 controller: db,
@@ -733,6 +742,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var id = viewerContainer.replace("#", "");
                     document.getElementById(id).style.width = "579px";
                     _this.highlightDetailedReviewTableFromCheckStatus(id);
+                },
+                rowClick: function (args) {
+                    var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
+                    var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+                    commentDiv.innerHTML = "Comment : <br>" + comment;
                 }
             });
 
@@ -740,7 +754,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "579px"
-        container.style.height = "202px"
+        container.style.height = "180px"
         container.style.margin = "0px"
         container.style.overflowX = "hidden";
         container.style.overflowY = "scroll";
@@ -984,7 +998,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                     component.SubComponentClass,
                     "",
                     true,
-                    "");
+                    "Match");
+
+                this.detailedReviewRowComments[0] = property.Description;
 
                 tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
                 tableData.push(tableRowContent);
@@ -992,6 +1008,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 for (var j = 0; j < component.CheckProperties.length; j++) {
                     property = component.CheckProperties[j];
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
+
+                    this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
+
                     tableData.push(tableRowContent);
                 }
 

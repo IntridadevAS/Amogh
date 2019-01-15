@@ -251,6 +251,7 @@
                         <div class="adescriptionvalue">
                         </div>
                         <div id="ComparisonDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
+                        <div id="ComparisonDetailedReviewComment" style="border:none; width: 579px; height:20px; font-size: 10px"></div>
                     </div>
                     <div  id="ComplianceADetailedReviewTbody"  class="table"  style='height:202px;display:none;'>
                             <!-- <div class="bg3">
@@ -260,6 +261,7 @@
                             <div class="adescriptionvalue">
                             </div>
                             <div id="SourceAComplianceDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
+                            <div id="SourceAComplianceDetailedReviewComment" style="border:none; width: 579px; height:20px; font-size: 10px"></div>
                     </div>
                     <div  id="ComplianceBDetailedReviewTbody"  class="table"  style='height:202px;display:none;'>
                         <!-- <div class="bg3">
@@ -269,6 +271,7 @@
                         <div class="adescriptionvalue">
                         </div>
                         <div id="SourceBComplianceDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
+                        <div id="SourceBComplianceDetailedReviewComment" style="border:none; width: 579px; height:20px; font-size: 10px"></div>
                     </div>
                  </div>
                
@@ -570,7 +573,8 @@
                             "SourceAComplianceMainReviewCell",
                             "SourceAComplianceDetailedReviewCell",
                             undefined,
-                            undefined);
+                            undefined,
+                            "SourceAComplianceDetailedReviewComment");
                     }
                     else if (typeof SourceAViewerData !== 'undefined') {
                         sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
@@ -579,7 +583,8 @@
                             "SourceAComplianceMainReviewCell",
                             "SourceAComplianceDetailedReviewCell",
                             SourceAComponentIdVsComponentData,
-                            SourceANodeIdVsComponentData);
+                            SourceANodeIdVsComponentData,
+                            "SourceAComplianceDetailedReviewComment");
                     }
 
 
@@ -601,7 +606,8 @@
                             "SourceBComplianceMainReviewCell",
                             "SourceBComplianceDetailedReviewCell",
                             undefined,
-                            undefined);
+                            undefined,
+                            "SourceBComplianceDetailedReviewComment");
                     }
                     else if (typeof SourceBViewerData !== 'undefined') {
                         sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
@@ -610,7 +616,8 @@
                             "SourceBComplianceMainReviewCell",
                             "SourceBComplianceDetailedReviewCell",
                             SourceBComponentIdVsComponentData,
-                            SourceBNodeIdVsComponentData);
+                            SourceBNodeIdVsComponentData,
+                            "SourceBComplianceDetailedReviewComment");
                     }
 
                     // populate review table

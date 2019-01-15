@@ -657,6 +657,11 @@ function CheckManager() {
         //     description = "Property match not found.";
         // }
 
+          if (checkCaseMappingProperty.Comment) {
+            description += "<br>" + checkCaseMappingProperty.Comment;
+        }
+
+
         if(property1Name === undefined && property2Name === undefined)
         {
             return undefined;

@@ -209,31 +209,31 @@
 		   
 		   
 		   <ComponentClass sourceAComponentClass="PipingSystem"  sourceBComponentClass="PipingSystem">
-				 <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning"/>  
-				 <Property sourceAName="REMARKS" sourceBName="REMARKS"  severity="Warning"/>  
-				 <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Warning"/>
-				 <Property sourceAName="Number" sourceBName="Number"  severity="Warning"/>
-				 <Property sourceAName="Size" sourceBName="Size"  severity="Warning"/>
-				 <Property sourceAName="Area" sourceBName="Area"  severity="Warning"/>
-				 <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>
-				 <Property sourceAName="Tracing_Size" sourceBName="Tracing_Size"  severity="Warning"/>
-				 <Property sourceAName="Insulation_Index" sourceBName="Insulation_Index"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field7" sourceBName="Proj_Def_Field7"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field9" sourceBName="Proj_Def_Field9"  severity="Warning"/>
-				 <Property sourceAName="Insulation_Table" sourceBName="Insulation_Table"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field4" sourceBName="Proj_Def_Field4"  severity="Warning"/>
-				 <Property sourceAName="Tracing_Type" sourceBName="Tracing_Type"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field10" sourceBName="Proj_Def_Field10"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field5" sourceBName="Proj_Def_Field5"  severity="Warning"/>
-				 <Property sourceAName="Sheet_No" sourceBName="Sheet_No"  severity="Warning"/>
-				 <Property sourceAName="Test_Media" sourceBName="Test_Media"  severity="Warning"/>
-				 <Property sourceAName="Insulation_Condition" sourceBName="Insulation_Condition"  severity="Warning"/>
-				 <Property sourceAName="Paint_Code" sourceBName="Paint_Code"  severity="Warning"/>
-				 <Property sourceAName="Pressure" sourceBName="Pressure"  severity="Warning"/>
+				 <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Warning" comment="Test comment"/>  
+				 <Property sourceAName="REMARKS" sourceBName="REMARKS"  severity="Warning"  comment="Test comment"/>  
+				 <Property sourceAName="Fluid" sourceBName="Fluid"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Number" sourceBName="Number"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Size" sourceBName="Size"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Area" sourceBName="Area"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Tracing_Size" sourceBName="Tracing_Size"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Insulation_Index" sourceBName="Insulation_Index"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field7" sourceBName="Proj_Def_Field7"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field9" sourceBName="Proj_Def_Field9"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Insulation_Table" sourceBName="Insulation_Table"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field4" sourceBName="Proj_Def_Field4"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Tracing_Type" sourceBName="Tracing_Type"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field10" sourceBName="Proj_Def_Field10"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field5" sourceBName="Proj_Def_Field5"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Sheet_No" sourceBName="Sheet_No"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Test_Media" sourceBName="Test_Media"  severity="Warning"  comment="Test comment"/>
+				 <Property sourceAName="Insulation_Condition" sourceBName="Insulation_Condition"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Paint_Code" sourceBName="Paint_Code"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Pressure" sourceBName="Pressure"  severity="Warning" comment="Test comment"/>
 				 <Property sourceAName="Tracing_No" sourceBName="Tracing_No"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field8" sourceBName="Proj_Def_Field8"  severity="Warning"/>
-				 <Property sourceAName="Proj_Def_Field6" sourceBName="Proj_Def_Field6"  severity="Warning"/>
-				 <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Warning"/> 		 
+				 <Property sourceAName="Proj_Def_Field8" sourceBName="Proj_Def_Field8"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="Proj_Def_Field6" sourceBName="Proj_Def_Field6"  severity="Warning" comment="Test comment"/>
+				 <Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Warning" comment="Test comment"/> 		 
 		   </ComponentClass>  
 			
 		   </ComponentGroup>
