@@ -1608,6 +1608,29 @@ div {
   color               : rgba(255, 255, 255, 1.0);
   text-align          : left;
   line-height         : 18.0px;
+  border 			  :0px;
+  outline			  :0px;
+}
+
+.module1 .infomid .mks .options{
+  background-color    : rgba(1,1,1,0.0);
+  top                 : 1px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 54px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  transition          : all 0.2s ease-in-out;
+  font-family         : "Helvetica-Light", Helvetica, Arial, serif;
+  font-size           : 15.0px;
+  color               : rgba(1, 1, 1, 1.0);
+  text-align          : left;
+  line-height         : 18.0px;
+  border 			  :0px;
+  outline			  :0px;
 }
 .module1 .infomid .mks:hover {
   transform           : scale(1.1);
