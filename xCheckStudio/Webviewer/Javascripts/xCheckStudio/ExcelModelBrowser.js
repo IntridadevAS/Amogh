@@ -566,11 +566,10 @@ function ExcelModeBrowser() {
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    width: "590px",
-                    height: "370px", 
+                    width: "570px",
+                    height: "350px", 
                     sorting: true,  
                     autoload: true,
-                    height: "10px",
                     data: tableData,
                     fields: columnHeaders,
                     margin: "0px",

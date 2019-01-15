@@ -239,6 +239,8 @@ function ComplianceReviewManager(complianceCheckManager,
               };
 
             $(viewerContainer).jsGrid({
+                width: "592px",
+                height: "202px",
                 sorting: true,
                 filtering: true,
                 autoload: true,
@@ -486,6 +488,8 @@ function ComplianceReviewManager(complianceCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
+                    width: "560px",
+                    height: "450px",
                     autoload: true,
                     data: tableData,
                     fields: columnHeaders,
@@ -928,6 +932,8 @@ function ComplianceReviewManager(complianceCheckManager,
               };
 
             $(viewerContainer).jsGrid({
+                width: "579px",
+                height: "202px",
                 sorting: true,
                 filtering: true,
                 autoload: true,

@@ -2433,7 +2433,7 @@
 
             // document.getElementById(modelTreeContainer).innerHTML = ""
             // document.getElementById(viewerContainer).innerHTML = ""
-            // if (!xCheckStudioInterface1) {
+            if (!xCheckStudioInterface1) {
             xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
             xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
 
@@ -2447,10 +2447,10 @@
             // // enable source B load data source button
             // var loadDataSourceBButton = document.getElementById("dataSouresB");
             // loadDataSourceBButton.disabled = false;
-            // }
-            // else {
-            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            //     xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
+            }
+            else {
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
 
             //     // enable source B controls
             //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
@@ -2461,7 +2461,7 @@
 
             //     var comparisonCB = document.getElementById("comparisonCB");
             //     comparisonCB.disabled = false;
-            // }
+            }
 
             // document.getElementById("checkButton").disabled = false;
         }

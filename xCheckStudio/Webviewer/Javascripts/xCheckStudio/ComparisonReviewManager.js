@@ -547,6 +547,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
+                    height: "250px",
+                    width: "560px",
                     autoload: true,
                     data: tableData,
                     fields: columnHeaders,
@@ -562,7 +564,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "560px"
-        container.style.height = "450px"
+        container.style.height = "250px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
         container.style.margin = "0px";
@@ -590,6 +592,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             };
 
             $(viewerContainer).jsGrid({
+                height: "202px",
+                width: "578px",
                 filtering: true,
                 autoload: true,
                 controller: db,
@@ -716,6 +720,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             };
 
             $(viewerContainer).jsGrid({
+                width: "576px",
+                height: "202px",
                 filtering: true,
                 autoload: true,
                 controller: db,

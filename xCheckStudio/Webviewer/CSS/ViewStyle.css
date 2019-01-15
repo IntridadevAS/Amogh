@@ -18,11 +18,8 @@ body {
 }
 
 .example-canvas-tiny {
-    /* width: 550px;
-    height: 270px; */
     position: relative;
     border: 1px solid gray;
-    margin: auto;
 }
 
 .example-div-block{

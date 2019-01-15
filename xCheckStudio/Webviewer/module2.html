@@ -250,7 +250,7 @@
                         </div>
                         <div class="adescriptionvalue">
                         </div>
-                        <div id="ComparisonDetailedReviewCell" style="border:none"></div>
+                        <div id="ComparisonDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
                     </div>
                     <div  id="ComplianceADetailedReviewTbody"  class="table"  style='height:202px;display:none;'>
                             <!-- <div class="bg3">
@@ -259,7 +259,7 @@
                             </div>
                             <div class="adescriptionvalue">
                             </div>
-                            <div id="SourceAComplianceDetailedReviewCell" style="border:none"></div>
+                            <div id="SourceAComplianceDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
                     </div>
                     <div  id="ComplianceBDetailedReviewTbody"  class="table"  style='height:202px;display:none;'>
                         <!-- <div class="bg3">
@@ -268,7 +268,7 @@
                         </div>
                         <div class="adescriptionvalue">
                         </div>
-                        <div id="SourceBComplianceDetailedReviewCell" style="border:none"></div>
+                        <div id="SourceBComplianceDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
                     </div>
                  </div>
                
@@ -277,486 +277,16 @@
                     <!-- <img src="/images/UIPackage/module2-with-open-menu-bitmap.png" class="bitmap" /> -->
                     <div class="bitmap">
                         <!--Checks Tab Page-->
-                        <div id="ChecksTabPage" class="viewContainerTab" style="width: 100%; height: 100%; display: block">
-                            <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span>
+                        <div id="ChecksTabPage" class="viewContainerTab" style="width: 100%; height: 110%; display: block;margin-top: 40px;">
+                            <!-- <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span> -->
                             <div style="height:100%" >
-                                <table id="checksViewTable" style="width: 100%; height: 200px; margin: auto;">
+                                <table id="checksViewTable" style="width: 100%; height: 200px; margin: auto; overflow: scroll;">
                                 </table>
                             </div>
                         </div>
                         <!--Analytics Tab Page-->
                         <div id="AnalyticsTabPage" class="viewContainerTab" style="  width: 100%; height: 100%;  display: none">
-                            <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span>
-                            <!-- <div style="height:100%" id="analyticsContent">
-                                <div style="width: 500px; height: 100%; position:relative; margin:auto;">
-                                    <div class="details">
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
-                                        <div class="datasource1datat">
-                                            <span class="span1">Data Source 1 <br /><br />Data Type<br /><br /><br />Data Source 2 <br /><br />Data
-                                                Type</span><span class="span2"><br /><br /><br /><br /></span>
-                                        </div>
-                                        <div class="checkcasexml2xls">
-                                            <span class="span1">CheckCase                             </span><span class="span2" id="checkCase">xml-2-xls</span>
-                                        </div>
-                                        <div class="checkcasexml2xls1" id="checkCase1">
-                                
-                                        </div>
-                                        <div class="xyz123" id="dataSource1">
-                                        </div>
-                                        <div class="abc123" id="dataSource2">
-                                        </div>
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy22" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy23" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy24" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
-                                        <div class="details1">
-                                            Details <button id='print-pdf'>Convert to PDF</button>
-                                        </div>
-                                        <div class="group">
-                                            <div class="rectangle1">
-                                            </div>
-                                            <div class="xlsx" id="extension1">
-                                                .xlsx
-                                            </div>
-                                        </div>
-                                        <div class="groupcopy">
-                                            <div class="rectangle1">
-                                            </div>
-                                            <div class="xlsx" id="extension2">
-                                                .xlsx
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="block1">
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-6.png" class="rectanglecopy6" src="/images/Analytics/01-1-rectangle-copy-6.png" />
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-4.png" class="rectanglecopy4" src="/images/Analytics/01-1-rectangle-copy-4.png" />
-                                        <div class="compare" id="compare" onclick="openCheckResultTab('ComparisonTab');">
-                                            Compare
-                                        </div>
-                                        <div class="compliance" id="compliance" onclick="openCheckResultTab('ComplianceTab');">
-                                            Compliance
-                                        </div>
-                                        <div id="ComparisonTab" class="AnalyticsResultsContainerTab" style="display: none">
-                                
-                                            <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                            <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
-                                            <div class="piechart" id="PieChartButton" onclick="openChartTab('PieChartTab');">
-                                                Pie chart
-                                            </div>
-                                            <div class="barchart" id="BarChartButton" onclick="openChartTab('BarChartTab');">
-                                                Bar chart
-                                            </div>
-                                            <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                            </div>
-                                            <div class="thin0385graphpiechartstatistics">
-                                                <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                            </div>
-                                            <div id="PieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                <div class="group2" id="group2_pie" style="border: 0px">
-                                
-                                                </div>
-                                                <div class="group4" id="group4_pie" style="border: 0px">
-                                
-                                                </div>
-                                                <div class="group5" id="group5_pie" style="border: 0px">
-                                
-                                                </div>
-                                
-                                                <div class="a40" id="a40">
-                                
-                                                </div>
-                                                <div class="a30" id="a30">
-                                
-                                                </div>
-                                                <div class="a10" id="a10">
-                                
-                                                </div>
-                                                <div class="errors">
-                                                    ERRORS
-                                                </div>
-                                                <div class="warnings">
-                                                    WARNINGS
-                                                </div>
-                                                <div class="ok">
-                                                    OK
-                                                </div>
-                                            </div>
-                                            <div id="BarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                <div class="group2" id="group2_bar" style="border: 0px; width: 610px">
-                                
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="ComplianceTab" class="AnalyticsResultsContainerTab" style="display: none">
-                                            <button class="ComplianceA" id="compare" onclick="openSourceComplianceChartTab('ComplianceATab');">
-                                                A
-                                            </button>
-                                            <button class="ComplianceB" id="compliance" onclick="openSourceComplianceChartTab('ComplianceBTab');">
-                                                B
-                                            </button>
-                                            <div id="ComplianceATab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
-                                                <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceAPieChartTab');">
-                                                    Pie chart
-                                                </div>
-                                                <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceABarChartTab');">
-                                                    Bar chart
-                                                </div>
-                                                <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                                </div>
-                                                <div class="thin0385graphpiechartstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                                </div>
-                                
-                                                <div id="ComplianceAPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceACompliance_pie2" style="border: 0px">
-                                
-                                                    </div>
-                                                    <div class="group4" id="SourceACompliance_pie4" style="border: 0px">
-                                
-                                                    </div>
-                                                    <div class="group5" id="SourceACompliance_pie5" style="border: 0px">
-                                
-                                                    </div>
-                                
-                                                    <div class="a40" id="a40_Apie">
-                                
-                                                    </div>
-                                                    <div class="a30" id="a30_Apie">
-                                
-                                                    </div>
-                                                    <div class="a10" id="a10_Apie">
-                                
-                                                    </div>
-                                                    <div class="errors">
-                                                        ERRORS
-                                                    </div>
-                                                    <div class="warnings">
-                                                        WARNINGS
-                                                    </div>
-                                                    <div class="ok">
-                                                        OK
-                                                    </div>
-                                
-                                                </div>
-                                                <div id="ComplianceABarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceACompliance_bar" style="border: 0px; width: 610px">
-                                
-                                                    </div>
-                                                </div>
-                                
-                                                <div class="a40" id="a40">
-                                
-                                                </div>
-                                            </div>
-                                            <div id="ComplianceBTab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
-                                                <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceBPieChartTab');">
-                                                    Pie chart
-                                                </div>
-                                                <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceBBarChartTab');">
-                                                    Bar chart
-                                                </div>
-                                                <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                                </div>
-                                                <div class="thin0385graphpiechartstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                                </div>
-                                
-                                                <div id="ComplianceBPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceBCompliance_pie2" style="border: 0px">
-                                
-                                                    </div>
-                                                    <div class="group4" id="SourceBCompliance_pie4" style="border: 0px">
-                                
-                                                    </div>
-                                                    <div class="group5" id="SourceBCompliance_pie5" style="border: 0px">
-                                
-                                                    </div>
-                                
-                                                    <div class="a40" id="a40_Bpie">
-                                
-                                                    </div>
-                                                    <div class="a30" id="a30_Bpie">
-                                
-                                                    </div>
-                                                    <div class="a10" id="a10_Bpie">
-                                
-                                                    </div>
-                                                    <div class="errors">
-                                                        ERRORS
-                                                    </div>
-                                                    <div class="warnings">
-                                                        WARNINGS
-                                                    </div>
-                                                    <div class="ok">
-                                                        OK
-                                                    </div>
-                                                </div>
-                                                <div id="ComplianceBBarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceBCompliance_bar" style="border: 0px; width: 610px">
-                                
-                                                    </div>
-                                                </div>
-                                
-                                                <div class="a40" id="a40">
-                                
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="severity">
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-17.png" class="rectanglecopy17" src="/images/Analytics/01-1-rectangle-copy-17.png" />
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-18.png" class="rectanglecopy18" src="/images/Analytics/01-1-rectangle-copy-18.png" />
-                                        <div class="projecthealth">
-                                            PROJECT HEALTH
-                                
-                                        </div>
-                                        <div id="SeverityTab" class="AnalyticsProjectHealthTab" style="display: none; height: 350px; width: 1200px;">
-                                            <div id="LineChart" style="height: 300px; width: 1200px; margin: 100px auto auto 100px">
-                                
-                                            </div>
-                                        </div>
-                                        <div id="InfoTab" class="AnalyticsProjectHealthTab" style="display: none">
-                                
-                                        </div>
-                                        <div class="severity1" id="severity1" onclick="openProjectHealthTab('SeverityTab')">
-                                            Severity
-                                        </div>
-                                        <div class="info" id="info" onclick="openProjectHealthTab('InfoTab')">
-                                            Info
-                                        </div>
-                                    </div>
-                                    <div class="blocksummary">
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
-                                        <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy5" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
-                                        <div class="totalitemschecked">
-                                            Total items checked
-                                        </div>
-                                        <div class="itemswitherrors">
-                                            Items with errors
-                                        </div>
-                                        <div class="itemswithwarnings">
-                                            Items with warnings
-                                        </div>
-                                        <div class="itemsu2018oku2019">
-                                            Items ‘OK’
-                                        </div>
-                                        <div class="a37" id="a37">
-                                        </div>
-                                        <div class="a18" id="a18">
-                                        </div>
-                                        <div class="a13" id="a13">
-                                        </div>
-                                        <div class="a6" id="a6">
-                                        </div>
-                                        <div class="summary">
-                                            Summary
-                                        </div>
-                                
-                                    </div>
-                                </div> 
-                            
-                            </div> -->
-                            
-                            <!-- <div style="border: solid black; margin: 70px 0 0 0; height: 105%; width: 101%;">
-                                <div style="border: solid black;height: 50%; width: 100%;">
-                                    <div style="color: black"> 
-                                        <div class="compare" id="compare" style="border: solid 1px;height: 5%; width: 20%;" onclick="openCheckResultTab('ComparisonTab');">
-                                            Compare
-                                        </div>
-                                        <div class="compliance" id="compliance" style="border: solid 1px;height: 5%; width: 20%; margin-left: 23%; margin-top: -20px" onclick="openCheckResultTab('ComplianceTab');">
-                                            Compliance
-                                        </div>
-                                        <div id="ComparisonTab"  style="border: solid 1px;height: 80%; width: 100%; margin-top: 10px" class="AnalyticsResultsContainerTab" style="display: none">
-                                        
-                                            <div class="piechart" id="PieChartButton" style="border: solid 1px;height: 5%; width: 15%; margin-left: 65%; margin-top: 0px" onclick="openChartTab('PieChartTab');">
-                                                Pie chart
-                                            </div>
-                                            <div class="barchart" id="BarChartButton" style="border: solid 1px;height: 5%; width: 15%; margin-left: 83%; margin-top: -22px" onclick="openChartTab('BarChartTab');">
-                                                Bar chart
-                                            </div>
-                                            <div id="PieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                <div class="group2" id="group2_pie" style="border: 0px">
-                                        
-                                                </div>
-                                                <div class="group4" id="group4_pie" style="border: 0px">
-                                        
-                                                </div>
-                                                <div class="group5" id="group5_pie" style="border: 0px">
-                                        
-                                                </div>
-                                        
-                                                <div class="a40" id="a40">
-                                        
-                                                </div>
-                                                <div class="a30" id="a30">
-                                        
-                                                </div>
-                                                <div class="a10" id="a10">
-                                        
-                                                </div>
-                                                <div class="errors">
-                                                    ERRORS
-                                                </div>
-                                                <div class="warnings">
-                                                    WARNINGS
-                                                </div>
-                                                <div class="ok">
-                                                    OK
-                                                </div>
-                                            </div>
-                                            <div id="BarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                <div class="group2" id="group2_bar" /*style="border: 0px; width: 610px"*/>
-                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="ComplianceTab" class="AnalyticsResultsContainerTab" style="display: none">
-                                            <button class="ComplianceA" id="compare" onclick="openSourceComplianceChartTab('ComplianceATab');">
-                                                A
-                                            </button>
-                                            <button class="ComplianceB" id="compliance" onclick="openSourceComplianceChartTab('ComplianceBTab');">
-                                                B
-                                            </button>
-                                            <div id="ComplianceATab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
-                                                <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceAPieChartTab');">
-                                                    Pie chart
-                                                </div>
-                                                <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceABarChartTab');">
-                                                    Bar chart
-                                                </div>
-                                                <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                                </div>
-                                                <div class="thin0385graphpiechartstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                                </div>
-                                        
-                                                <div id="ComplianceAPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceACompliance_pie2" style="border: 0px">
-                                        
-                                                    </div>
-                                                    <div class="group4" id="SourceACompliance_pie4" style="border: 0px">
-                                        
-                                                    </div>
-                                                    <div class="group5" id="SourceACompliance_pie5" style="border: 0px">
-                                        
-                                                    </div>
-                                        
-                                                    <div class="a40" id="a40_Apie">
-                                        
-                                                    </div>
-                                                    <div class="a30" id="a30_Apie">
-                                        
-                                                    </div>
-                                                    <div class="a10" id="a10_Apie">
-                                        
-                                                    </div>
-                                                    <div class="errors">
-                                                        ERRORS
-                                                    </div>
-                                                    <div class="warnings">
-                                                        WARNINGS
-                                                    </div>
-                                                    <div class="ok">
-                                                        OK
-                                                    </div>
-                                        
-                                                </div>
-                                                <div id="ComplianceABarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceACompliance_bar" style="border: 0px; width: 610px">
-                                        
-                                                    </div>
-                                                </div>
-                                        
-                                                <div class="a40" id="a40">
-                                        
-                                                </div>
-                                            </div>
-                                            <div id="ComplianceBTab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
-                                                <img anima-src="/images/Analytics/01-1-rectangle-copy-16@2x.png" class="rectanglecopy16" src="/images/Analytics/01-1-rectangle-copy-16@2x.png" />
-                                                <div class="piechart" id="PieChartButton" onclick="openChartTab('ComplianceBPieChartTab');">
-                                                    Pie chart
-                                                </div>
-                                                <div class="barchart" id="BarChartButton" onclick="openChartTab('ComplianceBBarChartTab');">
-                                                    Bar chart
-                                                </div>
-                                                <div class="thin0383graphcolumnsgrowthstatistics" id="thin0383graphcolumnsgrowthstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path@2x.png" class="path" src="/images/Analytics/01-1-path@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 1@2x.png" class="path1" src="/images/Analytics/01-1-path 1@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 2@2x.png" class="path2" src="/images/Analytics/01-1-path 2@2x.png" />
-                                                </div>
-                                                <div class="thin0385graphpiechartstatistics">
-                                                    <img anima-src="/images/Analytics/01-1-path 3@2x.png" class="path" src="/images/Analytics/01-1-path 3@2x.png" />
-                                                    <img anima-src="/images/Analytics/01-1-path 4@2x.png" class="path1" src="/images/Analytics/01-1-path 4@2x.png" />
-                                                </div>
-                                        
-                                                <div id="ComplianceBPieChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceBCompliance_pie2" style="border: 0px">
-                                        
-                                                    </div>
-                                                    <div class="group4" id="SourceBCompliance_pie4" style="border: 0px">
-                                        
-                                                    </div>
-                                                    <div class="group5" id="SourceBCompliance_pie5" style="border: 0px">
-                                        
-                                                    </div>
-                                        
-                                                    <div class="a40" id="a40_Bpie">
-                                        
-                                                    </div>
-                                                    <div class="a30" id="a30_Bpie">
-                                        
-                                                    </div>
-                                                    <div class="a10" id="a10_Bpie">
-                                        
-                                                    </div>
-                                                    <div class="errors">
-                                                        ERRORS
-                                                    </div>
-                                                    <div class="warnings">
-                                                        WARNINGS
-                                                    </div>
-                                                    <div class="ok">
-                                                        OK
-                                                    </div>
-                                                </div>
-                                                <div id="ComplianceBBarChartTab" class="AnalyticsChartContainerTab" style="display: none">
-                                                    <div class="group2" id="SourceBCompliance_bar" style="border: 0px; width: 610px">
-                                        
-                                                    </div>
-                                                </div>
-                                        
-                                                <div class="a40" id="a40">
-                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="border: solid black;height: 50%; width: 100%">
-                                </div>
-                            </div> -->
+                            <!-- <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span> -->
                         </div>
                     </div>
                     <div class="white1">
@@ -832,25 +362,21 @@
                 </div>
                 <div class="group3">
                     <div class="group1">
-                            <!-- <div class="scrollbar">
-                            </div> -->
-                            <!-- <div class="bg2">
-                            </div> -->
                             <div id="ComparisonTabPage"  class="checkResultsContainerTab" style="display:block;">
                                 <div id="ComparisonMainReviewTbody" class="table1" style='top:10px; height:275px; width: 592px; display:block;overflow-y:scroll;overflow-x: hidden'>
-                                    <div id="ComparisonMainReviewCell" style="text-align:left; vertical-align:top;width: 100%; height: 100%; border:none">
+                                    <div id="ComparisonMainReviewCell" style="text-align:left; vertical-align:top;width: 575px; height: 275px; border:none">
                                     </div>
                                 </div>
                             </div>
                             <div id="SourceAComplianceTabPage"  class="checkResultsContainerTab" style="display:none;">
                                 <div id="SourceAComplianceMainReviewTbody" class="table1" style='top:10px; height:275px; width: 592px; display:block;overflow-y:scroll;overflow-x: hidden'>
-                                    <div id="SourceAComplianceMainReviewCell" style="text-align:left; vertical-align:top;width: 100%; height: 100%; border:none">
+                                    <div id="SourceAComplianceMainReviewCell" style="text-align:left; vertical-align:top;width: 575px; height: 275px; border:none">
                                     </div>
                                 </div>
                             </div>
                             <div id="SourceBComplianceTabPage"  class="checkResultsContainerTab" style="display:none;">
                                 <div id="SourceBComplianceMainReviewTbody" class="table1" style='top:10px; height:275px; width: 592px; display:block;overflow-y:scroll;overflow-x: hidden'>
-                                    <div id="SourceBComplianceMainReviewCell" style="text-align:left; vertical-align:top;width: 100%; height: 100%; border:none">
+                                    <div id="SourceBComplianceMainReviewCell" style="text-align:left; vertical-align:top;width: 575px; height: 275px; border:none">
                                     </div>
                                 </div>
                             </div>
@@ -1510,9 +1036,9 @@
                 // create row for source a viewer
                 var tr = document.createElement("tr");
                 tr.id = sourceAViewerContainerRowId;
-                tr.style.width = "100%";
+                tr.style.width = "450px";
                 tr.style.height = "50%";
-                tr.style.margin = "auto";
+                tr.style.top = "40px";
                 //tr.style.borderStyle = "none";
                 tbody.appendChild(tr);
 
@@ -1533,9 +1059,9 @@
                 // create row for source b viewer
                 tr = document.createElement("tr");
                 tr.id = sourceBViewerContainerRowId;
-                tr.style.width = "100%";
+                tr.style.width = "450px";
                 tr.style.height = "50%";
-                tr.style.margin = "auto";
+                tr.style.top = "40px";  
                 //tr.style.borderStyle = "none";
                 tbody.appendChild(tr);
 
