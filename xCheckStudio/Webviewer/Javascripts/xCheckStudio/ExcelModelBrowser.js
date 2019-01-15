@@ -676,7 +676,7 @@ function ExcelModeBrowser() {
                         }
     
                         if (this.SelectedComponentRow) {
-                            this.RestoreBackgroundColor(_this.SelectedComponentRow);
+                            this.RestoreBackgroundColor(this.SelectedComponentRow);
                         }
     
                         this.ChangeBackgroundColor(rowData);
