@@ -13,6 +13,7 @@
     <script src='postData/comparisonCheckpostDataReader.php'></script>
     <script src='postData/sourceAComplianceDataReader.php'></script>
     <script src='postData/sourceBComplianceDataReader.php'></script>
+    <script src='postData/analyticsDetailsDataReader.php'></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleCharts.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleLoaderCharts.js"></script>
     <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\PDFExporter.js"></script> -->
@@ -334,16 +335,17 @@
         window.onload = function(){
             analyticsManager = new AnalyticsManager();
 
-            var checkCase = localStorage.getItem("CheckCase");
+            var checkCase = AnalyticsData.CheckCaseName;
             document.getElementById("checkCase").innerHTML = checkCase;
             document.getElementById("checkCase1").innerHTML = "CheckCase "+checkCase;
-            var source1 = localStorage.getItem("SourceAName");
+
+            var source1 = AnalyticsData.SourceBName;
             fileName1 = source1.split(".");
             document.getElementById("dataSource1").innerHTML = fileName1[0];
             document.getElementById("dataSource1").style.fontSize = "11px"
             document.getElementById("extension1").innerHTML = fileName1[1];
 
-            var source2 = localStorage.getItem("SourceBName");
+            var source2 = AnalyticsData.SourceAName;
             fileName2 = source2.split(".");
             document.getElementById("dataSource2").innerHTML = fileName2[0];
             document.getElementById("dataSource2").style.fontSize = "11px";

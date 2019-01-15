@@ -83,6 +83,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.highlightComponent = function (componentIdentifier) {
         var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
         if (nodeId === undefined) {
+           this.unHighlightComponent();
             return;
         }
 

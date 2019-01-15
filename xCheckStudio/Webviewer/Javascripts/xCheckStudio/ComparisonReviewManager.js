@@ -973,6 +973,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeader["name"] = name;
                     columnHeader["type"] = "text";
                     columnHeader["width"] = "30";
+                    columnHeader["filtering"] = "true";
                     columnHeaders.push(columnHeader);
                 }
 

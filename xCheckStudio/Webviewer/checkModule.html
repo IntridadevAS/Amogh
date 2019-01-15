@@ -1992,6 +1992,10 @@
         var checkCaseManager;
         var checkCaseFilesData;
 
+        var checkCaseName;
+        var sourceAFileName;
+        var sourceBFileName;
+
         var hiidenEntities = [];
 
         document.addEventListener("contextmenu", function (e) {
@@ -2277,9 +2281,9 @@
             });
 
 
-            var checkCaseName;
-            var sourceAFileName;
-            var sourceBFileName;
+            // var checkCaseName;
+            // var sourceAFileName;
+            // var sourceBFileName;
             checkCaseName = checkCaseManager.CheckCase.Name;
             //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
             //    if(sourceEndPointUri !== undefined)
@@ -2693,11 +2697,13 @@
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
                 localStorage.setItem("SourceAName", fileName);
+                sourceAFileName = fileName;            
                 document.getElementById("dataSource1ViewerContainerTab").innerText = fileName;
             }
             else if (modelTreeContainer === "modelTree2") {
                 tabHeader = document.getElementById("dataSource2ModelBrowserTab");
                 localStorage.setItem("SourceBName", fileName);
+                sourceBFileName = fileName;
                 document.getElementById("dataSource2ViewerContainerTab").innerText = fileName;
             }
             tabHeader.innerText = fileName;

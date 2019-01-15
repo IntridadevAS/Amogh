@@ -621,15 +621,15 @@
                 setButtonsCollapsible();
                 // openCheckResultTab("checkResultsContainerTab");
                 // remove post data js files from server from earlier check results, if any
-                $.ajax({
-                    data: '',
-                    url: 'postData/postDataCleaner.php',
-                    method: 'POST', // or GET
-                    async: false,
-                    success: function (msg) {
-                        //alert('Post Data files deleted');
-                    }
-                });
+                // $.ajax({
+                //     data: '',
+                //     url: 'postData/postDataCleaner.php',
+                //     method: 'POST', // or GET
+                //     async: false,
+                //     success: function (msg) {
+                //         //alert('Post Data files deleted');
+                //     }
+                // });
 
                 postData(comparisonCheckManager,sourceAComplianceCheckManager, sourceBComplianceCheckManager );
             };
@@ -675,8 +675,22 @@
                                 //$("#result").html(data);
                             }
                         });
-                    }
                 }
+
+                if(typeof AnalyticsData !== 'undefined')
+                {
+                    $.ajax({
+                    url: 'postData/analyticsDetailsDataWriter.php',
+                    type: "POST",
+                    async: false,
+                    data: { "AnalyticsDetailsData": JSON.stringify(AnalyticsData) },
+                    success: function (data) {
+                        // alert("success");
+                    }
+                });
+                }
+
+            }
             
             function loadAnalyticsData() {
                     analyticsManager = new AnalyticsManager();

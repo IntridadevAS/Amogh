@@ -552,52 +552,115 @@ function CheckManager() {
         var severity;
         var performCheck;
         var description;
-
-        if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
-            sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
-
-            var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-            var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
-
-            property1Name = property1.Name;
-            property2Name = property2.Name;
-            property1Value = property1.Value;
-            property2Value = property2.Value;
-
-            // If both properties (Source A and Source B properties) do not have values, 
-            // show  'No Value' severity
-            if ((property1Value === undefined || property1Value === "") &&
-                (property2Value === undefined || property2Value === "")) {
-                severity = "No Value";
-                performCheck = false;
-                description = "Both properties have no values.";
+        if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) ){
+            if( sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName))
+            {
+                var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+                var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+    
+                property1Name = property1.Name;
+                property2Name = property2.Name;
+                property1Value = property1.Value;
+                property2Value = property2.Value;
+    
+                // If both properties (Source A and Source B properties) do not have values, 
+                // show  'No Value' severity
+                if ((property1Value === undefined || property1Value === "") &&
+                    (property2Value === undefined || property2Value === "")) {
+                    severity = "No Value";
+                    performCheck = false;
+                    description = "Both properties have no values.";
+                }
+                else if ((property1Value === undefined || property1Value === "") ||
+                    (property2Value === undefined || property2Value === "")) {
+                    // If anyone of the properties has no value, then show 'Error'.
+                    severity = "Error";
+                    performCheck = false;
+    
+                    description = "One of the properties have no value.";
+                }
+                else {
+                    severity = checkCaseMappingProperty.Severity;
+                    performCheck = true;
+    
+                    description = "Property check performed";
+                }
             }
-            else if ((property1Value === undefined || property1Value === "") ||
-                (property2Value === undefined || property2Value === "")) {
-                // If anyone of the properties has no value, then show 'Error'.
+            else{
+                var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+
+                property1Name = property1.Name;
+                property2Name = checkCaseMappingProperty.SourceBName;
+                property1Value = property1.Value;;
+                property2Value = "";
                 severity = "Error";
                 performCheck = false;
-
-                description = "One of the properties have no value.";
-            }
-            else {
-                severity = checkCaseMappingProperty.Severity;
-                performCheck = true;
-
-                description = "Property check performed";
+    
+                description = "Property match not found.";
             }
         }
-        else {
+        else if(sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName))
+        {
+            var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+
             property1Name = checkCaseMappingProperty.SourceAName;
-            property2Name = checkCaseMappingProperty.SourceBName;
-            property1Value = "";
-            property2Value = "";
+            property2Name =  property2.Name;
+            property1Value ="";
+            property2Value = property2.Value;
             severity = "Error";
             performCheck = false;
 
             description = "Property match not found.";
         }
+        // if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
+        //     sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
 
+        //     var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+        //     var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
+
+        //     property1Name = property1.Name;
+        //     property2Name = property2.Name;
+        //     property1Value = property1.Value;
+        //     property2Value = property2.Value;
+
+        //     // If both properties (Source A and Source B properties) do not have values, 
+        //     // show  'No Value' severity
+        //     if ((property1Value === undefined || property1Value === "") &&
+        //         (property2Value === undefined || property2Value === "")) {
+        //         severity = "No Value";
+        //         performCheck = false;
+        //         description = "Both properties have no values.";
+        //     }
+        //     else if ((property1Value === undefined || property1Value === "") ||
+        //         (property2Value === undefined || property2Value === "")) {
+        //         // If anyone of the properties has no value, then show 'Error'.
+        //         severity = "Error";
+        //         performCheck = false;
+
+        //         description = "One of the properties have no value.";
+        //     }
+        //     else {
+        //         severity = checkCaseMappingProperty.Severity;
+        //         performCheck = true;
+
+        //         description = "Property check performed";
+        //     }
+        // }
+        // else {
+        //     property1Name = checkCaseMappingProperty.SourceAName;
+        //     property2Name = checkCaseMappingProperty.SourceBName;
+        //     property1Value = "";
+        //     property2Value = "";
+        //     severity = "Error";
+        //     performCheck = false;
+
+        //     description = "Property match not found.";
+        // }
+
+        if(property1Name === undefined && property2Name === undefined)
+        {
+            return undefined;
+        }
         var checkProperty = new CheckProperty(property1Name,
             property1Value,
             property2Name,
