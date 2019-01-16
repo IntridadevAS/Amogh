@@ -253,6 +253,15 @@ var xCheckStudio;
                 if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
                     this.NodeGroups.push(componentStyleClass);
                 }
+
+                if (this._viewer._params.containerId === "viewerContainer1") {
+                    sourceATotalItemCount = this.modelTreeRowData.length;
+                }
+                else if (this._viewer._params.containerId === "viewerContainer2") {
+                    sourceBTotalItemCount = this.modelTreeRowData.length;
+                }
+
+              
             }
 
 

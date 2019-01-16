@@ -308,6 +308,184 @@ function AnalyticsManager() {
             drawPieChart(dataTable, "", SourceBCompliance_pie5, colorsArray)
         }
     }
+//drawInfoPieCharts
+
+AnalyticsManager.prototype.drawInfoPieCharts = function(type, tabName){
+    if(this.ComparisonResultArray.length > 0)
+    {
+        this.ComparisonResultArray = [];
+    }
+    var totalItemsCount = 0;;
+    var totalItemsChecked = 0;
+    var totalItemsNotChecked = 0;
+    var noMatchCount = 0;
+
+    if (typeof ComparisonCheckData !== 'undefined' && type === "comparison" && typeof AnalyticsData !== 'undefined') {
+        var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
+        for (var componentGroup in componentGroupsArray) {
+            var components = componentGroupsArray[componentGroup].Components
+            // totalItemsChecked += components.length;
+            for (var i = 0; i < components.length; i++) {
+                currentComponent = components[i];
+                if (currentComponent.Status.toLowerCase() === "no match") {
+                    noMatchCount++;
+                }
+            }
+        }
+
+        totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
+        totalItemsChecked = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
+        totalItemsNotChecked = totalItemsCount - totalItemsChecked;
+        //add data to summary
+          document.getElementById("a37Info").innerText = totalItemsCount;
+            document.getElementById("a18Info").innerText = totalItemsNotChecked;
+            document.getElementById("a13Info").innerText = noMatchCount;
+        
+        //Add comparison check data for project health(severity chart)
+        var checkResultArray = localStorage.CheckResultArray;
+        if(checkResultArray === undefined)
+        {
+            checkResultArray = {};
+            // var temp = [totalItemsNotChecked, noMatchCount];
+            // checkResultArray[Date.now()] = temp;
+            // localStorage.setItem("CheckResultArray", JSON.stringify(checkResultArray));
+        }
+        else{
+            StorageData = localStorage.CheckResultArray;
+            StorageArray = JSON.parse(StorageData);
+            // if(Object.keys(StorageArray).length >= 10)
+            // {
+            //     var firstElement = Object.keys(StorageArray)[0];
+            //     delete StorageArray[firstElement];
+            // }
+            // var temp = [totalItemsNotChecked, noMatchCount];
+            // StorageArray[Date.now()] = temp;
+            // localStorage.setItem("CheckResultArray", JSON.stringify(StorageArray));
+        }
+
+        var titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Value");
+        this.ComparisonResultArray.push(titleArray);
+        var valueArray = [];
+        valueArray.push("Error");
+
+        var percent = noMatchCount * 100 / totalItemsCount;
+        document.getElementById("a40Info").innerText = Math.round(percent) + "%";
+        document.getElementById("a40Info").style.color = "#AFD3C5";
+        valueArray.push(percent);
+        this.ComparisonResultArray.push(valueArray);
+
+        var valueArray = [];
+        valueArray.push("");
+        valueArray.push(100 - percent);
+        this.ComparisonResultArray.push(valueArray);
+        getData(this.ComparisonResultArray);
+        colorsArray = ["#AFD3C5", "#EDEDED"]
+        drawPieChart(dataTable, "", group2_pieInfo, colorsArray)
+
+        this.ComparisonResultArray = [];
+
+        var titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Value");
+        this.ComparisonResultArray.push(titleArray);
+        var valueArray = [];
+        valueArray.push("Ok");
+        var percent =totalItemsNotChecked* 100 / totalItemsCount;
+        document.getElementById("a10Info").innerText = Math.round(percent) + "%";
+        document.getElementById("a10Info").style.color = "#839192";
+        valueArray.push(percent);
+        this.ComparisonResultArray.push(valueArray);
+        var valueArray = [];
+        valueArray.push("");
+        valueArray.push(100 - percent);
+        this.ComparisonResultArray.push(valueArray);
+        colorsArray = ["#839192", "#EDEDED"] ;     
+
+        getData(this.ComparisonResultArray);
+        drawPieChart(dataTable, "", group5_pieInfo, colorsArray)
+    }
+    
+}
+
+AnalyticsManager.prototype.drawInfoBarCharts = function(type, tabName){
+    if(this.ComparisonResultArray.length > 0)
+    {
+        this.ComparisonResultArray = []
+    }
+    
+    var totalItemsCheckedForDataSource = 0;
+    var errorsCountForDataSource = 0;
+    var warningsCountForDataSource = 0;
+    var okCountForDataSource = 0;
+
+    // var totalItemsChecked = 0;
+    // var okCount = 0;
+    // var errorsCount = 0;
+    // var warningsCount = 0;
+
+    var titleArray = [];
+    
+
+    if (typeof ComparisonCheckData !== 'undefined' && type === "comparison" && typeof AnalyticsData !== 'undefined' ) {
+        titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Error");
+        titleArray.push("Warning");
+        titleArray.push("Ok");
+        this.ComparisonResultArray.push(titleArray);
+
+        var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
+        for (var componentGroup in componentGroupsArray) {
+            var components = componentGroupsArray[componentGroup].Components
+            // totalItemsChecked += components.length;
+            totalItemsCheckedForDataSource += components.length;
+            var valueArray = [];
+            valueArray.push(componentGroup);
+
+            var okCount = 0;
+            var errorsCount = 0;
+            var warningsCount = 0;
+
+            for (var i = 0; i < components.length; i++) {
+                currentComponent = components[i];
+                if (currentComponent.Status.toLowerCase() === "ok") {
+                    okCount++;
+                }
+                if (currentComponent.Status.toLowerCase() === "error") {
+                    errorsCount++;
+                }
+                if (currentComponent.Status.toLowerCase() === "warning") {
+                    warningsCount++;
+                }
+            }
+
+            errorsCountForDataSource += errorsCount;
+            okCountForDataSource += okCount;
+            warningsCountForDataSource += warningsCount;
+            // document.getElementById("a37").innerText = totalItemsChecked;
+            // document.getElementById("a18").innerText = errorsCount;
+            // document.getElementById("a13").innerText = warningsCount;
+            // document.getElementById("a6").innerText = okCount;
+
+            valueArray.push(errorsCount);
+            valueArray.push(warningsCount);
+            valueArray.push(okCount);
+            this.ComparisonResultArray.push(valueArray);
+        }
+        
+        document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
+        document.getElementById("a18").innerText = errorsCountForDataSource;
+        document.getElementById("a13").innerText = warningsCountForDataSource;
+        document.getElementById("a6").innerText = okCountForDataSource;
+
+        
+        getData(this.ComparisonResultArray);
+        colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
+        drawBarChart(dataTable, "", group2_bar, colorsArray);
+    }
+}
 
     AnalyticsManager.prototype.drawBarCharts = function(type, tabName){
         if(this.ComparisonResultArray.length > 0)
@@ -471,7 +649,7 @@ function AnalyticsManager() {
             var okCount = 0;
             var errorsCount = 0;
             var warningsCount = 0;
-            
+
                 var valueArray = [];
                 valueArray.push(componentGroup);
                 for (var i = 0; i < components.length; i++) {

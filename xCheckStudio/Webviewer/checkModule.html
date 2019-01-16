@@ -1982,10 +1982,14 @@
     </script>
     <!-- Scripts -->
     <script>
-        function AnalyticsData(checkCaseName, sourceAName, sourceBName) {
+        function AnalyticsData(checkCaseName, sourceAName, sourceBName, sourceATotalItemCount, sourceACheckedItemCount, sourceBTotalItemCount, sourceBCheckedItemCount) {
             this.CheckCaseName = checkCaseName;
             this.SourceAName = sourceAName;
             this.SourceBName = sourceBName;
+            this.SourceATotalItemCount = sourceATotalItemCount; 
+            this.SourceACheckedItemCount = sourceACheckedItemCount;
+            this.SourceBTotalItemCount = sourceBTotalItemCount; 
+            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
         }
 
         var xCheckStudioInterface1;
@@ -1996,6 +2000,10 @@
         var checkCaseName;
         var sourceAFileName;
         var sourceBFileName;
+        var sourceATotalItemCount; 
+        var sourceACheckedItemCount;
+        var sourceBTotalItemCount; 
+        var sourceBCheckedItemCount;
 
         var hiidenEntities = [];
 
@@ -2286,6 +2294,33 @@
             // var sourceAFileName;
             // var sourceBFileName;
             checkCaseName = checkCaseManager.CheckCase.Name;
+            
+            var count ;
+            // sourceACheckedItemCount = count.split(":")[1];
+            // count = document.getElementById("SourceBComponentCount").innerText;
+            // sourceBCheckedItemCount = count.split(":")[1];
+
+            if(xCheckStudioInterface1._modelTree !== undefined)
+            {
+                count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+                sourceACheckedItemCount = count > 0 ? count : 0;
+            }
+            else if(xCheckStudioInterface1.excelReader !== undefined)
+            {
+                count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
+                sourceACheckedItemCount = count > 0 ? count : 0;
+            }
+            if(xCheckStudioInterface2._modelTree !== undefined)
+            {
+                count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
+                sourceBCheckedItemCount = count > 0 ? count : 0;
+            }
+           
+            else if(xCheckStudioInterface2.excelReader !== undefined)
+            {
+                count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
+                sourceBCheckedItemCount = count > 0 ? count : 0;
+            }
             //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
             //    if(sourceEndPointUri !== undefined)
             //    {
@@ -2302,7 +2337,9 @@
             //     sourceBFileName = sourceBFileName;
             //    }
 
-            var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName);
+            var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName, 
+                                                        sourceATotalItemCount, sourceACheckedItemCount, 
+                                                        sourceBTotalItemCount, sourceBCheckedItemCount);
 
             $.ajax({
                 url: 'postData/analyticsDetailsDataWriter.php',

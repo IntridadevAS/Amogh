@@ -148,10 +148,10 @@ function ExcelModeBrowser() {
             }
             var  countBox;
             if (containerId === "modelTree1") {
-                countBox = document.getElementById("totalComponentCount1");
+                sourceATotalItemCount = modelBrowserTableRows.length;
             }
             if (containerId === "modelTree2") {
-                countBox = document.getElementById("totalComponentCount2");
+                sourceBTotalItemCount = modelBrowserTableRows.length;
             }
             // countBox.innerText =  "Count :" + modelBrowserTableRows.length;
             // countBox.style.fontSize = "20px";
