@@ -126,12 +126,12 @@ function CheckManager() {
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Number) {
-            if (isNaN(propertyValue)) {
+            if (isNaN(propertyValue) || propertyValue==="") {
                 result = false;
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Number) {
-            if (!isNaN(propertyValue)) {
+            if (!isNaN(propertyValue) && propertyValue !=="") {
                 result = false;
             }
         }
@@ -141,7 +141,7 @@ function CheckManager() {
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Text) {
-            if (/^[a-z]+$/i.test(propertyValue)) {
+            if (/^[a-z]+$/i.test(propertyValue) || propertyValue==="") {
                 result = false;
             }
         }

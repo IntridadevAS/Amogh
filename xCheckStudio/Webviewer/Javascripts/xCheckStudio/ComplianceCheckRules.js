@@ -13,7 +13,7 @@ var ComplianceCheckRulesEnum = {
     "Not_Equal_To":11,
     "Should_Not_Be_Number":12,
     "Should_Be_Text" :13,
-    "Should_Not_Be_Text" :13,
+    "Should_Not_Be_Text" :14,
 };
 
 Object.freeze(ComplianceCheckRulesEnum);
