@@ -68,7 +68,7 @@ function CheckCaseManager() {
 
             var checkTypeName = checkTypeElement.getAttribute("type");
             var sourceAType = checkTypeElement.getAttribute("sourceType");
-            var sourceBType;
+            var sourceBType = undefined;
 
             if (sourceAType === undefined ||
                 sourceAType === null) {
@@ -86,10 +86,10 @@ function CheckCaseManager() {
                 }
 
                 // ComponentGroup object
-                var sourceAGroupName;
-                var sourceBGroupName;
+                var sourceAGroupName = undefined;
+                var sourceBGroupName = undefined;
                 sourceAGroupName = componentGroupElement.getAttribute("name");
-                if (!sourceAGroupName ) {
+                if (!sourceAGroupName) {
                     sourceAGroupName = componentGroupElement.getAttribute("sourceAGroupName");
                     sourceBGroupName = componentGroupElement.getAttribute("sourceBGroupName");
                 }
@@ -103,8 +103,8 @@ function CheckCaseManager() {
                     }
 
                     // Component object
-                    var sourceAClassName;
-                    var sourceBClassName;
+                    var sourceAClassName = undefined;
+                    var sourceBClassName = undefined;
                     sourceAClassName = componentElement.getAttribute("name");
                     if (!sourceAClassName) {
                         sourceAClassName = componentElement.getAttribute("sourceAComponentClass");
@@ -119,8 +119,8 @@ function CheckCaseManager() {
                         }
 
                         var sourceAProperty = propertyElement.getAttribute("name");
-                        var sourceBProperty;
-                        var rule;
+                        var sourceBProperty = undefined;
+                        var rule = undefined;
                         if (sourceAProperty === undefined ||
                             sourceAProperty === null) {
                             sourceAProperty = propertyElement.getAttribute("sourceAName");
@@ -146,71 +146,6 @@ function CheckCaseManager() {
 
                 checkType.addComponentGroup(checkCaseComponentGroup);
             }
-            // }
-
-            // else if (sourceAType === sourceBType) {
-            //     for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
-            //         var componentGroupElement = checkTypeElement.children[componentGroupIndex];
-            //         if (componentGroupElement.localName != "ComponentGroup") {
-            //             continue;
-            //         }
-
-            //         // ComponentGroup object
-            //         var checkCaseComponentGroup = new CheckCaseComponentGroup(componentGroupElement.getAttribute("name"));
-
-            //         for (var j = 0; j < componentGroupElement.children.length; j++) {
-            //             var componentElement = componentGroupElement.children[j];
-            //             if (componentElement.localName != "ComponentClass") {
-            //                 continue;
-            //             }
-
-            //             // Component object
-            //             var checkCaseComponentClass = new CheckCaseComponentClass(componentElement.getAttribute("name"));
-
-            //             for (var k = 0; k < componentElement.children.length; k++) {
-            //                 var propertyElement = componentElement.children[k];
-            //                 if (propertyElement.localName != "Property") {
-            //                     continue;
-            //                 }
-
-            //                 var sourceAProperty = propertyElement.getAttribute("name");
-            //                 var sourceBProperty;
-            //                 var rule;
-            //                 if (sourceAProperty === undefined ||
-            //                     sourceAProperty === null) {
-            //                     sourceAProperty = propertyElement.getAttribute("sourceAName");
-            //                     sourceBProperty = propertyElement.getAttribute("sourceBName");
-            //                 }
-            //                 else {
-            //                     rule = propertyElement.getAttribute("rule");
-            //                 }
-
-            //                 // if (complianceCheck.toLowerCase() == "true".toLowerCase()) {
-            //                 //     sourceAProperty = propertyElement.getAttribute("name");
-            //                 //     rule = propertyElement.getAttribute("rule");
-            //                 // }
-            //                 // else {
-            //                 //     sourceAProperty = propertyElement.getAttribute("sourceAName");
-            //                 //     sourceBProperty = propertyElement.getAttribute("sourceBName");
-            //                 // }
-            //                 var severity = propertyElement.getAttribute("severity");
-            //                 var comment = propertyElement.getAttribute("comment");
-
-            //                 // create mapping property object 
-            //                 var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-            //                     sourceBProperty,
-            //                     severity,
-            //                     rule,
-            //                     comment);
-            //                 checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-            //             }
-
-            //             checkCaseComponentGroup.addComponent(checkCaseComponentClass);
-            //         }
-
-            //         checkType.addComponentGroup(checkCaseComponentGroup);
-            //     }
-            // }
 
             checkCase.addCheckType(checkType);
         }
@@ -265,23 +200,21 @@ function CheckType(name,
     }
 
     CheckType.prototype.componentGroupExists = function (sourceAGroupName, sourceBGroupName) {
-        for (var i = 0; i < this.ComponentGroups.length; i++) {            
+        for (var i = 0; i < this.ComponentGroups.length; i++) {
             // check for source A only
-            if(sourceBGroupName === undefined &&
-               this.ComponentGroups[i].SourceAName === sourceAGroupName)
-            {
+            if (sourceBGroupName === undefined &&
+                this.ComponentGroups[i].SourceAName === sourceAGroupName) {
                 return true;
             }
 
-             // check for source B only
-             if(sourceAGroupName === undefined &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName)
-             {
-                 return true;
-             }
+            // check for source B only
+            if (sourceAGroupName === undefined &&
+                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+                return true;
+            }
 
 
-             // check for both sources
+            // check for both sources
             if (this.ComponentGroups[i].SourceAName === sourceAGroupName &&
                 this.ComponentGroups[i].SourceBName === sourceBGroupName) {
                 return true;
@@ -292,25 +225,23 @@ function CheckType(name,
     }
 
     CheckType.prototype.getComponentGroup = function (sourceAGroupName, sourceBGroupName) {
-        for (var i = 0; i < this.ComponentGroups.length; i++) {           
-           
-             // check for source A only
-            if(sourceBGroupName === undefined &&
-                this.ComponentGroups[i].SourceAName === sourceAGroupName)
-            {
+        for (var i = 0; i < this.ComponentGroups.length; i++) {
+
+            // check for source A only
+            if (sourceBGroupName === undefined &&
+                this.ComponentGroups[i].SourceAName === sourceAGroupName) {
                 return this.ComponentGroups[i];
             }
 
-             // check for source B only
-             if(sourceAGroupName === undefined &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName)
-             {
+            // check for source B only
+            if (sourceAGroupName === undefined &&
+                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
                 return this.ComponentGroups[i];
-             }
+            }
 
             // check for both sources
             if (this.ComponentGroups[i].SourceAName === sourceAGroupName &&
-                       this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
                 return this.ComponentGroups[i];
             }
         }
@@ -332,10 +263,9 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
 
     CheckCaseComponentGroup.prototype.componentClassExists = function (sourceAClassName, sourceBClassName) {
         for (var i = 0; i < this.ComponentClasses.length; i++) {
-            if(sourceBClassName === undefined &&
-               this.ComponentClasses[i].SourceAName === sourceAClassName)
-            {
-                return true; 
+            if (sourceBClassName === undefined &&
+                this.ComponentClasses[i].SourceAName === sourceAClassName) {
+                return true;
             }
 
             if (this.ComponentClasses[i].SourceAName === sourceAClassName &&
@@ -350,11 +280,10 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
     CheckCaseComponentGroup.prototype.getComponentClass = function (sourceAClassName, sourceBClassName) {
         for (var i = 0; i < this.ComponentClasses.length; i++) {
 
-            if(sourceBClassName === undefined &&
-                this.ComponentClasses[i].SourceAName === sourceAClassName)
-             {
+            if (sourceBClassName === undefined &&
+                this.ComponentClasses[i].SourceAName === sourceAClassName) {
                 return this.ComponentClasses[i];
-             }
+            }
 
             if (this.ComponentClasses[i].SourceAName === sourceAClassName &&
                 this.ComponentClasses[i].SourceBName === sourceBClassName) {
@@ -363,7 +292,7 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
         }
 
         return undefined;
-    }  
+    }
 }
 
 function CheckCaseComponentClass(sourceAName, sourceBName) {
