@@ -169,7 +169,7 @@
       height: 760px; /* Full height */
       margin: 0 432px 0 0;
       top: 0px;
-      left: 232px;
+      left: 320px;
       background-color: rgb(0,0,0); /* Fallback color */
       background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     }
@@ -178,8 +178,8 @@
     .modal-content {
       background-color: #fefefe;
       border: 1px solid #888;
-      width: 416px;
-      height: 179px;
+      width: 750px;
+      height: 740px;
       margin-left: 250px;
       margin-top: 214px;
     }
@@ -475,7 +475,7 @@
                 </div>
                 <div id="maximizeViewerContainer" class="modal">
                     <!-- Modal content -->
-                    <div class="modal-content" id="maximizeViewerContainer-content" style="width: 554px; height: 550px; margin-left: 350px; margin-top: 80px;">
+                    <div class="modal-content" id="maximizeViewerContainer-content" style="width: 750px; height: 740px; margin-left: 280px; margin-top: 5px;">
     
                     </div>
                 </div>
@@ -1294,6 +1294,17 @@
             //margin: 20px 0 0 20px
             //viewerContainer[0].appendChild(viewerdata);
             viewerContainer[0].children[0].appendChild(viewerdata);
+            var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
+                for(var i =0 ; i < modalViewerContainer.length; i++)
+                {
+                    var currentViewer = modalViewerContainer[i];
+                    currentViewer.style.width = "550px";
+                    currentViewer.style.height = "270px";
+                    if(modalViewerContainer.length === 1)
+                    {
+                        currentViewer.style.top = "120px";
+                    }
+                }
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
             // window.setTimeout(function () {
@@ -1317,13 +1328,19 @@
                 viewerdata.style.width = "100%";
                 viewerdata.style.height = "100%";
                 viewerdata.style.margin = "auto";
-                if(document.getElementById("viewerContainer1") !== null)
+
+                var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
+                for(var i =0 ; i < modalViewerContainer.length; i++)
                 {
-                    document.getElementById("viewerContainer1").style.top = "10px";
-                }
-                else if(document.getElementById("viewerContainer2") !== null)
-                {
-                    document.getElementById("viewerContainer2").style.top = "10px";
+                    var currentViewer = modalViewerContainer[i];
+                    currentViewer.style.width = "745px";
+                    currentViewer.style.height = "370px";
+                    if (modalViewerContainer.length === 1) {
+                        currentViewer.style.top = "0px";
+                        modalViewer.style.marginTop = "195px"
+                        modalViewer.style.width = "745px"
+                        modalViewer.style.height = "370px"
+                    }
                 }
                 
                 // When the user clicks anywhere outside of the modal, close it
