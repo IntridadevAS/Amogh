@@ -115,13 +115,13 @@
             height: 5px;
         }
 
-        #dataSource1 ::-webkit-scrollbar-thumb {
+        /* #dataSource1 ::-webkit-scrollbar-thumb {
             width: 10px;
         }
 
         #dataSource2 ::-webkit-scrollbar {
             width: 10px;
-        }
+        } */
 
         .closebtn {
             float: right;
@@ -2497,10 +2497,11 @@
             var tab2Viewer = document.getElementById("tab2Viewer");
             tab2Viewer.style.display = "block";
             tab2Viewer.style.backgroundColor = "#F3F0F4";
-
             //viewerContainer2
             var viewerContainer2 = document.getElementById("viewerContainer2")
             viewerContainer2.style.display = "block";
+            var elementCountTab = document.getElementById("SourceBComponentCount");
+            elementCountTab.style.display = "block";
 
             //tab1
             var tab2 = document.getElementById("tab1");

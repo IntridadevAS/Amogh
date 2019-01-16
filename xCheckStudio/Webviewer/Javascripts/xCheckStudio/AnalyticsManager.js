@@ -315,10 +315,15 @@ function AnalyticsManager() {
             this.ComparisonResultArray = []
         }
         
-        var totalItemsChecked = 0;
-        var errorsCount = 0;
-        var warningsCount = 0;
-        var okCount = 0;
+        var totalItemsCheckedForDataSource = 0;
+        var errorsCountForDataSource = 0;
+        var warningsCountForDataSource = 0;
+        var okCountForDataSource = 0;
+
+        // var totalItemsChecked = 0;
+        // var okCount = 0;
+        // var errorsCount = 0;
+        // var warningsCount = 0;
 
         var titleArray = [];
         
@@ -334,9 +339,15 @@ function AnalyticsManager() {
             var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
+                // totalItemsChecked += components.length;
+                totalItemsCheckedForDataSource += components.length;
                 var valueArray = [];
                 valueArray.push(componentGroup);
+
+                var okCount = 0;
+                var errorsCount = 0;
+                var warningsCount = 0;
+
                 for (var i = 0; i < components.length; i++) {
                     currentComponent = components[i];
                     if (currentComponent.Status.toLowerCase() === "ok") {
@@ -350,16 +361,25 @@ function AnalyticsManager() {
                     }
                 }
 
-                document.getElementById("a37").innerText = totalItemsChecked;
-                document.getElementById("a18").innerText = errorsCount;
-                document.getElementById("a13").innerText = warningsCount;
-                document.getElementById("a6").innerText = okCount;
+                errorsCountForDataSource += errorsCount;
+                okCountForDataSource += okCount;
+                warningsCountForDataSource += warningsCount;
+                // document.getElementById("a37").innerText = totalItemsChecked;
+                // document.getElementById("a18").innerText = errorsCount;
+                // document.getElementById("a13").innerText = warningsCount;
+                // document.getElementById("a6").innerText = okCount;
 
                 valueArray.push(errorsCount);
                 valueArray.push(warningsCount);
                 valueArray.push(okCount);
                 this.ComparisonResultArray.push(valueArray);
             }
+            
+            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
+            document.getElementById("a18").innerText = errorsCountForDataSource;
+            document.getElementById("a13").innerText = warningsCountForDataSource;
+            document.getElementById("a6").innerText = okCountForDataSource;
+
             
             getData(this.ComparisonResultArray);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
@@ -383,7 +403,13 @@ function AnalyticsManager() {
             var componentGroupsArray = SourceAComplianceData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
+                // totalItemsChecked += components.length;
+                totalItemsCheckedForDataSource += components.length;
+
+                var okCount = 0;
+                var errorsCount = 0;
+                var warningsCount = 0;
+
                 var valueArray = [];
                 valueArray.push(componentGroup);
                 for (var i = 0; i < components.length; i++) {
@@ -399,16 +425,25 @@ function AnalyticsManager() {
                     }
                 }
 
-                document.getElementById("a37").innerText = totalItemsChecked;
-                document.getElementById("a18").innerText = errorsCount;
-                document.getElementById("a13").innerText = warningsCount;
-                document.getElementById("a6").innerText = okCount;
+                // document.getElementById("a37").innerText = totalItemsChecked;
+                // document.getElementById("a18").innerText = errorsCount;
+                // document.getElementById("a13").innerText = warningsCount;
+                // document.getElementById("a6").innerText = okCount;
+
+                errorsCountForDataSource += errorsCount;
+                okCountForDataSource += okCount;
+                warningsCountForDataSource += warningsCount;
 
                 valueArray.push(errorsCount);
                 valueArray.push(warningsCount);
                 valueArray.push(okCount);
                 this.ComplianceResultArrayForSourceA.push(valueArray);
             }
+
+            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
+            document.getElementById("a18").innerText = errorsCountForDataSource;
+            document.getElementById("a13").innerText = warningsCountForDataSource;
+            document.getElementById("a6").innerText = okCountForDataSource;
 
             getData(this.ComplianceResultArrayForSourceA);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
@@ -419,7 +454,7 @@ function AnalyticsManager() {
             {
                 this.ComplianceResultArrayForSourceB = [];
             }
-            
+
             titleArray = [];
             titleArray.push("Name");
             titleArray.push("Error");
@@ -430,7 +465,13 @@ function AnalyticsManager() {
             var componentGroupsArray = SourceBComplianceData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
+                // totalItemsChecked += components.length;
+                totalItemsCheckedForDataSource += components.length;
+                
+            var okCount = 0;
+            var errorsCount = 0;
+            var warningsCount = 0;
+            
                 var valueArray = [];
                 valueArray.push(componentGroup);
                 for (var i = 0; i < components.length; i++) {
@@ -446,10 +487,14 @@ function AnalyticsManager() {
                     }
                 }
 
-                document.getElementById("a37").innerText = totalItemsChecked;
-                document.getElementById("a18").innerText = errorsCount;
-                document.getElementById("a13").innerText = warningsCount;
-                document.getElementById("a6").innerText = okCount;
+                errorsCountForDataSource += errorsCount;
+                okCountForDataSource += okCount;
+                warningsCountForDataSource += warningsCount;
+
+                // document.getElementById("a37").innerText = totalItemsChecked;
+                // document.getElementById("a18").innerText = errorsCount;
+                // document.getElementById("a13").innerText = warningsCount;
+                // document.getElementById("a6").innerText = okCount;
 
                 valueArray.push(errorsCount);
                 valueArray.push(warningsCount);
@@ -457,6 +502,10 @@ function AnalyticsManager() {
                 this.ComplianceResultArrayForSourceB.push(valueArray);
             }
 
+            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
+            document.getElementById("a18").innerText = errorsCountForDataSource;
+            document.getElementById("a13").innerText = warningsCountForDataSource;
+            document.getElementById("a6").innerText = okCountForDataSource;
 
             getData(this.ComplianceResultArrayForSourceB);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];

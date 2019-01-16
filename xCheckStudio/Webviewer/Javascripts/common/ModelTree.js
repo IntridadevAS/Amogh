@@ -667,6 +667,7 @@ var xCheckStudio;
                                     _this.BrowserItemClick(nodeId, args.event.currentTarget);
                                }
                                 _this.SelectedComponentRow = args.event.currentTarget;
+                                _this.ChangeBackgroundColor(_this.SelectedComponentRow );
                             }                               
                         }
                         

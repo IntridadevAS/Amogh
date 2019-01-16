@@ -26,7 +26,7 @@ function  drawLineChart(data,title_field,div, colorsArray)
             LineChart = new google.visualization.LineChart(document.getElementById(div.id));  
         }
         else{
-            LineChart = new google.visualization.LineChart(document.getElementById(div.container.id));  
+            LineChart = new google.visualization.LineChart(document.getElementById(div.ma.id));  
         }
     
     LineChart.draw(data, options);
