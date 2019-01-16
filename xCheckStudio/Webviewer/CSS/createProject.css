@@ -46,7 +46,7 @@ div {
 .createproject .bg .symbol {
   background-color    : rgba(255,255,255,0.0);
   top                 : 122px;
-  height              : 1058px;
+  height              : 600px;
   width               : 1195px;
   position            : absolute;
   margin              : 0;
@@ -55,6 +55,8 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   opacity             : 0.05;
+  object-fit		  : none;
+  object-position	  : 100% 0;
 }
 .createproject .header {
   background-color    : rgba(255,255,255,0.0);

@@ -30,7 +30,7 @@
                         <img anima-src=".\images\UIPackage/landing-page-studio@2x.png" class="studio" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                         <img anima-src=".\images\UIPackage/module1-symbol 1@2x.png" class="symbol" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                     </div>
-                    <a href="landingpage.html">
+                    <a href="home.html">
                         <img anima-src=".\images\UIPackage/prep-home-page-return-btn@2x.png" class="returnbtn" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                     </a>
                 </div>
@@ -63,7 +63,7 @@
                         <div class="path">
                             <img anima-src=".\images\UIPackage/landing-page-path@2x.png" class="path1" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                         </div>
-                        <div class="pierre">
+                        <div class="pierre" id="pierre">
                             Pierre
                         </div>
                     </div>
@@ -180,6 +180,30 @@
                 anima_loadAsyncSrc();
             }, 200);
         </script>
+		<script>
+		window.onload = function () {
+			var username = getCookie("username");
+			var pierrediv  = document.getElementById("pierre");
+			if (username != "" && pierrediv != null)
+                pierrediv.innerHTML = username;	
+		}
+		function getCookie(cname) 
+		{
+				var name = cname + "=";
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+			  for(var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+				  c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+				  return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		</script>
         <!-- End of Scripts -->
     </body>
 </html>
