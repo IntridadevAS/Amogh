@@ -230,7 +230,7 @@
                 <div class="bg1">
                 </div>
                 <div class="downloadbtn" onclick="clearData()" onMouseOver="this.style.cursor='pointer'">
-				<div class="bg2"></div>
+                    <div class="bg2"></div>
                     <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="bg2" />
                 </div>
                 <div class="search">
@@ -300,7 +300,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab" id="tab2Parent" style="left: 291px; display: none" onclick="OpenTab('tab2')"  onMouseOver="this.style.cursor='pointer'">
+                <div class="tab" id="tab2Parent" style="left: 291px; display: none" onclick="OpenTab('tab2')"
+                    onMouseOver="this.style.cursor='pointer'">
                     <div class="tab2" id="tab2" style="display: none;">
                         <div id="dataSource2ModelBrowserTab" style="align-content: center">
                             Source 2
@@ -1883,14 +1884,15 @@
                         <img src="/images/UIPackage/module1-with-open-menu-create-icon 2@2x.png" class="createicon" />
                     </div>
                 </div>
-                <div class="tab" id="tab1ViewerParent" onclick="OpenTab('tab1Viewer')"  onMouseOver="this.style.cursor='pointer'">
+                <div class="tab" id="tab1ViewerParent" onclick="OpenTab('tab1Viewer')" onMouseOver="this.style.cursor='pointer'">
                     <div class="tab1" id="tab1Viewer" style="background-color: #F3F0F4">
                         <div id="dataSource1ViewerContainerTab" style="align-content: center">
                             Source 1
                         </div>
                     </div>
                 </div>
-                <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none" onclick="OpenTab('tab2Viewer')" onMouseOver="this.style.cursor='pointer'">
+                <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none" onclick="OpenTab('tab2Viewer')"
+                    onMouseOver="this.style.cursor='pointer'">
                     <div class="tab2" id="tab2Viewer" style="display: none;">
                         <div id="dataSource2ViewerContainerTab" style="align-content: center">
                             Source 2
@@ -1926,8 +1928,8 @@
                         <div class="header">
                             <div class="bg1">
                             </div>
-                            <a href="checkModule.html">
-                                <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close" />
+                            <a href="#" >
+                                <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close" id="closeLoadDialog" />
                             </a>
                             <div class="loaddata">
                                 LOAD DATA
@@ -1982,13 +1984,14 @@
     </script>
     <!-- Scripts -->
     <script>
-        function AnalyticsData(checkCaseName, sourceAName, sourceBName, sourceATotalItemCount, sourceACheckedItemCount, sourceBTotalItemCount, sourceBCheckedItemCount) {
+        function AnalyticsData(checkCaseName,
+            sourceAName, sourceBName, sourceATotalItemCount, sourceACheckedItemCount, sourceBTotalItemCount, sourceBCheckedItemCount) {
             this.CheckCaseName = checkCaseName;
             this.SourceAName = sourceAName;
             this.SourceBName = sourceBName;
-            this.SourceATotalItemCount = sourceATotalItemCount; 
+            this.SourceATotalItemCount = sourceATotalItemCount;
             this.SourceACheckedItemCount = sourceACheckedItemCount;
-            this.SourceBTotalItemCount = sourceBTotalItemCount; 
+            this.SourceBTotalItemCount = sourceBTotalItemCount;
             this.SourceBCheckedItemCount = sourceBCheckedItemCount;
         }
 
@@ -2000,24 +2003,18 @@
         var checkCaseName;
         var sourceAFileName;
         var sourceBFileName;
-        var sourceATotalItemCount; 
+        var sourceATotalItemCount;
         var sourceACheckedItemCount;
-        var sourceBTotalItemCount; 
+        var sourceBTotalItemCount;
         var sourceBCheckedItemCount;
+        var sourceAClasswiseCheckedComponents;
+        var sourceBClasswiseCheckedComponents;
 
         var hiidenEntities = [];
 
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
         }, false);
-
-        // window.onclick = function (event) {
-        //     var i = document.getElementById("menu").style;
-        //     if (i.visibility === "visible") {
-        //         i.visibility = "hidden";
-        //         currentViewer = undefined;
-        //     }
-        // }
 
         function hide() {
             if (currentViewer) {
@@ -2289,57 +2286,51 @@
                 }
             });
 
-
-            // var checkCaseName;
-            // var sourceAFileName;
-            // var sourceBFileName;
             checkCaseName = checkCaseManager.CheckCase.Name;
-            
-            var count ;
-            // sourceACheckedItemCount = count.split(":")[1];
-            // count = document.getElementById("SourceBComponentCount").innerText;
-            // sourceBCheckedItemCount = count.split(":")[1];
 
-            if(xCheckStudioInterface1._modelTree !== undefined)
-            {
-                count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+            var sourceAModelTree;
+            var sourceBModelTree;
+            if (xCheckStudioInterface1) {
+                if (xCheckStudioInterface1._modelTree !== undefined) {
+                    sourceAModelTree = xCheckStudioInterface1._modelTree;
+                    // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+                    // sourceACheckedItemCount = count > 0 ? count : 0;
+                }
+                else if (xCheckStudioInterface1.excelReader !== undefined) {
+                    sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
+                    // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
+                    // sourceACheckedItemCount = count > 0 ? count : 0;
+                }
+            }
+
+            if (xCheckStudioInterface2) {
+                if (xCheckStudioInterface2._modelTree !== undefined) {
+                    sourceBModelTree = xCheckStudioInterface2._modelTree;
+                    // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
+                    // sourceBCheckedItemCount = count > 0 ? count : 0;
+                }
+
+                else if (xCheckStudioInterface2.excelReader !== undefined) {
+                    sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
+                    // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
+                    // sourceBCheckedItemCount = count > 0 ? count : 0;
+                }
+            }
+
+            if (sourceAModelTree) {
+                var count = sourceAModelTree.selectedCompoents.length;
                 sourceACheckedItemCount = count > 0 ? count : 0;
+                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
             }
-            else if(xCheckStudioInterface1.excelReader !== undefined)
-            {
-                count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
-                sourceACheckedItemCount = count > 0 ? count : 0;
-            }
-            if(xCheckStudioInterface2._modelTree !== undefined)
-            {
-                count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
+            if (sourceBModelTree) {
+                var count = sourceBModelTree.selectedCompoents.length;
                 sourceBCheckedItemCount = count > 0 ? count : 0;
+                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
             }
-           
-            else if(xCheckStudioInterface2.excelReader !== undefined)
-            {
-                count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
-                sourceBCheckedItemCount = count > 0 ? count : 0;
-            }
-            //     var sourceEndPointUri = xCheckStudioInterface1._firstViewer._params.endpointUri;
-            //    if(sourceEndPointUri !== undefined)
-            //    {
-            //     var tempArray = sourceEndPointUri.split("/");
-            //     var sourceAFileName = tempArray[tempArray.length-1];
-            //     sourceAFileName = sourceAFileName;
-            //    }
 
-            //     sourceEndPointUri = xCheckStudioInterface2._firstViewer._params.endpointUri;
-            //     if(sourceEndPointUri !== undefined)
-            //    {
-            //     tempArray = sourceEndPointUri.split("/");
-            //     sourceBFileName = tempArray[tempArray.length-1];
-            //     sourceBFileName = sourceBFileName;
-            //    }
-
-            var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName, 
-                                                        sourceATotalItemCount, sourceACheckedItemCount, 
-                                                        sourceBTotalItemCount, sourceBCheckedItemCount);
+            var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName,
+                sourceATotalItemCount, sourceACheckedItemCount,
+                sourceBTotalItemCount, sourceBCheckedItemCount);
 
             $.ajax({
                 url: 'postData/analyticsDetailsDataWriter.php',
@@ -2571,33 +2562,33 @@
             // document.getElementById(modelTreeContainer).innerHTML = ""
             // document.getElementById(viewerContainer).innerHTML = ""
             if (!xCheckStudioInterface1) {
-            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
 
-            // enable source A controls
-            // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-            // sourceAComplianceCB.disabled = false;
+                // enable source A controls
+                // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
+                // sourceAComplianceCB.disabled = false;
 
-            // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-            // checkAllSourceACB.disabled = false;
+                // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
+                // checkAllSourceACB.disabled = false;
 
-            // // enable source B load data source button
-            // var loadDataSourceBButton = document.getElementById("dataSouresB");
-            // loadDataSourceBButton.disabled = false;
+                // // enable source B load data source button
+                // var loadDataSourceBButton = document.getElementById("dataSouresB");
+                // loadDataSourceBButton.disabled = false;
             }
             else {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
 
-            //     // enable source B controls
-            //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-            //     sourceBComplianceCB.disabled = false;
+                //     // enable source B controls
+                //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
+                //     sourceBComplianceCB.disabled = false;
 
-            //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-            //     checkAllSourceBCB.disabled = false;
+                //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
+                //     checkAllSourceBCB.disabled = false;
 
-            //     var comparisonCB = document.getElementById("comparisonCB");
-            //     comparisonCB.disabled = false;
+                //     var comparisonCB = document.getElementById("comparisonCB");
+                //     comparisonCB.disabled = false;
             }
 
             // document.getElementById("checkButton").disabled = false;
@@ -2687,7 +2678,11 @@
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
-
+                var closebutton = document.getElementById("closeLoadDialog");
+                if(event.target === closebutton)
+                {
+                    modal.style.display = "none";
+                }
                 var i = document.getElementById("menu").style;
                 if (i.visibility === "visible") {
                     i.visibility = "hidden";
@@ -2736,7 +2731,7 @@
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
                 localStorage.setItem("SourceAName", fileName);
-                sourceAFileName = fileName;            
+                sourceAFileName = fileName;
                 document.getElementById("dataSource1ViewerContainerTab").innerText = fileName;
             }
             else if (modelTreeContainer === "modelTree2") {

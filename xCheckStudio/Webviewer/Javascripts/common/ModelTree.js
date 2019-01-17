@@ -329,6 +329,28 @@ var xCheckStudio;
                 }
             }
 
+            ModelTree.prototype.getClassWiseCheckedComponents = function () {
+                var classwiseCheckedComponents = {};
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                var mainCategoryPropertyName = identifierProperties['mainCategory'];
+                for (var i = 0; i < this.selectedCompoents.length; i++) {
+                    var selectedComponent = this.selectedCompoents[i];
+                    if(selectedComponent[mainCategoryPropertyName] === "")
+                    {
+                        continue;
+                    }
+                    if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
+                        // increment count of checked components for this main category
+                        classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
+                    }
+                    else {
+                        // add checked components count for this main category
+                        classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] = 1;
+                    }
+                }
+                return classwiseCheckedComponents;
+            }
+
             ModelTree.prototype.handleComponentCheck = function (currentCheckBox) {
 
                 var currentCell = currentCheckBox.parentElement;
@@ -394,6 +416,8 @@ var xCheckStudio;
                     }
                 }
             }
+
+            
 
             ModelTree.prototype.selectComponentRow = function (componentIdentifier) {
                 if (this._viewer._params.containerId == "viewerContainer2") {

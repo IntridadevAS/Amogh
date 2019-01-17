@@ -279,6 +279,26 @@ function ExcelModeBrowser() {
         row.onmouseout = createMouseOutHandler(row);
     }
 
+    ExcelModeBrowser.prototype.getClassWiseCheckedComponents = function () {
+        var classwiseCheckedComponents = {};
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+        var mainCategoryPropertyName = identifierProperties['mainCategory'];
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var selectedComponent = this.selectedCompoents[i];
+            if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
+                // increment count of checked components for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
+            }
+            else {
+                // add checked components count for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] = 1;
+            }
+        }
+
+
+        return classwiseCheckedComponents;
+    }
+
     ExcelModeBrowser.prototype.selectedCompoentExists = function (componentRow) {
         for (var i = 0; i < this.selectedCompoents.length; i++) {
             var component = this.selectedCompoents[i];
