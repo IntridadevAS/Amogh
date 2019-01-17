@@ -1,7 +1,8 @@
 
 var ReviewModuleViewerInterface = function (viewerOptions,
     componentIdVsComponentData,
-    nodeIdVsComponentData) {
+    nodeIdVsComponentData,
+    reviewManager) {
 
     this.ViewerOptions = viewerOptions;
     this.selectedNodeId = null;
@@ -10,6 +11,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     this.ComponentIdVsComponentData = componentIdVsComponentData;
     this.NodeIdVsComponentData = nodeIdVsComponentData;
     this.ComponentIdStatusData = {};
+
+    this.ReviewManager = reviewManager;
 
     ReviewModuleViewerInterface.prototype.setupViewer = function (width, height) {
 
@@ -48,6 +51,39 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         }
     }
 
+    ReviewModuleViewerInterface.prototype.unHighlightAll = function () {
+        var _this = this;
+
+        _this.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+        _this.selectedNodeId = undefined;
+        _this.selectedComponentId = undefined;
+        // highlight corresponding component in another viewer
+        if (_this.ViewerOptions[0] === "viewerContainer1" &&
+            _this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
+            _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
+
+            _this.ReviewManager.SourceBReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+
+            _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
+            _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
+        }
+        else if (_this.ViewerOptions[0] === "viewerContainer2" &&
+            _this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
+            _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
+
+            _this.ReviewManager.SourceAReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+
+            _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
+            _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;
+        }
+
+        // restore highlightcolor of selected row in main review table
+        if (_this.ReviewManager.SelectedComponentRow) {
+            _this.ReviewManager.RestoreBackgroundColor(_this.ReviewManager.SelectedComponentRow);
+            _this.ReviewManager.SelectedComponentRow = undefined;
+        }
+    }
+
     ReviewModuleViewerInterface.prototype.bindEvents = function (viewer) {
 
         var _this = this;
@@ -59,12 +95,18 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 _this.highlightComponentsfromResult();
             },
             selectionArray: function (selections) {
+                if (selections.length === 0
+                    && _this.selectedNodeId) {
+                    _this.unHighlightAll();
+                    return;
+                }
+
                 for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
                     var selection = selections_1[_i];
 
                     var sel = selection.getSelection();
 
-                    if (_this._selectedNodeId !== sel.getNodeId()) {
+                    if (_this.selectedNodeId !== sel.getNodeId()) {
                         _this.onSelection(selection);
                     }
                 }
@@ -83,18 +125,18 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.highlightComponent = function (componentIdentifier) {
         var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
         if (nodeId === undefined) {
-           this.unHighlightComponent();
+            this.unHighlightComponent();
             return;
         }
 
-        this.highlightManager.highlightNodeInViewer(nodeId);
+        this.selectedNodeId = nodeId;
 
-        this._selectedNodeId = nodeId;
+        this.highlightManager.highlightNodeInViewer(nodeId);
     };
 
     ReviewModuleViewerInterface.prototype.unHighlightComponent = function () {
         this.highlightManager.clearSelection();
-        this._selectedNodeId = undefined;
+        this.selectedNodeId = undefined;
     }
 
     ReviewModuleViewerInterface.prototype.onSelection = function (selectionEvent) {
@@ -104,14 +146,17 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             var model = this.Viewer.model;
             if (model.isNodeLoaded(this.selectedNodeId)) {
                 // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
-                if (model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance) {
+                if (model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance ||
+                    model.getNodeType(this.selectedNodeId) === Communicator.NodeType.Unknown) {
                     var parent_1 = model.getNodeParent(this.selectedNodeId);
                     if (parent_1 !== null) {
                         this.selectedNodeId = parent_1;
+                        this.highlightManager.highlightNodeInViewer(parent_1);
                     }
                 }
 
-                if (model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.BodyInstance) {
+                if (model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.BodyInstance ||
+                    model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.Unknown) {
                     let data = this.highlightManager.NodeIdVsComponentData[this.selectedNodeId];
                     if (data != undefined) {
 
@@ -126,17 +171,37 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         // highlight corresponding component in review table 
                         this.HighlightReviewComponent(data);
 
-                        // highlight corresponding component in model browser table                     
-                        this.highlightComponent(componentIdentifier);
+                        // highlight corresponding component in another viewer
+                        if (this.ViewerOptions[0] === "viewerContainer1" &&
+                            this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
+                            this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                        }
+                        else if (this.ViewerOptions[0] === "viewerContainer2" &&
+                            this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
+                            this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                        }
+                    }
+                    else {
+                        //this.unHighlightComponent();
+                        this.unHighlightAll();
                     }
                 }
+            }
+            else {
+                this.unHighlightComponent();
+                this.unHighlightAll();
             }
         }
     };
 
     ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (data) {
         var componentsGroupName = data["MainComponentClass"];
-        var doc = document.getElementsByClassName("collapsible");
+        var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
+        if (!mainReviewTableContainer) {
+            return;
+        }
+
+        var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
         for (var i = 0; i < doc.length; i++) {
             if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
                 var nextSibling = doc[i].nextSibling;
@@ -160,25 +225,27 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                     rowIdentifier += "_" + childRowColumns[3].innerHTML + "_"
                                         + childRowColumns[4].innerHTML + "_" + childRowColumns[5].innerHTML;
                                     if (rowIdentifier === componentIdentifier) {
-                                        if (reviewManager.SelectedComponentRow) {
-                                            reviewManager.RestoreBackgroundColor(reviewManager.SelectedComponentRow);
+                                        if (this.ReviewManager.SelectedComponentRow) {
+                                            this.ReviewManager.RestoreBackgroundColor(this.ReviewManager.SelectedComponentRow);
                                         }
 
-                                        reviewManager.ChangeBackgroundColor(childRow)
-                                        reviewManager.populateDetailedReviewTable(childRow);
-                                        reviewManager.SelectedComponentRow = childRow;
+                                        this.ReviewManager.ChangeBackgroundColor(childRow)
+                                        this.ReviewManager.populateDetailedReviewTable(childRow);
+                                        this.ReviewManager.SelectedComponentRow = childRow;
 
                                         break;
                                     }
 
                                 }
-                                if (reviewManager.SelectedComponentRow) {
-                                    reviewManager.RestoreBackgroundColor(reviewManager.SelectedComponentRow);
+                                if (this.ReviewManager.SelectedComponentRow) {
+                                    this.ReviewManager.RestoreBackgroundColor(this.ReviewManager.SelectedComponentRow);
                                 }
 
-                                reviewManager.ChangeBackgroundColor(childRow)
-                                reviewManager.populateDetailedReviewTable(childRow);
-                                reviewManager.SelectedComponentRow = childRow;
+                                this.ReviewManager.ChangeBackgroundColor(childRow)
+                                this.ReviewManager.populateDetailedReviewTable(childRow);
+                                this.ReviewManager.SelectedComponentRow = childRow;
+
+                                break;
                             }
                         }
                     }

@@ -44,7 +44,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
                 this.SourceAComponentIdVsComponentData,
-                this.SourceANodeIdVsComponentData);
+                this.SourceANodeIdVsComponentData,
+                this);
             this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);
         }
@@ -52,7 +53,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (this.SourceBViewerData !== undefined) {
             this.SourceBReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceBViewerData,
                 this.SourceBComponentIdVsComponentData,
-                this.SourceBNodeIdVsComponentData);
+                this.SourceBNodeIdVsComponentData, 
+                this);
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
         }

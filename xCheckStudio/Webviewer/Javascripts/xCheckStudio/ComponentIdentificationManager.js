@@ -26,7 +26,10 @@ var xCheckStudio;
                 properties = {
                     'name':ComponentIdentificationManager.XMLSourceNameProperty,
                     'mainCategory':ComponentIdentificationManager.XMLSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.XMLSourceSubComponentClassProperty
+                    'subClass': ComponentIdentificationManager.XMLSourceSubComponentClassProperty,
+                    'source': ComponentIdentificationManager.XMLPipingNWSegSourceProperty,
+                    'destination': ComponentIdentificationManager.XMLPipingNWSegDestinationProperty,
+                    'ownerId': ComponentIdentificationManager.XMLPipingNWSegOwnerProperty
                 };
             }
             else if (fileExtension.toLowerCase() === "rvm") {

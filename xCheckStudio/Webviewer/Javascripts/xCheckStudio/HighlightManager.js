@@ -62,4 +62,8 @@ function HighlightManager(viewer,
         this.Viewer.selectionManager.clear();  
         this._selectedComponentId = "";      
     }
+
+    HighlightManager.prototype.setViewOrientation = function (orienatation) {
+        this.Viewer.view.setViewOrientation(orienatation, Communicator.DefaultTransitionDuration);
+    }
 }

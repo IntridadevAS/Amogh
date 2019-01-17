@@ -224,6 +224,17 @@ var xCheckStudio;
             }
         }
 
+        xCheckStudioInterface.prototype.getPropertyValue = function (propertyCollectionObject, propertyToSearch) {
+
+            for (var key in propertyCollectionObject) {
+                if (key.toLowerCase() === propertyToSearch.toLowerCase()) {
+                    return propertyCollectionObject[key];
+                }
+            }
+
+            return undefined;
+        }
+
         xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties) {
             var _this = this;
             if (nodeId !== null &&
@@ -238,9 +249,13 @@ var xCheckStudio;
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0) {
 
-                            var mainComponentClass = nodeProperties[identifierProperties.mainCategory];
-                            var name = nodeProperties[identifierProperties.name];
-                            var subComponentClass = nodeProperties[identifierProperties.subClass];
+                            var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
+                            var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
+                            var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
+
+                            // var mainComponentClass = nodeProperties[identifierProperties.mainCategory];
+                            // var name = nodeProperties[identifierProperties.name];
+                            // var subComponentClass = nodeProperties[identifierProperties.subClass];
 
                             // check if source, destination and ownerid properties exists to uniquely identify
                             // PipingNetworkSegment
@@ -250,9 +265,13 @@ var xCheckStudio;
                             if (xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty in nodeProperties &&
                                 xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty in nodeProperties &&
                                 xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty in nodeProperties) {
-                                source = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty];
-                                destination = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty];
-                                ownerId = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty];
+                                source = _this.getPropertyValue(nodeProperties, identifierProperties.source);
+                                destination = _this.getPropertyValue(nodeProperties, identifierProperties.destination);
+                                ownerId = _this.getPropertyValue(nodeProperties, identifierProperties.ownerId);
+
+                                //     source = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty];
+                                // destination = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty];
+                                // ownerId = nodeProperties[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty];
                             }
 
                             // create generic properties object

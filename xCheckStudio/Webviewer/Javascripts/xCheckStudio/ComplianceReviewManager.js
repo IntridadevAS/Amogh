@@ -37,7 +37,8 @@ function ComplianceReviewManager(complianceCheckManager,
         if (this.ViewerData !== undefined) {
             this.ReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.ViewerData,
                 this.ComponentIdVsComponentData,
-                this.NodeIdVsComponentData);
+                this.NodeIdVsComponentData,
+                this);
             this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
 
             this.ReviewModuleViewerInterface.setupViewer(550, 300);
