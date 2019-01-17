@@ -169,26 +169,25 @@ function ComplianceReviewManager(complianceCheckManager,
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
                 var currentRow = modelBrowserHeaderTableRows[j];
                 for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i === 2 || i === 3 || i === 4 ) {
+                    if (i === 2 || i === 3 || i === 4) {
                         currentRow.cells[i].style.display = "none";
                     }
-                }               
-               
+                }
+
             }
 
-             // keep track of component id vs table row and status     
+            // keep track of component id vs table row and status     
             var modelBrowserDataTable = modelBrowserData.children[1];
             var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
             for (var j = 0; j < modelBrowserDataRows.length; j++) {
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if(currentRow.cells.length === 5)
-                {
-                 componentIdentifier += "_" + currentRow.cells[2].innerText;
-                 componentIdentifier += "_" + currentRow.cells[3].innerText;
-                 componentIdentifier += "_" + currentRow.cells[4].innerText;
-                }  
+                if (currentRow.cells.length === 5) {
+                    componentIdentifier += "_" + currentRow.cells[2].innerText;
+                    componentIdentifier += "_" + currentRow.cells[3].innerText;
+                    componentIdentifier += "_" + currentRow.cells[4].innerText;
+                }
 
                 var status = currentRow.cells[1].innerText;
                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
@@ -199,8 +198,8 @@ function ComplianceReviewManager(complianceCheckManager,
             modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
             var div2 = document.createElement("DIV");
-            div2.id = componentsGroup.ComponentClass+"_child";
-            div2.innerText =  "Count :" + modelBrowserTableRows.length;
+            div2.id = componentsGroup.ComponentClass + "_child";
+            div2.innerText = "Count :" + modelBrowserTableRows.length;
             div2.style.fontSize = "10px";
             div.appendChild(div2);
         }
@@ -212,8 +211,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
         for (var i = 0; i < mainReviewTableRows.length; i++) {
             var currentRow = mainReviewTableRows[i];
-            if(currentRow.cells.length === 1)
-            {
+            if (currentRow.cells.length === 1) {
                 return;
             }
             var status = currentRow.cells[1].innerHTML;
@@ -229,18 +227,18 @@ function ComplianceReviewManager(complianceCheckManager,
         $(function () {
             var db = {
                 loadData: filter => {
-                //   console.debug("Filter: ", filter);
-                  let source = (filter.Source || "").toLowerCase();
-                  let status = (filter.Status || "").toLowerCase();
-                  let dmy = parseInt(filter.dummy, 10);
-                  this.recalculateTotals = true;
-                  return $.grep(tableData, row => {
-                    return (!source || row.Source.toLowerCase().indexOf(source) >= 0)
-                    && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
-                    && (isNaN(dmy) || row.dummy === dmy);
-                  });
+                    //   console.debug("Filter: ", filter);
+                    let source = (filter.Source || "").toLowerCase();
+                    let status = (filter.Status || "").toLowerCase();
+                    let dmy = parseInt(filter.dummy, 10);
+                    this.recalculateTotals = true;
+                    return $.grep(tableData, row => {
+                        return (!source || row.Source.toLowerCase().indexOf(source) >= 0)
+                            && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
+                            && (isNaN(dmy) || row.dummy === dmy);
+                    });
                 }
-              };
+            };
 
             $(viewerContainer).jsGrid({
                 width: "592px",
@@ -258,7 +256,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     _this.highlightMainReviewTableFromCheckStatus(id);
                 },
                 rowClick: function (args) {
-                    var commentDiv = document.getElementById( _this.DetailedReviewRowCommentDiv);
+                    var commentDiv = document.getElementById(_this.DetailedReviewRowCommentDiv);
                     commentDiv.innerHTML = "";
 
                     _this.detailedReviewRowComments = {};
@@ -269,18 +267,17 @@ function ComplianceReviewManager(complianceCheckManager,
                     viewerContainer = viewerContainer.replace("#", "");
                     var sheetName = viewerContainer.replace(tempString, "");
 
-                    if(_this.SourceProperties !== undefined)
-                    {
+                    if (_this.SourceProperties !== undefined) {
                         if (_this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
-                           
+
                             _this.showSelectedSheetData("viewerContainer1", sheetName, args.event.currentTarget);
                         }
                         else if (_this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
-                          
+
                             _this.showSelectedSheetData("viewerContainer2", sheetName, args.event.currentTarget);
                         }
                     }
-                    else if(_this.ViewerData !== undefined){
+                    else if (_this.ViewerData !== undefined) {
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
                 }
@@ -308,7 +305,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
         this.ChangeBackgroundColor(currentReviewTableRow);
         this.SelectedComponentRow = currentReviewTableRow;
-        
+
         var reviewTableId = this.getReviewTableId(currentReviewTableRow);
 
         var componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
@@ -520,7 +517,7 @@ function ComplianceReviewManager(complianceCheckManager,
         container.style.overflowY = "scroll";
         container.style.margin = "0px";
         container.style.top = "50px"
-        
+
 
     };
 
@@ -569,8 +566,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     this.ChangeBackgroundColor(modelBrowserRow);
                     this.SelectedComponentRow = modelBrowserRow;
 
-                    if(containerId === "viewerContainer1")
-                    {
+                    if (containerId === "viewerContainer1") {
                         if (this.SelectedComponentRowFromSheetA) {
                             var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
                             obj = Object.keys(this.checkStatusArray)
@@ -581,16 +577,15 @@ function ComplianceReviewManager(complianceCheckManager,
                                 cell.style.backgroundColor = color;
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheetA = sheetDataRow;
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetA.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
                         }
                     }
-                    if(containerId === "viewerContainer2")
-                    {
+                    if (containerId === "viewerContainer2") {
                         if (this.SelectedComponentRowFromSheetB) {
                             var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
                             obj = Object.keys(this.checkStatusArray)
@@ -601,9 +596,9 @@ function ComplianceReviewManager(complianceCheckManager,
                                 cell.style.backgroundColor = color;
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheetB = sheetDataRow;
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetB.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
@@ -699,8 +694,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                 if (thisRow.cells[0].innerText === rowData.cells[column.Name].innerText) {
 
-                    if(containerId === "viewerContainer1")
-                    {
+                    if (containerId === "viewerContainer1") {
                         if (this.SelectedComponentRowFromSheetA) {
                             var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
                             obj = Object.keys(this.checkStatusArray)
@@ -711,16 +705,15 @@ function ComplianceReviewManager(complianceCheckManager,
                                 cell.style.backgroundColor = color;
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheetA = rowData;
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetA.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
                         }
                     }
-                    if(containerId === "viewerContainer2")
-                    {
+                    if (containerId === "viewerContainer2") {
                         if (this.SelectedComponentRowFromSheetB) {
                             var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
                             obj = Object.keys(this.checkStatusArray)
@@ -731,9 +724,9 @@ function ComplianceReviewManager(complianceCheckManager,
                                 cell.style.backgroundColor = color;
                             }
                         }
-    
+
                         this.SelectedComponentRowFromSheetB = rowData;
-    
+
                         for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                             cell = this.SelectedComponentRowFromSheetB.cells[j];
                             cell.style.backgroundColor = "#B2BABB"
@@ -837,11 +830,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     var title;
                     if (i === 0) {
                         title = "Source A Property";
-                        name =  "Property";
+                        name = "Property";
                     }
                     else if (i === 1) {
                         title = "Source A Value";
-                        name ="Value";
+                        name = "Value";
                     }
                     else if (i === 2) {
                         title = "Status";
@@ -886,14 +879,14 @@ function ComplianceReviewManager(complianceCheckManager,
                 var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "579px";
+                modelBrowserHeaderTable.style.width = "579px";
                 modelBrowserHeaderTable.style.overflowX = "hidden";
 
                 var modelBrowserDataTable = modelBrowserData.children[1]
                 modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width= "579px";
+                modelBrowserDataTable.style.width = "579px";
                 modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
-                
+
                 break;
             }
         }
@@ -901,20 +894,17 @@ function ComplianceReviewManager(complianceCheckManager,
 
     ComplianceReviewManager.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {
         var detailedReviewTableContainer = document.getElementById(containerId);
-        if(detailedReviewTableContainer === null)
-        {
+        if (detailedReviewTableContainer === null) {
             return;
         }
-        if(detailedReviewTableContainer.children.length === 0)
-        {
+        if (detailedReviewTableContainer.children.length === 0) {
             return;
         }
         var detailedReviewTableRows = detailedReviewTableContainer.children[1].getElementsByTagName("tr");
 
         for (var i = 0; i < detailedReviewTableRows.length; i++) {
             var currentRow = detailedReviewTableRows[i];
-            if(currentRow.cells.length < 2)
-            {
+            if (currentRow.cells.length < 2) {
                 return;
             }
             var status = currentRow.cells[2].innerHTML;
@@ -931,20 +921,20 @@ function ComplianceReviewManager(complianceCheckManager,
 
             var db = {
                 loadData: filter => {
-                //   console.debug("Filter: ", filter);
-                  let property = (filter.Property || "").toLowerCase();
-                  let value = (filter.Value || "").toLowerCase();
-                  let status = (filter.Status || "").toLowerCase();
-                  let dmy = parseInt(filter.dummy, 10);
-                  this.recalculateTotals = true;
-                  return $.grep(tableData, row => {
-                    return (!property || row.Property.toLowerCase().indexOf(property) >= 0)
-                    && (!value || row.Value.toLowerCase().indexOf(value) >= 0)
-                    && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
-                    && (isNaN(dmy) || row.dummy === dmy);
-                  });
+                    //   console.debug("Filter: ", filter);
+                    let property = (filter.Property || "").toLowerCase();
+                    let value = (filter.Value || "").toLowerCase();
+                    let status = (filter.Status || "").toLowerCase();
+                    let dmy = parseInt(filter.dummy, 10);
+                    this.recalculateTotals = true;
+                    return $.grep(tableData, row => {
+                        return (!property || row.Property.toLowerCase().indexOf(property) >= 0)
+                            && (!value || row.Value.toLowerCase().indexOf(value) >= 0)
+                            && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
+                            && (isNaN(dmy) || row.dummy === dmy);
+                    });
                 }
-              };
+            };
 
             $(viewerContainer).jsGrid({
                 width: "579px",
@@ -964,7 +954,12 @@ function ComplianceReviewManager(complianceCheckManager,
                 rowClick: function (args) {
                     var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
                     var commentDiv = document.getElementById(_this.DetailedReviewRowCommentDiv);
-                    commentDiv.innerHTML = "Comment : <br>" + comment;
+                    if (comment) {
+                        commentDiv.innerHTML = "Comment : <br>" + comment;
+                    }
+                    else {
+                        commentDiv.innerHTML = "Comment : <br>";
+                    }
                 }
             });
 

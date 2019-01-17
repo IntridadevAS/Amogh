@@ -746,7 +746,14 @@ function ComparisonReviewManager(comparisonCheckManager,
                 rowClick: function (args) {
                     var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
                     var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+                  if(comment)
+                  {                   
                     commentDiv.innerHTML = "Comment : <br>" + comment;
+                  }
+                  else
+                  {
+                    commentDiv.innerHTML = "Comment : <br>";
+                  }
                 }
             });
 
@@ -896,10 +903,10 @@ function ComparisonReviewManager(comparisonCheckManager,
         var parentTable = document.getElementById("ComparisonDetailedReviewCell");
         parentTable.innerHTML = '';
 
-        if (row.cells[2].innerHTML.toLowerCase() === "no match") {
+        // if (row.cells[2].innerHTML.toLowerCase() === "no match") {
 
-            return;
-        }
+        //     return;
+        // }
 
         var reviewTableId = this.getReviewTableId(row);
 
@@ -918,14 +925,14 @@ function ComparisonReviewManager(comparisonCheckManager,
             for (var i = 0; i < componentsGroup.Components.length; i++) {
                 var component = componentsGroup.Components[i];
 
-                if (component.Status.toLowerCase() === "no match") {
-                    continue;
-                }
+                // if (component.Status.toLowerCase() === "no match") {
+                //     continue;
+                // }
 
                 var source1NameCell = row.getElementsByTagName("td")[0];
                 var source2NameCell = row.getElementsByTagName("td")[1];
 
-                if (component.SourceAName !== source1NameCell.innerHTML &&
+                if (component.SourceAName !== source1NameCell.innerHTML ||
                     component.SourceBName !== source2NameCell.innerHTML) {
                     continue;
                 }
@@ -977,7 +984,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     }
                     else if (i === 3) {
                         title = "Source B Property";
-                        name = "A_Property";
+                        name = "B_Property";
                     }
                     else if (i === 4) {
                         title = "Status";

@@ -126,12 +126,12 @@ function CheckManager() {
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Be_Number) {
-            if (isNaN(propertyValue) || propertyValue==="") {
+            if (isNaN(propertyValue) || propertyValue === "") {
                 result = false;
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Number) {
-            if (!isNaN(propertyValue) && propertyValue !=="") {
+            if (!isNaN(propertyValue) && propertyValue !== "") {
                 result = false;
             }
         }
@@ -141,7 +141,7 @@ function CheckManager() {
             }
         }
         else if (checkCaseMappingProperty.Rule === ComplianceCheckRulesEnum.Should_Not_Be_Text) {
-            if (/^[a-z]+$/i.test(propertyValue) || propertyValue==="") {
+            if (/^[a-z]+$/i.test(propertyValue) || propertyValue === "") {
                 result = false;
             }
         }
@@ -506,30 +506,51 @@ function CheckManager() {
             checkComponent = new CheckComponent(sourceComponentProperties.Name,
                 "",
                 sourceComponentProperties.SubComponentClass);
+
+
+            for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
+                // get check case mapping property object
+                var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
+                if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
+                    var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+
+                    var checkProperty = new CheckProperty(property.Name,
+                        property.Value,
+                        undefined,
+                        undefined,
+                        "",
+                        undefined,
+                        undefined);
+
+                    checkComponent.AddCheckProperty(checkProperty);
+                }
+            }
         }
         else {
             checkComponent = new CheckComponent("",
                 sourceComponentProperties.Name,
                 sourceComponentProperties.SubComponentClass);
-        }
 
-        for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
-            // get check case mapping property object
-            var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
-            if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
-                var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
+            for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
+                // get check case mapping property object
+                var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
+                if (sourceComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
+                    var property = sourceComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
 
-                var checkProperty = new CheckProperty(property.Name,
-                    property.Value,
-                    undefined,
-                    undefined,
-                    "",
-                    undefined,
-                    undefined);
+                    var checkProperty = new CheckProperty(undefined,
+                        undefined,
+                        property.Name,
+                        property.Value,
+                        "",
+                        undefined,
+                        undefined);
 
-                checkComponent.AddCheckProperty(checkProperty);
+                    checkComponent.AddCheckProperty(checkProperty);
+                }
             }
         }
+
+
 
         checkComponent.Status = "No Match";
         return checkComponent;
@@ -853,12 +874,12 @@ function CheckComponent(sourceAName,
 
     CheckComponent.prototype.restore = function (componentData) {
 
-        if (componentData.Status.toLowerCase() === "no match") {
-            // if component data having status as No match, there is no need 
-            // restore properties for this component
-            this.Status = "No Match";
-            return;
-        }
+        // if (componentData.Status.toLowerCase() === "no match") {
+        //     // if component data having status as No match, there is no need 
+        //     // restore properties for this component
+        //     this.Status = "No Match";
+        //     return;
+        // }
 
         for (var i = 0; i < componentData.CheckProperties.length; i++) {
             var checkPropertyData = componentData.CheckProperties[i];
@@ -873,6 +894,12 @@ function CheckComponent(sourceAName,
 
             checkProperty.Result = checkPropertyData.Result;
             this.AddCheckProperty(checkProperty);
+        }
+
+        if (componentData.Status.toLowerCase() === "no match") {
+            // if component data having status as No match, there is no need 
+            // restore properties for this component
+            this.Status = "No Match";
         }
     }
 }
