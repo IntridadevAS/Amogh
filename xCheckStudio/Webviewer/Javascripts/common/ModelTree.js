@@ -13,7 +13,7 @@ var xCheckStudio;
     (function (Ui) {
         var ModelTree = /** @class */ (function () {
             function ModelTree(elementId, viewer, sourceType) {
-                this._size = new Communicator.Point2(556, 300);
+                this._size = new Communicator.Point2(556, 364);
                 this._elementId = elementId;
                 this._viewer = viewer;
                 this.SourceType = sourceType;
@@ -639,7 +639,7 @@ var xCheckStudio;
     
                     $(viewerContainer).jsGrid({
                         width: "556px",
-                        height: "300px",  
+                        height: "364px",  
                         filtering: true,
                         sorting: true,
                         autoload: true,
@@ -731,7 +731,7 @@ var xCheckStudio;
                 
             // }
             container.style.width = "556px"
-            container.style.height = "300px"
+            container.style.height = "364px"
             container.style.margin = "0px"
             container.style.overflowX = "hide";
             container.style.overflowY = "scroll";
@@ -750,7 +750,7 @@ var xCheckStudio;
             if (containerId === "modelTree2") {
                 countBox = document.getElementById("SourceBComponentCount");
             }
-            countBox.innerText = "Count :" + modelBrowserTableRows.length;
+            countBox.innerText = "Count: " + modelBrowserTableRows.length;
         }
 
         ModelTree.prototype.addselectedRowsToArray = function (viewerContainer){

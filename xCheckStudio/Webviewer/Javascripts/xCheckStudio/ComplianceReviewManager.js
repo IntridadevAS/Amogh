@@ -605,25 +605,48 @@ function ComplianceReviewManager(complianceCheckManager,
                             cell.style.backgroundColor = "#B2BABB"
                         }
                     }
-                    var table = modelBrowserRow.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-                    table.focus();
-                    table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
+                    // var table = modelBrowserRow.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                    // table.focus();
+                    // table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
 
                     this.populateDetailedReviewTable(modelBrowserRow);
 
-                    var table;
-                    if (reviewTableId === "SourceAComplianceMainReviewCell") {
-                        table = document.getElementById("SourceAComplianceMainReviewTbody");
-                        table.focus();
-                        table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
+                    // var table;
+                    // if (reviewTableId === "SourceAComplianceMainReviewCell") {
+                    //     table = document.getElementById("SourceAComplianceMainReviewTbody");
+                    //     table.focus();
+                    //     table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
 
-                    }
-                    else if (reviewTableId === "SourceBComplianceMainReviewCell") {
-                        table = document.getElementById("SourceBComplianceMainReviewTbody");
-                        table.focus();
-                        table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
+                    // }
+                    // else if (reviewTableId === "SourceBComplianceMainReviewCell") {
+                    //     table = document.getElementById("SourceBComplianceMainReviewTbody");
+                    //     table.focus();
+                    //     table.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
 
-                    }
+                    // }
+
+                    var reviewTable = _this.SelectedComponentRow.offsetParent.offsetParent;
+                        reviewTable.scrollTop = modelBrowserRow.offsetTop - modelBrowserRow.offsetHeight;
+
+                        // var table = document.getElementById("ComparisonMainReviewTbody");
+                        // // table.focus();
+                        // table.scrollTop = reviewTable.offsetTop - reviewTable.offsetHeight;
+
+                        var mainReviewTableContainer = document.getElementById(_this.MainReviewTableContainer);
+                        if (!mainReviewTableContainer) {
+                            return;
+                        }
+
+                        var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
+                        for(var i =0; i < collapsibleClasses.length; i++)
+                        {
+                            var collapsibleClass = collapsibleClasses[i];
+                            if(collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText)
+                            {
+                                collapsibleClass.nextElementSibling.style.display = "none";
+                                collapsibleClass.className = "collapsible";
+                            }
+                        }
 
                     break;
 

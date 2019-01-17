@@ -531,9 +531,28 @@ function ComparisonReviewManager(comparisonCheckManager,
                             cell.style.backgroundColor = "#B2BABB"
                         }
 
-                        var table = document.getElementById("ComparisonMainReviewTbody");
-                        table.focus();
-                        table.scrollTop = reviewTableRow.offsetTop - reviewTableRow.offsetHeight;
+                        var reviewTable = _this.SelectedComponentRow.offsetParent.offsetParent;
+                        reviewTable.scrollTop = reviewTableRow.offsetTop - reviewTableRow.offsetHeight;
+
+                        // var table = document.getElementById("ComparisonMainReviewTbody");
+                        // // table.focus();
+                        // table.scrollTop = reviewTable.offsetTop - reviewTable.offsetHeight;
+
+                        var mainReviewTableContainer = document.getElementById(_this.MainReviewTableContainer);
+                        if (!mainReviewTableContainer) {
+                            return;
+                        }
+
+                        var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
+                        for(var i =0; i < collapsibleClasses.length; i++)
+                        {
+                            var collapsibleClass = collapsibleClasses[i];
+                            if(collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText)
+                            {
+                                collapsibleClass.nextElementSibling.style.display = "none";
+                                collapsibleClass.className = "collapsible";
+                            }
+                        }
 
                         this.populateDetailedReviewTable(reviewTableRow);
 
@@ -559,6 +578,14 @@ function ComparisonReviewManager(comparisonCheckManager,
                     margin: "0px",
                     rowClick: function (args) {
                         _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer);
+                        if(viewerContainer === "#viewerContainer1")
+                        {
+                            _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer2");
+                        }
+                        else if(viewerContainer === "#viewerContainer2"){
+                            _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
+                        }
+                        
                     }
                 });
 
@@ -862,8 +889,8 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         if (this.SelectedComponentRowFromSheetB) {
                             var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                            obj = Object.keys(this.checkStatusArrayA)
-                            var status = this.checkStatusArrayA[obj[0]][rowIndex]
+                            obj = Object.keys(this.checkStatusArrayB)
+                            var status = this.checkStatusArrayB[obj[0]][rowIndex]
                             var color = this.getRowHighlightColor(status);
                             for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
                                 cell = this.SelectedComponentRowFromSheetB.cells[j];

@@ -19,6 +19,11 @@ var xCheckStudio;
         ComponentIdentificationManager.RVMSourceMainClassProperty = "Intrida Data/Type";
         ComponentIdentificationManager.RVMSourceSubComponentClassProperty = "Intrida Data/Type";
 
+         // Excel data source
+         ComponentIdentificationManager.XLSSourceNameProperty = "Name";
+         ComponentIdentificationManager.XLSSourceMainClassProperty = "Category";
+         ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
+
         function getComponentIdentificationProperties(fileExtension) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
@@ -37,6 +42,13 @@ var xCheckStudio;
                     'name':ComponentIdentificationManager.RVMSourceNameProperty,
                     'mainCategory':ComponentIdentificationManager.RVMSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.RVMSourceSubComponentClassProperty
+                };
+            }
+            else if (fileExtension.toLowerCase() === "xls") {
+                properties = {
+                    'name':ComponentIdentificationManager.XLSSourceNameProperty,
+                    'mainCategory':ComponentIdentificationManager.XLSSourceMainClassProperty,
+                    'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
                 };
             }
 

@@ -16,18 +16,18 @@ function  drawLineChart(data,title_field,div, colorsArray)
     options.pointSize = 10;
     options.series= {
         0: { },
-        1: { lineDashStyle: [4, 2] },
-        2: { }
+        1: { },
+        2: {lineDashStyle: [4, 2]  }
       },
     // options.chartArea={left:"5%",top:"10%",width:'100%',height:'100%'}
     options.legend = "none";
-    if(div.id !== undefined)
-        {
-            LineChart = new google.visualization.LineChart(document.getElementById(div.id));  
-        }
-        else{
-            LineChart = new google.visualization.LineChart(document.getElementById(div.ma.id));  
-        }
+    // if(div.id !== undefined)
+    //     {
+            LineChart = new google.visualization.LineChart(document.getElementById(div));  
+        // }
+        // else{
+        //     LineChart = new google.visualization.LineChart(document.getElementById(div.ma.id));  
+        // }
     
     LineChart.draw(data, options);
 }

@@ -21,6 +21,25 @@ var xCheckStudio;
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
+        xCheckStudioInterface.prototype.getClassWiseComponents = function () {
+            var classwiseComponents = {};
+            var mainCategoryPropertyName = "MainComponentClass";
+            for (var i = 0; i < this.sourceProperties.length; i++) {
+                var property = this.sourceProperties[i];
+                if (property[mainCategoryPropertyName] in classwiseComponents) {
+                    // increment count of checked components for this main category
+                    classwiseComponents[property[mainCategoryPropertyName]] += 1;
+                }
+                else {
+                    // add checked components count for this main category
+                    classwiseComponents[property[mainCategoryPropertyName]] = 1;
+                }
+            }
+    
+    
+            return classwiseComponents;
+        }
+
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
             var _this = this;
 

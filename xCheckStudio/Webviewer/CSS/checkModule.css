@@ -719,7 +719,7 @@ div {
 }
 .module1 .group1 .line {
   background-color    : rgba(51, 51, 51, 1.0);
-  top                 : 336px;
+  top                 : 386px;
   height              : 1px;
   width               : 556px;
   position            : absolute;
@@ -732,7 +732,7 @@ div {
 }
 .module1 .group1 .checkallswitch {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 352px;
+  top                 : 392px;
   height              : 24px;
   width               : 251px;
   position            : absolute;
@@ -754,7 +754,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -762,7 +762,7 @@ div {
 
 .module1 .group1 .checkall {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 305px;
+  top                 : 364px;
   height              : auto;
   width               : auto;
   position            : absolute;
@@ -772,7 +772,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -830,7 +830,7 @@ div {
 }
 .module1 .group1 .complianceswitch {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 399px;
+  top                 : 423px;
   height              : 24px;
   width               : 251px;
   position            : absolute;
@@ -852,7 +852,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -945,7 +945,7 @@ div {
 }
 .module1 .group1 .info {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 359px;
+  top                 : 395px;
   height              : 51px;
   width               : 51px;
   position            : absolute;
@@ -1012,7 +1012,7 @@ div {
 }
 .module1 .group2 .line {
   background-color    : rgba(51, 51, 51, 1.0);
-  top                 : 336px;
+  top                 : 386px;
   height              : 1px;
   width               : 556px;
   position            : absolute;
@@ -1025,7 +1025,7 @@ div {
 }
 .module1 .group2 .checkallswitch {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 352px;
+  top                 : 392px;
   height              : 24px;
   width               : 251px;
   position            : absolute;
@@ -1047,14 +1047,14 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
 }
 .module1 .group2 .checkall {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 305px;
+  top                 : 365px;
   height              : auto;
   width               : auto;
   /* position            : absolute; */
@@ -1064,7 +1064,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -1122,7 +1122,7 @@ div {
 }
 .module1 .group2 .complianceswitch {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 399px;
+  top                 : 423px;
   height              : 24px;
   width               : 251px;
   position            : absolute;
@@ -1144,7 +1144,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -1237,7 +1237,7 @@ div {
 }
 .module1 .group2 .info {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 359px;
+  top                 : 395px;
   height              : 51px;
   width               : 51px;
   position            : absolute;
@@ -1958,9 +1958,9 @@ div {
   opacity             : 0.99;
 }
 .module1 .group32 .bg1 {
-  background-color    : rgba(255,255,255,0.0);
+  background-color    : #F0EDF1;
   top                 : 50px;
-  height              : 430px;
+  height              : 380px;
   box-sizing          : border-box;
   width               : 601px;
   position            : absolute;

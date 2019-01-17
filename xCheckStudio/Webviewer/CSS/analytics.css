@@ -642,14 +642,15 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 81px;
+  left                : 84px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 36.0px;
+  font-size           : 26.0px;
   color               : rgba(236, 30, 37, 1.0);
-  text-align          : left;
+  text-align          : center;
+  line-height: 2;
 }
 .a011 .block1 .a30 {
   background-color    : rgba(255,255,255,0.0);
@@ -658,14 +659,15 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 301px;
+  left                : 303px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 36.0px;
+  font-size           : 26.0px;
   color               : rgba(246, 167, 36, 1.0);
-  text-align          : left;
+  text-align          : center;
+  line-height: 2;
 }
 .a011 .block1 .a10 {
   background-color    : rgba(255,255,255,0.0);
@@ -674,14 +676,15 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 522px;
+  left                : 524px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 36.0px;
+  font-size           : 26.0px;
   color               : rgba(129, 212, 35, 1.0);
-  text-align          : left;
+  text-align          : center;
+  line-height: 2;
 }
 .a011 .block1 .errors {
   background-color    : rgba(255,255,255,0.0);
@@ -1690,7 +1693,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 78px;
+  left                : 100px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -1709,7 +1712,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 78px;
+  left                : 100px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -1728,7 +1731,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 78px;
+  left                : 100px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -1747,7 +1750,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 78px;
+  left                : 100px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -1773,7 +1776,7 @@ div {
   font-family         : "Roboto", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 30.0px;
+  font-size           : 20.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 39.0px;
@@ -1792,7 +1795,7 @@ div {
   font-family         : "Roboto", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 30.0px;
+  font-size           : 20.0px;
   color               : rgba(236, 30, 37, 1.0);
   text-align          : left;
   line-height         : 39.0px;
@@ -1811,7 +1814,7 @@ div {
   font-family         : "Roboto", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 30.0px;
+  font-size           : 20.0px;
   color               : rgba(246, 167, 36, 1.0);
   text-align          : left;
   line-height         : 39.0px;
@@ -1830,7 +1833,7 @@ div {
   font-family         : "Roboto", Helvetica, Arial, serif;
   font-weight         : 400;
   font-style          : normal;
-  font-size           : 30.0px;
+  font-size           : 20.0px;
   color               : rgba(129, 212, 35, 1.0);
   text-align          : left;
   line-height         : 39.0px;

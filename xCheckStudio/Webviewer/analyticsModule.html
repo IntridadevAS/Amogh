@@ -201,10 +201,10 @@
                 </div>
                 <div id="ComplianceTab" class="AnalyticsResultsContainerTab" style="display: none">
                     <button class="ComplianceA" id="compare" onclick="openSourceComplianceChartTab('ComplianceATab');">
-                        A
+                        1
                     </button>
                     <button class="ComplianceB" id="compliance" onclick="openSourceComplianceChartTab('ComplianceBTab');">
-                        B
+                        2
                     </button>
                     <div id="ComplianceATab" class="AnalyticsComplianceResultsContainerTab" style="display: none">
                         <img anima-src="/images/Analytics/01-1-rectangle-copy-15@2x.png" class="rectanglecopy15" src="/images/Analytics/01-1-rectangle-copy-15@2x.png" />
@@ -393,9 +393,9 @@
                 </div>
                 <div class="a37" id="a37Info">
                 </div>
-                <div class="a18" id="a18Info">
+                <div class="a18" id="a18Info"  style="color: #839192">
                 </div>
-                <div class="a13" id="a13Info">
+                <div class="a13" id="a13Info"  style="color: #AFD3C5">
                 </div>
                 <div class="summary">
                     Summary
@@ -417,16 +417,22 @@
             document.getElementById("checkCase1").innerHTML = "CheckCase " + checkCase;
 
             var source1 = AnalyticsData.SourceBName;
-            fileName1 = source1.split(".");
-            document.getElementById("dataSource1").innerHTML = fileName1[0];
-            document.getElementById("dataSource1").style.fontSize = "11px"
-            document.getElementById("extension1").innerHTML = fileName1[1];
+            if(source1 !== undefined){
+                fileName1 = source1.split(".");
+                document.getElementById("dataSource1").innerHTML = fileName1[0];
+                document.getElementById("dataSource1").style.fontSize = "11px"
+                document.getElementById("extension1").innerHTML = fileName1[1];
+            }
 
             var source2 = AnalyticsData.SourceAName;
-            fileName2 = source2.split(".");
-            document.getElementById("dataSource2").innerHTML = fileName2[0];
-            document.getElementById("dataSource2").style.fontSize = "11px";
-            document.getElementById("extension2").innerHTML = fileName2[1];
+            if(source2 !== undefined)
+            {
+                fileName2 = source2.split(".");
+                document.getElementById("dataSource2").innerHTML = fileName2[0];
+                document.getElementById("dataSource2").style.fontSize = "11px";
+                document.getElementById("extension2").innerHTML = fileName2[1];
+            }
+            
 
             //load comparison pie chart default
             var currentDiv = document.getElementById("compare");
@@ -442,9 +448,10 @@
 
             //load severity line chart 
             document.getElementById("SeverityTab").style.display = "block";
-            analyticsManager.drawLineCharts();
-
-
+            if(typeof ComparisonCheckData !== 'undefined')
+            {
+                analyticsManager.drawLineCharts();
+            }
         }
 
         function getData(newData) {
@@ -512,7 +519,7 @@
                 otherDiv.style.fontSize = "18px";
                 otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
 
-                document.getElementById("PieChartTab").style.display = "block";
+                document.getElementById("PieChartTabInfo").style.display = "block";
                 analyticsManager.drawInfoPieCharts("comparison");
             }
         }
@@ -562,7 +569,7 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                // analyticsManager.drawInfoBarCharts("comparisonInfo");
+                analyticsManager.drawInfoBarCharts("comparison");
             }
             if (tabName === "PieChartTabInfo") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -701,6 +708,16 @@
             for (var i = 0; i < tabs.length; i++) {
                 tabs[i].style.display = "none";
             }
+            var tabs = document.getElementsByClassName("AnalyticsResultsContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+
+            
             document.getElementById(tabName).style.display = "block";
             if (tabName === "SeverityTab") {
                 var currentDiv = document.getElementById("severity1");
@@ -751,6 +768,8 @@
                 document.getElementById("PieChartTabInfo").style.display = "block";
 
                 analyticsManager.drawInfoPieCharts("comparison");
+                document.getElementById("InfoTab").style.display = "block";
+                analyticsManager.drawInfoLineCharts();
             }
 
         }

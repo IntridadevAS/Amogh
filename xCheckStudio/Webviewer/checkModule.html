@@ -1985,7 +1985,16 @@
     <!-- Scripts -->
     <script>
         function AnalyticsData(checkCaseName,
-            sourceAName, sourceBName, sourceATotalItemCount, sourceACheckedItemCount, sourceBTotalItemCount, sourceBCheckedItemCount) {
+                               sourceAName, 
+                               sourceBName, 
+                               sourceATotalItemCount, 
+                               sourceACheckedItemCount, 
+                               sourceBTotalItemCount, 
+                               sourceBCheckedItemCount, 
+                               sourceAClasswiseCheckedComponents,
+                               sourceBClasswiseCheckedComponents,
+                               sourceAClassWiseComponets,
+                               sourceBClassWiseComponets) {
             this.CheckCaseName = checkCaseName;
             this.SourceAName = sourceAName;
             this.SourceBName = sourceBName;
@@ -1993,6 +2002,10 @@
             this.SourceACheckedItemCount = sourceACheckedItemCount;
             this.SourceBTotalItemCount = sourceBTotalItemCount;
             this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
         }
 
         var xCheckStudioInterface1;
@@ -2003,13 +2016,11 @@
         var checkCaseName;
         var sourceAFileName;
         var sourceBFileName;
-        var sourceATotalItemCount;
-        var sourceACheckedItemCount;
-        var sourceBTotalItemCount;
-        var sourceBCheckedItemCount;
-        var sourceAClasswiseCheckedComponents;
-        var sourceBClasswiseCheckedComponents;
-
+        var sourceATotalItemCount = 0;
+        var sourceACheckedItemCount = 0;
+        var sourceBTotalItemCount = 0;
+        var sourceBCheckedItemCount = 0;
+       
         var hiidenEntities = [];
 
         document.addEventListener("contextmenu", function (e) {
@@ -2116,6 +2127,7 @@
 
             //delete checkResultsArray from local storage
             delete (localStorage["CheckResultArray"]);
+            delete(localStorage["CheckResultArrayInfo"])
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
@@ -2337,16 +2349,21 @@
 
             checkCaseName = checkCaseManager.CheckCase.Name;
 
+            var sourceAClasswiseCheckedComponents = 0;
+            var sourceBClasswiseCheckedComponents = 0;
+
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
                 if (xCheckStudioInterface1._modelTree !== undefined) {
                     sourceAModelTree = xCheckStudioInterface1._modelTree;
                     // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
                     // sourceACheckedItemCount = count > 0 ? count : 0;
                 }
                 else if (xCheckStudioInterface1.excelReader !== undefined) {
                     sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
+                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
                     // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
                     // sourceACheckedItemCount = count > 0 ? count : 0;
                 }
@@ -2355,31 +2372,41 @@
             if (xCheckStudioInterface2) {
                 if (xCheckStudioInterface2._modelTree !== undefined) {
                     sourceBModelTree = xCheckStudioInterface2._modelTree;
+                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
                     // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
                     // sourceBCheckedItemCount = count > 0 ? count : 0;
                 }
 
                 else if (xCheckStudioInterface2.excelReader !== undefined) {
                     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
+                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
                     // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
                     // sourceBCheckedItemCount = count > 0 ? count : 0;
                 }
             }
 
+            var sourceAClassWiseComponets = 0;
+            var sourceBClassWiseComponets = 0;
+
             if (sourceAModelTree) {
                 var count = sourceAModelTree.selectedCompoents.length;
                 sourceACheckedItemCount = count > 0 ? count : 0;
-                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
             }
             if (sourceBModelTree) {
                 var count = sourceBModelTree.selectedCompoents.length;
                 sourceBCheckedItemCount = count > 0 ? count : 0;
-                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+                sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+                // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
             }
 
             var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName,
-                sourceATotalItemCount, sourceACheckedItemCount,
-                sourceBTotalItemCount, sourceBCheckedItemCount);
+                                                        sourceATotalItemCount, sourceACheckedItemCount,
+                                                        sourceBTotalItemCount, sourceBCheckedItemCount, 
+                                                        sourceAClasswiseCheckedComponents,
+                                                        sourceBClasswiseCheckedComponents,
+                                                        sourceAClassWiseComponets,
+                                                        sourceBClassWiseComponets);
 
             $.ajax({
                 url: 'postData/analyticsDetailsDataWriter.php',
