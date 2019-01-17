@@ -34,12 +34,10 @@ var xCheckStudio;
 
             viewer.start();
 
-            var excelSheetParentContainer = document.getElementById("dataSourceViewer") ;
-            for(var i = 0; i < excelSheetParentContainer.childElementCount; i++)
-            {
+            var excelSheetParentContainer = document.getElementById("dataSourceViewer");
+            for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
                 currentChild = excelSheetParentContainer.children[i];
-                if(currentChild.className === "viewdatagraphics" )
-                {
+                if (currentChild.className === "viewdatagraphics") {
                     currentChild.style.display = "none";
                 }
             }
@@ -83,7 +81,7 @@ var xCheckStudio;
                         var sel = selection.getSelection();
 
                         if (_this._selectedNodeId !== sel.getNodeId()) {
-                            _this._onSelection(selection);                            
+                            _this._onSelection(selection);
                         }
                     }
                 },
@@ -92,7 +90,7 @@ var xCheckStudio;
                     //alert("contextMenu: " + position.x + ", " + position.y);                
                     // _this.menu(position.x, position.y);
                     currentViewer = viewer;
-                    _this.menu(event.clientX, event.clientY);                   
+                    _this.menu(event.clientX, event.clientY);
                 }
             });
 
@@ -324,14 +322,6 @@ var xCheckStudio;
                             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
                                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
                             }
-
-                            // _this.asyncLoop(_this._modelTree.NodeGroups, function () {
-                            //     //do after loop  
-                            //     alert('loop executed');
-                            // });
-
-
-
                         }
                     });
                 }
@@ -339,63 +329,17 @@ var xCheckStudio;
 
         };
 
+        xCheckStudioInterface.prototype.getModelBrowser = function () {
+            if (this._modelTree !== undefined) {
+                return this._modelTree;
+            }
+            else if (this.excelReader !== undefined &&
+                this.excelReader.excelModelBrowser !== undefined) {
+                return this.excelReader.excelModelBrowser;
+            }
 
-        // xCheckStudioInterface.prototype.asyncLoop = function (arr, callback) {
-        //     var _this = this;
-        //     (function loop(i) {
-        //         //do stuff here  
-        //         _this._modelTree.CreateGroup(arr[i]);
-
-        //         if (i < arr.length) {                      //the condition
-        //             setTimeout(function () { loop(++i) }, 0.0000005); //rerun when condition is true
-        //         }
-        //         else {
-        //             callback();                            //callback when the loop ends
-        //         }
-        //     }(0));                                         //start with 0
-        // }
-
-
-        // //var backGroundWorker;
-        // xCheckStudioInterface.prototype.createModelBrowser = function () {
-        //     var _this = this;
-        //     var backGroundWorker = new Worker('Javascripts/xCheckStudio/BackgroundWorker.js');
-
-        //     var modelTree = JSON.parse(JSON.stringify(this._modelTree));
-        //     var viewer = JSON.parse(JSON.stringify(this._firstViewer));
-        //     backGroundWorker.postMessage({ 'Tree': modelTree, 'Viewer': viewer });
-
-        //     // if (typeof (Worker) !== "undefined") {
-        //     //     var backGroundWorker = new Worker('BackgroundWorker.js');
-
-        //     //     if (typeof (backGroundWorker) == "undefined") {
-        //     //         backGroundWorker = new Worker(function () {
-        //     //             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
-        //     //             _this._modelTree.addClassesToModelBrowser();
-        //     //             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
-        //     //                 _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
-        //     //             }
-        //     //         });
-        //     //     }
-        //     //     backGroundWorker.onmessage = function (event) {
-        //     //         alert(event.data);
-        //     //     };
-        //     // }
-        //     // else {
-        //     //     alert("Sorry, your browser does not support Web Workers...");
-        //     // }
-
-
-        //     // return new Promise(function (resolve, reject) {
-        //     //     _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
-        //     //     _this._modelTree.addClassesToModelBrowser();
-        //     //     for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
-        //     //         _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
-        //     //     }
-
-        //     //     resolve(true);
-        //     // });
-        // };
+            return undefined;
+        }
 
         return xCheckStudioInterface;
     }());
