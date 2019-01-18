@@ -592,10 +592,11 @@ function CheckManager() {
                         property.Value,
                         undefined,
                         undefined,
-                        "",
+                        "No Match",
                         undefined,
                         undefined);
 
+                        checkProperty.performCheck = false;
                     checkComponent.AddCheckProperty(checkProperty);
                 }
             }
@@ -615,10 +616,11 @@ function CheckManager() {
                         undefined,
                         property.Name,
                         property.Value,
-                        "",
+                        "No Match",
                         undefined,
                         undefined);
 
+                        checkProperty.performCheck = false;
                     checkComponent.AddCheckProperty(checkProperty);
                 }
             }
@@ -959,6 +961,7 @@ function CheckProperty(sourceAName,
     severity,
     performCheck,
     description) {
+    
     this.SourceAName = sourceAName;
     this.SourceAValue = sourceAValue;
     this.SourceBName = sourceBName;
