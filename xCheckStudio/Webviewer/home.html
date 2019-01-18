@@ -457,13 +457,12 @@
             // return false;
 			// // alert("Check Clicked");
 		}
-		function OnPrepCliked()
-		{
-			alert("Prep Clicked");
-		}
+		
 		function OnReviewClicked()
 		{
-			alert("Review Clicked");
+			var modal = document.getElementById('projectselectiondialogModal');
+            modal.style.display = "block";
+            $('#projectselectiondialog-content').load("/reviewprojectselectiondialog.html")
 		}
 		window.onload = function () {
 			var username = getCookie("username");
