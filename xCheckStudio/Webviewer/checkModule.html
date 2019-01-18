@@ -11,6 +11,7 @@
     <link href="CSS\checkModule.css" rel="stylesheet" type="text/css" />
 	<link href="CSS\comparecompletedialog.css" rel="stylesheet" type="text/css" />
 	<link href="CSS\toast.css" rel="stylesheet" type="text/css" />
+	<link href="CSS\checkinfo.css" rel="stylesheet" type="text/css"/>
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
     <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
@@ -256,6 +257,63 @@
 						</div>
              </div>
          </div>
+    </div>
+	
+	<div class="checkinfo" id="checkinfo">
+            <div style="width: 682px; height: 392px; position:relative; margin:auto;">
+                <div class="projectcreationdialoggroup">
+                    <div class="bg">
+                    </div>
+                    <div class="properties">
+                        
+                        <div class="properties1">
+							<div class="bg1"> </div>
+							<div class="header"> Source 1 </div>
+							<div class="properties1Key1" id="infoproperties1Key1"> Total </div>
+							<div class="properties1val1" id="infoproperties1val1"> 256 </div>
+							<div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
+							<div class="properties1val2" id="infoproperties1val2"> 200 </div>
+                        </div>
+						
+                        <div class="footer">
+                        </div>   
+						
+						<div class="properties2">
+							<div class="bg2"> </div>
+							<div class="header"> Source 2 </div>
+							<div class="properties2Key1" id="infoproperties2Key1"> Total </div>
+							<div class="properties2val1" id="infoproperties2val1"> 300 </div>
+							<div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
+							<div class="properties2val2" id="infoproperties2val2"> 200 </div>
+                        </div>
+						
+						<div class="properties3">
+							<div class="bg3"> </div>
+							<div class="properties3Key" id="infoproperties3Key"> Check Case </div>
+							<div class="properties3val" id="infoproperties3val"> XML_To_XML </div>
+                        </div>
+						
+                        <div class="footer">
+                        </div> 
+                                                
+                        <!--<a href="/createproject.html">-->
+                            <div class="cancelbtn" onclick="OnInfoClose()" onMouseOver="this.style.cursor='pointer'">
+                                <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
+                                <div class="cancel">
+                                    OK
+                                </div>
+                            </div>
+                        <!--</a>-->
+                    </div>
+                    <div class="header">
+                        <div class="bg1">
+                        </div>
+                        <div class="newproject">
+                            Check Info
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
 	
     <input id="anPageName" name="page" type="hidden" value="module1" />
@@ -902,7 +960,7 @@
                     <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
                 </div>
-                <div class="info">
+                <div class="info" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                 </div>
@@ -1464,7 +1522,7 @@
                     <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
                 </div>
-                <div class="info">
+                <div class="info" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                 </div>
@@ -3594,8 +3652,7 @@
             window.location = "/module2.html";
         }
 		
-		function OnShowToast(text)
-		{
+		function OnShowToast(text){
 			document.getElementById("toast").style.display = "block";
 			if($('#toast').is(':visible')){
 				document.getElementById("toasttext").innerHTML = text;
@@ -3604,6 +3661,20 @@
 					$('#toast').delay(2500).fadeOut(); 
 				});
 			}
+		}
+		
+		function OnInfoClick(){
+			document.getElementById("checkinfo").style.display = "block";
+			
+			/*document.getElementById("infoproperties1val1").innerHTML = "";
+			document.getElementById("infoproperties1val2").innerHTML = "";
+			
+			document.getElementById("infoproperties2val1").innerHTML = "";
+			document.getElementById("infoproperties2val2").innerHTML = "";*/
+		}
+		
+		function OnInfoClose(){
+			document.getElementById("checkinfo").style.display = "none";
 		}
     </script>
     <!-- End of Scripts -->
