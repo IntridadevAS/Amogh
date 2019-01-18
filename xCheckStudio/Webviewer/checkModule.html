@@ -9,6 +9,8 @@
     <meta content="width=1280, maximum-scale=1.0" name="viewport" />
     <link href="CSS\loadDataDialog.css" rel="stylesheet" type="text/css" />
     <link href="CSS\checkModule.css" rel="stylesheet" type="text/css" />
+	<link href="CSS\comparecompletedialog.css" rel="stylesheet" type="text/css" />
+	<link href="CSS\toast.css" rel="stylesheet" type="text/css" />
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
     <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
@@ -197,8 +199,7 @@
     </style>
 </head>
 
-<body style="margin: 0;
- background: rgba(255, 255, 255, 1.0);">
+<body style="margin: 0; background: rgba(255, 255, 255, 1.0);">
     <div id="divLoading">
     </div>
 
@@ -217,7 +218,46 @@
             <img /> Stop Explode <span>Ctrl + ?!</span>
         </a>
     </div>
-
+	<div class="toast" id="toast">
+	<div style="width: 100%; height: 100%; position:relative; margin:auto;">
+             <div class="group">
+				<div class="toasttext" id="toasttext"> Hello Rahul</div>
+			 </div>
+	</div>
+	</div>
+	<div class="newprojectcreationdialog" id="checkcompletealert">
+        <div style="width: 100%; height: 100%; position:relative; margin:auto;">
+             <div class="projectcreationdialoggroup">
+                 <div class="bg"> </div>
+                 
+						<div class="textfieldfunction">Check completed successfully.</br>Do you want to view results?</div>
+                    
+						<div class="cancelbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
+							<div class="bg2"></div>
+                           <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2"/>
+                           <div class="cancel">
+                               No
+							</div>
+						</div>
+                    
+						<div class="createbtn" onclick="reviewresults()" onMouseOver="this.style.cursor='pointer'">
+							<img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2"/>
+							<div class="create">
+								Yes
+							</div>
+						</div>
+		
+						<div class="header">
+							<div class="bg1">
+							</div>
+							<div class="newproject">
+								Check Complete
+							</div>
+						</div>
+             </div>
+         </div>
+    </div>
+	
     <input id="anPageName" name="page" type="hidden" value="module1" />
     <div class="module1" controls id="fullscreen">
         <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
@@ -2110,7 +2150,7 @@
         }
 
         window.onload = function () {
-
+			
             // disable controls on load
             disableControlsOnLoad();
 
@@ -2143,7 +2183,8 @@
                 if (checkCaseSelect.value === "None") {
                     // hide busy spinner
                     busySpinner.classList.remove('show');
-                    alert("Please select check case from list.")
+                    //alert("Please select check case from list.")
+					OnShowToast('Please select check case from list.');
                     return;
                 }
 
@@ -2156,8 +2197,8 @@
                     !complianceSourceBCB.classList.contains("state1")) {
                     // hide busy spinner
                     busySpinner.classList.remove('show');
-
-                    alert("No selected check type found. Please select check type.");
+					OnShowToast('No selected check type found.</br>Please select check type.');
+                    //alert("No selected check type found. Please select check type.");
                     return;
                 }
 
@@ -2183,8 +2224,9 @@
                             // check if there are no selected components
                             if (sourceAModelBrowser.selectedCompoents.length === 0 &&
                                 sourceBModelBrowser.selectedCompoents.length === 0) {
-                                alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
-                                continue;
+                                //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
+                                OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
+								continue;
                             }
 
                             if (!comparisonCheckManager) {
@@ -2215,8 +2257,9 @@
                                         }
 
                                         if (sourceAModelBrowser.selectedCompoents.length === 0) {
-                                            alert("Compliance check on Source A can not be performed.\nNo selected components found.");
-                                            //continue;
+                                            //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+                                            OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
+											//continue;
                                         }
                                         else {
                                             if (!sourceAComplianceCheckManager) {
@@ -2250,8 +2293,10 @@
                                         }
 
                                         if (sourceBModelBrowser.selectedCompoents.length === 0) {
-                                            alert("Compliance check on Source B can not be performed.\nNo selected components found.");
+                                            //alert("Compliance check on Source B can not be performed.\nNo selected components found.");
                                             //continue;
+											
+											OnShowToast('Compliance check on Source B can not be performed.</br>No selected components found.');
                                         }
                                         else {
                                             if (!sourceBComplianceCheckManager) {
@@ -2274,25 +2319,10 @@
                 }
                 // hide busy spinner
                 busySpinner.classList.remove('show');
-
                 if (!checkPerformed) {
                     return;
                 }
-
-                var result = confirm("Check complete.\nView results?");
-                if (result) {
-                    // OK clicked
-                    postData();
-                    // window.location = "/reviewModule.html";
-                    window.location = "/module2.html";
-                    return false;
-                }
-                else {
-                    // Cancel clicked
-                    sourceAComplianceCheckManager = undefined;
-                    sourceBComplianceCheckManager = undefined;
-                    comparisonCheckManager = undefined;
-                }
+				document.getElementById("checkcompletealert").style.display = "block";
             };
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
@@ -2831,7 +2861,8 @@
                 xhr.open("POST", "uploads/uploadfiles.php", true);
                 xhr.onload = function (event) {
                     alert("The server says: " + event.target.response);
-                    if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
+                    //ShowToast('The server says: Success');
+					if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
                         document.getElementById(dataSource).disabled = true;
                     }
                     else {
@@ -3507,6 +3538,29 @@
         function clearData() {
             window.location.reload();
         }
+		function cancelreviewresults(){
+			sourceAComplianceCheckManager = undefined;
+            sourceBComplianceCheckManager = undefined;
+            comparisonCheckManager = undefined;
+			document.getElementById("checkcompletealert").style.display = "none";
+		}
+		
+		function reviewresults(){
+            postData();
+            window.location = "/module2.html";
+        }
+		
+		function OnShowToast(text)
+		{
+			document.getElementById("toast").style.display = "block";
+			if($('#toast').is(':visible')){
+				document.getElementById("toasttext").innerHTML = text;
+				$('#toast').fadeIn('slow', function(){
+					
+					$('#toast').delay(2500).fadeOut(); 
+				});
+			}
+		}
     </script>
     <!-- End of Scripts -->
 </body>
