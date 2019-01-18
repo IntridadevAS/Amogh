@@ -31,14 +31,14 @@ body {
     color: #555;
     text-decoration: none;
     padding: 6px 8px 6px 30px;
-    width: 250px;
+    width: 150px;
     position: relative;
   }
   
   #menu a img,
   #menu a i.fa {
     height: 20px;
-    font-size: 17px;
+    font-size: 8px;
     width: 20px;
     position: absolute;
     left: 5px;

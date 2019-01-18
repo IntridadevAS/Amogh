@@ -9,9 +9,9 @@
     <meta content="width=1280, maximum-scale=1.0" name="viewport" />
     <link href="CSS\loadDataDialog.css" rel="stylesheet" type="text/css" />
     <link href="CSS\checkModule.css" rel="stylesheet" type="text/css" />
-	<link href="CSS\comparecompletedialog.css" rel="stylesheet" type="text/css" />
-	<link href="CSS\toast.css" rel="stylesheet" type="text/css" />
-	<link href="CSS\checkinfo.css" rel="stylesheet" type="text/css"/>
+    <link href="CSS\comparecompletedialog.css" rel="stylesheet" type="text/css" />
+    <link href="CSS\toast.css" rel="stylesheet" type="text/css" />
+    <link href="CSS\checkinfo.css" rel="stylesheet" type="text/css" />
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
     <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
@@ -214,132 +214,132 @@
 
         <hr />
         <a href="#" onclick="setFront()">
-            <img /> Front <span>Ctrl + ?!</span>
+            Front <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setBack()">
-            <img /> Back <span>Ctrl + ?!</span>
+            Back <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setTop()">
-            <img /> Top <span>Ctrl + ?!</span>
+            Top <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setBottom()">
-            <img /> Bottom <span>Ctrl + ?!</span>
+            Bottom <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setRight()">
-            <img /> Right <span>Ctrl + ?!</span>
+            Right <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setLeft()">
-            <img /> Left <span>Ctrl + ?!</span>
+            Left <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="setISO()">
-            <img /> ISO <span>Ctrl + ?!</span>
+            ISO <span>Ctrl + ?!</span>
         </a>
         <hr />
 
         <a href="#" onclick="startExplode()">
-            <img /> Start Explode <span>Ctrl + ?!</span>
+            Start Explode <span>Ctrl + ?!</span>
         </a>
         <a href="#" onclick="stopExplode()">
-            <img /> Stop Explode <span>Ctrl + ?!</span>
+            Stop Explode <span>Ctrl + ?!</span>
         </a>
     </div>
-	<div class="toast" id="toast">
-	<div style="width: 100%; height: 100%; position:relative; margin:auto;">
-             <div class="group">
-				<div class="toasttext" id="toasttext"> Hello Rahul</div>
-			 </div>
-	</div>
-	</div>
-	<div class="newprojectcreationdialog" id="checkcompletealert">
+    <div class="toast" id="toast">
         <div style="width: 100%; height: 100%; position:relative; margin:auto;">
-             <div class="projectcreationdialoggroup">
-                 <div class="bg"> </div>
-                 
-						<div class="textfieldfunction">Check completed successfully.</br>Do you want to view results?</div>
-                    
-						<div class="cancelbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
-							<div class="bg2"></div>
-                           <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2"/>
-                           <div class="cancel">
-                               No
-							</div>
-						</div>
-                    
-						<div class="createbtn" onclick="reviewresults()" onMouseOver="this.style.cursor='pointer'">
-							<img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2"/>
-							<div class="create">
-								Yes
-							</div>
-						</div>
-		
-						<div class="header">
-							<div class="bg1">
-							</div>
-							<div class="newproject">
-								Check Complete
-							</div>
-						</div>
-             </div>
-         </div>
+            <div class="group">
+                <div class="toasttext" id="toasttext"> Hello Rahul</div>
+            </div>
+        </div>
     </div>
-	
-	<div class="checkinfo" id="checkinfo">
-            <div style="width: 682px; height: 392px; position:relative; margin:auto;">
-                <div class="projectcreationdialoggroup">
-                    <div class="bg">
+    <div class="newprojectcreationdialog" id="checkcompletealert">
+        <div style="width: 100%; height: 100%; position:relative; margin:auto;">
+            <div class="projectcreationdialoggroup">
+                <div class="bg"> </div>
+
+                <div class="textfieldfunction">Check completed successfully.</br>Do you want to view results?</div>
+
+                <div class="cancelbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
+                    <div class="bg2"></div>
+                    <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
+                    <div class="cancel">
+                        No
                     </div>
-                    <div class="properties">
-                        
-                        <div class="properties1">
-							<div class="bg1"> </div>
-							<div class="header"> Source 1 </div>
-							<div class="properties1Key1" id="infoproperties1Key1"> Total </div>
-							<div class="properties1val1" id="infoproperties1val1"> 256 </div>
-							<div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
-							<div class="properties1val2" id="infoproperties1val2"> 200 </div>
-                        </div>
-						
-                        <div class="footer">
-                        </div>   
-						
-						<div class="properties2">
-							<div class="bg2"> </div>
-							<div class="header"> Source 2 </div>
-							<div class="properties2Key1" id="infoproperties2Key1"> Total </div>
-							<div class="properties2val1" id="infoproperties2val1"> 300 </div>
-							<div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
-							<div class="properties2val2" id="infoproperties2val2"> 200 </div>
-                        </div>
-						
-						<div class="properties3">
-							<div class="bg3"> </div>
-							<div class="properties3Key" id="infoproperties3Key"> Check Case </div>
-							<div class="properties3val" id="infoproperties3val">  </div>
-                        </div>
-						
-                        <div class="footer">
-                        </div> 
-                                                
-                        <!--<a href="/createproject.html">-->
-                            <div class="cancelbtn" onclick="OnInfoClose()" onMouseOver="this.style.cursor='pointer'">
-                                <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
-                                <div class="cancel">
-                                    OK
-                                </div>
-                            </div>
-                        <!--</a>-->
+                </div>
+
+                <div class="createbtn" onclick="reviewresults()" onMouseOver="this.style.cursor='pointer'">
+                    <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
+                    <div class="create">
+                        Yes
                     </div>
-                    <div class="header">
-                        <div class="bg1">
-                        </div>
-                        <div class="newproject">
-                            Check Info
-                        </div>
+                </div>
+
+                <div class="header">
+                    <div class="bg1">
+                    </div>
+                    <div class="newproject">
+                        Check Complete
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-	
+
+    <div class="checkinfo" id="checkinfo">
+        <div style="width: 682px; height: 392px; position:relative; margin:auto;">
+            <div class="projectcreationdialoggroup">
+                <div class="bg">
+                </div>
+                <div class="properties">
+
+                    <div class="properties1">
+                        <div class="bg1"> </div>
+                        <div class="header"> Source 1 </div>
+                        <div class="properties1Key1" id="infoproperties1Key1"> Total </div>
+                        <div class="properties1val1" id="infoproperties1val1"> 256 </div>
+                        <div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
+                        <div class="properties1val2" id="infoproperties1val2"> 200 </div>
+                    </div>
+
+                    <div class="footer">
+                    </div>
+
+                    <div class="properties2">
+                        <div class="bg2"> </div>
+                        <div class="header"> Source 2 </div>
+                        <div class="properties2Key1" id="infoproperties2Key1"> Total </div>
+                        <div class="properties2val1" id="infoproperties2val1"> 300 </div>
+                        <div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
+                        <div class="properties2val2" id="infoproperties2val2"> 200 </div>
+                    </div>
+
+                    <div class="properties3">
+                        <div class="bg3"> </div>
+                        <div class="properties3Key" id="infoproperties3Key"> Check Case </div>
+                        <div class="properties3val" id="infoproperties3val"> </div>
+                    </div>
+
+                    <div class="footer">
+                    </div>
+
+                    <!--<a href="/createproject.html">-->
+                    <div class="cancelbtn" onclick="OnInfoClose()" onMouseOver="this.style.cursor='pointer'">
+                        <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
+                        <div class="cancel">
+                            OK
+                        </div>
+                    </div>
+                    <!--</a>-->
+                </div>
+                <div class="header">
+                    <div class="bg1">
+                    </div>
+                    <div class="newproject">
+                        Check Info
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input id="anPageName" name="page" type="hidden" value="module1" />
     <div class="module1" controls id="fullscreen">
         <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
@@ -1546,7 +1546,8 @@
                     <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
                 </div>
-                <div class="info" id="infobtn" onMouseOver="this.style.cursor='pointer'" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
+                <div class="info" id="infobtn" onMouseOver="this.style.cursor='pointer'" onclick="OnInfoClick()"
+                    onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                 </div>
@@ -2050,7 +2051,7 @@
                         <div class="header">
                             <div class="bg1">
                             </div>
-                            <a href="#" >
+                            <a href="#">
                                 <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close" id="closeLoadDialog" />
                             </a>
                             <div class="loaddata">
@@ -2107,16 +2108,16 @@
     <!-- Scripts -->
     <script>
         function AnalyticsData(checkCaseName,
-                               sourceAName, 
-                               sourceBName, 
-                               sourceATotalItemCount, 
-                               sourceACheckedItemCount, 
-                               sourceBTotalItemCount, 
-                               sourceBCheckedItemCount, 
-                               sourceAClasswiseCheckedComponents,
-                               sourceBClasswiseCheckedComponents,
-                               sourceAClassWiseComponets,
-                               sourceBClassWiseComponets) {
+            sourceAName,
+            sourceBName,
+            sourceATotalItemCount,
+            sourceACheckedItemCount,
+            sourceBTotalItemCount,
+            sourceBCheckedItemCount,
+            sourceAClasswiseCheckedComponents,
+            sourceBClasswiseCheckedComponents,
+            sourceAClassWiseComponets,
+            sourceBClassWiseComponets) {
             this.CheckCaseName = checkCaseName;
             this.SourceAName = sourceAName;
             this.SourceBName = sourceBName;
@@ -2142,7 +2143,7 @@
         var sourceACheckedItemCount = 0;
         var sourceBTotalItemCount = 0;
         var sourceBCheckedItemCount = 0;
-       
+
         var hiidenEntities = [];
 
         document.addEventListener("contextmenu", function (e) {
@@ -2196,7 +2197,7 @@
                 }
             }
         }
-  function setFront() {
+        function setFront() {
             if (currentViewer) {
                 currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
             }
@@ -2206,31 +2207,31 @@
                 currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Back, Communicator.DefaultTransitionDuration);
             }
         }
-            function setTop() {
-                if (currentViewer) {
-                    currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Top, Communicator.DefaultTransitionDuration);
-                }
+        function setTop() {
+            if (currentViewer) {
+                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Top, Communicator.DefaultTransitionDuration);
             }
-            function setBottom() {
-                if (currentViewer) {
-                    currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Bottom, Communicator.DefaultTransitionDuration);
-                }
+        }
+        function setBottom() {
+            if (currentViewer) {
+                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Bottom, Communicator.DefaultTransitionDuration);
             }
-            function setRight() {
-                if (currentViewer) {
-                    currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Right, Communicator.DefaultTransitionDuration);
-                }
+        }
+        function setRight() {
+            if (currentViewer) {
+                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Right, Communicator.DefaultTransitionDuration);
             }
-            function setLeft() {
-                if (currentViewer) {
-                    currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Left, Communicator.DefaultTransitionDuration);
-                }
+        }
+        function setLeft() {
+            if (currentViewer) {
+                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Left, Communicator.DefaultTransitionDuration);
             }
-            function setISO() {
-                if (currentViewer) {
-                    currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-                }
+        }
+        function setISO() {
+            if (currentViewer) {
+                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
             }
+        }
 
 
         function disableControlsOnLoad() {
@@ -2265,13 +2266,13 @@
             // disable check button            
             component = document.getElementById('checkButton');
             addClass(component, 'disabledbutton');
-			
-			component = document.getElementById('infobtn');
+
+            component = document.getElementById('infobtn');
             addClass(component, 'disabledbutton');
         }
 
         window.onload = function () {
-			
+
             // disable controls on load
             disableControlsOnLoad();
 
@@ -2288,7 +2289,7 @@
 
             //delete checkResultsArray from local storage
             delete (localStorage["CheckResultArray"]);
-            delete(localStorage["CheckResultArrayInfo"])
+            delete (localStorage["CheckResultArrayInfo"])
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
@@ -2305,7 +2306,7 @@
                     // hide busy spinner
                     busySpinner.classList.remove('show');
                     //alert("Please select check case from list.")
-					OnShowToast('Please select check case from list.');
+                    OnShowToast('Please select check case from list.');
                     return;
                 }
 
@@ -2318,7 +2319,7 @@
                     !complianceSourceBCB.classList.contains("state1")) {
                     // hide busy spinner
                     busySpinner.classList.remove('show');
-					OnShowToast('No selected check type found.</br>Please select check type.');
+                    OnShowToast('No selected check type found.</br>Please select check type.');
                     //alert("No selected check type found. Please select check type.");
                     return;
                 }
@@ -2347,7 +2348,7 @@
                                 sourceBModelBrowser.selectedCompoents.length === 0) {
                                 //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
                                 OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-								continue;
+                                continue;
                             }
 
                             if (!comparisonCheckManager) {
@@ -2380,7 +2381,7 @@
                                         if (sourceAModelBrowser.selectedCompoents.length === 0) {
                                             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
                                             OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-											//continue;
+                                            //continue;
                                         }
                                         else {
                                             if (!sourceAComplianceCheckManager) {
@@ -2416,8 +2417,8 @@
                                         if (sourceBModelBrowser.selectedCompoents.length === 0) {
                                             //alert("Compliance check on Source B can not be performed.\nNo selected components found.");
                                             //continue;
-											
-											OnShowToast('Compliance check on Source B can not be performed.</br>No selected components found.');
+
+                                            OnShowToast('Compliance check on Source B can not be performed.</br>No selected components found.');
                                         }
                                         else {
                                             if (!sourceBComplianceCheckManager) {
@@ -2443,7 +2444,7 @@
                 if (!checkPerformed) {
                     return;
                 }
-				document.getElementById("checkcompletealert").style.display = "block";
+                document.getElementById("checkcompletealert").style.display = "block";
             };
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
@@ -2506,8 +2507,8 @@
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
-               var browser=  xCheckStudioInterface1.getModelBrowser();
-               sourceAClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+                var browser = xCheckStudioInterface1.getModelBrowser();
+                sourceAClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
                 // if (xCheckStudioInterface1._modelTree !== undefined) {
                 //     sourceAModelTree = xCheckStudioInterface1._modelTree;
                 //     // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
@@ -2523,8 +2524,8 @@
             }
 
             if (xCheckStudioInterface2) {
-                var browser=  xCheckStudioInterface2.getModelBrowser();
-               sourceBClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+                var browser = xCheckStudioInterface2.getModelBrowser();
+                sourceBClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
                 // if (xCheckStudioInterface2._modelTree !== undefined) {
                 //     sourceBModelTree = xCheckStudioInterface2._modelTree;
                 //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
@@ -2556,12 +2557,12 @@
             }
 
             var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName,
-                                                        sourceATotalItemCount, sourceACheckedItemCount,
-                                                        sourceBTotalItemCount, sourceBCheckedItemCount, 
-                                                        sourceAClasswiseCheckedComponents,
-                                                        sourceBClasswiseCheckedComponents,
-                                                        sourceAClassWiseComponets,
-                                                        sourceBClassWiseComponets);
+                sourceATotalItemCount, sourceACheckedItemCount,
+                sourceBTotalItemCount, sourceBCheckedItemCount,
+                sourceAClasswiseCheckedComponents,
+                sourceBClasswiseCheckedComponents,
+                sourceAClassWiseComponets,
+                sourceBClassWiseComponets);
 
             $.ajax({
                 url: 'postData/analyticsDetailsDataWriter.php',
@@ -2874,7 +2875,7 @@
                 component = document.getElementById('infobtn');
                 if (component.classList.contains("disabledbutton")) {
                     component.classList.remove('disabledbutton');
-                }               
+                }
             }
             else if (isFirstDataSource === "false") {
                 modal = document.getElementById('projectselectiondialogModal');
@@ -2917,8 +2918,7 @@
                     modal.style.display = "none";
                 }
                 var closebutton = document.getElementById("closeLoadDialog");
-                if(event.target === closebutton)
-                {
+                if (event.target === closebutton) {
                     modal.style.display = "none";
                 }
                 var i = document.getElementById("menu").style;
@@ -2995,7 +2995,7 @@
                 xhr.onload = function (event) {
                     alert("The server says: " + event.target.response);
                     //ShowToast('The server says: Success');
-					if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
+                    if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
                         document.getElementById(dataSource).disabled = true;
                     }
                     else {
@@ -3013,18 +3013,18 @@
                     //     dataSource,
                     //     viewerContainer,
                     //     modelTreeContainer);
-                        loadExcelDataSource(fileExtension, file, dataSource,
+                    loadExcelDataSource(fileExtension, file, dataSource,
                         viewerContainer,
                         modelTreeContainer)
                 }
             }
         }
 
-        function loadExcelDataSource(fileExtension, 
-                                    file, 
-                                    dataSource,
-                                    viewerContainer,
-                                    modelTreeContainer){
+        function loadExcelDataSource(fileExtension,
+            file,
+            dataSource,
+            viewerContainer,
+            modelTreeContainer) {
             if (!checkCaseManager ||
                 !checkCaseManager.CheckCase) {
                 alert("CheckCaseManager not found.");
@@ -3045,23 +3045,23 @@
             }
 
             if (viewerContainer === "viewerContainer1") {
-                        if (!sourceAType ||
-                            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-                            alert("Data source type doesn't match with check case.");
-                            return false;
-                        }
-                    }
-                    else if (viewerContainer === "viewerContainer2") {
-                        if (!sourceBType ||
-                            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-                            alert("Data source type doesn't match with check case.");
-                            return false;
-                        }
-                    }
-                    readExcelDataSource(file,
-                        dataSource,
-                        viewerContainer,
-                        modelTreeContainer);
+                if (!sourceAType ||
+                    sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            else if (viewerContainer === "viewerContainer2") {
+                if (!sourceBType ||
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            readExcelDataSource(file,
+                dataSource,
+                viewerContainer,
+                modelTreeContainer);
 
         }
 
@@ -3237,23 +3237,23 @@
                         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") {
 
-                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,  
-                                                                                                                                        row.cells[modelBrowserMainClassColumn].textContent.trim());
-                           
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
+                                row.cells[modelBrowserMainClassColumn].textContent.trim());
+
                             var checkedComponent = {};
 
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-                            
+
                             // additional identifying properties for PipingNetwork segment component
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
-     
+
                             // additional identifying properties for Equipment component
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
-                          
+
                             if (checkBoxId === "checkAllSourceACB" &&
                                 xCheckStudioInterface1 &&
                                 !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {
@@ -3280,13 +3280,13 @@
                         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
 
-                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType, 
-                                                                                                                                        row.cells[modelBrowserMainClassColumn].textContent.trim());
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,
+                                row.cells[modelBrowserMainClassColumn].textContent.trim());
                             var checkedComponent = {};
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-                             
+
                             // additional identifying properties for PipingNetwork segment component
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
@@ -3715,32 +3715,32 @@
         function clearData() {
             window.location.reload();
         }
-		function cancelreviewresults(){
-			sourceAComplianceCheckManager = undefined;
+        function cancelreviewresults() {
+            sourceAComplianceCheckManager = undefined;
             sourceBComplianceCheckManager = undefined;
             comparisonCheckManager = undefined;
-			document.getElementById("checkcompletealert").style.display = "none";
-		}
-		
-		function reviewresults(){
+            document.getElementById("checkcompletealert").style.display = "none";
+        }
+
+        function reviewresults() {
             postData();
             window.location = "/module2.html";
         }
-		
-		function OnShowToast(text){
-			document.getElementById("toast").style.display = "block";
-			if($('#toast').is(':visible')){
-				document.getElementById("toasttext").innerHTML = text;
-				$('#toast').fadeIn('slow', function(){
-					
-					$('#toast').delay(2500).fadeOut(); 
-				});
-			}
-		}
-		
-		function OnInfoClick(){
+
+        function OnShowToast(text) {
+            document.getElementById("toast").style.display = "block";
+            if ($('#toast').is(':visible')) {
+                document.getElementById("toasttext").innerHTML = text;
+                $('#toast').fadeIn('slow', function () {
+
+                    $('#toast').delay(2500).fadeOut();
+                });
+            }
+        }
+
+        function OnInfoClick() {
             document.getElementById("checkinfo").style.display = "block";
-            
+
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
@@ -3788,22 +3788,22 @@
                 // sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
                 // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
             }
-            
-         
+
+
             document.getElementById("infoproperties1val1").innerHTML = document.getElementById("SourceAComponentCount").innerText;
-          
-			document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
-        
+
+            document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
+
             document.getElementById("infoproperties2val1").innerHTML = document.getElementById("SourceBComponentCount").innerText;
-         
+
             document.getElementById("infoproperties2val2").innerHTML = sourceBCheckedItemCount;
             document.getElementById("infoproperties3val").innerHTML = checkCaseManager.CheckCase.Name;
             //infoproperties3val
-		}
-		
-		function OnInfoClose(){
-			document.getElementById("checkinfo").style.display = "none";
-		}
+        }
+
+        function OnInfoClose() {
+            document.getElementById("checkinfo").style.display = "none";
+        }
     </script>
     <!-- End of Scripts -->
 </body>
