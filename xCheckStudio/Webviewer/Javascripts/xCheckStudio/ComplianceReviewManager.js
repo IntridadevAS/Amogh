@@ -79,7 +79,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
-                columnHeader["type"] = "text";
+                columnHeader["type"] = "textarea";
                 columnHeader["width"] = "20";
                 columnHeaders.push(columnHeader);
             }
@@ -104,7 +104,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
-                    columnHeader["type"] = "text";
+                    columnHeader["type"] = "textarea";
                     columnHeader["width"] = "0";
                     columnHeaders.push(columnHeader);
                 }
@@ -445,7 +445,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 columnHeader["name"] = sheetProperties[i].Name;
                 var type;
                 if (typeof (sheetProperties[i].Name) === "string") {
-                    type = "text";
+                    type = "textarea";
                 }
                 else if (typeof (sheetProperties[i].Name) === "number") {
                     type = "number";
@@ -867,7 +867,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
                     columnHeader["name"] = name;
                     columnHeader["title"] = title;
-                    columnHeader["type"] = "text";
+                    columnHeader["type"] = "textarea";
                     columnHeader["width"] = "30";
                     columnHeaders.push(columnHeader);
                 }

@@ -107,7 +107,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
-                columnHeader["type"] = "text";
+                columnHeader["type"] = "textarea";
                 columnHeader["width"] = width;
                 columnHeaders.push(columnHeader);
             }
@@ -128,7 +128,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         title = "OwnerId";
                     }
                     columnHeader["name"] = title;
-                    columnHeader["type"] = "text";
+                    columnHeader["type"] = "textarea";
                     columnHeader["width"] = "0";
                     columnHeaders.push(columnHeader);
                 }
@@ -408,7 +408,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeader["name"] = sheetProperties[i].Name;
                 var type;
                 if (typeof (sheetProperties[i].Name) === "string") {
-                    type = "text";
+                    type = "textarea";
                 }
                 else if (typeof (sheetProperties[i].Name) === "number") {
                     type = "number";
@@ -1021,7 +1021,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     }
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
-                    columnHeader["type"] = "text";
+                    columnHeader["type"] = "textarea";
                     columnHeader["width"] = "30";
                     columnHeader["filtering"] = "true";
                     columnHeaders.push(columnHeader);
