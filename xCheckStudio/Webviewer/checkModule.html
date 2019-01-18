@@ -314,7 +314,7 @@
 						<div class="properties3">
 							<div class="bg3"> </div>
 							<div class="properties3Key" id="infoproperties3Key"> Check Case </div>
-							<div class="properties3val" id="infoproperties3val"> XML_To_XML </div>
+							<div class="properties3val" id="infoproperties3val">  </div>
                         </div>
 						
                         <div class="footer">
@@ -2506,34 +2506,38 @@
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
-                if (xCheckStudioInterface1._modelTree !== undefined) {
-                    sourceAModelTree = xCheckStudioInterface1._modelTree;
-                    // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
-                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                    // sourceACheckedItemCount = count > 0 ? count : 0;
-                }
-                else if (xCheckStudioInterface1.excelReader !== undefined) {
-                    sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
-                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                    // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
-                    // sourceACheckedItemCount = count > 0 ? count : 0;
-                }
+               var browser=  xCheckStudioInterface1.getModelBrowser();
+               sourceAClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+                // if (xCheckStudioInterface1._modelTree !== undefined) {
+                //     sourceAModelTree = xCheckStudioInterface1._modelTree;
+                //     // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+                //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                //     // sourceACheckedItemCount = count > 0 ? count : 0;
+                // }
+                // else if (xCheckStudioInterface1.excelReader !== undefined) {
+                //     sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
+                //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
+                //     // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
+                //     // sourceACheckedItemCount = count > 0 ? count : 0;
+                // }
             }
 
             if (xCheckStudioInterface2) {
-                if (xCheckStudioInterface2._modelTree !== undefined) {
-                    sourceBModelTree = xCheckStudioInterface2._modelTree;
-                    sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                    // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
-                    // sourceBCheckedItemCount = count > 0 ? count : 0;
-                }
+                var browser=  xCheckStudioInterface2.getModelBrowser();
+               sourceBClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+                // if (xCheckStudioInterface2._modelTree !== undefined) {
+                //     sourceBModelTree = xCheckStudioInterface2._modelTree;
+                //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                //     // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
+                //     // sourceBCheckedItemCount = count > 0 ? count : 0;
+                // }
 
-                else if (xCheckStudioInterface2.excelReader !== undefined) {
-                    sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
-                    sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                    // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
-                    // sourceBCheckedItemCount = count > 0 ? count : 0;
-                }
+                // else if (xCheckStudioInterface2.excelReader !== undefined) {
+                //     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
+                //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
+                //     // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
+                //     // sourceBCheckedItemCount = count > 0 ? count : 0;
+                // }
             }
 
             var sourceAClassWiseComponets = 0;
@@ -3729,13 +3733,66 @@
 		}
 		
 		function OnInfoClick(){
-			document.getElementById("checkinfo").style.display = "block";
-			
-			/*document.getElementById("infoproperties1val1").innerHTML = "";
-			document.getElementById("infoproperties1val2").innerHTML = "";
-			
-			document.getElementById("infoproperties2val1").innerHTML = "";
-			document.getElementById("infoproperties2val2").innerHTML = "";*/
+            document.getElementById("checkinfo").style.display = "block";
+            
+            var sourceAModelTree;
+            var sourceBModelTree;
+            if (xCheckStudioInterface1) {
+                if (xCheckStudioInterface1._modelTree !== undefined) {
+                    sourceAModelTree = xCheckStudioInterface1._modelTree;
+                    // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
+                    // sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                    // sourceACheckedItemCount = count > 0 ? count : 0;
+                }
+                else if (xCheckStudioInterface1.excelReader !== undefined) {
+                    sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
+                    // sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
+                    // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
+                    // sourceACheckedItemCount = count > 0 ? count : 0;
+                }
+            }
+
+            if (xCheckStudioInterface2) {
+                if (xCheckStudioInterface2._modelTree !== undefined) {
+                    sourceBModelTree = xCheckStudioInterface2._modelTree;
+                    // sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                    // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
+                    // sourceBCheckedItemCount = count > 0 ? count : 0;
+                }
+
+                else if (xCheckStudioInterface2.excelReader !== undefined) {
+                    sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
+                    // sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
+                    // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
+                    // sourceBCheckedItemCount = count > 0 ? count : 0;
+                }
+            }
+
+            var sourceAClassWiseComponets = 0;
+            var sourceBClassWiseComponets = 0;
+
+            if (sourceAModelTree) {
+                var count = sourceAModelTree.selectedCompoents.length;
+                sourceACheckedItemCount = count > 0 ? count : 0;
+                // sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
+            }
+            if (sourceBModelTree) {
+                var count = sourceBModelTree.selectedCompoents.length;
+                sourceBCheckedItemCount = count > 0 ? count : 0;
+                // sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+                // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+            }
+            
+         
+            document.getElementById("infoproperties1val1").innerHTML = document.getElementById("SourceAComponentCount").innerText;
+          
+			document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
+        
+            document.getElementById("infoproperties2val1").innerHTML = document.getElementById("SourceBComponentCount").innerText;
+         
+            document.getElementById("infoproperties2val2").innerHTML = sourceBCheckedItemCount;
+            document.getElementById("infoproperties3val").innerHTML = checkCaseManager.CheckCase.Name;
+            //infoproperties3val
 		}
 		
 		function OnInfoClose(){
