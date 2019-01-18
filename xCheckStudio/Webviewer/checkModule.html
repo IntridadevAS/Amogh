@@ -2402,14 +2402,14 @@
             if (xCheckStudioInterface2) {
                 if (xCheckStudioInterface2._modelTree !== undefined) {
                     sourceBModelTree = xCheckStudioInterface2._modelTree;
-                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
+                    sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
                     // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
                     // sourceBCheckedItemCount = count > 0 ? count : 0;
                 }
 
                 else if (xCheckStudioInterface2.excelReader !== undefined) {
                     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
-                    sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
+                    sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
                     // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
                     // sourceBCheckedItemCount = count > 0 ? count : 0;
                 }
@@ -3082,7 +3082,7 @@
                         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
                             checkedComponent = {
                                 'Name': row.cells[1].textContent.trim(),
-                                'Category': row.cells[2].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
                                 'ComponentClass': row.cells[3].textContent.trim(),
                                 'Description': row.cells[4].textContent.trim()
                             };
@@ -3123,7 +3123,7 @@
                         else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
                             checkedComponent = {
                                 'Name': row.cells[1].textContent.trim(),
-                                'Category': row.cells[2].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
                                 'ComponentClass': row.cells[3].textContent.trim(),
                                 'Description': row.cells[4].textContent.trim()
                             };

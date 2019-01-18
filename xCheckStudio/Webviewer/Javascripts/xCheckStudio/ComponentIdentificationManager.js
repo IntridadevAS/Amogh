@@ -22,10 +22,10 @@ var xCheckStudio;
         ComponentIdentificationManager.RVMSourceMainClassProperty = "Intrida Data/Type";
         ComponentIdentificationManager.RVMSourceSubComponentClassProperty = "Intrida Data/Type";
 
-        // Excel data source
-        ComponentIdentificationManager.XLSSourceNameProperty = "Name";
-        ComponentIdentificationManager.XLSSourceMainClassProperty = "Category";
-        ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
+         // Excel data source
+         ComponentIdentificationManager.XLSSourceNameProperty = "Name";
+         ComponentIdentificationManager.XLSSourceMainClassProperty = "MainComponentClass";
+         ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
 
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;

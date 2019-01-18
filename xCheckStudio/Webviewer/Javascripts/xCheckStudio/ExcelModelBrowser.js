@@ -230,7 +230,7 @@ function ExcelModeBrowser() {
         // maintain track of selected components
         var checkedComponent = {
             'Name': row.cells[1].textContent,
-            'Category': row.cells[2].textContent,
+            'MainComponentClass': row.cells[2].textContent,
             'ComponentClass': row.cells[3].textContent,
             'Description': row.cells[4].textContent
         };
@@ -303,7 +303,7 @@ function ExcelModeBrowser() {
         for (var i = 0; i < this.selectedCompoents.length; i++) {
             var component = this.selectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-                component['Category'] === componentRow.cells[2].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
                 component['Description'] == componentRow.cells[4].textContent.trim()) {
                 return true;
@@ -317,15 +317,15 @@ function ExcelModeBrowser() {
         for (var i = 0; i < this.selectedCompoents.length; i++) {
             var component = this.selectedCompoents[i];
             if (component['Name'] === componentProperties.Name &&
-                component['Category'] === componentProperties.MainComponentClass &&
+                component['MainComponentClass'] === componentProperties.MainComponentClass &&
                 component['ComponentClass'] === componentProperties.SubComponentClass)
 
-                for (var j = 0; j < componentProperties.properties.length; j++) {
-                    if (componentProperties.properties[j].Name === "Description") {
-                        component['Description'] === componentProperties.properties[j].Value;
+                // for (var j = 0; j < componentProperties.properties.length; j++) {
+                //     if (componentProperties.properties[j].Name === "Description") {
+                        // component['Description'] === componentProperties.properties[j].Value;
                         return true;
-                    }
-                }
+                //     }
+                // }
 
 
         }
@@ -337,7 +337,7 @@ function ExcelModeBrowser() {
         for (var i = 0; i < this.selectedCompoents.length; i++) {
             var component = this.selectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-                component['Category'] === componentRow.cells[2].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
                 component['Description'] === componentRow.cells[4].textContent.trim()) {
 
@@ -366,7 +366,7 @@ function ExcelModeBrowser() {
 
             var checkedComponent = {
                 'Name': currentRow.cells[1].textContent.trim(),
-                'Category': currentRow.cells[2].textContent.trim(),
+                'MainComponentClass': currentRow.cells[2].textContent.trim(),
                 'ComponentClass': currentRow.cells[3].textContent.trim(),
                 'Description': currentRow.cells[4].textContent.trim()
             };
@@ -436,14 +436,14 @@ function ExcelModeBrowser() {
                       console.debug("Filter: ", filter);
                       let ComponentClass = (filter.ComponentClass || "").toLowerCase();
                       let name = (filter.Name || "").toLowerCase();
-                      let Category = (filter.Category || "").toLowerCase();
+                      let Category = (filter.MainComponentClass || "").toLowerCase();
                       let Description = (filter.Description || "").toLowerCase();
                       let dmy = parseInt(filter.dummy, 10);
                       this.recalculateTotals = true;
                       return $.grep(tableData, row => {
                         return (!ComponentClass || row.ComponentClass.toLowerCase().indexOf(ComponentClass) >= 0)
                         && (!name || row.Name.toLowerCase().indexOf(name) >= 0)
-                        && (!Category || row.Category.toLowerCase().indexOf(Category) >= 0)
+                        && (!Category || row.MainComponentClass.toLowerCase().indexOf(Category) >= 0)
                         && (!Description || row.Description.toLowerCase().indexOf(Description) >= 0)
                         && (isNaN(dmy) || row.dummy === dmy);
                       });
@@ -571,7 +571,7 @@ function ExcelModeBrowser() {
 
                 $(viewerContainer).jsGrid({
                     width: "570px",
-                    height: "364px", 
+                    height: "360px", 
                     sorting: true,  
                     autoload: true,
                     data: tableData,
@@ -599,7 +599,7 @@ function ExcelModeBrowser() {
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "570px"
-        container.style.height = "364px"
+        container.style.height = "360px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
     };
@@ -620,7 +620,7 @@ function ExcelModeBrowser() {
 
             var checkedComponent = {
                 'Name': row.cells[1].textContent,
-                'Category': row.cells[2].textContent,
+                'MainComponentClass': row.cells[2].textContent,
                 'ComponentClass': row.cells[3].textContent,
                 'Description': row.cells[4].textContent
             };

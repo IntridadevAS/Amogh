@@ -6,6 +6,11 @@ function CheckManager() {
     this.Name = name;
 
     this.CheckComponentsGroups = {};
+    this.SourceANotCheckedComponents = [];
+    this.SourceBNotCheckedComponents = [];
+    this.SourceANotMatchedComponents = [];
+    this.SourceBNotMatchedComponents = [];
+
 
     CheckManager.prototype.restore = function (checkManagerData) {
         for (var property in checkManagerData.CheckComponentsGroups) {
@@ -17,6 +22,10 @@ function CheckManager() {
                 this.CheckComponentsGroups[componentGroupData.ComponentClass] = checkComponentGroup;
             }
         }
+        this.SourceANotCheckedComponents =checkManagerData.SourceANotCheckedComponents;
+        this.SourceBNotCheckedComponents = checkManagerData.SourceBNotCheckedComponents;
+        this.SourceANotMatchedComponents = checkManagerData.SourceANotMatchedComponents;
+        this.SourceBNotMatchedComponents = checkManagerData.SourceBNotMatchedComponents;
 
     }
 
@@ -46,15 +55,30 @@ function CheckManager() {
             if ((interfaceObject.SourceType.toLowerCase() === "xml" ||
                 interfaceObject.SourceType.toLowerCase() === "rvm") &&
                 !interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
+                     //source A not checked
+                     if(this.SourceANotCheckedComponents.indexOf(sourceComponentProperties) === -1)
+                     {
+                         this.SourceANotCheckedComponents.push(sourceComponentProperties);
+                     }
                 continue;
             }
             else if (interfaceObject.SourceType.toLowerCase() === "xls" &&
                 !interfaceObject.excelReader.excelModelBrowser.isComponentSelected(sourceComponentProperties)) {
+                     //source A not checked
+                     if(this.SourceANotCheckedComponents.indexOf(sourceComponentProperties) === -1)
+                     {
+                         this.SourceANotCheckedComponents.push(sourceComponentProperties);
+                     }
                 continue;
             }
 
             // check if component class exists in checkcase
             if (!checkCaseType.componentGroupExists(sourceComponentProperties.MainComponentClass)) {
+                //source A not matched
+                if(this.SourceANotMatchedComponents.indexOf(sourceComponentProperties) === -1)
+                {
+                    this.SourceANotMatchedComponents.push(sourceComponentProperties);
+                }
                 continue;
             }
 
@@ -63,6 +87,11 @@ function CheckManager() {
 
             // check if component exists in checkCaseGroup
             if (!checkCaseGroup.componentClassExists(sourceComponentProperties.SubComponentClass)) {
+                //source A not matched
+                if(this.SourceANotMatchedComponents.indexOf(sourceComponentProperties) === -1)
+                {
+                    this.SourceANotMatchedComponents.push(sourceComponentProperties);
+                }
                 continue;
             }
             // get check case component
@@ -78,6 +107,11 @@ function CheckManager() {
                 this.CheckComponentsGroups[sourceComponentProperties.MainComponentClass] = checkComponentGroup;
             }
             if (!checkComponentGroup) {
+                //source A not matched
+                if(this.SourceANotMatchedComponents.indexOf(sourceAComponentProperties) === -1)
+                {
+                    this.SourceANotMatchedComponents.push(sourceAComponentProperties);
+                }
                 continue;
             }
 
@@ -248,10 +282,20 @@ function CheckManager() {
             // check if this property is checked or not, in Source A
             if ((xCheckStudioInterface1.SourceType.toLowerCase() === "xml" || xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") &&
                 !xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
+                    //source A not checked
+                    if(this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties) === -1)
+                      {
+                          this.SourceANotCheckedComponents.push(sourceAComponentProperties);
+                      }
                 continue;
             }
             else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls" &&
                 !xCheckStudioInterface1.excelReader.excelModelBrowser.isComponentSelected(sourceAComponentProperties)) {
+                      //source A not checked
+                      if(this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties) === -1)
+                      {
+                          this.SourceANotCheckedComponents.push(sourceAComponentProperties);
+                      }
                 continue;
             }
 
@@ -335,6 +379,11 @@ function CheckManager() {
                 //    }
                 //    else if (checkCaseType.SourceAType === checkCaseType.SourceBType) {
                 if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                    //source A not matched
+                    if(this.SourceANotMatchedComponents.indexOf(sourceAComponentProperties) === -1)
+                    {
+                        this.SourceANotMatchedComponents.push(sourceAComponentProperties);
+                    }
                     continue;
                 }
                 //}
@@ -392,10 +441,20 @@ function CheckManager() {
             // check if this property is checked or not in SOurce BG
             if ((xCheckStudioInterface2.SourceType.toLowerCase() === "xml" || xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") &&
                 !xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
+                    //source B not checked
+                    if(this.SourceBNotCheckedComponents.indexOf(sourceBComponentProperties) === -1)
+                    {
+                        this.SourceBNotCheckedComponents.push(sourceBComponentProperties);
+                    }
                 continue;
             }
             else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls" &&
                 !xCheckStudioInterface2.excelReader.excelModelBrowser.isComponentSelected(sourceBComponentProperties)) {
+                    //source B not checked
+                    if(this.SourceBNotCheckedComponents.indexOf(sourceBComponentProperties) === -1)
+                {
+                    this.SourceBNotCheckedComponents.push(sourceBComponentProperties);
+                }
                 continue;
             }
 
@@ -464,9 +523,24 @@ function CheckManager() {
 
                 // check if components are match
                 if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                    // source A componenet is not checked and source b component is checked
+                    // both components are not match
+                    // push source b component to src B not matched array 
+                    if(this.SourceBNotMatchedComponents.indexOf(sourceBComponentProperties) === -1)
+                    {
+                        this.SourceBNotMatchedComponents.push(sourceBComponentProperties);
+                    }
                     continue;
                 }
 
+                if(this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties) !== -1)
+                {
+                   var index = this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties);
+                   this.SourceANotCheckedComponents.splice(index, 1);
+                }
+                // source A componenet is not checked and source b component is checked
+                // both components are match
+                // remove src A component from src A not checked array
                 componentMatchFound = true;
 
                 // create checkcomponent object

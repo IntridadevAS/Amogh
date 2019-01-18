@@ -764,8 +764,20 @@
                 otherDiv.style.fontSize = "18px";
                 otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
 
+                var currentTab = document.getElementById("PieChartTabInfo");
+                var parentTab = currentTab.parentElement;
+
+                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
+                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
+                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
+                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
+
+                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
+                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
+                
                 document.getElementById("ComparisonTabInfo").style.display = "block";
                 document.getElementById("PieChartTabInfo").style.display = "block";
+
 
                 analyticsManager.drawInfoPieCharts("comparison");
                 document.getElementById("InfoTab").style.display = "block";

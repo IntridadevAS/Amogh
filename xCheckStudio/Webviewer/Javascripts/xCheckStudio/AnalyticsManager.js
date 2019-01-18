@@ -329,11 +329,28 @@ function AnalyticsManager() {
             }
 
             totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
-            totalItemsCheckedFromSources = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
+
+            // totalItemsCheckedFromSources = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
+           
+            
+            
+            // var sourceANotChecked = ComparisonCheckData.SourceANotCheckedComponents.length;
+            // var sourceBNotChecked = ComparisonCheckData.SourceBNotCheckedComponents.length ;
+
+            var sourceANotChecked = AnalyticsData.SourceATotalItemCount - AnalyticsData.SourceACheckedItemCount;
+            var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
+            if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
+            {
+                totalItemsCheckedFromSources = sourceANotChecked + sourceBNotChecked;
+            }
+            else{
+                totalItemsCheckedFromSources = totalItemsCount;
+            }
             totalItemsNotChecked = totalItemsCount - totalItemsCheckedFromSources;
+            // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
             //add data to summary
-            document.getElementById("a37Info").innerText = totalItemsCount;
-            document.getElementById("a18Info").innerText = totalItemsNotChecked;
+            document.getElementById("a37Info").innerText = totalItemsChecked;
+            document.getElementById("a18Info").innerText = totalItemsNotChecked ;
             document.getElementById("a13Info").innerText = noMatchCount;
 
             //Add comparison check data for project health(Info chart)
@@ -412,7 +429,7 @@ function AnalyticsManager() {
         var noMatchCountForDataSource = 0;
         var notCheckedCountForDataSource = 0;
 
-        // var totalItemsChecked = 0;
+        var totalItemsChecked = 0;
         // var okCount = 0;
         // var errorsCount = 0;
         // var warningsCount = 0;
@@ -430,7 +447,7 @@ function AnalyticsManager() {
             var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
+                totalItemsChecked = components.length;
                 totalItemsCheckedForDataSource += components.length;
                 var valueArray = [];
                 valueArray.push(componentGroup);
@@ -456,10 +473,26 @@ function AnalyticsManager() {
                 notCheckedCount = classwiseTotalComponents - classwiseTotalCheckedComponents;
 
                 noMatchCountForDataSource += noMatchCount;
-                notCheckedCountForDataSource += notCheckedCount;
+
+                // var sourceANotChecked = ComparisonCheckData.SourceANotCheckedComponents.length;
+                // var sourceBNotChecked = ComparisonCheckData.SourceBNotCheckedComponents.length ;
+                // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
+                var sourceANotChecked = AnalyticsData.SourceATotalItemCount - AnalyticsData.SourceACheckedItemCount;
+            var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
+            if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
+            {
+                totalItemsCheckedFromSources = sourceANotChecked + sourceBNotChecked;
+            }
+            else{
+                totalItemsCheckedFromSources = totalItemsChecked;
+            }
+            totalItemsNotChecked = totalItemsChecked - totalItemsCheckedFromSources;
+
+                notCheckedCountForDataSource += totalItemsNotChecked;
 
                 valueArray.push(noMatchCount);
-                valueArray.push(notCheckedCount);
+                // valueArray.push(notCheckedCount);
+                valueArray.push(totalItemsNotChecked);
                 this.ComparisonResultArray.push(valueArray);
             }
             totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
