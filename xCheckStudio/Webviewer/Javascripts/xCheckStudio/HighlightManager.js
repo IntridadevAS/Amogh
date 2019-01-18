@@ -15,9 +15,9 @@ function HighlightManager(viewer,
 
     HighlightManager.prototype.getNodeIdFromComponentIdentifier = function (componentIdentifier) {
 
-        if (componentIdentifier === this._selectedComponentId) {
-            return undefined;
-        }
+        // if (componentIdentifier === this._selectedComponentId) {
+        //     return undefined;
+        // }
 
         if (!(componentIdentifier in this.ComponentIdVsComponentData)) {
             return undefined;

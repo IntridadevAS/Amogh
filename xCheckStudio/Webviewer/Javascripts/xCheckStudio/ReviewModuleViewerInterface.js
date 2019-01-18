@@ -54,7 +54,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.unHighlightAll = function () {
         var _this = this;
 
-        _this.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+        //_this.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
         _this.selectedNodeId = undefined;
         _this.selectedComponentId = undefined;
         // highlight corresponding component in another viewer
@@ -62,7 +62,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             _this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
             _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
 
-            _this.ReviewManager.SourceBReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+            //_this.ReviewManager.SourceBReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
 
             _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
             _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
@@ -71,7 +71,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             _this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
             _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
 
-            _this.ReviewManager.SourceAReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+            //_this.ReviewManager.SourceAReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
 
             _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
             _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;

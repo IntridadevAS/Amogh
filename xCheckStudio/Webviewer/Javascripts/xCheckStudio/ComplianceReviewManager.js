@@ -112,7 +112,7 @@ function ComplianceReviewManager(complianceCheckManager,
             else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
                 columnHeader = {};
                 columnHeader["title"] = "Handle";
-                columnHeader["name"] = name;
+                columnHeader["name"] = "Handle";
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "0";
                 columnHeaders.push(columnHeader);
