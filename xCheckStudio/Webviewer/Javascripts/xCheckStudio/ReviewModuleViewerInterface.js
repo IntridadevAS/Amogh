@@ -1,4 +1,4 @@
-
+var currentViewer;
 var ReviewModuleViewerInterface = function (viewerOptions,
     componentIdVsComponentData,
     nodeIdVsComponentData,
@@ -109,11 +109,26 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     if (_this.selectedNodeId !== sel.getNodeId()) {
                         _this.onSelection(selection);
                     }
+                }               
+            },           
+
+                contextMenu: function (position) {
+                    //alert("contextMenu: " + position.x + ", " + position.y);                
+                    // _this.menu(position.x, position.y);
+                    currentViewer = viewer;
+                    _this.menu(event.clientX, event.clientY);
                 }
-            },
 
         });
     };
+
+    ReviewModuleViewerInterface.prototype.menu = function (x, y) {
+        var i = document.getElementById("menu").style;
+        i.top = y + "px";
+        i.left = x + "px";
+        i.visibility = "visible";
+        i.opacity = "1";
+    }
 
     ReviewModuleViewerInterface.prototype.setViewerBackgroundColor = function () {
         var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");

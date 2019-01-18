@@ -1,0 +1,5 @@
+<CheckCase name="SolidWorks_2_SolidWorks">
+
+	<Check type="Comparison" sourceAType="SLDASM" sourceBType="SLDASM">
+	</Check>
+</CheckCase>
