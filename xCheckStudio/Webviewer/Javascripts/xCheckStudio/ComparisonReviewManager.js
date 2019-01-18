@@ -933,7 +933,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                     }
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {        
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
 
                     if (checkPropertyHandle != undefined) {

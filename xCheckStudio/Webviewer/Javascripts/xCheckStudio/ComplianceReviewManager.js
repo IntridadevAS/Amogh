@@ -144,7 +144,9 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
                 else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
                     var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-                    tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;  
+                    if (checkPropertyHandle != undefined) {
+                    tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
+                    }  
                 }
 
                 tableData.push(tableRowContent);               

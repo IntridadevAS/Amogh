@@ -1300,15 +1300,24 @@
             //viewerContainer[0].appendChild(viewerdata);
             viewerContainer[0].children[0].appendChild(viewerdata);
             var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
-                for(var i =0 ; i < modalViewerContainer.length; i++)
-                {
-                    var currentViewer = modalViewerContainer[i];
+                for (var i = 0; i < modalViewerContainer.length; i++) {
+                fileExtension1 = AnalyticsData.SourceAName.split(".")[1];
+                fileExtension2 = AnalyticsData.SourceBName.split(".")[1];
+                var currentViewer = modalViewerContainer[i];
+                if (fileExtension1 !== "xls" || fileExtension2 !== "xls") {
                     currentViewer.style.width = "550px";
                     currentViewer.style.height = "350px";
-                    if(modalViewerContainer.length === 1)
-                    {
+                    if (modalViewerContainer.length === 1) {
                         currentViewer.style.top = "90px";
                     }
+                }
+                else{
+                    currentViewer.style.width = "550px";
+                    currentViewer.style.height = "250px";
+                    if (modalViewerContainer.length === 1) {
+                        currentViewer.style.top = "90px";
+                    }
+                }
                 }
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
@@ -1340,6 +1349,7 @@
                     var currentViewer = modalViewerContainer[i];
                     currentViewer.style.width = "745px";
                     currentViewer.style.height = "370px";
+                    currentViewer.style.top = "0px"
                     if (modalViewerContainer.length === 1) {
                         currentViewer.style.top = "0px";
                         modalViewer.style.marginTop = "195px"
