@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <!--<a href="module1.html">-->
-                    <div class="project1" onclick="OnLoadPowerPlant()" style="cursor: pointer;">
+                    <div class="project1" onclick="OnLoadPowerPlant()" style="cursor: pointer;" onMouseOver="this.style.cursor='pointer'">
                         <img src="/images/UIPackage/landing-page-with-open-menu-bg 4@2x.png" class="bg1"/>
                         <img src="/images/UIPackage/create-project-bitmap@2x.png" class="bitmap"/>
                         <div class="loadu2018powerplantu2019">
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                 <!--</a>-->
-                <div class="project2">
+                <div class="project2"onclick="OnLoadPowerPlant2()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/landing-page-with-open-menu-bg 4@2x.png" class="bg1"/>
                     <img src="/images/UIPackage/create-project-bitmap 1@2x.png" class="bitmap"/>
                     <div class="loadu2018project2u2019">
@@ -219,6 +219,12 @@
 			function OnLoadPowerPlant()
 			{
 				var projectname = "PowerPlant";
+				setCookie("checkprojectname", projectname, 1);
+				window.location.href = "/checkModule.html";
+			}
+			function OnLoadPowerPlant2()
+			{
+				var projectname = "Project 2";
 				setCookie("checkprojectname", projectname, 1);
 				window.location.href = "/checkModule.html";
 			}
