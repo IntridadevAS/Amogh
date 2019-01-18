@@ -4,7 +4,8 @@ function GenericProperties(name,
                            source,
                            destination,
                            ownerId,
-                           nodeId)
+                           nodeId,
+                           ownerHandle)
 {
     this.Name = name;
   
@@ -17,6 +18,8 @@ function GenericProperties(name,
     
     this.NodeId = nodeId;
 
+    this.OwnerHandle = ownerHandle;
+    
     this.properties=[];
     GenericProperties.prototype.addProperty = function(genericProperty)
     {

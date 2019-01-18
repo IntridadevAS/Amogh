@@ -3056,24 +3056,23 @@
                         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") {
 
-                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType);
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,  
+                                                                                                                                        row.cells[modelBrowserMainClassColumn].textContent.trim());
+                           
                             var checkedComponent = {};
+
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                            
+                            // additional identifying properties for PipingNetwork segment component
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
-
-                            // checkedComponent = {
-                            //     'Name': row.cells[1].textContent.trim(),
-                            //     'MainComponentClass': row.cells[2].textContent.trim(),
-                            //     'SubComponentClass': row.cells[3].textContent.trim(),
-                            //     'Source': row.cells[4].textContent.trim(),
-                            //     'Destination': row.cells[5].textContent.trim(),
-                            //     'Owner': row.cells[6].textContent.trim()
-                            // };
-
+     
+                            // additional identifying properties for Equipment component
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+                          
                             if (checkBoxId === "checkAllSourceACB" &&
                                 xCheckStudioInterface1 &&
                                 !xCheckStudioInterface1._modelTree.selectedCompoentExists(row)) {
@@ -3100,23 +3099,20 @@
                         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") {
 
-                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType);
+                            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType, 
+                                                                                                                                        row.cells[modelBrowserMainClassColumn].textContent.trim());
                             var checkedComponent = {};
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                             
+                            // additional identifying properties for PipingNetwork segment component
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
                             checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
 
-                            // checkedComponent = {
-                            //     'Name': row.cells[1].textContent.trim(),
-                            //     'MainComponentClass': row.cells[2].textContent.trim(),
-                            //     'SubComponentClass': row.cells[3].textContent.trim(),
-                            //     'Source': row.cells[4].textContent.trim(),
-                            //     'Destination': row.cells[5].textContent.trim(),
-                            //     'Owner': row.cells[6].textContent.trim()
-                            // };
+                            // additional identifying properties for Equipment component
+                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceBCB" &&
                                 xCheckStudioInterface2 &&

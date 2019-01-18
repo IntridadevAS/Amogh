@@ -9,45 +9,55 @@ var xCheckStudio;
         ComponentIdentificationManager.XMLSourceMainClassProperty = "Intrida Data/MainComponentClass";
         ComponentIdentificationManager.XMLSourceSubComponentClassProperty = "Intrida Data/SubComponentClass";
 
+        // for XML  pipingnetworksegment components
         ComponentIdentificationManager.XMLPipingNWSegSourceProperty = "Intrida Data/Source";
         ComponentIdentificationManager.XMLPipingNWSegDestinationProperty = "Intrida Data/Destination";
         ComponentIdentificationManager.XMLPipingNWSegOwnerProperty = "Intrida Data/OwnerId";
 
+        // for XML Equipment components
+        ComponentIdentificationManager.XMLEquipmentOwnerProperty = "Intrida Data/Handle"
 
         // RVM data source
         ComponentIdentificationManager.RVMSourceNameProperty = "Intrida Data/Name";
         ComponentIdentificationManager.RVMSourceMainClassProperty = "Intrida Data/Type";
         ComponentIdentificationManager.RVMSourceSubComponentClassProperty = "Intrida Data/Type";
 
-         // Excel data source
-         ComponentIdentificationManager.XLSSourceNameProperty = "Name";
-         ComponentIdentificationManager.XLSSourceMainClassProperty = "Category";
-         ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
+        // Excel data source
+        ComponentIdentificationManager.XLSSourceNameProperty = "Name";
+        ComponentIdentificationManager.XLSSourceMainClassProperty = "Category";
+        ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
 
-        function getComponentIdentificationProperties(fileExtension) {
+        function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
 
-                properties = {
-                    'name':ComponentIdentificationManager.XMLSourceNameProperty,
-                    'mainCategory':ComponentIdentificationManager.XMLSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.XMLSourceSubComponentClassProperty,
-                    'source': ComponentIdentificationManager.XMLPipingNWSegSourceProperty,
-                    'destination': ComponentIdentificationManager.XMLPipingNWSegDestinationProperty,
-                    'ownerId': ComponentIdentificationManager.XMLPipingNWSegOwnerProperty
-                };
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.XMLSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.XMLSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.XMLSourceSubComponentClassProperty;
+
+                if (mainComponentClass !== undefined) {
+                    if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
+                        properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
+                        properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
+                        properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
+                    }
+                    else if (mainComponentClass.toLowerCase() === "equipment") {
+                        properties['handle'] = ComponentIdentificationManager.XMLEquipmentOwnerProperty;
+                    }
+                }
             }
             else if (fileExtension.toLowerCase() === "rvm") {
                 properties = {
-                    'name':ComponentIdentificationManager.RVMSourceNameProperty,
-                    'mainCategory':ComponentIdentificationManager.RVMSourceMainClassProperty,
+                    'name': ComponentIdentificationManager.RVMSourceNameProperty,
+                    'mainCategory': ComponentIdentificationManager.RVMSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.RVMSourceSubComponentClassProperty
                 };
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 properties = {
-                    'name':ComponentIdentificationManager.XLSSourceNameProperty,
-                    'mainCategory':ComponentIdentificationManager.XLSSourceMainClassProperty,
+                    'name': ComponentIdentificationManager.XLSSourceNameProperty,
+                    'mainCategory': ComponentIdentificationManager.XLSSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
                 };
             }

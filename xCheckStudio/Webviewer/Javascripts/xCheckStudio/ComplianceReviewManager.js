@@ -79,7 +79,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
-                columnHeader["type"] = "textarea";
+                columnHeader["type"] = "text";
                 columnHeader["width"] = "20";
                 columnHeaders.push(columnHeader);
             }
@@ -104,10 +104,18 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
-                    columnHeader["type"] = "textarea";
+                    columnHeader["type"] = "text";
                     columnHeader["width"] = "0";
                     columnHeaders.push(columnHeader);
                 }
+            }
+            else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                columnHeader = {};
+                columnHeader["title"] = "Handle";
+                columnHeader["name"] = name;
+                columnHeader["type"] = "text";
+                columnHeader["width"] = "0";
+                columnHeaders.push(columnHeader);
             }
 
             for (var j = 0; j < componentsGroup.Components.length; j++) {
@@ -116,10 +124,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 var component = componentsGroup.Components[j];
 
                 tableRowContent[columnHeaders[0].name] = component.SourceAName;
-                tableRowContent[columnHeaders[1].name] = component.Status;
-
-                // construct component identifier 
-                //var componentIdentifier = component.SourceAName;
+                tableRowContent[columnHeaders[1].name] = component.Status;              
 
                 if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     var checkPropertySource = component.getCheckProperty('Source', '', true);
@@ -127,27 +132,22 @@ function ComplianceReviewManager(complianceCheckManager,
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', '', true);
 
                     if (checkPropertySource != undefined) {
-                        tableRowContent[columnHeaders[2].name] = checkPropertySource.SourceAValue;
-
-                        // componentIdentifier += "_" + checkPropertySource.SourceAValue;
+                        tableRowContent[columnHeaders[2].name] = checkPropertySource.SourceAValue;                        
                     }
                     if (checkPropertyDestination != undefined) {
-                        tableRowContent[columnHeaders[3].name] = checkPropertyDestination.SourceAValue;
-
-                        //componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
+                        tableRowContent[columnHeaders[3].name] = checkPropertyDestination.SourceAValue;                        
                     }
 
                     if (checkPropertyOwnerId != undefined) {
                         tableRowContent[columnHeaders[4].name] = checkPropertyOwnerId.SourceAValue;
-
-                        //componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
                     }
                 }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
+                    tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;  
+                }
 
-                tableData.push(tableRowContent);
-
-                // // keep track of component id vs table row and status         
-                //  this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
+                tableData.push(tableRowContent);               
             }
 
             var id = "#" + div.id;
@@ -184,10 +184,13 @@ function ComplianceReviewManager(complianceCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (currentRow.cells.length === 5) {
+                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     componentIdentifier += "_" + currentRow.cells[2].innerText;
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
+                }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    componentIdentifier += "_" + currentRow.cells[2].innerText;
                 }
 
                 var status = currentRow.cells[1].innerText;
@@ -316,80 +319,13 @@ function ComplianceReviewManager(complianceCheckManager,
             var ownerId = currentReviewTableRow.cells[4].innerHTML;
             componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
         }
+        else if (reviewTableId.indexOf("Equipment") !== -1) {
+            var handle = currentReviewTableRow.cells[2].innerHTML;
+            componentIdentifier += "_" + handle;
+        }
 
         // highlight component in graphics view in both viewer
         this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);
-    }
-
-    ComplianceReviewManager.prototype.bindEvents = function (table) {
-        var _this = this;
-
-        // add row click event handler                
-        var rows = table.getElementsByTagName("tr");
-        for (i = 0; i < rows.length; i++) {
-            var currentRow = table.rows[i];
-            var createClickHandler = function (row) {
-                return function () {
-                    if (_this.SelectedComponentRow === row) {
-                        return;
-                    }
-
-                    if (_this.SelectedComponentRow) {
-                        _this.RestoreBackgroundColor(_this.SelectedComponentRow);
-                    }
-
-                    _this.populateDetailedReviewTable(row);
-
-                    if (_this.ReviewModuleViewerInterface !== undefined) {
-                        var reviewTableId = _this.getReviewTableId(row);
-
-                        var componentIdentifier = row.cells[0].innerHTML;
-                        if (reviewTableId === "PipingNetworkSegment") {
-                            var source = row.cells[_this.MainReviewTableStatusCell + 1].innerHTML;
-                            var destination = row.cells[_this.MainReviewTableStatusCell + 2].innerHTML;
-                            var ownerId = row.cells[_this.MainReviewTableStatusCell + 3].innerHTML;
-                            componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
-                        }
-
-                        // highlight component in graphics view in both viewer
-                        _this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);
-                    }
-                    else {
-                        var sheetName = row.parentElement.parentElement.id;
-                        this.checkStatusArray = {};
-
-                        if (typeof SourceAProperties !== 'undefined') {
-                            _this.showSelectedSheetData("viewerContainer1", sheetName, row);
-                        }
-                        if (typeof SourceBProperties !== 'undefined') {
-                            _this.showSelectedSheetData("viewerContainer2", sheetName, row);
-                        }
-
-                    }
-
-                    _this.SelectedComponentRow = row;
-                };
-            };
-            currentRow.onclick = createClickHandler(currentRow);
-
-            // row mouse hover event
-            var createMouseHoverHandler = function (row) {
-                return function () {
-                    _this.ChangeBackgroundColor(row);
-                };
-            };
-            currentRow.onmouseover = createMouseHoverHandler(currentRow);
-
-            // row mouse out event
-            var createMouseOutHandler = function (row) {
-                return function () {
-                    if (_this.SelectedComponentRow !== row) {
-                        _this.RestoreBackgroundColor(row);
-                    }
-                };
-            };
-            currentRow.onmouseout = createMouseOutHandler(currentRow);
-        }
     }
 
     ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
@@ -837,6 +773,16 @@ function ComplianceReviewManager(complianceCheckManager,
                         if (checkPropertySource.SourceAValue !== source ||
                             checkPropertyDestination.SourceAValue !== destination ||
                             checkPropertyOwnerId.SourceAValue !== ownerId) {
+                            continue;
+                        }
+                    }
+                }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
+
+                    if (checkPropertyHandle != undefined) {
+                        var handle = row.cells[2].innerHTML;
+                        if (checkPropertyHandle.SourceAValue !== handle) {
                             continue;
                         }
                     }

@@ -712,78 +712,52 @@ function CheckManager() {
         sourceBComponentProperties) {
 
         if (sourceAComponentProperties.Name === sourceBComponentProperties.Name) {
+
+
+            if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment" &&
+                sourceBComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment") {
+                var sourceASource = sourceAComponentProperties.getProperty('Source');
+                var sourceADestination = sourceAComponentProperties.getProperty('Destination');
+                var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
+
+                var sourceBSource = sourceBComponentProperties.getProperty('Source');
+                var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
+                var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
+                if (sourceASource !== undefined &&
+                    sourceADestination !== undefined &&
+                    sourceAOwnerId !== undefined &&
+                    sourceBSource !== undefined &&
+                    sourceBDestination !== undefined &&
+                    sourceBOwnerId !== undefined &&
+                    sourceASource.Value === sourceBSource.Value &&
+                    sourceADestination.Value === sourceBDestination.Value &&
+                    sourceAOwnerId.Value === sourceBOwnerId.Value) {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "equipment" &&
+                     sourceBComponentProperties.MainComponentClass.toLowerCase() === "equipment") {
+
+                var sourceAOwnerHandle = sourceAComponentProperties.getProperty('Handle');
+                var sourceBOwnerHandle = sourceBComponentProperties.getProperty('Handle');
+                if (sourceAOwnerHandle !== undefined &&
+                    sourceBOwnerHandle !== undefined &&
+                    sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
-        //     // check if components are match
-        //     // if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
-        //     //     sourceAComponentProperties.MainComponentClass === sourceBComponentProperties.MainComponentClass &&
-        //     //     sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass) {
-        //  if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
-        //                 sourceAComponentProperties.MainComponentClass === sourceAmainComponentClass &&
-        //                 sourceBComponentProperties.MainComponentClass === sourceBmainComponentClass &&
-        //                 sourceAComponentProperties.SubComponentClass === sourceASubComponentClass &&
-        //                 sourceBComponentProperties.SubComponentClass === sourceBSubComponentClass){
-
-        //         // if component is PipingNetworkSegment, check if source and destination properties are same
-        //         // because they may have same tag names
-        //         if (sourceAComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-        //             var sourceASource = sourceAComponentProperties.getProperty('Source');
-        //             var sourceADestination = sourceAComponentProperties.getProperty('Destination');
-        //             var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
-
-        //             var sourceBSource = sourceBComponentProperties.getProperty('Source');
-        //             var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
-        //             var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
-
-        //             if (sourceASource === undefined ||
-        //                 sourceADestination === undefined ||
-        //                 sourceBSource === undefined ||
-        //                 sourceBDestination === undefined ||
-        //                 sourceAOwnerId === undefined ||
-        //                 sourceBOwnerId === undefined ||
-        //                 sourceASource.Value !== sourceBSource.Value ||
-        //                 sourceADestination.Value !== sourceBDestination.Value ||
-        //                 sourceAOwnerId.Value !== sourceBOwnerId.Value) {
-        //                 return false;
-        //             }
-
-        //             return true;
-        //         }
-
-        //         return true;
-        //     }
-        //     else if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
-        //         sourceAComponentProperties.MainComponentClass === sourceBComponentProperties.MainComponentClass &&
-        //         sourceAComponentProperties.SubComponentClass === sourceBComponentProperties.SubComponentClass){
-
-        //         // if component is PipingNetworkSegment, check if source and destination properties are same
-        //         // because they may have same tag names
-        //         if (sourceAComponentProperties.MainComponentClass === "PipingNetworkSegment") {
-        //             var sourceASource = sourceAComponentProperties.getProperty('Source');
-        //             var sourceADestination = sourceAComponentProperties.getProperty('Destination');
-        //             var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
-
-        //             var sourceBSource = sourceBComponentProperties.getProperty('Source');
-        //             var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
-        //             var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
-
-        //             if (sourceASource === undefined ||
-        //                 sourceADestination === undefined ||
-        //                 sourceBSource === undefined ||
-        //                 sourceBDestination === undefined ||
-        //                 sourceAOwnerId === undefined ||
-        //                 sourceBOwnerId === undefined ||
-        //                 sourceASource.Value !== sourceBSource.Value ||
-        //                 sourceADestination.Value !== sourceBDestination.Value ||
-        //                 sourceAOwnerId.Value !== sourceBOwnerId.Value) {
-        //                 return false;
-        //             }
-
-        //             return true;
-        //         }
-
-        //         return true;
-        //     }
 
         return false;
     }

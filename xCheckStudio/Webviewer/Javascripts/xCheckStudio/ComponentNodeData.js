@@ -4,7 +4,8 @@ function ComponentNodeData(name,
     source,
     destination,
     ownerId,
-    nodeId)
+    nodeId,
+    ownerHandle)
 {
     this.Name = name;    
     this.MainComponentClass = mainComponentClass;
@@ -13,4 +14,5 @@ function ComponentNodeData(name,
     this.Destination =destination;
     this.OwnerId =ownerId;
     this.NodeId = nodeId;
+    this.OwnerHandle =ownerHandle;
 }

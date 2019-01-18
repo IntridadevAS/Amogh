@@ -164,6 +164,10 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         if (data.MainComponentClass === "PipingNetworkSegment") {
                             componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
                         }
+                        else  if (data.MainComponentClass.toLowerCase() === "equipment") {
+                            componentIdentifier += "_" + data["OwnerHandle"] ;
+                        }
+
                         if (this.selectedComponentId === data.NodeId) {
                             return;
                         }
@@ -194,8 +198,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         }
     };
 
-    ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (data) {
-        var componentsGroupName = data["MainComponentClass"];
+    ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (componentData) {
+        var componentsGroupName = componentData["MainComponentClass"];
         var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
         if (!mainReviewTableContainer) {
             return;
@@ -217,26 +221,28 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         var childRow = childRows[k];
                         var childRowColumns = childRow.getElementsByTagName("td");
                         if (childRowColumns.length > 0) {
-                            if (childRowColumns[0].innerHTML === data.Name) {
-                                var componentIdentifier = data.Name;
+                            if (childRowColumns[0].innerHTML === componentData.Name) {
+                                var componentIdentifier = componentData.Name;
                                 var rowIdentifier = childRowColumns[0].innerHTML
-                                if (data.MainComponentClass === "PipingNetworkSegment") {
-                                    componentIdentifier += "_" + data.Source + "_" + data.Destination + "_" + data.OwnerId;
-                                    rowIdentifier += "_" + childRowColumns[3].innerHTML + "_"
-                                        + childRowColumns[4].innerHTML + "_" + childRowColumns[5].innerHTML;
-                                    if (rowIdentifier === componentIdentifier) {
-                                        if (this.ReviewManager.SelectedComponentRow) {
-                                            this.ReviewManager.RestoreBackgroundColor(this.ReviewManager.SelectedComponentRow);
-                                        }
 
-                                        this.ReviewManager.ChangeBackgroundColor(childRow)
-                                        this.ReviewManager.populateDetailedReviewTable(childRow);
-                                        this.ReviewManager.SelectedComponentRow = childRow;
+                                if (componentData.MainComponentClass === "PipingNetworkSegment") {
 
-                                        break;
+                                    componentIdentifier += "_" + componentData.Source + "_" + componentData.Destination + "_" + componentData.OwnerId;
+                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -3].innerHTML + "_"
+                                        + childRowColumns[childRowColumns.length -1].innerHTML + "_" + childRowColumns[childRowColumns.length -1].innerHTML;
+
+                                    if (rowIdentifier !== componentIdentifier) {
+                                        continue;                                                                 
                                     }
-
                                 }
+                                else if (componentData.MainComponentClass.toLowerCase() === "equipment") {
+                                    componentIdentifier += "_" + componentData.OwnerHandle;
+                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -1].innerHTML;
+                                    if (rowIdentifier !== componentIdentifier) {
+                                        continue;
+                                    }
+                                }
+
                                 if (this.ReviewManager.SelectedComponentRow) {
                                     this.ReviewManager.RestoreBackgroundColor(this.ReviewManager.SelectedComponentRow);
                                 }

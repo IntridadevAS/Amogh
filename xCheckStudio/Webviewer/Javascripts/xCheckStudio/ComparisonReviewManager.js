@@ -107,7 +107,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
-                columnHeader["type"] = "textarea";
+                columnHeader["type"] = "text";
                 columnHeader["width"] = width;
                 columnHeaders.push(columnHeader);
             }
@@ -128,10 +128,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                         title = "OwnerId";
                     }
                     columnHeader["name"] = title;
-                    columnHeader["type"] = "textarea";
+                    columnHeader["type"] = "text";
                     columnHeader["width"] = "0";
                     columnHeaders.push(columnHeader);
                 }
+            }
+            else if(componentsGroup.ComponentClass.toLowerCase() === "equipment")
+            {
+                columnHeader = {};
+                columnHeader["name"] = "Handle";
+                columnHeader["type"] = "text";
+                columnHeader["width"] = "0";
+                columnHeaders.push(columnHeader);
             }
 
             for (var j = 0; j < componentsGroup.Components.length; j++) {
@@ -153,27 +161,24 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
 
                     if (checkPropertySource != undefined) {
-                        tableRowContent[columnHeaders[3].name] = checkPropertySource.SourceAValue;
-
-                        //componentIdentifier += "_" + checkPropertySource.SourceAValue;
+                        tableRowContent[columnHeaders[3].name] = checkPropertySource.SourceAValue;                        
                     }
                     if (checkPropertyDestination != undefined) {
-                        tableRowContent[columnHeaders[4].name] = checkPropertyDestination.SourceAValue;
-
-                        //componentIdentifier += "_" + checkPropertyDestination.SourceAValue;
+                        tableRowContent[columnHeaders[4].name] = checkPropertyDestination.SourceAValue;                       
                     }
 
                     if (checkPropertyOwnerId != undefined) {
-                        tableRowContent[columnHeaders[5].name] = checkPropertyOwnerId.SourceAValue;
-
-                        //componentIdentifier += "_" + checkPropertyOwnerId.SourceAValue;
+                        tableRowContent[columnHeaders[5].name] = checkPropertyOwnerId.SourceAValue;                        
+                    }
+                }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
+                    if (checkPropertyHandle != undefined) {
+                        tableRowContent[columnHeaders[3].name] = checkPropertyHandle.SourceAValue;                        
                     }
                 }
 
                 tableData.push(tableRowContent);
-
-                //  // keep track of component id vs table row and status         
-                //  this.ComponentIdStatusData[componentIdentifier] = [tr, component.Status];
             }
 
             var id = "#" + div.id;
@@ -207,10 +212,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (currentRow.cells.length === 6) {
+                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                     componentIdentifier += "_" + currentRow.cells[5].innerText;
+                }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    componentIdentifier += "_" + currentRow.cells[3].innerText;
                 }
 
                 var status = currentRow.cells[2].innerText;
@@ -245,74 +253,6 @@ function ComparisonReviewManager(comparisonCheckManager,
         //     countBox = document.getElementById("SourceBComponentCount");
         // }
         countBox.innerText = "Count :" + modelBrowserTableRows.length;
-    }
-
-    ComparisonReviewManager.prototype.bindEvents = function (table) {
-        var _this = this;
-
-        // add row click event handler                
-        var rows = table.getElementsByTagName("tr");
-        for (i = 0; i < rows.length; i++) {
-            var currentRow = table.rows[i];
-            var createClickHandler = function (row) {
-                return function () {
-                    if (_this.SelectedComponentRow === row) {
-                        return;
-                    }
-
-                    if (_this.SelectedComponentRow) {
-                        _this.RestoreBackgroundColor(_this.SelectedComponentRow);
-                    }
-
-                    _this.populateDetailedReviewTable(row);
-
-                    if (_this.SourceAReviewModuleViewerInterface !== undefined && _this.SourceBReviewModuleViewerInterface !== undefined) {
-                        var reviewTableId = _this.getReviewTableId(row);
-
-                        var componentIdentifier = row.cells[0].innerHTML;
-                        if (reviewTableId === "PipingNetworkSegment") {
-                            var source = row.cells[3].innerHTML === "" ? "undefined" : row.cells[3].innerHTML;
-                            var destination = row.cells[4].innerHTML === "" ? "undefined" : row.cells[3].innerHTML;;
-                            var ownerId = row.cells[5].innerHTML === "" ? "undefined" : row.cells[3].innerHTML;;
-                            componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
-                        }
-
-                        _this.SelectedComponentRow = row;
-
-                        // highlight component in graphics view in both viewer
-                        _this.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
-                        _this.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
-                    }
-                    else {
-                        var sheetName = row.parentElement.parentElement.id;
-                        this.checkStatusArrayA = {};
-                        this.checkStatusArrayB = {};
-                        _this.showSelectedSheetData("viewerContainer1", sheetName, row);
-                        _this.showSelectedSheetData("viewerContainer2", sheetName, row);
-                    }
-
-                };
-            };
-            currentRow.onclick = createClickHandler(currentRow);
-
-            // row mouse hover event
-            var createMouseHoverHandler = function (row) {
-                return function () {
-                    _this.ChangeBackgroundColor(row);
-                };
-            };
-            currentRow.onmouseover = createMouseHoverHandler(currentRow);
-
-            // row mouse out event
-            var createMouseOutHandler = function (row) {
-                return function () {
-                    if (_this.SelectedComponentRow !== row) {
-                        _this.RestoreBackgroundColor(row);
-                    }
-                };
-            };
-            currentRow.onmouseout = createMouseOutHandler(currentRow);
-        }
     }
 
     ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
@@ -696,6 +636,11 @@ function ComparisonReviewManager(comparisonCheckManager,
             var ownerId = currentReviewTableRow.cells[5].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[5].innerHTML;;
             componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
         }
+        else if (reviewTableId.indexOf("Equipment") !== -1) {
+            var ownerHandle = currentReviewTableRow.cells[3].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[3].innerHTML;;
+            componentIdentifier += "_" + ownerHandle;
+        }
+        
 
         // highlight component in graphics view in both viewer
         if (this.SourceAViewerData != undefined) {
@@ -984,6 +929,16 @@ function ComparisonReviewManager(comparisonCheckManager,
                         if (checkPropertySource.SourceAValue !== source ||
                             checkPropertyDestination.SourceAValue !== destination ||
                             checkPropertyOwnerId.SourceAValue !== ownerId) {
+                            continue;
+                        }
+                    }
+                }
+                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                    var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
+
+                    if (checkPropertyHandle != undefined) {
+                        var handle = row.cells[3].innerHTML;
+                        if (checkPropertyHandle.SourceAValue !== handle) {
                             continue;
                         }
                     }

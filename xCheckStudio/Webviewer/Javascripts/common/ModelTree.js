@@ -111,8 +111,8 @@ var xCheckStudio;
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "0";
                 columnHeader["filtering"] = "false";
-                columnHeader["sorting"] = "false";
-                _this.modelTreeColumnHeaders.push(columnHeader);
+                columnHeader["sorting"] = "false";                
+                _this.modelTreeColumnHeaders.push(columnHeader);             
 
             };
 
@@ -222,7 +222,7 @@ var xCheckStudio;
 
                     tableRowContent[this.modelTreeColumnHeaders[5].name] = (nodeData.Destination != undefined ? nodeData.Destination : "");
 
-                    tableRowContent[this.modelTreeColumnHeaders[6].name] = (nodeData.OwnerId != undefined ? nodeData.OwnerId : "");
+                    tableRowContent[this.modelTreeColumnHeaders[6].name] = (nodeData.OwnerId != undefined ? nodeData.OwnerId : nodeData.OwnerHandle != undefined ? nodeData.OwnerHandle : "");
 
                     tableRowContent[this.modelTreeColumnHeaders[7].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
                 }
@@ -266,7 +266,8 @@ var xCheckStudio;
 
 
             ModelTree.prototype.selectedCompoentExists = function (componentRow) {
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, 
+                                                                                                                            componentRow.cells[2].textContent.trim());
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
                     if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
@@ -274,7 +275,8 @@ var xCheckStudio;
                         component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim() &&
+                        component[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] == componentRow.cells[6].textContent.trim()) {
                         return true;
                     }
                 }
@@ -283,7 +285,7 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.isComponentSelected = function (componentProperties) {
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, componentProperties.MainComponentClass);
 
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
@@ -298,7 +300,9 @@ var xCheckStudio;
                                 (componentProperties.Destination === undefined ||
                                     component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentProperties.Destination) &&
                                 (componentProperties.OwnerId === undefined ||
-                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId)) {
+                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId) ||
+                                (componentProperties.OwnerId === undefined ||
+                                        component[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] == componentProperties.OwnerId)) {
                                 return true;
                             }
                         }
@@ -314,7 +318,7 @@ var xCheckStudio;
 
             ModelTree.prototype.removeFromselectedCompoents = function (componentRow) {
 
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, componentRow.cells[2].textContent.trim());
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
                     if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
@@ -368,7 +372,8 @@ var xCheckStudio;
                 if (currentCheckBox.checked &&
                     !this.selectedCompoentExists(currentRow)) {
 
-                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
+                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, 
+                                                                                                                                currentRow.cells[modelBrowserMainClassColumn].textContent.trim());
                     var checkedComponent = {};
                     checkedComponent[identifierProperties.name] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent[identifierProperties.mainCategory] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
@@ -416,54 +421,7 @@ var xCheckStudio;
                     }
                 }
             }
-
-            
-
-            ModelTree.prototype.selectComponentRow = function (componentIdentifier) {
-                if (this._viewer._params.containerId == "viewerContainer2") {
-                    children = xCheckStudioInterface1._modelTree.ModelBrowserTable.children;
-                    for (var i = 0; i < children.length; i++) {
-                        var child = children[i];
-                        if (child.childElementCount > 0) {
-                            childCell = child.children[0];
-                            childComponentIdentifier = childCell.textContent.trim();
-                            if (child.children[1].innerHTML === "PipingNetworkSegment") {
-                                childComponentIdentifier += "_" + child.children[3].innerHTML + "_" + child.children[4].innerHTML + "_" + child.children[5].innerHTML
-                            }
-                            if (childComponentIdentifier === componentIdentifier) {
-                                if (xCheckStudioInterface1._modelTree.SelectedComponentRow !== undefined) {
-                                    this.RestoreBackgroundColor(xCheckStudioInterface1._modelTree.SelectedComponentRow);
-                                }
-
-                                xCheckStudioInterface1._modelTree.SelectedComponentRow = child;
-                                xCheckStudioInterface1._modelTree.SelectedComponentRow.style.backgroundColor = "#9999ff";
-                            }
-                        }
-                    }
-                }
-                else if (this._viewer._params.containerId == "viewerContainer1") {
-                    children = xCheckStudioInterface2._modelTree.ModelBrowserTable.children;
-                    for (var i = 0; i < children.length; i++) {
-                        var child = children[i];
-                        if (child.childElementCount > 0) {
-                            childCell = child.children[0];
-                            childComponentIdentifier = childCell.textContent;
-                            if (child.children[1].innerHTML === "PipingNetworkSegment") {
-                                childComponentIdentifier += "_" + child.children[3].innerHTML + "_" + child.children[4].innerHTML + "_" + child.children[5].innerHTML
-                            }
-                            if (childComponentIdentifier === componentIdentifier) {
-                                if (xCheckStudioInterface2._modelTree.SelectedComponentRow !== undefined) {
-                                    this.RestoreBackgroundColor(xCheckStudioInterface2._modelTree.SelectedComponentRow);
-                                }
-
-                                xCheckStudioInterface2._modelTree.SelectedComponentRow = child;
-                                xCheckStudioInterface2._modelTree.SelectedComponentRow.style.backgroundColor = "#9999ff";
-                            }
-                        }
-                    }
-                }
-            };
-
+             
 
             ModelTree.prototype.BrowserItemClick = function (nodeId, thisRow) {
                 var nodeID = parseInt(nodeId)
@@ -919,7 +877,7 @@ var xCheckStudio;
                     if (childRowColumns.length > 0) {
                         if (childRowColumns[2].innerText.trim() === "PipingNetworkSegment") {
                             for (var j = 1; j < childRowColumns.length; j++) {
-                                if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserNodeIdColumn) && 
+                                if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserOwnerColumn) && 
                                      childRowColumns[j].innerText != undefined) {
                                     
                                     inner_Text = (childRowColumns[j].innerText);
@@ -932,6 +890,16 @@ var xCheckStudio;
                                 }
                             }
                         }
+                        else if (childRowColumns[2].innerText.trim() === "Equipment") {
+                            inner_Text = (childRowColumns[modelBrowserOwnerColumn].innerText);
+                            inner_Text = inner_Text.trim();
+                            if(inner_Text === "")
+                            {
+                                inner_Text = "undefined"
+                            }
+                            rowIdentifier += "_" + inner_Text;                
+                        }
+
                         if (componentIdentifier === rowIdentifier) {
                             if (this.SelectedComponentRow) {
                                 this.RestoreBackgroundColor(this.SelectedComponentRow);
