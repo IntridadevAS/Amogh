@@ -354,6 +354,7 @@
                     <!--Analytics Tab Page-->
                     <div id="AnalyticsTabPage" class="viewContainerTab" style="  width: 100%; height: 100%;  display: none">
                         <!-- <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span> -->
+                        <div id="analyticsContainer" style="margin-top: 50px; height: 110%; width: 100%;"> </div>
                     </div>
                 </div>
                 <div class="white1">
@@ -1152,14 +1153,20 @@
                 // // When the user clicks the button, open the modal 
                 // modal.style.display = "block";
                 // document.getElementById("projectselectiondialog-content").innerHTML = "";
-                // $('#projectselectiondialog-content').load('/analyticsModule.html');
-                window.open("/analyticsModule.html", 'popUpWindow', 'height=800,width=1500,left=100,top=100, status=yes');
+                
+                // $('#analyticsContainer').load('/analyticsModule.html');
+                document.getElementById("analyticsContainer").innerHTML='<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                // window.open("/analyticsModule.html", 'popUpWindow', 'height=800,width=1500,left=100,top=100, status=yes');
+
+                analyticsManager = new AnalyticsManager();
+
+           
             }
-            else if (tabName === "ChecksTabPage") {
+            else if(tabName === "ChecksTabPage")
+            {
                 document.getElementById("AnalyticsViewTab").style.backgroundColor = "lightgray";
                 document.getElementById("ChecksViewTab").style.backgroundColor = "#F3F0F4";
             }
-
         }
 
         function setButtonsCollapsible() {
@@ -1446,21 +1453,22 @@
                 fileExtension1 = AnalyticsData.SourceAName.split(".")[1];
                 fileExtension2 = AnalyticsData.SourceBName.split(".")[1];
                 var currentViewer = modalViewerContainer[i];
-                if (fileExtension1 !== "xls" || fileExtension2 !== "xls") {
+                if (document.getElementById("dataSource1ModelBrowserTab").style.backgroundColor !== "lightgray") {
                     currentViewer.style.width = "550px";
-                    currentViewer.style.height = "350px";
+                    currentViewer.style.height = "270px";
                     if (modalViewerContainer.length === 1) {
                         currentViewer.style.top = "90px";
                     }
                 }
                 else {
                     currentViewer.style.width = "550px";
-                    currentViewer.style.height = "250px";
+                    currentViewer.style.height = "350px";
                     if (modalViewerContainer.length === 1) {
                         currentViewer.style.top = "90px";
                     }
                 }
             }
+            document.getElementById("ChecksTabPage").style.marginTop = "40px";
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
             // window.setTimeout(function () {
@@ -1469,37 +1477,48 @@
         };
 
         function OnFullScreen() {
-            var elem = document.getElementById("checksViewTable");
-            // if (elem.style.display === "block") {
-            // if (elem.requestFullscreen) 
-            // {
             var modal = document.getElementById('maximizeViewerContainer');
             // When the user clicks the button, open the modal 
             modal.style.display = "block";
-            var viewerdata = document.getElementById("checksViewTable")
-            var modalViewer = document.getElementById("maximizeViewerContainer-content");
-            modalViewer.appendChild(viewerdata);
+            if (document.getElementById("ChecksViewTab").style.backgroundColor === "rgb(243, 240, 244)") {
+                var viewerdata = document.getElementById("checksViewTable")
+                var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                modalViewer.innerHTML = "";
+                modalViewer.appendChild(viewerdata);
 
-            // var modalViewerContainer = document.getElementById("checksViewTable");
-            viewerdata.style.width = "100%";
-            viewerdata.style.height = "100%";
-            viewerdata.style.margin = "auto";
+                viewerdata.style.width = "100%";
+                viewerdata.style.height = "100%";
+                viewerdata.style.margin = "auto";
+                modalViewer.style.marginLeft = "280px";
 
-            var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
-            for (var i = 0; i < modalViewerContainer.length; i++) {
-                var currentViewer = modalViewerContainer[i];
-                currentViewer.style.width = "745px";
-                currentViewer.style.height = "370px";
-                currentViewer.style.top = "0px"
-                if (modalViewerContainer.length === 1) {
-                    currentViewer.style.top = "0px";
-                    modalViewer.style.marginTop = "195px"
-                    modalViewer.style.width = "745px"
-                    modalViewer.style.height = "370px"
+
+                var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
+                for (var i = 0; i < modalViewerContainer.length; i++) {
+                    var currentViewer = modalViewerContainer[i];
+                    currentViewer.style.width = "745px";
+                    currentViewer.style.height = "370px";
+                    currentViewer.style.top = "0px"
+                    if (modalViewerContainer.length === 1) {
+                        currentViewer.style.top = "0px";
+                        modalViewer.style.marginTop = "195px"
+                        modalViewer.style.width = "745px"
+                        modalViewer.style.height = "370px"
+                    }
                 }
             }
-
-            // }
+            else if(document.getElementById("AnalyticsViewTab").style.backgroundColor === "rgb(243, 240, 244)"){
+                var analyticsContainerElement = document.getElementById("analyticsContainer");
+                var modalViewer = document.getElementById("maximizeViewerContainer-content");
+                modalViewer.innerHTML = "";
+                modalViewer.appendChild(analyticsContainerElement);
+                modalViewer.style.marginLeft = "10px";
+                modalViewer.style.marginTop = "10px";
+                modalViewer.style.height = "750px";
+                var modalAnalyticsContainer = modalViewer.children[0]//modalViewer.getElementById("analyticsContainer");
+                modalAnalyticsContainer.style.height = "743px";
+                modalAnalyticsContainer.style.width = "165%";
+                modalAnalyticsContainer.style.marginTop = "0px";
+            }
         }
 
 
@@ -1507,8 +1526,24 @@
         window.onclick = function (event) {
             var modal = document.getElementById('maximizeViewerContainer');
             if (event.target == modal) {
-                var viewerdata = document.getElementById("checksViewTable")
-                returnViewer(viewerdata);
+                if (document.getElementById("ChecksViewTab").style.backgroundColor === "rgb(243, 240, 244)") {
+                    var viewerdata = document.getElementById("checksViewTable")
+                    returnViewer(viewerdata);
+                }
+                else if(document.getElementById("AnalyticsViewTab").style.backgroundColor === "rgb(243, 240, 244)"){
+                    var analyticsContainerElement  = document.getElementById("analyticsContainer").innerHTML;
+                    var analyticsDiv = document.createElement("DIV");
+                    analyticsDiv.id = "analyticsContainer";
+                    document.getElementById("AnalyticsTabPage").appendChild(analyticsDiv);
+                    document.getElementById("analyticsContainer").innerHTML = analyticsContainerElement;
+                    analyticsDiv.style.height = "110%";
+                    analyticsDiv.style.width = "100%";
+                    analyticsDiv.style.marginTop = "50px";
+                    document.getElementById("ChecksTabPage").style.marginTop = "80px";
+
+                    // document.getElementById("analyticsContainer").innerHTML='<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                }
+               
                 modal.style.display = "none";
             }
 

@@ -45,7 +45,7 @@
  background: rgba(244, 244, 244, 1.0);">
     <input id="anPageName" name="page" type="hidden" value="a011" />
     <div class="a011" id="wrapper">
-        <div style="width: 1360px; height: 100%; position:relative; margin:auto;">
+        <div style="width: 100%; height: 100%; position:relative; margin:auto;">
             <div class="details">
                 <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
                 <div class="datasource1datat">
@@ -53,7 +53,7 @@
                         Type</span><span class="span2"><br /><br /><br /><br /></span>
                 </div>
                 <div class="checkcasexml2xls">
-                    <span class="span1">CheckCase                             </span><span class="span2" id="checkCase">xml-2-xls</span>
+                    <span class="span1">CheckCase                             </span><span class="span2" id="checkCaseAnalytics">xml-2-xls</span>
                 </div>
                 <div class="checkcasexml2xls1" id="checkCase1">
 
@@ -413,8 +413,7 @@
             analyticsManager = new AnalyticsManager();
 
             var checkCase = AnalyticsData.CheckCaseName;
-            document.getElementById("checkCase").innerHTML = checkCase;
-            document.getElementById("checkCase1").innerHTML = "CheckCase " + checkCase;
+            document.getElementById("checkCaseAnalytics").innerHTML = checkCase;
 
             var source1 = AnalyticsData.SourceBName;
             if(source1 !== undefined){
