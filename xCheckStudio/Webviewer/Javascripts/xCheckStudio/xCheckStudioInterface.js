@@ -276,6 +276,15 @@ var xCheckStudio;
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
                             var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
 
+                            if (mainComponentClass === undefined ||
+                                name === undefined ||
+                                subComponentClass === undefined) {
+                                if (_this.nodeIdArray.indexOf(nodeId) != -1) {
+                                    _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
+                                }
+                                return;
+                            }
+
                             // var mainComponentClass = nodeProperties[identifierProperties.mainCategory];
                             // var name = nodeProperties[identifierProperties.name];
                             // var subComponentClass = nodeProperties[identifierProperties.subClass];
