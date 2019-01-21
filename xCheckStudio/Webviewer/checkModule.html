@@ -246,7 +246,7 @@
     <div class="toast" id="toast">
         <div style="width: 100%; height: 100%; position:relative; margin:auto;">
             <div class="group">
-                <div class="toasttext" id="toasttext"> Hello Rahul</div>
+                <div class="toasttext" id="toasttext"></div>
             </div>
         </div>
     </div>
@@ -255,20 +255,19 @@
             <div class="projectcreationdialoggroup">
                 <div class="bg"> </div>
 
-                <div class="textfieldfunction">Check completed successfully.</br>Do you want to view results?</div>
-
-                <div class="cancelbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
-                    <div class="bg2"></div>
-                    <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
-                    <div class="cancel">
-                        No
-                    </div>
-                </div>
+                <div class="textfieldfunction">Check complete. View results?</div>
 
                 <div class="createbtn" onclick="reviewresults()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
                     <div class="create">
-                        Yes
+                        OK
+                    </div>
+                </div>
+
+                <div class="cancelbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
+                    <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
+                    <div class="cancel">
+                        Cancel
                     </div>
                 </div>
 
@@ -276,7 +275,7 @@
                     <div class="bg1">
                     </div>
                     <div class="newproject">
-                        Check Complete
+                        CHECK COMPLETE
                     </div>
                 </div>
             </div>
@@ -293,10 +292,13 @@
                     <div class="properties1">
                         <div class="bg1"> </div>
                         <div class="header"> Source 1 </div>
+						<div class="headerval" id="headerval2">  </div>
                         <div class="properties1Key1" id="infoproperties1Key1"> Total </div>
-                        <div class="properties1val1" id="infoproperties1val1"> 256 </div>
+                        <div class="properties1val1" id="infoproperties1val1">  </div>
                         <div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
-                        <div class="properties1val2" id="infoproperties1val2"> 200 </div>
+                        <div class="properties1val2" id="infoproperties1val2">  </div>
+						<div class="properties1Key3" id="infoproperties1Key3"> Comparison </div>
+                        <div class="properties1val3" id="infoproperties1val3">  </div>
                     </div>
 
                     <div class="footer">
@@ -305,16 +307,21 @@
                     <div class="properties2">
                         <div class="bg2"> </div>
                         <div class="header"> Source 2 </div>
+						<div class="headerval" id="headerval2">  </div>
                         <div class="properties2Key1" id="infoproperties2Key1"> Total </div>
-                        <div class="properties2val1" id="infoproperties2val1"> 300 </div>
+                        <div class="properties2val1" id="infoproperties2val1">  </div>
                         <div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
-                        <div class="properties2val2" id="infoproperties2val2"> 200 </div>
+                        <div class="properties2val2" id="infoproperties2val2">  </div>
+						<div class="properties2Key3" id="infoproperties2Key3"> Comparison </div>
+                        <div class="properties2val3" id="infoproperties2val3">  </div>
                     </div>
 
                     <div class="properties3">
                         <div class="bg3"> </div>
-                        <div class="properties3Key" id="infoproperties3Key"> Check Case </div>
-                        <div class="properties3val" id="infoproperties3val"> </div>
+                        <div class="properties3Key1" id="infoproperties3Key1"> Check Case </div>
+                        <div class="properties3val1" id="infoproperties3val1"> </div>
+						<div class="properties3Key2" id="infoproperties3Key2"> Comparison </div>
+                        <div class="properties3val2" id="infoproperties3val2">  </div>
                     </div>
 
                     <div class="footer">
@@ -333,7 +340,7 @@
                     <div class="bg1">
                     </div>
                     <div class="newproject">
-                        Check Info
+                        CHECK INFO
                     </div>
                 </div>
             </div>
@@ -2954,14 +2961,16 @@
 
             var file = xCheckStudio.UploadManager.getSourceData(event.target.files);
             if (file === undefined) {
-                alert("Valid data source not found");
+                //alert("Valid data source not found");
+				OnShowToast('Valid data source not found');
                 return;
             }
 
             var fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
             if (!xCheckStudio.UploadManager.validateSource(fileExtension, event.target.files)) {
-                alert("valid data source not found");
+                //alert("valid data source not found");
+				OnShowToast('Valid data source not found');
                 return;
             }
 
@@ -3789,16 +3798,18 @@
                 // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
             }
 
-
+			//document.getElementById("headerval1").innerHTML = ;
             document.getElementById("infoproperties1val1").innerHTML = document.getElementById("SourceAComponentCount").innerText;
-
             document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
+			//document.getElementById("infoproperties1val3").innerHTML = ;
 
+			//document.getElementById("headerval2").innerHTML = ;
             document.getElementById("infoproperties2val1").innerHTML = document.getElementById("SourceBComponentCount").innerText;
-
             document.getElementById("infoproperties2val2").innerHTML = sourceBCheckedItemCount;
-            document.getElementById("infoproperties3val").innerHTML = checkCaseManager.CheckCase.Name;
-            //infoproperties3val
+			//document.getElementById("infoproperties2val3").innerHTML = ;
+			
+            document.getElementById("infoproperties3val1").innerHTML = checkCaseManager.CheckCase.Name;
+			//document.getElementById("infoproperties3val2").innerHTML = ;
         }
 
         function OnInfoClose() {
