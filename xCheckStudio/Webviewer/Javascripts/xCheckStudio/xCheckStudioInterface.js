@@ -86,12 +86,13 @@ var xCheckStudio;
 
             viewer.setCallbacks({
                 firstModelLoaded: function () {
-                    viewer.view.fitWorld();
+                    viewer.view.fitWorld(); 
                     _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
 
+                   
                     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
-                    _this.readProperties(viewer.model.getAbsoluteRootNode(), identifierProperties);
-
+                    _this.RootNodeId = viewer.model.getAbsoluteRootNode();
+                    _this.readProperties(_this.RootNodeId, identifierProperties);                    
                 },
                 selectionArray: function (selections) {
                     for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
@@ -258,6 +259,9 @@ var xCheckStudio;
             return undefined;
         }
 
+
+      
+
         xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties) {
             var _this = this;
             if (nodeId !== null &&
@@ -276,85 +280,76 @@ var xCheckStudio;
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
                             var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
 
-                            if (mainComponentClass === undefined ||
-                                name === undefined ||
-                                subComponentClass === undefined) {
-                                if (_this.nodeIdArray.indexOf(nodeId) != -1) {
-                                    _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
+                            if (mainComponentClass !== undefined &&
+                                name !== undefined &&
+                                subComponentClass !== undefined) {
+
+                                var source;
+                                var destination;
+                                var ownerId;
+                                var ownerHandle;
+                                if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
+                                    xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty in nodeProperties &&
+                                    xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty in nodeProperties &&
+                                    xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty in nodeProperties) {
+
+                                    source = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty);
+                                    destination = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty);
+                                    ownerId = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty);
                                 }
-                                return;
+                                else if (mainComponentClass.toLowerCase() === "equipment" &&
+                                    xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty in nodeProperties) {
+                                    ownerHandle = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty);
+                                }
+
+                                // create generic properties object
+                                var genericPropertiesObject = new GenericProperties(name,
+                                    mainComponentClass,
+                                    subComponentClass,
+                                    source,
+                                    destination,
+                                    ownerId,
+                                    nodeId,
+                                    ownerHandle);
+
+                                // add component class as generic property
+                                var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
+                                genericPropertiesObject.addProperty(componentClassPropertyObject);
+
+                                // iterate node properties and add to generic properties object
+                                for (var key in nodeProperties) {
+                                    var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
+                                    genericPropertiesObject.addProperty(genericPropertyObject);
+                                }
+
+                                // add genericProperties object to sourceproperties collection
+                                _this.sourceProperties.push(genericPropertiesObject);
+
+                                // keep track of component vs node id
+                                var componentIdentifier = name
+
+                                var componentNodeData = new ComponentNodeData(name,
+                                    mainComponentClass,
+                                    subComponentClass,
+                                    source,
+                                    destination,
+                                    ownerId,
+                                    nodeId,
+                                    ownerHandle);
+
+                                if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
+                                    source !== undefined &&
+                                    destination !== undefined &&
+                                    ownerId !== undefined) {
+                                    componentIdentifier = name + "_" + source + "_" + destination + "_" + ownerId;
+                                }
+                                else if (mainComponentClass.toLowerCase() === "equipment" && ownerHandle !== undefined) {
+                                    componentIdentifier = name + "_" + ownerHandle;
+                                }
+
+                                _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                                _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                             }
-
-                            // var mainComponentClass = nodeProperties[identifierProperties.mainCategory];
-                            // var name = nodeProperties[identifierProperties.name];
-                            // var subComponentClass = nodeProperties[identifierProperties.subClass];
-
-                            // check if source, destination and ownerid properties exists to uniquely identify
-                            // PipingNetworkSegment
-                            var source;
-                            var destination;
-                            var ownerId;
-                            var ownerHandle;
-                            if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                                xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty in nodeProperties &&
-                                xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty in nodeProperties &&
-                                xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty in nodeProperties) {
-
-                                source = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty);
-                                destination = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty);
-                                ownerId = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty);
-                            }
-                            else if (mainComponentClass.toLowerCase() === "equipment" &&
-                                xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty in nodeProperties) {
-                                ownerHandle = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty);
-                            }
-
-                            // create generic properties object
-                            var genericPropertiesObject = new GenericProperties(name,
-                                mainComponentClass,
-                                subComponentClass,
-                                source,
-                                destination,
-                                ownerId,
-                                nodeId,
-                                ownerHandle);
-
-                            // add component class as generic property
-                            var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
-                            genericPropertiesObject.addProperty(componentClassPropertyObject);
-
-                            // iterate node properties and add to generic properties object
-                            for (var key in nodeProperties) {
-                                var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
-                                genericPropertiesObject.addProperty(genericPropertyObject);
-                            }
-
-                            // add genericProperties object to sourceproperties collection
-                            _this.sourceProperties.push(genericPropertiesObject);
-
-                            // keep track of component vs node id
-                            var componentIdentifier = name
-
-                            var componentNodeData = new ComponentNodeData(name,
-                                mainComponentClass,
-                                subComponentClass,
-                                source,
-                                destination,
-                                ownerId,
-                                nodeId,
-                                ownerHandle);
-                            if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                                source !== undefined &&
-                                destination !== undefined &&
-                                ownerId !== undefined) {
-                                componentIdentifier = name + "_" + source + "_" + destination + "_" + ownerId;
-                            }
-                            else if (mainComponentClass.toLowerCase() === "equipment" && ownerHandle !== undefined) {
-                                componentIdentifier = name + "_" + ownerHandle;
-                            }
-
-                            _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                            _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                         }
 
                         var children = _this._firstViewer.model.getNodeChildren(nodeId);
@@ -374,9 +369,7 @@ var xCheckStudio;
                         if (_this.nodeIdArray.indexOf(nodeId) != -1) {
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
-                        if (_this.nodeIdArray.length == 0) {
-
-
+                         if (_this.nodeIdArray.length == 0) {
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
                             _this._modelTree.addClassesToModelBrowser();
                             for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
