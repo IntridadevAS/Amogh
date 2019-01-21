@@ -1291,8 +1291,8 @@ div {
 
 .module1 .group31 {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 560px;
-  height              : 97px;
+  top                 : 585px;
+  height              : 70px;
   width               : 601px;
   position            : absolute;
   margin              : 0;
@@ -1306,7 +1306,7 @@ div {
 .module1 .group31 .bg1 {
   background-color    : rgba(255, 255, 255, 1.0);
   top                 : 0px;
-  height              : 97px;
+  height              : 70px;
   box-sizing          : border-box;
   width               : 601px;
   position            : absolute;
@@ -1321,7 +1321,7 @@ div {
 }
 .module1 .group31 .dropdown-view {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 20px;
+  top                 : 3px;
   height              : 58px;
   width               : 268px;
   position            : absolute;
@@ -1358,12 +1358,12 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 7px;
+  left                : 0px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(0, 0, 0, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -1380,7 +1380,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(0, 0, 0, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -1399,7 +1399,7 @@ div {
 }
 .module1 .group31 .comparisonswitch {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 20px;
+  top                 : 3px;
   height              : 54px;
   width               : 108px;
   position            : absolute;
@@ -1421,7 +1421,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 18.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -1478,7 +1478,7 @@ div {
 }
 .module1 .group31 .play {
   background-color    : rgba(255,255,255,0.0);
-  top                 : 18px;
+  top                 : 3px;
   height              : 64px;
   width               : 64px;
   position            : absolute;
@@ -1944,7 +1944,7 @@ div {
 .module1 .group32 {
   background-color    : rgba(255,255,255,0.0);
   top                 : 125px;
-  height              : 430px;
+  height              : 457px;
   width               : 601px;
   position            : absolute;
   margin              : 0;
@@ -1960,7 +1960,7 @@ div {
 .module1 .group32 .bg1 {
   background-color    : #F0EDF1;
   top                 : 50px;
-  height              : 380px;
+  height              : 408px;
   box-sizing          : border-box;
   width               : 601px;
   position            : absolute;
