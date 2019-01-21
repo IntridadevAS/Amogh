@@ -347,6 +347,10 @@ function AnalyticsManager() {
                 totalItemsNotCheckedFromSources = totalItemsCount;
             }
             totalItemsNotChecked = totalItemsChecked - totalItemsNotCheckedFromSources;
+            if(totalItemsNotChecked < 0)
+            {
+                totalItemsNotChecked = 0;
+            }
             // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
             //add data to summary
             document.getElementById("a37Info").innerText = totalItemsChecked;
@@ -364,11 +368,6 @@ function AnalyticsManager() {
             else {
                 StorageData = localStorage.CheckResultArrayInfo;
                 StorageArray = JSON.parse(StorageData);
-                // if(Object.keys(StorageArray).length >= 10)
-                // {
-                //     var firstElement = Object.keys(StorageArray)[0];
-                //     delete StorageArray[firstElement];
-                // }
                 var temp = [totalItemsNotChecked, noMatchCount];
                 StorageArray[Date.now()] = temp;
                 localStorage.setItem("CheckResultArrayInfo", JSON.stringify(StorageArray));
