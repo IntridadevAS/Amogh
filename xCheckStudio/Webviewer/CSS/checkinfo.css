@@ -127,7 +127,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   font-weight         : bold;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
@@ -141,12 +141,12 @@ div {
   width               : 153px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   font-weight         : bold;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
@@ -164,7 +164,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -176,12 +176,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -198,7 +198,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -210,12 +210,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -233,7 +233,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -245,12 +245,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -289,7 +289,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   font-weight         : bold;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
@@ -303,12 +303,12 @@ div {
   width               : 153px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   font-weight         : bold;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
@@ -326,7 +326,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -338,12 +338,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -360,7 +360,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -372,12 +372,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -395,7 +395,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -407,12 +407,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -450,7 +450,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -462,12 +462,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -485,7 +485,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -497,12 +497,12 @@ div {
   width               : 350px;
   position            : absolute;
   margin              : 0;
-  left                : 225px;
+  left                : 155px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
@@ -605,7 +605,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 20.0px;
+  font-size           : 15.0px;
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;

@@ -292,12 +292,12 @@
                     <div class="properties1">
                         <div class="bg1"> </div>
                         <div class="header"> Source 1 </div>
-						<div class="headerval" id="headerval2">  </div>
+						<div class="headerval" id="headerval1">  </div>
                         <div class="properties1Key1" id="infoproperties1Key1"> Total </div>
                         <div class="properties1val1" id="infoproperties1val1">  </div>
                         <div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
                         <div class="properties1val2" id="infoproperties1val2">  </div>
-						<div class="properties1Key3" id="infoproperties1Key3"> Comparison </div>
+						<div class="properties1Key3" id="infoproperties1Key3"> Compliance </div>
                         <div class="properties1val3" id="infoproperties1val3">  </div>
                     </div>
 
@@ -312,7 +312,7 @@
                         <div class="properties2val1" id="infoproperties2val1">  </div>
                         <div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
                         <div class="properties2val2" id="infoproperties2val2">  </div>
-						<div class="properties2Key3" id="infoproperties2Key3"> Comparison </div>
+						<div class="properties2Key3" id="infoproperties2Key3"> Compliance </div>
                         <div class="properties2val3" id="infoproperties2val3">  </div>
                     </div>
 
@@ -2514,8 +2514,8 @@
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
-                var browser = xCheckStudioInterface1.getModelBrowser();
-                sourceAClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+                sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
+                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
                 // if (xCheckStudioInterface1._modelTree !== undefined) {
                 //     sourceAModelTree = xCheckStudioInterface1._modelTree;
                 //     // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
@@ -2531,8 +2531,8 @@
             }
 
             if (xCheckStudioInterface2) {
-                var browser = xCheckStudioInterface2.getModelBrowser();
-                sourceBClasswiseCheckedComponents = browser.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+                sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
+                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
                 // if (xCheckStudioInterface2._modelTree !== undefined) {
                 //     sourceBModelTree = xCheckStudioInterface2._modelTree;
                 //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
@@ -3753,34 +3753,24 @@
             var sourceAModelTree;
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
-                if (xCheckStudioInterface1._modelTree !== undefined) {
-                    sourceAModelTree = xCheckStudioInterface1._modelTree;
-                    // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
-                    // sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                    // sourceACheckedItemCount = count > 0 ? count : 0;
-                }
-                else if (xCheckStudioInterface1.excelReader !== undefined) {
-                    sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
-                    // sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                    // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
-                    // sourceACheckedItemCount = count > 0 ? count : 0;
-                }
+                // if (xCheckStudioInterface1._modelTree !== undefined) {
+                //     sourceAModelTree = xCheckStudioInterface1._modelTree;
+                // }
+                // else if (xCheckStudioInterface1.excelReader !== undefined) {
+                //     sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
+                // }
+                sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
             }
 
             if (xCheckStudioInterface2) {
-                if (xCheckStudioInterface2._modelTree !== undefined) {
-                    sourceBModelTree = xCheckStudioInterface2._modelTree;
-                    // sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                    // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
-                    // sourceBCheckedItemCount = count > 0 ? count : 0;
-                }
+                // if (xCheckStudioInterface2._modelTree !== undefined) {
+                //     sourceBModelTree = xCheckStudioInterface2._modelTree;
+                // }
 
-                else if (xCheckStudioInterface2.excelReader !== undefined) {
-                    sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
-                    // sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                    // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
-                    // sourceBCheckedItemCount = count > 0 ? count : 0;
-                }
+                // else if (xCheckStudioInterface2.excelReader !== undefined) {
+                //     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
+                // }
+                sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
             }
 
             var sourceAClassWiseComponets = 0;
@@ -3789,26 +3779,68 @@
             if (sourceAModelTree) {
                 var count = sourceAModelTree.selectedCompoents.length;
                 sourceACheckedItemCount = count > 0 ? count : 0;
-                // sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
             }
             if (sourceBModelTree) {
                 var count = sourceBModelTree.selectedCompoents.length;
                 sourceBCheckedItemCount = count > 0 ? count : 0;
-                // sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
-                // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
             }
 
-			//document.getElementById("headerval1").innerHTML = ;
-            document.getElementById("infoproperties1val1").innerHTML = document.getElementById("SourceAComponentCount").innerText;
+            // for source A
+            if(sourceAFileName !== undefined)
+            {
+                document.getElementById("headerval1").innerHTML = sourceAFileName;
+            }
+            var sourceACount = document.getElementById("SourceAComponentCount").innerText;
+            if(sourceACount.split(":")[1] !== undefined)
+            {
+                document.getElementById("infoproperties1val1").innerHTML = sourceACount.split(":")[1].trim();
+            }
+            else{
+                document.getElementById("infoproperties1val1").innerHTML = 0;
+            }
             document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
-			//document.getElementById("infoproperties1val3").innerHTML = ;
+            var sourceACompliancebtn = document.getElementById("complianceSourceACB");
+            if(sourceACompliancebtn.className.includes("state2-to-state1"))
+            {
+                document.getElementById("infoproperties1val3").innerHTML = "Enabled";
+            }
+            else{
+                document.getElementById("infoproperties1val3").innerHTML = "Disabled";
+            }
 
-			//document.getElementById("headerval2").innerHTML = ;
-            document.getElementById("infoproperties2val1").innerHTML = document.getElementById("SourceBComponentCount").innerText;
+            //for source B
+            if(sourceBFileName !== undefined)
+            {
+                document.getElementById("headerval2").innerHTML = sourceBFileName;
+            }
+            var sourceBCount = document.getElementById("SourceBComponentCount").innerText;
+            if(sourceBCount.split(":")[1] !== undefined)
+            {
+                document.getElementById("infoproperties2val1").innerHTML = sourceBCount.split(":")[1].trim();
+            }
+            else{
+                document.getElementById("infoproperties2val1").innerHTML = 0;
+            }
             document.getElementById("infoproperties2val2").innerHTML = sourceBCheckedItemCount;
-			//document.getElementById("infoproperties2val3").innerHTML = ;
-			
+            var sourceBCompliancebtn = document.getElementById("complianceSourceBCB");
+            if(sourceBCompliancebtn.className.includes("state2-to-state1"))
+            {
+                document.getElementById("infoproperties2val3").innerHTML = "Enabled";
+            }
+            else{
+                document.getElementById("infoproperties2val3").innerHTML = "Disabled";
+            }
+            
+            //for both sources
             document.getElementById("infoproperties3val1").innerHTML = checkCaseManager.CheckCase.Name;
+            var comparisonBtn = document.getElementById("comparisonCB");
+            if(comparisonBtn.className.includes("state1-to-state2"))
+            {
+                document.getElementById("infoproperties3val2").innerHTML = "Enabled";
+            }
+            else{
+                document.getElementById("infoproperties3val2").innerHTML = "Disabled";
+            }
 			//document.getElementById("infoproperties3val2").innerHTML = ;
         }
 

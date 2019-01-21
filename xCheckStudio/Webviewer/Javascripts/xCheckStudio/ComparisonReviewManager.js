@@ -380,16 +380,38 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             if (viewerContainer === "viewerContainer1") {
                 _this = this;
-                _this.checkStatusArrayA = {};
+                
+                // if (this.SelectedComponentRowFromSheetA) {
+                //     var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+                //     obj = Object.keys(this.checkStatusArrayA)
+                //     var status = this.checkStatusArrayA[obj[0]][rowIndex]
+                //     var color = this.getRowHighlightColor(status);
+                //     for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                //         cell = this.SelectedComponentRowFromSheetA.cells[j];
+                //         cell.style.backgroundColor = color;
+                //     }
+                // }
                 _this.SelectedComponentRowFromSheetA = undefined;
+                _this.checkStatusArrayA = {};
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer1", CurrentReviewTableRow, column, sheetName);
                 _this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer1");
 
             }
             else if (viewerContainer === "viewerContainer2") {
                 _this = this;
-                _this.checkStatusArrayB = {};
+                
+                // if (this.SelectedComponentRowFromSheetB) {
+                //     var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+                //     obj = Object.keys(this.checkStatusArrayB)
+                //     var status = this.checkStatusArrayB[obj[0]][rowIndex]
+                //     var color = this.getRowHighlightColor(status);
+                //     for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                //         cell = this.SelectedComponentRowFromSheetB.cells[j];
+                //         cell.style.backgroundColor = color;
+                //     }
+                // }
                 _this.SelectedComponentRowFromSheetB = undefined;
+                _this.checkStatusArrayB = {};
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer2", CurrentReviewTableRow, column, sheetName);
                 _this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer2");
             }
@@ -520,10 +542,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                         _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer);
                         if(viewerContainer === "#viewerContainer1")
                         {
-                            _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer2");
+                            if(document.getElementById("viewerContainer2").innerHTML !== "" && _this.SelectedComponentRow.cells[1].innerText !== "")
+                            {
+                                _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer2");
+                            }
                         }
                         else if(viewerContainer === "#viewerContainer2"){
-                            _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
+                            if(document.getElementById("viewerContainer1").innerHTML !== "" && _this.SelectedComponentRow.cells[0].innerText !== "")
+                            {
+                                _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
+                            }
+                            
                         }
                         
                     }
@@ -591,8 +620,21 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (_this.SourceAProperties !== undefined && _this.SourceBProperties !== undefined) {
                         this.checkStatusArrayA = {};
                         this.checkStatusArrayB = {};
-                        _this.showSelectedSheetData("viewerContainer1", sheetName, args.event.currentTarget);
-                        _this.showSelectedSheetData("viewerContainer2", sheetName, args.event.currentTarget);
+                        var CurrentReviewTableRow = args.event.currentTarget;
+                        if(CurrentReviewTableRow.cells[0].innerText !== "")
+                        {
+                            _this.showSelectedSheetData("viewerContainer1", sheetName, args.event.currentTarget);    
+                        }
+                        else if (CurrentReviewTableRow.cells[0].innerText === "") {
+                            document.getElementById("viewerContainer1").innerHTML = "";
+                        }
+                        if(CurrentReviewTableRow.cells[1].innerText !== "")
+                        {
+                            _this.showSelectedSheetData("viewerContainer2", sheetName, args.event.currentTarget);    
+                        }
+                        else if(CurrentReviewTableRow.cells[1].innerText === ""){
+                            document.getElementById("viewerContainer2").innerHTML = "";
+                        }
                     }
                     else if (_this.SourceAViewerData !== undefined &&
                         _this.SourceBViewerData !== undefined) {

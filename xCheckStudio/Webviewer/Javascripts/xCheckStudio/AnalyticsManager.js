@@ -330,7 +330,7 @@ function AnalyticsManager() {
 
             totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
 
-            // totalItemsCheckedFromSources = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
+            // totalItemsNotCheckedFromSources = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
            
             
             
@@ -341,12 +341,12 @@ function AnalyticsManager() {
             var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
             if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
             {
-                totalItemsCheckedFromSources = sourceANotChecked + sourceBNotChecked;
+                totalItemsNotCheckedFromSources = sourceANotChecked + sourceBNotChecked;
             }
             else{
-                totalItemsCheckedFromSources = totalItemsCount;
+                totalItemsNotCheckedFromSources = totalItemsCount;
             }
-            totalItemsNotChecked = totalItemsCount - totalItemsCheckedFromSources;
+            totalItemsNotChecked = totalItemsChecked - totalItemsNotCheckedFromSources;
             // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
             //add data to summary
             document.getElementById("a37Info").innerText = totalItemsChecked;
@@ -481,14 +481,17 @@ function AnalyticsManager() {
             var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
             if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
             {
-                totalItemsCheckedFromSources = sourceANotChecked + sourceBNotChecked;
+                totalItemsNotCheckedFromSources = sourceANotChecked + sourceBNotChecked;
             }
             else{
-                totalItemsCheckedFromSources = totalItemsChecked;
+                totalItemsNotCheckedFromSources = totalItemsChecked;
             }
-            totalItemsNotChecked = totalItemsChecked - totalItemsCheckedFromSources;
+            totalItemsNotChecked = totalItemsChecked - totalItemsNotCheckedFromSources;
 
-                notCheckedCountForDataSource += totalItemsNotChecked;
+                if(totalItemsNotChecked >= 0)
+                {
+                    notCheckedCountForDataSource += totalItemsNotChecked;
+                }
 
                 valueArray.push(noMatchCount);
                 // valueArray.push(notCheckedCount);
