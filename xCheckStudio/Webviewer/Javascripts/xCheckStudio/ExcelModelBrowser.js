@@ -571,7 +571,7 @@ function ExcelModeBrowser() {
 
                 $(viewerContainer).jsGrid({
                     width: "570px",
-                    height: "360px", 
+                    height: "380px", 
                     sorting: true,  
                     autoload: true,
                     data: tableData,
@@ -599,7 +599,7 @@ function ExcelModeBrowser() {
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "570px"
-        container.style.height = "360px"
+        container.style.height = "380px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
     };

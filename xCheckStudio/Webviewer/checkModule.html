@@ -416,7 +416,7 @@
                 <div class="panel">
                     <div class="bg2">
                     </div>
-                    <div class="createtab" id="createTab" onclick="CreateNewTab()" style="cursor: pointer; ">
+                    <div class="createtab" id="createTab" onclick="CreateNewTab()" style="cursor: pointer;" onMouseOver="this.style.cursor='pointer'">
                     </div>
                     <div class="createbtn">
                         <img src="/images/UIPackage/module1-with-open-menu-create-icon@2x.png" class="createicon" />
@@ -1886,11 +1886,11 @@
             </div>
             <div class="group32" id="dataSourceViewer" style="opacity: 0.99">
                 <div class="bg1">
-                    <div id="viewerContainer1" style="height: 350px; width: 560px;margin: 20px 0 0 20px; display: block"
+                    <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
                         class="example-canvas-small">
 
                     </div>
-                    <div id="viewerContainer2" style="height: 350px; width: 560px; margin: 20px 0 0 20px; display: none"
+                    <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
                         class="example-canvas-small">
 
                     </div>
@@ -3563,7 +3563,7 @@
             var container = document.getElementById("dataSourceViewer");
             viewerContainer = container.getElementsByClassName("bg1");
             viewerdata.style.width = "560px"
-            viewerdata.style.height = "350px";
+            viewerdata.style.height = "380px";
             viewerdata.style.margin = "20px 0 0 20px";
             //margin: 20px 0 0 20px
             viewerContainer[0].appendChild(viewerdata);
