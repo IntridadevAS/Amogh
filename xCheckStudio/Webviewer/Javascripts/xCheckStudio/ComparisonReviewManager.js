@@ -112,8 +112,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeaders.push(columnHeader);
             }
 
-            // if component groupd is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid
-            if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+            // if component group is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid
+            var componentClassArray = componentsGroup.ComponentClass.split("-");
+            if(componentClassArray.length != 2)
+            {
+                return;
+            }
+
+            if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
+                componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
 
                 for (var i = 0; i < 3; i++) {
                     columnHeader = {};
@@ -133,7 +140,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeaders.push(columnHeader);
                 }
             }
-            else if(componentsGroup.ComponentClass.toLowerCase() === "equipment")
+            else if(componentClassArray[0].toLowerCase() === "equipment" ||
+                    componentClassArray[1].toLowerCase() === "equipment")
             {
                 columnHeader = {};
                 columnHeader["name"] = "Handle";
@@ -155,7 +163,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                 // construct component identifier 
                 //var componentIdentifier = component.SourceAName;
 
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
+                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
@@ -171,7 +180,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                         tableRowContent[columnHeaders[5].name] = checkPropertyOwnerId.SourceAValue;                        
                     }
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                else if (componentClassArray[0].toLowerCase() === "equipment" ||
+                         componentClassArray[1].toLowerCase() === "equipment") {
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
                     if (checkPropertyHandle != undefined) {
                         tableRowContent[columnHeaders[3].name] = checkPropertyHandle.SourceAValue;                        
@@ -212,12 +222,14 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
+                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                     componentIdentifier += "_" + currentRow.cells[5].innerText;
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
+                else if (componentClassArray[0].toLowerCase() === "equipment" ||
+                         componentClassArray[1].toLowerCase() === "equipment") {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                 }
 
@@ -380,38 +392,16 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             if (viewerContainer === "viewerContainer1") {
                 _this = this;
-                
-                // if (this.SelectedComponentRowFromSheetA) {
-                //     var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
-                //     obj = Object.keys(this.checkStatusArrayA)
-                //     var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                //     var color = this.getRowHighlightColor(status);
-                //     for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                //         cell = this.SelectedComponentRowFromSheetA.cells[j];
-                //         cell.style.backgroundColor = color;
-                //     }
-                // }
-                _this.SelectedComponentRowFromSheetA = undefined;
                 _this.checkStatusArrayA = {};
+                _this.SelectedComponentRowFromSheetA = undefined;
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer1", CurrentReviewTableRow, column, sheetName);
                 _this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer1");
 
             }
             else if (viewerContainer === "viewerContainer2") {
                 _this = this;
-                
-                // if (this.SelectedComponentRowFromSheetB) {
-                //     var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                //     obj = Object.keys(this.checkStatusArrayB)
-                //     var status = this.checkStatusArrayB[obj[0]][rowIndex]
-                //     var color = this.getRowHighlightColor(status);
-                //     for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                //         cell = this.SelectedComponentRowFromSheetB.cells[j];
-                //         cell.style.backgroundColor = color;
-                //     }
-                // }
-                _this.SelectedComponentRowFromSheetB = undefined;
                 _this.checkStatusArrayB = {};
+                _this.SelectedComponentRowFromSheetB = undefined;
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer2", CurrentReviewTableRow, column, sheetName);
                 _this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer2");
             }
@@ -620,17 +610,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (_this.SourceAProperties !== undefined && _this.SourceBProperties !== undefined) {
                         this.checkStatusArrayA = {};
                         this.checkStatusArrayB = {};
+                        var result = sheetName.split('-');
                         var CurrentReviewTableRow = args.event.currentTarget;
                         if(CurrentReviewTableRow.cells[0].innerText !== "")
                         {
-                            _this.showSelectedSheetData("viewerContainer1", sheetName, args.event.currentTarget);    
+                            _this.showSelectedSheetData("viewerContainer1", result[0], args.event.currentTarget);    
                         }
                         else if (CurrentReviewTableRow.cells[0].innerText === "") {
                             document.getElementById("viewerContainer1").innerHTML = "";
                         }
                         if(CurrentReviewTableRow.cells[1].innerText !== "")
                         {
-                            _this.showSelectedSheetData("viewerContainer2", sheetName, args.event.currentTarget);    
+                            _this.showSelectedSheetData("viewerContainer2",  result[0], args.event.currentTarget);    
                         }
                         else if(CurrentReviewTableRow.cells[1].innerText === ""){
                             document.getElementById("viewerContainer2").innerHTML = "";
@@ -643,7 +634,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     else if (_this.SourceAProperties !== undefined && _this.SourceBViewerData !== undefined) {
                         this.checkStatusArrayA = {};
                         this.checkStatusArrayB = {};
-                        _this.showSelectedSheetData("viewerContainer1", sheetName, args.event.currentTarget);
+                         var result = sheetName.split('-');
+                        _this.showSelectedSheetData("viewerContainer1", result[0], args.event.currentTarget);
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
                 }
@@ -955,7 +947,14 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
                 // because they may have same tag names
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                var componentClassArray = componentsGroup.ComponentClass.split("-");
+                if(componentClassArray.length != 2)
+                {
+                    return;
+                }
+    
+                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
+                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
@@ -975,7 +974,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                     }
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {        
+                else if (componentClassArray[0].toLowerCase() ==="equipment" ||
+                         componentClassArray[1].toLowerCase() ==="equipment") {        
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
 
                     if (checkPropertyHandle != undefined) {

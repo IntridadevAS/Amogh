@@ -297,18 +297,7 @@ function CheckManager() {
                           this.SourceANotCheckedComponents.push(sourceAComponentProperties);
                       }
                 continue;
-            }
-
-            // check if component class exists in checkcase for Source A
-            if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, undefined)) {
-                continue;
-            }
-
-            // create or get check component group
-            var checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass);
-            if (!checkComponentGroup) {
-                continue;
-            }
+            }        
 
             // componentMatchFound flag
             var componentMatchFound = false;
@@ -316,6 +305,17 @@ function CheckManager() {
             // check corresponding component in source B
             for (var j = 0; j < sourceBProperties.length; j++) {
                 var sourceBComponentProperties = sourceBProperties[j];
+
+                // check if component class exists in checkcase for Source A
+                if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
+                    continue;
+                }
+
+                // create or get check component group
+                var checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                if (!checkComponentGroup) {
+                    continue;
+                }
 
                 // check if component class exists in checkcase in both sources
                 if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
@@ -458,21 +458,23 @@ function CheckManager() {
                 continue;
             }
 
-            // check if component class exists in checkcase for Source B
-            if (!checkCaseType.componentGroupExists(undefined, sourceBComponentProperties.MainComponentClass)) {
-                continue;
-            }
-
-            // create or get check component group
-            var checkComponentGroup = this.getCheckComponentGroup(sourceBComponentProperties.MainComponentClass);
-            if (!checkComponentGroup) {
-                continue;
-            }
+        
 
             var componentMatchFound = false;
 
             for (var j = 0; j < sourceAProperties.length; j++) {
                 var sourceAComponentProperties = sourceAProperties[j];
+
+                // check if component class exists in checkcase for Source B
+                if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
+                    continue;
+                }
+
+                // create or get check component group
+                var checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                if (!checkComponentGroup) {
+                    continue;
+                }
 
                 // check if component class exists in checkcase
                 if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {

@@ -222,7 +222,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
         var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
         for (var i = 0; i < doc.length; i++) {
-            if (componentsGroupName.localeCompare(doc[i].innerHTML) == 0) {
+            var result = doc[i].innerHTML.split("-");
+           
+            if ( result.indexOf(componentsGroupName) != -1) {
                 var nextSibling = doc[i].nextSibling;
                 if (nextSibling.style.display != "block") {
                     nextSibling.style.display = "block";
