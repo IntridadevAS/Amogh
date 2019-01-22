@@ -332,52 +332,6 @@ function CheckManager() {
                 // get check case component
                 var checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
 
-                //    // check if components are match
-                //    if(checkCaseType.SourceAType !== checkCaseType.SourceBType){
-                //     var sourceAmainComponent = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass);
-                //     var sourceBmainComponent = checkCaseType.getComponentGroup(sourceBComponentProperties.MainComponentClass);
-                //     var sourceASubComponent = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass);
-                //     var sourceBSubComponent = checkCaseGroup.getComponentClass(sourceBComponentProperties.SubComponentClass);
-                //     if(sourceAmainComponent !== undefined)
-                //     {
-                //         sourceAmainComponentClass = sourceAmainComponent.SourceAGroupName;
-                //     }
-                //     else{
-                //         sourceAmainComponentClass = "";
-                //     }
-                //     if(sourceBmainComponent !== undefined)
-                //     {
-                //         sourceBmainComponentClass = sourceBmainComponent.SourceBGroupName;
-                //     }
-                //     else{
-                //         sourceBmainComponentClass = "";
-                //     }
-                //     if(sourceASubComponent !== undefined)
-                //     {
-                //         sourceASubComponentClass = sourceASubComponent.SourceAClassName;
-                //     }
-                //     else{
-                //         sourceASubComponentClass = "";
-                //     }
-                //     if(sourceBSubComponent !== undefined)
-                //     {
-                //         sourceBSubComponentClass = sourceBSubComponent.SourceBClassName;
-                //     }
-                //     else{
-                //         sourceBSubComponentClass = "";
-                //     }
-
-                //     // if (sourceAComponentProperties.Name === sourceBComponentProperties.Name &&
-                //     //     sourceAComponentProperties.MainComponentClass === sourceAmainComponentClass &&
-                //     //     sourceBComponentProperties.MainComponentClass === sourceBmainComponentClass &&
-                //     //     sourceAComponentProperties.SubComponentClass === sourceASubComponentClass &&
-                //     //     sourceBComponentProperties.SubComponentClass === sourceBSubComponentClass) {
-                //             if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties, sourceAmainComponentClass, sourceBmainComponentClass,
-                //                 sourceASubComponentClass, sourceBSubComponentClass)) {
-                //                 continue;
-                //             }
-                //    }
-                //    else if (checkCaseType.SourceAType === checkCaseType.SourceBType) {
                 if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
                     //source A not matched
                     if(this.SourceANotMatchedComponents.indexOf(sourceAComponentProperties) === -1)
@@ -386,8 +340,6 @@ function CheckManager() {
                     }
                     continue;
                 }
-                //}
-
 
                 // mark this source B proerty compoent as matched
                 comparedSourceBComponents.push(sourceBComponentProperties);
@@ -489,39 +441,6 @@ function CheckManager() {
                 }
                 // get check case component
                 var checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
-
-                // var sourceAmainComponent = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass);
-                // var sourceBmainComponent = checkCaseType.getComponentGroup(sourceBComponentProperties.MainComponentClass);
-                // var sourceASubComponent = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass);
-                // var sourceBSubComponent = checkCaseGroup.getComponentClass(sourceBComponentProperties.SubComponentClass);
-                // if(sourceAmainComponent !== undefined)
-                // {
-                //     sourceAmainComponentClass = sourceAmainComponent.SourceAGroupName;
-                // }
-                // else{
-                //     sourceAmainComponentClass = "";
-                // }
-                // if(sourceBmainComponent !== undefined)
-                // {
-                //     sourceBmainComponentClass = sourceBmainComponent.SourceBGroupName;
-                // }
-                // else{
-                //     sourceBmainComponentClass = "";
-                // }
-                // if(sourceASubComponent !== undefined)
-                // {
-                //     sourceASubComponentClass = sourceASubComponent.SourceAClassName;
-                // }
-                // else{
-                //     sourceASubComponentClass = "";
-                // }
-                // if(sourceBSubComponent !== undefined)
-                // {
-                //     sourceBSubComponentClass = sourceBSubComponent.SourceBClassName;
-                // }
-                // else{
-                //     sourceBSubComponentClass = "";
-                // }
 
                 // check if components are match
                 if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
@@ -705,50 +624,6 @@ function CheckManager() {
 
             description = "Property match not found.";
         }
-        // if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName) &&
-        //     sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
-
-        //     var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
-        //     var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
-
-        //     property1Name = property1.Name;
-        //     property2Name = property2.Name;
-        //     property1Value = property1.Value;
-        //     property2Value = property2.Value;
-
-        //     // If both properties (Source A and Source B properties) do not have values, 
-        //     // show  'No Value' severity
-        //     if ((property1Value === undefined || property1Value === "") &&
-        //         (property2Value === undefined || property2Value === "")) {
-        //         severity = "No Value";
-        //         performCheck = false;
-        //         description = "Both properties have no values.";
-        //     }
-        //     else if ((property1Value === undefined || property1Value === "") ||
-        //         (property2Value === undefined || property2Value === "")) {
-        //         // If anyone of the properties has no value, then show 'Error'.
-        //         severity = "Error";
-        //         performCheck = false;
-
-        //         description = "One of the properties have no value.";
-        //     }
-        //     else {
-        //         severity = checkCaseMappingProperty.Severity;
-        //         performCheck = true;
-
-        //         description = "Property check performed";
-        //     }
-        // }
-        // else {
-        //     property1Name = checkCaseMappingProperty.SourceAName;
-        //     property2Name = checkCaseMappingProperty.SourceBName;
-        //     property1Value = "";
-        //     property2Value = "";
-        //     severity = "Error";
-        //     performCheck = false;
-
-        //     description = "Property match not found.";
-        // }
 
         if (checkCaseMappingProperty.Comment) {
             description += "<br>" + checkCaseMappingProperty.Comment;
@@ -882,12 +757,6 @@ function CheckComponent(sourceAName,
         this.CheckProperties.push(property);
 
         if (!property.PerformCheck) {
-            // if (property.Severity.toLowerCase() === ("No Value").toLowerCase() &&
-            //     this.Status.toLowerCase() !== ("Error").toLowerCase() &&
-            //     this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
-            //     this.Status = "No Value";
-            // }
-            // else
             if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
                 this.Status = "Error";
             }
@@ -925,13 +794,6 @@ function CheckComponent(sourceAName,
     }
 
     CheckComponent.prototype.restore = function (componentData) {
-
-        // if (componentData.Status.toLowerCase() === "no match") {
-        //     // if component data having status as No match, there is no need 
-        //     // restore properties for this component
-        //     this.Status = "No Match";
-        //     return;
-        // }
 
         for (var i = 0; i < componentData.CheckProperties.length; i++) {
             var checkPropertyData = componentData.CheckProperties[i];

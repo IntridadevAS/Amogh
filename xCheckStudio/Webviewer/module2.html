@@ -176,6 +176,7 @@
             /* Hidden by default */
             position: absolute;
             /* Stay in place */
+            z-index: 1;
             padding: auto;
             /* Location of the box */
             width: 1280px;
@@ -184,7 +185,6 @@
             /* Full height */
             margin: 0 432px 0 0;
             top: 0px;
-            left: 320px;
             background-color: rgb(0, 0, 0);
             /* Fallback color */
             background-color: rgba(0, 0, 0, 0.4);
@@ -495,19 +495,6 @@
                 </div>
 
             </div>
-            <!-- <div class="white1">
-                    <img src="/images/UIPackage/module2-bg 7.png" class="bg2" />
-                    <div class="panel">
-                        <div class="bg3">
-                        </div>
-                    </div>
-                    <div class="tab1">
-                        <img src="/images/UIPackage/module2-with-open-menu-tab 2@2x.png" class="tab2" />
-                    </div>
-                    <div class="checks">
-                        Checks
-                    </div>
-                </div> -->
             <div class="group">
                 <div class="iconfullscreenfilled" onclick="OnFullScreen()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/module1-icon--fullscreen--filled@2x.png" class="iconfullscreenfilled1" />
@@ -525,27 +512,15 @@
                     <img src="/images/UIPackage/module1-with-open-menu-icon-3-black@2x.png" class="icon3black" />
                 </div>
             </div>
-            <!-- <div class="tab">
-                    <img src="/images/UIPackage/module2-tab 3@2x.png" class="tab1" />
+            <!-- The Modal -->
+            <div id="maximizeViewerContainer" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content" id="maximizeViewerContainer-content" style="width: 750px; height: 740px; margin-left: 280px; margin-top: 5px;">
+
                 </div>
-                <div class="analytics">
-                    Analytics
-                </div> -->
-            <!-- <img src="/images/UIPackage/module2-with-open-menu-bitmap.png" class="bitmap" /> -->
-        </div>
-        <!-- The Modal -->
-        <div id="projectselectiondialogModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" id="projectselectiondialog-content">
-
             </div>
         </div>
-        <div id="maximizeViewerContainer" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" id="maximizeViewerContainer-content" style="width: 750px; height: 740px; margin-left: 280px; margin-top: 5px;">
-
-            </div>
-        </div>
+        
     </div>
     <!-- Scripts -->
     <script>
@@ -1146,15 +1121,6 @@
             if (tabName === "AnalyticsTabPage") {
                 document.getElementById("AnalyticsViewTab").style.backgroundColor = "#F3F0F4";
                 document.getElementById("ChecksViewTab").style.backgroundColor = "lightgray";
-                // loadAnalyticsData();
-                // $("#analyticsContent").load("/analyticsModule.html");
-                // modal = document.getElementById('projectselectiondialogModal');
-
-                // // When the user clicks the button, open the modal 
-                // modal.style.display = "block";
-                // document.getElementById("projectselectiondialog-content").innerHTML = "";
-                
-                // $('#analyticsContainer').load('/analyticsModule.html');
                 document.getElementById("analyticsContainer").innerHTML='<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
                 // window.open("/analyticsModule.html", 'popUpWindow', 'height=800,width=1500,left=100,top=100, status=yes');
 
@@ -1511,7 +1477,7 @@
                 var modalViewer = document.getElementById("maximizeViewerContainer-content");
                 modalViewer.innerHTML = "";
                 modalViewer.appendChild(analyticsContainerElement);
-                modalViewer.style.marginLeft = "10px";
+                modalViewer.style.marginLeft = "20px";
                 modalViewer.style.marginTop = "10px";
                 modalViewer.style.height = "750px";
                 var modalAnalyticsContainer = modalViewer.children[0]//modalViewer.getElementById("analyticsContainer");

@@ -17,21 +17,37 @@ function AnalyticsManager() {
             var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
+                // totalItemsChecked += components.length;
                 for (var i = 0; i < components.length; i++) {
                     currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
+                    if(currentComponent.SourceAName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        if (currentComponent.Status.toLowerCase() === "ok") {
+                            okCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "error") {
+                            errorsCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "warning") {
+                            warningsCount++;
+                        }
                     }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
+                    if(currentComponent.SourceBName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        if (currentComponent.Status.toLowerCase() === "ok") {
+                            okCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "error") {
+                            errorsCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "warning") {
+                            warningsCount++;
+                        }
                     }
                 }
             }
-
             //add data to summary
             document.getElementById("a37").innerText = totalItemsChecked;
             document.getElementById("a18").innerText = errorsCount;
@@ -304,7 +320,6 @@ function AnalyticsManager() {
             drawPieChart(dataTable, "", SourceBCompliance_pie5, colorsArray)
         }
     }
-    //drawInfoPieCharts
 
     AnalyticsManager.prototype.drawInfoPieCharts = function (type, tabName) {
         if (this.ComparisonResultArray.length > 0) {
@@ -319,41 +334,31 @@ function AnalyticsManager() {
             var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
+                // totalItemsChecked += components.length;
                 for (var i = 0; i < components.length; i++) {
                     currentComponent = components[i];
                     if (currentComponent.Status.toLowerCase() === "no match") {
                         noMatchCount++;
                     }
+                    if(currentComponent.SourceAName !== "")
+                    {
+                        totalItemsChecked += 1;
+                    }
+                    if(currentComponent.SourceBName !== "")
+                    {
+                        totalItemsChecked += 1;
+                    }
                 }
             }
 
             totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
-
-            // totalItemsNotCheckedFromSources = AnalyticsData.SourceACheckedItemCount + AnalyticsData.SourceBCheckedItemCount;
-           
-            
-            
-            // var sourceANotChecked = ComparisonCheckData.SourceANotCheckedComponents.length;
-            // var sourceBNotChecked = ComparisonCheckData.SourceBNotCheckedComponents.length ;
-
-            var sourceANotChecked = AnalyticsData.SourceATotalItemCount - AnalyticsData.SourceACheckedItemCount;
-            var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
-            if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
-            {
-                totalItemsNotCheckedFromSources = sourceANotChecked + sourceBNotChecked;
-            }
-            else{
-                totalItemsNotCheckedFromSources = totalItemsCount;
-            }
-            totalItemsNotChecked = totalItemsChecked - totalItemsNotCheckedFromSources;
-            if(totalItemsNotChecked < 0)
-            {
-                totalItemsNotChecked = 0;
-            }
-            // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
+            totalItemsNotChecked = totalItemsCount - totalItemsChecked;
+            // if(totalItemsNotChecked < 0)
+            // {
+            //     totalItemsNotChecked = 0;
+            // }
             //add data to summary
-            document.getElementById("a37Info").innerText = totalItemsChecked;
+            document.getElementById("a37Info").innerText = totalItemsCount;
             document.getElementById("a18Info").innerText = totalItemsNotChecked ;
             document.getElementById("a13Info").innerText = noMatchCount;
 
@@ -426,17 +431,13 @@ function AnalyticsManager() {
 
         var totalItemsCheckedForDataSource = 0;
         var noMatchCountForDataSource = 0;
-        var notCheckedCountForDataSource = 0;
 
         var totalItemsChecked = 0;
-        // var okCount = 0;
-        // var errorsCount = 0;
-        // var warningsCount = 0;
 
         var titleArray = [];
 
 
-        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison" && typeof AnalyticsData !== 'undefined') {
+        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison") {
             titleArray = [];
             titleArray.push("Name");
             titleArray.push("No Match");
@@ -446,60 +447,51 @@ function AnalyticsManager() {
             var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
                 var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked = components.length;
+                // totalItemsChecked += components.length;
                 totalItemsCheckedForDataSource += components.length;
                 var valueArray = [];
                 valueArray.push(componentGroup);
 
                 var noMatchCount = 0;
                 var notCheckedCount = 0;
+                var classwiseCheckedItemsCount = 0;
 
                 for (var i = 0; i < components.length; i++) {
                     currentComponent = components[i];
                     if (currentComponent.Status.toLowerCase() === "no match") {
                         noMatchCount++;
                     }
+                    if(currentComponent.SourceAName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        classwiseCheckedItemsCount +=1;
+                    }
+                    if(currentComponent.SourceBName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        classwiseCheckedItemsCount +=1;
+                    }
                 }
-
-                var sourceACheckedComponent = AnalyticsData.SourceAClasswiseCheckedComponents[componentGroup] !== undefined ? AnalyticsData.SourceAClasswiseCheckedComponents[componentGroup] : 0;
-                var sourceBCheckedComponent = AnalyticsData.SourceBClasswiseCheckedComponents[componentGroup] !== undefined ? AnalyticsData.SourceBClasswiseCheckedComponents[componentGroup] : 0;
-                var classwiseTotalCheckedComponents = sourceACheckedComponent + sourceBCheckedComponent;
-
-                var sourceAClassWiseComponents = AnalyticsData.SourceAClasswiseComponents[componentGroup] !== undefined ? AnalyticsData.SourceAClasswiseComponents[componentGroup] : 0;
-                var sourceBClassWiseComponents = AnalyticsData.SourceBClasswiseComponents[componentGroup] !== undefined ? AnalyticsData.SourceBClasswiseComponents[componentGroup] : 0;
-                var classwiseTotalComponents = sourceAClassWiseComponents + sourceBClassWiseComponents;
-
-                notCheckedCount = classwiseTotalComponents - classwiseTotalCheckedComponents;
 
                 noMatchCountForDataSource += noMatchCount;
-
-                // var sourceANotChecked = ComparisonCheckData.SourceANotCheckedComponents.length;
-                // var sourceBNotChecked = ComparisonCheckData.SourceBNotCheckedComponents.length ;
-                // totalItemsNotChecked = (sourceANotChecked + sourceBNotChecked);
-                var sourceANotChecked = AnalyticsData.SourceATotalItemCount - AnalyticsData.SourceACheckedItemCount;
-            var sourceBNotChecked = AnalyticsData.SourceBTotalItemCount - AnalyticsData.SourceBCheckedItemCount;
-            if(sourceANotChecked !== 0 && sourceBNotChecked !== 0)
-            {
-                totalItemsNotCheckedFromSources = sourceANotChecked + sourceBNotChecked;
-            }
-            else{
-                totalItemsNotCheckedFromSources = totalItemsChecked;
-            }
-            totalItemsNotChecked = totalItemsChecked - totalItemsNotCheckedFromSources;
-
-                if(totalItemsNotChecked >= 0)
+                var componentGroupName = componentGroup.split("-");
+                var sourceAcomponentGroupCount = AnalyticsData.SourceAClasswiseComponents[componentGroupName[0]];
+                var sourceBcomponentGroupCount = AnalyticsData.SourceBClasswiseComponents[componentGroupName[1]];
+                var classWiseTotalItems = sourceAcomponentGroupCount + sourceBcomponentGroupCount;
+                var classWiseTotalNotCheckedItems = classWiseTotalItems - classwiseCheckedItemsCount;
+                if(classWiseTotalNotCheckedItems < 0)
                 {
-                    notCheckedCountForDataSource += totalItemsNotChecked;
+                    classWiseTotalNotCheckedItems =0;
                 }
-
                 valueArray.push(noMatchCount);
-                // valueArray.push(notCheckedCount);
-                valueArray.push(totalItemsNotChecked);
+                valueArray.push(classWiseTotalNotCheckedItems);
                 this.ComparisonResultArray.push(valueArray);
             }
-            totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
-            document.getElementById("a37Info").innerText = totalItemsCheckedForDataSource;
-            document.getElementById("a18Info").innerText = notCheckedCountForDataSource;
+
+            var totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
+            var totalItemsNotChecked = totalItemsCount - totalItemsChecked;
+            document.getElementById("a37Info").innerText = totalItemsCount;
+            document.getElementById("a18Info").innerText = totalItemsNotChecked;
             document.getElementById("a13Info").innerText = noMatchCountForDataSource;
 
 
@@ -507,6 +499,7 @@ function AnalyticsManager() {
             colorsArray = ["#AFD3C5", "#839192"];
             drawBarChart(dataTable, "", group2_barInfo, colorsArray);
         }
+        
     }
 
     AnalyticsManager.prototype.drawBarCharts = function (type, tabName) {
@@ -519,7 +512,7 @@ function AnalyticsManager() {
         var warningsCountForDataSource = 0;
         var okCountForDataSource = 0;
 
-        // var totalItemsChecked = 0;
+        var totalItemsChecked = 0;
         // var okCount = 0;
         // var errorsCount = 0;
         // var warningsCount = 0;
@@ -549,14 +542,31 @@ function AnalyticsManager() {
 
                 for (var i = 0; i < components.length; i++) {
                     currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
+                    if(currentComponent.SourceAName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        if (currentComponent.Status.toLowerCase() === "ok") {
+                            okCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "error") {
+                            errorsCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "warning") {
+                            warningsCount++;
+                        }
                     }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
+                    if(currentComponent.SourceBName !== "")
+                    {
+                        totalItemsChecked += 1;
+                        if (currentComponent.Status.toLowerCase() === "ok") {
+                            okCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "error") {
+                            errorsCount++;
+                        }
+                        if (currentComponent.Status.toLowerCase() === "warning") {
+                            warningsCount++;
+                        }
                     }
                 }
 
@@ -574,7 +584,7 @@ function AnalyticsManager() {
                 this.ComparisonResultArray.push(valueArray);
             }
 
-            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
+            document.getElementById("a37").innerText = totalItemsChecked;
             document.getElementById("a18").innerText = errorsCountForDataSource;
             document.getElementById("a13").innerText = warningsCountForDataSource;
             document.getElementById("a6").innerText = okCountForDataSource;

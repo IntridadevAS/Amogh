@@ -80,7 +80,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 16.0px;
+  font-size           : 12.0px;
   color               : rgba(153, 153, 153, 1.0);
   text-align          : left;
   line-height         : 19.0px;
@@ -115,7 +115,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 660px;
+  left                : 580px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -132,7 +132,7 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 660px;
+  left                : 580px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -202,7 +202,7 @@ div {
   width               : 39px;
   position            : absolute;
   margin              : 0;
-  left                : 683px;
+  left                : 580px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
@@ -244,7 +244,7 @@ div {
   width               : 39px;
   position            : absolute;
   margin              : 0;
-  left                : 683px;
+  left                : 580px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
