@@ -38,8 +38,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.checkStatusArrayA = {};
     this.checkStatusArrayB = {};
 
-    this.detailedReviewRowComments = {};
-
+    this.detailedReviewRowComments = {};    
+    
     ComparisonReviewManager.prototype.loadDatasources = function () {
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
@@ -58,6 +58,17 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
         }
+    }
+
+    ComparisonReviewManager.prototype.checkComponentGroupCategory = function (componentGroupClassName, categoryToCheck) {
+        var componentClassArray = componentGroupClassName.split("-");
+        for (var i = 0; i < componentClassArray.length; i++) {
+            if (componentClassArray[i].toLowerCase() === categoryToCheck.toLowerCase()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     ComparisonReviewManager.prototype.populateReviewTable = function () {
@@ -112,15 +123,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeaders.push(columnHeader);
             }
 
-            // if component group is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid
-            var componentClassArray = componentsGroup.ComponentClass.split("-");
-            if(componentClassArray.length != 2)
-            {
-                return;
-            }
-
-            if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
-                componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
+            // if component group is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid         
+           
+            if ( this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
 
                 for (var i = 0; i < 3; i++) {
                     columnHeader = {};
@@ -140,8 +145,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeaders.push(columnHeader);
                 }
             }
-            else if(componentClassArray[0].toLowerCase() === "equipment" ||
-                    componentClassArray[1].toLowerCase() === "equipment")
+            else if(this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" ))
             {
                 columnHeader = {};
                 columnHeader["name"] = "Handle";
@@ -163,8 +167,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 // construct component identifier 
                 //var componentIdentifier = component.SourceAName;
 
-                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
-                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
+                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
@@ -180,8 +183,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         tableRowContent[columnHeaders[5].name] = checkPropertyOwnerId.SourceAValue;                        
                     }
                 }
-                else if (componentClassArray[0].toLowerCase() === "equipment" ||
-                         componentClassArray[1].toLowerCase() === "equipment") {
+                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" )) {
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
                     if (checkPropertyHandle != undefined) {
                         tableRowContent[columnHeaders[3].name] = checkPropertyHandle.SourceAValue;                        
@@ -222,14 +224,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
-                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
+                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                     componentIdentifier += "_" + currentRow.cells[5].innerText;
                 }
-                else if (componentClassArray[0].toLowerCase() === "equipment" ||
-                         componentClassArray[1].toLowerCase() === "equipment") {
+                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" )) {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                 }
 
@@ -529,22 +529,36 @@ function ComparisonReviewManager(comparisonCheckManager,
                     fields: columnHeaders,
                     margin: "0px",
                     rowClick: function (args) {
+                        if ((viewerContainer === "#viewerContainer1" && args.event.currentTarget === _this.SelectedComponentRowFromSheetA) ||
+                            (viewerContainer === "#viewerContainer2" && args.event.currentTarget === _this.SelectedComponentRowFromSheetB)) {
+                            return;
+                        }
+
                         _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer);
-                        if(viewerContainer === "#viewerContainer1")
-                        {
-                            if(document.getElementById("viewerContainer2").innerHTML !== "" && _this.SelectedComponentRow.cells[1].innerText !== "")
-                            {
-                                _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer2");
+
+                        if (viewerContainer === "#viewerContainer1") {
+                            if (document.getElementById("viewerContainer2").innerHTML !== "" &&
+                                _this.SelectedComponentRow.cells[1].innerText !== "") {
+                                if (_this.SourceBProperties !== undefined) {
+                                    _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer2");
+                                }
+                                else if (_this.SourceBViewerData !== undefined) {
+                                    _this.HighlightComponentInGraphicsViewer(_this.SelectedComponentRow)
+                                }
                             }
                         }
-                        else if(viewerContainer === "#viewerContainer2"){
-                            if(document.getElementById("viewerContainer1").innerHTML !== "" && _this.SelectedComponentRow.cells[0].innerText !== "")
-                            {
-                                _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
+                        else if (viewerContainer === "#viewerContainer2") {
+                            if (document.getElementById("viewerContainer1").innerHTML !== "" && _this.SelectedComponentRow.cells[0].innerText !== "") {
+                                if (_this.SourceAProperties !== undefined) {
+                                    _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
+                                }
+                                else if (_this.SourceAViewerData !== undefined) {
+                                    _this.HighlightComponentInGraphicsViewer(_this.SelectedComponentRow)
+                                }
                             }
-                            
+
                         }
-                        
+
                     }
                 });
 
@@ -621,7 +635,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         if(CurrentReviewTableRow.cells[1].innerText !== "")
                         {
-                            _this.showSelectedSheetData("viewerContainer2",  result[0], args.event.currentTarget);    
+                            _this.showSelectedSheetData("viewerContainer2",  result[1], args.event.currentTarget);    
                         }
                         else if(CurrentReviewTableRow.cells[1].innerText === ""){
                             document.getElementById("viewerContainer2").innerHTML = "";
@@ -636,6 +650,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                         this.checkStatusArrayB = {};
                          var result = sheetName.split('-');
                         _this.showSelectedSheetData("viewerContainer1", result[0], args.event.currentTarget);
+                        _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
+                    }
+                    else if (_this.SourceBProperties !== undefined && _this.SourceAViewerData !== undefined) {
+                        this.checkStatusArrayA = {};
+                        this.checkStatusArrayB = {};
+                         var result = sheetName.split('-');
+                        _this.showSelectedSheetData("viewerContainer2", result[1], args.event.currentTarget);
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
                 }
@@ -665,14 +686,21 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
 
         if (reviewTableId.indexOf("PipingNetworkSegment") !== -1) {
-            var source = currentReviewTableRow.cells[3].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[3].innerHTML;
-            var destination = currentReviewTableRow.cells[4].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[4].innerHTML;;
-            var ownerId = currentReviewTableRow.cells[5].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[5].innerHTML;;
-            componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+            var source = currentReviewTableRow.cells[3].innerHTML;
+            var destination = currentReviewTableRow.cells[4].innerHTML;
+            var ownerId = currentReviewTableRow.cells[5].innerHTML;
+
+            if (source !== undefined && source !== "" && 
+                destination !== undefined && destination !== "" && 
+                ownerId !== undefined && ownerId !== "") {
+                componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+            }
         }
         else if (reviewTableId.indexOf("Equipment") !== -1) {
-            var ownerHandle = currentReviewTableRow.cells[3].innerHTML === "" ? "undefined" : currentReviewTableRow.cells[3].innerHTML;;
-            componentIdentifier += "_" + ownerHandle;
+            var ownerHandle = currentReviewTableRow.cells[3].innerHTML;
+            if (ownerHandle !== undefined && ownerHandle !== "") {
+                componentIdentifier += "_" + ownerHandle;
+            }
         }
         
 
@@ -948,15 +976,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
-                // because they may have same tag names
-                var componentClassArray = componentsGroup.ComponentClass.split("-");
-                if(componentClassArray.length != 2)
-                {
-                    return;
-                }
+                // because they may have same tag names              
     
-                if (componentClassArray[0].toLowerCase() === "pipingnetworksegment" ||
-                    componentClassArray[1].toLowerCase() === "pipingnetworksegment") {
+                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
@@ -976,8 +998,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                     }
                 }
-                else if (componentClassArray[0].toLowerCase() ==="equipment" ||
-                         componentClassArray[1].toLowerCase() ==="equipment") {        
+                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" )) {        
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
 
                     if (checkPropertyHandle != undefined) {
@@ -1026,15 +1047,38 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeaders.push(columnHeader);
                 }
 
-                // show component class name as property in detailed review table               
-                var property = new CheckProperty("ComponentClass",
-                    component.SubComponentClass,
-                    "ComponentClass",
-                    component.SubComponentClass,
-                    "",
-                    true,
-                    "Match");
+                // show component class name as property in detailed review table    
 
+                var property;
+                if (component.Status.toLowerCase() === "no match") {
+                    if (component.SourceAName !== "") {
+                        property = new CheckProperty("ComponentClass",
+                            component.SubComponentClass,
+                            "",
+                            "",
+                            "No Match",
+                            true,
+                            "No Match");
+                    }
+                    else if (component.SourceBName !== "") {
+                        property = new CheckProperty("",
+                            "",
+                            "ComponentClass",
+                            component.SubComponentClass,
+                            "No Match",
+                            true,
+                            "No Match");
+                    }
+                }
+                else {
+                    property = new CheckProperty("ComponentClass",
+                        component.SubComponentClass,
+                        "ComponentClass",
+                        component.SubComponentClass,
+                        "",
+                        true,
+                        "Match");
+                }
                 this.detailedReviewRowComments[0] = property.Description;
 
                 tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);

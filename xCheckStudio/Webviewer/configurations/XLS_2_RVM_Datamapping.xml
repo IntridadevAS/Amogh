@@ -1,0 +1,100 @@
+<CheckCase name="XLS_2_RVM">
+
+	<Check type="Comparison" sourceAType="XLS" sourceBType="RVM">
+	    <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PIPE">
+		       <ComponentClass sourceAComponentClass="PipeLine" sourceBComponentClass="PIPE">
+			      	
+			    <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>			 		
+				<Property sourceAName="Description" sourceBName="DESC"  severity="Warning"/>
+				<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+				<Property sourceAName="Line Size" sourceBName="Bore"  severity="Error"/>
+				<Property sourceAName="Fluid Code" sourceBName="FUNC"  severity="Warning"/>
+				<Property sourceAName="Line Number" sourceBName="NUMB"  severity="Warning"/>
+				<Property sourceAName="Insulation Specification" sourceBName="ISPE"  severity="Warning"/>
+				<Property sourceAName="Area" sourceBName="AREA"  severity="Warning"/>
+				<Property sourceAName="Paint Class" sourceBName="PTSP"  severity="Warning"/>		
+                <Property sourceAName="Specification" sourceBName="PSPE"  severity="Warning"/>					
+			    
+			</ComponentClass>
+	    </ComponentGroup> 
+		
+		<ComponentGroup sourceAGroupName="Branch" sourceBGroupName="BRAN">
+		    <ComponentClass sourceAComponentClass="Branch" sourceBComponentClass="BRAN">
+			    
+				<Property sourceAName="Name" sourceBName="Name"  severity="Error"/> 
+				<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+				<Property sourceAName="From" sourceBName="HREF"  severity="Warning"/>
+				<Property sourceAName="To" sourceBName="TREF"  severity="Warning"/>
+				<Property sourceAName="Description" sourceBName="DESC"  severity="Warning"/>
+				<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>				
+                <Property sourceAName="Specification" sourceBName="PSPE"  severity="Warning"/>
+				
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="EQUI">
+		    <ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="EQUI">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+					<Property sourceAName="Tag Number" sourceBName="Numb"  severity="Warning"/>
+					<Property sourceAName="Tag Letter" sourceBName="Func"  severity="Warning"/>
+					<Property sourceAName="System" sourceBName="DESP"  severity="Warning"/>
+					<Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+					<Property sourceAName="Duty" sourceBName="Func"  severity="Warning"/>
+					<Property sourceAName="ProcessArea" sourceBName="Area"  severity="Warning"/>
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Nozzle" sourceBGroupName="NOZZ">
+		    <ComponentClass sourceAComponentClass="Flanged Nozzle" sourceBComponentClass="NOZZ">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Description" sourceBName="DESC"  severity="Error"/>
+					<Property sourceAName="Function" sourceBName="FUNC"  severity="Error"/>
+					<Property sourceAName="Tag Number" sourceBName="NUMB"  severity="Warning"/>
+					<Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+					
+			</ComponentClass>
+			<ComponentClass sourceAComponentClass="Manway" sourceBComponentClass="NOZZ">
+			      <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
+					<Property sourceAName="Description" sourceBName="DESC"  severity="Error"/>
+					<Property sourceAName="Function" sourceBName="FUNC"  severity="Error"/>
+					<Property sourceAName="Tag Number" sourceBName="NUMB"  severity="Warning"/>
+					<Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+			</ComponentClass>
+	    </ComponentGroup>	
+		
+		<ComponentGroup sourceAGroupName="Valve" sourceBGroupName="VALV">
+		    <ComponentClass sourceAComponentClass="Valve" sourceBComponentClass="VALV">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>	
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>					
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Olet" sourceBGroupName="OLET">
+		    <ComponentClass sourceAComponentClass="Olet" sourceBComponentClass="OLET">
+			        <Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>	
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>	
+                    <Property sourceAName="NominalDiameter" sourceBName="ABORE"  severity="Error"/>					
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Instrument" sourceBGroupName="INST">
+		    <ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="INST">
+			        <Property sourceAName="TagNumber" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="Class" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>	
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+            </ComponentClass>
+	    </ComponentGroup>
+		
+	</Check>
+</CheckCase>

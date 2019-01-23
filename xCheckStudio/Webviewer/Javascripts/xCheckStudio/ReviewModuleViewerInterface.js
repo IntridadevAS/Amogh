@@ -58,29 +58,66 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         _this.selectedNodeId = undefined;
         _this.selectedComponentId = undefined;
         // highlight corresponding component in another viewer
-        if (_this.ViewerOptions[0] === "viewerContainer1" &&
-            _this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
-            _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
+        if (_this.ViewerOptions[0] === "viewerContainer1") {
+            if (_this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
+                _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
 
-            //_this.ReviewManager.SourceBReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+                //_this.ReviewManager.SourceBReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
 
-            _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
-            _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
+                _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
+                _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
+            }
+            else if (_this.ReviewManager.SelectedComponentRowFromSheetB !== undefined) {
+               // _this.ReviewManager.RestoreBackgroundColor(_this.ReviewManager.SelectedComponentRowFromSheetB);
+               
+               // reset color of row
+               var rowIndex =  _this.ReviewManager.SelectedComponentRowFromSheetB.rowIndex;
+               obj = Object.keys( _this.ReviewManager.checkStatusArrayB)
+               var status =  _this.ReviewManager.checkStatusArrayB[obj[0]][rowIndex]
+               var color =  _this.ReviewManager.getRowHighlightColor(status);
+               for (var j = 0; j <  _this.ReviewManager.SelectedComponentRowFromSheetB.cells.length; j++) {
+                   cell = _this.ReviewManager.SelectedComponentRowFromSheetB.cells[j];
+                   cell.style.backgroundColor = color;
+               }
+
+                _this.ReviewManager.SelectedComponentRowFromSheetB = undefined;
+            }
         }
-        else if (_this.ViewerOptions[0] === "viewerContainer2" &&
-            _this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
-            _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
+        else if (_this.ViewerOptions[0] === "viewerContainer2") {
+            if (_this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
+                _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
 
-            //_this.ReviewManager.SourceAReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+                //_this.ReviewManager.SourceAReviewModuleViewerInterface.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
 
-            _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
-            _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;
+                _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
+                _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;
+            }
+            else if (_this.ReviewManager.SelectedComponentRowFromSheetA !== undefined) {
+                //_this.ReviewManager.RestoreBackgroundColor(_this.ReviewManager.SelectedComponentRowFromSheetA);
+
+                  // reset color of row
+               var rowIndex =  _this.ReviewManager.SelectedComponentRowFromSheetA.rowIndex;
+               obj = Object.keys( _this.ReviewManager.checkStatusArrayA)
+               var status =  _this.ReviewManager.checkStatusArrayA[obj[0]][rowIndex]
+               var color =  _this.ReviewManager.getRowHighlightColor(status);
+               for (var j = 0; j <  _this.ReviewManager.SelectedComponentRowFromSheetA.cells.length; j++) {
+                   cell = _this.ReviewManager.SelectedComponentRowFromSheetA.cells[j];
+                   cell.style.backgroundColor = color;
+               }                
+
+                _this.ReviewManager.SelectedComponentRowFromSheetA = undefined;
+            }
         }
 
         // restore highlightcolor of selected row in main review table
         if (_this.ReviewManager.SelectedComponentRow) {
             _this.ReviewManager.RestoreBackgroundColor(_this.ReviewManager.SelectedComponentRow);
             _this.ReviewManager.SelectedComponentRow = undefined;
+
+            var parentTable = document.getElementById(_this.ReviewManager.DetailedReviewTableContainer);
+            if (parentTable !== undefined) {
+                parentTable.innerHTML = '';
+            }
         }
     }
 
@@ -191,13 +228,29 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         this.HighlightReviewComponent(data);
 
                         // highlight corresponding component in another viewer
-                        if (this.ViewerOptions[0] === "viewerContainer1" &&
-                            this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
-                            this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                        if (this.ViewerOptions[0] === "viewerContainer1") {
+                            if (this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
+                                this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                            }
+                            else if (this.ReviewManager.SourceBProperties !== undefined &&
+                                this.ReviewManager.SelectedComponentRow !== undefined) {
+                                // this long long line is to take id of main review table div id for selected row i.e. "Equipment-EQUI"
+                                var mainTableContainerId = this.ReviewManager.SelectedComponentRow.parentElement.parentElement.parentElement.parentElement.id;
+                                var result = mainTableContainerId.split("-");
+                                this.ReviewManager.showSelectedSheetData("viewerContainer2", result[1], this.ReviewManager.SelectedComponentRow);
+                            }
                         }
-                        else if (this.ViewerOptions[0] === "viewerContainer2" &&
-                            this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
-                            this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                        else if (this.ViewerOptions[0] === "viewerContainer2") {
+                            if (this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
+                                this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                            }
+                            else if (this.ReviewManager.SourceAProperties !== undefined &&
+                                this.ReviewManager.SelectedComponentRow !== undefined) {
+                                // this long long line is to take id of main review table div id for selected row i.e. "Equipment-EQUI"
+                                var mainTableContainerId = this.ReviewManager.SelectedComponentRow.parentElement.parentElement.parentElement.parentElement.id;
+                                var result = mainTableContainerId.split("-");
+                                this.ReviewManager.showSelectedSheetData("viewerContainer1", result[0], this.ReviewManager.SelectedComponentRow);
+                            }
                         }
                     }
                     else {

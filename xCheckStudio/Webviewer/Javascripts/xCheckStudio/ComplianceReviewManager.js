@@ -319,11 +319,18 @@ function ComplianceReviewManager(complianceCheckManager,
             var source = currentReviewTableRow.cells[2].innerHTML;
             var destination = currentReviewTableRow.cells[3].innerHTML;
             var ownerId = currentReviewTableRow.cells[4].innerHTML;
-            componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+           
+            if (source !== undefined && source !== "" && 
+                destination !== undefined && destination !== "" && 
+                ownerId !== undefined && ownerId !== "") {
+                componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+            }
         }
         else if (reviewTableId.indexOf("Equipment") !== -1) {
             var handle = currentReviewTableRow.cells[2].innerHTML;
-            componentIdentifier += "_" + handle;
+            if (handle !== undefined && handle !== "") {
+                componentIdentifier += "_" + handle;
+            }
         }
 
         // highlight component in graphics view in both viewer
