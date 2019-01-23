@@ -85,6 +85,23 @@ div {
   text-align          : left;
   line-height         : 19.0px;
 }
+.a011 .details .text {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 247px;
+  float               : left;
+  width               : 145px;
+  font-size           : 14.0px;
+}
+.a011 .details .textVal {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 247px;
+  float               : right;
+  font-size           : 14.0px;
+  color               : black;
+  
+}
+
+
 .a011 .details .checkcasexml2xls .span1 {
   
 }
@@ -647,7 +664,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 26.0px;
+  font-size           : 20.0px;
   color               : rgba(236, 30, 37, 1.0);
   text-align          : center;
   line-height: 2;
@@ -664,7 +681,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 26.0px;
+  font-size           : 20.0px;
   color               : rgba(246, 167, 36, 1.0);
   text-align          : center;
   line-height: 2;
@@ -681,7 +698,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "San Francisco", Helvetica, Arial, serif;
-  font-size           : 26.0px;
+  font-size           : 20.0px;
   color               : rgba(129, 212, 35, 1.0);
   text-align          : center;
   line-height: 2;
@@ -698,7 +715,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 14.0px;
+  font-size           : 12.0px;
   color               : rgba(153, 153, 153, 1.0);
   text-align          : center;
   line-height         : 17.0px;
@@ -710,12 +727,12 @@ div {
   width               : auto;
   position            : absolute;
   margin              : 0;
-  left                : 292px;
+  left                : 299px;
   -ms-transform       : rotate(0deg); /* IE 9 */
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 14.0px;
+  font-size           : 12.0px;
   color               : rgba(153, 153, 153, 1.0);
   text-align          : center;
   line-height         : 17.0px;
@@ -732,7 +749,7 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
   font-family         : "Helvetica-Bold", Helvetica, Arial, serif;
-  font-size           : 14.0px;
+  font-size           : 12.0px;
   color               : rgba(153, 153, 153, 1.0);
   text-align          : center;
   line-height         : 17.0px;

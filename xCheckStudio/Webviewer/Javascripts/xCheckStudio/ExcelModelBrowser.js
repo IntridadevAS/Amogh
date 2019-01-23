@@ -378,19 +378,22 @@ function ExcelModeBrowser() {
         }
 
         var currentTable = currentRow.parentElement;
-        if (currentTable.tagName.toLowerCase() !== 'table') {
+        if (currentTable.tagName.toLowerCase() !== 'tbody') {
             return;
         }
 
         var currentComponentCell = currentRow.cells[1];
         var currentRowStyle = currentComponentCell.className;
 
-        //var currentClassList = currentRow.classList;
-        var currentClassName = currentRow.className;
-        var index = currentClassName.lastIndexOf(" ");
+        var currentClassList = currentRow.classList;
+        // var currentClassName = currentRow.className;
+        // var index = currentClassName.lastIndexOf(" ");
 
         // check/uncheck all child and further child rows
-        var styleToCheck = currentClassName + " " + currentRowStyle;
+        // var styleToCheck = currentClassName + " " + currentRowStyle;
+
+        //index 1 and 2 for class names from parent row
+        var styleToCheck = currentClassList[1] + " " + currentClassList[2]+ " "+ currentRowStyle;
         for (var i = 0; i < currentTable.rows.length; i++) {
 
             var row = currentTable.rows[i];
@@ -398,7 +401,13 @@ function ExcelModeBrowser() {
                 continue;
             }
 
-            if (row.className === styleToCheck) {
+            var rowClassList = row.classList;
+
+            //index 1 and 2 for class names inherited from parent row 
+            // rowClassList[rowClassList.length -1] is for class applied for current row
+            var rowStyleCheck = rowClassList[1] + " "+ rowClassList[2]+ " "+ rowClassList[rowClassList.length -1];
+
+            if (rowStyleCheck === styleToCheck) {
 
                 var checkBox = row.cells[0].children[0];
                 if (checkBox.checked === currentCheckBox.checked) {

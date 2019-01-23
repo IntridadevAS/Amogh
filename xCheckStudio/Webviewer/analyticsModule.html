@@ -53,7 +53,9 @@
                         Type</span><span class="span2"><br /><br /><br /><br /></span>
                 </div>
                 <div class="checkcasexml2xls">
-                    <span class="span1">CheckCase                             </span><span class="span2" id="checkCaseAnalytics">xml-2-xls</span>
+                    <!-- <span class="span1">CheckCase                             </span><span class="span2" id="checkCaseAnalytics">xml-2-xls</span> -->
+                    <div class="text">CheckCase</div>
+                    <div id="checkCaseAnalytics" class="textVal"></div>
                 </div>
                 <div class="checkcasexml2xls1" id="checkCase1">
 
@@ -188,7 +190,7 @@
                         <div class="errors" id="errorsIdInfo">
                             No Match
                         </div>
-                        <div class="ok" id="okIdInfo" style="left: 515px">
+                        <div class="ok" id="okIdInfo" style="left: 519px">
                             Not Checked
                         </div>
                     </div>
@@ -419,7 +421,7 @@
             if(source1 !== undefined){
                 fileName1 = source1.split(".");
                 document.getElementById("dataSource1").innerHTML = fileName1[0];
-                document.getElementById("dataSource1").style.fontSize = "11px"
+                document.getElementById("dataSource1").style.fontSize = "13px"
                 document.getElementById("extension1").innerHTML = fileName1[1];
             }
 
@@ -428,7 +430,7 @@
             {
                 fileName2 = source2.split(".");
                 document.getElementById("dataSource2").innerHTML = fileName2[0];
-                document.getElementById("dataSource2").style.fontSize = "11px";
+                document.getElementById("dataSource2").style.fontSize = "13px";
                 document.getElementById("extension2").innerHTML = fileName2[1];
             }
             

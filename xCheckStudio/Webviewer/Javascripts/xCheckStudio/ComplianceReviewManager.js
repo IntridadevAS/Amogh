@@ -378,22 +378,25 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
             }
             var column = {};
-            for (var i = 0; i < sheetProperties.length; i++) {
-                columnHeader = {};
-                columnHeader["name"] = sheetProperties[i].Name;
-                var type;
-                if (typeof (sheetProperties[i].Name) === "string") {
-                    type = "textarea";
-                }
-                else if (typeof (sheetProperties[i].Name) === "number") {
-                    type = "number";
-                }
-                columnHeader["type"] = type;
-                columnHeader["width"] = "80";
-                columnHeaders.push(columnHeader);
-                if (Object.keys(column).length <= 3) {
-                    if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
-                        column[sheetProperties[i].Name] = i;
+            if(sheetProperties !== undefined)
+            {
+                for (var i = 0; i < sheetProperties.length; i++) {
+                    columnHeader = {};
+                    columnHeader["name"] = sheetProperties[i].Name;
+                    var type;
+                    if (typeof (sheetProperties[i].Name) === "string") {
+                        type = "textarea";
+                    }
+                    else if (typeof (sheetProperties[i].Name) === "number") {
+                        type = "number";
+                    }
+                    columnHeader["type"] = type;
+                    columnHeader["width"] = "80";
+                    columnHeaders.push(columnHeader);
+                    if (Object.keys(column).length <= 3) {
+                        if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
+                            column[sheetProperties[i].Name] = i;
+                        }
                     }
                 }
             }
@@ -615,6 +618,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         cell.style.height = "10px"
                     }
                     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
+                    break;
                 }
                 else if (modelBrowserRow.cells[1].innerText !== "" && modelBrowserRow.cells[1].innerText === currentSheetRow.cells[column.Name].innerText) {
                     var color = modelBrowserRow.cells[0].style.backgroundColor;
@@ -623,6 +627,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         cell.style.backgroundColor = color;
                     }
                     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
+                    break;
                 }
             }
         }
@@ -756,6 +761,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     component.SourceBName !== source2NameCell.innerHTML) {
                     continue;
                 }
+                // if (component.SourceAName !== source1NameCell.innerHTML || component.SourceAName !== source1NameCell.innerText) {
+                //     continue;
+                // }
+                
+
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
                 // because they may have same tag names

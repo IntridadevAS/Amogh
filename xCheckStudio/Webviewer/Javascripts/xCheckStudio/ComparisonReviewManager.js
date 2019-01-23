@@ -558,7 +558,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
         container.style.margin = "0px";
-        container.style.top = "50px"
+        container.style.top = "0px"
 
     };
 
@@ -776,17 +776,17 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     };
 
-    ComparisonReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, CurrentReviewTableRow, column, sheetName) {
-        var modelBrowserTable = CurrentReviewTableRow.parentElement;
-        var modelBrowserRows = modelBrowserTable.getElementsByTagName("tr");
+    ComparisonReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, reviewTableRow, column, sheetName) {
+        var reviewTableElement = reviewTableRow.parentElement;
+        var reviewTableRows = reviewTableElement.getElementsByTagName("tr");
 
         var id = viewerContainer.replace("#", "");
         var currentSheetDataTable = document.getElementById(id);
         var currentSheetRows = currentSheetDataTable.children[1].getElementsByTagName("tr");
 
         var checkStatusArray = {};
-        for (var i = 0; i < modelBrowserRows.length; i++) {
-            var CurrentReviewTableRow = modelBrowserRows[i];
+        for (var i = 0; i < reviewTableRows.length; i++) {
+            var CurrentReviewTableRow = reviewTableRows[i];
             for (var j = 0; j < currentSheetRows.length; j++) {
                 currentSheetRow = currentSheetRows[j];
                 if (CurrentReviewTableRow.cells[0].innerText !== "" && CurrentReviewTableRow.cells[0].innerText === currentSheetRow.cells[column.Name].innerText) {
@@ -796,6 +796,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         cell.style.backgroundColor = color;
                     }
                     checkStatusArray[currentSheetRow.rowIndex] = CurrentReviewTableRow.cells[2].innerHTML;
+                    break;
                 }
                 else if (CurrentReviewTableRow.cells[1].innerText !== "" && CurrentReviewTableRow.cells[1].innerText === currentSheetRow.cells[column.Name].innerText) {
                     var color = CurrentReviewTableRow.cells[0].style.backgroundColor;
@@ -804,6 +805,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         cell.style.backgroundColor = color;
                     }
                     checkStatusArray[currentSheetRow.rowIndex] = CurrentReviewTableRow.cells[2].innerHTML;
+                    break;
                 }
             }
         }
