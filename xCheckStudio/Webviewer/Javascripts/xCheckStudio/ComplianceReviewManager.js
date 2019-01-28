@@ -189,9 +189,26 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
                 else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
                     var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-         
-                    if (checkPropertyHandle !== undefined &&
-                        checkPropertyHandle.SourceAValue != undefined) {
+                    // var handleValue;
+                    // if (component.Status.toLowerCase() === "no match") {
+                    //     for (var i = 0; i < component.CheckProperties.length; i++) {
+                    //         if (component.SourceAName === "" &&
+                    //             component.CheckProperties[i].SourceBName === 'Handle') {
+                    //             handleValue = component.CheckProperties[i].SourceBValue;
+                    //             break;
+                    //         }
+                    //         else if (component.SourceBName === "" &&
+                    //             component.CheckProperties[i].SourceAName === 'Handle') {
+                    //             handleValue = component.CheckProperties[i].SourceAValue;
+                    //         }
+                    //     }
+                    // }
+                    // else if(checkPropertyHandle !== undefined)
+                    // {
+                    // handleValue = checkPropertyHandle.SourceAValue;
+                    //}
+
+                    if (checkPropertyHandle != undefined && checkPropertyHandle.SourceAValue != undefined) {
                         tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
                     }
                 }
@@ -720,10 +737,13 @@ function ComplianceReviewManager(complianceCheckManager,
                             var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
                             obj = Object.keys(this.checkStatusArray)
                             var status = this.checkStatusArray[obj[0]][rowIndex]
-                            var color = this.getRowHighlightColor(status);
-                            for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                                cell = this.SelectedComponentRowFromSheetA.cells[j];
-                                cell.style.backgroundColor = color;
+                            if(status !== undefined)
+                            {
+                                var color = this.getRowHighlightColor(status);
+                                for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                                    cell = this.SelectedComponentRowFromSheetA.cells[j];
+                                    cell.style.backgroundColor = color;
+                                }
                             }
                         }
 

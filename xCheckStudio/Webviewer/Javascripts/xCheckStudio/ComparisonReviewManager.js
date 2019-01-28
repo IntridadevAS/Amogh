@@ -164,9 +164,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 tableRowContent[columnHeaders[1].name] = component.SourceBName;
                 tableRowContent[columnHeaders[2].name] = component.Status;
 
-                // construct component identifier 
-                //var componentIdentifier = component.SourceAName;
-
                 if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
@@ -258,7 +255,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
 
             var id = "#" + div.id;
-            // this.LoadTableData(this, columnHeaders, tableData, id);
             this.LoadReviewTableData(this, columnHeaders, tableData, id);
             this.highlightMainReviewTableFromCheckStatus(div.id);
 
@@ -322,20 +318,12 @@ function ComparisonReviewManager(comparisonCheckManager,
         // var countBox;
         var id = containerId + "_child";
         var countBox = document.getElementById(id);
-        // if (containerId === "modelTree1") {
-        //     countBox = document.getElementById("SourceAComponentCount");
-        // }
-        // if (containerId === "modelTree2") {
-        //     countBox = document.getElementById("SourceBComponentCount");
-        // }
         countBox.innerText = "Count :" + modelBrowserTableRows.length;
     }
 
     ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
         var mainReviewTableContainer = document.getElementById(containerId);
         var mainReviewTableRows = mainReviewTableContainer.children[1].getElementsByTagName("tr");
-
-        // var mainReviewTableRows = mainReviewTable.getElementsByTagName("tr");
 
         for (var i = 0; i < mainReviewTableRows.length; i++) {
             var currentRow = mainReviewTableRows[i];
@@ -352,7 +340,7 @@ function ComparisonReviewManager(comparisonCheckManager,
     }
 
     ComparisonReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, CurrentReviewTableRow) {
-        var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
+        var currentSheetName = sheetName;
         var mainComponentClasseData;
         var viewerContainerData = document.getElementById(viewerContainer);
         if (viewerContainer === "viewerContainer1") {
@@ -367,7 +355,16 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
         if (viewerContainerData.childElementCount > 1 &&
             viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
-
+            if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
+                if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") {
+                    this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                    return;
+                }
+                else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") {
+                    this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                    return;
+                }
+            }
             this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
             return;
         }
@@ -379,6 +376,18 @@ function ComparisonReviewManager(comparisonCheckManager,
             if (viewerContainerData.childElementCount > 1) {
                 for (var subComponentClass in mainComponentClasseData) {
                     if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
+                        // this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
+                        // return;
+                        if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
+                            if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") {
+                                this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                                return;
+                            }
+                            else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") {
+                                this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                                return;
+                            }
+                        }
                         this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
                         return;
                     }
@@ -503,14 +512,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                         sheetDataRow.cells[column.Name].innerText === reviewTableRow.cells[1].innerText) {
                         if (containerId === "viewerContainer1") {
                             if (this.SelectedComponentRowFromSheetA) {
-                                var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
-                                obj = Object.keys(this.checkStatusArrayA)
-                                var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                                var color = this.getRowHighlightColor(status);
-                                for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                                    cell = this.SelectedComponentRowFromSheetA.cells[j];
-                                    cell.style.backgroundColor = color;
-                                }
+                                this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                                // var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+                                // obj = Object.keys(this.checkStatusArrayA)
+                                // var status = this.checkStatusArrayA[obj[0]][rowIndex]
+                                // var color = this.getRowHighlightColor(status);
+                                // for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                                //     cell = this.SelectedComponentRowFromSheetA.cells[j];
+                                //     cell.style.backgroundColor = color;
+                                // }
                             }
 
                             this.SelectedComponentRowFromSheetA = sheetDataRow;
@@ -518,14 +528,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         if (containerId === "viewerContainer2") {
                             if (this.SelectedComponentRowFromSheetB) {
-                                var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                                obj = Object.keys(this.checkStatusArrayA)
-                                var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                                var color = this.getRowHighlightColor(status);
-                                for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                                    cell = this.SelectedComponentRowFromSheetB.cells[j];
-                                    cell.style.backgroundColor = color;
-                                }
+                                this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                                // var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+                                // obj = Object.keys(this.checkStatusArrayA)
+                                // var status = this.checkStatusArrayA[obj[0]][rowIndex]
+                                // var color = this.getRowHighlightColor(status);
+                                // for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                                //     cell = this.SelectedComponentRowFromSheetB.cells[j];
+                                //     cell.style.backgroundColor = color;
+                                // }
                             }
 
                             this.SelectedComponentRowFromSheetB = sheetDataRow;
@@ -922,7 +933,9 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         if (viewerContainerData != undefined) {
             var containerChildren = viewerContainerData.children;
+            // 0 index jsGrid header table
             var columnHeaders = containerChildren[0].getElementsByTagName("th");
+            //1 index jsGrid table body
             var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
             var sourceDataViewTableRows = sheetDataTable.getElementsByTagName("tr");
             var column = {};
@@ -942,14 +955,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                     CurrentReviewTableRow.cells[1].innerText === currentRowInSourceTable.cells[column.Name].innerText) {
                     if (containerId === "viewerContainer1") {
                         if (this.SelectedComponentRowFromSheetA) {
-                            var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
-                            obj = Object.keys(this.checkStatusArrayA)
-                            var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                            var color = this.getRowHighlightColor(status);
-                            for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                                cell = this.SelectedComponentRowFromSheetA.cells[j];
-                                cell.style.backgroundColor = color;
-                            }
+                            // var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+                            // obj = Object.keys(this.checkStatusArrayA)
+                            // var status = this.checkStatusArrayA[obj[0]][rowIndex]
+                            // var color = this.getRowHighlightColor(status);
+                            // for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
+                            //     cell = this.SelectedComponentRowFromSheetA.cells[j];
+                            //     cell.style.backgroundColor = color;
+                            // }
+                            this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
                         }
 
                         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
@@ -966,14 +980,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (containerId === "viewerContainer2") {
 
                         if (this.SelectedComponentRowFromSheetB) {
-                            var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                            obj = Object.keys(this.checkStatusArrayB)
-                            var status = this.checkStatusArrayB[obj[0]][rowIndex]
-                            var color = this.getRowHighlightColor(status);
-                            for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                                cell = this.SelectedComponentRowFromSheetB.cells[j];
-                                cell.style.backgroundColor = color;
-                            }
+                            // var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+                            // obj = Object.keys(this.checkStatusArrayB)
+                            // var status = this.checkStatusArrayB[obj[0]][rowIndex]
+                            this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                            // var color = this.getRowHighlightColor(status);
+                            // for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
+                            //     cell = this.SelectedComponentRowFromSheetB.cells[j];
+                            //     cell.style.backgroundColor = color;
+                            // }
                         }
 
                         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
@@ -1003,6 +1018,17 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
 
+    }
+
+    ComparisonReviewManager.prototype.unhighlightSelectedSheetRow = function(checkStatusArray, currentRow){
+        var rowIndex = currentRow.rowIndex;
+        obj = Object.keys(checkStatusArray)
+        var status = checkStatusArray[obj[0]][rowIndex]
+        var color = this.getRowHighlightColor(status);
+        for (var j = 0; j < currentRow.cells.length; j++) {
+            cell = currentRow.cells[j];
+            cell.style.backgroundColor = color;
+        }
     }
 
     ComparisonReviewManager.prototype.populateDetailedReviewTable = function (row) {
