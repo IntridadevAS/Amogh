@@ -522,7 +522,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             $(function () {
 
                 $(viewerContainer).jsGrid({
-                    height: "250px",
+                    height: "270px",
                     width: "550px",
                     autoload: true,
                     data: tableData,
@@ -568,7 +568,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "550px"
-        container.style.height = "250px"
+        container.style.height = "270px"
         container.style.overflowX = "scroll";
         container.style.overflowY = "scroll";
         container.style.margin = "0px";

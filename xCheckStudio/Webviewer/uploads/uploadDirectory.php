@@ -1,5 +1,5 @@
 <?php 
-phpinfo();
+//phpinfo();
 
 if(isset($_FILES['files']['name'][0]))
 {
