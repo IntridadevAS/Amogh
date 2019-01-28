@@ -1,18 +1,5 @@
 
-// function scanFiles(item, container) {
-//     alert(item.name);
-//     if (item.isDirectory) {
-//         let directoryReader = item.createReader();
-
-//         directoryReader.readEntries(function (entries) {
-//             entries.forEach(function (entry) {
-//                 scanFiles(entry);
-//             });
-//         });
-//     }
-// }
-
-function onDropFiles(event, viewerContainer, modelTreeContainer ) {
+function onDropFiles(event, viewerContainer, modelTreeContainer) {
     let items = event.dataTransfer.items;
     //var dropZoneId = dropzone.id;
 
@@ -50,6 +37,12 @@ function onDropFiles(event, viewerContainer, modelTreeContainer ) {
 
 function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer) {
 
+    // show busy loader
+    var busySpinner = document.getElementById("divLoading");
+    if (busySpinner !== undefined) {
+        busySpinner.className = 'show';
+    }
+
     $.ajax({
         url: "uploads/uploadDirectory.php",
         type: "POST",
@@ -60,6 +53,13 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
         success: function (ret) {
             //alert(ret);
             convertDataSource(mainFileName, viewerContainer, modelTreeContainer);
+
+            // // hide busy spinner
+            // busySpinner.classList.remove('show');
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            // hide busy spinner
+            busySpinner.classList.remove('show');
         }
     });
 }
@@ -67,6 +67,12 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
 function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
     var formData = new FormData();
     formData.append("MainFile", mainFileName);
+
+    // // show busy loader
+     var busySpinner = document.getElementById("divLoading");
+    // if (busySpinner !== undefined) {
+    //     busySpinner.className = 'show';
+    // }
 
     $.ajax({
         url: "uploads/convertDatasource.php",
@@ -114,7 +120,18 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
                 }
             }
             else {
-                
+
+            }
+
+            // hide busy spinner
+            if (busySpinner !== undefined) {
+                busySpinner.classList.remove('show');
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            // hide busy spinner
+            if (busySpinner !== undefined) {
+                busySpinner.classList.remove('show');
             }
         }
     });
