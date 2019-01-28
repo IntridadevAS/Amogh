@@ -186,9 +186,12 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         this.highlightManager.highlightNodeInViewer(nodeId);
     };
 
-    ReviewModuleViewerInterface.prototype.unHighlightComponent = function () {
-        this.highlightManager.clearSelection();
+    ReviewModuleViewerInterface.prototype.unHighlightComponent = function () {      
+        
         this.selectedNodeId = undefined;
+        this.highlightManager.clearSelection();    
+        
+        
     }
 
     ReviewModuleViewerInterface.prototype.onSelection = function (selectionEvent) {

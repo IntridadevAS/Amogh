@@ -131,22 +131,86 @@ function ComplianceReviewManager(complianceCheckManager,
                     var checkPropertyDestination = component.getCheckProperty('Destination', '', true);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', '', true);
 
-                    if (checkPropertySource != undefined) {
-                        tableRowContent[columnHeaders[2].name] = checkPropertySource.SourceAValue;                        
+                    var sourceValue = undefined;
+                    var destinationValue = undefined;
+                    var ownerValue = undefined;
+                    if (component.Status.toLowerCase() === "no match") {
+                        if (component.SourceAName === "") {
+                            for (var i = 0; i < component.CheckProperties.length; i++) {
+                                if (component.CheckProperties[i].SourceBName === 'Source') {
+                                    sourceValue = component.CheckProperties[i].SourceBValue;
+                                    continue;
+                                }
+                                else if (component.CheckProperties[i].SourceBName === 'Destination') {
+                                    destinationValue = component.CheckProperties[i].SourceBValue;
+                                    continue;
+                                }
+                                else if (component.CheckProperties[i].SourceBName === 'OwnerId') {
+                                    ownerValue = component.CheckProperties[i].SourceBValue;
+                                    continue;
+                                }
+                            }
+                        }
+                        else if (component.SourceBName === "") {
+                            for (var i = 0; i < component.CheckProperties.length; i++) {
+                                if (component.CheckProperties[i].SourceAName === 'Source') {
+                                    sourceValue = component.CheckProperties[i].SourceAValue;
+                                    continue;
+                                }
+                                else if (component.CheckProperties[i].SourceAName === 'Destination') {
+                                    destinationValue = component.CheckProperties[i].SourceAValue;
+                                    continue;
+                                }
+                                else if (component.CheckProperties[i].SourceAName === 'OwnerId') {
+                                    ownerValue = component.CheckProperties[i].SourceAValue;
+                                    continue;
+                                }
+                            }
+                        }
                     }
-                    if (checkPropertyDestination != undefined) {
-                        tableRowContent[columnHeaders[3].name] = checkPropertyDestination.SourceAValue;                        
+                    else if (checkPropertySource !== undefined &&
+                        checkPropertyDestination !== undefined &&
+                        checkPropertyOwnerId !== undefined) {
+                        sourceValue = checkPropertySource.SourceAValue;
+                        destinationValue = checkPropertyDestination.SourceAValue;
+                        ownerValue = checkPropertyOwnerId.SourceAValue;
                     }
 
-                    if (checkPropertyOwnerId != undefined) {
-                        tableRowContent[columnHeaders[4].name] = checkPropertyOwnerId.SourceAValue;
+                    if (sourceValue != undefined) {
+                        tableRowContent[columnHeaders[2].name] = sourceValue;                        
+                    }
+                    if (destinationValue != undefined) {
+                        tableRowContent[columnHeaders[3].name] = destinationValue;                        
+                    }
+
+                    if (ownerValue != undefined) {
+                        tableRowContent[columnHeaders[4].name] = ownerValue;
                     }
                 }
                 else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
                     var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-                    if (checkPropertyHandle != undefined) {
-                    tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
-                    }  
+                    // var handleValue;
+                    // if (component.Status.toLowerCase() === "no match") {
+                    //     for (var i = 0; i < component.CheckProperties.length; i++) {
+                    //         if (component.SourceAName === "" &&
+                    //             component.CheckProperties[i].SourceBName === 'Handle') {
+                    //             handleValue = component.CheckProperties[i].SourceBValue;
+                    //             break;
+                    //         }
+                    //         else if (component.SourceBName === "" &&
+                    //             component.CheckProperties[i].SourceAName === 'Handle') {
+                    //             handleValue = component.CheckProperties[i].SourceAValue;
+                    //         }
+                    //     }
+                    // }
+                    // else if(checkPropertyHandle !== undefined)
+                    // {
+                    // handleValue = checkPropertyHandle.SourceAValue;
+                    //}
+
+                    if (checkPropertyHandle.SourceAValue != undefined) {
+                        tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
+                    }
                 }
 
                 tableData.push(tableRowContent);               
