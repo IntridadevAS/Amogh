@@ -189,26 +189,9 @@ function ComplianceReviewManager(complianceCheckManager,
                 }
                 else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
                     var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-                    // var handleValue;
-                    // if (component.Status.toLowerCase() === "no match") {
-                    //     for (var i = 0; i < component.CheckProperties.length; i++) {
-                    //         if (component.SourceAName === "" &&
-                    //             component.CheckProperties[i].SourceBName === 'Handle') {
-                    //             handleValue = component.CheckProperties[i].SourceBValue;
-                    //             break;
-                    //         }
-                    //         else if (component.SourceBName === "" &&
-                    //             component.CheckProperties[i].SourceAName === 'Handle') {
-                    //             handleValue = component.CheckProperties[i].SourceAValue;
-                    //         }
-                    //     }
-                    // }
-                    // else if(checkPropertyHandle !== undefined)
-                    // {
-                    // handleValue = checkPropertyHandle.SourceAValue;
-                    //}
-
-                    if (checkPropertyHandle.SourceAValue != undefined) {
+         
+                    if (checkPropertyHandle !== undefined &&
+                        checkPropertyHandle.SourceAValue != undefined) {
                         tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
                     }
                 }
