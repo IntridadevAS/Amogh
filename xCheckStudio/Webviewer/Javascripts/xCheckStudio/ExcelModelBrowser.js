@@ -471,49 +471,7 @@ function ExcelModeBrowser() {
                     margin: "0px",
                     checked: true,
                     onRefreshed: function (config) {
-                        var modelTreeParentContainer;
-                            if(this._container.context.id === "modelTree1")
-                            {
-                                modelTreeParentContainer = document.getElementById("dataSource1") ;
-                            }
-                            else if(this._container.context.id === "modelTree2")
-                            {
-                                modelTreeParentContainer = document.getElementById("dataSource2") ;
-                            }
-                            for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
-                            {
-                                currentChild = modelTreeParentContainer.children[i];
-                                if(currentChild.className === "loaddata" || currentChild.className === "createbtn" || currentChild.className === "createbtn2")
-                                {
-                                    currentChild.style.display = "none";
-                                }
-                            }  
                         _this.AddTableContentCount(this._container.context.id);
-                            // var modelTreeParentContainer;
-                            // if(this._container.context.id === "modelTree1")
-                            // {
-                            //     modelTreeParentContainer = document.getElementById("dataSource1") ;
-                            //     for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
-                            //     {
-                            //         currentChild = modelTreeParentContainer.children[i];
-                            //         if(currentChild.className === "loaddata" || currentChild.className === "createbtn")
-                            //         {
-                            //             currentChild.style.display = "none";
-                            //         }
-                            //     }  
-                            // }
-                            // else if(this._container.context.id === "modelTree2")
-                            // {
-                            //     modelTreeParentContainer = document.getElementById("dataSource2") ;
-                            //     for(var i = 0; i < modelTreeParentContainer.childElementCount; i++)
-                            //     {
-                            //         currentChild = modelTreeParentContainer.children[i];
-                            //         if(currentChild.className === "loaddata" || currentChild.className === "createbtn2")
-                            //         {
-                            //             currentChild.style.display = "none";
-                            //         }
-                            //     }  
-                            // }
                      
                     },
                     rowClick: function (args) {

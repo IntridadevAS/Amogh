@@ -1052,7 +1052,7 @@
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                     </div>
-                    <div class="loaddata">
+                    <div class="loaddata" id="loadDataA">
                         Load data
                     </div>
                     <div id="SourceAComponentCount" class="checkall">
@@ -1616,7 +1616,7 @@
                     <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                     <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                 </div>
-                <div class="loaddata">
+                <div class="loaddata"  id="loadDataB">
                     Load data
                 </div>
                 <div id="SourceBComponentCount" class="checkall" style="display: none">
@@ -3084,7 +3084,6 @@
             //*******
             // localStorage.setItem(dataSource, fileName);
             //*******
-
             if (fileExtension.toLowerCase() === "xml" ||
                 fileExtension.toLowerCase() === "rvm" ||
                 fileExtension.toLowerCase() === "sldasm"||
@@ -3096,9 +3095,10 @@
                 xhr.open("POST", "uploads/uploadfiles.php", true);
                 xhr.onload = function (event) {
                     alert("The server says: " + event.target.response);
-                    //ShowToast('The server says: Success');
+                    //ShowToast('The server says: Success');                   
                     if (loadModel(fileName, viewerContainer, modelTreeContainer)) {
                         document.getElementById(dataSource).disabled = true;
+                        hideLoadButton(modelTreeContainer);
                     }
                     else {
                         document.getElementById(formId).reset();
@@ -3111,16 +3111,26 @@
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                    // readExcelDataSource(file,
-                    //     dataSource,
-                    //     viewerContainer,
-                    //     modelTreeContainer);
-                    loadExcelDataSource(fileExtension, file, dataSource,
+                   if( loadExcelDataSource(fileExtension, file, dataSource,
                         viewerContainer,
-                        modelTreeContainer)
+                        modelTreeContainer)){
+                            hideLoadButton(modelTreeContainer);
+                        }
                 }
             }
         }
+
+        function hideLoadButton(modelTreeContainer) {
+                if (modelTreeContainer === "modelTree1") {
+                    document.getElementById("createbtnA").style.display = "none";
+                    document.getElementById("loadDataA").style.display = "none";
+                }
+                else if (modelTreeContainer === "modelTree2") {
+                    document.getElementById("createbtnB").style.display = "none";
+                    document.getElementById("loadDataB").style.display = "none";
+                }
+
+            }
 
         function loadExcelDataSource(fileExtension,
             file,
@@ -3164,6 +3174,8 @@
                 dataSource,
                 viewerContainer,
                 modelTreeContainer);
+            
+            return true;
 
         }
 
@@ -3241,9 +3253,6 @@
                     return false;
                 }
             });
-
-            //enable check Button
-            // document.getElementById("checkButton").disabled = false;
             return true;
         }
 
