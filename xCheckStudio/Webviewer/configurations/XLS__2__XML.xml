@@ -197,7 +197,7 @@
 	<Check type="ComplianceSourceB" sourceType="XML" >
 	 <ComponentGroup sourceAGroupName="Equipment">
 		<ComponentClass sourceAComponentClass="Vessel/Column">
-			 <Property name=="TagName"   rule="Should start with-S" severity="Error"    comment="Property Should start with S" />  
+			 <Property name="TagName"   rule="Should start with-S" severity="Error"    comment="Property Should start with S" />  
 			 <Property name="DS_EquipmentDesc_Description"   rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
 			 <Property name="Type"   rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
 			 <Property name="Number"  rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
