@@ -2884,22 +2884,6 @@
                     return;
                 }
 
-                var sourceAType = checkCaseManager.CheckCase.CheckTypes[0].SourceAType;
-                if (sourceAType.toLowerCase() === "sldasm") {
-                    var inputControl = document.getElementById("file-input");
-                    if (inputControl === undefined) {
-                        return;
-                    }
-                    inputControl.setAttribute("webkitdirectory", "true");
-                }
-                else {
-                    var inputControl = document.getElementById("file-input");
-                    if (inputControl === undefined) {
-                        return;
-                    }
-                    inputControl.removeAttribute("webkitdirectory");
-                }
-
                 modal = document.getElementById('projectselectiondialogModal');
 
                 // When the user clicks the button, open the modal 
@@ -2953,28 +2937,6 @@
                     checkCaseManager.CheckCase.CheckTypes === undefined ||
                     checkCaseManager.CheckCase.CheckTypes.length === 0) {
                     return;
-                }
-
-                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                    var sourceBType = checkCaseManager.CheckCase.CheckTypes[i].SourceBType;
-                    if (sourceBType === undefined || sourceBType === "") {
-                        continue;
-                    }
-
-                    if (sourceBType.toLowerCase() === "sldasm") {
-                        var inputControl = document.getElementById("file-input");
-                        if (inputControl === undefined) {
-                            return;
-                        }
-                        inputControl.setAttribute("webkitdirectory", "true");
-                    }
-                    else {
-                        var inputControl = document.getElementById("file-input");
-                        if (inputControl === undefined) {
-                            return;
-                        }
-                        inputControl.removeAttribute("webkitdirectory");
-                    }
                 }
 
                 modal = document.getElementById('projectselectiondialogModal');

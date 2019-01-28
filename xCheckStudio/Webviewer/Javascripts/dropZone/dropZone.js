@@ -32,7 +32,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer ) {
 
 
             traverse_directory(item).then(function (fileEntries) {
-                alert('traverse done');
+                //alert('traverse done');
                 var uploadFormData = new FormData();
 
                 for (var j = 0; j < fileEntries.length; j++) {
@@ -58,7 +58,7 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
         contentType: false,
         processData: false,
         success: function (ret) {
-            alert(ret);
+            //alert(ret);
             convertDataSource(mainFileName, viewerContainer, modelTreeContainer);
         }
     });
@@ -79,7 +79,39 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
             //alert(ret);   
 
             if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
-                alert("Model Loaded");   
+                //alert("Model Loaded");   
+                hideLoadButton(modelTreeContainer);
+
+                // enable source a controls
+                // diable check all CB for source A
+                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // diable compliance CB for source A
+                component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // enable source B, load button
+                component = document.getElementById('createbtnB');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // enable check button
+                component = document.getElementById('checkButton');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
+
+                // enable info  button
+                component = document.getElementById('infobtn');
+                if (component.classList.contains("disabledbutton")) {
+                    component.classList.remove('disabledbutton');
+                }
             }
             else {
                 
