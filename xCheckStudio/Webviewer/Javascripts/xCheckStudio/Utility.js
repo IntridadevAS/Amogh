@@ -40,7 +40,7 @@ var xCheckStudio;
                 return SuccessColor;
             }
             else if (status.toLowerCase() === ("Error").toLowerCase()) {
-                return ErrorColor;
+                return HoopsViewerErrorColor;
             }
             else if (status.toLowerCase() === ("Warning").toLowerCase()) {
                 return WarningColor;

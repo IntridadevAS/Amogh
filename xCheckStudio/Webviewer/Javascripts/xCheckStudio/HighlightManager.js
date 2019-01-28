@@ -1,5 +1,6 @@
 var SuccessColor = "#c6f2cb";//"#70db70";
 var ErrorColor = "#fad9d7";//"#ff4d4d";
+var HoopsViewerErrorColor = "#FF0000";
 var WarningColor = "#f9ffc7";//"#ffff99";
 var NoMatchColor = "#dddbff"//"#ccccff";
 var NoValueColor = "#f2f2f2";
