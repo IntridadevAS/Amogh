@@ -1,0 +1,5 @@
+<CheckCase name="DWG_2_DWG">
+
+	<Check type="Comparison" sourceAType="DWG" sourceBType="DWG">
+	</Check>
+</CheckCase>

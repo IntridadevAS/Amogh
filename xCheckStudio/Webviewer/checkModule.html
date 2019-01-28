@@ -3,6 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
+  
+   <script type="text/javascript" src="Javascripts\dropZone\dropZone.js"></script> 
 
     <link href="/images/UIPackage/favicon.png" rel="shortcut icon" />
     <meta charset="utf-8" />
@@ -47,6 +49,21 @@
     </meta>
 
     <style>
+        .dropzone {
+  text-align: center;
+  width: 100%;
+  height: 100%;   
+  border: 4px dashed rgb(102,102,153);
+  border-radius: 6px;
+}
+
+.dropBox
+{
+    top: 0%;
+    height: 80%;
+    width: 100%;
+}
+
         /* disable the div contents */
         .disabledbutton {
             pointer-events: none;
@@ -439,567 +456,608 @@
                 </div>
             </div>
             <div class="group1" id="dataSource1">
-                <div id="modelTree1">
+                    <!-- <form enctype="multipart/form-data" id="uploadFormId">
+                        <input type="file" name="file" id="file">
+                    </form> -->
 
-                </div>
-                <div class="line">
-                </div>
-                <div class="checkallswitch">
-                    <div class="checkall">
-                        Check all
+                <div id="dropZone1" class="dropBox" ondrop="onDropFiles(event,'viewerContainer1', 'modelTree1' )">
+                    <!-- <input type="file" id="selectFile"> -->
+                    <div id="modelTree1">
+            
                     </div>
-                    <style>
-                        .module1 .group1 .checkallswitch .toggle-KJzr * {
-                                box-sizing          : border-box;
+                    <div class="line">
+                    </div>
+                    <div class="checkallswitch">
+                        <div class="checkall">
+                            Check all
+                        </div>
+                        <style>
+                            .module1 .group1 .checkallswitch .toggle-KJzr * {
+                                box-sizing: border-box;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                right               : 0%;
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 17.53%;
-                                position            : absolute;
-                                margin              : 0;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(255, 255, 255, 0.0);
+                                right: 0%;
+                                top: 0%;
+                                height: 100%;
+                                width: 17.53%;
+                                position: absolute;
+                                margin: 0;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr .bg1 {
-                                pointer-events      : none;
-                                background-color    : rgba(233, 79, 28, 1.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(233, 79, 28, 1.0);
+                                top: 0%;
+                                height: 100%;
+                                width: 100%;
+                                position: absolute;
+                                margin: 0;
+                                left: 0%;
+                                border-radius: 12px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr .bg11 {
-                                pointer-events      : none;
-                                background-color    : rgba(51, 51, 51, 1.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(51, 51, 51, 1.0);
+                                top: 0%;
+                                height: 100%;
+                                width: 100%;
+                                position: absolute;
+                                margin: 0;
+                                left: 0%;
+                                border-radius: 12px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr .btn1 {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                top                 : 2px;
-                                height              : 20px;
-                                width               : 20px;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 2px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(255, 255, 255, 0.0);
+                                top: 2px;
+                                height: 20px;
+                                width: 20px;
+                                position: absolute;
+                                margin: 0;
+                                left: 2px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                width               : 45.45%;
-                                top                 : 8.33%;
-                                left                : 50.00%;
-                                height              : 83.33%;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                width: 45.45%;
+                                top: 8.33%;
+                                left: 50.00%;
+                                height: 83.33%;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .bg11 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 0;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                opacity: 0;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                width               : 20px;
-                                top                 : 2px;
-                                left                : 2px;
-                                height              : 20px;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                width: 20px;
+                                top: 2px;
+                                left: 2px;
+                                height: 20px;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .bg11 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 1;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                opacity: 1;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2 .bg11 {
-                                opacity             : 0.0052;
+                                opacity: 0.0052;
                             }
+            
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2 .btn1 {
-                                top                 : 8.33%;
-                                height              : 83.33%;
-                                width               : 45.45%;
-                                left                : 50.00%;
+                                top: 8.33%;
+                                height: 83.33%;
+                                width: 45.45%;
+                                left: 50.00%;
                             }
                         </style>
-                    <div id="csB8xgZ">
-                        <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ"
-                            id="checkAllSourceACB">
-                            <div class="bg1 " data-name="bg1beP8csB8xgZ">
+                        <div id="csB8xgZ">
+                            <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceACB">
+                                <div class="bg1 " data-name="bg1beP8csB8xgZ">
+                                </div>
+                                <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
+                                </div>
+                                <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
                             </div>
-                            <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
-                            </div>
-                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
                         </div>
-                    </div>
-                    <script>
-                        if (typeof String.prototype.endsWith !== 'function') {
-                            String.prototype.endsWith = function (suffix) {
-                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
-                            };
-                        }
-                        if (!String.prototype.startsWith) {
-                            String.prototype.startsWith = function (searchString, position) {
-                                position = position || 0;
-                                return this.indexOf(searchString, position) === position;
-                            };
-                        }
-                        if (!Array.prototype.forEach) {
-                            Array.prototype.forEach = function (callback) {
-                                var T, k;
-                                if (this == null) {
-                                    throw new TypeError('this is null or not defined');
-                                }
-                                var O = Object(this);
-                                var len = O.length >>> 0;
-                                if (typeof callback !== 'function') {
-                                    throw new TypeError(callback + ' is not a function');
-                                }
-                                if (arguments.length > 1) {
-                                    T = arguments[1];
-                                }
-                                k = 0;
-                                while (k < len) {
-                                    var kValue;
-                                    if (k in O) {
-                                        kValue = O[k];
-                                        callback.call(T, kValue, k, O);
+                        <script>
+                            if (typeof String.prototype.endsWith !== 'function') {
+                                String.prototype.endsWith = function (suffix) {
+                                    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                                };
+                            }
+                            if (!String.prototype.startsWith) {
+                                String.prototype.startsWith = function (searchString, position) {
+                                    position = position || 0;
+                                    return this.indexOf(searchString, position) === position;
+                                };
+                            }
+                            if (!Array.prototype.forEach) {
+                                Array.prototype.forEach = function (callback) {
+                                    var T, k;
+                                    if (this == null) {
+                                        throw new TypeError('this is null or not defined');
                                     }
-                                    k++;
-                                }
-                            };
-                        }
-                        function toArray(obj) {
-                            var array = [];
-                            for (var i = obj.length >>> 0; i--;) {
-                                array[i] = obj[i];
-                            }
-                            return array;
-                        }
-                        function addClass(object, className) {
-                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
-                        }
-                        function removeAllClassesButFirst(component, skipClass) {
-                            var classList = component.classList;
-                            var componentClass = classList.item(0);
-                            var toRemove = [];
-                            var beforeComponent = true;
-                            toArray(classList).forEach(function (className) {
-                                beforeComponent = beforeComponent && className != 'component';
-                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
-                                    toRemove.push(className);
-                                }
-                            });
-                            toRemove.forEach(function (className) {
-                                classList.remove(className);
-                            });
-                        }
-                        function applyState(component, stateClass) {
-                            var componentClass = component.classList.item(0);
-                            component.className = componentClass;
-                            component.classList.add(stateClass);
-                        }
-                        function isCurrentState(component, state) {
-                            var classList = component.classList;
-                            var rv = false;
-                            toArray(classList).forEach(function (className) {
-                                if (className.endsWith(state)) {
-                                    rv = true;
-                                }
-                            });
-                            return rv;
-                        }
-                        function whichTransitionEvent() {
-                            var t, el = document.createElement("fakeelement");
-                            var transitions = {
-                                "transition": "transitionend",
-                                "OTransition": "oTransitionEnd",
-                                "MozTransition": "transitionend",
-                                "WebkitTransition": "webkitTransitionEnd"
-                            };
-                            for (t in transitions) {
-                                if (el.style[t] !== undefined) {
-                                    return transitions[t];
-                                }
-                            }
-                        }
-                        var transitionEvent = whichTransitionEvent();
-                        function clicktoggleKJzrcsB8xgZ1Handler(event) {
-                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                            if (isCurrentState(component, 'state1')) {
-                                try {
-                                    setTimeout(function () {
-                                        var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                                        if (component.classList.contains("disabledbutton")) {
-                                            return;
+                                    var O = Object(this);
+                                    var len = O.length >>> 0;
+                                    if (typeof callback !== 'function') {
+                                        throw new TypeError(callback + ' is not a function');
+                                    }
+                                    if (arguments.length > 1) {
+                                        T = arguments[1];
+                                    }
+                                    k = 0;
+                                    while (k < len) {
+                                        var kValue;
+                                        if (k in O) {
+                                            kValue = O[k];
+                                            callback.call(T, kValue, k, O);
                                         }
-
-                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
-                                        removeAllClassesButFirst(component, 'state1-to-state2');
-                                        addClass(component, 'state2');
-                                        addClass(component, 'state1-to-state2');
-                                        checkAllCBClick(true, "modelTree1", "checkAllSourceACB")
-                                    }, 0);
-                                } catch (e) {
-                                    console.log(e);
+                                        k++;
+                                    }
+                                };
+                            }
+                            function toArray(obj) {
+                                var array = [];
+                                for (var i = obj.length >>> 0; i--;) {
+                                    array[i] = obj[i];
+                                }
+                                return array;
+                            }
+                            function addClass(object, className) {
+                                object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                            }
+                            function removeAllClassesButFirst(component, skipClass) {
+                                var classList = component.classList;
+                                var componentClass = classList.item(0);
+                                var toRemove = [];
+                                var beforeComponent = true;
+                                toArray(classList).forEach(function (className) {
+                                    beforeComponent = beforeComponent && className != 'component';
+                                    if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                        toRemove.push(className);
+                                    }
+                                });
+                                toRemove.forEach(function (className) {
+                                    classList.remove(className);
+                                });
+                            }
+                            function applyState(component, stateClass) {
+                                var componentClass = component.classList.item(0);
+                                component.className = componentClass;
+                                component.classList.add(stateClass);
+                            }
+                            function isCurrentState(component, state) {
+                                var classList = component.classList;
+                                var rv = false;
+                                toArray(classList).forEach(function (className) {
+                                    if (className.endsWith(state)) {
+                                        rv = true;
+                                    }
+                                });
+                                return rv;
+                            }
+                            function whichTransitionEvent() {
+                                var t, el = document.createElement("fakeelement");
+                                var transitions = {
+                                    "transition": "transitionend",
+                                    "OTransition": "oTransitionEnd",
+                                    "MozTransition": "transitionend",
+                                    "WebkitTransition": "webkitTransitionEnd"
+                                };
+                                for (t in transitions) {
+                                    if (el.style[t] !== undefined) {
+                                        return transitions[t];
+                                    }
                                 }
                             }
-                        }
-                        function transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler(event) {
-                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                            var transitionEvent = whichTransitionEvent();
+                            function clicktoggleKJzrcsB8xgZ1Handler(event) {
                                 var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
-                            }
-                        }
-                        child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
-                        if (child) {
-                            child.style['pointer-events'] = 'auto';
-                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ1Handler);
-                        } else {
-                            console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
-                        }
-                        function resettoggleKJzrcsB8xgZ() {
-                            console.log('reset');
-                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                            if (!component) {
-                                return;
-                            }
-                            component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
-                            removeAllClassesButFirst(component, 'state1-to-state2');
-                            addClass(component, 'state2');
-                            addClass(component, 'state1-to-state2');
-                        }
-                        function clicktoggleKJzrcsB8xgZ2Handler(event) {
-                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                            if (isCurrentState(component, 'state2')) {
-                                try {
-                                    setTimeout(function () {
-                                        var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                                        if (component.classList.contains("disabledbutton")) {
-                                            return;
-                                        }
+                                if (isCurrentState(component, 'state1')) {
+                                    try {
+                                        setTimeout(function () {
+                                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                            if (component.classList.contains("disabledbutton")) {
+                                                return;
+                                            }
 
-                                        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
-                                        removeAllClassesButFirst(component, 'state2-to-state1');
-                                        addClass(component, 'state1');
-                                        addClass(component, 'state2-to-state1');
-                                        checkAllCBClick(false, "modelTree1", "checkAllSourceACB")
-                                    }, 0);
-                                } catch (e) {
-                                    console.log(e);
+                                            component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                                            removeAllClassesButFirst(component, 'state1-to-state2');
+                                            addClass(component, 'state2');
+                                            addClass(component, 'state1-to-state2');
+                                            checkAllCBClick(true, "modelTree1", "checkAllSourceACB")
+                                        }, 0);
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
                                 }
                             }
-                        }
-                        function transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler(event) {
-                            if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
-                                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                                component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                            function transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler(event) {
+                                if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                    var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                    component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                                }
                             }
-                        }
-                        child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
-                        if (child) {
-                            child.style['pointer-events'] = 'auto';
-                            child.addEventListener('click', clicktoggleKJzrcsB8xgZ2Handler);
-                        } else {
-                            console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
-                        }
-                    </script>
-                </div>
-                <div class="complianceswitch">
-                    <div class="compliance">
-                        Compliance
+                            child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                            if (child) {
+                                child.style['pointer-events'] = 'auto';
+                                child.addEventListener('click', clicktoggleKJzrcsB8xgZ1Handler);
+                            } else {
+                                console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                            }
+                            function resettoggleKJzrcsB8xgZ() {
+                                console.log('reset');
+                                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                if (!component) {
+                                    return;
+                                }
+                                component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+                                removeAllClassesButFirst(component, 'state1-to-state2');
+                                addClass(component, 'state2');
+                                addClass(component, 'state1-to-state2');
+                            }
+                            function clicktoggleKJzrcsB8xgZ2Handler(event) {
+                                var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                if (isCurrentState(component, 'state2')) {
+                                    try {
+                                        setTimeout(function () {
+                                            var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                            if (component.classList.contains("disabledbutton")) {
+                                                return;
+                                            }
+
+                                            component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                                            removeAllClassesButFirst(component, 'state2-to-state1');
+                                            addClass(component, 'state1');
+                                            addClass(component, 'state2-to-state1');
+                                            checkAllCBClick(false, "modelTree1", "checkAllSourceACB")
+                                        }, 0);
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }
+                            }
+                            function transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler(event) {
+                                if (event.target.className.trim() == 'bg11' || event.target.className.startsWith('bg11 ')) {
+                                    var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                                    component.removeEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+                                }
+                            }
+                            child = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                            if (child) {
+                                child.style['pointer-events'] = 'auto';
+                                child.addEventListener('click', clicktoggleKJzrcsB8xgZ2Handler);
+                            } else {
+                                console.log('Could not find element at: .module1 .group1 .checkallswitch .toggle-KJzr .bg1');
+                            }
+                        </script>
                     </div>
-                    <style>
-                        .module1 .group1 .complianceswitch .toggle-Hm8P * {
-                                box-sizing          : border-box;
+                    <div class="complianceswitch">
+                        <div class="compliance">
+                            Compliance
+                        </div>
+                        <style>
+                            .module1 .group1 .complianceswitch .toggle-Hm8P * {
+                                box-sizing: border-box;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                right               : 0%;
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 17.53%;
-                                position            : absolute;
-                                margin              : 0;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(255, 255, 255, 0.0);
+                                right: 0%;
+                                top: 0%;
+                                height: 100%;
+                                width: 17.53%;
+                                position: absolute;
+                                margin: 0;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P .bg2 {
-                                pointer-events      : none;
-                                background-color    : rgba(24, 23, 23, 1.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(24, 23, 23, 1.0);
+                                top: 0%;
+                                height: 100%;
+                                width: 100%;
+                                position: absolute;
+                                margin: 0;
+                                left: 0%;
+                                border-radius: 12px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P .bg1 {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(255, 255, 255, 0.0);
+                                top: 0%;
+                                height: 100%;
+                                width: 100%;
+                                position: absolute;
+                                margin: 0;
+                                left: 0%;
+                                border-radius: 12px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P .btn1 {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                top                 : 2px;
-                                height              : 20px;
-                                width               : 20px;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 22px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
+                                pointer-events: none;
+                                background-color: rgba(255, 255, 255, 0.0);
+                                top: 2px;
+                                height: 20px;
+                                width: 20px;
+                                position: absolute;
+                                margin: 0;
+                                left: 22px;
+                                -ms-transform: rotate(0deg);
+                                /* IE 9 */
+                                -webkit-transform: rotate(0deg);
+                                /* Chrome, Safari, Opera */
+                                transform: rotate(0deg);
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                left                : 22px;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                left: 22px;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .bg1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 1;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                opacity: 1;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                left                : 2px;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                left: 2px;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .bg1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 0;
+                                transition: all 0.2s ease-in-out 0.0s;
+                                opacity: 0;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .bg1 {
-                                opacity             : 0.0029;
+                                opacity: 0.0029;
                             }
+            
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .btn1 {
-                                left                : 2px;
+                                left: 2px;
                             }
                         </style>
-                    <div id="S0BCR4u">
-                        <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u"
-                            id='complianceSourceACB'>
-                            <div class="bg2 " data-name="bg2FqZPS0BCR4u">
+                        <div id="S0BCR4u">
+                            <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u" id='complianceSourceACB'>
+                                <div class="bg2 " data-name="bg2FqZPS0BCR4u">
+                                </div>
+                                <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
+                                <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
+                                </img>
                             </div>
-                            <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
-                            <img class="btn1" src="/images/UIPackage/module1-with-open-menu-btn@2x.png" />
-                            </img>
                         </div>
-                    </div>
-                    <script>
-                        if (typeof String.prototype.endsWith !== 'function') {
-                            String.prototype.endsWith = function (suffix) {
-                                return this.indexOf(suffix, this.length - suffix.length) !== -1;
-                            };
-                        }
-                        if (!String.prototype.startsWith) {
-                            String.prototype.startsWith = function (searchString, position) {
-                                position = position || 0;
-                                return this.indexOf(searchString, position) === position;
-                            };
-                        }
-                        if (!Array.prototype.forEach) {
-                            Array.prototype.forEach = function (callback) {
-                                var T, k;
-                                if (this == null) {
-                                    throw new TypeError('this is null or not defined');
-                                }
-                                var O = Object(this);
-                                var len = O.length >>> 0;
-                                if (typeof callback !== 'function') {
-                                    throw new TypeError(callback + ' is not a function');
-                                }
-                                if (arguments.length > 1) {
-                                    T = arguments[1];
-                                }
-                                k = 0;
-                                while (k < len) {
-                                    var kValue;
-                                    if (k in O) {
-                                        kValue = O[k];
-                                        callback.call(T, kValue, k, O);
+                        <script>
+                            if (typeof String.prototype.endsWith !== 'function') {
+                                String.prototype.endsWith = function (suffix) {
+                                    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+                                };
+                            }
+                            if (!String.prototype.startsWith) {
+                                String.prototype.startsWith = function (searchString, position) {
+                                    position = position || 0;
+                                    return this.indexOf(searchString, position) === position;
+                                };
+                            }
+                            if (!Array.prototype.forEach) {
+                                Array.prototype.forEach = function (callback) {
+                                    var T, k;
+                                    if (this == null) {
+                                        throw new TypeError('this is null or not defined');
                                     }
-                                    k++;
-                                }
-                            };
-                        }
-                        function toArray(obj) {
-                            var array = [];
-                            for (var i = obj.length >>> 0; i--;) {
-                                array[i] = obj[i];
-                            }
-                            return array;
-                        }
-                        function addClass(object, className) {
-                            object.classList ? object.classList.add(className) : object.className += ' ' + className;
-                        }
-                        function removeAllClassesButFirst(component, skipClass) {
-                            var classList = component.classList;
-                            var componentClass = classList.item(0);
-                            var toRemove = [];
-                            var beforeComponent = true;
-                            toArray(classList).forEach(function (className) {
-                                beforeComponent = beforeComponent && className != 'component';
-                                if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
-                                    toRemove.push(className);
-                                }
-                            });
-                            toRemove.forEach(function (className) {
-                                classList.remove(className);
-                            });
-                        }
-                        function applyState(component, stateClass) {
-                            var componentClass = component.classList.item(0);
-                            component.className = componentClass;
-                            component.classList.add(stateClass);
-                        }
-                        function isCurrentState(component, state) {
-                            var classList = component.classList;
-                            var rv = false;
-                            toArray(classList).forEach(function (className) {
-                                if (className.endsWith(state)) {
-                                    rv = true;
-                                }
-                            });
-                            return rv;
-                        }
-                        function whichTransitionEvent() {
-                            var t, el = document.createElement("fakeelement");
-                            var transitions = {
-                                "transition": "transitionend",
-                                "OTransition": "oTransitionEnd",
-                                "MozTransition": "transitionend",
-                                "WebkitTransition": "webkitTransitionEnd"
-                            };
-                            for (t in transitions) {
-                                if (el.style[t] !== undefined) {
-                                    return transitions[t];
-                                }
-                            }
-                        }
-                        var transitionEvent = whichTransitionEvent();
-                        function clicktoggleHm8PS0BCR4u1Handler(event) {
-                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                            if (isCurrentState(component, 'state2')) {
-                                try {
-                                    setTimeout(function () {
-                                        var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                                        if (component.classList.contains("disabledbutton")) {
-                                            return;
+                                    var O = Object(this);
+                                    var len = O.length >>> 0;
+                                    if (typeof callback !== 'function') {
+                                        throw new TypeError(callback + ' is not a function');
+                                    }
+                                    if (arguments.length > 1) {
+                                        T = arguments[1];
+                                    }
+                                    k = 0;
+                                    while (k < len) {
+                                        var kValue;
+                                        if (k in O) {
+                                            kValue = O[k];
+                                            callback.call(T, kValue, k, O);
                                         }
-
-                                        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
-                                        removeAllClassesButFirst(component, 'state2-to-state1');
-                                        addClass(component, 'state1');
-                                        addClass(component, 'state2-to-state1');
-                                    }, 0);
-                                } catch (e) {
-                                    console.log(e);
+                                        k++;
+                                    }
+                                };
+                            }
+                            function toArray(obj) {
+                                var array = [];
+                                for (var i = obj.length >>> 0; i--;) {
+                                    array[i] = obj[i];
+                                }
+                                return array;
+                            }
+                            function addClass(object, className) {
+                                object.classList ? object.classList.add(className) : object.className += ' ' + className;
+                            }
+                            function removeAllClassesButFirst(component, skipClass) {
+                                var classList = component.classList;
+                                var componentClass = classList.item(0);
+                                var toRemove = [];
+                                var beforeComponent = true;
+                                toArray(classList).forEach(function (className) {
+                                    beforeComponent = beforeComponent && className != 'component';
+                                    if (className != skipClass && className != componentClass && className != 'component' && !beforeComponent) {
+                                        toRemove.push(className);
+                                    }
+                                });
+                                toRemove.forEach(function (className) {
+                                    classList.remove(className);
+                                });
+                            }
+                            function applyState(component, stateClass) {
+                                var componentClass = component.classList.item(0);
+                                component.className = componentClass;
+                                component.classList.add(stateClass);
+                            }
+                            function isCurrentState(component, state) {
+                                var classList = component.classList;
+                                var rv = false;
+                                toArray(classList).forEach(function (className) {
+                                    if (className.endsWith(state)) {
+                                        rv = true;
+                                    }
+                                });
+                                return rv;
+                            }
+                            function whichTransitionEvent() {
+                                var t, el = document.createElement("fakeelement");
+                                var transitions = {
+                                    "transition": "transitionend",
+                                    "OTransition": "oTransitionEnd",
+                                    "MozTransition": "transitionend",
+                                    "WebkitTransition": "webkitTransitionEnd"
+                                };
+                                for (t in transitions) {
+                                    if (el.style[t] !== undefined) {
+                                        return transitions[t];
+                                    }
                                 }
                             }
-                        }
-                        function transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler(event) {
-                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                            var transitionEvent = whichTransitionEvent();
+                            function clicktoggleHm8PS0BCR4u1Handler(event) {
                                 var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                                component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
-                            }
-                        }
-                        child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
-                        if (child) {
-                            child.style['pointer-events'] = 'auto';
-                            child.addEventListener('click', clicktoggleHm8PS0BCR4u1Handler);
-                        } else {
-                            console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
-                        }
-                        function clicktoggleHm8PS0BCR4u2Handler(event) {
-                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                            if (isCurrentState(component, 'state1')) {
-                                try {
-                                    setTimeout(function () {
-                                        var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                                        if (component.classList.contains("disabledbutton")) {
-                                            return;
-                                        }
+                                if (isCurrentState(component, 'state2')) {
+                                    try {
+                                        setTimeout(function () {
+                                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                            if (component.classList.contains("disabledbutton")) {
+                                                return;
+                                            }
 
-                                        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
-                                        removeAllClassesButFirst(component, 'state1-to-state2');
-                                        addClass(component, 'state2');
-                                        addClass(component, 'state1-to-state2');
-                                    }, 0);
-                                } catch (e) {
-                                    console.log(e);
+                                            component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+                                            removeAllClassesButFirst(component, 'state2-to-state1');
+                                            addClass(component, 'state1');
+                                            addClass(component, 'state2-to-state1');
+                                        }, 0);
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
                                 }
                             }
-                        }
-                        function transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler(event) {
-                            if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                            function transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler(event) {
+                                if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                    var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                    component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+                                }
+                            }
+                            child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                            if (child) {
+                                child.style['pointer-events'] = 'auto';
+                                child.addEventListener('click', clicktoggleHm8PS0BCR4u1Handler);
+                            } else {
+                                console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                            }
+                            function clicktoggleHm8PS0BCR4u2Handler(event) {
                                 var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                                component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
-                            }
-                        }
-                        child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
-                        if (child) {
-                            child.style['pointer-events'] = 'auto';
-                            child.addEventListener('click', clicktoggleHm8PS0BCR4u2Handler);
-                        } else {
-                            console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
-                        }
-                        function resettoggleHm8PS0BCR4u() {
-                            console.log('reset');
-                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                            if (!component) {
-                                return;
-                            }
-                            component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
-                            removeAllClassesButFirst(component, 'state1-to-state2');
-                            addClass(component, 'state2');
-                            addClass(component, 'state1-to-state2');
-                        }
-                    </script>
-                </div>
-                <div class="createbtn" id="createbtnA" onclick="OnLoadClick('true')" style="cursor: pointer;">
-                    <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
-                    <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
-                </div>
-                <div class="info" id="infobtn" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
-                    <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
-                    <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
-                </div>
-                <div class="loaddata">
-                    Load data
-                </div>
-                <div id="SourceAComponentCount" class="checkall">
+                                if (isCurrentState(component, 'state1')) {
+                                    try {
+                                        setTimeout(function () {
+                                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                            if (component.classList.contains("disabledbutton")) {
+                                                return;
+                                            }
 
+                                            component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                                            removeAllClassesButFirst(component, 'state1-to-state2');
+                                            addClass(component, 'state2');
+                                            addClass(component, 'state1-to-state2');
+                                        }, 0);
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }
+                            }
+                            function transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler(event) {
+                                if (event.target.className.trim() == 'bg1' || event.target.className.startsWith('bg1 ')) {
+                                    var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                    component.removeEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                                }
+                            }
+                            child = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                            if (child) {
+                                child.style['pointer-events'] = 'auto';
+                                child.addEventListener('click', clicktoggleHm8PS0BCR4u2Handler);
+                            } else {
+                                console.log('Could not find element at: .module1 .group1 .complianceswitch .toggle-Hm8P .bg2');
+                            }
+                            function resettoggleHm8PS0BCR4u() {
+                                console.log('reset');
+                                var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                                if (!component) {
+                                    return;
+                                }
+                                component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate1tostate2EndedHandler);
+                                removeAllClassesButFirst(component, 'state1-to-state2');
+                                addClass(component, 'state2');
+                                addClass(component, 'state1-to-state2');
+                            }
+                        </script>
+                    </div>
+                    <div class="createbtn" id="createbtnA" onclick="OnLoadClick('true')" style="cursor: pointer;">
+                        <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
+                        <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
+                    </div>
+                    <div class="info" id="infobtn" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
+                        <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
+                        <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
+                    </div>
+                    <div class="loaddata">
+                        Load data
+                    </div>
+                    <div id="SourceAComponentCount" class="checkall">
+            
+                    </div>
                 </div>
             </div>
             <div class="group2" id="dataSource2" style="display: none">
@@ -2075,7 +2133,7 @@
                                         <!-- <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">  -->
                                         <input id="file-input" name="dataSouresName[]" multiple="multiple" type="file"
                                             onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
-                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm" />
+                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg" />
                                     </label>
                                 </div>
                             </form>
@@ -2279,6 +2337,8 @@
         }
 
         window.onload = function () {
+
+            setDropZone();
 
             // disable controls on load
             disableControlsOnLoad();
@@ -2626,7 +2686,9 @@
             // post source A viewer data
             if (xCheckStudioInterface1) {
                 if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") {
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvm"||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "dwg") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -2690,7 +2752,8 @@
             if (xCheckStudioInterface2) {
                 if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                     xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
-                    xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm") {
+                    xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
+                    xCheckStudioInterface2.SourceType.toLowerCase() === "dwg") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
@@ -2799,45 +2862,44 @@
             let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-            // document.getElementById(modelTreeContainer).innerHTML = ""
-            // document.getElementById(viewerContainer).innerHTML = ""
             if (!xCheckStudioInterface1) {
                 xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                 xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
-
-                // enable source A controls
-                // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-                // sourceAComplianceCB.disabled = false;
-
-                // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-                // checkAllSourceACB.disabled = false;
-
-                // // enable source B load data source button
-                // var loadDataSourceBButton = document.getElementById("dataSouresB");
-                // loadDataSourceBButton.disabled = false;
             }
             else {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
-
-                //     // enable source B controls
-                //     var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-                //     sourceBComplianceCB.disabled = false;
-
-                //     var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-                //     checkAllSourceBCB.disabled = false;
-
-                //     var comparisonCB = document.getElementById("comparisonCB");
-                //     comparisonCB.disabled = false;
-            }
-
-            // document.getElementById("checkButton").disabled = false;
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);      
+            }          
         }
 
         //open windows file selector dialog
         function OnLoadClick(isFirstDataSource) {
             var modal;
             if (isFirstDataSource === "true") {
+                // get first source type
+                if (checkCaseManager === undefined ||
+                    checkCaseManager.CheckCase === undefined ||
+                    checkCaseManager.CheckCase.CheckTypes === undefined ||
+                    checkCaseManager.CheckCase.CheckTypes.length === 0) {
+                    return;
+                }
+
+                var sourceAType = checkCaseManager.CheckCase.CheckTypes[0].SourceAType;
+                if (sourceAType.toLowerCase() === "sldasm") {
+                    var inputControl = document.getElementById("file-input");
+                    if (inputControl === undefined) {
+                        return;
+                    }
+                    inputControl.setAttribute("webkitdirectory", "true");
+                }
+                else {
+                    var inputControl = document.getElementById("file-input");
+                    if (inputControl === undefined) {
+                        return;
+                    }
+                    inputControl.removeAttribute("webkitdirectory");
+                }
+
                 modal = document.getElementById('projectselectiondialogModal');
 
                 // When the user clicks the button, open the modal 
@@ -2885,6 +2947,36 @@
                 }
             }
             else if (isFirstDataSource === "false") {
+                // get second source type
+                if (checkCaseManager === undefined ||
+                    checkCaseManager.CheckCase === undefined ||
+                    checkCaseManager.CheckCase.CheckTypes === undefined ||
+                    checkCaseManager.CheckCase.CheckTypes.length === 0) {
+                    return;
+                }
+
+                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+                    var sourceBType = checkCaseManager.CheckCase.CheckTypes[i].SourceBType;
+                    if (sourceBType === undefined || sourceBType === "") {
+                        continue;
+                    }
+
+                    if (sourceBType.toLowerCase() === "sldasm") {
+                        var inputControl = document.getElementById("file-input");
+                        if (inputControl === undefined) {
+                            return;
+                        }
+                        inputControl.setAttribute("webkitdirectory", "true");
+                    }
+                    else {
+                        var inputControl = document.getElementById("file-input");
+                        if (inputControl === undefined) {
+                            return;
+                        }
+                        inputControl.removeAttribute("webkitdirectory");
+                    }
+                }
+
                 modal = document.getElementById('projectselectiondialogModal');
 
                 // When the user clicks the button, open the modal 
@@ -2995,7 +3087,8 @@
 
             if (fileExtension.toLowerCase() === "xml" ||
                 fileExtension.toLowerCase() === "rvm" ||
-                fileExtension.toLowerCase() === "sldasm") {
+                fileExtension.toLowerCase() === "sldasm"||
+                fileExtension.toLowerCase() === "dwg") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
@@ -3004,7 +3097,7 @@
                 xhr.onload = function (event) {
                     alert("The server says: " + event.target.response);
                     //ShowToast('The server says: Success');
-                    if (loadModel(dataSource, fileName, viewerContainer, modelTreeContainer)) {
+                    if (loadModel(fileName, viewerContainer, modelTreeContainer)) {
                         document.getElementById(dataSource).disabled = true;
                     }
                     else {
@@ -3074,8 +3167,7 @@
 
         }
 
-        function loadModel(dataSource,
-            fileName,
+        function loadModel(fileName,
             viewerContainer,
             modelTreeContainer) {
 
@@ -3136,62 +3228,11 @@
 
                     if (viewerContainer === "viewerContainer1") {
                         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                        xCheckStudioInterface1.setupViewer(viewerOptions, true);
-
-                        // enable source A controls
-                        // var checkAllSourceACB = document.getElementById("checkAllSourceACB");
-                        // checkAllSourceACB.disabled = false;
-
-                        // var sourceAComplianceCB = document.getElementById("complianceSourceACB");
-                        // sourceAComplianceCB.disabled = false;
-
-                        // var sourceAFrontView = document.getElementById(sourceAFrontId);
-                        // sourceAFrontView.disabled = false;
-                        // var sourceABackView = document.getElementById(sourceABackId);
-                        // sourceABackView.disabled = false;
-                        // var sourceATopView = document.getElementById(sourceATopId);
-                        // sourceATopView.disabled = false;
-                        // var sourceABottomView = document.getElementById(sourceABottomId);
-                        // sourceABottomView.disabled = false;
-                        // var sourceALeftView = document.getElementById(sourceALeftId);
-                        // sourceALeftView.disabled = false;
-                        // var sourceARightView = document.getElementById(sourceARightId);
-                        // sourceARightView.disabled = false;
-                        // var sourceAIsoView = document.getElementById(sourceAIsoId);
-                        // sourceAIsoView.disabled = false;
-
-                        // // enable source B load data source button
-                        // var loadDataSourceBButton = document.getElementById("dataSouresB");
-                        // loadDataSourceBButton.disabled = false;
+                        xCheckStudioInterface1.setupViewer(viewerOptions, true);                      
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
-
-                        // enable source B controls
-                        // var sourceBComplianceCB = document.getElementById("complianceSourceBCB");
-                        // sourceBComplianceCB.disabled = false;
-
-                        // var checkAllSourceBCB = document.getElementById("checkAllSourceBCB");
-                        // checkAllSourceBCB.disabled = false;
-
-                        // var sourceBFrontView = document.getElementById(sourceBFrontId);
-                        // sourceBFrontView.disabled = false;
-                        // var sourceBBackView = document.getElementById(sourceBBackId);
-                        // sourceBBackView.disabled = false;
-                        // var sourceBTopView = document.getElementById(sourceBTopId);
-                        // sourceBTopView.disabled = false;
-                        // var sourceBBottomView = document.getElementById(sourceBBottomId);
-                        // sourceBBottomView.disabled = false;
-                        // var sourceBLeftView = document.getElementById(sourceBLeftId);
-                        // sourceBLeftView.disabled = false;
-                        // var sourceBRightView = document.getElementById(sourceBRightId);
-                        // sourceBRightView.disabled = false;
-                        // var sourceBIsoView = document.getElementById(sourceBIsoId);
-                        // sourceBIsoView.disabled = false;
-
-                        // var comparisonCB = document.getElementById("comparisonCB");
-                        // comparisonCB.disabled = false;
                     }
 
                 }

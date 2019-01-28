@@ -2,8 +2,8 @@
 
 $errors = array();
 $uploadedFiles = array();
-$extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM");
-$validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM");
+$extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg");
+$validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg");
 // $bytes = 1024;
 // $KB = 1024;
 // $totalBytes = $bytes * $KB;
