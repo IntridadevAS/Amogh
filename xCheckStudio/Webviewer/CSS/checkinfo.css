@@ -132,13 +132,16 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap; 
 }
 
 .checkinfo .projectcreationdialoggroup .properties .properties1 .headerval{
   background-color    : rgba(255,255,255,0.0);
   top                 : 10px;
   height              : auto;
-  width               : 153px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -151,6 +154,9 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 .checkinfo .projectcreationdialoggroup .properties .properties1 .properties1Key1{
   background-color    : rgba(255,255,255,0.0);
@@ -173,7 +179,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 40px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -185,6 +191,7 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
 }
 .checkinfo .projectcreationdialoggroup .properties .properties1 .properties1Key2{
   background-color    : rgba(255,255,255,0.0);
@@ -207,7 +214,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 70px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -219,6 +226,7 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
 }
 
 .checkinfo .projectcreationdialoggroup .properties .properties1 .properties1Key3{
@@ -242,7 +250,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 100px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -254,6 +262,7 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
 }
 /************* Row 2************************/
 .checkinfo .projectcreationdialoggroup .properties .properties2{
@@ -300,7 +309,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 150px;
   height              : auto;
-  width               : 153px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -313,6 +322,9 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 .checkinfo .projectcreationdialoggroup .properties .properties2 .properties2Key1{
   background-color    : rgba(255,255,255,0.0);
@@ -335,7 +347,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 180px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -369,7 +381,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 210px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -404,7 +416,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 240px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -459,7 +471,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 290px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -471,6 +483,9 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 
 .checkinfo .projectcreationdialoggroup .properties .properties3 .properties3Key2{
@@ -494,7 +509,7 @@ div {
   background-color    : rgba(255,255,255,0.0);
   top                 : 320px;
   height              : auto;
-  width               : 350px;
+  width               : 210px;
   position            : absolute;
   margin              : 0;
   left                : 155px;
@@ -506,6 +521,9 @@ div {
   color               : rgba(51, 51, 51, 1.0);
   text-align          : left;
   line-height         : 24.0px;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 .checkinfo .projectcreationdialoggroup .properties .cancelbtn {
   background-color    : rgba(255,255,255,0.0);
