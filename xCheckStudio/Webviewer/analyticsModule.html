@@ -25,20 +25,16 @@
         google.charts.load('42', { 'packages': ['corechart'] });   
     </script>
 
-    <!-- <style>
-    	@media print {
-				body * {
-					visibility: hidden;
-				}
-				#wrapper, #wrapper * {
-					visibility: visible;
-				}
-				#wrapper {
-					top:0;
-					left:0;
-				}
-			}
-    </style> -->
+    <style>
+    	.disable {
+			pointer-events: none;
+			opacity: 0.4;
+		}
+		.disable div,
+		.disable textarea {
+			overflow: hidden;
+		}
+    </style>
 </head>
 
 <body style="margin: 0;
@@ -433,8 +429,30 @@
                 document.getElementById("dataSource2").style.fontSize = "13px";
                 document.getElementById("extension2").innerHTML = fileName2[1];
             }
-            
-
+			
+			if (typeof ComparisonCheckData === 'undefined')
+			{
+				$("#compare").addClass("disable");
+				openCheckResultTab('ComplianceTab');
+				var tab = document.getElementById("ComplianceTab");
+				tab.click();
+			}
+			if (typeof SourceAComplianceData === 'undefined' && typeof SourceBComplianceData === 'undefined') 
+			{
+				$("#compliance").addClass("disable");
+			}
+			
+			
+			/*if (typeof SourceAComplianceData === 'undefined')
+			{
+				$("#compare").addClass("disable");
+			}
+			if (typeof SourceBComplianceData === 'undefined')
+			{
+				$("#compliance").addClass("disable");
+			}*/
+			
+			
             //load comparison pie chart default
             var currentDiv = document.getElementById("compare");
             currentDiv.style.fontSize = "22px";
