@@ -1228,6 +1228,21 @@
                 div.style.borderStyle = "none";
                 div.innerHTML = "Source B";
                 td.appendChild(div);
+
+                //clear highlighted row
+                if(comparisonReviewManager.SelectedComponentRowFromSheetA)
+                {
+                    comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayA, 
+                    comparisonReviewManager.SelectedComponentRowFromSheetA);
+                }
+                if(comparisonReviewManager.SelectedComponentRowFromSheetB)
+                {
+                    comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayB, 
+                    comparisonReviewManager.SelectedComponentRowFromSheetB);
+                }
+                if (comparisonReviewManager.SelectedComponentRow) {
+                    comparisonReviewManager.RestoreBackgroundColor(comparisonReviewManager.SelectedComponentRow);
+                }
             }
             else if (tabName === "SourceAComplianceTabPage") {
 
@@ -1267,6 +1282,15 @@
                 div.style.borderStyle = "none";
                 div.innerHTML = "Source A";
                 td.appendChild(div);
+
+                //clear highlighted row
+                if(sourceAComplianceReviewManager.SelectedComponentRowFromSheetA){
+                    sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray, 
+                                                                                 sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
+                }
+                if (sourceAComplianceReviewManager.SelectedComponentRow) {
+                    sourceAComplianceReviewManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                 }
             }
             else if (tabName === "SourceBComplianceTabPage") {
                 var sourceAComplianceTab = document.getElementById("dataSource2ModelBrowserTab");
@@ -1305,6 +1329,15 @@
                 div.style.borderStyle = "none";
                 div.innerHTML = "Source B";
                 td.appendChild(div);
+
+                //clear highlighted row
+                if(sourceBComplianceReviewManager.SelectedComponentRowFromSheetB){
+                    sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray, 
+                                                                            sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
+                }
+                if (sourceBComplianceReviewManager.SelectedComponentRow) {
+                    sourceBComplianceReviewManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                 }                                                    
             }
 
             // clear views before loading models into viewers
