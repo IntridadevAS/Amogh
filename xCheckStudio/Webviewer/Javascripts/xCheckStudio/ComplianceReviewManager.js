@@ -90,7 +90,13 @@ function ComplianceReviewManager(complianceCheckManager,
                 columnHeader = {};
                 var title;
                 if (i === 0) {
-                    title = "Source A";
+                    if(this.MainReviewTableContainer === "SourceAComplianceMainReviewCell"){
+                        title = AnalyticsData.SourceAName;
+                    }
+                    if(this.MainReviewTableContainer === "SourceBComplianceMainReviewCell"){
+                        title = AnalyticsData.SourceBName;
+                    }
+                    // title = "Source A";
                     name = "SourceA"
                 }
                 else if (i === 1) {

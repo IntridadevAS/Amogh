@@ -102,12 +102,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeader = {};
                 var title;
                 if (i === 0) {
-                    title = "Source A";
+                    title = AnalyticsData.SourceAName;//"Source A";
                     name = "SourceA";
                     width = "30";
                 }
                 else if (i === 1) {
-                    title = "Source B";
+                    title = AnalyticsData.SourceBName;//"Source B";
                     name = "SourceB";
                     width = "30";
                 }
@@ -1221,7 +1221,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width = "579px";
-                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+                modelBrowserDataTable.style.margin = "05px 0px 0px 0px"
 
                 break;
             }
