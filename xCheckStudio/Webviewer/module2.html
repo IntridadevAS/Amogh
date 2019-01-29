@@ -212,6 +212,15 @@
         .jsgrid-cell {
             word-wrap: break-word;
         }
+		
+		.disable {
+			pointer-events: none;
+			opacity: 0.4;
+		}
+		.disable div,
+		.disable textarea {
+			overflow: hidden;
+		}
     </style>
 </head>
 
@@ -458,7 +467,7 @@
                         <div class="bg3">
                         </div>
                     </div>
-                    <div class="sourceatab">
+                    <div class="sourceatab" id="sourceatab">
                         <img src="/images/UIPackage/module2-tab 1@2x.png" class="tab1" />
                     </div>
                     <div class="sourceatab" id="tab1Parent" onclick="openCheckResultTab('ComparisonTabPage');" style="cursor: pointer;">
@@ -469,7 +478,7 @@
                         </div>
                     </div>
 
-                    <div class="sourcebtab">
+                    <div class="sourcebtab" id="sourcebtab">
                         <img src="/images/UIPackage/module2-tab 1@2x.png" class="tab2" />
                     </div>
                     <div class="sourcebtab" id="tab2Parent" onclick="openCheckResultTab('SourceAComplianceTabPage');"
@@ -481,7 +490,7 @@
                         </div>
                     </div>
 
-                    <div class="sourcectab">
+                    <div class="sourcectab" id="sourcectab">
                         <img src="/images/UIPackage/module2-tab 1@2x.png" class="tab3" />
                     </div>
                     <div class="sourcectab" id="tab3Parent" onclick="openCheckResultTab('SourceBComplianceTabPage');"
@@ -691,6 +700,10 @@
                 // populate review table
                 comparisonReviewManager.populateReviewTable();
             }
+			else
+			{
+				$("#tab1Parent").addClass("disable");
+			}
 
             if (typeof SourceAComplianceData !== 'undefined') {
 
@@ -724,7 +737,10 @@
                 // populate review table
                 sourceAComplianceReviewManager.populateReviewTable();
             }
-
+			else
+			{
+				$("#tab2Parent").addClass("disable");
+			}
             if (typeof SourceBComplianceData !== 'undefined') {
 
                 // restore source A compliance check data
@@ -756,6 +772,10 @@
                 // populate review table
                 sourceBComplianceReviewManager.populateReviewTable();
             }
+			else
+			{
+				$("#tab3Parent").addClass("disable");
+			}
 
             // make buttons collapsible
             setButtonsCollapsible();
@@ -774,8 +794,38 @@
             postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager);
 
             // trigger comparison tab click manually
-            var tab1 = document.getElementById("tab1Parent");
-            tab1.click();
+            /*/var tab1 = document.getElementById("tab1Parent");
+            tab1.click();*/
+			if (typeof ComparisonCheckData !== 'undefined')
+			{
+				openCheckResultTab('ComparisonTabPage');
+				var tab = document.getElementById("tab1Parent");
+				tab.click();
+			}
+			else
+			{
+				if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
+				{
+					openCheckResultTab('SourceAComplianceTabPage');
+					var tab2 = document.getElementById("tab2Parent");
+					tab2.click();
+				}
+				else
+				{
+					if (typeof SourceAComplianceData === 'undefined')
+					{
+						openCheckResultTab('SourceBComplianceTabPage');
+						var tab3 = document.getElementById("tab3Parent");
+						tab3.click();
+					}
+					else if (typeof SourceBComplianceData === 'undefined')
+					{
+						openCheckResultTab('SourceAComplianceTabPage');
+						var tab2 = document.getElementById("tab2Parent");
+						tab2.click();
+					}
+				}
+			}
         };
 
         function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager) {
