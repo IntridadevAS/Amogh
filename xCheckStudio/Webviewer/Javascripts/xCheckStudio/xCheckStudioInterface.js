@@ -371,10 +371,10 @@ var xCheckStudio;
                         }
                          if (_this.nodeIdArray.length == 0) {
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);
-                            _this._modelTree.addClassesToModelBrowser();
-                            for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
-                                _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
-                            }
+                            // _this._modelTree.addClassesToModelBrowser();
+                            // for (var i = 0; i < _this._modelTree.NodeGroups.length; i++) {
+                            //     _this._modelTree.CreateGroup(_this._modelTree.NodeGroups[i]);
+                            // }
                         }
                     });
                 }

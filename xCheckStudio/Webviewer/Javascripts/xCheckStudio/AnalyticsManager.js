@@ -439,7 +439,7 @@ function AnalyticsManager() {
             valueArray.push("Not Checked");
             var percent = totalItemsNotChecked * 100 / totalItemsCount;
              fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a10Info").innerText = fixedPercent;
+            document.getElementById("a10Info").innerText = fixedPercent + "%";
             document.getElementById("a10Info").style.color = "#839192";
             valueArray.push(fixedPercent);
             this.ComparisonResultArray.push(valueArray);

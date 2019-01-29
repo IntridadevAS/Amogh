@@ -19,7 +19,7 @@ var xCheckStudio;
                 this.SourceType = sourceType;
 
                 this.NodeIdVsCellClassList = {};
-                this.RowIndexVsRowClassList = {};
+                this.NodeIdVsRowClassList = {};
                 this.modelTreeColumnHeaders = [];
                 this.modelTreeRowData = [];
 
@@ -151,14 +151,15 @@ var xCheckStudio;
                     var currentRow = modelBrowserRows[i];
                     if(currentRow.cells[7].innerHTML !== "")
                     {
-                        var nodeId = currentRow.cells[7].innerHTML
+                        var nodeId = currentRow.cells[7].innerHTML;
                             var className = this.NodeIdVsCellClassList[nodeId] ;
                             if(className !== undefined)
                             { 
                                 modelBrowserRows[i].cells[1].className = className;
                             }
                     }
-                        var className = this.RowIndexVsRowClassList[currentRow.rowIndex]
+                    var nodeId = currentRow.cells[7].innerHTML;
+                        var className = this.NodeIdVsRowClassList[nodeId];
                         if(className !== undefined)
                         {
                             var classList = className.split(" ");
@@ -179,7 +180,7 @@ var xCheckStudio;
                 var componentName = model.getNodeName(nodeId);
                 if (styleList !== undefined) {
                     // row.classList = styleList;
-                    _this.RowIndexVsRowClassList[_this.modelTreeRowData.length] = styleList;
+                    _this.NodeIdVsRowClassList[nodeId] = styleList;
                 }
 
                 //add node properties to model browser table
@@ -192,7 +193,20 @@ var xCheckStudio;
                 }
 
                 tableRowContent = {};
-                var checkBox = document.createElement("INPUT");
+                // var checkBox = document.createElement("INPUT");
+                // checkBox.setAttribute("type", "checkbox");
+                // checkBox.checked = false;
+
+                // tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
+
+                // // select component check box state change event
+                // checkBox.onchange = function () {
+                //     _this.handleComponentCheck(this);
+                // }
+
+                if (nodeData != undefined) {
+
+                    var checkBox = document.createElement("INPUT");
                 checkBox.setAttribute("type", "checkbox");
                 checkBox.checked = false;
 
@@ -202,8 +216,6 @@ var xCheckStudio;
                 checkBox.onchange = function () {
                     _this.handleComponentCheck(this);
                 }
-
-                if (nodeData != undefined) {
 
                     tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
                     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
@@ -228,6 +240,10 @@ var xCheckStudio;
                 }
                 else {
 
+                    if(componentName.toLowerCase() === "unnamed" || componentName.toLowerCase() === "models" || componentName.includes("Product"))
+                    {
+                        return;
+                    }
                     tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
                     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
                     if (isAssemblyNodeType) {
@@ -246,6 +262,7 @@ var xCheckStudio;
                     tableRowContent[this.modelTreeColumnHeaders[6].name] = "";
 
                     tableRowContent[this.modelTreeColumnHeaders[7].name] = "";
+                    
                 }
 
                 this.modelTreeRowData.push(tableRowContent);
@@ -486,17 +503,6 @@ var xCheckStudio;
 
                 var modelBrowserData = document.getElementById(this._elementId);
                 var modelBrowserDataTable = modelBrowserData.children[1];
-                // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-                // var  countBox;
-                // if (this._elementId === "modelTree1") {
-                //     countBox = document.getElementById("totalComponentCount1");
-                // }
-                // if (this._elementId === "modelTree2") {
-                //     countBox = document.getElementById("totalComponentCount2");
-                // }
-                // // countBox.innerText =  "Count :" + modelBrowserTableRows.length;
-                // // countBox.style.fontSize = "20px";
-
 
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
@@ -567,27 +573,6 @@ var xCheckStudio;
                 $(function () {
                     var db = {
                         loadData: filter => {
-                        //  if(filter.Component === "" && filter.MainComponentClass === "" && filter.SubComponentClass === "")
-                        //  {
-                        //      if(xCheckStudioInterface1 !== undefined && xCheckStudioInterface1._modelTree !== undefined)
-                        //      {
-                        //         // xCheckStudioInterface1._modelTree.addModelBrowser(xCheckStudioInterface1._firstViewer.model.getAbsoluteRootNode(), undefined);
-                        //         // xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
-                        //         // for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
-                        //         //     xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
-                        //         // }
-                        //      }
-                        //      else if(xCheckStudioInterface2 !== undefined && xCheckStudioInterface2._modelTree !== undefined)
-                        //      {
-                        //         // xCheckStudioInterface2._modelTree.addModelBrowser(xCheckStudioInterface2._firstViewer.model.getAbsoluteRootNode(), undefined);
-                        //         // xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
-                        //         // for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
-                        //         //     xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
-                        //         // }
-                        //      }
-                            
-                        //  }
-                        //  else{
                             console.debug("Filter: ", filter);
                             let Component = (filter.Component || "").toLowerCase();
                             let MainComponentClass = (filter.MainComponentClass || "").toLowerCase();
@@ -600,7 +585,6 @@ var xCheckStudio;
                               && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
                               && (isNaN(dmy) || row.dummy === dmy);
                             });
-                        //  }
                         }
                       };
     
@@ -617,6 +601,22 @@ var xCheckStudio;
                         checked: true,
                         onRefreshed: function(config) {      
                             _this.AddTableContentCount(this._container.context.id);
+                        },
+                        onDataLoaded: function(args) {
+                            if(args.grid._container[0].id === "modelTree1")
+                            {
+                                xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
+                                for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
+                                    xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
+                                }
+                            }
+                            else if(args.grid._container[0].id === "modelTree2")
+                            {
+                                xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
+                                for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
+                                    xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
+                                }
+                            }
                         },
                         rowClick: function (args) {
                             if (args.event.target.type === "checkbox") {
@@ -649,28 +649,9 @@ var xCheckStudio;
     
                 });
     
-                //add all rows to this.selectedComponents array
-                // this.addselectedRowsToArray(viewerContainer)
-    
     
             var container = document.getElementById(viewerContainer.replace("#", ""));
 
-            // var modelBrowser = container;
-            // var modelBrowserHeader = modelBrowser.children[0];
-            // var headers = modelBrowserHeader.getElementsByTagName("th");
-            // for(var i =0; i < headers.length; i++)
-            // {
-            //     var currentHeader = headers[i];
-            //     if(i===0)
-            //     {
-            //         currentHeader.style.position = "fixed";
-            //     }
-            //     else{
-            //         currentHeader.style.position = "relative";
-            //     }
-                
-                
-            // }
             container.style.width = "556px"
             container.style.height = "364px"
             container.style.margin = "0px"
@@ -745,7 +726,7 @@ var xCheckStudio;
                     var collapsibleButtonTd = $(this).find("td:eq(1)");
 
                     var padding_left = parseInt($(collapsibleButtonTd).css('padding-left'));
-                    $(collapsibleButtonTd).css('padding-left', String(padding_left + 15) + 'px');
+                    $(collapsibleButtonTd).css('padding-left', String(padding_left + 25) + 'px');
                 });
                 this.RestoreGroup(group_name);
 
