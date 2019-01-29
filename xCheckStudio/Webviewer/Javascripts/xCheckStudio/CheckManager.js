@@ -813,6 +813,8 @@ function CheckManager() {
                 }
 
             }
+
+            return true;
         }
 
         return false;
