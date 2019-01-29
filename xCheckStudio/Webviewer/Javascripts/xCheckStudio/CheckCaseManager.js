@@ -203,20 +203,20 @@ function CheckType(name,
         for (var i = 0; i < this.ComponentGroups.length; i++) {
             // check for source A only
             if (sourceBGroupName === undefined &&
-                this.ComponentGroups[i].SourceAName === sourceAGroupName) {
+                this.ComponentGroups[i].SourceAName.toLowerCase() === sourceAGroupName.toLowerCase()) {
                 return true;
             }
 
             // check for source B only
             if (sourceAGroupName === undefined &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+                this.ComponentGroups[i].SourceBName.toLowerCase() === sourceBGroupName.toLowerCase()) {
                 return true;
             }
 
 
             // check for both sources
-            if (this.ComponentGroups[i].SourceAName === sourceAGroupName &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+            if (this.ComponentGroups[i].SourceAName.toLowerCase() === sourceAGroupName.toLowerCase() &&
+                this.ComponentGroups[i].SourceBName.toLowerCase() === sourceBGroupName.toLowerCase()) {
                 return true;
             }
         }
@@ -229,19 +229,19 @@ function CheckType(name,
 
             // check for source A only
             if (sourceBGroupName === undefined &&
-                this.ComponentGroups[i].SourceAName === sourceAGroupName) {
+                this.ComponentGroups[i].SourceAName.toLowerCase() === sourceAGroupName.toLowerCase()) {
                 return this.ComponentGroups[i];
             }
 
             // check for source B only
             if (sourceAGroupName === undefined &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+                this.ComponentGroups[i].SourceBName.toLowerCase() === sourceBGroupName.toLowerCase()) {
                 return this.ComponentGroups[i];
             }
 
             // check for both sources
-            if (this.ComponentGroups[i].SourceAName === sourceAGroupName &&
-                this.ComponentGroups[i].SourceBName === sourceBGroupName) {
+            if (this.ComponentGroups[i].SourceAName.toLowerCase() === sourceAGroupName.toLowerCase() &&
+                this.ComponentGroups[i].SourceBName.toLowerCase() === sourceBGroupName.toLowerCase()) {
                 return this.ComponentGroups[i];
             }
         }
@@ -264,12 +264,12 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
     CheckCaseComponentGroup.prototype.componentClassExists = function (sourceAClassName, sourceBClassName) {
         for (var i = 0; i < this.ComponentClasses.length; i++) {
             if (sourceBClassName === undefined &&
-                this.ComponentClasses[i].SourceAName === sourceAClassName) {
+                this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase()) {
                 return true;
             }
 
-            if (this.ComponentClasses[i].SourceAName === sourceAClassName &&
-                this.ComponentClasses[i].SourceBName === sourceBClassName) {
+            if (this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
+                this.ComponentClasses[i].SourceBName.toLowerCase() === sourceBClassName.toLowerCase()) {
                 return true;
             }
         }
@@ -281,12 +281,12 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
         for (var i = 0; i < this.ComponentClasses.length; i++) {
 
             if (sourceBClassName === undefined &&
-                this.ComponentClasses[i].SourceAName === sourceAClassName) {
+                this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase()) {
                 return this.ComponentClasses[i];
             }
 
-            if (this.ComponentClasses[i].SourceAName === sourceAClassName &&
-                this.ComponentClasses[i].SourceBName === sourceBClassName) {
+            if (this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
+                this.ComponentClasses[i].SourceBName.toLowerCase() === sourceBClassName.toLowerCase()) {
                 return this.ComponentClasses[i];
             }
         }
@@ -308,8 +308,8 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
 
     CheckCaseComponentClass.prototype.propertyExists = function (sourceApropertyName, sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
-                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+            if (this.MappingProperties[i].SourceAName.toLowerCase() === sourceApropertyName.toLowerCase() &&
+                this.MappingProperties[i].SourceBName.toLowerCase() === sourceBpropertyName.toLowerCase()) {
                 return true;
             }
         }
@@ -319,7 +319,7 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
 
     CheckCaseComponentClass.prototype.sourceAPropertyExists = function (sourceApropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName) {
+            if (this.MappingProperties[i].SourceAName.toLowerCase() === sourceApropertyName.toLowerCase()) {
                 return true;
             }
         }
@@ -329,7 +329,7 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
 
     CheckCaseComponentClass.prototype.sourceBPropertyExists = function (sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {
-            if (this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+            if (this.MappingProperties[i].SourceBName.toLowerCase() === sourceBpropertyName.toLowerCase()) {
                 return true;
             }
         }
@@ -339,8 +339,8 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
 
     CheckCaseComponentClass.prototype.getProperty = function (sourceApropertyName, sourceBpropertyName) {
         for (var i = 0; i < this.MappingProperties.length; i++) {
-            if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
-                this.MappingProperties[i].SourceBName === sourceBpropertyName) {
+            if (this.MappingProperties[i].SourceAName.toLowerCase() === sourceApropertyName.toLowerCase() &&
+                this.MappingProperties[i].SourceBName.toLowerCase() === sourceBpropertyName.toLowerCase()) {
                 return this.MappingProperties[i];
             }
         }
