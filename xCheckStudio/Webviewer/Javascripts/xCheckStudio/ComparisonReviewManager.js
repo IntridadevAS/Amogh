@@ -38,8 +38,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.checkStatusArrayA = {};
     this.checkStatusArrayB = {};
 
-    this.detailedReviewRowComments = {};    
-    
+    this.detailedReviewRowComments = {};
+
     ComparisonReviewManager.prototype.loadDatasources = function () {
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
@@ -53,7 +53,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (this.SourceBViewerData !== undefined) {
             this.SourceBReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceBViewerData,
                 this.SourceBComponentIdVsComponentData,
-                this.SourceBNodeIdVsComponentData, 
+                this.SourceBNodeIdVsComponentData,
                 this);
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
@@ -124,8 +124,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
 
             // if component group is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid         
-           
-            if ( this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
+
+            if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
 
                 for (var i = 0; i < 3; i++) {
                     columnHeader = {};
@@ -145,8 +145,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeaders.push(columnHeader);
                 }
             }
-            else if(this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" ))
-            {
+            else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
                 columnHeader = {};
                 columnHeader["name"] = "Handle";
                 columnHeader["type"] = "text";
@@ -241,8 +240,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                         }
                     }
-                    else if(checkPropertyHandle !== undefined)
-                    {
+                    else if (checkPropertyHandle !== undefined) {
                         handleValue = checkPropertyHandle.SourceAValue;
                     }
 
@@ -259,10 +257,12 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.highlightMainReviewTableFromCheckStatus(div.id);
 
             var modelBrowserData = document.getElementById(div.id);
-            var modelBrowserDataTable = modelBrowserData.children[1];
+            // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
             var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
-            var modelBrowserHeaderTable = modelBrowserData.children[0];
+            var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
             modelBrowserHeaderTable.style.position = "fixed"
             modelBrowserHeaderTable.style.width = "578px";
             modelBrowserHeaderTable.style.overflowX = "hide";
@@ -277,19 +277,21 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
 
 
-            // keep track of component id vs table row and status     
-            var modelBrowserDataTable = modelBrowserData.children[1];
+            // keep track of component id vs table row and status 
+            // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1    
+            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
             var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
             for (var j = 0; j < modelBrowserDataRows.length; j++) {
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
+                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                     componentIdentifier += "_" + currentRow.cells[5].innerText;
                 }
-                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" )) {
+                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                 }
 
@@ -312,7 +314,10 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
         var modelBrowserData = document.getElementById(containerId);
-        var modelBrowserDataTable = modelBrowserData.children[1];
+
+        // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+        var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
         var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
         // var countBox;
@@ -323,7 +328,9 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
         var mainReviewTableContainer = document.getElementById(containerId);
-        var mainReviewTableRows = mainReviewTableContainer.children[1].getElementsByTagName("tr");
+        // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+        var mainReviewTableRows = mainReviewTableContainer.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
         for (var i = 0; i < mainReviewTableRows.length; i++) {
             var currentRow = mainReviewTableRows[i];
@@ -353,8 +360,10 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (mainComponentClasseData === undefined) {
             return;
         }
+        // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
         if (viewerContainerData.childElementCount > 1 &&
-            viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
+            viewerContainerData.children[jsGridTbodyTableIndex].getElementsByTagName("td")[0].innerText === currentSheetName) {
             if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
                 if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") {
                     this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
@@ -374,8 +383,10 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         if (Object.keys(mainComponentClasseData).length > 0) {
             if (viewerContainerData.childElementCount > 1) {
+                // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
                 for (var subComponentClass in mainComponentClasseData) {
-                    if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
+                    if (viewerContainerData.children[jsGridTbodyTableIndex].getElementsByTagName("td")[0].innerText === subComponentClass) {
                         // this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
                         // return;
                         if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
@@ -415,10 +426,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                     }
                     if (sheetProperties === undefined) {
                         for (var j = 0; j < mainComponentClasseData[subComponent].length; j++) {
-                            if (mainComponentClasseData[subComponent][j].Name === CurrentReviewTableRow.cells[0].innerText.trim() ||
-                                mainComponentClasseData[subComponent][0].Name === CurrentReviewTableRow.cells[1].innerText.trim()) {
-                                sheetProperties = mainComponentClasseData[subComponent][0].properties;
-                            }
+                            // if (mainComponentClasseData[subComponent][j].Name === CurrentReviewTableRow.cells[0].innerText.trim() ||
+                            //     mainComponentClasseData[subComponent][0].Name === CurrentReviewTableRow.cells[1].innerText.trim()) {
+                            sheetProperties = mainComponentClasseData[subComponent][0].properties;
+                            // }
                         }
 
                     }
@@ -441,8 +452,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeader["type"] = type;
                 columnHeader["width"] = "90";
                 columnHeaders.push(columnHeader);
+                //tagnumber is for instruments XLS data sheet
                 if (Object.keys(column).length <= 3) {
-                    if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
+                    if (sheetProperties[i].Name === "ComponentClass" ||
+                        sheetProperties[i].Name === "Name" ||
+                        sheetProperties[i].Name === "Description" ||
+                        sheetProperties[i].Name === "Tagnumber") {
                         column[sheetProperties[i].Name] = i;
                     }
                 }
@@ -491,7 +506,11 @@ function ComparisonReviewManager(comparisonCheckManager,
             var column = {};
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
-                if (columnHeader.innerHTML.trim() === "ComponentClass" || columnHeader.innerHTML.trim() === "Name" || columnHeader.innerHTML.trim() === "Description") {
+                //tagnumber is for instruments XLS data sheet
+                if (columnHeader.innerHTML.trim() === "ComponentClass" ||
+                    columnHeader.innerHTML.trim() === "Name" ||
+                    columnHeader.innerHTML.trim() === "Description" ||
+                    columnHeader.innerHTML.trim() === "Tagnumber") {
                     column[columnHeader.innerHTML.trim()] = i;
                 }
                 if (Object.keys(column).length === 3) {
@@ -508,19 +527,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                 reviewTableRow = reviewTableRowsData[i];
 
                 if (reviewTableRow.cells.length > 0) {
-                    if (sheetDataRow.cells[column.Name].innerText === reviewTableRow.cells[0].innerText ||
-                        sheetDataRow.cells[column.Name].innerText === reviewTableRow.cells[1].innerText) {
+                    var componentName;
+                    if (column.Name !== undefined) {
+                        componentName = sheetDataRow.cells[column.Name].innerText;
+                    }
+                    else if (column.Tagnumber !== undefined) {
+                        componentName = sheetDataRow.cells[column.Tagnumber].innerText;
+                    }
+
+                    if (componentName === reviewTableRow.cells[0].innerText ||
+                        componentName === reviewTableRow.cells[1].innerText) {
                         if (containerId === "viewerContainer1") {
                             if (this.SelectedComponentRowFromSheetA) {
                                 this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
-                                // var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
-                                // obj = Object.keys(this.checkStatusArrayA)
-                                // var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                                // var color = this.getRowHighlightColor(status);
-                                // for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                                //     cell = this.SelectedComponentRowFromSheetA.cells[j];
-                                //     cell.style.backgroundColor = color;
-                                // }
                             }
 
                             this.SelectedComponentRowFromSheetA = sheetDataRow;
@@ -529,14 +548,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         if (containerId === "viewerContainer2") {
                             if (this.SelectedComponentRowFromSheetB) {
                                 this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-                                // var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                                // obj = Object.keys(this.checkStatusArrayA)
-                                // var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                                // var color = this.getRowHighlightColor(status);
-                                // for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                                //     cell = this.SelectedComponentRowFromSheetB.cells[j];
-                                //     cell.style.backgroundColor = color;
-                                // }
                             }
 
                             this.SelectedComponentRowFromSheetB = sheetDataRow;
@@ -561,21 +572,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                         var reviewTable = _this.SelectedComponentRow.offsetParent.offsetParent;
                         reviewTable.scrollTop = reviewTableRow.offsetTop - reviewTableRow.offsetHeight;
 
-                        // var table = document.getElementById("ComparisonMainReviewTbody");
-                        // // table.focus();
-                        // table.scrollTop = reviewTable.offsetTop - reviewTable.offsetHeight;
-
                         var mainReviewTableContainer = document.getElementById(_this.MainReviewTableContainer);
                         if (!mainReviewTableContainer) {
                             return;
                         }
 
                         var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
-                        for(var i =0; i < collapsibleClasses.length; i++)
-                        {
+                        for (var i = 0; i < collapsibleClasses.length; i++) {
                             var collapsibleClass = collapsibleClasses[i];
-                            if(collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText)
-                            {
+                            if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
                                 collapsibleClass.nextElementSibling.style.display = "none";
                                 collapsibleClass.className = "collapsible";
                             }
@@ -701,18 +706,16 @@ function ComparisonReviewManager(comparisonCheckManager,
                         this.checkStatusArrayB = {};
                         var result = sheetName.split('-');
                         var CurrentReviewTableRow = args.event.currentTarget;
-                        if(CurrentReviewTableRow.cells[0].innerText !== "")
-                        {
-                            _this.showSelectedSheetData("viewerContainer1", result[0], args.event.currentTarget);    
+                        if (CurrentReviewTableRow.cells[0].innerText !== "") {
+                            _this.showSelectedSheetData("viewerContainer1", result[0], args.event.currentTarget);
                         }
                         else if (CurrentReviewTableRow.cells[0].innerText === "") {
                             document.getElementById("viewerContainer1").innerHTML = "";
                         }
-                        if(CurrentReviewTableRow.cells[1].innerText !== "")
-                        {
-                            _this.showSelectedSheetData("viewerContainer2",  result[1], args.event.currentTarget);    
+                        if (CurrentReviewTableRow.cells[1].innerText !== "") {
+                            _this.showSelectedSheetData("viewerContainer2", result[1], args.event.currentTarget);
                         }
-                        else if(CurrentReviewTableRow.cells[1].innerText === ""){
+                        else if (CurrentReviewTableRow.cells[1].innerText === "") {
                             document.getElementById("viewerContainer2").innerHTML = "";
                         }
                     }
@@ -731,11 +734,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
                     else if (_this.SourceAViewerData !== undefined &&
-                             _this.SourceBProperties !== undefined) {
-                        
+                        _this.SourceBProperties !== undefined) {
+
                         this.checkStatusArrayA = {};
                         this.checkStatusArrayB = {};
-                         var result = sheetName.split('-');
+                        var result = sheetName.split('-');
                         _this.showSelectedSheetData("viewerContainer2", result[1], args.event.currentTarget);
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
@@ -770,8 +773,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             var destination = currentReviewTableRow.cells[4].innerHTML;
             var ownerId = currentReviewTableRow.cells[5].innerHTML;
 
-            if (source !== undefined && source !== "" && 
-                destination !== undefined && destination !== "" && 
+            if (source !== undefined && source !== "" &&
+                destination !== undefined && destination !== "" &&
                 ownerId !== undefined && ownerId !== "") {
                 componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
             }
@@ -782,7 +785,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 componentIdentifier += "_" + ownerHandle;
             }
         }
-        
+
 
         // highlight component in graphics view in both viewer
         if (this.SourceAViewerData != undefined) {
@@ -862,14 +865,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 rowClick: function (args) {
                     var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
                     var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                  if(comment)
-                  {                   
-                    commentDiv.innerHTML = "Comment : <br>" + comment;
-                  }
-                  else
-                  {
-                    commentDiv.innerHTML = "Comment : <br>";
-                  }
+                    if (comment) {
+                        commentDiv.innerHTML = "Comment : <br>" + comment;
+                    }
+                    else {
+                        commentDiv.innerHTML = "Comment : <br>";
+                    }
                 }
             });
 
@@ -890,14 +891,23 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         var id = viewerContainer.replace("#", "");
         var currentSheetDataTable = document.getElementById(id);
-        var currentSheetRows = currentSheetDataTable.children[1].getElementsByTagName("tr");
+        // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+        var currentSheetRows = currentSheetDataTable.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
         var checkStatusArray = {};
         for (var i = 0; i < reviewTableRows.length; i++) {
             var CurrentReviewTableRow = reviewTableRows[i];
             for (var j = 0; j < currentSheetRows.length; j++) {
                 currentSheetRow = currentSheetRows[j];
-                if (CurrentReviewTableRow.cells[0].innerText !== "" && CurrentReviewTableRow.cells[0].innerText === currentSheetRow.cells[column.Name].innerText) {
+                var componentName;
+                if (column.Name !== undefined) {
+                    componentName = currentSheetRow.cells[column.Name].innerText;
+                }
+                else if (column.Tagnumber !== undefined) {
+                    componentName = currentSheetRow.cells[column.Tagnumber].innerText;
+                }
+                if (CurrentReviewTableRow.cells[0].innerText !== "" && CurrentReviewTableRow.cells[0].innerText === componentName) {
                     var color = CurrentReviewTableRow.cells[0].style.backgroundColor;
                     for (var j = 0; j < currentSheetRow.cells.length; j++) {
                         cell = currentSheetRow.cells[j];
@@ -906,7 +916,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     checkStatusArray[currentSheetRow.rowIndex] = CurrentReviewTableRow.cells[2].innerHTML;
                     break;
                 }
-                else if (CurrentReviewTableRow.cells[1].innerText !== "" && CurrentReviewTableRow.cells[1].innerText === currentSheetRow.cells[column.Name].innerText) {
+                else if (CurrentReviewTableRow.cells[1].innerText !== "" && CurrentReviewTableRow.cells[1].innerText === componentName) {
                     var color = CurrentReviewTableRow.cells[0].style.backgroundColor;
                     for (var j = 0; j < currentSheetRow.cells.length; j++) {
                         cell = currentSheetRow.cells[j];
@@ -941,7 +951,11 @@ function ComparisonReviewManager(comparisonCheckManager,
             var column = {};
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
-                if (columnHeader.innerHTML.trim() === "ComponentClass" || columnHeader.innerHTML.trim() === "Name" || columnHeader.innerHTML.trim() === "Description") {
+                //tagnumber is for instruments XLS data sheet
+                if (columnHeader.innerHTML.trim() === "ComponentClass" ||
+                    columnHeader.innerHTML.trim() === "Name" ||
+                    columnHeader.innerHTML.trim() === "Description" ||
+                    columnHeader.innerHTML.trim() === "Tagnumber") {
                     column[columnHeader.innerHTML.trim()] = i;
                 }
                 if (Object.keys(column).length === 3) {
@@ -951,27 +965,23 @@ function ComparisonReviewManager(comparisonCheckManager,
             for (var i = 0; i < sourceDataViewTableRows.length; i++) {
                 currentRowInSourceTable = sourceDataViewTableRows[i];
 
-                if (CurrentReviewTableRow.cells[0].innerText === currentRowInSourceTable.cells[column.Name].innerText ||
-                    CurrentReviewTableRow.cells[1].innerText === currentRowInSourceTable.cells[column.Name].innerText) {
+                var componentName;
+                if (column.Name !== undefined) {
+                    componentName = currentRowInSourceTable.cells[column.Name].innerText;
+                }
+                else if (column.Tagnumber !== undefined) {
+                    componentName = currentRowInSourceTable.cells[column.Tagnumber].innerText;
+                }
+                if (CurrentReviewTableRow.cells[0].innerText === componentName ||
+                    CurrentReviewTableRow.cells[1].innerText === componentName) {
                     if (containerId === "viewerContainer1") {
                         if (this.SelectedComponentRowFromSheetA) {
-                            // var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
-                            // obj = Object.keys(this.checkStatusArrayA)
-                            // var status = this.checkStatusArrayA[obj[0]][rowIndex]
-                            // var color = this.getRowHighlightColor(status);
-                            // for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                            //     cell = this.SelectedComponentRowFromSheetA.cells[j];
-                            //     cell.style.backgroundColor = color;
-                            // }
                             this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
                         }
 
                         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
 
-                        for (var j = 0; j < this.SelectedComponentRowFromSheetA.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheetA.cells[j];
-                            cell.style.backgroundColor = "#B2BABB"
-                        }
+                        this.ChangeBackgroundColor(this.SelectedComponentRowFromSheetA);
 
                         var sheetDataTable1 = containerChildren[1].getElementsByTagName("table")[0];
                         sheetDataTable1.focus();
@@ -980,24 +990,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                     if (containerId === "viewerContainer2") {
 
                         if (this.SelectedComponentRowFromSheetB) {
-                            // var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-                            // obj = Object.keys(this.checkStatusArrayB)
-                            // var status = this.checkStatusArrayB[obj[0]][rowIndex]
                             this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-                            // var color = this.getRowHighlightColor(status);
-                            // for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                            //     cell = this.SelectedComponentRowFromSheetB.cells[j];
-                            //     cell.style.backgroundColor = color;
-                            // }
                         }
 
                         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
 
-
-                        for (var j = 0; j < this.SelectedComponentRowFromSheetB.cells.length; j++) {
-                            cell = this.SelectedComponentRowFromSheetB.cells[j];
-                            cell.style.backgroundColor = "#B2BABB"
-                        }
+                        this.ChangeBackgroundColor(this.SelectedComponentRowFromSheetB);
 
                         var sheetDataTable2 = containerChildren[1].getElementsByTagName("table")[0];
                         sheetDataTable2.focus();
@@ -1017,17 +1015,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             }
         }
-
     }
 
-    ComparisonReviewManager.prototype.unhighlightSelectedSheetRow = function(checkStatusArray, currentRow){
+    ComparisonReviewManager.prototype.unhighlightSelectedSheetRow = function (checkStatusArray, currentRow) {
         var rowIndex = currentRow.rowIndex;
         obj = Object.keys(checkStatusArray)
         var status = checkStatusArray[obj[0]][rowIndex]
-        var color = this.getRowHighlightColor(status);
-        for (var j = 0; j < currentRow.cells.length; j++) {
-            cell = currentRow.cells[j];
-            cell.style.backgroundColor = color;
+        if (status !== undefined) {
+            var color = this.getRowHighlightColor(status);
+            for (var j = 0; j < currentRow.cells.length; j++) {
+                cell = currentRow.cells[j];
+                cell.style.backgroundColor = color;
+            }
+        }
+        else {
+            color = "#fffff"
+            for (var j = 0; j < currentRow.cells.length; j++) {
+                cell = currentRow.cells[j];
+                cell.style.backgroundColor = color;
+            }
         }
     }
 
@@ -1065,15 +1071,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var source1NameCell = row.getElementsByTagName("td")[0];
                 var source2NameCell = row.getElementsByTagName("td")[1];
 
-                if (component.SourceAName !== source1NameCell.innerHTML ||
-                    component.SourceBName !== source2NameCell.innerHTML) {
+                if (component.SourceAName !== source1NameCell.innerText ||
+                    component.SourceBName !== source2NameCell.innerText) {
                     continue;
                 }
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
                 // because they may have same tag names              
-    
-                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment" )) {
+
+                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
                     var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
@@ -1093,7 +1099,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                     }
                 }
-                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment" )) {        
+                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
                     var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
 
                     if (checkPropertyHandle != undefined) {
@@ -1193,7 +1199,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.highlightDetailedReviewTableFromCheckStatus("ComparisonDetailedReviewCell")
 
                 var modelBrowserData = document.getElementById("ComparisonDetailedReviewCell");
-                var modelBrowserHeaderTable = modelBrowserData.children[0];
+                // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+                var modelBrowserHeaderTable = modelBrowserData.children[jsGridTbodyTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
                 modelBrowserHeaderTable.style.width = "579px";
                 modelBrowserHeaderTable.style.overflowX = "hide";
@@ -1208,7 +1216,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                     }
                 }
 
-                var modelBrowserDataTable = modelBrowserData.children[1]
+                // jsGridHeaderTableIndex = 0 
+                // jsGridTbodyTableIndex = 1
+                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width = "579px";
                 modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
@@ -1226,7 +1236,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (detailedReviewTableContainer.children.length === 0) {
             return;
         }
-        var detailedReviewTableRows = detailedReviewTableContainer.children[1].getElementsByTagName("tr");
+        // jsGridHeaderTableIndex = 0 
+            // jsGridTbodyTableIndex = 1
+        var detailedReviewTableRows = detailedReviewTableContainer.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
         // var mainReviewTableRows = mainReviewTable.getElementsByTagName("tr");
 
@@ -1258,38 +1270,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             tableRowContent[columnHeaders[4].name] = property.Severity;
         }
         return tableRowContent;
-        // var tr = document.createElement("tr");
-
-        // var td = document.createElement("td");
-        // td.innerHTML = property.SourceAName;
-        // tr.appendChild(td);
-
-        // td = document.createElement("td");
-        // td.innerHTML = property.SourceAValue;
-        // tr.appendChild(td);
-
-        // td = document.createElement("td");
-        // td.innerHTML = property.SourceBName;
-        // tr.appendChild(td);
-
-        // td = document.createElement("td");
-        // td.innerHTML = property.SourceBValue;;
-        // tr.appendChild(td);
-
-        // td = document.createElement("td");
-        // if (property.PerformCheck &&
-        //     property.Result) {
-        //     td.innerHTML = "OK";
-        // }
-        // else {
-        //     td.innerHTML = property.Severity;
-        // }
-        // tr.appendChild(td);
-
-        // // set row's background color according to status
-        // tr.style.backgroundColor = this.getRowHighlightColor(td.innerHTML);
-
-        // return tr;
     }
 
     ComparisonReviewManager.prototype.ChangeBackgroundColor = function (row) {
