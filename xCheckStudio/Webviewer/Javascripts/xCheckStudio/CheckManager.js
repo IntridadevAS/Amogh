@@ -802,18 +802,17 @@ function CheckManager() {
 
                 var sourceAOwnerHandle = sourceAComponentProperties.getProperty('Handle');
                 var sourceBOwnerHandle = sourceBComponentProperties.getProperty('Handle');
-                if (sourceAOwnerHandle !== undefined &&
+
+                if (sourceBFileName.split(".")[1] === "xls" &&
+                    sourceAFileName.split(".")[1] === "xls") {
+                    return true;
+                } else if (sourceAOwnerHandle !== undefined &&
                     sourceBOwnerHandle !== undefined &&
                     sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
-            }
 
-            return true;
+            }
         }
 
         return false;
