@@ -84,7 +84,7 @@ function AnalyticsManager() {
             valueArray.push("Error");
 
             var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a40").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComparisonResultArray.push(valueArray);
@@ -92,7 +92,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-            complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+            complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
             getData(this.ComparisonResultArray);
@@ -108,14 +108,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Warning");
             var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a30").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComparisonResultArray.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
             colorsArray = ["#F8C13B", "#EDEDED"]
@@ -131,14 +131,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Ok");
             var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a10").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComparisonResultArray.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
             colorsArray = ["#98DE32", "#EDEDED"];
@@ -184,7 +184,7 @@ function AnalyticsManager() {
             valueArray.push("Error");
 
             var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a40_Apie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
@@ -192,7 +192,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
             getData(this.ComplianceResultArrayForSourceA);
@@ -208,14 +208,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Warning");
             var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a30_Apie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
             colorsArray = ["#F8C13B", "#EDEDED"]
@@ -231,14 +231,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Ok");
             var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a10_Apie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
             colorsArray = ["#98DE32", "#EDEDED"];
@@ -284,7 +284,7 @@ function AnalyticsManager() {
             valueArray.push("Error");
 
             var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a40_Bpie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
@@ -292,7 +292,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
             getData(this.ComplianceResultArrayForSourceB);
@@ -308,14 +308,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Warning");
             var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a30_Bpie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
             colorsArray = ["#F8C13B", "#EDEDED"]
@@ -331,14 +331,14 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Ok");
             var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a10_Bpie").innerText = fixedPercent + "%";
             valueArray.push(fixedPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
             colorsArray = ["#98DE32", "#EDEDED"];
@@ -413,7 +413,7 @@ function AnalyticsManager() {
             valueArray.push("No Match");
 
             var percent = noMatchCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a40Info").innerText = fixedPercent + "%";
             document.getElementById("a40Info").style.color = "#AFD3C5";
             valueArray.push(fixedPercent);
@@ -422,7 +422,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
             getData(this.ComparisonResultArray);
@@ -438,7 +438,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("Not Checked");
             var percent = totalItemsNotChecked * 100 / totalItemsCount;
-             fixedPercent =  parseFloat((percent).toFixed(2))
+             fixedPercent =  parseFloat((percent).toFixed(1))
             document.getElementById("a10Info").innerText = fixedPercent;
             document.getElementById("a10Info").style.color = "#839192";
             valueArray.push(fixedPercent);
@@ -446,7 +446,7 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
-             complementryPercent=  parseFloat((complementryPercent).toFixed(2))
+             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
             colorsArray = ["#839192", "#EDEDED"];
