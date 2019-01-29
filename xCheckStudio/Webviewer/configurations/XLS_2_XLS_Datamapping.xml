@@ -120,6 +120,72 @@
 				<Property sourceAName="System" sourceBName="System"  severity="Error"/>
 			</ComponentClass>
 		</ComponentGroup>
+	
+		<ComponentGroup sourceAGroupName="Instrument" sourceBGroupName="Instrument">
+			<ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="Instrument">	
+				   <Property sourceAName="Tagnumber" sourceBName="Tagnumber"  severity="Warning"/>						   
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Valve" sourceBGroupName="Valve">
+			<ComponentClass sourceAComponentClass="Valve" sourceBComponentClass="Valve">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>					   
+				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Fittings" sourceBGroupName="Fittings">
+			<ComponentClass sourceAComponentClass="FITT" sourceBComponentClass="FITT">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>					   
+				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>						   
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Reducer" sourceBGroupName="Reducer">
+			<ComponentClass sourceAComponentClass="REDUCER" sourceBComponentClass="REDUCER">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>								   
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Tee" sourceBGroupName="Tee">
+			<ComponentClass sourceAComponentClass="TEE" sourceBComponentClass="TEE">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Flange" sourceBGroupName="Flange">
+			<ComponentClass sourceAComponentClass="Flange" sourceBComponentClass="Flange">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Olet" sourceBGroupName="Olet">
+			<ComponentClass sourceAComponentClass="OLET" sourceBComponentClass="OLET">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
+				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>	
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Cap" sourceBGroupName="Cap">
+			<ComponentClass sourceAComponentClass="CAP" sourceBComponentClass="CAP">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
+				   <Property sourceAName="LOCK" sourceBName="LOCK"  severity="Warning"/>	
+			</ComponentClass>
+		</ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Cable" sourceBGroupName="Cable">
+			<ComponentClass sourceAComponentClass="CABLE" sourceBComponentClass="CABLE">	
+				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
+			</ComponentClass>
+		</ComponentGroup>
+		
 	</Check>
 	
 	<Check type="Compliance" sourceType="XLS" >
@@ -233,6 +299,36 @@
 				<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
 		  </ComponentClass>
 	   </ComponentGroup>
+	   
+	   <ComponentGroup name="Instrument">
+		  <ComponentClass name="Instrument">	
+				   <Property name="Name" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Tag Prefix" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Tag Letter" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Tag Number" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Tag Suffix" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Description" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Location" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="ProcessArea" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="System" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="System Description" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="# of Nozzles" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Duty" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="P&amp;ID" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Model Number" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Manufacturer" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Hazardous Area Class." rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Gas Group" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Temperature Class" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Ex Classification" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Power Load [kW]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Power Rated [volt]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Length Overall [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Width or Diameter [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Length Tan to Tan [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+				   <Property name="Height Overall [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+		  </ComponentClass>
+		</ComponentGroup>
 	</Check>
 	 
 </CheckCase>
