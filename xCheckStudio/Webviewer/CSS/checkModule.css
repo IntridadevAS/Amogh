@@ -688,6 +688,9 @@ div {
   transform           : rotate(0deg);
   text-align : center;
   line-height: 2;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 .module1 .white .tab .tab1 {
   background-color    : #F2F0F3;
@@ -703,6 +706,9 @@ div {
   transform           : rotate(0deg);
   text-align : center;
   line-height: 2;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 
 .module1 .group1 {
@@ -1926,6 +1932,7 @@ div {
   text-align : center;
   line-height: 2;
 }
+
 .module1 .white1 .tab .tab1 {
   background-color    : #F2F0F3;
   border-radius       : 5px;
@@ -1940,6 +1947,15 @@ div {
   transform           : rotate(0deg);
   text-align : center;
   line-height: 2;
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
+}
+
+.text{
+  text-overflow		  : ellipsis;
+  overflow			  : hidden;
+  white-space         : nowrap;
 }
 .module1 .group32 {
   background-color    : rgba(255,255,255,0.0);
