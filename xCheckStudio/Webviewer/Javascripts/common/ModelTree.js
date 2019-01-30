@@ -599,8 +599,26 @@ var xCheckStudio;
                         fields: columnHeaders,
                         margin: "0px",
                         checked: true,
-                        onRefreshed: function(config) {      
+                        onRefreshed: function(config) {  
                             _this.AddTableContentCount(this._container.context.id);
+                            var sorting = this.getSorting();
+                            if(sorting.field !== undefined || sorting.order !== undefined )
+                            {
+                                if(config.grid._container[0].id === "modelTree1")
+                                {
+                                    xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
+                                    for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
+                                        xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
+                                    }
+                                }
+                                else if(args.grid._container[0].id === "modelTree2")
+                                {
+                                    xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
+                                    for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
+                                        xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
+                                    }
+                                }
+                            }
                         },
                         onDataLoaded: function(args) {
                             if(args.grid._container[0].id === "modelTree1")

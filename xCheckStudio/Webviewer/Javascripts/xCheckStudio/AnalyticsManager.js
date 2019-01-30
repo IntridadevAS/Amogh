@@ -380,10 +380,10 @@ function AnalyticsManager() {
 
             totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
             totalItemsNotChecked = totalItemsCount - totalItemsChecked;
-            // if(totalItemsNotChecked < 0)
-            // {
-            //     totalItemsNotChecked = 0;
-            // }
+            if(totalItemsNotChecked < 0)
+            {
+                totalItemsNotChecked = 0;
+            }
             //add data to summary
             document.getElementById("a37Info").innerText = totalItemsCount;
             document.getElementById("a18Info").innerText = totalItemsNotChecked ;
@@ -523,6 +523,10 @@ function AnalyticsManager() {
 
             var totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
             var totalItemsNotChecked = totalItemsCount - totalItemsChecked;
+            if(totalItemsNotChecked < 0)
+            {
+                totalItemsNotChecked = 0;
+            }
             document.getElementById("a37Info").innerText = totalItemsCount;
             document.getElementById("a18Info").innerText = totalItemsNotChecked;
             document.getElementById("a13Info").innerText = noMatchCountForDataSource;
