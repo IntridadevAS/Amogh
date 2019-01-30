@@ -816,6 +816,9 @@ function CheckManager() {
                     sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
                     return true;
                 }
+                else{
+                    return false;
+                }
 
             }
 
