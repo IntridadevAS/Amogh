@@ -303,6 +303,7 @@ function CheckManager() {
             var componentMatchFound = false;
             var checkComponentGroup = undefined;
             var checkCaseComponentClass= undefined;
+            var componentGroupMapped = false;
 
             // check corresponding component in source B
             for (var j = 0; j < sourceBProperties.length; j++) {
@@ -312,6 +313,9 @@ function CheckManager() {
                 if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
                     continue;
                 }
+
+                //component
+                componentGroupMapped = true;
 
                 // create or get check component group
                 checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
@@ -370,7 +374,7 @@ function CheckManager() {
             }
 
             // if component match not found 
-            if (!componentMatchFound) {
+            if (!componentMatchFound && componentGroupMapped) {
                 var checkComponent = this.getNoMatchComponent(sourceAComponentProperties, checkCaseComponentClass, true);
 
                 if(checkComponentGroup === undefined)
@@ -426,6 +430,7 @@ function CheckManager() {
             var componentMatchFound = false;
             var checkComponentGroup = undefined;
             var checkCaseComponentClass = undefined;
+            var componentGroupMapped = false;
 
             for (var j = 0; j < sourceAProperties.length; j++) {
                 var sourceAComponentProperties = sourceAProperties[j];
@@ -434,7 +439,7 @@ function CheckManager() {
                 if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
                     continue;
                 }
-
+                componentGroupMapped  =  true;
                 // create or get check component group
                 checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
                 if (!checkComponentGroup) {
@@ -498,7 +503,7 @@ function CheckManager() {
             }
 
             // if component match not found 
-            if (!componentMatchFound) {
+            if (!componentMatchFound && componentGroupMapped) {
                 var checkComponent = this.getNoMatchComponent(sourceBComponentProperties, checkCaseComponentClass, false);
                 if (checkComponentGroup === undefined) {
                     checkComponentGroup = this.getCheckComponentGroup(sourceBComponentProperties.MainComponentClass);

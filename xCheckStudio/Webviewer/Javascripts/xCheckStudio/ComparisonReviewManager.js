@@ -366,11 +366,17 @@ function ComparisonReviewManager(comparisonCheckManager,
             viewerContainerData.children[jsGridTbodyTableIndex].getElementsByTagName("td")[0].innerText === currentSheetName) {
             if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
                 if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") {
+                   if(this.SelectedComponentRowFromSheetA)
+                   {
                     this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                   }
                     return;
                 }
                 else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") {
+                    if(this.SelectedComponentRowFromSheetB)
+                   {
                     this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                   }
                     return;
                 }
             }
@@ -391,11 +397,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                         // return;
                         if (CurrentReviewTableRow.cells[2].innerText === "No Match") {
                             if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") {
-                                this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                                if(this.SelectedComponentRowFromSheetA){
+                                    this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
+                                }
                                 return;
                             }
                             else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") {
-                                this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                                if(this.SelectedComponentRowFromSheetB){
+                                    this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
+                                }
                                 return;
                             }
                         }
@@ -626,15 +636,26 @@ function ComparisonReviewManager(comparisonCheckManager,
                                     _this.HighlightComponentInGraphicsViewer(_this.SelectedComponentRow)
                                 }
                             }
+                            //for "no match" case unhighlight component 
+                            if( _this.SelectedComponentRow.cells[1].innerText === "")
+                            {
+                                _this.SourceBReviewModuleViewerInterface.unHighlightComponent();
+                            }
                         }
                         else if (viewerContainer === "#viewerContainer2") {
-                            if (document.getElementById("viewerContainer1").innerHTML !== "" && _this.SelectedComponentRow.cells[0].innerText !== "") {
+                            if (document.getElementById("viewerContainer1").innerHTML !== "" 
+                                && _this.SelectedComponentRow.cells[0].innerText !== "") {
                                 if (_this.SourceAProperties !== undefined) {
                                     _this.HighlightRowInSheetData(_this.SelectedComponentRow, "viewerContainer1");
                                 }
                                 else if (_this.SourceAViewerData !== undefined) {
                                     _this.HighlightComponentInGraphicsViewer(_this.SelectedComponentRow)
                                 }
+                            }
+                            //for "no match" case unhighlight component 
+                            if( _this.SelectedComponentRow.cells[0].innerText === "")
+                            {
+                                _this.SourceAReviewModuleViewerInterface.unHighlightComponent();
                             }
 
                         }

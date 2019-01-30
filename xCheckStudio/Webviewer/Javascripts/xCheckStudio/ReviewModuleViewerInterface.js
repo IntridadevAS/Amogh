@@ -190,7 +190,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         
         this.selectedNodeId = undefined;
         this.highlightManager.clearSelection();    
-        
+        this.Viewer.view.fitWorld();
+        // this.Viewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
         
     }
 
@@ -294,15 +295,17 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         var childRow = childRows[k];
                         var childRowColumns = childRow.getElementsByTagName("td");
                         if (childRowColumns.length > 0) {
-                            if (childRowColumns[0].innerHTML === componentData.Name) {
+                            if (childRowColumns[0].innerText === componentData.Name ||
+                                childRowColumns[1].innerText === componentData.Name) {
                                 var componentIdentifier = componentData.Name;
-                                var rowIdentifier = childRowColumns[0].innerHTML
+                                // var rowIdentifier = childRowColumns[0].innerHTML
+                                var rowIdentifier = childRowColumns[0].innerText !== "" ? childRowColumns[0].innerText : childRowColumns[1].innerText;
 
                                 if (componentData.MainComponentClass === "PipingNetworkSegment") {
 
                                     componentIdentifier += "_" + componentData.Source + "_" + componentData.Destination + "_" + componentData.OwnerId;
-                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -3].innerHTML + "_"
-                                        + childRowColumns[childRowColumns.length -1].innerHTML + "_" + childRowColumns[childRowColumns.length -1].innerHTML;
+                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -3].innerText + "_"
+                                        + childRowColumns[childRowColumns.length -1].innerText + "_" + childRowColumns[childRowColumns.length -1].innerText;
 
                                     if (rowIdentifier !== componentIdentifier) {
                                         continue;                                                                 
@@ -310,7 +313,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                 }
                                 else if (componentData.MainComponentClass.toLowerCase() === "equipment") {
                                     componentIdentifier += "_" + componentData.OwnerHandle;
-                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -1].innerHTML;
+                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -1].innerText;
                                     if (rowIdentifier !== componentIdentifier) {
                                         continue;
                                     }

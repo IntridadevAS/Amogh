@@ -16,7 +16,23 @@
 				 <Property sourceAName="Duty" sourceBName="PersistentID"  severity="Warning"/>
 			     <Property sourceAName="Paint_Code" sourceBName="Paint_Code"  severity="Warning"/>	
 				 <Property sourceAName="ProcessArea" sourceBName="Owner_Handle"  severity="Warning"/>		 
+				 <Property sourceAName="ProcessArea" sourceBName="Handle"  severity="Warning"/>	
 		   </ComponentClass>  
+		   <ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Pumps">
+				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="DS_EquipmentDesc_Description"  severity="Error"/>
+				 <Property sourceAName="Type" sourceBName="Type"  severity="Warning"/>
+				 <Property sourceAName="Tag Number" sourceBName="Number"  severity="Warning"/>
+				 <Property sourceAName="Tag Suffix" sourceBName="Suffix"  severity="Warning"/>
+				 <Property sourceAName="Tag Prefix" sourceBName="Prefix"  severity="Warning"/>
+				 <Property sourceAName="Tag Letter" sourceBName="SymbolName"  severity="Warning"/>
+				 <Property sourceAName="System" sourceBName="Function"  severity="Warning"/>
+				 <Property sourceAName="P&amp;ID" sourceBName="Sheet_No"  severity="Warning"/>
+				 <Property sourceAName="Duty" sourceBName="PersistentID"  severity="Warning"/>
+			     <Property sourceAName="Paint_Code" sourceBName="Paint_Code"  severity="Warning"/>	
+				 <Property sourceAName="ProcessArea" sourceBName="Owner_Handle"  severity="Warning"/>	
+				<Property sourceAName="ProcessArea" sourceBName="Handle"  severity="Warning"/>					 
+		   </ComponentClass> 
 		</ComponentGroup>
 	   
 	    <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipingNetworkSystem">
