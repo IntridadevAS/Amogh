@@ -979,7 +979,8 @@ function ComplianceReviewManager(complianceCheckManager,
             // jsGridTbodyTableIndex = 1
                 var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "579px";
+                modelBrowserHeaderTable.style.width = "562px";
+                modelBrowserHeaderTable.style.backgroundColor = "white";
                 modelBrowserHeaderTable.style.overflowX = "hidden";
 
                 // jsGridHeaderTableIndex = 0 
@@ -987,7 +988,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width = "579px";
-                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+                modelBrowserDataTable.style.margin = "55px 0px 0px 0px"
 
                 break;
             }
@@ -1048,6 +1049,30 @@ function ComplianceReviewManager(complianceCheckManager,
                 autoload: true,
                 controller: db,
                 data: tableData,
+                headerRowRenderer: function() {
+                    var fields = $(viewerContainer).jsGrid("option", "fields");
+                    var result = $("<tr>").height(0).append($("<th>").width(240))
+                    .append($("<th>").width(240));
+
+                    result = result.add($("<tr>")
+                    .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceAName)))
+
+
+                    var tr = $("<tr class='jsgrid-header-row'>");
+                    var grid = this;
+
+                    grid._eachField(function (field, index) {
+                        var th = $("<th>").text(field.title).width(field.width).appendTo(tr);
+
+                        if (grid.sorting && field.sorting) {
+                            th.on("click", function () {
+                                grid.sort(index);
+                            });
+                        }
+                    });
+
+                    return result.add(tr);
+                },
                 fields: columnHeaders,
                 margin: "0px",
                 onRefreshed: function (config) {

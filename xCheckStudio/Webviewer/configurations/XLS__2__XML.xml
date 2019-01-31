@@ -52,6 +52,25 @@
 		   </ComponentClass>  
 		</ComponentGroup>
 		
+		
+		<ComponentGroup sourceAGroupName="Instrument" sourceBGroupName="InstrumentComponent">
+		    <ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="InstrumentIndicator">
+			        <Property sourceAName="Tagnumber" sourceBName="NaTagNameme"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+			 <ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="ProcessInstrument">
+			        <Property sourceAName="Tagnumber" sourceBName="TagName"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Warning"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+	    </ComponentGroup>
 		<ComponentGroup sourceAGroupName="Nozzle" sourceBGroupName="Nozzle">
 	   
 		   <ComponentClass sourceAComponentClass="FlangedNozzle" sourceBComponentClass="FlangedNozzle">
@@ -72,6 +91,8 @@
 				 <Property sourceAName="Owner" sourceBName="Owner_Handle"  severity="Warning"/>
 		   </ComponentClass> 
 		</ComponentGroup>
+	   
+	   
 	   
 	  <!-- <ComponentGroup sourceAGroupName="Branch" sourceBGroupName="PipingNetworkSegment">
 	   

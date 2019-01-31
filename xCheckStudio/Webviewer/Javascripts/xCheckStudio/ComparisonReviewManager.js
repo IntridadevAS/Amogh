@@ -264,7 +264,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
             modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "578px";
+            modelBrowserHeaderTable.style.width = "565px";
             modelBrowserHeaderTable.style.overflowX = "hide";
             var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
@@ -876,10 +876,37 @@ function ComparisonReviewManager(comparisonCheckManager,
                 controller: db,
                 sorting: true,
                 data: tableData,
+                headerRowRenderer: function() {
+                    var fields = $(viewerContainer).jsGrid("option", "fields");
+                    var result = $("<tr>").height(0).append($("<th>").width(120))
+                    .append($("<th>").width(120))
+                    .append($("<th>").width(120))
+                    .append($("<th>").width(120));
+
+                    result = result.add($("<tr>")
+                    .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceAName))
+                    .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceBName)))
+
+
+                    var tr = $("<tr class='jsgrid-header-row'>");
+                    var grid = this;
+
+                    grid._eachField(function (field, index) {
+                        var th = $("<th>").text(field.title).width(field.width).appendTo(tr);
+
+                        if (grid.sorting && field.sorting) {
+                            th.on("click", function () {
+                                grid.sort(index);
+                            });
+                        }
+                    });
+
+                    return result.add(tr);
+                },
                 fields: columnHeaders,
                 margin: "0px",
                 onRefreshed: function (config) {
-                    var id = viewerContainer.replace("#", "");
+                    var id = viewerContainer.replace("#", "");                    
                     document.getElementById(id).style.width = "579px";
                     _this.highlightDetailedReviewTableFromCheckStatus(id);
                 },
@@ -1099,7 +1126,6 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 // if component is PipingNetworkSegment, check if source and destination properties are same
                 // because they may have same tag names              
-
                 if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
                     var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
                     var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
@@ -1164,7 +1190,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
                     columnHeader["type"] = "textarea";
-                    columnHeader["width"] = "30";
+                    columnHeader["width"] = "27";
                     columnHeader["filtering"] = "true";
                     columnHeaders.push(columnHeader);
                 }
@@ -1222,9 +1248,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var modelBrowserData = document.getElementById("ComparisonDetailedReviewCell");
                 // jsGridHeaderTableIndex = 0 
             // jsGridTbodyTableIndex = 1
-                var modelBrowserHeaderTable = modelBrowserData.children[jsGridTbodyTableIndex];
+                var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "579px";
+                modelBrowserHeaderTable.style.width = "562px";
+                modelBrowserHeaderTable.style.backgroundColor = "white";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
                 for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
@@ -1242,7 +1269,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width = "579px";
-                modelBrowserDataTable.style.margin = "05px 0px 0px 0px"
+                modelBrowserDataTable.style.margin = "52px 0px 0px 0px"
 
                 break;
             }

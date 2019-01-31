@@ -158,11 +158,11 @@ function ExcelModeBrowser() {
 
             var modelBrowserHeaderTable = modelBrowserData.children[0];
             modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width= "554px";
+            modelBrowserHeaderTable.style.width= "543px";
 
             modelBrowserDataTable.style.position = "static"
             modelBrowserDataTable.style.width= "556px";
-            modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+            modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
         }
 
     };

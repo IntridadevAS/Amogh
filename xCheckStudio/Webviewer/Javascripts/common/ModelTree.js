@@ -506,7 +506,7 @@ var xCheckStudio;
 
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "554px";
+                modelBrowserHeaderTable.style.width= "543px";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
                 for(var j =0; j < modelBrowserHeaderTableRows.length; j++)
@@ -528,7 +528,7 @@ var xCheckStudio;
     
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width= "556px";
-                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+                modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
             };
 
             ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
@@ -611,7 +611,7 @@ var xCheckStudio;
                                         xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
                                     }
                                 }
-                                else if(args.grid._container[0].id === "modelTree2")
+                                else if(config.grid._container[0].id === "modelTree2")
                                 {
                                     xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
                                     for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {

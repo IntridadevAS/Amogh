@@ -100,7 +100,7 @@
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
 				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
 			</ComponentClass>
-			<ComponentClass sourceAComponentClass="Pump" sourceBComponentClass="EQUI">
+			<ComponentClass sourceAComponentClass="Pumps" sourceBComponentClass="EQUI">
 			  <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/> 
 				<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
 				<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
