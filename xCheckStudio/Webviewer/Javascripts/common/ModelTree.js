@@ -217,7 +217,7 @@ var xCheckStudio;
                     _this.handleComponentCheck(this);
                 }
 
-                    tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
+                    tableRowContent[this.modelTreeColumnHeaders[1].name] = nodeData.Name;
                     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
                     if (isAssemblyNodeType) {
                         if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
@@ -238,32 +238,33 @@ var xCheckStudio;
 
                     tableRowContent[this.modelTreeColumnHeaders[7].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
                 }
-                else {
+                 else {
+                     return;
 
-                    if(componentName.toLowerCase() === "unnamed" || componentName.toLowerCase() === "models" || componentName.includes("Product"))
-                    {
-                        return;
-                    }
-                    tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
-                    var isAssemblyNodeType = this.isAssemblyNode(nodeId);
-                    if (isAssemblyNodeType) {
-                        this.NodeIdVsCellClassList[componentName]  = componentStyleClass;
-                    }
+                //     if(componentName.toLowerCase() === "unnamed" || componentName.toLowerCase() === "models" || componentName.includes("Product"))
+                //     {
+                //         return;
+                //     }
+                //     tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
+                //     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
+                //     if (isAssemblyNodeType) {
+                //         this.NodeIdVsCellClassList[componentName]  = componentStyleClass;
+                //     }
 
-                    tableRowContent[this.modelTreeColumnHeaders[2].name] = "";
+                //     tableRowContent[this.modelTreeColumnHeaders[2].name] = "";
 
-                    tableRowContent[this.modelTreeColumnHeaders[3].name] = "";
+                //     tableRowContent[this.modelTreeColumnHeaders[3].name] = "";
 
-                    // extra cells for row item identification
-                    tableRowContent[this.modelTreeColumnHeaders[4].name] = "";
+                //     // extra cells for row item identification
+                //     tableRowContent[this.modelTreeColumnHeaders[4].name] = "";
 
-                    tableRowContent[this.modelTreeColumnHeaders[5].name] = "";
+                //     tableRowContent[this.modelTreeColumnHeaders[5].name] = "";
 
-                    tableRowContent[this.modelTreeColumnHeaders[6].name] = "";
+                //     tableRowContent[this.modelTreeColumnHeaders[6].name] = "";
 
-                    tableRowContent[this.modelTreeColumnHeaders[7].name] = "";
+                //     tableRowContent[this.modelTreeColumnHeaders[7].name] = "";
                     
-                }
+                 }
 
                 this.modelTreeRowData.push(tableRowContent);
 
@@ -541,6 +542,7 @@ var xCheckStudio;
 
                         var componentStyleClass = this.getComponentstyleClass(componentName);
                         componentStyleClass = componentStyleClass.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                        componentStyleClass = componentStyleClass.replace(/\s/g,'');
 
                         this.addComponentRow(nodeId, styleList, componentStyleClass);
 
@@ -735,6 +737,7 @@ var xCheckStudio;
                 var _this = this;
 
                 var imageClass = group_name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                imageClass = imageClass.replace(/\s/g,'');
 
                 // Create Button(Image)
                 $('td.' + group_name).prepend("<img class='" + imageClass + " button_closed'> ");

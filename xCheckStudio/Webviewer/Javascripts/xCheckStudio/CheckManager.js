@@ -53,7 +53,8 @@ function CheckManager() {
             // check if this property is checked or not, in Source A
 
             if ((interfaceObject.SourceType.toLowerCase() === "xml" ||
-                interfaceObject.SourceType.toLowerCase() === "rvm") &&
+                interfaceObject.SourceType.toLowerCase() === "rvm"||
+                interfaceObject.SourceType.toLowerCase() === "sldasm") &&
                 !interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
                      //source A not checked
                      if(this.SourceANotCheckedComponents.indexOf(sourceComponentProperties) === -1)
@@ -280,7 +281,9 @@ function CheckManager() {
             var sourceAComponentProperties = sourceAProperties[i];
 
             // check if this property is checked or not, in Source A
-            if ((xCheckStudioInterface1.SourceType.toLowerCase() === "xml" || xCheckStudioInterface1.SourceType.toLowerCase() === "rvm") &&
+            if ((xCheckStudioInterface1.SourceType.toLowerCase() === "xml" || 
+                 xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
+                 xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm") &&
                 !xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
                     //source A not checked
                     if(this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties) === -1)
@@ -406,7 +409,9 @@ function CheckManager() {
             }
 
             // check if this property is checked or not in SOurce BG
-            if ((xCheckStudioInterface2.SourceType.toLowerCase() === "xml" || xCheckStudioInterface2.SourceType.toLowerCase() === "rvm") &&
+            if ((xCheckStudioInterface2.SourceType.toLowerCase() === "xml" || 
+                 xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
+                 xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm") &&
                 !xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
                     //source B not checked
                     if(this.SourceBNotCheckedComponents.indexOf(sourceBComponentProperties) === -1)
@@ -803,23 +808,22 @@ function CheckManager() {
 
             }
             else if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "equipment" &&
-                     sourceBComponentProperties.MainComponentClass.toLowerCase() === "equipment") {
+                sourceBComponentProperties.MainComponentClass.toLowerCase() === "equipment") {
 
                 var sourceAOwnerHandle = sourceAComponentProperties.getProperty('Handle');
                 var sourceBOwnerHandle = sourceBComponentProperties.getProperty('Handle');
 
-                if (sourceBFileName.split(".")[1] === "xls" &&
-                    sourceAFileName.split(".")[1] === "xls") {
-                    return true;
-                } else if (sourceAOwnerHandle !== undefined &&
-                    sourceBOwnerHandle !== undefined &&
-                    sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
-                    return true;
+                if (sourceBFileName.split(".")[1].toLowerCase() === "xml" &&
+                    sourceAFileName.split(".")[1].toLowerCase() === "xml") {
+                    if (sourceAOwnerHandle !== undefined &&
+                        sourceBOwnerHandle !== undefined &&
+                        sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
-                else{
-                    return false;
-                }
-
             }
 
             return true;

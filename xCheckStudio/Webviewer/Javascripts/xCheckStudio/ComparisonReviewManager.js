@@ -86,8 +86,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             parentTable.appendChild(btn);
 
             var div = document.createElement("DIV");
-            div.className = "content scrollable";
-            div.id = componentsGroup.ComponentClass;
+            div.className = "content scrollable";           
+            div.id = componentsGroup.ComponentClass.replace(/\s/g,'');
             parentTable.appendChild(div);
 
             var div2 = document.createElement("DIV");
@@ -789,7 +789,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             componentIdentifier = currentReviewTableRow.cells[1].innerHTML;
         }
 
-        if (reviewTableId.indexOf("PipingNetworkSegment") !== -1) {
+        var result = reviewTableId.split('-');
+        if (result[0] === "PipingNetworkSegment") {
             var source = currentReviewTableRow.cells[3].innerHTML;
             var destination = currentReviewTableRow.cells[4].innerHTML;
             var ownerId = currentReviewTableRow.cells[5].innerHTML;
@@ -800,7 +801,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
             }
         }
-        else if (reviewTableId.indexOf("Equipment") !== -1) {
+        else if (result[0] === "Equipment") {
             var ownerHandle = currentReviewTableRow.cells[3].innerHTML;
             if (ownerHandle !== undefined && ownerHandle !== "") {
                 componentIdentifier += "_" + ownerHandle;

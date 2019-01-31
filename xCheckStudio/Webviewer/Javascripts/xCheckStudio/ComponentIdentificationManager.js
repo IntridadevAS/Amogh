@@ -27,6 +27,11 @@ var xCheckStudio;
          ComponentIdentificationManager.XLSSourceMainClassProperty = "MainComponentClass";
          ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
 
+         // SolidWorks data source
+         ComponentIdentificationManager.SLDSourceNameProperty = "SW-File Name(File Name)";
+         ComponentIdentificationManager.SLDSourceMainClassProperty = "Type";
+         ComponentIdentificationManager.SLDSourceSubComponentClassProperty = "Component Class";
+
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
@@ -59,6 +64,13 @@ var xCheckStudio;
                     'name': ComponentIdentificationManager.XLSSourceNameProperty,
                     'mainCategory': ComponentIdentificationManager.XLSSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
+                };
+            }
+            else if (fileExtension.toLowerCase() === "sldasm") {
+                properties = {
+                    'name': ComponentIdentificationManager.SLDSourceNameProperty,
+                    'mainCategory': ComponentIdentificationManager.SLDSourceMainClassProperty,
+                    'subClass': ComponentIdentificationManager.SLDSourceSubComponentClassProperty
                 };
             }
 

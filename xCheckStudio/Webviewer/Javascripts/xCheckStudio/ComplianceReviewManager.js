@@ -80,7 +80,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
             var div = document.createElement("DIV");
             div.className = "content scrollable";
-            div.id = componentsGroup.ComponentClass + "_" + this.MainReviewTableContainer;
+            div.id = componentsGroup.ComponentClass.replace(/\s/g,'') + "_" + this.MainReviewTableContainer;
             parentTable.appendChild(div);
 
             var tableData = [];

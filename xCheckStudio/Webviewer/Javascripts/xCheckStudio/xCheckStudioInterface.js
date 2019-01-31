@@ -258,8 +258,6 @@ var xCheckStudio;
 
             return undefined;
         }
-
-
       
 
         xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties) {
@@ -275,9 +273,10 @@ var xCheckStudio;
                     _this._firstViewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0) {
-
+                            
                             var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
+                            //var name = _this._firstViewer.model.getNodeName(nodeId);
                             var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
 
                             if (mainComponentClass !== undefined &&
@@ -347,6 +346,22 @@ var xCheckStudio;
                                     componentIdentifier = name + "_" + ownerHandle;
                                 }
 
+                                _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                                _this.nodeIdVsComponentData[nodeId] = componentNodeData;
+                            }
+                            else if (name !== undefined) {
+
+                                var componentNodeData = new ComponentNodeData(name,
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    nodeId,
+                                    "");
+
+                                // keep track of component vs node id
+                                var componentIdentifier = name
                                 _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
                                 _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                             }
