@@ -2916,6 +2916,7 @@
         //open windows file selector dialog
         function OnLoadClick(isFirstDataSource) {
             var modal;
+            var modalMaximizeViewer;
             if (isFirstDataSource === "true") {
                 // get first source type
                 if (checkCaseManager === undefined ||
@@ -2926,7 +2927,7 @@
                 }
 
                 modal = document.getElementById('projectselectiondialogModal');
-
+                modalMaximizeViewer = document.getElementById('maximizeViewerContainer');
                 // When the user clicks the button, open the modal 
                 modal.style.display = "block";
                 document.getElementById("projectselectiondialog-content").innerHTML = "";
@@ -2984,7 +2985,7 @@
                 }
 
                 modal = document.getElementById('projectselectiondialogModal');
-
+                modalMaximizeViewer = document.getElementById('maximizeViewerContainer');
                 // When the user clicks the button, open the modal 
                 modal.style.display = "block";
                 document.getElementById("projectselectiondialog-content").innerHTML = "";
@@ -3018,9 +3019,35 @@
             }
 
             // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            // window.onclick = function (event) {
+            //     if (event.target == modal) {
+            //         modal.style.display = "none";
+            //     }
+                
+            //     if (event.target == modalMaximizeViewer) {
+            //         returnViewer(maximizedViewerData);
+            //         modalMaximizeViewer.style.display = "none";
+            //     }
+            //     var closebutton = document.getElementById("closeLoadDialog");
+            //     if (event.target === closebutton) {
+            //         modal.style.display = "none";
+            //     }
+            //     var i = document.getElementById("menu").style;
+            //     if (i.visibility === "visible") {
+            //         i.visibility = "hidden";
+            //         currentViewer = undefined;
+            //     }
+            // }
+        }
+
+        window.onclick = function (event) {
+                if (event.target.id == "projectselectiondialogModal") {
+                    document.getElementById('projectselectiondialogModal').style.display = "none";
+                }
+                
+                if (event.target.id == "maximizeViewerContainer") {
+                    returnViewer(maximizedViewerData);
+                    document.getElementById('maximizeViewerContainer').style.display = "none";
                 }
                 var closebutton = document.getElementById("closeLoadDialog");
                 if (event.target === closebutton) {
@@ -3032,7 +3059,6 @@
                     currentViewer = undefined;
                 }
             }
-        }
 
         function loadDataSource(event,
             dataSource,
@@ -3634,6 +3660,7 @@
             // }, 500);
         };
 
+        var maximizedViewerData ;
         function OnFullScreen() {
             var elem = document.getElementById("viewerContainer1");
             if (elem.style.display === "block") {
@@ -3642,20 +3669,20 @@
                 var modal = document.getElementById('maximizeViewerContainer');
                 // When the user clicks the button, open the modal 
                 modal.style.display = "block";
-                var viewerdata = document.getElementById("viewerContainer1")
+                maximizedViewerData = document.getElementById("viewerContainer1")
                 var modalViewer = document.getElementById("maximizeViewerContainer-content");
-                modalViewer.appendChild(viewerdata);
+                modalViewer.appendChild(maximizedViewerData);
                 var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
                 modalViewerContainer.style.width = "100%";
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
                 // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        returnViewer(viewerdata);
-                        modal.style.display = "none";
-                    }
-                }
+                // window.onclick = function (event) {
+                //     if (event.target == modal) {
+                //         returnViewer(viewerdata);
+                //         modal.style.display = "none";
+                //     }
+                // }
             }
 
             var elem2 = document.getElementById("viewerContainer2");
@@ -3664,20 +3691,20 @@
                 var modal = document.getElementById('maximizeViewerContainer');
                 // When the user clicks the button, open the modal 
                 modal.style.display = "block";
-                var viewerdata = document.getElementById("viewerContainer2")
+                maximizedViewerData = document.getElementById("viewerContainer2")
                 var modalViewer = document.getElementById("maximizeViewerContainer-content");
-                modalViewer.appendChild(viewerdata);
+                modalViewer.appendChild(maximizedViewerData);
                 var modalViewerContainer = modalViewer.getElementsByClassName("example-canvas-small")[0];
                 modalViewerContainer.style.width = "100%";
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
                 // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        returnViewer(viewerdata);
-                        modal.style.display = "none";
-                    }
-                }
+                // window.onclick = function (event) {
+                //     if (event.target == modal) {
+                //         returnViewer(maximizedViewerData);
+                //         modal.style.display = "none";
+                //     }
+                // }
             }
         }
 
