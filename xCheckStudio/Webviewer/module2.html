@@ -143,7 +143,6 @@
         }
 
         .scrollable {
-
             overflow-x: auto;
             overflow-y: auto;
         }
@@ -1218,8 +1217,8 @@
             viewerContainer[0].children[0].appendChild(viewerdata);
             var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
             for (var i = 0; i < modalViewerContainer.length; i++) {
-                fileExtension1 = AnalyticsData.SourceAName.split(".")[1];
-                fileExtension2 = AnalyticsData.SourceBName.split(".")[1];
+                // fileExtension1 = AnalyticsData.SourceAName.split(".")[1];
+                // fileExtension2 = AnalyticsData.SourceBName.split(".")[1];
                 var currentViewer = modalViewerContainer[i];
                 if (document.getElementById("dataSource1ModelBrowserTab").style.backgroundColor !== "lightgray") {
                     currentViewer.style.width = "550px";

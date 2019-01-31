@@ -1169,19 +1169,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeader = {};
                     var title;
                     if (i === 0) {
-                        title = "Source A Property";
+                        title = "Property";
                         name = "A_Property";
                     }
                     else if (i === 1) {
-                        title = "Source A Value";
+                        title = "Value";
                         name = "A_Value";
                     }
                     else if (i === 2) {
-                        title = "Source B Value";
+                        title = "Value";
                         name = "B_Value";
                     }
                     else if (i === 3) {
-                        title = "Source B Property";
+                        title = "Property";
                         name = "B_Property";
                     }
                     else if (i === 4) {

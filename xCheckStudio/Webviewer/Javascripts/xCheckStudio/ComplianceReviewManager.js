@@ -927,11 +927,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     columnHeader = {};
                     var title;
                     if (i === 0) {
-                        title = "Source A Property";
+                        title = "Property";
                         name = "Property";
                     }
                     else if (i === 1) {
-                        title = "Source A Value";
+                        title = "Value";
                         name = "Value";
                     }
                     else if (i === 2) {
