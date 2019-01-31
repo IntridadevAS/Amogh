@@ -20,12 +20,14 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
     for (let i = 0; i < items.length; i++) {
         let item = items[i].webkitGetAsEntry();
 
-        var mainFileName = getMainFileName(item, dropZoneId);
+       
         if (item.isFile) {
             //uploadFiles(items[0].getAsFile(), true);
 
             var uploadFormData = new FormData();
             uploadFormData.append('files[]', items[0].getAsFile());
+            
+            var mainFileName = item.name;
             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
         }
         else if (item.isDirectory) {
@@ -38,6 +40,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
                     uploadFormData.append('files[]', fileEntries[j]);
                 }
 
+                var mainFileName = getMainFileName(item, dropZoneId);
                 uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
             });
         }
@@ -287,14 +290,6 @@ function traverse_directory(entry) {
         })();
     });
 }
-
-// function onDragLeave(event, dropZoneId) {
-//     event.currentTarget.classList.remove('dropzone');
-// }
-
-// function onDragOver(event, dropZoneId) {
-//     event.currentTarget.classList.add('dropzone');
-// }
 
 function enableDropZone(dropZoneId) {
     let dropzone = document.getElementById(dropZoneId);
