@@ -1,5 +1,5 @@
-var ValidFileFormats = ["xml", "xls", "rvm", "att", "sldasm", "dwg"];
-var ValidDataSources = ["xml", "xls", "rvm", "sldasm", "dwg"];
+var ValidFileFormats = ["xml", "xls", "rvm", "att", "sldasm", "dwg", "sldprt"];
+var ValidDataSources = ["xml", "xls", "rvm", "sldasm", "dwg", "sldprt"];
 var SourceFiles = {
     "rvm": ["att"]
 };

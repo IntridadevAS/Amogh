@@ -389,7 +389,8 @@ function ComplianceReviewManager(complianceCheckManager,
         var reviewTableId = this.getReviewTableId(currentReviewTableRow);
 
         var componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
-        if (reviewTableId.indexOf("PipingNetworkSegment") !== -1) {
+        var result = reviewTableId.split('-');
+        if (result[0] === "PipingNetworkSegment") {
             var source = currentReviewTableRow.cells[2].innerHTML;
             var destination = currentReviewTableRow.cells[3].innerHTML;
             var ownerId = currentReviewTableRow.cells[4].innerHTML;
@@ -400,7 +401,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
             }
         }
-        else if (reviewTableId.indexOf("Equipment") !== -1) {
+        else if (result[0] === "Equipment") {
             var handle = currentReviewTableRow.cells[2].innerHTML;
             if (handle !== undefined && handle !== "") {
                 componentIdentifier += "_" + handle;
@@ -859,7 +860,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
             // get the componentgroupd corresponding to selected component 
             var componentsGroup = this.ComplianceCheckManager.CheckComponentsGroups[componentsGroupName];
-            if (componentsGroup.ComponentClass != reviewTableId) {
+            if (componentsGroup.ComponentClass.replace(/\s/g,'') != reviewTableId) {
                 continue;
             }
 

@@ -1122,7 +1122,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             // get the componentgroupd corresponding to selected component 
             var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
-            if (componentsGroup.ComponentClass != reviewTableId) {
+            if (componentsGroup.ComponentClass.replace(/\s/g,'') != reviewTableId) {
                 continue;
             }
 

@@ -32,6 +32,11 @@ var xCheckStudio;
          ComponentIdentificationManager.SLDSourceMainClassProperty = "Type";
          ComponentIdentificationManager.SLDSourceSubComponentClassProperty = "Component Class";
 
+         // SolidWorks part data source
+         ComponentIdentificationManager.SLDPRTNameProperty = "SW-File Name(File Name)";
+         ComponentIdentificationManager.SLDPRTMainClassProperty = "Type";
+         ComponentIdentificationManager.SLDPRTSubComponentClassProperty = "Component Class";
+
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
@@ -71,6 +76,13 @@ var xCheckStudio;
                     'name': ComponentIdentificationManager.SLDSourceNameProperty,
                     'mainCategory': ComponentIdentificationManager.SLDSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.SLDSourceSubComponentClassProperty
+                };
+            }
+            else if (fileExtension.toLowerCase() === "sldprt") {
+                properties = {
+                    'name': ComponentIdentificationManager.SLDPRTNameProperty,
+                    'mainCategory': ComponentIdentificationManager.SLDPRTMainClassProperty,
+                    'subClass': ComponentIdentificationManager.SLDPRTSubComponentClassProperty
                 };
             }
 

@@ -54,7 +54,8 @@ function CheckManager() {
 
             if ((interfaceObject.SourceType.toLowerCase() === "xml" ||
                 interfaceObject.SourceType.toLowerCase() === "rvm"||
-                interfaceObject.SourceType.toLowerCase() === "sldasm") &&
+                interfaceObject.SourceType.toLowerCase() === "sldasm" ||
+                interfaceObject.SourceType.toLowerCase() === "sldprt") &&
                 !interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
                      //source A not checked
                      if(this.SourceANotCheckedComponents.indexOf(sourceComponentProperties) === -1)
@@ -283,7 +284,8 @@ function CheckManager() {
             // check if this property is checked or not, in Source A
             if ((xCheckStudioInterface1.SourceType.toLowerCase() === "xml" || 
                  xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
-                 xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm") &&
+                 xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
+                 xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") &&
                 !xCheckStudioInterface1._modelTree.isComponentSelected(sourceAComponentProperties)) {
                     //source A not checked
                     if(this.SourceANotCheckedComponents.indexOf(sourceAComponentProperties) === -1)
@@ -411,7 +413,8 @@ function CheckManager() {
             // check if this property is checked or not in SOurce BG
             if ((xCheckStudioInterface2.SourceType.toLowerCase() === "xml" || 
                  xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
-                 xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm") &&
+                 xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
+                 xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt") &&
                 !xCheckStudioInterface2._modelTree.isComponentSelected(sourceBComponentProperties)) {
                     //source B not checked
                     if(this.SourceBNotCheckedComponents.indexOf(sourceBComponentProperties) === -1)

@@ -2173,7 +2173,7 @@
                                         <!-- <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">  -->
                                         <input id="file-input" name="dataSouresName[]" multiple="multiple" type="file"
                                             onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
-                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg" />
+                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT" />
                                     </label>
                                 </div>
                             </form>
@@ -2729,7 +2729,8 @@
                 if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "rvm"||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "dwg") {
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "dwg"||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -2794,7 +2795,8 @@
                 if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                     xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
                     xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
-                    xCheckStudioInterface2.SourceType.toLowerCase() === "dwg") {
+                    xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
                     //virewer container Data
                     var viewerOptions = [];
                     viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
@@ -3118,7 +3120,8 @@
             if (fileExtension.toLowerCase() === "xml" ||
                 fileExtension.toLowerCase() === "rvm" ||
                 fileExtension.toLowerCase() === "sldasm"||
-                fileExtension.toLowerCase() === "dwg") {
+                fileExtension.toLowerCase() === "dwg" ||
+                fileExtension.toLowerCase() === "sldprt") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
@@ -3326,7 +3329,8 @@
                         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm"||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
-                            xCheckStudioInterface1.SourceType.toLowerCase() === "dwg") {
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "dwg"||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
 
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
                                 row.cells[modelBrowserMainClassColumn].textContent.trim());
@@ -3371,7 +3375,8 @@
                         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm"||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
-                            xCheckStudioInterface2.SourceType.toLowerCase() === "dwg") {
+                            xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
+                            xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt") {
 
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,
                                 row.cells[modelBrowserMainClassColumn].textContent.trim());
