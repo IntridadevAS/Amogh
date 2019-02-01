@@ -155,7 +155,7 @@ var xCheckStudio;
                             var className = this.NodeIdVsCellClassList[nodeId] ;
                             if(className !== undefined)
                             { 
-                                modelBrowserRows[i].cells[1].className = className;
+                                modelBrowserRows[i].cells[1].classList.add(className)
                             }
                     }
                     var nodeId = currentRow.cells[7].innerHTML;
