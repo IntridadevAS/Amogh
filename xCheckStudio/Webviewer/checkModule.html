@@ -3651,6 +3651,18 @@
             viewerdata.style.margin = "20px 0 0 20px";
             //margin: 20px 0 0 20px
             viewerContainer[0].appendChild(viewerdata);
+           
+            if (viewerdata.id === "viewerContainer1" &&
+                xCheckStudioInterface1 &&
+                xCheckStudioInterface1._firstViewer) {
+                xCheckStudioInterface1._firstViewer.resizeCanvas();
+            }
+            else if (viewerdata.id === "viewerContainer2" &&
+                xCheckStudioInterface2 &&
+                xCheckStudioInterface2._firstViewer) {
+                xCheckStudioInterface2._firstViewer.resizeCanvas();
+            }
+
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
             // window.setTimeout(function () {
@@ -3674,6 +3686,13 @@
                 modalViewerContainer.style.width = "100%";
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
+                
+                
+                if (xCheckStudioInterface1 &&
+                    xCheckStudioInterface1._firstViewer) {
+                    xCheckStudioInterface1._firstViewer.resizeCanvas();
+                }
+
                 // When the user clicks anywhere outside of the modal, close it
                 // window.onclick = function (event) {
                 //     if (event.target == modal) {
@@ -3696,6 +3715,12 @@
                 modalViewerContainer.style.width = "100%";
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
+
+                if (xCheckStudioInterface2 &&
+                    xCheckStudioInterface2._firstViewer) {
+                    xCheckStudioInterface2._firstViewer.resizeCanvas();
+                }
+
                 // When the user clicks anywhere outside of the modal, close it
                 // window.onclick = function (event) {
                 //     if (event.target == modal) {
