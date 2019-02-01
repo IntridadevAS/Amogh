@@ -328,6 +328,33 @@
 					   <Property sourceAName="Trim_1" sourceBName="Trim_1"  severity="Error"/>			   
 				</ComponentClass>
 				
+				<ComponentClass sourceAComponentClass="Column"  sourceBComponentClass="Column">	
+					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
+					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
+					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+					   <Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
+					   <Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
+					   <Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
+					   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					   <Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
+					   <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					   <Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
+					   <Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+					   
+					   <Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
+					   <Property sourceAName="Handle" sourceBName="Handle"  severity="Error"/>
+					   <Property sourceAName="Owner_Handle" sourceBName="Owner_Handle"  severity="Error"/>
+					   <Property sourceAName="SymbolName" sourceBName="SymbolName"  severity="Error"/>
+					   <Property sourceAName="AType" sourceBName="AType"  severity="Error"/>
+					   <Property sourceAName="PDMS_Type" sourceBName="PDMS_Type"  severity="Error"/>
+					   <Property sourceAName="PDMS_SubType" sourceBName="PDMS_SubType"  severity="Error"/>
+					   <Property sourceAName="CLASSNAME" sourceBName="CLASSNAME"  severity="Error"/>
+					   <Property sourceAName="TAGFORMAT" sourceBName="TAGFORMAT"  severity="Error"/>
+					   <Property sourceAName="AREAPATH" sourceBName="AREAPATH"  severity="Error"/>
+					   <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+					   <Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>		   
+				</ComponentClass>
+				
 				<ComponentClass sourceAComponentClass="BlindFlange"  sourceBComponentClass="BlindFlange">	
 					   <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
@@ -498,6 +525,39 @@
 						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
 				</ComponentClass>
 				<ComponentClass sourceAComponentClass="Pump"  sourceBComponentClass="Pump">	
+					 <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
+					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
+					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+					   <Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
+					   <Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
+					   <Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
+					   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+					   <Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
+					   <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+					   <Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
+					   <Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+					   
+					   <Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
+					   <Property sourceAName="Handle" sourceBName="Handle"  severity="Error"/>
+					   <Property sourceAName="Owner_Handle" sourceBName="Owner_Handle"  severity="Error"/>
+					   <Property sourceAName="SymbolName" sourceBName="SymbolName"  severity="Error"/>
+					   <Property sourceAName="AType" sourceBName="AType"  severity="Error"/>
+					   <Property sourceAName="PDMS_Type" sourceBName="PDMS_Type"  severity="Error"/>
+					   <Property sourceAName="PDMS_SubType" sourceBName="PDMS_SubType"  severity="Error"/>
+					   <Property sourceAName="CLASSNAME" sourceBName="CLASSNAME"  severity="Error"/>
+					   <Property sourceAName="TAGFORMAT" sourceBName="TAGFORMAT"  severity="Error"/>
+					   <Property sourceAName="AREAPATH" sourceBName="AREAPATH"  severity="Error"/>
+					   <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+					   <Property sourceAName="DS_EquipmentDesc_Description" sourceBName="DS_EquipmentDesc_Description"  severity="Error"/>
+					   <Property sourceAName="DS_EquipmentDesc_Design_Pressure" sourceBName="DS_EquipmentDesc_Design_Pressure"  severity="Error"/>
+					   <Property sourceAName="DS_EquipmentDesc_Design_Temperature" sourceBName="DS_EquipmentDesc_Design_Temperature"  severity="Error"/>
+					   <Property sourceAName="DS_EquipmentDesc_Duty" sourceBName="DS_EquipmentDesc_Duty"  severity="Error"/>
+					   <Property sourceAName="DS_EquipmentDesc_Size" sourceBName="DS_EquipmentDesc_Size"  severity="Error"/>
+					   <Property sourceAName="DS_GENERAL_Description" sourceBName="DS_GENERAL_Description"  severity="Error"/>
+						<Property sourceAName="Grid_Reference" sourceBName="Grid_Reference"  severity="Error"/>
+						<Property sourceAName="ReferenceObject" sourceBName="ReferenceObject"  severity="Error"/>
+				</ComponentClass>
+				<ComponentClass sourceAComponentClass="Pumps"  sourceBComponentClass="Pumps">	
 					 <Property sourceAName="Block" sourceBName="Block"  severity="Warning"/>
 					   <Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
 					   <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
@@ -771,6 +831,31 @@
 					 <Property name="ReferenceObject" rule="Must have value" severity="Error" comment="Property must have value." />
 					 <Property name="Trim_1" rule="Must have value" severity="Error" comment="Property must have value." />
 				  </ComponentClass>
+				  <ComponentClass name="Column">
+					 <Property name="Block"    rule="Should be number"    severity="Error"    comment="Should be number" />
+					 <Property name="TagBlock" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+					 <Property name="Function" rule="" severity="Error"    comment="No Rule" />
+					 <Property name="TagFunction" rule="" severity="Error" comment="No Rule" />
+					 <Property name="Prefix" rule="Should end with-xyz" severity="Error" comment="Should end with-xyz." />
+					 <Property name="TagPrefix" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Type" rule="Equal to-E" severity="Error" comment="Equal to-E" />
+					 <Property name="TagType" rule="Should not be number" severity="Error" comment="Should not be number" />
+					 <Property name="Number" rule="Should be number" severity="Error" comment="Should be number." />
+					 <Property name="TagSequenceNo" rule="Should end with-02" severity="Error" comment="Should end with-02" />
+					 <Property name="Suffix" rule="Should be text" severity="Error" comment="Should be text" />
+					 <Property name="TagSuffix" rule="Should not be text" severity="Error" comment="Should not be text" />
+					 <Property name="Handle" rule="Not Equal to-abc" severity="Error" comment="Not Equal to-abc" />
+					 <Property name="Owner_Handle" rule="Should Not End With-j" severity="Error" comment="Should Not End With-j" />
+					 <Property name="SymbolName" rule="Should contain-k" severity="Error" comment="Should contain-k" />
+					 <Property name="AType" rule="Should not contain-k" severity="Error" comment="Should not contain-k" />
+					 <Property name="PDMS_Type" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="PDMS_SubType" rule="Must have value" severity="Error" comment="Property must have value." />
+		
+					 <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+					 
+					 <Property name="Grid_Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+					 
+				  </ComponentClass>
 				  <ComponentClass name="BlindFlange">   
 					 <Property name="Block" rule="Must have value" severity="Error" comment="Property must have value." />
 					 <Property name="TagBlock" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -931,6 +1016,38 @@
 					 <Property name="ReferenceObject" rule="Must have value" severity="Error" comment="Property must have value." />
 				  </ComponentClass>
 				  <ComponentClass name="Pump">
+					 <Property name="Block" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagBlock" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagFunction" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Prefix" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagPrefix" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagType" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Number" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagSequenceNo" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Suffix" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TagSuffix" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Handle" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Owner_Handle" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="SymbolName" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="AType" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="PDMS_Type" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="PDMS_SubType" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="CLASSNAME" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="TAGFORMAT" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="AREAPATH" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_EquipmentDesc_Description" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_EquipmentDesc_Design_Pressure" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_EquipmentDesc_Design_Temperature" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_EquipmentDesc_Duty" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_EquipmentDesc_Size" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="DS_GENERAL_Description" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="Grid_Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+					 <Property name="ReferenceObject" rule="Must have value" severity="Error" comment="Property must have value." />
+				  </ComponentClass>
+				  <ComponentClass name="Pumps">
 					 <Property name="Block" rule="Must have value" severity="Error" comment="Property must have value." />
 					 <Property name="TagBlock" rule="Must have value" severity="Error" comment="Property must have value." />
 					 <Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
