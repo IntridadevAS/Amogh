@@ -2895,8 +2895,7 @@
             elementCountTab.style.display = "none";
         }
 
-        function readExcelDataSource(file,
-            dataSource,
+        function readExcelDataSource(file,           
             viewerContainer,
             modelTreeContainer) {
 
@@ -3143,7 +3142,8 @@
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                   if( loadExcelDataSource(fileExtension, file, dataSource,
+                   if( loadExcelDataSource(fileExtension, 
+                        file, 
                         viewerContainer,
                         modelTreeContainer)){
                             hideLoadButton(modelTreeContainer);
@@ -3165,8 +3165,7 @@
             }
 
         function loadExcelDataSource(fileExtension,
-            file,
-            dataSource,
+            file,           
             viewerContainer,
             modelTreeContainer) {
             if (!checkCaseManager ||
@@ -3202,8 +3201,7 @@
                     return false;
                 }
             }
-            readExcelDataSource(file,
-                dataSource,
+            readExcelDataSource(file,               
                 viewerContainer,
                 modelTreeContainer);
             

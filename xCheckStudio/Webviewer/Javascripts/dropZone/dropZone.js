@@ -1,5 +1,7 @@
 
 function onDropFiles(event, viewerContainer, modelTreeContainer) {
+    event.currentTarget.classList.remove('dropzone');
+    
     let items = event.dataTransfer.items;
 
     if (event.currentTarget.id === "dropZone1") {
@@ -14,7 +16,8 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
     }
     else {
         return;
-    }  
+    }    
+
 
     event.preventDefault();
     for (let i = 0; i < items.length; i++) {
@@ -22,12 +25,25 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
 
        
         if (item.isFile) {
-            //uploadFiles(items[0].getAsFile(), true);
+            var mainFileName = item.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(mainFileName).toLowerCase();
+
+            // if data source is Excel file
+            if (fileExtension.toLowerCase() === "xls") {
+                if (loadExcelDataSource(fileExtension,
+                    items[0].getAsFile(),                    
+                    viewerContainer,
+                    modelTreeContainer)) {
+
+                    manageControlsOnDatasourceLoad(mainFileName,
+                        viewerContainer,
+                        modelTreeContainer);
+                    return;
+                }
+            }
 
             var uploadFormData = new FormData();
             uploadFormData.append('files[]', items[0].getAsFile());
-            
-            var mainFileName = item.name;
             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
         }
         else if (item.isDirectory) {
@@ -44,9 +60,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
                 uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
             });
         }
-    }
-
-    event.currentTarget.classList.remove('dropzone');
+    }   
 }
 
 function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer) {
@@ -82,11 +96,8 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
     var formData = new FormData();
     formData.append("MainFile", mainFileName);
 
-    // // show busy loader
-     var busySpinner = document.getElementById("divLoading");
-    // if (busySpinner !== undefined) {
-    //     busySpinner.className = 'show';
-    // }
+    // show busy loader
+    var busySpinner = document.getElementById("divLoading");
 
     $.ajax({
         url: "uploads/convertDatasource.php",
@@ -96,95 +107,91 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         contentType: false,
         processData: false,
         success: function (ret) {
-            //alert(ret);   
+            //alert(ret);
 
             if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
-                //alert("Model Loaded");   
-                hideLoadButton(modelTreeContainer);
 
-                if (viewerContainer === "viewerContainer1") {
-                    sourceAFileName = mainFileName;
+                manageControlsOnDatasourceLoad(mainFileName,
+                    viewerContainer, 
+                    modelTreeContainer);
 
-                    // enable source a controls
-                    // enable check all CB for source A
-                    var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                // //alert("Model Loaded");   
+                // hideLoadButton(modelTreeContainer);
 
-                    // diable compliance CB for source A
-                    component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                // if (viewerContainer === "viewerContainer1") {
+                //     sourceAFileName = mainFileName;
 
-                    // enable check button
-                    component = document.getElementById('checkButton');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // enable source a controls
+                //     // enable check all CB for source A
+                //     var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // enable info  button
-                    component = document.getElementById('infobtn');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // diable compliance CB for source A
+                //     component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // enable source B, load button
-                    component = document.getElementById('createbtnB');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // enable check button
+                //     component = document.getElementById('checkButton');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // enable drop zone for source B
-                    enableDropZone("dropZone2");
+                //     // enable info  button
+                //     component = document.getElementById('infobtn');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // disable load button for souece a
-                    component = document.getElementById('createbtnA');
-                    addClass(component, 'disabledbutton');   
-                }
-                else if (viewerContainer === "viewerContainer2") {
-                    sourceBFileName = mainFileName;
+                //     // enable source B, load button
+                //     component = document.getElementById('createbtnB');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // enable source b controls
-                    // enable source a controls
-                    // enable check all CB for source A
-                    var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // enable drop zone for source B
+                //     enableDropZone("dropZone2");
 
-                    // diable compliance CB for source A
-                    component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // disable load button for souece a
+                //     component = document.getElementById('createbtnA');
+                //     addClass(component, 'disabledbutton');   
+                // }
+                // else if (viewerContainer === "viewerContainer2") {
+                //     sourceBFileName = mainFileName;
 
-                    // enable comparison switch
-                    component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // enable source b controls
+                //     // enable source a controls
+                //     // enable check all CB for source A
+                //     var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // enable info  button
-                    component = document.getElementById('infobtn');
-                    if (component.classList.contains("disabledbutton")) {
-                        component.classList.remove('disabledbutton');
-                    }
+                //     // diable compliance CB for source A
+                //     component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
 
-                    // disble load button for souece b
-                    component = document.getElementById('createbtnB');
-                    addClass(component, 'disabledbutton');
-                    
-                    // // disable current dropzone events
-                    // component = document.getElementById('dropZone2');   
-                    // component.ondrop = null;
-                    // component.ondragleave = null;
-                    // component.ondragover = null;
-                    // component.removeEventListener("dragover", onDragOver);
-                    // component.removeEventListener("dragleave", onDragLeave);
-                    // component.removeEventListener("drop", onDropFiles);
-                }
+                //     // enable comparison switch
+                //     component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
+
+                //     // enable info  button
+                //     component = document.getElementById('infobtn');
+                //     if (component.classList.contains("disabledbutton")) {
+                //         component.classList.remove('disabledbutton');
+                //     }
+
+                //     // disble load button for souece b
+                //     component = document.getElementById('createbtnB');
+                //     addClass(component, 'disabledbutton');        
+                // }
 
             }
             else {
@@ -204,6 +211,87 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         }
     });
     return false;
+}
+
+function manageControlsOnDatasourceLoad(mainFileName,
+                                        viewerContainer, 
+                                        modelTreeContainer) {
+    hideLoadButton(modelTreeContainer);
+
+    if (viewerContainer === "viewerContainer1") {
+        sourceAFileName = mainFileName;
+
+        // enable source a controls
+        // enable check all CB for source A
+        var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // diable compliance CB for source A
+        component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable check button
+        component = document.getElementById('checkButton');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable info  button
+        component = document.getElementById('infobtn');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable source B, load button
+        component = document.getElementById('createbtnB');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable drop zone for source B
+        enableDropZone("dropZone2");
+
+        // disable load button for souece a
+        component = document.getElementById('createbtnA');
+        addClass(component, 'disabledbutton');
+    }
+    else if (viewerContainer === "viewerContainer2") {
+        sourceBFileName = mainFileName;
+
+        // enable source b controls
+        // enable source a controls
+        // enable check all CB for source A
+        var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // diable compliance CB for source A
+        component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable comparison switch
+        component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // enable info  button
+        component = document.getElementById('infobtn');
+        if (component.classList.contains("disabledbutton")) {
+            component.classList.remove('disabledbutton');
+        }
+
+        // disble load button for souece b
+        component = document.getElementById('createbtnB');
+        addClass(component, 'disabledbutton');
+    }
 }
 
 function getMainFileName(item, dropZoneId) {
