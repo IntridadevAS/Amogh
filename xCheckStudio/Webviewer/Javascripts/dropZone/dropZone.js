@@ -81,9 +81,7 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
         success: function (ret) {
             //alert(ret);
             convertDataSource(mainFileName, viewerContainer, modelTreeContainer);
-
-            // // hide busy spinner
-            // busySpinner.classList.remove('show');
+        
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             // hide busy spinner
@@ -113,86 +111,7 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
 
                 manageControlsOnDatasourceLoad(mainFileName,
                     viewerContainer, 
-                    modelTreeContainer);
-
-                // //alert("Model Loaded");   
-                // hideLoadButton(modelTreeContainer);
-
-                // if (viewerContainer === "viewerContainer1") {
-                //     sourceAFileName = mainFileName;
-
-                //     // enable source a controls
-                //     // enable check all CB for source A
-                //     var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // diable compliance CB for source A
-                //     component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable check button
-                //     component = document.getElementById('checkButton');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable info  button
-                //     component = document.getElementById('infobtn');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable source B, load button
-                //     component = document.getElementById('createbtnB');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable drop zone for source B
-                //     enableDropZone("dropZone2");
-
-                //     // disable load button for souece a
-                //     component = document.getElementById('createbtnA');
-                //     addClass(component, 'disabledbutton');   
-                // }
-                // else if (viewerContainer === "viewerContainer2") {
-                //     sourceBFileName = mainFileName;
-
-                //     // enable source b controls
-                //     // enable source a controls
-                //     // enable check all CB for source A
-                //     var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // diable compliance CB for source A
-                //     component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable comparison switch
-                //     component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // enable info  button
-                //     component = document.getElementById('infobtn');
-                //     if (component.classList.contains("disabledbutton")) {
-                //         component.classList.remove('disabledbutton');
-                //     }
-
-                //     // disble load button for souece b
-                //     component = document.getElementById('createbtnB');
-                //     addClass(component, 'disabledbutton');        
-                // }
-
+                    modelTreeContainer);            
             }
             else {
 
@@ -220,6 +139,10 @@ function manageControlsOnDatasourceLoad(mainFileName,
 
     if (viewerContainer === "viewerContainer1") {
         sourceAFileName = mainFileName;
+
+        // Add Source file names in modelbrowser tab header and viewer tab header
+        document.getElementById("dataSource1ModelBrowserTab").innerText = mainFileName;      
+        document.getElementById("dataSource1ViewerContainerTab").innerText = mainFileName;
 
         // enable source a controls
         // enable check all CB for source A
@@ -261,6 +184,10 @@ function manageControlsOnDatasourceLoad(mainFileName,
     }
     else if (viewerContainer === "viewerContainer2") {
         sourceBFileName = mainFileName;
+
+        // Add Source file names in modelbrowser tab header and viewer tab header
+        document.getElementById("dataSource2ModelBrowserTab").innerText = mainFileName;  
+        document.getElementById("dataSource2ViewerContainerTab").innerText = mainFileName;
 
         // enable source b controls
         // enable source a controls
