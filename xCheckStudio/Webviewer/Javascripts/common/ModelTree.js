@@ -500,6 +500,13 @@ var xCheckStudio;
             ModelTree.prototype.addModelBrowser = function (nodeId, styleList) {
                 this.addModelBrowserComponent(nodeId, styleList);
 
+                if (this.modelTreeColumnHeaders === undefined ||
+                    this.modelTreeColumnHeaders.length === 0 ||
+                    this.modelTreeRowData === undefined ||
+                    this.modelTreeRowData.length === 0) {
+                    return;
+                }
+
                 this.loadModelBrowserTable();
 
                 var modelBrowserData = document.getElementById(this._elementId);

@@ -272,7 +272,8 @@ var xCheckStudio;
 
                     _this._firstViewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
                         if (nodeProperties != null &&
-                            Object.keys(nodeProperties).length > 0) {
+                            Object.keys(nodeProperties).length > 0 &&
+                            identifierProperties !== undefined) {
                             
                             var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
