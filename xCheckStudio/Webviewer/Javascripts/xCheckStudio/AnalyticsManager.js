@@ -59,22 +59,37 @@ function AnalyticsManager() {
             var checkResultArray = localStorage.CheckResultArray;
             if (checkResultArray === undefined) {
                 checkResultArray = {};
+                // var checkCase = AnalyticsData.CheckCaseName;
+                // var SourceAName = AnalyticsData.SourceAName.split(".")[0];
+                // var SourceBName = AnalyticsData.SourceBName.split(".")[0];
+
+                // var dataSourceIdentifier = checkCase;
+                // if(SourceAName !== undefined)
+                // {
+                //     dataSourceIdentifier += "_" + SourceAName;
+                // }
+                // if(SourceBName !== undefined)
+                // {
+                //     dataSourceIdentifier += "_" + SourceBName;
+                // }
+
                 var temp = [errorsCount, warningsCount, okCount];
+
                 checkResultArray[Date.now()] = temp;
                 localStorage.setItem("CheckResultArray", JSON.stringify(checkResultArray));
             }
-            else {
-                StorageData = localStorage.CheckResultArray;
-                StorageArray = JSON.parse(StorageData);
-                // if(Object.keys(StorageArray).length >= 10)
-                // {
-                //     var firstElement = Object.keys(StorageArray)[0];
-                //     delete StorageArray[firstElement];
-                // }
-                var temp = [errorsCount, warningsCount, okCount];
-                StorageArray[Date.now()] = temp;
-                localStorage.setItem("CheckResultArray", JSON.stringify(StorageArray));
-            }
+            // else {
+            //     StorageData = localStorage.CheckResultArray;
+            //     StorageArray = JSON.parse(StorageData);
+            //     // if(Object.keys(StorageArray).length >= 10)
+            //     // {
+            //     //     var firstElement = Object.keys(StorageArray)[0];
+            //     //     delete StorageArray[firstElement];
+            //     // }
+            //     var temp = [errorsCount, warningsCount, okCount];
+            //     StorageArray[Date.now()] = temp;
+            //     localStorage.setItem("CheckResultArray", JSON.stringify(StorageArray));
+            // }
 
             var titleArray = [];
             titleArray.push("Name");
@@ -92,6 +107,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
@@ -115,6 +134,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
@@ -138,6 +161,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
@@ -192,6 +219,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
@@ -215,6 +246,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
@@ -238,6 +273,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceA.push(valueArray);
@@ -292,6 +331,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
@@ -315,6 +358,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
@@ -338,6 +385,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComplianceResultArrayForSourceB.push(valueArray);
@@ -397,13 +448,13 @@ function AnalyticsManager() {
                 checkResultArrayForInfo[Date.now()] = temp;
                 localStorage.setItem("CheckResultArrayInfo", JSON.stringify(checkResultArrayForInfo));
             }
-            else {
-                StorageData = localStorage.CheckResultArrayInfo;
-                StorageArray = JSON.parse(StorageData);
-                var temp = [totalItemsNotChecked, noMatchCount];
-                StorageArray[Date.now()] = temp;
-                localStorage.setItem("CheckResultArrayInfo", JSON.stringify(StorageArray));
-            }
+            // else {
+            //     StorageData = localStorage.CheckResultArrayInfo;
+            //     StorageArray = JSON.parse(StorageData);
+            //     var temp = [totalItemsNotChecked, noMatchCount];
+            //     StorageArray[Date.now()] = temp;
+            //     localStorage.setItem("CheckResultArrayInfo", JSON.stringify(StorageArray));
+            // }
 
             var titleArray = [];
             titleArray.push("Name");
@@ -422,6 +473,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
@@ -446,6 +501,10 @@ function AnalyticsManager() {
             var valueArray = [];
             valueArray.push("");
             complementryPercent = 100 - fixedPercent;
+            if(complementryPercent < 0)
+            {
+                complementryPercent = 0;
+            }
              complementryPercent=  parseFloat((complementryPercent).toFixed(1))
             valueArray.push(complementryPercent);
             this.ComparisonResultArray.push(valueArray);
