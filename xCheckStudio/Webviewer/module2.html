@@ -1235,6 +1235,10 @@
                     }
                 }
             }
+
+             // resize viewer canvas
+             resizeHoopsViewerCanvas();
+
             // document.getElementById("ChecksTabPage").style.marginTop = "40px";
             // this._viewer.moveToWindow(window);
             // this._viewer.resizeCanvas();
@@ -1273,6 +1277,9 @@
                         modalViewer.style.height = "370px"
                     }
                 }
+
+                // resize viewer canvas
+                resizeHoopsViewerCanvas();
             }
             else if(document.getElementById("AnalyticsViewTab").style.backgroundColor === "rgb(243, 240, 244)"){
                 var analyticsContainerElement = document.getElementById("analyticsContainer");
@@ -1289,6 +1296,33 @@
             }
         }
 
+        function resizeHoopsViewerCanvas()
+        {
+            if(document.getElementById("ComparisonDetailedReviewTbody").style.display === "block" &&
+                   comparisonReviewManager !== undefined &&
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer &&
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer)
+                {
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.resizeCanvas();
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.resizeCanvas();
+                }
+                else if(document.getElementById("ComplianceADetailedReviewTbody").style.display === "block" &&
+                        sourceAComplianceReviewManager !== undefined &&
+                        sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
+                        sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer)
+                {
+                    sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.resizeCanvas();
+                }
+                else if(document.getElementById("ComplianceBDetailedReviewTbody").style.display === "block" &&
+                        sourceBComplianceReviewManager !== undefined &&
+                        sourceBComplianceReviewManager.ReviewModuleViewerInterface &&
+                        sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer)
+                {
+                    sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.resizeCanvas();
+                }
+        }
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
