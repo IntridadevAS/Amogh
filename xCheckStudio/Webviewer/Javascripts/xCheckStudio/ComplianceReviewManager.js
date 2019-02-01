@@ -979,7 +979,7 @@ function ComplianceReviewManager(complianceCheckManager,
             // jsGridTbodyTableIndex = 1
                 var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "562px";
+                modelBrowserHeaderTable.style.width = "565px";
                 modelBrowserHeaderTable.style.backgroundColor = "white";
                 modelBrowserHeaderTable.style.overflowX = "hidden";
 
@@ -1051,8 +1051,8 @@ function ComplianceReviewManager(complianceCheckManager,
                 data: tableData,
                 headerRowRenderer: function() {
                     var fields = $(viewerContainer).jsGrid("option", "fields");
-                    var result = $("<tr>").height(0).append($("<th>").width(240))
-                    .append($("<th>").width(240));
+                    var result = $("<tr>").height(0).append($("<th>").width(194))
+                    .append($("<th>").width(190));
 
                     result = result.add($("<tr>")
                     .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceAName)))

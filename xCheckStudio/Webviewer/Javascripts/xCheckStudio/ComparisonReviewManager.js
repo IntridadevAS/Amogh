@@ -104,17 +104,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                 if (i === 0) {
                     title = AnalyticsData.SourceAName;//"Source A";
                     name = "SourceA";
-                    width = "30";
+                    width = "35";
                 }
                 else if (i === 1) {
                     title = AnalyticsData.SourceBName;//"Source B";
                     name = "SourceB";
-                    width = "30";
+                    width = "34";
                 }
                 else if (i === 2) {
                     title = "Status";
                     name = "Status"
-                    width = "30";
+                    width = "34";
                 }
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
@@ -896,9 +896,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 headerRowRenderer: function() {
                     var fields = $(viewerContainer).jsGrid("option", "fields");
                     var result = $("<tr>").height(0).append($("<th>").width(120))
+                    .append($("<th>").width(110))
                     .append($("<th>").width(120))
-                    .append($("<th>").width(120))
-                    .append($("<th>").width(120));
+                    .append($("<th>").width(110));
 
                     result = result.add($("<tr>")
                     .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceAName))
@@ -1267,7 +1267,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             // jsGridTbodyTableIndex = 1
                 var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "562px";
+                modelBrowserHeaderTable.style.width = "565px";
                 modelBrowserHeaderTable.style.backgroundColor = "white";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
