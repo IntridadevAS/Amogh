@@ -28,7 +28,7 @@
 		<ComponentGroup sourceAGroupName="Pipeline"  sourceBGroupName="Pipeline">
 			  
 			  <ComponentClass sourceAComponentClass="Pipe"  sourceBComponentClass="Pipe">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
+			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
 				  <Property sourceAName="Route type" sourceBName="Route type"  severity="Error"/>
 				  <Property sourceAName="RouteCompID" sourceBName="RouteCompID"  severity="Error"/>
@@ -41,7 +41,9 @@
 		<ComponentGroup sourceAGroupName="Instrument"  sourceBGroupName="Instrument">
 			  
 			  <ComponentClass sourceAComponentClass="Alcometer"  sourceBComponentClass="Alcometer">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
+			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+				   <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
+				   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
 			  </ComponentClass>
 			  
 			   <ComponentClass sourceAComponentClass="Color Meter"  sourceBComponentClass="Color Meter">
@@ -57,7 +59,7 @@
 		<ComponentGroup sourceAGroupName="Nozzle"  sourceBGroupName="Nozzle">
 			  
 			  <ComponentClass sourceAComponentClass="Weld neck flanged nozzle"  sourceBComponentClass="Weld neck flanged nozzle">
-			         <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
+			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>				 		 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
@@ -91,7 +93,9 @@
 			 </ComponentClass>
 			 
 			 <ComponentClass sourceAComponentClass="Gate Valve"  sourceBComponentClass="Gate Valve">
-			     <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+			     <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+				 <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Error"/>				 
 				 <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
 			 </ComponentClass>
@@ -144,7 +148,7 @@
 			  
 			  <ComponentClass sourceAComponentClass="Equipment Component"  sourceBComponentClass="Equipment Component">
 			        <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
-				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
+				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>	 
 				  
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
 			  </ComponentClass>		  
@@ -161,14 +165,14 @@
 			  </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Spray Ball"  sourceBComponentClass="Spray Ball">
-                       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+                  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>			 
 			 </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Fitting Clamp"  sourceBComponentClass="Fitting Clamp">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
@@ -177,4 +181,371 @@
 	    </ComponentGroup>
 		
 	</Check>
+
+    <Check type="ComplianceSourceA" sourceType="SLDASM" >
+	   <ComponentGroup name="Equipment">
+				  <ComponentClass name="Pump">				  
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />
+					    <Property name="Assembly type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>
+				  
+				   <ComponentClass name="Fitting">
+    
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Number" rule="Should be number" severity="Error" comment="Should be number." />
+						<Property name="Status" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Pipeline">
+				  
+				  <ComponentClass name="Pipe">					  
+			            <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="RouteCompID" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />						
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Instrument">
+				  
+				  <ComponentClass name="Alcometer">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Type" rule="Should be number" severity="Error" comment="Should be number." />			
+                  </ComponentClass>	
+				  
+				   <ComponentClass name="Color Meter">
+				   	    <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />		
+				        <Property name="RouteCompID" rule="Should be number" severity="Error" comment="Should be number." />					   
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />		
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Nozzle">
+				  
+				  <ComponentClass name="Weld neck flanged nozzle">
+			            <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />		
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Flanged Nozzle">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Manway">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Valve">
+				  
+				  <ComponentClass name="Check Valve">					       
+					    <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />	
+						<Property name="RouteCompID" rule="Should be number" severity="Error" comment="Should be number." />		
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />		
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+			      </ComponentClass>	
+				  
+				  <ComponentClass name="Gate Valve">				 
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />	
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+                  </ComponentClass>					
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Reducer">
+				  
+				  <ComponentClass name="Eccentric Reducer">				        
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+					    <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Concentric Reducer">			       
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+					    <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Attachment">
+				  
+				  <ComponentClass name="Lift Lug">
+                        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />						  
+                  </ComponentClass>								
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Sub Equipment">
+				  
+				  <ComponentClass name="Bottom Head Cone">				  
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+ 
+                  <ComponentClass name="Leg Cone">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+                  
+				  <ComponentClass name="Equipment Component">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					  
+			  
+		</ComponentGroup>
+		
+		<ComponentGroup name="Fitting">
+				  
+				  <ComponentClass name="Gasket">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+ 
+                  <ComponentClass name="Spray Ball">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+                  
+				  <ComponentClass name="Fitting Clamp">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					  
+			  
+		</ComponentGroup>
+    </Check>
+	
+	<Check type="ComplianceSourceB" sourceType="SLDASM" >
+	     <ComponentGroup name="Equipment">
+				  <ComponentClass name="Pump">				  
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />
+					    <Property name="Assembly type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>
+				  
+				   <ComponentClass name="Fitting">
+    
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Number" rule="Should be number" severity="Error" comment="Should be number." />
+						<Property name="Status" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Pipeline">
+				  
+				  <ComponentClass name="Pipe">					  
+			            <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="RouteCompID" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />						
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Instrument">
+				  
+				  <ComponentClass name="Alcometer">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Type" rule="Should be number" severity="Error" comment="Should be number." />			
+                  </ComponentClass>	
+				  
+				   <ComponentClass name="Color Meter">
+				   	    <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />		
+				        <Property name="RouteCompID" rule="Should be number" severity="Error" comment="Should be number." />					   
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />		
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Nozzle">
+				  
+				  <ComponentClass name="Weld neck flanged nozzle">
+			            <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />		
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Flanged Nozzle">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Manway">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Valve">
+				  
+				  <ComponentClass name="Check Valve">					       
+					    <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Route type" rule="Must have value" severity="Error" comment="Property must have value." />	
+						<Property name="RouteCompID" rule="Should be number" severity="Error" comment="Should be number." />		
+						<Property name="RoutingTerminalBlockComponent" rule="Must have value" severity="Error" comment="Property must have value." />		
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+			      </ComponentClass>	
+				  
+				  <ComponentClass name="Gate Valve">				 
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />	
+				        <Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />	
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+                  </ComponentClass>					
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Reducer">
+				  
+				  <ComponentClass name="Eccentric Reducer">				        
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+					    <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />					 
+                  </ComponentClass>	
+				  
+				  <ComponentClass name="Concentric Reducer">			       
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					   
+						<Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+					    <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Attachment">
+				  
+				  <ComponentClass name="Lift Lug">
+                        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />						  
+                  </ComponentClass>								
+			  
+		</ComponentGroup>
+		
+		 <ComponentGroup name="Sub Equipment">
+				  
+				  <ComponentClass name="Bottom Head Cone">				  
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+ 
+                  <ComponentClass name="Leg Cone">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+                  
+				  <ComponentClass name="Equipment Component">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					  
+			  
+		</ComponentGroup>
+		
+		<ComponentGroup name="Fitting">
+				  
+				  <ComponentClass name="Gasket">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+ 
+                  <ComponentClass name="Spray Ball">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>	
+                  
+				  <ComponentClass name="Fitting Clamp">
+				        <Property name="ComponentClass" rule="Must have value" severity="Error" comment="Property must have value." />					  
+                        <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />						
+						<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+						<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+                  </ComponentClass>					  
+			  
+		</ComponentGroup>
+    </Check>
+	
 </CheckCase>
