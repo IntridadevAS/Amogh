@@ -29,7 +29,7 @@ function GenericProperties(name,
     GenericProperties.prototype.propertyExists = function(propertyName)
     {
         for (var i = 0; i < this.properties.length; i++) {           
-            if (this.properties[i].Name === propertyName) {
+            if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
                 return true;
             }
         }
@@ -39,7 +39,7 @@ function GenericProperties(name,
 
     GenericProperties.prototype.getProperty = function (propertyName) {
         for (var i = 0; i < this.properties.length; i++) {   
-            if (this.properties[i].Name === propertyName) {
+            if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
                 return this.properties[i];
             }
         }
