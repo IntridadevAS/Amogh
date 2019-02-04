@@ -50,6 +50,17 @@
 				
 			</ComponentClass>
 			
+			<ComponentClass sourceAComponentClass="Column" sourceBComponentClass="EQUI">
+			    <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/> 
+				<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+				<Property sourceAName="Owner_handle" sourceBName="Owner"  severity="Warning"/>
+				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
+				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
+				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
+				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+			</ComponentClass>
+			
 			<ComponentClass sourceAComponentClass="BlindFlange" sourceBComponentClass="EQUI">
 			    <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/> 
 				<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
