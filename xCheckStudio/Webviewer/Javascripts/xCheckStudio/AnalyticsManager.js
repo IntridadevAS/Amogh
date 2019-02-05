@@ -751,7 +751,7 @@ function AnalyticsManager() {
 
             getData(this.ComplianceResultArrayForSourceA);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
-            drawBarChart(dataTable, "Source A", SourceACompliance_bar, colorsArray);
+            drawBarChart(dataTable, "", SourceACompliance_bar, colorsArray);
         }
         if (typeof SourceBComplianceData !== 'undefined' && type === "compliance" && tabName === "ComplianceBBarChartTab") {
             if (this.ComplianceResultArrayForSourceB.length > 0) {
@@ -812,7 +812,7 @@ function AnalyticsManager() {
 
             getData(this.ComplianceResultArrayForSourceB);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
-            drawBarChart(dataTable, "Source B", SourceBCompliance_bar, colorsArray);
+            drawBarChart(dataTable, "", SourceBCompliance_bar, colorsArray);
         }
     }
 
