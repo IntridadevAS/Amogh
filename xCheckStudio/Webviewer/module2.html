@@ -706,6 +706,22 @@
                         SourceBComponentIdVsComponentData,
                         SourceBNodeIdVsComponentData);
                 }
+                else if (typeof SourceAViewerData !== 'undefined' &&
+                    typeof SourceBProperties !== 'undefined' &&
+                    SourceAComponentIdVsComponentData !== 'undefined' &&
+                    SourceANodeIdVsComponentData !== 'undefined') {
+                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,                       
+                        SourceAViewerData,
+                        undefined,                       
+                        undefined,
+                        SourceBProperties,
+                        "ComparisonMainReviewCell",
+                        "ComparisonDetailedReviewCell",
+                        SourceAComponentIdVsComponentData,
+                        SourceANodeIdVsComponentData,
+                        undefined,
+                        undefined);
+                }
 
                 // populate review table
                 comparisonReviewManager.populateReviewTable();
@@ -777,7 +793,7 @@
                         SourceBComponentIdVsComponentData,
                         SourceBNodeIdVsComponentData,
                         "SourceBComplianceDetailedReviewComment");
-                }
+                }                
 
                 // populate review table
                 sourceBComplianceReviewManager.populateReviewTable();
