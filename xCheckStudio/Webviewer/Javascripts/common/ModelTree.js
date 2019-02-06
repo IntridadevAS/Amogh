@@ -918,21 +918,56 @@ var xCheckStudio;
                 $(currentRow).show();
 
                 var currentClassName = currentRow.className;
-                var index = currentClassName.lastIndexOf(" ");
-
-                var inheritedStyle = currentClassName.substr(0, index);
-                var parentsStyle = currentClassName.substr(index+1);     
+               
+                // remove first class-name i.e. "jsgrid-row" or "jsgrid-alt-row " 
+                var secondClassNameindex = currentClassName.indexOf(" ");               
+                var inheritedStyle = currentClassName.substr(secondClassNameindex+1);
+               
+                var lastClassNameindex = inheritedStyle.lastIndexOf(" ");
+               
+                // get parent's own style name
+                var parentsStyle = inheritedStyle.substr(lastClassNameindex+1);     
                 
-                var rows = document.getElementsByClassName(inheritedStyle);
-                for(var i = 0; i < rows.length; i++)
-                {
-                     if(parentsStyle === rows[i].cells[modelBrowserComponentColumn].className)
-                     {                         
-                         $(rows[i]).show();
-                         this.OpenHighlightedRow(rows[i]);
-                         break;
-                     }
-               }
+                // remove last class name
+                inheritedStyle = inheritedStyle.substr(0, lastClassNameindex);
+               
+                parentsStyle = "jsgrid-cell " + parentsStyle ;
+                var rows = document.getElementsByClassName("jsgrid-row " + inheritedStyle);            
+               
+                for (var i = 0; i < rows.length; i++) {
+                    if (parentsStyle === rows[i].cells[modelBrowserComponentColumn].className) {
+                        if (rows[i].cells[modelBrowserComponentColumn].children.length > 0 &&
+                            rows[i].cells[modelBrowserComponentColumn].children[0].localName === "img" &&
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.contains('button_closed')) {
+                            // remove colsed button and add opened button image
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.remove("button_closed");
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.add("button_open");
+                        }
+
+                        $(rows[i]).show();
+                        rows[i].cells[modelBrowserComponentColumn].children[0].local
+                        this.OpenHighlightedRow(rows[i]);
+                        return;
+                    }
+                }
+
+                // if not found check in alternate rows
+                rows = document.getElementsByClassName("jsgrid-alt-row " + inheritedStyle);
+                for (var i = 0; i < rows.length; i++) {
+                    if (parentsStyle === rows[i].cells[modelBrowserComponentColumn].className) {
+                        if (rows[i].cells[modelBrowserComponentColumn].children.length > 0 &&
+                            rows[i].cells[modelBrowserComponentColumn].children[0].localName === "img" &&
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.contains('button_closed')) {
+                            // remove colsed button and add opened button image
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.remove("button_closed");
+                            rows[i].cells[modelBrowserComponentColumn].children[0].classList.add("button_open");
+                        }
+
+                        $(rows[i]).show();
+                        this.OpenHighlightedRow(rows[i]);
+                        return;
+                    }
+                }
             }
 
             return ModelTree;
