@@ -229,7 +229,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         }
 
                         // highlight corresponding component in review table 
-                        this.HighlightReviewComponent(data);
+                        if (!this.HighlightReviewComponent(data)) {
+                            return;
+                        }
 
                         // highlight corresponding component in another viewer
                         if (this.ViewerOptions[0] === "viewerContainer1") {
@@ -274,7 +276,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         var componentsGroupName = componentData["MainComponentClass"];
         var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
         if (!mainReviewTableContainer) {
-            return;
+            return false;
         }
 
         var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
@@ -283,9 +285,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
            
             if ( result.indexOf(componentsGroupName) != -1) {
                 var nextSibling = doc[i].nextSibling;
-                if (nextSibling.style.display != "block") {
-                    nextSibling.style.display = "block";
-                }
+                
                 var siblingCount = nextSibling.childElementCount;
                 for (var j = 0; j < siblingCount; j++) {
                     var child = doc[i].nextSibling.children[j];
@@ -319,21 +319,29 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                     }
                                 }
 
+                                // open collapsible area
+                                if (nextSibling.style.display != "block") {
+                                    nextSibling.style.display = "block";
+                                }
+
                                 if (this.ReviewManager.SelectedComponentRow) {
                                     this.ReviewManager.RestoreBackgroundColor(this.ReviewManager.SelectedComponentRow);
-                                }
+                                }                           
 
                                 this.ReviewManager.ChangeBackgroundColor(childRow)
                                 this.ReviewManager.populateDetailedReviewTable(childRow);
                                 this.ReviewManager.SelectedComponentRow = childRow;
 
-                                break;
+                                //break;
+                                return true;
                             }
                         }
                     }
                 }
             }
         }
+
+        return false;
     }
 }
 
