@@ -4,6 +4,8 @@
 		<ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="Equipment">
 	   
 		   <ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Vessel/Column">
+		         <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="TagName"/>
+				 
 				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="DS_EquipmentDesc_Description"  severity="Error"/>
 				 <Property sourceAName="Type" sourceBName="Type"  severity="Warning"/>
@@ -19,6 +21,8 @@
 				 <Property sourceAName="ProcessArea" sourceBName="Handle"  severity="Warning"/>	
 		   </ComponentClass>  
 		   <ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Pumps">
+		         <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="TagName"/>
+		   
 				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="DS_EquipmentDesc_Description"  severity="Error"/>
 				 <Property sourceAName="Type" sourceBName="Type"  severity="Warning"/>
@@ -38,6 +42,8 @@
 	    <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipingNetworkSystem">
 	   
 		   <ComponentClass sourceAComponentClass="PipeLine" sourceBComponentClass="PipingSystem">
+				 <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="TagName"/>
+		   
 				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Line Size [mm]" sourceBName="NominalDiameter"  severity="Warning"/>
@@ -55,7 +61,9 @@
 		
 		<ComponentGroup sourceAGroupName="Instrument" sourceBGroupName="InstrumentComponent">
 		    <ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="InstrumentIndicator">
-			        <Property sourceAName="Tagnumber" sourceBName="NaTagNameme"  severity="Error"/>
+			        <Matchwith sourceAPropertyname="Tagnumber"  sourceBPropertyname ="TagName"/>
+		   
+					<Property sourceAName="Tagnumber" sourceBName="TagName"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
                     <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
@@ -63,7 +71,9 @@
 					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
             </ComponentClass>
 			 <ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="ProcessInstrument">
-			        <Property sourceAName="Tagnumber" sourceBName="TagName"  severity="Error"/>
+			        <Matchwith sourceAPropertyname="Tagnumber"  sourceBPropertyname ="TagName"/>
+		   
+					<Property sourceAName="Tagnumber" sourceBName="TagName"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
                     <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
@@ -74,6 +84,8 @@
 		<ComponentGroup sourceAGroupName="Nozzle" sourceBGroupName="Nozzle">
 	   
 		   <ComponentClass sourceAComponentClass="FlangedNozzle" sourceBComponentClass="FlangedNozzle">
+                 <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="TagName"/>
+		   				
 				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Size" sourceBName="Size"  severity="Warning"/>
@@ -83,6 +95,8 @@
 		   </ComponentClass>  
 		   
 		    <ComponentClass sourceAComponentClass="Manway" sourceBComponentClass="Mway">
+				 <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="TagName"/>
+		   			
 				 <Property sourceAName="Name" sourceBName="TagName"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Size" sourceBName="Size"  severity="Warning"/>

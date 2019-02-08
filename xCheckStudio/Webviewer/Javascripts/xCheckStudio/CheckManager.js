@@ -323,12 +323,7 @@ function CheckManager() {
                 checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
                 if (!checkComponentGroup) {
                     continue;
-                }
-
-                // // check if component class exists in checkcase in both sources
-                // if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
-                //     continue;
-                // }
+                }            
 
                 // get check case group
                 var checkCaseGroup = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass);
@@ -343,12 +338,16 @@ function CheckManager() {
                 }
 
                 // get check case component
-                checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
+                checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, 
+                                                                           sourceBComponentProperties.SubComponentClass);
 
                  //component
                  componentGroupMapped = true;
 
-                if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                if (!this.isComponentMatch(sourceAComponentProperties, 
+                                           sourceBComponentProperties,
+                                           checkCaseComponentClass.SourceAMatchwithProperty,
+                                           checkCaseComponentClass.SourceBMatchwithProperty)) {
                     //source A not matched
                     if(this.SourceANotMatchedComponents.indexOf(sourceAComponentProperties) === -1)
                     {
@@ -472,12 +471,15 @@ function CheckManager() {
 
                     continue;
                 }
-                
+
                 // get check case component
                 checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
 
                 // check if components are match
-                if (!this.isComponentMatch(sourceAComponentProperties, sourceBComponentProperties)) {
+                if (!this.isComponentMatch(sourceAComponentProperties, 
+                                           sourceBComponentProperties,
+                                           checkCaseComponentClass.SourceAMatchwithProperty,
+                                           checkCaseComponentClass.SourceBMatchwithProperty)) {
                     // source A componenet is not checked and source b component is checked
                     // both components are not match
                     // push source b component to src B not matched array 
@@ -742,13 +744,24 @@ function CheckManager() {
     }
 
     CheckManager.prototype.isComponentMatch = function (sourceAComponentProperties,
-        sourceBComponentProperties) {
+                                                        sourceBComponentProperties,
+                                                        sourceAMatchwithPropertyName,
+                                                        sourceBMatchwithPropertyName) {
 
-        if (sourceAComponentProperties.Name === sourceBComponentProperties.Name) {
+        if (!sourceAComponentProperties.propertyExists(sourceAMatchwithPropertyName) ||
+            !sourceBComponentProperties.propertyExists(sourceBMatchwithPropertyName)) {
+            return false;
+        }
+
+        var sourceAMatchwithProperty =sourceAComponentProperties.getProperty(sourceAMatchwithPropertyName);
+        var sourceBMatchwithProperty = sourceBComponentProperties.getProperty(sourceBMatchwithPropertyName);
+        
+        if (sourceAMatchwithProperty.Value === sourceBMatchwithProperty.Value) {
 
 
             if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                sourceBComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment") {
+                sourceBComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment") 
+                {
                 var sourceASource = sourceAComponentProperties.getProperty('Source');
                 var sourceADestination = sourceAComponentProperties.getProperty('Destination');
                 var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
@@ -756,6 +769,7 @@ function CheckManager() {
                 var sourceBSource = sourceBComponentProperties.getProperty('Source');
                 var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
                 var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
+               
                 if (sourceASource !== undefined &&
                     sourceADestination !== undefined &&
                     sourceAOwnerId !== undefined &&

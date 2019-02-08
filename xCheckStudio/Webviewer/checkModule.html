@@ -2557,6 +2557,8 @@
             var checkCaseSelect = document.getElementById("checkCaseSelect");
             checkCaseSelect.onchange = function () {
                 if (this.value === "None") {
+                    checkCaseManager = undefined;
+
                     // disable controls
                     disableControlsOnLoad();
 
@@ -2578,7 +2580,6 @@
                 // read check case data from XML checkcase data file
                 checkCaseManager = new CheckCaseManager();
                 checkCaseManager.readCheckCaseData(fileName);
-
 
                 // if valid check case is selected, then enable source A controls              
                 var component = document.getElementById('createbtnA');

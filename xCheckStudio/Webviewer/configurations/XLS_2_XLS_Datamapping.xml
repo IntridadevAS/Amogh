@@ -4,7 +4,9 @@
 	   <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipeLine">
 	   
 		   <ComponentClass sourceAComponentClass="PipeLine" sourceBComponentClass="PipeLine">
-				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>  
+				<Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				
+				<Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>  
 				 <Property sourceAName="Class" sourceBName="Class"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="System" sourceBName="System"  severity="Warning"/>
@@ -33,6 +35,8 @@
 		<ComponentGroup sourceAGroupName="Branch" sourceBGroupName="Branch">
 			
 			<ComponentClass sourceAComponentClass="Branch" sourceBComponentClass="Branch">
+			     <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				 
 				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>  
 				 <Property sourceAName="Class" sourceBName="Class"  severity="Warning"/>  
 				 <Property sourceAName="Description" sourceBName="Description"  severity="Warning"/>
@@ -62,7 +66,9 @@
 		
 		<ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="Equipment">
 			
-			<ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Equipment">	
+			<ComponentClass sourceAComponentClass="Equipment" sourceBComponentClass="Equipment">
+                   <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 				   <Property sourceAName="Tag Prefix" sourceBName="Tag Prefix"  severity="Error"/>
 				   <Property sourceAName="Tag Letter" sourceBName="Tag Letter"  severity="Error"/>
@@ -96,6 +102,7 @@
 		<ComponentGroup sourceAGroupName="Nozzle" sourceBGroupName="Nozzle">
 			
 			<ComponentClass sourceAComponentClass="Flanged Nozzle" sourceBComponentClass="Flanged Nozzle">
+			     <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
 			
 				<Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>			
 				<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
@@ -109,6 +116,8 @@
 			</ComponentClass>
 			
 			<ComponentClass sourceAComponentClass="Manway" sourceBComponentClass="Manway">
+			    <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+			
 				 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>			
 				<Property sourceAName="Size" sourceBName="Size"  severity="Error"/>
 				<Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
@@ -123,12 +132,16 @@
 	
 		<ComponentGroup sourceAGroupName="Instrument" sourceBGroupName="Instrument">
 			<ComponentClass sourceAComponentClass="Instrument" sourceBComponentClass="Instrument">	
+			       <Matchwith sourceAPropertyname="Tagnumber"  sourceBPropertyname ="Tagnumber"/>
+				   
 				   <Property sourceAName="Tagnumber" sourceBName="Tagnumber"  severity="Warning"/>						   
 			</ComponentClass>
 		</ComponentGroup>
 		
 		<ComponentGroup sourceAGroupName="Valve" sourceBGroupName="Valve">
 			<ComponentClass sourceAComponentClass="Valve" sourceBComponentClass="Valve">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>					   
 				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>
@@ -136,7 +149,9 @@
 		</ComponentGroup>
 		
 		<ComponentGroup sourceAGroupName="Fittings" sourceBGroupName="Fittings">
-			<ComponentClass sourceAComponentClass="FITT" sourceBComponentClass="FITT">	
+			<ComponentClass sourceAComponentClass="FITT" sourceBComponentClass="FITT">
+                   <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>			
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>					   
 				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>						   
@@ -145,6 +160,8 @@
 		
 		<ComponentGroup sourceAGroupName="Reducer" sourceBGroupName="Reducer">
 			<ComponentClass sourceAComponentClass="REDUCER" sourceBComponentClass="REDUCER">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>								   
 			</ComponentClass>
@@ -152,6 +169,8 @@
 		
 		<ComponentGroup sourceAGroupName="Tee" sourceBGroupName="Tee">
 			<ComponentClass sourceAComponentClass="TEE" sourceBComponentClass="TEE">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+			
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
 			</ComponentClass>
@@ -159,6 +178,8 @@
 		
 		<ComponentGroup sourceAGroupName="Flange" sourceBGroupName="Flange">
 			<ComponentClass sourceAComponentClass="Flange" sourceBComponentClass="Flange">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
 			</ComponentClass>
@@ -166,6 +187,8 @@
 		
 		<ComponentGroup sourceAGroupName="Olet" sourceBGroupName="Olet">
 			<ComponentClass sourceAComponentClass="OLET" sourceBComponentClass="OLET">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
 				   <Property sourceAName="Specification" sourceBName="Specification"  severity="Warning"/>	
@@ -174,6 +197,8 @@
 		
 		<ComponentGroup sourceAGroupName="Cap" sourceBGroupName="Cap">
 			<ComponentClass sourceAComponentClass="CAP" sourceBComponentClass="CAP">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 				   <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>	
 				   <Property sourceAName="LOCK" sourceBName="LOCK"  severity="Warning"/>	
@@ -182,6 +207,8 @@
 		
 		<ComponentGroup sourceAGroupName="Cable" sourceBGroupName="Cable">
 			<ComponentClass sourceAComponentClass="CABLE" sourceBComponentClass="CABLE">	
+			       <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				   
 				   <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>	
 			</ComponentClass>
 		</ComponentGroup>

@@ -4,6 +4,8 @@
 	<ComponentGroup sourceAGroupName="Equipment"  sourceBGroupName="Equipment">
 			  
 			  <ComponentClass sourceAComponentClass="Tank"  sourceBComponentClass="Tank">
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="Name"/>
+				  
 			      <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
 				  <Property sourceAName="PartNo" sourceBName="PartNo"  severity="Error"/>
 				  <Property sourceAName="Location" sourceBName="Location"  severity="Error"/>

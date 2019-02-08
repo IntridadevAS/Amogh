@@ -114,31 +114,35 @@ function CheckCaseManager() {
 
                     for (var k = 0; k < componentElement.children.length; k++) {
                         var propertyElement = componentElement.children[k];
-                        if (propertyElement.localName != "Property") {
-                            continue;
-                        }
 
-                        var sourceAProperty = propertyElement.getAttribute("name");
-                        var sourceBProperty = undefined;
-                        var rule = undefined;
-                        if (sourceAProperty === undefined ||
-                            sourceAProperty === null) {
-                            sourceAProperty = propertyElement.getAttribute("sourceAName");
-                            sourceBProperty = propertyElement.getAttribute("sourceBName");
+                        if (propertyElement.localName.toLowerCase() === "matchwith") {
+                            checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
+                            checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
                         }
-                        else {
-                            rule = propertyElement.getAttribute("rule");
-                        }
-                        var severity = propertyElement.getAttribute("severity");
-                        var comment = propertyElement.getAttribute("comment");
+                        else if (propertyElement.localName.toLowerCase() === "property") {
 
-                        // create mapping property object 
-                        var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-                            sourceBProperty,
-                            severity,
-                            rule,
-                            comment);
-                        checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                            var sourceAProperty = propertyElement.getAttribute("name");
+                            var sourceBProperty = undefined;
+                            var rule = undefined;
+                            if (sourceAProperty === undefined ||
+                                sourceAProperty === null) {
+                                sourceAProperty = propertyElement.getAttribute("sourceAName");
+                                sourceBProperty = propertyElement.getAttribute("sourceBName");
+                            }
+                            else {
+                                rule = propertyElement.getAttribute("rule");
+                            }
+                            var severity = propertyElement.getAttribute("severity");
+                            var comment = propertyElement.getAttribute("comment");
+
+                            // create mapping property object 
+                            var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
+                                sourceBProperty,
+                                severity,
+                                rule,
+                                comment);
+                            checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+                        }
                     }
 
                     checkCaseComponentGroup.addComponent(checkCaseComponentClass);
@@ -294,7 +298,9 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
                 return this.ComponentClasses[i];
             }
 
-            if (this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
+            if (sourceAClassName !== undefined &&
+                sourceBClassName !== undefined &&
+                this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
                 this.ComponentClasses[i].SourceBName.toLowerCase() === sourceBClassName.toLowerCase()) {
                 return this.ComponentClasses[i];
             }
@@ -308,6 +314,9 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
     //this.ClassName = className;
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
+
+    this.SourceAMatchwithProperty;
+    this.SourceBMatchwithProperty;
 
     this.MappingProperties = [];
 

@@ -5,7 +5,7 @@ var xCheckStudio;
     (function (ComponentIdentificationManager) {
 
         // XML data source
-        ComponentIdentificationManager.XMLSourceNameProperty = "Intrida Data/Name";
+        ComponentIdentificationManager.XMLSourceNameProperty = "Intrida Data/Title";
         ComponentIdentificationManager.XMLSourceMainClassProperty = "Intrida Data/MainComponentClass";
         ComponentIdentificationManager.XMLSourceSubComponentClassProperty = "Intrida Data/SubComponentClass";
 
