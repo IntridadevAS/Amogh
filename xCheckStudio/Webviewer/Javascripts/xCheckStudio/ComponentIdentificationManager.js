@@ -12,10 +12,7 @@ var xCheckStudio;
         // for XML  pipingnetworksegment components
         ComponentIdentificationManager.XMLPipingNWSegSourceProperty = "Intrida Data/Source";
         ComponentIdentificationManager.XMLPipingNWSegDestinationProperty = "Intrida Data/Destination";
-        ComponentIdentificationManager.XMLPipingNWSegOwnerProperty = "Intrida Data/OwnerId";
-
-        // for XML Equipment components
-        ComponentIdentificationManager.XMLEquipmentOwnerProperty = "Intrida Data/Handle"
+        ComponentIdentificationManager.XMLPipingNWSegOwnerProperty = "Intrida Data/OwnerId";       
 
         // RVM data source
         ComponentIdentificationManager.RVMSourceNameProperty = "Intrida Data/Name";
@@ -51,10 +48,7 @@ var xCheckStudio;
                         properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
                         properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
                         properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
-                    }
-                    else if (mainComponentClass.toLowerCase() === "equipment") {
-                        properties['handle'] = ComponentIdentificationManager.XMLEquipmentOwnerProperty;
-                    }
+                    }                    
                 }
             }
             else if (fileExtension.toLowerCase() === "rvm") {

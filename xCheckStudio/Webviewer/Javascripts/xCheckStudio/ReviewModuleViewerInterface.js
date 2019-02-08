@@ -220,10 +220,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         if (data.MainComponentClass === "PipingNetworkSegment") {
                             componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
                         }
-                        else  if (data.MainComponentClass.toLowerCase() === "equipment") {
-                            componentIdentifier += "_" + data["OwnerHandle"] ;
-                        }
-
+              
                         if (this.selectedComponentId === data.NodeId) {
                             return;
                         }
@@ -311,14 +308,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                         continue;                                                                 
                                     }
                                 }
-                                else if (componentData.MainComponentClass.toLowerCase() === "equipment") {
-                                    componentIdentifier += "_" + componentData.OwnerHandle;
-                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -1].innerText;
-                                    if (rowIdentifier !== componentIdentifier) {
-                                        continue;
-                                    }
-                                }
-
+                       
                                 // open collapsible area
                                 if (nextSibling.style.display != "block") {
                                     nextSibling.style.display = "block";

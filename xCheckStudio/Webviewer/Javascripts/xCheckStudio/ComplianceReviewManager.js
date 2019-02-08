@@ -135,15 +135,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     columnHeaders.push(columnHeader);
                 }
             }
-            else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
-                columnHeader = {};
-                columnHeader["title"] = "Handle";
-                columnHeader["name"] = "Handle";
-                columnHeader["type"] = "text";
-                columnHeader["width"] = "0";
-                columnHeaders.push(columnHeader);
-            }
-
+    
             for (var j = 0; j < componentsGroup.Components.length; j++) {
                 tableRowContent = {};
 
@@ -213,14 +205,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         tableRowContent[columnHeaders[4].name] = ownerValue;
                     }
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
-                    var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-
-                    if (checkPropertyHandle != undefined && checkPropertyHandle.SourceAValue != undefined) {
-                        tableRowContent[columnHeaders[2].name] = checkPropertyHandle.SourceAValue;
-                    }
-                }
-
+      
                 tableData.push(tableRowContent);
             }
 
@@ -263,10 +248,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     componentIdentifier += "_" + currentRow.cells[3].innerText;
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                 }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
-                    componentIdentifier += "_" + currentRow.cells[2].innerText;
-                }
-
+ 
                 var status = currentRow.cells[1].innerText;
                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
             }
@@ -399,12 +381,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 destination !== undefined && destination !== "" &&
                 ownerId !== undefined && ownerId !== "") {
                 componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
-            }
-        }
-        else if (result[0] === "Equipment") {
-            var handle = currentReviewTableRow.cells[2].innerHTML;
-            if (handle !== undefined && handle !== "") {
-                componentIdentifier += "_" + handle;
             }
         }
 
@@ -902,16 +878,6 @@ function ComplianceReviewManager(complianceCheckManager,
                         if (checkPropertySource.SourceAValue !== source ||
                             checkPropertyDestination.SourceAValue !== destination ||
                             checkPropertyOwnerId.SourceAValue !== ownerId) {
-                            continue;
-                        }
-                    }
-                }
-                else if (componentsGroup.ComponentClass.toLowerCase() === "equipment") {
-                    var checkPropertyHandle = component.getCheckProperty('Handle', '', true);
-
-                    if (checkPropertyHandle != undefined) {
-                        var handle = row.cells[2].innerHTML;
-                        if (checkPropertyHandle.SourceAValue !== handle) {
                             continue;
                         }
                     }

@@ -335,8 +335,13 @@ function CheckManager() {
 
                 // check if component exists in checkCaseGroup
                 if (!checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass)) {
+                    if (checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass)) {
+                        componentGroupMapped = true;
+                    }
+
                     continue;
                 }
+
                 // get check case component
                 checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
 
@@ -431,9 +436,7 @@ function CheckManager() {
                     this.SourceBNotCheckedComponents.push(sourceBComponentProperties);
                 }
                 continue;
-            }
-
-        
+            }        
 
             var componentMatchFound = false;
             var checkComponentGroup = undefined;
@@ -463,8 +466,13 @@ function CheckManager() {
 
                 // check if component exists in checkCaseGroup
                 if (!checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass)) {
+                    if (checkCaseGroup.componentClassExists(undefined, sourceBComponentProperties.SubComponentClass)) {
+                        componentGroupMapped = true;
+                    }
+
                     continue;
                 }
+                
                 // get check case component
                 checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
 
@@ -764,24 +772,6 @@ function CheckManager() {
                     return false;
                 }
 
-            }
-            else if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "equipment" &&
-                sourceBComponentProperties.MainComponentClass.toLowerCase() === "equipment") {
-
-                var sourceAOwnerHandle = sourceAComponentProperties.getProperty('Handle');
-                var sourceBOwnerHandle = sourceBComponentProperties.getProperty('Handle');
-
-                if (sourceBFileName.split(".")[1].toLowerCase() === "xml" &&
-                    sourceAFileName.split(".")[1].toLowerCase() === "xml") {
-                    if (sourceAOwnerHandle !== undefined &&
-                        sourceBOwnerHandle !== undefined &&
-                        sourceAOwnerHandle.Value === sourceBOwnerHandle.Value) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
             }
 
             return true;

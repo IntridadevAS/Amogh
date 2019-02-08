@@ -293,8 +293,7 @@ var xCheckStudio;
                         component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] == componentRow.cells[6].textContent.trim()) {
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
                         return true;
                     }
                 }
@@ -318,9 +317,7 @@ var xCheckStudio;
                                 (componentProperties.Destination === undefined ||
                                     component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentProperties.Destination) &&
                                 (componentProperties.OwnerId === undefined ||
-                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId) ||
-                                (componentProperties.OwnerId === undefined ||
-                                        component[xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty] == componentProperties.OwnerId)) {
+                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId)) {
                                 return true;
                             }
                         }
@@ -882,15 +879,7 @@ var xCheckStudio;
                                 }
                             }
                         }
-                        else if (childRowColumns[2].innerText.trim() === "Equipment") {
-                            inner_Text = (childRowColumns[modelBrowserOwnerColumn].innerText);
-                            inner_Text = inner_Text.trim();
-                            if(inner_Text === "")
-                            {
-                                inner_Text = "undefined"
-                            }
-                            rowIdentifier += "_" + inner_Text;                
-                        }
+                       
 
                         if (componentIdentifier === rowIdentifier) {
                             if (this.SelectedComponentRow) {

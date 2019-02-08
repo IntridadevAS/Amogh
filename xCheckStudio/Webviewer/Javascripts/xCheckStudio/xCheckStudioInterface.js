@@ -218,10 +218,7 @@ var xCheckStudio;
                         if (data.MainComponentClass === "PipingNetworkSegment") {
                             componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["ownerId"];
                         }
-                        else if (data.MainComponentClass.toLowerCase() === "equipment") {
-                            componentIdentifier += "_" + data["OwnerHandle"];
-                        }
-
+               
                         // highlight corresponding component in model browser table
                         this._modelTree.HighlightModelBrowserRow(componentIdentifier);
                     }
@@ -296,11 +293,7 @@ var xCheckStudio;
                                     source = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty);
                                     destination = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty);
                                     ownerId = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty);
-                                }
-                                else if (mainComponentClass.toLowerCase() === "equipment" &&
-                                    xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty in nodeProperties) {
-                                    ownerHandle = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLEquipmentOwnerProperty);
-                                }
+                                }                               
 
                                 // create generic properties object
                                 var genericPropertiesObject = new GenericProperties(name,
@@ -343,10 +336,7 @@ var xCheckStudio;
                                     ownerId !== undefined) {
                                     componentIdentifier = name + "_" + source + "_" + destination + "_" + ownerId;
                                 }
-                                else if (mainComponentClass.toLowerCase() === "equipment" && ownerHandle !== undefined) {
-                                    componentIdentifier = name + "_" + ownerHandle;
-                                }
-
+                    
                                 _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
                                 _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                             }

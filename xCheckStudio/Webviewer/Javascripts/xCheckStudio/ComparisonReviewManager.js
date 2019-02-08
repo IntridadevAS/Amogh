@@ -145,14 +145,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     columnHeaders.push(columnHeader);
                 }
             }
-            else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
-                columnHeader = {};
-                columnHeader["name"] = "Handle";
-                columnHeader["type"] = "text";
-                columnHeader["width"] = "0";
-                columnHeaders.push(columnHeader);
-            }
-
+ 
             for (var j = 0; j < componentsGroup.Components.length; j++) {
 
                 tableRowContent = {};
@@ -224,31 +217,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         tableRowContent[columnHeaders[5].name] = ownerValue;
                     }
                 }
-                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
-                    var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false, component.Status);
-                    var handleValue = undefined;
-                    if (component.Status.toLowerCase() === "no match") {
-                        for (var i = 0; i < component.CheckProperties.length; i++) {
-                            if (component.SourceAName === "" &&
-                                component.CheckProperties[i].SourceBName === 'Handle') {
-                                handleValue = component.CheckProperties[i].SourceBValue;
-                                break;
-                            }
-                            else if (component.SourceBName === "" &&
-                                component.CheckProperties[i].SourceAName === 'Handle') {
-                                handleValue = component.CheckProperties[i].SourceAValue;
-                            }
-                        }
-                    }
-                    else if (checkPropertyHandle !== undefined) {
-                        handleValue = checkPropertyHandle.SourceAValue;
-                    }
-
-                    if (handleValue != undefined) {
-                        tableRowContent[columnHeaders[3].name] = handleValue;
-                    }
-                }
-
+ 
                 tableData.push(tableRowContent);
             }
 
@@ -291,10 +260,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     componentIdentifier += "_" + currentRow.cells[4].innerText;
                     componentIdentifier += "_" + currentRow.cells[5].innerText;
                 }
-                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
-                    componentIdentifier += "_" + currentRow.cells[3].innerText;
-                }
-
+          
                 var status = currentRow.cells[2].innerText;
                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
             }
@@ -817,12 +783,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
             }
         }
-        else if (result[0] === "Equipment") {
-            var ownerHandle = currentReviewTableRow.cells[3].innerHTML;
-            if (ownerHandle !== undefined && ownerHandle !== "") {
-                componentIdentifier += "_" + ownerHandle;
-            }
-        }
 
 
         // highlight component in graphics view in both viewer
@@ -1163,17 +1123,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                     }
                 }
-                else if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "equipment")) {
-                    var checkPropertyHandle = component.getCheckProperty('Handle', 'Handle', false);
-
-                    if (checkPropertyHandle != undefined) {
-                        var handle = row.cells[3].innerHTML;
-                        if (checkPropertyHandle.SourceAValue !== handle) {
-                            continue;
-                        }
-                    }
-                }
-
+ 
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
 

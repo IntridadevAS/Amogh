@@ -263,12 +263,21 @@ function CheckCaseComponentGroup(sourceAName, sourceBName) {
 
     CheckCaseComponentGroup.prototype.componentClassExists = function (sourceAClassName, sourceBClassName) {
         for (var i = 0; i < this.ComponentClasses.length; i++) {
+            if (sourceAClassName === undefined &&
+                sourceBClassName !== undefined &&
+                this.ComponentClasses[i].SourceBName.toLowerCase() === sourceBClassName.toLowerCase()) {
+                return true;
+            }
+            
             if (sourceBClassName === undefined &&
+                sourceAClassName !== undefined &&
                 this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase()) {
                 return true;
             }
 
-            if (this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
+            if (sourceAClassName !== undefined &&
+                sourceBClassName !== undefined &&
+                this.ComponentClasses[i].SourceAName.toLowerCase() === sourceAClassName.toLowerCase() &&
                 this.ComponentClasses[i].SourceBName.toLowerCase() === sourceBClassName.toLowerCase()) {
                 return true;
             }
@@ -408,87 +417,3 @@ function CheckCaseMappingProperty(sourceAName,
     }
 }
 
-
-// function CheckCaseComponentGroups(nameA, nameB) {
-//     this.SourceAGroupName = nameA;
-//     this.SourceBGroupName = nameB;
-
-//     this.ComponentClasses = [];
-
-//     CheckCaseComponentGroups.prototype.addComponent = function (componentClass) {
-//         this.ComponentClasses.push(componentClass);
-//     }
-
-//     CheckCaseComponentGroups.prototype.componentClassExists = function (className) {
-//         for (var i = 0; i < this.ComponentClasses.length; i++) {
-//             if (this.ComponentClasses[i].SourceAClassName === className || this.ComponentClasses[i].SourceBClassName === className) {
-//                 return true;
-//             }
-//         }
-
-//         return false;
-//     }
-
-//     CheckCaseComponentGroups.prototype.getComponentClass = function (className) {
-//         for (var i = 0; i < this.ComponentClasses.length; i++) {
-//             if (this.ComponentClasses[i].SourceAClassName === className || this.ComponentClasses[i].SourceBClassName === className) {
-//                 return this.ComponentClasses[i];
-//             }
-//         }
-
-//         return undefined;
-//     }
-// }
-
-// function CheckCaseComponentClasses(classAName, classBName) {
-//     this.SourceAClassName = classAName;
-//     this.SourceBClassName = classBName;
-
-//     this.MappingProperties = [];
-
-//     CheckCaseComponentClasses.prototype.addMappingProperty = function (mappingProperty) {
-//         this.MappingProperties.push(mappingProperty);
-//     }
-
-//     CheckCaseComponentClasses.prototype.propertyExists = function (sourceApropertyName, sourceBpropertyName) {
-//         for (var i = 0; i < this.MappingProperties.length; i++) {
-//             if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
-//                 this.MappingProperties[i].SourceBName === sourceBpropertyName) {
-//                 return true;
-//             }
-//         }
-
-//         return false;
-//     }
-
-//     CheckCaseComponentClasses.prototype.sourceAPropertyExists = function (sourceApropertyName) {
-//         for (var i = 0; i < this.MappingProperties.length; i++) {
-//             if (this.MappingProperties[i].SourceAName === sourceApropertyName) {
-//                 return true;
-//             }
-//         }
-
-//         return false;
-//     }
-
-//     CheckCaseComponentClasses.prototype.sourceBPropertyExists = function (sourceBpropertyName) {
-//         for (var i = 0; i < this.MappingProperties.length; i++) {
-//             if (this.MappingProperties[i].SourceBName === sourceBpropertyName) {
-//                 return true;
-//             }
-//         }
-
-//         return false;
-//     }
-
-//     CheckCaseComponentClasses.prototype.getProperty = function (sourceApropertyName, sourceBpropertyName) {
-//         for (var i = 0; i < this.MappingProperties.length; i++) {
-//             if (this.MappingProperties[i].SourceAName === sourceApropertyName &&
-//                 this.MappingProperties[i].SourceBName === sourceBpropertyName) {
-//                 return this.MappingProperties[i];
-//             }
-//         }
-
-//         return undefined;
-//     }
-// }
