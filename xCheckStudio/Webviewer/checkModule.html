@@ -49,6 +49,56 @@
     </meta>
 
     <style>
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 25%; /* Full width (cover the whole page) */
+  height: 5%; /* Full height (cover the whole page) */
+  top: 30px; 
+  left: 20px;
+  right: 0;
+  bottom: 0;
+  /*background-color: rgba(0,0,0,0.5);  Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 15px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 10px;
+  height:10px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
         .dropzone {
   text-align: center;
   width: 100%;
@@ -1986,7 +2036,12 @@
                 <div class="bg1">
                     <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
                         class="example-canvas-small">
-
+                        <div id="overlay">
+                            <div class="slidecontainer" style="color:#FFFFFF">
+                                <input type="range" min="0" max="10" value="0" class="slider" id="explodeSlider1">
+                                <p>Value: <span id="explodeValue1"></span></p>
+                            </div>
+                        </div>
                     </div>
                     <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
                         class="example-canvas-small">
@@ -2212,31 +2267,32 @@
     </script>
     <!-- Scripts -->
     <script>
-        function AnalyticsData(checkCaseName,
-            sourceAName,
-            sourceBName,
-            sourceATotalItemCount,
-            sourceACheckedItemCount,
-            sourceBTotalItemCount,
-            sourceBCheckedItemCount,
-            sourceAClasswiseCheckedComponents,
-            sourceBClasswiseCheckedComponents,
-            sourceAClassWiseComponets,
-            sourceBClassWiseComponets) {
-            this.CheckCaseName = checkCaseName;
-            this.SourceAName = sourceAName;
-            this.SourceBName = sourceBName;
-            this.SourceATotalItemCount = sourceATotalItemCount;
-            this.SourceACheckedItemCount = sourceACheckedItemCount;
-            this.SourceBTotalItemCount = sourceBTotalItemCount;
-            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
-            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
-            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
-            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
-            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
-        }
+           
+            function AnalyticsData(checkCaseName,
+                sourceAName,
+                sourceBName,
+                sourceATotalItemCount,
+                sourceACheckedItemCount,
+                sourceBTotalItemCount,
+                sourceBCheckedItemCount,
+                sourceAClasswiseCheckedComponents,
+                sourceBClasswiseCheckedComponents,
+                sourceAClassWiseComponets,
+                sourceBClassWiseComponets) {
+                this.CheckCaseName = checkCaseName;
+                this.SourceAName = sourceAName;
+                this.SourceBName = sourceBName;
+                this.SourceATotalItemCount = sourceATotalItemCount;
+                this.SourceACheckedItemCount = sourceACheckedItemCount;
+                this.SourceBTotalItemCount = sourceBTotalItemCount;
+                this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+                this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+                this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+                this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+                this.SourceBClasswiseComponents = sourceAClassWiseComponets;
+            }
 
-        var xCheckStudioInterface1;
+            var xCheckStudioInterface1;
         var xCheckStudioInterface2;
         var checkCaseManager;
         var checkCaseFilesData;
@@ -2259,7 +2315,7 @@
             if (currentViewer) {
 
                 var results = currentViewer.selectionManager.getResults();
-                //currentViewer.model.setNodesVisibilities(boolMap);
+                
                 var map = {};
                 for (var i = 0; i < results.length; i++) {
                     var selectedItem = results[i];
@@ -2285,14 +2341,37 @@
         }
 
         function startExplode() {
-            if (currentViewer) {
-                var explodeManager = currentViewer.getExplodeManager();
-                explodeManager.setMagnitude(2);
-                explodeManager.start().then(function () {
+                // if (currentViewer) {
+                //     var explodeManager = currentViewer.getExplodeManager();
+                //     explodeManager.setMagnitude(explodeValue);
+                //     explodeManager.start().then(function () {
 
-                });
+                //     });
+                // }
+
+                var slider = document.getElementById("explodeSlider1");
+                var output = document.getElementById("explodeValue1");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function () {
+                    output.innerHTML = this.value;
+
+                    if (currentViewer) {
+                        var explodeManager = currentViewer.getExplodeManager();
+                        if (explodeManager.getActive()) {
+                            explodeManager.stop();
+                        }
+
+                        explodeManager.setMagnitude(Number(this.value));
+                        explodeManager.start().then(function () {
+
+                        });
+                    }
+
+                }
+
+                document.getElementById("overlay").style.display = "block";
             }
-        }
 
         function stopExplode() {
             if (currentViewer) {
@@ -2301,7 +2380,11 @@
                     explodeManager.stop();
                 }
             }
+            
+            document.getElementById("explodeSlider1").value = 0;
+            document.getElementById("overlay").style.display = "none";
         }
+
         function setFront() {
             if (currentViewer) {
                 currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
@@ -3058,7 +3141,7 @@
                 var i = document.getElementById("menu").style;
                 if (i.visibility === "visible") {
                     i.visibility = "hidden";
-                    currentViewer = undefined;
+                    //currentViewer = undefined;
                 }
             }
 
