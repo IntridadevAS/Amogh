@@ -4,6 +4,9 @@
 	       	    <ComponentGroup sourceAGroupName="Equipment"  sourceBGroupName="Equipment">
 			  
 			  <ComponentClass sourceAComponentClass="Pump"  sourceBComponentClass="Pump">
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
 			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Assembly type" sourceBName="Assembly type"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
@@ -13,7 +16,10 @@
 			  </ComponentClass>
 			  
 			   <ComponentClass sourceAComponentClass="Fitting"  sourceBComponentClass="Fitting">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
 				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				  <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Error"/>
@@ -28,7 +34,10 @@
 		<ComponentGroup sourceAGroupName="Pipeline"  sourceBGroupName="Pipeline">
 			  
 			  <ComponentClass sourceAComponentClass="Pipe"  sourceBComponentClass="Pipe">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>				  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
 				  <Property sourceAName="Route type" sourceBName="Route type"  severity="Error"/>
 				  <Property sourceAName="RouteCompID" sourceBName="RouteCompID"  severity="Error"/>
@@ -41,14 +50,22 @@
 		<ComponentGroup sourceAGroupName="Instrument"  sourceBGroupName="Instrument">
 			  
 			  <ComponentClass sourceAComponentClass="Alcometer"  sourceBComponentClass="Alcometer">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
+			       <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				   <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				   <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+				   <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>
+				   <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
 			  </ComponentClass>
 			  
 			   <ComponentClass sourceAComponentClass="Color Meter"  sourceBComponentClass="Color Meter">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
+			       <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>				 		 
 				  <Property sourceAName="Route type" sourceBName="Route type"  severity="Error"/>	
-				     <Property sourceAName="RouteCompID" sourceBName="RouteCompID"  severity="Error"/>			  
+				  <Property sourceAName="RouteCompID" sourceBName="RouteCompID"  severity="Error"/>			  
 				  <Property sourceAName="RoutingTerminalBlockComponent" sourceBName="RoutingTerminalBlockComponent"  severity="Error"/>				 		 
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>				  
 			  </ComponentClass>
@@ -57,21 +74,30 @@
 		<ComponentGroup sourceAGroupName="Nozzle"  sourceBGroupName="Nozzle">
 			  
 			  <ComponentClass sourceAComponentClass="Weld neck flanged nozzle"  sourceBComponentClass="Weld neck flanged nozzle">
-			         <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
+			        <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>			  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>				 		 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>	
 			  </ComponentClass>
 			  
 			  <ComponentClass sourceAComponentClass="Flanged Nozzle"  sourceBComponentClass="Flanged Nozzle">
-			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>		  
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>		  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>				 		 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
 			 </ComponentClass>
 			  
 			  <ComponentClass sourceAComponentClass="Manway"  sourceBComponentClass="Manway">
-			        <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>		  
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>		  
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>				 		 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
@@ -82,7 +108,10 @@
 		<ComponentGroup sourceAGroupName="Valve"  sourceBGroupName="Valve">
 			  
 			 <ComponentClass sourceAComponentClass="Check Valve"  sourceBComponentClass="Check Valve">
-                 <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+                 <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				 <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Route type" sourceBName="Route type"  severity="Error"/>
 				 <Property sourceAName="RouteCompID" sourceBName="RouteCompID"  severity="Error"/>
 				 <Property sourceAName="RoutingTerminalBlockComponent" sourceBName="RoutingTerminalBlockComponent"  severity="Error"/>
@@ -91,7 +120,10 @@
 			 </ComponentClass>
 			 
 			 <ComponentClass sourceAComponentClass="Gate Valve"  sourceBComponentClass="Gate Valve">
-			     <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+			     <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				 <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/><Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/><Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
 				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Error"/>				 
 				 <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
 			 </ComponentClass>
@@ -100,13 +132,19 @@
 		<ComponentGroup sourceAGroupName="Reducer"  sourceBGroupName="Reducer">
 			  
 			  <ComponentClass sourceAComponentClass="Eccentric Reducer"  sourceBComponentClass="Eccentric Reducer">
-                <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+                <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				<Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				<Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				<Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
-				 <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>			 
+				<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>			 
 			 </ComponentClass>
 			  
 			  <ComponentClass sourceAComponentClass="Concentric Reducer"  sourceBComponentClass="Concentric Reducer">
-			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>	
 				  <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Error"/>
@@ -118,7 +156,10 @@
 		<ComponentGroup sourceAGroupName="Attachment"  sourceBGroupName="Attachment">
 			  
 			  <ComponentClass sourceAComponentClass="Lift Lug"  sourceBComponentClass="Lift Lug">
-                  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+                  <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>					  
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>			 
@@ -129,21 +170,30 @@
 		<ComponentGroup sourceAGroupName="Sub Equipment"  sourceBGroupName="Sub Equipment">
 			  
 			  <ComponentClass sourceAComponentClass="Bottom Head Cone"  sourceBComponentClass="Bottom Head Cone">
-                  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+                  <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>					  
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>				 
 			 </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Leg Cone"  sourceBComponentClass="Leg Cone">
-			      <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>					  
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>		
 			  </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Equipment Component"  sourceBComponentClass="Equipment Component">
-			        <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
@@ -154,21 +204,30 @@
 		<ComponentGroup sourceAGroupName="Fitting"  sourceBGroupName="Fitting">
 			  
 			  <ComponentClass sourceAComponentClass="Gasket"  sourceBComponentClass="Gasket">
-			         <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
 			  </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Spray Ball"  sourceBComponentClass="Spray Ball">
-                       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+                  <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>			 
 			 </ComponentClass>		  
 			  
 			  <ComponentClass sourceAComponentClass="Fitting Clamp"  sourceBComponentClass="Fitting Clamp">
-			       <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
+			      <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="SW-File Name(File Name)"/>
+				  
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="SW-File Name(File Name)"  severity="Error"/>
+				  <Property sourceAName="ComponentClass" sourceBName="ComponentClass"  severity="Error"/>
 				  <Property sourceAName="Component Class" sourceBName="Component Class"  severity="Error"/>			 
 				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>
 				  <Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
