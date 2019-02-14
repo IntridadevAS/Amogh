@@ -1,4 +1,4 @@
-var currentViewer;
+
 var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
@@ -109,7 +109,10 @@ var xCheckStudio;
                 contextMenu: function (position) {
                     //alert("contextMenu: " + position.x + ", " + position.y);                
                     // _this.menu(position.x, position.y);
-                    currentViewer = viewer;
+                    if (currentViewer === undefined) {
+                        currentViewer = viewer;
+                    }
+                    
                     _this.menu(event.clientX, event.clientY);
                 }
             });

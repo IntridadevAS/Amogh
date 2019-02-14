@@ -15,6 +15,8 @@
     <link href="CSS\toast.css" rel="stylesheet" type="text/css" />
     <link href="CSS\checkinfo.css" rel="stylesheet" type="text/css" />
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
+    <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
+    
     <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
@@ -50,54 +52,6 @@
 
     <style>
 
-#overlay {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 25%; /* Full width (cover the whole page) */
-  height: 5%; /* Full height (cover the whole page) */
-  top: 30px; 
-  left: 20px;
-  right: 0;
-  bottom: 0;
-  /*background-color: rgba(0,0,0,0.5);  Black background with opacity */
-  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
-}
-
-.slidecontainer {
-  width: 100%;
-}
-
-.slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 8px;
-  background: #d3d3d3;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-}
-
-.slider:hover {
-  opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 15px;
-  background: #4CAF50;
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 10px;
-  height:10px;
-  background: #4CAF50;
-  cursor: pointer;
-}
 
         .dropzone {
   text-align: center;
@@ -2036,7 +1990,7 @@
                 <div class="bg1">
                     <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
                         class="example-canvas-small">
-                        <div id="overlay">
+                        <div id="overlay1" class="sliderOverlay">
                             <div class="slidecontainer" style="color:#FFFFFF">
                                 <input type="range" min="0" max="10" value="0" class="slider" id="explodeSlider1">
                                 <p>Value: <span id="explodeValue1"></span></p>
@@ -2045,7 +1999,12 @@
                     </div>
                     <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
                         class="example-canvas-small">
-
+                        <div id="overlay2" class="sliderOverlay">
+                            <div class="slidecontainer" style="color:#FFFFFF">
+                                <input type="range" min="0" max="10" value="0" class="slider" id="explodeSlider2">
+                                <p>Value: <span id="explodeValue2"></span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="viewdatagraphics">
@@ -2307,6 +2266,8 @@
 
         var hiidenEntities = [];
 
+        var currentViewer;
+
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
         }, false);
@@ -2340,14 +2301,32 @@
             }
         }
 
-        function startExplode() {
-              
-                var slider = document.getElementById("explodeSlider1");
-                var output = document.getElementById("explodeValue1");
-                output.innerHTML = slider.value;
+    function startExplode() {
+
+            if (currentViewer) {
+                var slider;
+                var outputFiled;
+                var overlayField;
+                if (currentViewer._params.containerId === "viewerContainer1") {
+                    slider = document.getElementById("explodeSlider1");
+                    outputFiled = document.getElementById("explodeValue1");
+                    overlayField = document.getElementById("overlay1");
+                }
+                else if (currentViewer._params.containerId === "viewerContainer2") {
+                    slider = document.getElementById("explodeSlider2");
+                    outputFiled = document.getElementById("explodeValue2");
+                    overlayField = document.getElementById("overlay2");
+                }
+                if (!slider || !outputFiled || !overlayField) {
+                    return;
+                }
+
+                overlayField.style.display = "block";
+
+                outputFiled.innerHTML = slider.value;
 
                 slider.oninput = function () {
-                    output.innerHTML = this.value;
+                    outputFiled.innerHTML = this.value;
 
                     if (currentViewer) {
                         var explodeManager = currentViewer.getExplodeManager();
@@ -2362,9 +2341,8 @@
                     }
 
                 }
-
-                document.getElementById("overlay").style.display = "block";
             }
+        }
 
         function stopExplode() {
             if (currentViewer) {
@@ -2372,10 +2350,23 @@
                 if (explodeManager.getActive()) {
                     explodeManager.stop();
                 }
+
+                var slider;
+                var overlayField;
+                if (currentViewer._params.containerId === "viewerContainer1") {
+                    slider = document.getElementById("explodeSlider1");
+                    overlayField = document.getElementById("overlay1");
+                }
+                else if (currentViewer._params.containerId === "viewerContainer2") {
+                    slider = document.getElementById("explodeSlider2");
+                    overlayField = document.getElementById("overlay2");
+                }
+                if (!slider || !overlayField) {
+                    return;
+                }
+                slider.value = 0;
+                overlayField.style.display = "none";
             }
-            
-            document.getElementById("explodeSlider1").value = 0;
-            document.getElementById("overlay").style.display = "none";
         }
 
         function setFront() {
@@ -2945,6 +2936,13 @@
             //count
             var elementCountTab = document.getElementById("SourceAComponentCount");
             elementCountTab.style.display = "none";
+
+
+            if (currentViewer) {
+
+                stopExplode();
+                currentViewer = undefined;
+            }
         }
 
         function readExcelDataSource(file,           
@@ -3791,6 +3789,17 @@
                 document.getElementById("SourceAComponentCount").style.display = "block"
                 document.getElementById("tab1").style.backgroundColor = "#F3F0F4";
                 document.getElementById("tab1Viewer").style.backgroundColor = "#F3F0F4";
+
+                if (currentViewer && 
+                    currentViewer._params.containerId !== "viewerContainer1") {
+
+                    stopExplode();
+                    currentViewer = undefined;
+                }
+
+                if (xCheckStudioInterface1 && xCheckStudioInterface1._firstViewer) {
+                    currentViewer = xCheckStudioInterface1._firstViewer;
+                }                
             }
             else if (tabName === "tab2" || tabName === "tab2Viewer") {
                 document.getElementById("dataSource1").style.display = "none";
@@ -3806,9 +3815,20 @@
                 document.getElementById("SourceBComponentCount").style.display = "block"
                 document.getElementById("tab2").style.backgroundColor = "#F3F0F4";
                 document.getElementById("tab2Viewer").style.backgroundColor = "#F3F0F4";
-            }
 
+                if (currentViewer&& 
+                    currentViewer._params.containerId !== "viewerContainer2") {
+
+                    stopExplode();
+                    currentViewer = undefined;
+                }
+                if(xCheckStudioInterface2 && xCheckStudioInterface2._firstViewer)
+                {
+                    currentViewer = xCheckStudioInterface2._firstViewer;
+                }    
+            }
         }
+
         function OnCheckClicked() {
             // Get the modal
             var modal = document.getElementById('projectselectiondialogModal');
