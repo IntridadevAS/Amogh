@@ -2,10 +2,10 @@ var modelBrowserCheckColumn = 0;
 var modelBrowserComponentColumn = 1;
 var modelBrowserMainClassColumn = 2;
 var modelBrowserSubClassColumn = 3;
-var modelBrowserSourceColumn = 4;
-var modelBrowserDestinationColumn = 5;
-var modelBrowserOwnerColumn = 6;
-var modelBrowserNodeIdColumn = 7;
+// var modelBrowserSourceColumn = 4;
+// var modelBrowserDestinationColumn = 5;
+// var modelBrowserOwnerColumn = 6;
+var modelBrowserNodeIdColumn = 4;
 
 var xCheckStudio;
 (function (xCheckStudio) {
@@ -78,32 +78,32 @@ var xCheckStudio;
                 columnHeader["width"] = "100";
                 _this.modelTreeColumnHeaders.push(columnHeader);
 
-                columnHeader = {};
-                columnHeader["title"] = "Source";
-                columnHeader["name"] = "Source";
-                columnHeader["type"] = "text";
-                columnHeader["width"] = "0";
-                columnHeader["filtering"] = "false";
-                columnHeader["sorting"] = "false";
-                _this.modelTreeColumnHeaders.push(columnHeader);
+                // columnHeader = {};
+                // columnHeader["title"] = "Source";
+                // columnHeader["name"] = "Source";
+                // columnHeader["type"] = "text";
+                // columnHeader["width"] = "0";
+                // columnHeader["filtering"] = "false";
+                // columnHeader["sorting"] = "false";
+                // _this.modelTreeColumnHeaders.push(columnHeader);
 
-                columnHeader = {};
-                columnHeader["title"] = "Destination";
-                columnHeader["name"] = "Destination";
-                columnHeader["type"] = "text";
-                columnHeader["width"] = "0";
-                columnHeader["filtering"] = "false";
-                columnHeader["sorting"] = "false";
-                _this.modelTreeColumnHeaders.push(columnHeader);
+                // columnHeader = {};
+                // columnHeader["title"] = "Destination";
+                // columnHeader["name"] = "Destination";
+                // columnHeader["type"] = "text";
+                // columnHeader["width"] = "0";
+                // columnHeader["filtering"] = "false";
+                // columnHeader["sorting"] = "false";
+                // _this.modelTreeColumnHeaders.push(columnHeader);
 
-                columnHeader = {};
-                columnHeader["title"] = "OwnerId";
-                columnHeader["name"] = "OwnerId";
-                columnHeader["type"] = "text";
-                columnHeader["width"] = "0";
-                columnHeader["filtering"] = "false";
-                columnHeader["sorting"] = "false";
-                _this.modelTreeColumnHeaders.push(columnHeader);
+                // columnHeader = {};
+                // columnHeader["title"] = "OwnerId";
+                // columnHeader["name"] = "OwnerId";
+                // columnHeader["type"] = "text";
+                // columnHeader["width"] = "0";
+                // columnHeader["filtering"] = "false";
+                // columnHeader["sorting"] = "false";
+                // _this.modelTreeColumnHeaders.push(columnHeader);
 
                 columnHeader = {};
                 columnHeader["title"] = "NodeId";
@@ -146,30 +146,27 @@ var xCheckStudio;
                 var modelBrowserHeader = modelBrowser.children[0];
                 var modelBrowserRowTable = modelBrowser.children[1].getElementsByTagName("table")[0];
                 var modelBrowserRows = modelBrowserRowTable.getElementsByTagName("tr");
-                for(var i = 0; i < modelBrowserRows.length; i++)
-                {
+                for (var i = 0; i < modelBrowserRows.length; i++) {
                     var currentRow = modelBrowserRows[i];
-                    if(currentRow.cells[7].innerHTML !== "")
-                    {
-                        var nodeId = currentRow.cells[7].innerHTML;
-                            var className = this.NodeIdVsCellClassList[nodeId] ;
-                            if(className !== undefined)
-                            { 
-                                modelBrowserRows[i].cells[1].classList.add(className)
-                            }
+                    
+                    if (currentRow.cells[4].innerHTML !== "") {
+                        var nodeId = currentRow.cells[4].innerHTML;
+                        var className = this.NodeIdVsCellClassList[nodeId];
+                        if (className !== undefined) {
+                            modelBrowserRows[i].cells[1].classList.add(className)
+                        }
                     }
-                    var nodeId = currentRow.cells[7].innerHTML;
-                        var className = this.NodeIdVsRowClassList[nodeId];
-                        if(className !== undefined)
-                        {
-                            var classList = className.split(" ");
-                            for(var j =0; j < classList.length; j++)
-                            {
-                                modelBrowserRows[i].classList.add(classList[j]);
-                            }
-                            
-                            this.RestoreBackgroundColor(modelBrowserRows[i])
-                        } 
+                    
+                    var nodeId = currentRow.cells[4].innerHTML;
+                    var className = this.NodeIdVsRowClassList[nodeId];
+                    if (className !== undefined) {
+                        var classList = className.split(" ");
+                        for (var j = 0; j < classList.length; j++) {
+                            modelBrowserRows[i].classList.add(classList[j]);
+                        }
+
+                        this.RestoreBackgroundColor(modelBrowserRows[i])
+                    }
                 }
             }
 
@@ -193,17 +190,7 @@ var xCheckStudio;
                 }
 
                 tableRowContent = {};
-                // var checkBox = document.createElement("INPUT");
-                // checkBox.setAttribute("type", "checkbox");
-                // checkBox.checked = false;
-
-                // tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
-
-                // // select component check box state change event
-                // checkBox.onchange = function () {
-                //     _this.handleComponentCheck(this);
-                // }
-
+              
                 if (nodeData != undefined) {
 
                     var checkBox = document.createElement("INPUT");
@@ -229,40 +216,17 @@ var xCheckStudio;
 
                     tableRowContent[this.modelTreeColumnHeaders[3].name] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
 
-                    // extra cells for row item identification
-                    tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.Source != undefined ? nodeData.Source : "");
+                    // // extra cells for row item identification
+                    // tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.Source != undefined ? nodeData.Source : "");
 
-                    tableRowContent[this.modelTreeColumnHeaders[5].name] = (nodeData.Destination != undefined ? nodeData.Destination : "");
+                    // tableRowContent[this.modelTreeColumnHeaders[5].name] = (nodeData.Destination != undefined ? nodeData.Destination : "");
 
-                    tableRowContent[this.modelTreeColumnHeaders[6].name] = (nodeData.OwnerId != undefined ? nodeData.OwnerId : nodeData.OwnerHandle != undefined ? nodeData.OwnerHandle : "");
+                    // tableRowContent[this.modelTreeColumnHeaders[6].name] = (nodeData.OwnerId != undefined ? nodeData.OwnerId : nodeData.OwnerHandle != undefined ? nodeData.OwnerHandle : "");
 
-                    tableRowContent[this.modelTreeColumnHeaders[7].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+                    tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
                 }
                  else {
-                     return;
-
-                //     if(componentName.toLowerCase() === "unnamed" || componentName.toLowerCase() === "models" || componentName.includes("Product"))
-                //     {
-                //         return;
-                //     }
-                //     tableRowContent[this.modelTreeColumnHeaders[1].name] = componentName;
-                //     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
-                //     if (isAssemblyNodeType) {
-                //         this.NodeIdVsCellClassList[componentName]  = componentStyleClass;
-                //     }
-
-                //     tableRowContent[this.modelTreeColumnHeaders[2].name] = "";
-
-                //     tableRowContent[this.modelTreeColumnHeaders[3].name] = "";
-
-                //     // extra cells for row item identification
-                //     tableRowContent[this.modelTreeColumnHeaders[4].name] = "";
-
-                //     tableRowContent[this.modelTreeColumnHeaders[5].name] = "";
-
-                //     tableRowContent[this.modelTreeColumnHeaders[6].name] = "";
-
-                //     tableRowContent[this.modelTreeColumnHeaders[7].name] = "";
+                     return;            
                     
                  }
 
@@ -290,11 +254,18 @@ var xCheckStudio;
                     var component = this.selectedCompoents[i];
                     if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
                         component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
-                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
+                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() /*&&                      
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
-                        return true;
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()*/) {
+                        if ("NodeId" in component) {
+                            if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
+                                return true;
+                            }
+                        }
+                        else {
+                            return true;
+                        }
                     }
                 }
 
@@ -310,14 +281,8 @@ var xCheckStudio;
                         component[identifierProperties.mainCategory] === componentProperties.MainComponentClass &&
                         component[identifierProperties.subClass] === componentProperties.SubComponentClass) {
 
-                        if (this.SourceType.toLowerCase() === "xml") {
-                            // if source is xml check for addition identifying properties
-                            if ((componentProperties.Source === undefined ||
-                                component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentProperties.Source) &&
-                                (componentProperties.Destination === undefined ||
-                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentProperties.Destination) &&
-                                (componentProperties.OwnerId === undefined ||
-                                    component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId)) {
+                        if ("NodeId" in component) {
+                            if (component["NodeId"] === componentProperties.NodeId.toString()) {
                                 return true;
                             }
                         }
@@ -325,6 +290,20 @@ var xCheckStudio;
                             return true;
                         }
 
+                        // if (this.SourceType.toLowerCase() === "xml") {
+                        //     // if source is xml check for addition identifying properties
+                        //     if ((componentProperties.Source === undefined ||
+                        //         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentProperties.Source) &&
+                        //         (componentProperties.Destination === undefined ||
+                        //             component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentProperties.Destination) &&
+                        //         (componentProperties.OwnerId === undefined ||
+                        //             component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentProperties.OwnerId)) {
+                        //         return true;
+                        //     }
+                        // }
+                        // else {
+                        //return true;
+                        //}
                     }
                 }
 
@@ -338,11 +317,21 @@ var xCheckStudio;
                     var component = this.selectedCompoents[i];
                     if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
                         component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
-                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() &&
+                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() /*&&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()) {
-                        this.selectedCompoents.splice(i, 1);
+                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()*/) {
+
+                        if ("NodeId" in component) {
+                            if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
+                                this.selectedCompoents.splice(i, 1);
+                            }
+                        }
+                        else {
+                            this.selectedCompoents.splice(i, 1);
+                        }
+
+                        // this.selectedCompoents.splice(i, 1);
                         break;
                     }
                 }
@@ -393,9 +382,10 @@ var xCheckStudio;
                     checkedComponent[identifierProperties.name] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent[identifierProperties.mainCategory] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
                     checkedComponent[identifierProperties.subClass] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
-                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = currentRow.cells[modelBrowserSourceColumn].textContent.trim();
-                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = currentRow.cells[modelBrowserDestinationColumn].textContent.trim();
-                    checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = currentRow.cells[modelBrowserOwnerColumn].textContent.trim();
+                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = currentRow.cells[modelBrowserSourceColumn].textContent.trim();
+                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = currentRow.cells[modelBrowserDestinationColumn].textContent.trim();
+                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = currentRow.cells[modelBrowserOwnerColumn].textContent.trim();
+                    checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     this.selectedCompoents.push(checkedComponent);
                 }
@@ -659,7 +649,7 @@ var xCheckStudio;
                                     _this.RestoreBackgroundColor(_this.SelectedComponentRow);
                                 }
 
-                                var nodeId = args.event.currentTarget.cells[7].innerText
+                                var nodeId = args.event.currentTarget.cells[modelBrowserNodeIdColumn].innerText
                                if(nodeId !== undefined)
                                {
                                     _this.BrowserItemClick(nodeId, args.event.currentTarget);
@@ -716,9 +706,10 @@ var xCheckStudio;
                     'Name': row.cells[modelBrowserComponentColumn].textContent,
                     'MainComponentClass': row.cells[modelBrowserMainClassColumn].textContent,
                     'SubComponentClass': row.cells[modelBrowserSubClassColumn].textContent,
-                    'Source': row.cells[modelBrowserSourceColumn].textContent,
-                    'Destination': row.cells[modelBrowserDestinationColumn].textContent,
-                    'Owner': row.cells[modelBrowserOwnerColumn].textContent
+                    'NodeId': row.cells[modelBrowserNodeIdColumn].textContent
+                    //'Source': row.cells[modelBrowserSourceColumn].textContent,
+                    //'Destination': row.cells[modelBrowserDestinationColumn].textContent,
+                    //'Owner': row.cells[modelBrowserOwnerColumn].textContent
                 };
                 this.selectedCompoents.push(checkedComponent);
             }
@@ -864,21 +855,21 @@ var xCheckStudio;
                     */
                     rowIdentifier = rowIdentifier.trim();
                     if (childRowColumns.length > 0) {
-                        if (childRowColumns[2].innerText.trim() === "PipingNetworkSegment") {
-                            for (var j = 1; j < childRowColumns.length; j++) {
-                                if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserOwnerColumn) && 
-                                     childRowColumns[j].innerText != undefined) {
+                        // if (childRowColumns[2].innerText.trim() === "PipingNetworkSegment") {
+                        //     for (var j = 1; j < childRowColumns.length; j++) {
+                        //         if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserOwnerColumn) && 
+                        //              childRowColumns[j].innerText != undefined) {
                                     
-                                    inner_Text = (childRowColumns[j].innerText);
-                                    inner_Text = inner_Text.trim();
-                                    if(inner_Text === "")
-                                    {
-                                        inner_Text = "undefined"
-                                    }
-                                    rowIdentifier += "_" + inner_Text;
-                                }
-                            }
-                        }
+                        //             inner_Text = (childRowColumns[j].innerText);
+                        //             inner_Text = inner_Text.trim();
+                        //             if(inner_Text === "")
+                        //             {
+                        //                 inner_Text = "undefined"
+                        //             }
+                        //             rowIdentifier += "_" + inner_Text;
+                        //         }
+                        //     }
+                        // }
                        
 
                         if (componentIdentifier === rowIdentifier) {

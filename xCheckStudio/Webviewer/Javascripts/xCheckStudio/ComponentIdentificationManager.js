@@ -9,10 +9,10 @@ var xCheckStudio;
         ComponentIdentificationManager.XMLSourceMainClassProperty = "Intrida Data/MainComponentClass";
         ComponentIdentificationManager.XMLSourceSubComponentClassProperty = "Intrida Data/SubComponentClass";
 
-        // for XML  pipingnetworksegment components
-        ComponentIdentificationManager.XMLPipingNWSegSourceProperty = "Intrida Data/Source";
-        ComponentIdentificationManager.XMLPipingNWSegDestinationProperty = "Intrida Data/Destination";
-        ComponentIdentificationManager.XMLPipingNWSegOwnerProperty = "Intrida Data/OwnerId";       
+        // // for XML  pipingnetworksegment components
+        // ComponentIdentificationManager.XMLPipingNWSegSourceProperty = "Intrida Data/Source";
+        // ComponentIdentificationManager.XMLPipingNWSegDestinationProperty = "Intrida Data/Destination";
+        // ComponentIdentificationManager.XMLPipingNWSegOwnerProperty = "Intrida Data/OwnerId";       
 
         // RVM data source
         ComponentIdentificationManager.RVMSourceNameProperty = "Intrida Data/Name";
@@ -43,13 +43,13 @@ var xCheckStudio;
                 properties['mainCategory'] = ComponentIdentificationManager.XMLSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.XMLSourceSubComponentClassProperty;
 
-                if (mainComponentClass !== undefined) {
-                    if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
-                        properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
-                        properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
-                        properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
-                    }                    
-                }
+                // if (mainComponentClass !== undefined) {
+                //     if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
+                //         properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
+                //         properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
+                //         properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
+                //     }                    
+                // }
             }
             else if (fileExtension.toLowerCase() === "rvm") {
                 properties = {

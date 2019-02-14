@@ -119,7 +119,9 @@ function CheckManager() {
 
             var checkComponent = new CheckComponent(sourceComponentProperties.Name,
                 undefined,
-                sourceComponentProperties.SubComponentClass)
+                sourceComponentProperties.SubComponentClass,
+                sourceComponentProperties.NodeId,
+                undefined)
             checkComponentGroup.AddCheckComponent(checkComponent);
 
             for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
@@ -346,8 +348,7 @@ function CheckManager() {
 
                 if (!this.isComponentMatch(sourceAComponentProperties, 
                                            sourceBComponentProperties,
-                                           checkCaseComponentClass.SourceAMatchwithProperty,
-                                           checkCaseComponentClass.SourceBMatchwithProperty)) {
+                                           checkCaseComponentClass.MatchwithProperties)) {
                     //source A not matched
                     if(this.SourceANotMatchedComponents.indexOf(sourceAComponentProperties) === -1)
                     {
@@ -365,7 +366,9 @@ function CheckManager() {
                 // create checkcomponent object
                 var checkComponent = new CheckComponent(sourceAComponentProperties.Name,
                     sourceBComponentProperties.Name,
-                    sourceAComponentProperties.SubComponentClass)
+                    sourceAComponentProperties.SubComponentClass,
+                    sourceAComponentProperties.NodeId,
+                    sourceBComponentProperties.NodeId)
                 checkComponentGroup.AddCheckComponent(checkComponent);
 
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
@@ -478,8 +481,7 @@ function CheckManager() {
                 // check if components are match
                 if (!this.isComponentMatch(sourceAComponentProperties, 
                                            sourceBComponentProperties,
-                                           checkCaseComponentClass.SourceAMatchwithProperty,
-                                           checkCaseComponentClass.SourceBMatchwithProperty)) {
+                                           checkCaseComponentClass.MatchwithProperties)) {
                     // source A componenet is not checked and source b component is checked
                     // both components are not match
                     // push source b component to src B not matched array 
@@ -503,7 +505,9 @@ function CheckManager() {
                 // create checkcomponent object
                 var checkComponent = new CheckComponent(sourceAComponentProperties.Name,
                     sourceBComponentProperties.Name,
-                    sourceAComponentProperties.SubComponentClass)
+                    sourceAComponentProperties.SubComponentClass,
+                    sourceAComponentProperties.NodeId,
+                    sourceBComponentProperties.NodeId)
                 checkComponentGroup.AddCheckComponent(checkComponent);
 
                 for (var k = 0; k < checkCaseComponentClass.MappingProperties.length; k++) {
@@ -543,7 +547,9 @@ function CheckManager() {
         if (sourceAComponent) {
             checkComponent = new CheckComponent(sourceComponentProperties.Name,
                 "",
-                sourceComponentProperties.SubComponentClass);
+                sourceComponentProperties.SubComponentClass,
+                sourceComponentProperties.NodeId,
+                undefined);
 
 
             // if (checkCaseComponentClass !== undefined &&
@@ -587,7 +593,9 @@ function CheckManager() {
         else {
             checkComponent = new CheckComponent("",
                 sourceComponentProperties.Name,
-                sourceComponentProperties.SubComponentClass);
+                sourceComponentProperties.SubComponentClass,
+                undefined,
+                sourceComponentProperties.NodeId);
 
             // if (checkCaseComponentClass !== undefined &&
             //     checkCaseComponentClass.MappingProperties !== undefined) {
@@ -745,53 +753,37 @@ function CheckManager() {
 
     CheckManager.prototype.isComponentMatch = function (sourceAComponentProperties,
                                                         sourceBComponentProperties,
-                                                        sourceAMatchwithPropertyName,
-                                                        sourceBMatchwithPropertyName) {
+                                                        matchwithProperties) {
 
-        if (!sourceAComponentProperties.propertyExists(sourceAMatchwithPropertyName) ||
-            !sourceBComponentProperties.propertyExists(sourceBMatchwithPropertyName)) {
+        if (matchwithProperties.length === 0) {
             return false;
         }
 
-        var sourceAMatchwithProperty =sourceAComponentProperties.getProperty(sourceAMatchwithPropertyName);
-        var sourceBMatchwithProperty = sourceBComponentProperties.getProperty(sourceBMatchwithPropertyName);
-        
-        if (sourceAMatchwithProperty.Value === sourceBMatchwithProperty.Value) {
+        for (var sourceAMatchwithPropertyName in matchwithProperties) {
+            if (matchwithProperties.hasOwnProperty(sourceAMatchwithPropertyName)) {
 
+                var sourceBMatchwithPropertyName = matchwithProperties[sourceAMatchwithPropertyName];
 
-            if (sourceAComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                sourceBComponentProperties.MainComponentClass.toLowerCase() === "pipingnetworksegment") 
-                {
-                var sourceASource = sourceAComponentProperties.getProperty('Source');
-                var sourceADestination = sourceAComponentProperties.getProperty('Destination');
-                var sourceAOwnerId = sourceAComponentProperties.getProperty('OwnerId');
-
-                var sourceBSource = sourceBComponentProperties.getProperty('Source');
-                var sourceBDestination = sourceBComponentProperties.getProperty('Destination');
-                var sourceBOwnerId = sourceBComponentProperties.getProperty('OwnerId');
-               
-                if (sourceASource !== undefined &&
-                    sourceADestination !== undefined &&
-                    sourceAOwnerId !== undefined &&
-                    sourceBSource !== undefined &&
-                    sourceBDestination !== undefined &&
-                    sourceBOwnerId !== undefined &&
-                    sourceASource.Value === sourceBSource.Value &&
-                    sourceADestination.Value === sourceBDestination.Value &&
-                    sourceAOwnerId.Value === sourceBOwnerId.Value) {
-                    return true;
-                }
-                else
-                {
+                if (!sourceAComponentProperties.propertyExists(sourceAMatchwithPropertyName) ||
+                    !sourceBComponentProperties.propertyExists(sourceBMatchwithPropertyName)) {
                     return false;
                 }
 
-            }
+                var sourceAMatchwithProperty = sourceAComponentProperties.getProperty(sourceAMatchwithPropertyName);
+                var sourceBMatchwithProperty = sourceBComponentProperties.getProperty(sourceBMatchwithPropertyName);
 
-            return true;
+                if (sourceAMatchwithProperty.Value !== sourceBMatchwithProperty.Value) {
+
+                    return false;
+                }
+            }
+            else
+            {
+                return false;  
+            }
         }
 
-        return false;
+        return true;    
     }
 }
 
@@ -811,7 +803,9 @@ function CheckComponentGroup(componentClass) {
 
             var checkComponent = new CheckComponent(componentData.SourceAName,
                 componentData.SourceBName,
-                componentData.SubComponentClass);
+                componentData.SubComponentClass,
+                componentData.SourceANodeId,
+                componentData.SourceBNodeId);
 
             checkComponent.restore(componentData);
             this.Components.push(checkComponent);
@@ -822,7 +816,9 @@ function CheckComponentGroup(componentClass) {
 function CheckComponent(sourceAName,
     sourceBName,
     /* identifier,*/
-    subComponentClass) {
+    subComponentClass,
+    sourceANodeId,
+    sourceBNodeId) {
 
     //this.Identifier = identifier;
     this.SourceAName = sourceAName;
@@ -831,6 +827,9 @@ function CheckComponent(sourceAName,
 
     this.Status = "OK";
     this.CheckProperties = [];
+
+    this.SourceANodeId = sourceANodeId;
+    this.SourceBNodeId = sourceBNodeId;
 
     CheckComponent.prototype.AddCheckProperty = function (property) {
         this.CheckProperties.push(property);

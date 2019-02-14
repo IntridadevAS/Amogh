@@ -174,9 +174,10 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         this.Viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
     }
 
-    ReviewModuleViewerInterface.prototype.highlightComponent = function (componentIdentifier) {
-        var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
-        if (nodeId === undefined) {
+    ReviewModuleViewerInterface.prototype.highlightComponent = function (/*componentIdentifier*/nodeIdString) {
+        //var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
+        var nodeId = Number(nodeIdString);
+        if (nodeIdString === undefined || nodeId === NaN) {
             this.unHighlightComponent();
             return;
         }
@@ -217,9 +218,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     if (data != undefined) {
 
                         var componentIdentifier = data["Name"];
-                        if (data.MainComponentClass === "PipingNetworkSegment") {
-                            componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
-                        }
+                        // if (data.MainComponentClass === "PipingNetworkSegment") {
+                        //     componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["OwnerId"];
+                        // }
               
                         if (this.selectedComponentId === data.NodeId) {
                             return;
@@ -233,7 +234,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         // highlight corresponding component in another viewer
                         if (this.ViewerOptions[0] === "viewerContainer1") {
                             if (this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
-                                this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                                this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(this.ReviewManager.SelectedComponentRow.cells[4].innerText);
                             }
                             else if (this.ReviewManager.SourceBProperties !== undefined &&
                                 this.ReviewManager.SelectedComponentRow !== undefined) {
@@ -245,7 +246,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                         }
                         else if (this.ViewerOptions[0] === "viewerContainer2") {
                             if (this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
-                                this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+                                this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(this.ReviewManager.SelectedComponentRow.cells[3].innerText);
                             }
                             else if (this.ReviewManager.SourceAProperties !== undefined &&
                                 this.ReviewManager.SelectedComponentRow !== undefined) {
@@ -298,16 +299,16 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                 // var rowIdentifier = childRowColumns[0].innerHTML
                                 var rowIdentifier = childRowColumns[0].innerText !== "" ? childRowColumns[0].innerText : childRowColumns[1].innerText;
 
-                                if (componentData.MainComponentClass === "PipingNetworkSegment") {
+                                // if (componentData.MainComponentClass === "PipingNetworkSegment") {
 
-                                    componentIdentifier += "_" + componentData.Source + "_" + componentData.Destination + "_" + componentData.OwnerId;
-                                    rowIdentifier += "_" + childRowColumns[childRowColumns.length -3].innerText + "_"
-                                        + childRowColumns[childRowColumns.length -1].innerText + "_" + childRowColumns[childRowColumns.length -1].innerText;
+                                //     componentIdentifier += "_" + componentData.Source + "_" + componentData.Destination + "_" + componentData.OwnerId;
+                                //     rowIdentifier += "_" + childRowColumns[childRowColumns.length -3].innerText + "_"
+                                //         + childRowColumns[childRowColumns.length -1].innerText + "_" + childRowColumns[childRowColumns.length -1].innerText;
 
-                                    if (rowIdentifier !== componentIdentifier) {
-                                        continue;                                                                 
-                                    }
-                                }
+                                //     if (rowIdentifier !== componentIdentifier) {
+                                //         continue;                                                                 
+                                //     }
+                                // }
                        
                                 // open collapsible area
                                 if (nextSibling.style.display != "block") {

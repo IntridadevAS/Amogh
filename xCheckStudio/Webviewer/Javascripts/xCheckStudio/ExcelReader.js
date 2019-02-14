@@ -61,29 +61,44 @@ ExcelReader.prototype.ReadSheetData = function (sheetName) {
         {
             name = row.Tagnumber;
         }
+
+        if(name === undefined)
+        {
+            continue;
+        }     
+
         var mainComponentClass = sheetName;
         var subComponentClass ;
         if(row["Component Class"])
         {
             subComponentClass = row["Component Class"];
         }
+        else if(row["Component class"])
+        {
+            subComponentClass = row["Component class"];
+        }
         else if(row.Class)
         {
             subComponentClass = row.Class;
         }
-        var source = "";
-        var destination = "";
-        var ownerId = "";
-        var nodeId = "";
+       
+        if(subComponentClass === undefined)
+        {
+            continue;
+        }        
+        // var source = "";
+        // var destination = "";
+        // var ownerId = "";
+        // var nodeId = "";
 
         // create generic properties object
-        var genericPropertiesObject = new GenericProperties(name,
+        var genericPropertiesObject = new GenericComponent(name,
             mainComponentClass,
-            subComponentClass,
+            subComponentClass/*,
             source,
             destination,
             ownerId,
-            nodeId);
+            nodeId*/);
 
         // add component class as generic property
         var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);

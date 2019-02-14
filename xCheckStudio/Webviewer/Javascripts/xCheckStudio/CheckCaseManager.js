@@ -116,8 +116,17 @@ function CheckCaseManager() {
                         var propertyElement = componentElement.children[k];
 
                         if (propertyElement.localName.toLowerCase() === "matchwith") {
-                            checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
-                            checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
+                            //checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
+                            //checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
+
+                            var sourceAMatchProperty = propertyElement.getAttribute("sourceAPropertyname");
+                            var sourceBMatchProperty = propertyElement.getAttribute("sourceBPropertyname");
+
+                            if (sourceAMatchProperty !== undefined &&
+                                sourceBMatchProperty !== undefined &&
+                                !(sourceAMatchProperty in checkCaseComponentClass.MatchwithProperties)) {
+                                    checkCaseComponentClass.MatchwithProperties[sourceAMatchProperty] =  sourceBMatchProperty;
+                            }
                         }
                         else if (propertyElement.localName.toLowerCase() === "property") {
 
@@ -315,8 +324,9 @@ function CheckCaseComponentClass(sourceAName, sourceBName) {
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
 
-    this.SourceAMatchwithProperty;
-    this.SourceBMatchwithProperty;
+    //this.SourceAMatchwithProperty;
+    //this.SourceBMatchwithProperty;
+    this.MatchwithProperties={};
 
     this.MappingProperties = [];
 

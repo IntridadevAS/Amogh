@@ -2341,14 +2341,7 @@
         }
 
         function startExplode() {
-                // if (currentViewer) {
-                //     var explodeManager = currentViewer.getExplodeManager();
-                //     explodeManager.setMagnitude(explodeValue);
-                //     explodeManager.start().then(function () {
-
-                //     });
-                // }
-
+              
                 var slider = document.getElementById("explodeSlider1");
                 var output = document.getElementById("explodeValue1");
                 output.innerHTML = slider.value;
@@ -2700,37 +2693,12 @@
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
                 sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
-                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
-                // if (xCheckStudioInterface1._modelTree !== undefined) {
-                //     sourceAModelTree = xCheckStudioInterface1._modelTree;
-                //     // count = xCheckStudioInterface1._modelTree.selectedCompoents.length;
-                //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                //     // sourceACheckedItemCount = count > 0 ? count : 0;
-                // }
-                // else if (xCheckStudioInterface1.excelReader !== undefined) {
-                //     sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
-                //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                //     // count = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.length
-                //     // sourceACheckedItemCount = count > 0 ? count : 0;
-                // }
+                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);               
             }
 
             if (xCheckStudioInterface2) {
                 sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
-                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
-                // if (xCheckStudioInterface2._modelTree !== undefined) {
-                //     sourceBModelTree = xCheckStudioInterface2._modelTree;
-                //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents();
-                //     // count = xCheckStudioInterface2._modelTree.selectedCompoents.length;
-                //     // sourceBCheckedItemCount = count > 0 ? count : 0;
-                // }
-
-                // else if (xCheckStudioInterface2.excelReader !== undefined) {
-                //     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
-                //     sourceBClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents("xls");
-                //     // count = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.length
-                //     // sourceBCheckedItemCount = count > 0 ? count : 0;
-                // }
+                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);               
             }
 
             var sourceAClassWiseComponets = 0;
@@ -2801,9 +2769,7 @@
                     type: "POST",
                     async: false,
                     data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
-                    success: function (data) {
-                        //alert("success");
-                        //$("#result").html(data);
+                    success: function (data) {                      
                     }
                 });
             }
@@ -3101,28 +3067,7 @@
                 if (component.classList.contains("disabledbutton")) {
                     component.classList.remove('disabledbutton');
                 }
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            // window.onclick = function (event) {
-            //     if (event.target == modal) {
-            //         modal.style.display = "none";
-            //     }
-                
-            //     if (event.target == modalMaximizeViewer) {
-            //         returnViewer(maximizedViewerData);
-            //         modalMaximizeViewer.style.display = "none";
-            //     }
-            //     var closebutton = document.getElementById("closeLoadDialog");
-            //     if (event.target === closebutton) {
-            //         modal.style.display = "none";
-            //     }
-            //     var i = document.getElementById("menu").style;
-            //     if (i.visibility === "visible") {
-            //         i.visibility = "hidden";
-            //         currentViewer = undefined;
-            //     }
-            // }
+            }         
         }
 
         window.onclick = function (event) {
@@ -3425,10 +3370,11 @@
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
 
-                            // additional identifying properties for PipingNetwork segment component
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+                            // // additional identifying properties for PipingNetwork segment component
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+                            checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceACB" &&
                                 xCheckStudioInterface1 &&
@@ -3467,10 +3413,11 @@
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
 
                             // additional identifying properties for PipingNetwork segment component
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
-                            checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
-
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
+                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+                            checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
+                            
                             if (checkBoxId === "checkAllSourceBCB" &&
                                 xCheckStudioInterface2 &&
                                 !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
@@ -3870,16 +3817,6 @@
 
             modal.style.display = "block";
             $('#projectselectiondialog-content').load("/projectselectiondialog.html")
-
-            // When the user clicks anywhere outside of the modal, close it
-            // window.onclick = function (event) {
-            //     if (event.target == modal) {
-            //         modal.style.display = "none";
-            //     }
-            // }
-            // window.location = "/checkModule.html";
-            // return false;
-            // // alert("Check Clicked");
         }
     </script>
     <script>
@@ -3898,12 +3835,7 @@
             }
             return "";
         }
-        // window.onload = function() {
-        // 	var project = getCookie("checkprojectname");
-        // 	var powerplantdiv  = document.getElementById("powerplant");
-        // 	if (project != "" && powerplantdiv != null)
-        // 		powerplant.innerHTML = project;
-        // };
+      
         function OnShowHideMenu() {
             var x = document.getElementById("openmenu");
             if (x.style.display === "none") {
@@ -3945,24 +3877,11 @@
 
             var sourceAModelTree;
             var sourceBModelTree;
-            if (xCheckStudioInterface1) {
-                // if (xCheckStudioInterface1._modelTree !== undefined) {
-                //     sourceAModelTree = xCheckStudioInterface1._modelTree;
-                // }
-                // else if (xCheckStudioInterface1.excelReader !== undefined) {
-                //     sourceAModelTree = xCheckStudioInterface1.excelReader.excelModelBrowser;
-                // }
+            if (xCheckStudioInterface1) {              
                 sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
             }
 
-            if (xCheckStudioInterface2) {
-                // if (xCheckStudioInterface2._modelTree !== undefined) {
-                //     sourceBModelTree = xCheckStudioInterface2._modelTree;
-                // }
-
-                // else if (xCheckStudioInterface2.excelReader !== undefined) {
-                //     sourceBModelTree = xCheckStudioInterface2.excelReader.excelModelBrowser;
-                // }
+            if (xCheckStudioInterface2) {              
                 sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
             }
 

@@ -86,7 +86,7 @@ function ComplianceReviewManager(complianceCheckManager,
             var tableData = [];
             var columnHeaders = [];
 
-            for (var i = 0; i < 2; i++) {
+            for (var i = 0; i < 3; i++) {
                 columnHeader = {};
                 var title;
                 if (i === 0) {
@@ -103,37 +103,17 @@ function ComplianceReviewManager(complianceCheckManager,
                     title = "Status";
                     name = "Status"
                 }
+                else if (i === 2) {
+                    title = "NodeId";
+                    name = "NodeId"
+                    width = "10";
+                }
+
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "20";
                 columnHeaders.push(columnHeader);
-            }
-
-            // if component groupd is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid
-            if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-
-                for (var i = 0; i < 3; i++) {
-                    columnHeader = {};
-                    var title;
-                    if (i === 0) {
-                        title = "Source";
-                        name = "Source";
-                    }
-                    else if (i === 1) {
-                        title = "Destination";
-                        name = "Destination";
-                    }
-                    else if (i === 2) {
-                        title = "OwnerId";
-                        name = "OwnerId";
-                    }
-                    columnHeader["title"] = title;
-                    columnHeader["name"] = name;
-                    columnHeader["type"] = "text";
-                    columnHeader["width"] = "0";
-                    columnHeaders.push(columnHeader);
-                }
             }
     
             for (var j = 0; j < componentsGroup.Components.length; j++) {
@@ -142,69 +122,8 @@ function ComplianceReviewManager(complianceCheckManager,
                 var component = componentsGroup.Components[j];
 
                 tableRowContent[columnHeaders[0].name] = component.SourceAName;
-                tableRowContent[columnHeaders[1].name] = component.Status;
-
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                    var checkPropertySource = component.getCheckProperty('Source', '', true);
-                    var checkPropertyDestination = component.getCheckProperty('Destination', '', true);
-                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', '', true);
-
-                    var sourceValue = undefined;
-                    var destinationValue = undefined;
-                    var ownerValue = undefined;
-                    if (component.Status.toLowerCase() === "no match") {
-                        if (component.SourceAName === "") {
-                            for (var i = 0; i < component.CheckProperties.length; i++) {
-                                if (component.CheckProperties[i].SourceBName === 'Source') {
-                                    sourceValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceBName === 'Destination') {
-                                    destinationValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceBName === 'OwnerId') {
-                                    ownerValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                            }
-                        }
-                        else if (component.SourceBName === "") {
-                            for (var i = 0; i < component.CheckProperties.length; i++) {
-                                if (component.CheckProperties[i].SourceAName === 'Source') {
-                                    sourceValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceAName === 'Destination') {
-                                    destinationValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceAName === 'OwnerId') {
-                                    ownerValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                    else if (checkPropertySource !== undefined &&
-                        checkPropertyDestination !== undefined &&
-                        checkPropertyOwnerId !== undefined) {
-                        sourceValue = checkPropertySource.SourceAValue;
-                        destinationValue = checkPropertyDestination.SourceAValue;
-                        ownerValue = checkPropertyOwnerId.SourceAValue;
-                    }
-
-                    if (sourceValue != undefined) {
-                        tableRowContent[columnHeaders[2].name] = sourceValue;
-                    }
-                    if (destinationValue != undefined) {
-                        tableRowContent[columnHeaders[3].name] = destinationValue;
-                    }
-
-                    if (ownerValue != undefined) {
-                        tableRowContent[columnHeaders[4].name] = ownerValue;
-                    }
-                }
+                tableRowContent[columnHeaders[1].name] = component.Status;  
+                tableRowContent[columnHeaders[2].name] = component.SourceANodeId;           
       
                 tableData.push(tableRowContent);
             }
@@ -227,7 +146,7 @@ function ComplianceReviewManager(complianceCheckManager,
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
                 var currentRow = modelBrowserHeaderTableRows[j];
                 for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i === 2 || i === 3 || i === 4) {
+                    if (i > 1) {
                         currentRow.cells[i].style.display = "none";
                     }
                 }
@@ -242,13 +161,19 @@ function ComplianceReviewManager(complianceCheckManager,
             for (var j = 0; j < modelBrowserDataRows.length; j++) {
                 var currentRow = modelBrowserDataRows[j];
 
-                var componentIdentifier = currentRow.cells[0].innerText;
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                    componentIdentifier += "_" + currentRow.cells[2].innerText;
-                    componentIdentifier += "_" + currentRow.cells[3].innerText;
-                    componentIdentifier += "_" + currentRow.cells[4].innerText;
+                for (var i = 0; i < currentRow.cells.length; i++) {
+                    if (i > 1) {
+                        currentRow.cells[i].style.display = "none";
+                    }
                 }
- 
+
+                var componentIdentifier = currentRow.cells[0].innerText;
+                // if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
+                //     componentIdentifier += "_" + currentRow.cells[2].innerText;
+                //     componentIdentifier += "_" + currentRow.cells[3].innerText;
+                //     componentIdentifier += "_" + currentRow.cells[4].innerText;
+                // }
+
                 var status = currentRow.cells[1].innerText;
                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
             }
@@ -368,24 +293,25 @@ function ComplianceReviewManager(complianceCheckManager,
         this.ChangeBackgroundColor(currentReviewTableRow);
         this.SelectedComponentRow = currentReviewTableRow;
 
-        var reviewTableId = this.getReviewTableId(currentReviewTableRow);
+        //var reviewTableId = this.getReviewTableId(currentReviewTableRow);
 
-        var componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
-        var result = reviewTableId.split('-');
-        if (result[0] === "PipingNetworkSegment") {
-            var source = currentReviewTableRow.cells[2].innerHTML;
-            var destination = currentReviewTableRow.cells[3].innerHTML;
-            var ownerId = currentReviewTableRow.cells[4].innerHTML;
+        //var componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
+        //var result = reviewTableId.split('-');
+        // if (result[0] === "PipingNetworkSegment") {
+        //     var source = currentReviewTableRow.cells[2].innerHTML;
+        //     var destination = currentReviewTableRow.cells[3].innerHTML;
+        //     var ownerId = currentReviewTableRow.cells[4].innerHTML;
 
-            if (source !== undefined && source !== "" &&
-                destination !== undefined && destination !== "" &&
-                ownerId !== undefined && ownerId !== "") {
-                componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
-            }
-        }
+        //     if (source !== undefined && source !== "" &&
+        //         destination !== undefined && destination !== "" &&
+        //         ownerId !== undefined && ownerId !== "") {
+        //         componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+        //     }
+        // }
 
         // highlight component in graphics view in both viewer
-        this.ReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+        var nodeId = currentReviewTableRow.cells[2].innerHTML;
+        this.ReviewModuleViewerInterface.highlightComponent(nodeId);
     }
 
     ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
@@ -820,8 +746,6 @@ function ComplianceReviewManager(complianceCheckManager,
         parentTable.innerHTML = '';
 
         if (row.cells[1].innerHTML.toLowerCase() === "no match") {
-
-
             return;
         }
 
@@ -845,41 +769,18 @@ function ComplianceReviewManager(complianceCheckManager,
 
                 if (component.Status.toLowerCase() === "no match") {
                     continue;
+                }              
+       
+                if (this.ViewerData !== undefined) {
+                    var sourceNodeIdCell = row.getElementsByTagName("td")[2];
+                    if (component.SourceANodeId !== Number(sourceNodeIdCell.innerText)) {
+                        continue;
+                    }
                 }
-
-                var source1NameCell = row.getElementsByTagName("td")[0];
-                // var source2NameCell = row.getElementsByTagName("td")[1];
-
-                // if (component.SourceAName !== source1NameCell.innerHTML &&
-                //     component.SourceBName !== source2NameCell.innerHTML) {
-                //     continue;
-                // }
-                if (component.SourceAName !== source1NameCell.innerText) {
-                    continue;
-                }
-
-
-
-                // if component is PipingNetworkSegment, check if source and destination properties are same
-                // because they may have same tag names
-                if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                    var checkPropertySource = component.getCheckProperty('Source', '', true);
-                    var checkPropertyDestination = component.getCheckProperty('Destination', '', true);
-                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', '', true);
-
-                    if (checkPropertySource != undefined &&
-                        checkPropertyDestination != undefined &&
-                        checkPropertyOwnerId != undefined) {
-
-                        var source = row.cells[2].innerHTML;
-                        var destination = row.cells[3].innerHTML;
-                        var ownerId = row.cells[4].innerHTML;
-
-                        if (checkPropertySource.SourceAValue !== source ||
-                            checkPropertyDestination.SourceAValue !== destination ||
-                            checkPropertyOwnerId.SourceAValue !== ownerId) {
-                            continue;
-                        }
+                else if (this.SourceProperties !== undefined) {
+                    var sourceNodeNameCell = row.getElementsByTagName("td")[0];
+                    if (component.SourceAName !== sourceNodeNameCell.innerText) {
+                        continue;
                     }
                 }
 

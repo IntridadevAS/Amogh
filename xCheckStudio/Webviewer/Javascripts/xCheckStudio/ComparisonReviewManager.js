@@ -98,7 +98,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             var tableData = [];
             var columnHeaders = [];
 
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 5; i++) {
                 columnHeader = {};
                 var title;
                 if (i === 0) {
@@ -116,6 +116,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                     name = "Status"
                     width = "34";
                 }
+                else if (i === 3) {
+                    title = "SourceANodeId";
+                    name = "SourceANodeId"
+                    width = "10";
+                }
+                else if (i === 4) {
+                    title = "SourceBNodeId";
+                    name = "SourceBNodeId"
+                    width = "10";
+                }
+
                 columnHeader["title"] = title;
                 columnHeader["name"] = name;
                 columnHeader["type"] = "text";
@@ -123,29 +134,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 columnHeaders.push(columnHeader);
             }
 
-            // if component group is PipingNetworkSegment, create hidden columns at end for Source, destination and ownerid         
-
-            if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
-
-                for (var i = 0; i < 3; i++) {
-                    columnHeader = {};
-                    var title;
-                    if (i === 0) {
-                        title = "Source";
-                    }
-                    else if (i === 1) {
-                        title = "Destination";
-                    }
-                    else if (i === 2) {
-                        title = "OwnerId";
-                    }
-                    columnHeader["name"] = title;
-                    columnHeader["type"] = "text";
-                    columnHeader["width"] = "0";
-                    columnHeaders.push(columnHeader);
-                }
-            }
- 
             for (var j = 0; j < componentsGroup.Components.length; j++) {
 
                 tableRowContent = {};
@@ -155,69 +143,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 tableRowContent[columnHeaders[0].name] = component.SourceAName;
                 tableRowContent[columnHeaders[1].name] = component.SourceBName;
                 tableRowContent[columnHeaders[2].name] = component.Status;
+                tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
+                tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
 
-                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
-                    var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
-                    var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
-                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
-
-                    var sourceValue = undefined;
-                    var destinationValue = undefined;
-                    var ownerValue = undefined;
-                    if (component.Status.toLowerCase() === "no match") {
-                        if (component.SourceAName === "") {
-                            for (var i = 0; i < component.CheckProperties.length; i++) {
-                                if (component.CheckProperties[i].SourceBName === 'Source') {
-                                    sourceValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceBName === 'Destination') {
-                                    destinationValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceBName === 'OwnerId') {
-                                    ownerValue = component.CheckProperties[i].SourceBValue;
-                                    continue;
-                                }
-                            }
-                        }
-                        else if (component.SourceBName === "") {
-                            for (var i = 0; i < component.CheckProperties.length; i++) {
-                                if (component.CheckProperties[i].SourceAName === 'Source') {
-                                    sourceValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceAName === 'Destination') {
-                                    destinationValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                                else if (component.CheckProperties[i].SourceAName === 'OwnerId') {
-                                    ownerValue = component.CheckProperties[i].SourceAValue;
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                    else if (checkPropertySource !== undefined &&
-                        checkPropertyDestination !== undefined &&
-                        checkPropertyOwnerId !== undefined) {
-                        sourceValue = checkPropertySource.SourceAValue;
-                        destinationValue = checkPropertyDestination.SourceAValue;
-                        ownerValue = checkPropertyOwnerId.SourceAValue;
-                    }
-
-                    if (sourceValue != undefined) {
-                        tableRowContent[columnHeaders[3].name] = sourceValue;
-                    }
-                    if (destinationValue != undefined) {
-                        tableRowContent[columnHeaders[4].name] = destinationValue;
-                    }
-
-                    if (ownerValue != undefined) {
-                        tableRowContent[columnHeaders[5].name] = ownerValue;
-                    }
-                }
- 
                 tableData.push(tableRowContent);
             }
 
@@ -239,7 +167,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
                 var currentRow = modelBrowserHeaderTableRows[j];
                 for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i === 4 || i === 5 || i === 3) {
+                    if (i > 2) {
                         currentRow.cells[i].style.display = "none";
                     }
                 }
@@ -255,12 +183,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
-                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
-                    componentIdentifier += "_" + currentRow.cells[3].innerText;
-                    componentIdentifier += "_" + currentRow.cells[4].innerText;
-                    componentIdentifier += "_" + currentRow.cells[5].innerText;
+                for (var i = 0; i < currentRow.cells.length; i++) {
+                    if (i > 2) {
+                        currentRow.cells[i].style.display = "none";
+                    }
                 }
-          
+
                 var status = currentRow.cells[2].innerText;
                 this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
             }
@@ -761,34 +689,38 @@ function ComparisonReviewManager(comparisonCheckManager,
     };
 
     ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {
-        var reviewTableId = this.getReviewTableId(currentReviewTableRow);
+        //var reviewTableId = this.getReviewTableId(currentReviewTableRow);
 
-        var componentIdentifier;
-        if (this.SourceAViewerData !== undefined && currentReviewTableRow.cells[0].innerHTML !== "") {
-            componentIdentifier = currentReviewTableRow.cells[0].innerHTML;
-        }
-        else if (this.SourceBViewerData !== undefined && currentReviewTableRow.cells[1].innerHTML !== "") {
-            componentIdentifier = currentReviewTableRow.cells[1].innerHTML;
+        var sourceANodeId;       
+        if (this.SourceAViewerData !== undefined &&
+            currentReviewTableRow.cells[3].innerHTML !== "") {
+                sourceANodeId = currentReviewTableRow.cells[3].innerHTML;
         }
 
-        var result = reviewTableId.split('-');
-        if (result[0] === "PipingNetworkSegment") {
-            var source = currentReviewTableRow.cells[3].innerHTML;
-            var destination = currentReviewTableRow.cells[4].innerHTML;
-            var ownerId = currentReviewTableRow.cells[5].innerHTML;
-
-            if (source !== undefined && source !== "" &&
-                destination !== undefined && destination !== "" &&
-                ownerId !== undefined && ownerId !== "") {
-                componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
-            }
+        var sourceBNodeId;
+        if (this.SourceBViewerData !== undefined &&
+            currentReviewTableRow.cells[4].innerHTML !== "") {
+            sourceBNodeId = currentReviewTableRow.cells[4].innerHTML;
         }
+
+        //var result = reviewTableId.split('-');
+        // if (result[0] === "PipingNetworkSegment") {
+        //     var source = currentReviewTableRow.cells[3].innerHTML;
+        //     var destination = currentReviewTableRow.cells[4].innerHTML;
+        //     var ownerId = currentReviewTableRow.cells[5].innerHTML;
+
+        //     if (source !== undefined && source !== "" &&
+        //         destination !== undefined && destination !== "" &&
+        //         ownerId !== undefined && ownerId !== "") {
+        //         componentIdentifier += "_" + source + "_" + destination + "_" + ownerId;
+        //     }
+        // }
 
 
         // highlight component in graphics view in both viewer
         if (this.SourceAViewerData != undefined) {
-            if (currentReviewTableRow.cells[0].innerHTML !== "") {
-                this.SourceAReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+            if (sourceANodeId !== undefined && sourceANodeId !== "") {
+                this.SourceAReviewModuleViewerInterface.highlightComponent(sourceANodeId);
             }
             else {
                 // unhighlight previous component
@@ -797,8 +729,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
         if (this.SourceBViewerData != undefined) {
 
-            if (currentReviewTableRow.cells[1].innerHTML !== "") {
-                this.SourceBReviewModuleViewerInterface.highlightComponent(componentIdentifier);
+            if (sourceBNodeId !== undefined && sourceBNodeId !== "") {
+                this.SourceBReviewModuleViewerInterface.highlightComponent(sourceBNodeId);
             }
             else {
                 // unhighlight previous component
@@ -1088,42 +1020,75 @@ function ComparisonReviewManager(comparisonCheckManager,
 
             for (var i = 0; i < componentsGroup.Components.length; i++) {
                 var component = componentsGroup.Components[i];
+              
+                // var source1NodeIdCell = row.getElementsByTagName("td")[3];
+                // var source2NodeIdCell = row.getElementsByTagName("td")[4];
 
-                // if (component.Status.toLowerCase() === "no match") {
-                //     continue;
-                // }
+                if (row.cells[2].innerText.toLowerCase() === 'no match') {
 
-                var source1NameCell = row.getElementsByTagName("td")[0];
-                var source2NameCell = row.getElementsByTagName("td")[1];
-
-                if (component.SourceAName !== source1NameCell.innerText ||
-                    component.SourceBName !== source2NameCell.innerText) {
-                    continue;
-                }
-
-                // if component is PipingNetworkSegment, check if source and destination properties are same
-                // because they may have same tag names              
-                if (this.checkComponentGroupCategory(componentsGroup.ComponentClass, "pipingnetworksegment")) {
-                    var checkPropertySource = component.getCheckProperty('Source', 'Source', false);
-                    var checkPropertyDestination = component.getCheckProperty('Destination', 'Destination', false);
-                    var checkPropertyOwnerId = component.getCheckProperty('OwnerId', 'OwnerId', false);
-
-                    if (checkPropertySource != undefined &&
-                        checkPropertyDestination != undefined &&
-                        checkPropertyOwnerId != undefined) {
-
-                        var source = row.cells[3].innerHTML;
-                        var destination = row.cells[4].innerHTML;
-                        var ownerId = row.cells[5].innerHTML;
-
-                        if (checkPropertySource.SourceAValue !== source ||
-                            checkPropertyDestination.SourceAValue !== destination ||
-                            checkPropertyOwnerId.SourceAValue !== ownerId) {
+                    if (this.SourceAViewerData !== undefined) {
+                        var source1NodeIdCell = row.getElementsByTagName("td")[3];
+                        if (component.SourceANodeId !== Number(source1NodeIdCell.innerText)) {
                             continue;
                         }
                     }
+                    else if (this.SourceBViewerData !== undefined) {
+                        var source2NodeIdCell = row.getElementsByTagName("td")[4];
+                        if (component.SourceBNodeId !== Number(source2NodeIdCell.innerText)) {
+                            continue;
+                        }
+                    }
+                    else if (this.SourceAProperties !== undefined) {
+                        var source1NameCell = row.getElementsByTagName("td")[0];
+                        if (component.SourceAName !== source1NameCell.innerText) {
+                            continue;
+                        }
+                    }
+                    else if (this.SourceBProperties !== undefined) {
+                        var source2NameCell = row.getElementsByTagName("td")[1];
+                        if (component.SourceBName !== source2NameCell.innerText) {
+                            continue;
+                        }
+                    }
+                    else {
+                        continue;
+                    }
                 }
- 
+                else {
+
+                    if (this.SourceAViewerData !== undefined &&
+                        this.SourceBViewerData !== undefined) {
+                        if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
+                            component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
+                            continue;
+                        }
+                    }
+                    else if (this.SourceAViewerData !== undefined &&
+                        this.SourceBProperties !== undefined) {
+                        if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
+                            component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
+                            continue;
+                        }
+                    }
+                    else if (this.SourceAProperties !== undefined &&
+                        this.SourceBViewerData !== undefined) {
+                        if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
+                            component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
+                            continue;
+                        }
+                    }
+                    else if (this.SourceAProperties !== undefined &&
+                        this.SourceBProperties !== undefined) {
+                        if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
+                            component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
+                            continue;
+                        }
+                    }
+                    else {
+                        continue;
+                    }
+                }
+
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
 

@@ -1,32 +1,31 @@
-function GenericProperties(name,
+function GenericComponent(name,
                            mainComponentClass, 
                            subComponentClass,
-                           source,
-                           destination,
-                           ownerId,
+                           //source,
+                           //destination,
+                           //ownerId,
                            nodeId,
-                           ownerHandle)
+                           /*ownerHandle*/)
 {
-    this.Name = name;
-  
+    this.Name = name;  
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
 
-    this.Source = source;
-    this.Destination = destination;
-    this.OwnerId = ownerId;
+    // this.Source = source;
+    // this.Destination = destination;
+    // this.OwnerId = ownerId;
     
     this.NodeId = nodeId;
 
-    this.OwnerHandle = ownerHandle;
+    //this.OwnerHandle = ownerHandle;
     
     this.properties=[];
-    GenericProperties.prototype.addProperty = function(genericProperty)
+    GenericComponent.prototype.addProperty = function(genericProperty)
     {
         this.properties.push(genericProperty);
     }
 
-    GenericProperties.prototype.propertyExists = function(propertyName)
+    GenericComponent.prototype.propertyExists = function(propertyName)
     {
         for (var i = 0; i < this.properties.length; i++) {           
             if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
@@ -37,7 +36,7 @@ function GenericProperties(name,
         return false;
     }
 
-    GenericProperties.prototype.getProperty = function (propertyName) {
+    GenericComponent.prototype.getProperty = function (propertyName) {
         for (var i = 0; i < this.properties.length; i++) {   
             if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
                 return this.properties[i];
