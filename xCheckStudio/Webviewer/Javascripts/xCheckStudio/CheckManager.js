@@ -656,7 +656,7 @@ function CheckManager() {
         var property2Value;
         var severity;
         var performCheck;
-        var description;
+        var description ="";
         if (sourceAComponentProperties.propertyExists(checkCaseMappingProperty.SourceAName)) {
             if (sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
                 var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
@@ -673,7 +673,7 @@ function CheckManager() {
                     (property2Value === undefined || property2Value === "")) {
                     severity = "No Value";
                     performCheck = false;
-                    description = "Both properties have no values.";
+                    //description = "Both properties have no values.";
                 }
                 else if ((property1Value === undefined || property1Value === "") ||
                     (property2Value === undefined || property2Value === "")) {
@@ -681,13 +681,13 @@ function CheckManager() {
                     severity = "Error";
                     performCheck = false;
 
-                    description = "One of the properties have no value.";
+                    //description = "One of the properties have no value.";
                 }
                 else {
                     severity = checkCaseMappingProperty.Severity;
                     performCheck = true;
 
-                    description = "Property check performed";
+                   // description = "Property check performed";
                 }
             }
             else {
@@ -700,7 +700,7 @@ function CheckManager() {
                 severity = "Error";
                 performCheck = false;
 
-                description = "Property match not found.";
+                //description = "Property match not found.";
             }
         }
         else if (sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
@@ -713,11 +713,11 @@ function CheckManager() {
             severity = "Error";
             performCheck = false;
 
-            description = "Property match not found.";
+           // description = "Property match not found.";
         }
         
         if (checkCaseMappingProperty.Comment) {
-            description += "<br>" + checkCaseMappingProperty.Comment;
+            description +=/* "<br>" +*/ checkCaseMappingProperty.Comment;
         }
 
         if (property1Name === undefined && property2Name === undefined) {
