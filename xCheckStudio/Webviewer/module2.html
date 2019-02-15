@@ -3,7 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
-
+    
+    <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
     <link href="/images/UIPackage/favicon.png" rel="shortcut icon" />
     <meta charset="utf-8" />
     <meta content="width=1280, maximum-scale=1.0" name="viewport" />
@@ -367,6 +368,43 @@
                         <!-- <span onclick="this.parentElement.style.display='none'" style="color: black" class="closebtn">&times;</span> -->
                         <div style="height:100%">
                             <table id="checksViewTable" style="width: 100%; height: 200px; margin: auto; overflow: scroll;">
+
+                                <tbody>
+                                    <!-- comparison source A viewer -->
+                                    <tr id="sourceAContainerRow" style="width: 450px; height: 50%; top: 40px;">
+                                        <td style="border-style: none;">   
+                                      
+                                            <div class="example-canvas-tiny" id="viewerContainer1"
+                                                style="width: 550px; height: 270px; min-width: 200px; border-style: none;">
+                                                <div id="overlay1" class="sliderOverlay">
+                                                    <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                                                        <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+                                                        <p><span id="explodeValue1"></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                
+                                    <!-- comparison source B viewer -->
+                                    <tr id="sourceBContainerRow" style="width: 450px; height: 50%; top: 40px;">
+                                        <td style="border-style: none;">
+                                    
+                                            <div class="example-canvas-tiny" id="viewerContainer2"
+                                                style="width: 550px; height: 270px; min-width: 200px; border-style: none;">
+                                                <div id="overlay2" class="sliderOverlay">
+                                                    <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                                                        <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
+                                                        <p> <span id="explodeValue2"></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                      
+
+                                </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -581,21 +619,109 @@
 
         function startExplode() {
             if (currentViewer) {
-                var explodeManager = currentViewer.getExplodeManager();
-                explodeManager.setMagnitude(2);
-                explodeManager.start().then(function () {
+                var slider;
+                var outputFiled;
+                var overlayField;
+                if (currentViewer._params.containerId === "viewerContainer1") {
+                    slider = document.getElementById("explodeSlider1");
+                    outputFiled = document.getElementById("explodeValue1");
+                    overlayField = document.getElementById("overlay1");
 
-                });
+                    overlayField.style.top = "50px";
+                }
+                else if (currentViewer._params.containerId === "viewerContainer2") {
+                    slider = document.getElementById("explodeSlider2");
+                    outputFiled = document.getElementById("explodeValue2");
+                    overlayField = document.getElementById("overlay2");
+
+                    if (document.getElementById("ComparisonTabPage").style.display === 'block') {
+                        overlayField.style.top = "330px";
+                    }
+                    else {
+                        overlayField.style.top = "50px";
+                    }
+                }
+                if (!slider || !outputFiled || !overlayField) {
+                    return;
+                }
+
+                overlayField.style.display = "block";
+
+                outputFiled.innerHTML = slider.value;               
+                overlayField.style.right = "10px";
+
+                slider.oninput = function () {
+                    outputFiled.innerHTML = this.value;
+
+                    if (document.getElementById("ComparisonTabPage").style.display === 'block') {
+                        if (this.id === "explodeSlider1") {
+                            currentViewer =  comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer;
+                        }
+                        else if (this.id === "explodeSlider2") {
+                            currentViewer =  comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer;
+                        }
+                    }                   
+                    else if (document.getElementById("SourceAComplianceTabPage").style.display === 'block') {
+                        currentViewer =  sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer;
+                    }
+                    else if (document.getElementById("SourceBComplianceTabPage").style.display === 'block') {
+                        currentViewer =  sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer;
+                    }
+
+
+                    if (currentViewer) {
+                        var explodeManager = currentViewer.getExplodeManager();
+                        if (explodeManager.getActive()) {
+                            explodeManager.stop();
+                        }
+
+                        explodeManager.setMagnitude(Number(this.value));
+                        explodeManager.start().then(function () {
+
+                        });
+                    }
+
+                }
+
+                // var explodeManager = currentViewer.getExplodeManager();
+                // explodeManager.setMagnitude(2);
+                // explodeManager.start().then(function () {
+
+                // });
             }
         }
 
         function stopExplode() {
+
             if (currentViewer) {
                 var explodeManager = currentViewer.getExplodeManager();
                 if (explodeManager.getActive()) {
                     explodeManager.stop();
                 }
+
+                var slider;
+                var overlayField;
+                if (currentViewer._params.containerId === "viewerContainer1") {
+                    slider = document.getElementById("explodeSlider1");
+                    overlayField = document.getElementById("overlay1");
+                }
+                else if (currentViewer._params.containerId === "viewerContainer2") {
+                    slider = document.getElementById("explodeSlider2");
+                    overlayField = document.getElementById("overlay2");
+                }
+                if (!slider || !overlayField) {
+                    return;
+                }
+                slider.value = 0;
+                overlayField.style.display = "none";
             }
+
+            // if (currentViewer) {
+            //     var explodeManager = currentViewer.getExplodeManager();
+            //     if (explodeManager.getActive()) {
+            //         explodeManager.stop();
+            //     }
+            // }
         }
 
         function setFront() {
@@ -822,36 +948,32 @@
             // trigger comparison tab click manually
             /*/var tab1 = document.getElementById("tab1Parent");
             tab1.click();*/
-			if (typeof ComparisonCheckData !== 'undefined')
-			{
-				openCheckResultTab('ComparisonTabPage');
-				var tab = document.getElementById("tab1Parent");
-				tab.click();
-			}
-			else
-			{
-				if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
-				{
-					openCheckResultTab('SourceAComplianceTabPage');
-					var tab2 = document.getElementById("tab2Parent");
-					tab2.click();
-				}
-				else
-				{
-					if (typeof SourceAComplianceData === 'undefined')
-					{
-						openCheckResultTab('SourceBComplianceTabPage');
-						var tab3 = document.getElementById("tab3Parent");
-						tab3.click();
-					}
-					else if (typeof SourceBComplianceData === 'undefined')
-					{
-						openCheckResultTab('SourceAComplianceTabPage');
-						var tab2 = document.getElementById("tab2Parent");
-						tab2.click();
-					}
-				}
-			}
+			if (typeof ComparisonCheckData !== 'undefined') {
+                openCheckResultTab('ComparisonTabPage');
+                //var tab = document.getElementById("tab1Parent");
+                //tab.click();
+            }
+            else {
+                // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
+                // {
+                // 	openCheckResultTab('SourceAComplianceTabPage');
+                // 	// var tab2 = document.getElementById("tab2Parent");
+                // 	// tab2.click();
+                // }
+                // else
+                // {
+                if (typeof SourceAComplianceData !== 'undefined') {
+                    openCheckResultTab('SourceAComplianceTabPage');
+                    // var tab3 = document.getElementById("tab3Parent");
+                    // tab3.click();
+                }
+                else if (typeof SourceBComplianceData !== 'undefined') {
+                    openCheckResultTab('SourceBComplianceTabPage');
+                    // var tab2 = document.getElementById("tab2Parent");
+                    // tab2.click();
+                }
+                //}
+            }
         };
 
         function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager) {
@@ -962,11 +1084,44 @@
 
             // // clear all contents of checksViewTable
             var checksViewTable = document.getElementById("checksViewTable");
-            checksViewTable.innerHTML = "";
+            // checksViewTable.innerHTML = "";
 
-            // create table rows and viewer containers            
-            var tbody = document.createElement("tbody");
-            checksViewTable.appendChild(tbody);
+            // // create table rows and viewer containers            
+            // var tbody = document.createElement("tbody");
+            // checksViewTable.appendChild(tbody);
+
+            var viewerContainer1 = document.getElementById("viewerContainer1");            
+            //viewerContainer1.innerHTML = ""
+            for(var i = 0; i< viewerContainer1.children.length; i++)
+            {
+                var childElement = viewerContainer1.children[i];
+                if(childElement.id !== "overlay1")
+                {
+                    viewerContainer1.removeChild(childElement);
+                    i--;
+                }
+                else
+                {
+                    childElement.style.display = "none";
+                    document.getElementById("explodeSlider1").value = 0;
+                }
+            }
+            
+            var viewerContainer2 = document.getElementById("viewerContainer2");
+            //viewerContainer2.innerHTML = ""
+            for(var i = 0; i< viewerContainer2.children.length; i++)
+            {
+                var childElement = viewerContainer2.children[i];
+                if(childElement.id !== "overlay2")
+                {
+                    viewerContainer2.removeChild(childElement);
+                    i--;
+                }
+                {
+                    childElement.style.display = "none";
+                    document.getElementById("explodeSlider2").value = 0;
+                }
+            }
 
             if (tabName === "ComparisonTabPage") {
 
@@ -984,51 +1139,65 @@
                 var comparisonDetailedReviewTab = document.getElementById("ComplianceBDetailedReviewTbody");
                 comparisonDetailedReviewTab.style.display = "none";
 
-                // create row for source a viewer
-                var tr = document.createElement("tr");
-                tr.id = sourceAViewerContainerRowId;
-                tr.style.width = "450px";
-                tr.style.height = "50%";
-                tr.style.top = "40px";
-                //tr.style.borderStyle = "none";
-                tbody.appendChild(tr);
 
-                var td = document.createElement("td");
-                td.style.borderStyle = "none";
-                tr.appendChild(td);
+                var sourceAViewerRow = document.getElementById(sourceAViewerContainerRowId);
+                sourceAViewerRow.style.width = "100%";
+                sourceAViewerRow.style.height = "50%";
+                sourceAViewerRow.style.top = "40px";
+                sourceAViewerRow.style.display = "block";
 
-                var div = document.createElement("div");
-                div.className = "example-canvas-tiny";
-                div.style.width = "550px";
-                div.style.height = "270px";
-                div.id = sourceAViewerContainerId;
-                div.style.minWidth = "200px";
-                div.style.borderStyle = "none";
-                div.innerHTML = "Source A";
-                td.appendChild(div);
+                var sourceBViewerRow = document.getElementById(sourceBViewerContainerRowId);
+                sourceBViewerRow.style.width = "100%";
+                sourceBViewerRow.style.height = "50%";
+                sourceBViewerRow.style.top = "40px";
+                sourceBViewerRow.style.display = "block";
 
-                // create row for source b viewer
-                tr = document.createElement("tr");
-                tr.id = sourceBViewerContainerRowId;
-                tr.style.width = "450px";
-                tr.style.height = "50%";
-                tr.style.top = "40px";
-                //tr.style.borderStyle = "none";
-                tbody.appendChild(tr);
+              
+                // // create row for source a viewer
+                // var tr = document.createElement("tr");
+                // tr.id = sourceAViewerContainerRowId;
+                // tr.style.width = "450px";
+                // tr.style.height = "50%";
+                // tr.style.top = "40px";
+                // //tr.style.borderStyle = "none";
+                // tbody.appendChild(tr);
 
-                var td = document.createElement("td");
-                td.style.borderStyle = "none";
-                tr.appendChild(td);
+                // var td = document.createElement("td");
+                // td.style.borderStyle = "none";
+                // tr.appendChild(td);
 
-                var div = document.createElement("div");
-                div.className = "example-canvas-tiny";
-                div.style.width = "550px";
-                div.style.height = "270px";
-                div.id = sourceBViewerContainerId;
-                div.style.minWidth = "200px";
-                div.style.borderStyle = "none";
-                div.innerHTML = "Source B";
-                td.appendChild(div);
+                // var div = document.createElement("div");
+                // div.className = "example-canvas-tiny";
+                // div.style.width = "550px";
+                // div.style.height = "270px";
+                // div.id = sourceAViewerContainerId;
+                // div.style.minWidth = "200px";
+                // div.style.borderStyle = "none";
+                // div.innerHTML = "Source A";
+                // td.appendChild(div);
+
+                // // create row for source b viewer
+                // tr = document.createElement("tr");
+                // tr.id = sourceBViewerContainerRowId;
+                // tr.style.width = "450px";
+                // tr.style.height = "50%";
+                // tr.style.top = "40px";
+                // //tr.style.borderStyle = "none";
+                // tbody.appendChild(tr);
+
+                // var td = document.createElement("td");
+                // td.style.borderStyle = "none";
+                // tr.appendChild(td);
+
+                // var div = document.createElement("div");
+                // div.className = "example-canvas-tiny";
+                // div.style.width = "550px";
+                // div.style.height = "270px";
+                // div.id = sourceBViewerContainerId;
+                // div.style.minWidth = "200px";
+                // div.style.borderStyle = "none";
+                // div.innerHTML = "Source B";
+                // td.appendChild(div);
 
                 //clear highlighted row
                 if(comparisonReviewManager.SelectedComponentRowFromSheetA)
@@ -1061,28 +1230,38 @@
                 var comparisonDetailedReviewTab = document.getElementById("ComplianceBDetailedReviewTbody");
                 comparisonDetailedReviewTab.style.display = "none";
 
-                // create row for source a viewer
-                var tr = document.createElement("tr");
-                tr.id = sourceAViewerContainerRowId;
-                tr.style.width = "100%";
-                tr.style.height = "50%";
-                tr.style.margin = "auto";
-                tbody.appendChild(tr);
+                var sourceAViewerRow = document.getElementById(sourceAViewerContainerRowId);
+                sourceAViewerRow.style.width = "100%";
+                sourceAViewerRow.style.height = "50%";
+                sourceAViewerRow.style.margin = "auto";
+                sourceAViewerRow.style.display = "block";
 
-                var td = document.createElement("td");
-                td.style.borderStyle = "none";
-                tr.appendChild(td);
+                var sourceBViewerRow = document.getElementById(sourceBViewerContainerRowId);
+                sourceBViewerRow.style.display = "none";
+                // viewerContainer1.innerHTML = ""
 
-                var div = document.createElement("div");
-                div.className = "example-canvas-tiny";
-                div.style.width = "550px";
-                div.style.height = "450px";
-                div.style.top = "50px";
-                div.id = sourceAViewerContainerId;
-                div.style.minWidth = "400px";
-                div.style.borderStyle = "none";
-                div.innerHTML = "Source A";
-                td.appendChild(div);
+                // // create row for source a viewer
+                // var tr = document.createElement("tr");
+                // tr.id = sourceAViewerContainerRowId;
+                // tr.style.width = "100%";
+                // tr.style.height = "50%";
+                // tr.style.margin = "auto";
+                // tbody.appendChild(tr);
+
+                // var td = document.createElement("td");
+                // td.style.borderStyle = "none";
+                // tr.appendChild(td);
+
+                // var div = document.createElement("div");
+                // div.className = "example-canvas-tiny";
+                // div.style.width = "550px";
+                // div.style.height = "450px";
+                // div.style.top = "50px";
+                // div.id = sourceAViewerContainerId;
+                // div.style.minWidth = "400px";
+                // div.style.borderStyle = "none";
+                // div.innerHTML = "Source A";
+                // td.appendChild(div);
 
                 //clear highlighted row
                 if(sourceAComplianceReviewManager.SelectedComponentRowFromSheetA){
@@ -1108,28 +1287,36 @@
                 var comparisonDetailedReviewTab = document.getElementById("ComplianceBDetailedReviewTbody");
                 comparisonDetailedReviewTab.style.display = "block";
 
-                // create row for source b viewer
-                tr = document.createElement("tr");
-                tr.id = sourceBViewerContainerRowId;
-                tr.style.width = "100%";
-                tr.style.height = "50%";
-                tr.style.margin = "auto";
-                tbody.appendChild(tr);
+                var sourceBViewerRow = document.getElementById(sourceBViewerContainerRowId);
+                sourceBViewerRow.style.width = "100%";
+                sourceBViewerRow.style.height = "50%";
+                sourceBViewerRow.style.margin = "auto";
+                sourceBViewerRow.style.display = "block";
 
-                var td = document.createElement("td");
-                td.style.borderStyle = "none";
-                tr.appendChild(td);
+                var sourceAViewerRow = document.getElementById(sourceAViewerContainerRowId);
+                sourceAViewerRow.style.display = "none";
+                // // create row for source b viewer
+                // tr = document.createElement("tr");
+                // tr.id = sourceBViewerContainerRowId;
+                // tr.style.width = "100%";
+                // tr.style.height = "50%";
+                // tr.style.margin = "auto";
+                // tbody.appendChild(tr);
 
-                var div = document.createElement("div");
-                div.className = "example-canvas-tiny";
-                div.style.width = "550px";
-                div.style.height = "450px";
-                div.style.top = "50px";
-                div.id = sourceBViewerContainerId;
-                div.style.minWidth = "400px";
-                div.style.borderStyle = "none";
-                div.innerHTML = "Source B";
-                td.appendChild(div);
+                // var td = document.createElement("td");
+                // td.style.borderStyle = "none";
+                // tr.appendChild(td);
+
+                // var div = document.createElement("div");
+                // div.className = "example-canvas-tiny";
+                // div.style.width = "550px";
+                // div.style.height = "450px";
+                // div.style.top = "50px";
+                // div.id = sourceBViewerContainerId;
+                // div.style.minWidth = "400px";
+                // div.style.borderStyle = "none";
+                // div.innerHTML = "Source B";
+                // td.appendChild(div);
 
                 //clear highlighted row
                 if(sourceBComplianceReviewManager.SelectedComponentRowFromSheetB){
@@ -1155,15 +1342,15 @@
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
                 }
 
-                // clear for Excel data source
-                if (document.getElementById(sourceAViewerContainerId) &&
-                    document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
-                    document.getElementById(sourceAViewerContainerId).innerHTML = ""
-                }
-                if (document.getElementById(sourceBViewerContainerId) &&
-                    document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
-                    document.getElementById(sourceBViewerContainerId).innerHTML = ""
-                }
+                // // clear for Excel data source
+                // if (document.getElementById(sourceAViewerContainerId) &&
+                //     document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
+                //     document.getElementById(sourceAViewerContainerId).innerHTML = ""
+                // }
+                // if (document.getElementById(sourceBViewerContainerId) &&
+                //     document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
+                //     document.getElementById(sourceBViewerContainerId).innerHTML = ""
+                // }
             }
             if (typeof sourceAComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1171,11 +1358,11 @@
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                // clear for Excel data source
-                if (document.getElementById(sourceAViewerContainerId) &&
-                    document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
-                    document.getElementById(sourceAViewerContainerId).innerHTML = ""
-                }
+                // // clear for Excel data source
+                // if (document.getElementById(sourceAViewerContainerId) &&
+                //     document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
+                //     document.getElementById(sourceAViewerContainerId).innerHTML = ""
+                // }
             }
             if (typeof sourceBComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1183,21 +1370,24 @@
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                // clear for Excel data source
-                if (document.getElementById(sourceBViewerContainerId) &&
-                    document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
-                    document.getElementById(sourceBViewerContainerId).innerHTML = ""
-                }
+                // // clear for Excel data source
+                // if (document.getElementById(sourceBViewerContainerId) &&
+                //     document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
+                //     document.getElementById(sourceBViewerContainerId).innerHTML = ""
+                // }
             }
 
             // load data sources in viewer
-            if (typeof comparisonReviewManager !== 'undefined' && tabName === "ComparisonTabPage") {
+            if (typeof comparisonReviewManager !== 'undefined' && 
+                tabName === "ComparisonTabPage") {
                 comparisonReviewManager.loadDatasources();
             }
-            else if (typeof sourceAComplianceReviewManager !== 'undefined' && tabName === "SourceAComplianceTabPage") {
+            else if (typeof sourceAComplianceReviewManager !== 'undefined' && 
+                     tabName === "SourceAComplianceTabPage") {
                 sourceAComplianceReviewManager.loadDatasource();
             }
-            else if (typeof sourceBComplianceReviewManager !== 'undefined' && tabName === "SourceBComplianceTabPage") {
+            else if (typeof sourceBComplianceReviewManager !== 'undefined' && 
+                     tabName === "SourceBComplianceTabPage") {
                 sourceBComplianceReviewManager.loadDatasource();
             }
         }
@@ -1379,7 +1569,7 @@
             var i = document.getElementById("menu").style;
             if (i.visibility === "visible") {
                 i.visibility = "hidden";
-                currentViewer = undefined;
+               // currentViewer = undefined;
             }
         }
 
