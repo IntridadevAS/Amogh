@@ -1034,13 +1034,15 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 if (row.cells[2].innerText.toLowerCase() === 'no match') {
 
-                    if (this.SourceAViewerData !== undefined) {
+                    if (this.SourceAViewerData !== undefined && 
+                        row.getElementsByTagName("td")[0].innerText !="") {
                         var source1NodeIdCell = row.getElementsByTagName("td")[3];
                         if (component.SourceANodeId !== Number(source1NodeIdCell.innerText)) {
                             continue;
                         }
                     }
-                    else if (this.SourceBViewerData !== undefined) {
+                    else if (this.SourceBViewerData !== undefined&& 
+                        row.getElementsByTagName("td")[1].innerText !="") {
                         var source2NodeIdCell = row.getElementsByTagName("td")[4];
                         if (component.SourceBNodeId !== Number(source2NodeIdCell.innerText)) {
                             continue;
