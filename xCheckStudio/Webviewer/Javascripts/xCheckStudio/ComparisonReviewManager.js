@@ -48,6 +48,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this);
             this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);
+
+            var viewerContainer = document.getElementById(this.SourceAViewerData[0]);
+            viewerContainer.style.height = "270px";
+            viewerContainer.style.top= "0px";
         }
 
         if (this.SourceBViewerData !== undefined) {
@@ -57,6 +61,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this);
             this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
+
+            var viewerContainer = document.getElementById(this.SourceBViewerData[0]);
+            viewerContainer.style.height = "270px";
+            viewerContainer.style.top= "0px";
         }
     }
 

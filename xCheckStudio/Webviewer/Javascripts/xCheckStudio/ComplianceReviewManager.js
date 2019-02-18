@@ -42,8 +42,11 @@ function ComplianceReviewManager(complianceCheckManager,
             this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
 
             this.ReviewModuleViewerInterface.setupViewer(550, 300);
-        }
 
+            var viewerContainer = document.getElementById(this.ViewerData[0]);
+            viewerContainer.style.height = "405px";
+            viewerContainer.style.top= "70px";
+        }
     }
 
     ComplianceReviewManager.prototype.unhighlightSelectedSheetRow = function (checkStatusArray, currentRow) {

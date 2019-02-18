@@ -626,8 +626,8 @@
                     slider = document.getElementById("explodeSlider1");
                     outputFiled = document.getElementById("explodeValue1");
                     overlayField = document.getElementById("overlay1");
-
-                    overlayField.style.top = "50px";
+                    
+                    //overlayField.style.top = "50px";
                 }
                 else if (currentViewer._params.containerId === "viewerContainer2") {
                     slider = document.getElementById("explodeSlider2");
@@ -635,10 +635,10 @@
                     overlayField = document.getElementById("overlay2");
 
                     if (document.getElementById("ComparisonTabPage").style.display === 'block') {
-                        overlayField.style.top = "330px";
+                       //overlayField.style.top = "330px";
                     }
                     else {
-                        overlayField.style.top = "50px";
+                        //overlayField.style.top = "50px";
                     }
                 }
                 if (!slider || !outputFiled || !overlayField) {
@@ -647,8 +647,11 @@
 
                 overlayField.style.display = "block";
 
-                outputFiled.innerHTML = slider.value;               
-                overlayField.style.right = "10px";
+                outputFiled.innerHTML = slider.value;  
+                overlayField.style.bottom = "55px";             
+                //overlayField.style.right = "10px";
+                //overlayField.style.top = overlayField.parentElement.style.height -  overlayField.style.height;
+                //overlayField.style.left = overlayField.parentElement.style.width -  overlayField.style.width;
 
                 slider.oninput = function () {
                     outputFiled.innerHTML = this.value;
@@ -681,13 +684,7 @@
                         });
                     }
 
-                }
-
-                // var explodeManager = currentViewer.getExplodeManager();
-                // explodeManager.setMagnitude(2);
-                // explodeManager.start().then(function () {
-
-                // });
+                }               
             }
         }
 
@@ -714,14 +711,7 @@
                 }
                 slider.value = 0;
                 overlayField.style.display = "none";
-            }
-
-            // if (currentViewer) {
-            //     var explodeManager = currentViewer.getExplodeManager();
-            //     if (explodeManager.getActive()) {
-            //         explodeManager.stop();
-            //     }
-            // }
+            }           
         }
 
         function setFront() {
@@ -1440,16 +1430,16 @@
                 if (document.getElementById("dataSource1ModelBrowserTab").style.backgroundColor !== "lightgray") {
                     currentViewer.style.width = "550px";
                     currentViewer.style.height = "270px";
-                    if (modalViewerContainer.length === 1) {
-                        currentViewer.style.top = "50px";
-                    }
+                    //if (modalViewerContainer.length === 1) {
+                        currentViewer.style.top = "0px";
+                    //}
                 }
                 else {
                     currentViewer.style.width = "550px";
-                    currentViewer.style.height = "450px";
-                    if (modalViewerContainer.length === 1) {
-                        currentViewer.style.top = "50px";
-                    }
+                    currentViewer.style.height = "405px";
+                    //if (modalViewerContainer.length === 1) {
+                        currentViewer.style.top = "70px";
+                    //}
                 }
             }
 
@@ -1487,7 +1477,10 @@
                     currentViewer.style.height = "370px";
                     currentViewer.style.top = "0px";
                     modalViewer.style.marginTop = "10px"
-                    if (modalViewerContainer.length === 1) {
+                    
+                    // if compliance viewer is being opened in fullscreen mode
+                    if (document.getElementById("dataSource2ModelBrowserTab").style.backgroundColor !== "lightgray" ||
+                        document.getElementById("dataSource3ModelBrowserTab").style.backgroundColor !== "lightgray") {
                         currentViewer.style.top = "0px";
                         modalViewer.style.marginTop = "195px"
                         modalViewer.style.width = "745px"
