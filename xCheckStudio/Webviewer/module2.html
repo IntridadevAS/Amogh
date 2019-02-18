@@ -1477,7 +1477,7 @@
                     currentViewer.style.height = "370px";
                     currentViewer.style.top = "0px";
                     modalViewer.style.marginTop = "10px"
-                    
+
                     // if compliance viewer is being opened in fullscreen mode
                     if (document.getElementById("dataSource2ModelBrowserTab").style.backgroundColor !== "lightgray" ||
                         document.getElementById("dataSource3ModelBrowserTab").style.backgroundColor !== "lightgray") {
@@ -1508,23 +1508,23 @@
 
         function resizeHoopsViewerCanvas()
         {
-            if(document.getElementById("ComparisonDetailedReviewTbody").style.display === "block" &&
-                   comparisonReviewManager !== undefined &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer)
-                {
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.resizeCanvas();
+            if (document.getElementById("ComparisonDetailedReviewTbody").style.display === "block" &&
+                comparisonReviewManager !== undefined) {
+                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
+                        comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.resizeCanvas();
+                }
+                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
+                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {                   
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.resizeCanvas();
                 }
-                else if(document.getElementById("ComplianceADetailedReviewTbody").style.display === "block" &&
-                        sourceAComplianceReviewManager !== undefined &&
-                        sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
-                        sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer)
-                {
-                    sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.resizeCanvas();
-                }
+            }
+            else if (document.getElementById("ComplianceADetailedReviewTbody").style.display === "block" &&
+                sourceAComplianceReviewManager !== undefined &&
+                sourceAComplianceReviewManager.ReviewModuleViewerInterface &&
+                sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
+                sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.resizeCanvas();
+            }
                 else if(document.getElementById("ComplianceBDetailedReviewTbody").style.display === "block" &&
                         sourceBComplianceReviewManager !== undefined &&
                         sourceBComplianceReviewManager.ReviewModuleViewerInterface &&
