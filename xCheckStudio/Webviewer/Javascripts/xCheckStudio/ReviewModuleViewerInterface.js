@@ -175,6 +175,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
 
         this.Viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
+
+         // set back face visibility
+         this.Viewer.view.setBackfacesVisible(true);
     }
 
     ReviewModuleViewerInterface.prototype.highlightComponent = function (/*componentIdentifier*/nodeIdString) {

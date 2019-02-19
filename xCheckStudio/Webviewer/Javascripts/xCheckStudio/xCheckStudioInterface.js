@@ -78,6 +78,9 @@ var xCheckStudio;
             var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
 
             this._firstViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
+
+            // set back face visibility
+            this._firstViewer.view.setBackfacesVisible(true);
         }
 
         xCheckStudioInterface.prototype._bindEvents = function (viewer, isFirstViewer) {
