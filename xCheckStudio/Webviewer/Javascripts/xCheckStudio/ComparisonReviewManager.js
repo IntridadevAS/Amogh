@@ -191,6 +191,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var currentRow = modelBrowserDataRows[j];
 
                 var componentIdentifier = currentRow.cells[0].innerText;
+                if (componentIdentifier === undefined ||
+                    componentIdentifier === "") {
+                    componentIdentifier = currentRow.cells[1].innerText;
+                }
+
                 for (var i = 0; i < currentRow.cells.length; i++) {
                     if (i > 2) {
                         currentRow.cells[i].style.display = "none";

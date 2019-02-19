@@ -240,6 +240,36 @@
                     <Property sourceAName="BranchId" sourceBName="CREF"  severity="Error"/>				
 			</ComponentClass>
 			
+			<ComponentClass sourceAComponentClass="GateValve" sourceBComponentClass="VALV">
+			        <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				  
+					<Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="BranchId" sourceBName="Owner"  severity="Error"/>	
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+
+                    <Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>
+			 		<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>
+					<Property sourceAName="Closure" sourceBName="ORIF"  severity="Error"/>	
+                    <Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>
+                    <Property sourceAName="BranchId" sourceBName="CREF"  severity="Error"/>				
+			</ComponentClass>
+			
+			<ComponentClass sourceAComponentClass="ConcentricReducer" sourceBComponentClass="VALV">
+			        <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+				  
+					<Property sourceAName="Name" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="BranchId" sourceBName="Owner"  severity="Error"/>	
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Warning"/>
+
+                    <Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>
+			 		<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>
+					<Property sourceAName="Closure" sourceBName="ORIF"  severity="Error"/>	
+                    <Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>
+                    <Property sourceAName="BranchId" sourceBName="CREF"  severity="Error"/>				
+			</ComponentClass>
+			
 	    </ComponentGroup>	
 		
 		
