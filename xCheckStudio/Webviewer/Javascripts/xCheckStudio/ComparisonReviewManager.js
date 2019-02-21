@@ -86,7 +86,11 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         for (var componentsGroupName in this.ComparisonCheckManager.CheckComponentsGroups) {
             var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
-
+            if(componentsGroup.Components.length === 0)
+            {
+                continue;
+            }
+            
             var btn = document.createElement("BUTTON");       // Create a <button> element
             btn.className = "collapsible";
             var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node

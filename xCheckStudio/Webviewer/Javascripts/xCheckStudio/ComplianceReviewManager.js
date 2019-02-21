@@ -74,7 +74,11 @@ function ComplianceReviewManager(complianceCheckManager,
 
         for (var componentsGroupName in this.ComplianceCheckManager.CheckComponentsGroups) {
             var componentsGroup = this.ComplianceCheckManager.CheckComponentsGroups[componentsGroupName];
-
+            if(componentsGroup.Components.length === 0)
+            {
+                continue;
+            }
+            
             var btn = document.createElement("BUTTON");       // Create a <button> element
             btn.className = "collapsible";
             var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node

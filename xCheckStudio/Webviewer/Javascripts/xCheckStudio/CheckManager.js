@@ -321,11 +321,11 @@ function CheckManager() {
                     continue;
                 }
                
-                // create or get check component group
-                checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
-                if (!checkComponentGroup) {
-                    continue;
-                }            
+                // // create or get check component group
+                // checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                // if (!checkComponentGroup) {
+                //     continue;
+                // }            
 
                 // get check case group
                 var checkCaseGroup = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass);
@@ -333,6 +333,7 @@ function CheckManager() {
                 // check if component exists in checkCaseGroup
                 if (!checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass)) {
                     if (checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass)) {
+                        checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
                         componentGroupMapped = true;
                     }
 
@@ -345,6 +346,12 @@ function CheckManager() {
 
                  //component
                  componentGroupMapped = true;
+
+                  // create or get check component group
+                checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                if (!checkComponentGroup) {
+                    continue;
+                }     
 
                 if (!this.isComponentMatch(sourceAComponentProperties, 
                                            sourceBComponentProperties,
@@ -452,23 +459,24 @@ function CheckManager() {
                 if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
                     continue;
                 }
-                componentGroupMapped  =  true;
-                // create or get check component group
-                checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
-                if (!checkComponentGroup) {
-                    continue;
-                }
+                // componentGroupMapped  =  true;
+                // // create or get check component group
+                // checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                // if (!checkComponentGroup) {
+                //     continue;
+                // }
 
-                // check if component class exists in checkcase
-                if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
-                    continue;
-                }
+                // // check if component class exists in checkcase
+                // if (!checkCaseType.componentGroupExists(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass)) {
+                //     continue;
+                // }
                 // get check case group for both sources
                 var checkCaseGroup = checkCaseType.getComponentGroup(sourceAComponentProperties.MainComponentClass, sourceBComponentProperties.MainComponentClass);
 
                 // check if component exists in checkCaseGroup
                 if (!checkCaseGroup.componentClassExists(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass)) {
                     if (checkCaseGroup.componentClassExists(undefined, sourceBComponentProperties.SubComponentClass)) {
+                        checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
                         componentGroupMapped = true;
                     }
 
@@ -477,6 +485,13 @@ function CheckManager() {
 
                 // get check case component
                 checkCaseComponentClass = checkCaseGroup.getComponentClass(sourceAComponentProperties.SubComponentClass, sourceBComponentProperties.SubComponentClass);
+
+                componentGroupMapped  =  true;
+                // create or get check component group
+                checkComponentGroup = this.getCheckComponentGroup(sourceAComponentProperties.MainComponentClass + "-" + sourceBComponentProperties.MainComponentClass);
+                if (!checkComponentGroup) {
+                    continue;
+                }
 
                 // check if components are match
                 if (!this.isComponentMatch(sourceAComponentProperties, 
