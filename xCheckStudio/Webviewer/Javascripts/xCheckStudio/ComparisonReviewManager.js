@@ -664,6 +664,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                     document.getElementById(id).style.width = "578px";
                     _this.highlightMainReviewTableFromCheckStatus(id);
 
+                    // hide additional column cells
+                    var tableRows = this._container.context.getElementsByTagName("tr");
+                    for (var j = 0; j < tableRows.length; j++) {
+                        var currentRow = tableRows[j];
+                        for (var i = 0; i < currentRow.cells.length; i++) {
+                            if (i > 2) {
+                                currentRow.cells[i].style.display = "none";
+                            }
+                        }
+                    }
+
                 },
                 rowClick: function (args) {
                     var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
