@@ -41,6 +41,22 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.detailedReviewRowComments = {};
 
     ComparisonReviewManager.prototype.loadDatasources = function () {
+        var modal = document.getElementById('maximizeViewerContainer');              
+
+        var viewer1 = document.getElementById("viewerContainer1");
+        viewer1.style.height = "270px";
+        viewer1.style.top= "0px";
+       
+        var viewer2 = document.getElementById("viewerContainer2");
+        viewer2.style.height = "270px";
+        viewer2.style.top= "0px";
+
+        if(modal.style.display === "block")
+        {
+            viewer1.style.height = "405px";
+            viewer2.style.height = "405px";
+        }
+
         if (this.SourceAViewerData !== undefined) {
             this.SourceAReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceAViewerData,
                 this.SourceAComponentIdVsComponentData,
@@ -50,9 +66,9 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);
 
             var viewerContainer = document.getElementById(this.SourceAViewerData[0]);
-            viewerContainer.style.height = "270px";
-            viewerContainer.style.top= "0px";
-        }
+            // viewerContainer.style.height = "270px";
+            // viewerContainer.style.top= "0px";
+        }        
 
         if (this.SourceBViewerData !== undefined) {
             this.SourceBReviewModuleViewerInterface = new ReviewModuleViewerInterface(this.SourceBViewerData,
@@ -63,8 +79,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
 
             var viewerContainer = document.getElementById(this.SourceBViewerData[0]);
-            viewerContainer.style.height = "270px";
-            viewerContainer.style.top= "0px";
+            // viewerContainer.style.height = "270px";
+            // viewerContainer.style.top= "0px";
         }
     }
 
@@ -520,11 +536,20 @@ function ComparisonReviewManager(comparisonCheckManager,
     ComparisonReviewManager.prototype.LoadSheetTableData = function (_this, columnHeaders, tableData, viewerContainer, CurrentReviewTableRow, column, sheetName) {
 
         if (viewerContainer === "#viewerContainer1" || viewerContainer === "#viewerContainer2") {
-            $(function () {
+            $(function () {             
+           
+                var width ="550px";
+                var height = "270px";
+
+                var modal = document.getElementById('maximizeViewerContainer');
+                if (modal.style.display === "block") {
+                    width = "745px";
+                    height = "370px";
+                }                                          
 
                 $(viewerContainer).jsGrid({
-                    height: "270px",
-                    width: "550px",
+                    height: height,
+                    width: width,
                     autoload: true,
                     data: tableData,
                     fields: columnHeaders,
@@ -593,14 +618,14 @@ function ComparisonReviewManager(comparisonCheckManager,
             });
             _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRow, column, sheetName);
         }
-
+        
         var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.width = "550px"
-        container.style.height = "270px"
-        container.style.overflowX = "scroll";
-        container.style.overflowY = "scroll";
-        container.style.margin = "0px";
-        container.style.top = "0px"
+        // container.style.width = "550px"
+        // container.style.height = "270px"
+         container.style.overflowX = "scroll";
+         container.style.overflowY = "scroll";
+         container.style.margin = "0px";
+         container.style.top = "0px"
 
     };
 
