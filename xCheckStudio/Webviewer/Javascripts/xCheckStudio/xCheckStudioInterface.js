@@ -7,7 +7,7 @@ var xCheckStudio;
             this.SourceType = sourceType;
 
             this._selectedNodeId = null;
-            this._selectedComponentId = null;
+            //this._selectedComponentId = null;
             this.nodeIdArray = [];
             this.componentIdVsComponentData = {};
             this.nodeIdVsComponentData = {};
@@ -216,9 +216,9 @@ var xCheckStudio;
                         if (data === undefined) {
                             return;
                         }
-                        if (this._selectedComponentId === data.NodeId) {
-                            return;
-                        }
+                        // if (this._selectedComponentId === data.NodeId) {
+                        //     return;
+                        // }
 
                         var componentIdentifier = data["Name"];
                         // if (data.MainComponentClass === "PipingNetworkSegment") {

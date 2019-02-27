@@ -10,7 +10,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
     this.ComponentIdVsComponentData = componentIdVsComponentData;
     this.NodeIdVsComponentData = nodeIdVsComponentData;
-    this.ComponentIdStatusData = {};
+    this.NodeIdStatusData = {};
 
     this.ReviewManager = reviewManager;
 
@@ -35,10 +35,10 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     }
 
     ReviewModuleViewerInterface.prototype.highlightComponentsfromResult = function () {
-        for (var componentId in this.ComponentIdStatusData) {
-            if (this.ComponentIdStatusData.hasOwnProperty(componentId)) {
+        for (var nodeId in this.NodeIdStatusData) {
+            if (this.NodeIdStatusData.hasOwnProperty(nodeId)) {
 
-                var status = this.ComponentIdStatusData[componentId][1];
+                var status = this.NodeIdStatusData[nodeId][1];
 
                 // set the component row color in main review table     
                 var hexColor = xCheckStudio.Util.getComponentHexColor(status);
@@ -46,7 +46,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     continue;
                 }
 
-                this.highlightManager.changeComponentColorInViewer(componentId, status);
+                this.highlightManager.changeComponentColorInViewer(nodeId, status);
             }
         }
     }
@@ -181,7 +181,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     }
 
     ReviewModuleViewerInterface.prototype.highlightComponent = function (/*componentIdentifier*/nodeIdString) {
-        //var nodeId = this.highlightManager.getNodeIdFromComponentIdentifier(componentIdentifier);
+       
         var nodeId = Number(nodeIdString);
         if (nodeIdString === undefined || nodeId === NaN) {
             this.unHighlightComponent();

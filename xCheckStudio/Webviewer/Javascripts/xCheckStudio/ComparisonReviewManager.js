@@ -22,7 +22,9 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
-    this.ComponentIdStatusData = {};
+   //this.ComponentIdStatusData = {};
+   this.SourceANodeIdVsStatus = {};
+   this.SourceBNodeIdVsStatus = {};
 
     this.ComparisonCheckManager = comparisonCheckManager;
 
@@ -62,12 +64,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.SourceAComponentIdVsComponentData,
                 this.SourceANodeIdVsComponentData,
                 this);
-            this.SourceAReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
-            this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);
-
-            var viewerContainer = document.getElementById(this.SourceAViewerData[0]);
-            // viewerContainer.style.height = "270px";
-            // viewerContainer.style.top= "0px";
+            this.SourceAReviewModuleViewerInterface.NodeIdStatusData =  this.SourceANodeIdVsStatus;
+            this.SourceAReviewModuleViewerInterface.setupViewer(550, 280);            
         }        
 
         if (this.SourceBViewerData !== undefined) {
@@ -75,12 +73,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.SourceBComponentIdVsComponentData,
                 this.SourceBNodeIdVsComponentData,
                 this);
-            this.SourceBReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
+            this.SourceBReviewModuleViewerInterface.NodeIdStatusData =  this.SourceBNodeIdVsStatus;
             this.SourceBReviewModuleViewerInterface.setupViewer(550, 280);
-
-            var viewerContainer = document.getElementById(this.SourceBViewerData[0]);
-            // viewerContainer.style.height = "270px";
-            // viewerContainer.style.top= "0px";
         }
     }
 
@@ -210,20 +204,48 @@ function ComparisonReviewManager(comparisonCheckManager,
             for (var j = 0; j < modelBrowserDataRows.length; j++) {
                 var currentRow = modelBrowserDataRows[j];
 
-                var componentIdentifier = currentRow.cells[0].innerText;
-                if (componentIdentifier === undefined ||
-                    componentIdentifier === "") {
-                    componentIdentifier = currentRow.cells[1].innerText;
-                }
+                // var componentIdentifier = "";
+                // if (currentRow.cells[0].innerText !== undefined ||
+                //     currentRow.cells[0].innerText !== "") {
+                //     componentIdentifier = currentRow.cells[0].innerText;
+                // }
 
+                // if (currentRow.cells[1].innerText !== undefined ||
+                //     currentRow.cells[1].innerText !== "") {
+                //     if (componentIdentifier !== "") {
+                //         componentIdentifier += "_";
+                //     }
+
+                //     componentIdentifier += currentRow.cells[1].innerText;
+                // }
+
+                // if (componentIdentifier === undefined ||
+                //     componentIdentifier === "") {
+                //     continue;
+                // }
+
+                var status = currentRow.cells[2].innerText;
+                if (currentRow.cells.length === 5) {
+                    if (currentRow.cells[3].innerText !== undefined &&
+                        currentRow.cells[3].innerText !== "") {
+
+                        var sourceANodeId = currentRow.cells[3].innerText;
+                        this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
+                    }
+                    if (currentRow.cells[4].innerText !== undefined &&
+                        currentRow.cells[4].innerText !== "") {
+
+                        var sourceBNodeId = currentRow.cells[4].innerText;
+                        this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
+                    }
+                } 
+
+                // hide additional columns
                 for (var i = 0; i < currentRow.cells.length; i++) {
                     if (i > 2) {
                         currentRow.cells[i].style.display = "none";
                     }
                 }
-
-                var status = currentRow.cells[2].innerText;
-                this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
             }
 
             modelBrowserDataTable.style.position = "static"

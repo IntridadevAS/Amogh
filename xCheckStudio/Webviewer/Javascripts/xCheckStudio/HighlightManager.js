@@ -14,38 +14,39 @@ function HighlightManager(viewer,
     this.ComponentIdVsComponentData = componentIdVsComponentData
     this.NodeIdVsComponentData = nodeIdVsComponentData;
 
-    HighlightManager.prototype.getNodeIdFromComponentIdentifier = function (componentIdentifier) {
+    // HighlightManager.prototype.getNodeIdFromComponentIdentifier = function (componentIdentifier) {
 
-        // if (componentIdentifier === this._selectedComponentId) {
-        //     return undefined;
-        // }
+    //     // if (componentIdentifier === this._selectedComponentId) {
+    //     //     return undefined;
+    //     // }
 
-        if (!(componentIdentifier in this.ComponentIdVsComponentData)) {
-            return undefined;
-        }
+    //     if (!(componentIdentifier in this.ComponentIdVsComponentData)) {
+    //         return undefined;
+    //     }
 
-        this._selectedComponentId = componentIdentifier;
+    //     this._selectedComponentId = componentIdentifier;
 
-        var component_data = this.ComponentIdVsComponentData[componentIdentifier];
-        var nodeId = component_data.NodeId;
+    //     var component_data = this.ComponentIdVsComponentData[componentIdentifier];
+    //     var nodeId = component_data.NodeId;
 
-        return nodeId;
-    }
+    //     return nodeId;
+    // }
 
 
-    HighlightManager.prototype.changeComponentColorInViewer = function (componentIdentifier,
-        /*componentRow,*/
-        status) {
-
+    HighlightManager.prototype.changeComponentColorInViewer = function (nodeIdString,      
+                                                                        status) {    
+                                                                            
         var hexColor = xCheckStudio.Util.getComponentHexColor(status);
         if (hexColor === undefined) {
             return;
         }
-
-        var nodeId = this.getNodeIdFromComponentIdentifier(componentIdentifier);
-        if (nodeId === undefined) {
+       
+        var nodeId = Number(nodeIdString);
+        if (nodeId === undefined ||
+            isNaN(nodeId)) {
             return;
         }
+       
 
         // set nodes face and line colors from status of compoentns
         var rgbColor = xCheckStudio.Util.hexToRgb(hexColor);
@@ -61,7 +62,7 @@ function HighlightManager(viewer,
 
     HighlightManager.prototype.clearSelection = function () {
         this.Viewer.selectionManager.clear();  
-        this._selectedComponentId = "";      
+        //this._selectedComponentId = "";      
     }
 
     HighlightManager.prototype.setViewOrientation = function (orienatation) {

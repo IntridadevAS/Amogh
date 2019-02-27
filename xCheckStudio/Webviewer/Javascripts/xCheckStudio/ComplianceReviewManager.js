@@ -19,7 +19,7 @@ function ComplianceReviewManager(complianceCheckManager,
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
-    this.ComponentIdStatusData = {};
+    this.NodeIdStatusData = {};
 
     this.ComponentIdVsComponentData = componentIdVsComponentData;
     this.NodeIdVsComponentData = nodeIdVsComponentData;
@@ -39,7 +39,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 this.ComponentIdVsComponentData,
                 this.NodeIdVsComponentData,
                 this);
-            this.ReviewModuleViewerInterface.ComponentIdStatusData = this.ComponentIdStatusData;
+            this.ReviewModuleViewerInterface.NodeIdStatusData = this.NodeIdStatusData;
 
             this.ReviewModuleViewerInterface.setupViewer(550, 300);
 
@@ -174,15 +174,26 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
                 }
 
-                var componentIdentifier = currentRow.cells[0].innerText;
-                // if (componentsGroup.ComponentClass === "PipingNetworkSegment") {
-                //     componentIdentifier += "_" + currentRow.cells[2].innerText;
-                //     componentIdentifier += "_" + currentRow.cells[3].innerText;
-                //     componentIdentifier += "_" + currentRow.cells[4].innerText;
+                //var componentIdentifier = currentRow.cells[0].innerText;
+                // var componentIdentifier = "";
+                // if (currentRow.cells[0].innerText !== undefined ||
+                //     currentRow.cells[0].innerText !== "") {
+                //     componentIdentifier = currentRow.cells[0].innerText;
+                // }
+
+                // if (componentIdentifier === undefined ||
+                //     componentIdentifier === "") {
+                //     continue;
                 // }
 
                 var status = currentRow.cells[1].innerText;
-                this.ComponentIdStatusData[componentIdentifier] = [currentRow, status];
+                if (currentRow.cells.length === 3) {
+                    if (currentRow.cells[2].innerText !== undefined &&
+                        currentRow.cells[2].innerText !== "") {
+                        var nodeId = currentRow.cells[2].innerText;
+                        this.NodeIdStatusData[nodeId] = [currentRow, status];
+                    }
+                }
             }
 
             modelBrowserDataTable.style.position = "static"
