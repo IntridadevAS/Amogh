@@ -1,3 +1,9 @@
+var XLSX ;
+if(typeof(require) !=='undefined')
+{ 
+    XLSX = require('xlsx');
+}
+
 function ExcelReader(sourceType) {
     this.SourceType = sourceType;
 
@@ -5,7 +11,7 @@ function ExcelReader(sourceType) {
     this.containerId = "";
     this.sourceProperties = [];
     this.sourceDataSheet = {};
-    
+
     this.excelModelBrowser = new ExcelModeBrowser();
 }
 
