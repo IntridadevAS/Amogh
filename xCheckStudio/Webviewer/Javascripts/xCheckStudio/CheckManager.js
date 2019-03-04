@@ -709,7 +709,7 @@ function CheckManager() {
                 var property1 = sourceAComponentProperties.getProperty(checkCaseMappingProperty.SourceAName);
 
                 property1Name = property1.Name;
-                property2Name = checkCaseMappingProperty.SourceBName;
+                property2Name = ""/*checkCaseMappingProperty.SourceBName*/;
                 property1Value = property1.Value;;
                 property2Value = "";
                 severity = "Error";
@@ -721,7 +721,7 @@ function CheckManager() {
         else if (sourceBComponentProperties.propertyExists(checkCaseMappingProperty.SourceBName)) {
             var property2 = sourceBComponentProperties.getProperty(checkCaseMappingProperty.SourceBName);
 
-            property1Name = checkCaseMappingProperty.SourceAName;
+            property1Name = ""/*checkCaseMappingProperty.SourceAName*/;
             property2Name = property2.Name;
             property1Value = "";
             property2Value = property2.Value;
