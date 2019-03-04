@@ -381,10 +381,7 @@ var xCheckStudio;
                     var checkedComponent = {};
                     checkedComponent[identifierProperties.name] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent[identifierProperties.mainCategory] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
-                    checkedComponent[identifierProperties.subClass] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
-                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = currentRow.cells[modelBrowserSourceColumn].textContent.trim();
-                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = currentRow.cells[modelBrowserDestinationColumn].textContent.trim();
-                    //checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = currentRow.cells[modelBrowserOwnerColumn].textContent.trim();
+                    checkedComponent[identifierProperties.subClass] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();                  
                     checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     this.selectedCompoents.push(checkedComponent);
@@ -399,39 +396,77 @@ var xCheckStudio;
                 }
 
                 var currentComponentCell = currentRow.cells[1];
-                var currentRowStyle = currentComponentCell.className;
-
+                //var currentRowStyle = currentComponentCell.className;              
+                
                 var currentClassList = currentRow.classList;
-                // var currentClassName = currentRow.className;
-                // var index = currentClassName.lastIndexOf(" ");
-
-                // check/uncheck all child and further child rows
-                // var styleToCheck = currentClassName + " " + currentRowStyle;
-
-                //index 1 and 2 for class names from parent row
-                var styleToCheck = currentClassList[1] + " " + currentClassList[2]+ " "+ currentRowStyle;
-                for (var i = 0; i < currentTable.rows.length; i++) {
-
-                    var row = currentTable.rows[i];
-                    if (row === currentRow) {
+                var styleToCheck ="";
+                for (var i = 0; i < currentClassList.length; i++) {
+                    var styleClass = currentClassList[i];
+                    if (styleClass.includes("jsgrid")) {
                         continue;
                     }
 
-                    var rowClassList = row.classList;
+                    if (styleToCheck == "") {
+                        styleToCheck = styleClass;
+                    }
+                    else {
+                        styleToCheck += " " + styleClass;
+                    }
+                }
 
-                    //index 1 and 2 for class names inherited from parent row 
-                    // rowClassList[rowClassList.length -1] is for class applied for current row
-                    var rowStyleCheck = rowClassList[1] + " "+ rowClassList[2]+ " "+ rowClassList[rowClassList.length -1];
-                    // if (row.className === styleToCheck) {
-                    if (rowStyleCheck === styleToCheck) {
+                var currentRowClassList = currentComponentCell.classList;
+                var hasChild = false;
+                for (var i = 0; i < currentRowClassList.length; i++) {
+                    var styleClass = currentRowClassList[i];
+                    if (styleClass.includes("jsgrid")) {
+                        continue;
+                    }
 
-                        var checkBox = row.cells[0].children[0];
-                        if (checkBox.checked === currentCheckBox.checked) {
+                    hasChild = true;
+                    if (styleToCheck == "") {
+                        styleToCheck = styleClass;
+                    }
+                    else {
+                        styleToCheck += " " + styleClass;
+                    }
+                }
+
+                // select the child component rows
+                if (hasChild) {
+                    for (var i = 0; i < currentTable.rows.length; i++) {
+
+                        var row = currentTable.rows[i];
+                        if (row === currentRow) {
                             continue;
                         }
 
-                        checkBox.checked = currentCheckBox.checked;
-                        this.handleComponentCheck(checkBox);
+                        var rowClassList = row.classList;                       
+                        var rowStyleCheck = "";
+                        for (var j = 0; j < rowClassList.length; j++) {
+                            var styleClass = rowClassList[j];
+                            if (styleClass.includes("jsgrid")) {
+                                continue;
+                            }
+
+                            if (rowStyleCheck == "") {
+                                rowStyleCheck = styleClass;
+                            }
+                            else {
+                                rowStyleCheck += " " + styleClass;
+                            }
+                        }
+
+                        // if (row.className === styleToCheck) {
+                        if (rowStyleCheck === styleToCheck) {
+
+                            var checkBox = row.cells[0].children[0];
+                            if (checkBox.checked === currentCheckBox.checked) {
+                                continue;
+                            }
+
+                            checkBox.checked = currentCheckBox.checked;
+                            this.handleComponentCheck(checkBox);
+                        }
                     }
                 }
             }
