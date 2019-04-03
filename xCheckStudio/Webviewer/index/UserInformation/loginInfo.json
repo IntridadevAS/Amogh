@@ -1,0 +1,12 @@
+{
+	"Users":[{
+		"Admin":{
+			"Password" : "Admin",
+			"Role" : "Administrator"
+		},
+		"User2":{
+			"Password" : "user2",
+			"Role" : "Checker"
+		}		
+	}]
+}

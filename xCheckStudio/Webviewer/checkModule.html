@@ -3,8 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
-  
-   <script type="text/javascript" src="Javascripts\dropZone\dropZone.js"></script> 
+
+    <script type="text/javascript" src="Javascripts\dropZone\dropZone.js"></script>
 
     <link href="/images/UIPackage/favicon.png" rel="shortcut icon" />
     <meta charset="utf-8" />
@@ -16,7 +16,7 @@
     <link href="CSS\checkinfo.css" rel="stylesheet" type="text/css" />
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
-    
+
     <meta content="Launchpad by Anima" name="author">
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
@@ -42,6 +42,8 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
+
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
@@ -51,22 +53,19 @@
     </meta>
 
     <style>
-
-
         .dropzone {
-  text-align: center;
-  width: 100%;
-  height: 100%;   
-  border: 4px dashed rgb(102,102,153);
-  border-radius: 6px;
-}
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            border: 4px dashed rgb(102, 102, 153);
+            border-radius: 6px;
+        }
 
-.dropBox
-{
-    top: 0%;
-    height: 80%;
-    width: 100%;
-}
+        .dropBox {
+            top: 0%;
+            height: 80%;
+            width: 100%;
+        }
 
         /* disable the div contents */
         .disabledbutton {
@@ -75,67 +74,78 @@
         }
 
         /* The Modal (background) */
-    .modal {
-      display: none; /* Hidden by default */
-      position: absolute; /* Stay in place */
-      padding: auto; /* Location of the box */
-      width: 1280px; /* Full width */
-      height: 720px; /* Full height */
-      margin: 0 432px 0 0;
-      top: 0px;
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-    
-    /* Modal Content */
-    .modal-content {
-      background-color: #fefefe;
-      border: 1px solid #888;
-      width: 416px;
-      height: 179px;
-      margin-left: 333px;
-      margin-top: 214px;
-    }
-    
-    /* The Close Button */
-    .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    
-    .close:hover,
-    .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    #file-input {
-        cursor: pointer;
-        outline: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        overflow: hidden;
-        filter: alpha(opacity=0); /* IE < 9 */
-        opacity: 0;
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            /* Stay in place */
+            padding: auto;
+            /* Location of the box */
+            width: 1280px;
+            /* Full width */
+            height: 720px;
+            /* Full height */
+            margin: 0 432px 0 0;
+            top: 0px;
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
         }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            border: 1px solid #888;
+            width: 416px;
+            height: 179px;
+            margin-left: 333px;
+            margin-top: 214px;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #file-input {
+            cursor: pointer;
+            outline: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            filter: alpha(opacity=0);
+            /* IE < 9 */
+            opacity: 0;
+        }
+
         .input-label {
-        cursor: pointer;
-        position: relative;
-        display: inline-block;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
         }
 
-        #dataSourceViewer, #dataSource1, #dataSource2{
+        #dataSourceViewer,
+        #dataSource1,
+        #dataSource2 {
             font-size: 8px;
             color: #000;
         }
-        
-        td{
+
+        td {
             height: 5px;
         }
 
@@ -188,38 +198,39 @@
             content: url('images/button-closed.png');
             cursor: pointer;
         }
-        #divLoading
-        {
-            display : none;
-        }
-        #divLoading.show
-        {
-            display : block;
-            position : fixed;
-            z-index: 100;
-            background-image : url('/images/busySpinner.gif');
-            background-color:#666;
-            opacity : 0.8;
-            background-repeat : no-repeat;
-            background-position : center;
-            left : 0;
-            bottom : 0;
-            right : 0;
-            top : 0;
-        }
-        #loadinggif.show
-        {
-            left : 50%;
-            top : 50%;
-            position : absolute;
-            z-index : 101;
-            width : 32px;
-            height : 32px;
-            margin-left : -16px;
-            margin-top : -16px;
+
+        #divLoading {
+            display: none;
         }
 
-        .jsgrid-cell, td {
+        #divLoading.show {
+            display: block;
+            position: fixed;
+            z-index: 100;
+            background-image: url('/images/busySpinner.gif');
+            background-color: #666;
+            opacity: 0.8;
+            background-repeat: no-repeat;
+            background-position: center;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            top: 0;
+        }
+
+        #loadinggif.show {
+            left: 50%;
+            top: 50%;
+            position: absolute;
+            z-index: 101;
+            width: 32px;
+            height: 32px;
+            margin-left: -16px;
+            margin-top: -16px;
+        }
+
+        .jsgrid-cell,
+        td {
             word-wrap: break-word;
         }
     </style>
@@ -231,41 +242,52 @@
 
     <div id="menu">
         <a href="#" onclick="hide()">
-            <img src="images/hide.png" />Hide <!--<span>Ctrl + ?!</span> -->
+            <img src="images/hide.png" />Hide
+            <!--<span>Ctrl + ?!</span> -->
         </a>
         <a href="#" onclick="showAll()">
-            <img src="images/show.png" /> Show All  <!--<span>Ctrl + ?!</span>-->
+            <img src="images/show.png" /> Show All
+            <!--<span>Ctrl + ?!</span>-->
         </a>
 
         <hr />
         <a href="#" onclick="setFront()">
-            Front  <!--<span>Ctrl + ?!</span>-->
+            Front
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setBack()">
-            Back  <!--<span>Ctrl + ?!</span>-->
+            Back
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setTop()">
-            Top  <!--<span>Ctrl + ?!</span>-->
+            Top
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setBottom()">
-            Bottom  <!--<span>Ctrl + ?!</span>-->
+            Bottom
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setRight()">
-            Right  <!--<span>Ctrl + ?!</span>-->
+            Right
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setLeft()">
-            Left  <!--<span>Ctrl + ?!</span>-->
+            Left
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="setISO()">
-            ISO  <!--<span>Ctrl + ?!</span>-->
+            ISO
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <hr />
 
         <a href="#" onclick="startExplode()">
-            Start Explode  <!--<span>Ctrl + ?!</span>-->
+            Start Explode
+            <!--<span>Ctrl + ?!</span>-->
         </a>
         <a href="#" onclick="stopExplode()">
-            Stop Explode  <!--<span>Ctrl + ?!</span>-->
+            Stop Explode
+            <!--<span>Ctrl + ?!</span>-->
         </a>
     </div>
     <div class="toast" id="toast">
@@ -289,7 +311,7 @@
                     </div>
                 </div>
 
-                <div   class="createbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
+                <div class="createbtn" onclick="cancelreviewresults()" onMouseOver="this.style.cursor='pointer'">
                     <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
                     <div class="create">
                         Cancel
@@ -317,13 +339,13 @@
                     <div class="properties1">
                         <div class="bg1"> </div>
                         <div class="header"> Source 1 </div>
-						<div class="headerval" id="headerval1">  </div>
+                        <div class="headerval" id="headerval1"> </div>
                         <div class="properties1Key1" id="infoproperties1Key1"> Total </div>
-                        <div class="properties1val1" id="infoproperties1val1">  </div>
+                        <div class="properties1val1" id="infoproperties1val1"> </div>
                         <div class="properties1Key2" id="infoproperties1Key2"> Selected </div>
-                        <div class="properties1val2" id="infoproperties1val2">  </div>
-						<div class="properties1Key3" id="infoproperties1Key3"> Compliance </div>
-                        <div class="properties1val3" id="infoproperties1val3">  </div>
+                        <div class="properties1val2" id="infoproperties1val2"> </div>
+                        <div class="properties1Key3" id="infoproperties1Key3"> Compliance </div>
+                        <div class="properties1val3" id="infoproperties1val3"> </div>
                     </div>
 
                     <div class="footer">
@@ -332,21 +354,21 @@
                     <div class="properties2">
                         <div class="bg2"> </div>
                         <div class="header"> Source 2 </div>
-						<div class="headerval" id="headerval2">  </div>
+                        <div class="headerval" id="headerval2"> </div>
                         <div class="properties2Key1" id="infoproperties2Key1"> Total </div>
-                        <div class="properties2val1" id="infoproperties2val1">  </div>
+                        <div class="properties2val1" id="infoproperties2val1"> </div>
                         <div class="properties2Key2" id="infoproperties2Key2"> Selected </div>
-                        <div class="properties2val2" id="infoproperties2val2">  </div>
-						<div class="properties2Key3" id="infoproperties2Key3"> Compliance </div>
-                        <div class="properties2val3" id="infoproperties2val3">  </div>
+                        <div class="properties2val2" id="infoproperties2val2"> </div>
+                        <div class="properties2Key3" id="infoproperties2Key3"> Compliance </div>
+                        <div class="properties2val3" id="infoproperties2val3"> </div>
                     </div>
 
                     <div class="properties3">
                         <div class="bg3"> </div>
                         <div class="properties3Key1" id="infoproperties3Key1"> Check Case </div>
                         <div class="properties3val1" id="infoproperties3val1"> </div>
-						<div class="properties3Key2" id="infoproperties3Key2"> Comparison </div>
-                        <div class="properties3val2" id="infoproperties3val2">  </div>
+                        <div class="properties3Key2" id="infoproperties3Key2"> Comparison </div>
+                        <div class="properties3val2" id="infoproperties3val2"> </div>
                     </div>
 
                     <div class="footer">
@@ -441,7 +463,8 @@
                 <div class="panel">
                     <div class="bg2">
                     </div>
-                    <div class="createtab" id="createTab" onclick="CreateNewTab()" style="cursor: pointer;" onMouseOver="this.style.cursor='pointer'">
+                    <div class="createtab" id="createTab" onclick="CreateNewTab()" style="cursor: pointer;"
+                        onMouseOver="this.style.cursor='pointer'">
                     </div>
                     <div class="createbtn">
                         <img src="/images/UIPackage/module1-with-open-menu-create-icon@2x.png" class="createicon" />
@@ -464,14 +487,14 @@
                 </div>
             </div>
             <div class="group1" id="dataSource1">
-                    <!-- <form enctype="multipart/form-data" id="uploadFormId">
+                <!-- <form enctype="multipart/form-data" id="uploadFormId">
                         <input type="file" name="file" id="file">
                     </form> -->
 
                 <div id="dropZone1" class="dropBox" ondrop="onDropFiles(event,'viewerContainer1', 'modelTree1' )">
                     <!-- <input type="file" id="selectFile"> -->
                     <div id="modelTree1">
-            
+
                     </div>
                     <div class="line">
                     </div>
@@ -483,7 +506,7 @@
                             .module1 .group1 .checkallswitch .toggle-KJzr * {
                                 box-sizing: border-box;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -499,7 +522,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr .bg1 {
                                 pointer-events: none;
                                 background-color: rgba(233, 79, 28, 1.0);
@@ -516,7 +539,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr .bg11 {
                                 pointer-events: none;
                                 background-color: rgba(51, 51, 51, 1.0);
@@ -533,7 +556,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr .btn1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -549,7 +572,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 width: 45.45%;
@@ -557,12 +580,12 @@
                                 left: 50.00%;
                                 height: 83.33%;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state1-to-state2 .bg11 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 0;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 width: 20px;
@@ -570,16 +593,16 @@
                                 left: 2px;
                                 height: 20px;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2-to-state1 .bg11 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 1;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2 .bg11 {
                                 opacity: 0.0052;
                             }
-            
+
                             .module1 .group1 .checkallswitch .toggle-KJzr.state2 .btn1 {
                                 top: 8.33%;
                                 height: 83.33%;
@@ -588,7 +611,8 @@
                             }
                         </style>
                         <div id="csB8xgZ">
-                            <div class="toggle-KJzr component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceACB">
+                            <div class="toggle-KJzr component state1" data-initial-state="state1"
+                                data-name="toggleKJzrcsB8xgZ" id="checkAllSourceACB">
                                 <div class="bg1 " data-name="bg1beP8csB8xgZ">
                                 </div>
                                 <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
@@ -777,7 +801,7 @@
                             .module1 .group1 .complianceswitch .toggle-Hm8P * {
                                 box-sizing: border-box;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -793,7 +817,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P .bg2 {
                                 pointer-events: none;
                                 background-color: rgba(24, 23, 23, 1.0);
@@ -810,7 +834,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P .bg1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -827,7 +851,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P .btn1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -843,37 +867,38 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 left: 22px;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2-to-state1 .bg1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 1;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 left: 2px;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state1-to-state2 .bg1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 0;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .bg1 {
                                 opacity: 0.0029;
                             }
-            
+
                             .module1 .group1 .complianceswitch .toggle-Hm8P.state2 .btn1 {
                                 left: 2px;
                             }
                         </style>
                         <div id="S0BCR4u">
-                            <div class="toggle-Hm8P component state2" data-initial-state="state2" data-name="toggleHm8PS0BCR4u" id='complianceSourceACB'>
+                            <div class="toggle-Hm8P component state2" data-initial-state="state2"
+                                data-name="toggleHm8PS0BCR4u" id='complianceSourceACB'>
                                 <div class="bg2 " data-name="bg2FqZPS0BCR4u">
                                 </div>
                                 <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
@@ -1064,12 +1089,12 @@
                         Load data
                     </div>
                     <div id="SourceAComponentCount" class="checkall">
-            
+
                     </div>
                 </div>
             </div>
             <div class="group2" id="dataSource2" style="display: none">
-                <div id="dropZone2" class="dropBox"  ondrop="onDropFiles(event,'viewerContainer2', 'modelTree2' )">
+                <div id="dropZone2" class="dropBox" ondrop="onDropFiles(event,'viewerContainer2', 'modelTree2' )">
                     <div id="modelTree2">
                     </div>
                     <div class="line"></div>
@@ -1081,7 +1106,7 @@
                             .module1 .group2 .checkallswitch .toggle-KJzr2 * {
                                 box-sizing: border-box;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -1097,7 +1122,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2 .bg1 {
                                 pointer-events: none;
                                 background-color: rgba(233, 79, 28, 1.0);
@@ -1114,7 +1139,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2 .bg11 {
                                 pointer-events: none;
                                 background-color: rgba(51, 51, 51, 1.0);
@@ -1131,7 +1156,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2 .btn1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -1147,7 +1172,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state1-to-state2 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 width: 45.45%;
@@ -1155,12 +1180,12 @@
                                 left: 50.00%;
                                 height: 83.33%;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state1-to-state2 .bg11 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 0;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state2-to-state1 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 width: 20px;
@@ -1168,16 +1193,16 @@
                                 left: 2px;
                                 height: 20px;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state2-to-state1 .bg11 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 1;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state2 .bg11 {
                                 opacity: 0.0052;
                             }
-            
+
                             .module1 .group2 .checkallswitch .toggle-KJzr2.state2 .btn1 {
                                 top: 8.33%;
                                 height: 83.33%;
@@ -1186,7 +1211,8 @@
                             }
                         </style>
                         <div id="csB8xgZ">
-                            <div class="toggle-KJzr2 component state1" data-initial-state="state1" data-name="toggleKJzrcsB8xgZ" id="checkAllSourceBCB">
+                            <div class="toggle-KJzr2 component state1" data-initial-state="state1"
+                                data-name="toggleKJzrcsB8xgZ" id="checkAllSourceBCB">
                                 <div class="bg1 " data-name="bg1beP8csB8xgZ">
                                 </div>
                                 <div class="bg11 " data-name="bg11jbLOcsB8xgZ">
@@ -1375,7 +1401,7 @@
                             .module1 .group2 .complianceswitch .toggle-Hm8P2 * {
                                 box-sizing: border-box;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -1391,7 +1417,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg2 {
                                 pointer-events: none;
                                 background-color: rgba(24, 23, 23, 1.0);
@@ -1408,7 +1434,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2 .bg1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -1425,7 +1451,7 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2 .btn1 {
                                 pointer-events: none;
                                 background-color: rgba(255, 255, 255, 0.0);
@@ -1441,38 +1467,38 @@
                                 /* Chrome, Safari, Opera */
                                 transform: rotate(0deg);
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state2-to-state1 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 left: 22px;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state2-to-state1 .bg1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 1;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state1-to-state2 .btn1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 left: 2px;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state1-to-state2 .bg1 {
                                 transition: all 0.2s ease-in-out 0.0s;
                                 opacity: 0;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state2 .bg1 {
                                 opacity: 0.0029;
                             }
-            
+
                             .module1 .group2 .complianceswitch .toggle-Hm8P2.state2 .btn1 {
                                 left: 2px;
                             }
                         </style>
                         <div id="S0BCR4u">
-                            <div class="toggle-Hm8P2 component state2" data-initial-state="state2" data-name="toggleHm8P2S0BCR4u"
-                                id='complianceSourceBCB'>
+                            <div class="toggle-Hm8P2 component state2" data-initial-state="state2"
+                                data-name="toggleHm8P2S0BCR4u" id='complianceSourceBCB'>
                                 <div class="bg2 " data-name="bg2FqZPS0BCR4u">
                                 </div>
                                 <img class="bg1" src="/images/UIPackage/module1-bg-1@2x.png">
@@ -1655,7 +1681,8 @@
                         <img src="/images/UIPackage/module1-with-open-menu-bg 5@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-with-open-menu-create-icon 1@2x.png" class="createicon" />
                     </div>
-                    <div class="info" id="infobtn" onMouseOver="this.style.cursor='pointer'" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
+                    <div class="info" id="infobtn" onMouseOver="this.style.cursor='pointer'" onclick="OnInfoClick()"
+                        onMouseOver="this.style.cursor='pointer'">
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                     </div>
@@ -1663,7 +1690,7 @@
                         Load data
                     </div>
                     <div id="SourceBComponentCount" class="checkall" style="display: none">
-            
+
                     </div>
                 </div>
             </div>
@@ -1683,88 +1710,106 @@
                     </div>
                     <style>
                         .module1 .group31 .comparisonswitch .toggle-2udj * {
-                                box-sizing          : border-box;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                bottom              : 0%;
-                                height              : 44.44%;
-                                width               : 40.74%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 29.63%;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj .bg12 {
-                                pointer-events      : none;
-                                background-color    : rgba(233, 79, 28, 1.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj .bg11 {
-                                pointer-events      : none;
-                                background-color    : rgba(51, 51, 51, 1.0);
-                                top                 : 0%;
-                                height              : 100%;
-                                width               : 100%;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 0%;
-                                border-radius       : 12px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj .btn1 {
-                                pointer-events      : none;
-                                background-color    : rgba(255,255,255,0.0);
-                                top                 : 2px;
-                                height              : 20px;
-                                width               : 20px;
-                                position            : absolute;
-                                margin              : 0;
-                                left                : 2px;
-                                -ms-transform       : rotate(0deg); /* IE 9 */
-                                -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
-                                transform           : rotate(0deg);
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                left                : 22px;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .bg11 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 0;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .btn1 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                left                : 2px;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .bg11 {
-                                transition          : all 0.2s ease-in-out 0.0s;
-                                opacity             : 1;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state2 .bg11 {
-                                opacity             : 0.0080;
-                            }
-                            .module1 .group31 .comparisonswitch .toggle-2udj.state2 .btn1 {
-                                left                : 22px;
-                            }
-                        </style>
+                            box-sizing: border-box;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj {
+                            pointer-events: none;
+                            background-color: rgba(255, 255, 255, 0.0);
+                            bottom: 0%;
+                            height: 44.44%;
+                            width: 40.74%;
+                            position: absolute;
+                            margin: 0;
+                            left: 29.63%;
+                            -ms-transform: rotate(0deg);
+                            /* IE 9 */
+                            -webkit-transform: rotate(0deg);
+                            /* Chrome, Safari, Opera */
+                            transform: rotate(0deg);
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj .bg12 {
+                            pointer-events: none;
+                            background-color: rgba(233, 79, 28, 1.0);
+                            top: 0%;
+                            height: 100%;
+                            width: 100%;
+                            position: absolute;
+                            margin: 0;
+                            left: 0%;
+                            border-radius: 12px;
+                            -ms-transform: rotate(0deg);
+                            /* IE 9 */
+                            -webkit-transform: rotate(0deg);
+                            /* Chrome, Safari, Opera */
+                            transform: rotate(0deg);
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj .bg11 {
+                            pointer-events: none;
+                            background-color: rgba(51, 51, 51, 1.0);
+                            top: 0%;
+                            height: 100%;
+                            width: 100%;
+                            position: absolute;
+                            margin: 0;
+                            left: 0%;
+                            border-radius: 12px;
+                            -ms-transform: rotate(0deg);
+                            /* IE 9 */
+                            -webkit-transform: rotate(0deg);
+                            /* Chrome, Safari, Opera */
+                            transform: rotate(0deg);
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj .btn1 {
+                            pointer-events: none;
+                            background-color: rgba(255, 255, 255, 0.0);
+                            top: 2px;
+                            height: 20px;
+                            width: 20px;
+                            position: absolute;
+                            margin: 0;
+                            left: 2px;
+                            -ms-transform: rotate(0deg);
+                            /* IE 9 */
+                            -webkit-transform: rotate(0deg);
+                            /* Chrome, Safari, Opera */
+                            transform: rotate(0deg);
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .btn1 {
+                            transition: all 0.2s ease-in-out 0.0s;
+                            left: 22px;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state1-to-state2 .bg11 {
+                            transition: all 0.2s ease-in-out 0.0s;
+                            opacity: 0;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .btn1 {
+                            transition: all 0.2s ease-in-out 0.0s;
+                            left: 2px;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state2-to-state1 .bg11 {
+                            transition: all 0.2s ease-in-out 0.0s;
+                            opacity: 1;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state2 .bg11 {
+                            opacity: 0.0080;
+                        }
+
+                        .module1 .group31 .comparisonswitch .toggle-2udj.state2 .btn1 {
+                            left: 22px;
+                        }
+                    </style>
                     <div id="lGv4xgM">
-                        <div class="toggle-2udj component state1" data-initial-state="state1" data-name="toggle2udjlGv4xgM"
-                            id="comparisonCB">
+                        <div class="toggle-2udj component state1" data-initial-state="state1"
+                            data-name="toggle2udjlGv4xgM" id="comparisonCB">
                             <div class="bg12 " data-name="bg12Z4CZlGv4xgM">
                             </div>
                             <div class="bg11 " data-name="bg11aa7ElGv4xgM">
@@ -1971,10 +2016,12 @@
             </div>
             <div class="group">
                 <div class="iconfullscreenfilled" onclick="OnFullScreen()" onMouseOver="this.style.cursor='pointer'">
-                    <img src="/images/UIPackage/module1-icon--fullscreen--filled@2x.png" class="iconfullscreenfilled1" />
+                    <img src="/images/UIPackage/module1-icon--fullscreen--filled@2x.png"
+                        class="iconfullscreenfilled1" />
                 </div>
                 <div class="iconfullscreenexitfilled" onclick="OnExitFullScreen()">
-                    <img src="/images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png" class="iconfullscreenexitfilled1" />
+                    <img src="/images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png"
+                        class="iconfullscreenexitfilled1" />
                 </div>
                 <div class="icon1">
                     <img src="/images/UIPackage/module1-icon-3-bg2@2x.png" class="icon1bg2" />
@@ -1992,7 +2039,8 @@
                         class="example-canvas-small">
                         <div id="overlay1" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider"
+                                    id="explodeSlider1">
                                 <p> <span id="explodeValue1"></span></p>
                             </div>
                         </div>
@@ -2001,7 +2049,8 @@
                         class="example-canvas-small">
                         <div id="overlay2" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
+                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider"
+                                    id="explodeSlider2">
                                 <p> <span id="explodeValue2"></span></p>
                             </div>
                         </div>
@@ -2014,7 +2063,8 @@
                     <img src="/images/UIPackage/module2-with-open-menu-bg-llist.png" class="bgllist" />
                     <a href="createprojectwithopenmenu.html">
                         <div class="projects">
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedprojects" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedprojects" />
                             <div class="hoverprojects">
                             </div>
                             <div class="label">
@@ -2024,20 +2074,24 @@
                                     Label
                                 </div>
                             </div>
-                            <img src="/images/UIPackage/create-project-with-open-menu-icon-projects@2x.png" class="iconprojects" />
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-projects@2x.png"
+                                class="iconprojects" />
                         </div>
                     </a>
                     <a href="prephomepage.html">
                         <div class="prep">
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedprep" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedprep" />
                             <div class="hoverprep">
                             </div>
-                            <img src="/images/UIPackage/create-project-with-open-menu-icon-prep@2x.png" class="iconprep" />
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-prep@2x.png"
+                                class="iconprep" />
                         </div>
                     </a>
                     <a href="module2withopenmenu.html">
                         <div class="review">
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedreview" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedreview" />
                             <div class="hoverreview">
                             </div>
                             <div class="label">
@@ -2051,7 +2105,8 @@
                         </div>
                     </a>
                     <div class="reports">
-                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedstat" />
+                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                            class="selectedstat" />
                         <div class="hoverstat">
                         </div>
                         <div class="label">
@@ -2064,7 +2119,8 @@
                         <img src="/images/UIPackage/create-project-with-open-menu-icon-stat@2x.png" class="iconstat" />
                     </div>
                     <div class="export">
-                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedexport" />
+                        <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                            class="selectedexport" />
                         <div class="hoverexport">
                         </div>
                         <div class="label">
@@ -2074,11 +2130,14 @@
                                 Label
                             </div>
                         </div>
-                        <img src="/images/UIPackage/landing-page-with-open-menu-icon-export@2x.png" class="iconexport" />
+                        <img src="/images/UIPackage/landing-page-with-open-menu-icon-export@2x.png"
+                            class="iconexport" />
                     </div>
-                    <a href="/index.html">
-                        <div class="logout">
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedlogout" />
+                    <!-- <form method="post" href="/index.html"> -->
+                    <form method="post" onclick="LogoutUser()">
+                        <div class="logout"> 
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedlogout" />
                             <div class="hoverlogout">
                             </div>
                             <div class="label">
@@ -2090,13 +2149,15 @@
                             </div>
                             <img src="/images/UIPackage/module1-with-open-menu-icon-logout@2x.png" class="iconlogout" />
                         </div>
-                    </a>
+                    </form>
                     <a href="landingpage.html">
                         <div class="home">
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedhome" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedhome" />
                             <div class="hoverhome">
                             </div>
-                            <img src="/images/UIPackage/create-project-with-open-menu-icon-home@2x.png" class="iconhome" />
+                            <img src="/images/UIPackage/create-project-with-open-menu-icon-home@2x.png"
+                                class="iconhome" />
                         </div>
                     </a>
                     <a href="module1.html">
@@ -2108,7 +2169,8 @@
                                     Check
                                 </div>
                             </div>
-                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png" class="selectedcheck" />
+                            <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
+                                class="selectedcheck" />
                             <div class="hovercheck">
                             </div>
                             <img src="/images/UIPackage/module2-with-open-menu-icon-check@2x.png" class="iconcheck" />
@@ -2126,15 +2188,16 @@
                         <img src="/images/UIPackage/module1-with-open-menu-create-icon 2@2x.png" class="createicon" />
                     </div>
                 </div>
-                <div class="tab" id="tab1ViewerParent" onclick="OpenTab('tab1Viewer')" onMouseOver="this.style.cursor='pointer'">
+                <div class="tab" id="tab1ViewerParent" onclick="OpenTab('tab1Viewer')"
+                    onMouseOver="this.style.cursor='pointer'">
                     <div class="tab1" id="tab1Viewer" style="background-color: #F3F0F4">
                         <div id="dataSource1ViewerContainerTab" style="align-content: center" class="text">
                             Source 1
                         </div>
                     </div>
                 </div>
-                <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none" onclick="OpenTab('tab2Viewer')"
-                    onMouseOver="this.style.cursor='pointer'">
+                <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none"
+                    onclick="OpenTab('tab2Viewer')" onMouseOver="this.style.cursor='pointer'">
                     <div class="tab2" id="tab2Viewer" style="display: none;">
                         <div id="dataSource2ViewerContainerTab" style="align-content: center" class="text">
                             Source 2
@@ -2152,7 +2215,8 @@
             </div>
             <div id="maximizeViewerContainer" class="modal">
                 <!-- Modal content -->
-                <div class="modal-content" id="maximizeViewerContainer-content" style="width: 900px; height: 500px; margin-left: 200px; font-size: 10px; margin-top: 80px;">
+                <div class="modal-content" id="maximizeViewerContainer-content"
+                    style="width: 900px; height: 500px; margin-left: 200px; font-size: 10px; margin-top: 80px;">
 
                 </div>
             </div>
@@ -2171,7 +2235,8 @@
                             <div class="bg1">
                             </div>
                             <a href="#">
-                                <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close" id="closeLoadDialog" />
+                                <img src="/images/UIPackage/output-data-dialog-close@2x.png" class="close"
+                                    id="closeLoadDialog" />
                             </a>
                             <div class="loaddata">
                                 LOAD DATA
@@ -2226,32 +2291,32 @@
     </script>
     <!-- Scripts -->
     <script>
-           
-            function AnalyticsData(checkCaseName,
-                sourceAName,
-                sourceBName,
-                sourceATotalItemCount,
-                sourceACheckedItemCount,
-                sourceBTotalItemCount,
-                sourceBCheckedItemCount,
-                sourceAClasswiseCheckedComponents,
-                sourceBClasswiseCheckedComponents,
-                sourceAClassWiseComponets,
-                sourceBClassWiseComponets) {
-                this.CheckCaseName = checkCaseName;
-                this.SourceAName = sourceAName;
-                this.SourceBName = sourceBName;
-                this.SourceATotalItemCount = sourceATotalItemCount;
-                this.SourceACheckedItemCount = sourceACheckedItemCount;
-                this.SourceBTotalItemCount = sourceBTotalItemCount;
-                this.SourceBCheckedItemCount = sourceBCheckedItemCount;
-                this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
-                this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
-                this.SourceAClasswiseComponents = sourceAClassWiseComponets;
-                this.SourceBClasswiseComponents = sourceAClassWiseComponets;
-            }
 
-            var xCheckStudioInterface1;
+        function AnalyticsData(checkCaseName,
+            sourceAName,
+            sourceBName,
+            sourceATotalItemCount,
+            sourceACheckedItemCount,
+            sourceBTotalItemCount,
+            sourceBCheckedItemCount,
+            sourceAClasswiseCheckedComponents,
+            sourceBClasswiseCheckedComponents,
+            sourceAClassWiseComponets,
+            sourceBClassWiseComponets) {
+            this.CheckCaseName = checkCaseName;
+            this.SourceAName = sourceAName;
+            this.SourceBName = sourceBName;
+            this.SourceATotalItemCount = sourceATotalItemCount;
+            this.SourceACheckedItemCount = sourceACheckedItemCount;
+            this.SourceBTotalItemCount = sourceBTotalItemCount;
+            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
+        }
+
+        var xCheckStudioInterface1;
         var xCheckStudioInterface2;
         var checkCaseManager;
         var checkCaseFilesData;
@@ -2276,7 +2341,7 @@
             if (currentViewer) {
 
                 var results = currentViewer.selectionManager.getResults();
-                
+
                 var map = {};
                 for (var i = 0; i < results.length; i++) {
                     var selectedItem = results[i];
@@ -2301,7 +2366,7 @@
             }
         }
 
-    function startExplode() {
+        function startExplode() {
 
             if (currentViewer) {
                 var slider;
@@ -2690,12 +2755,12 @@
             var sourceBModelTree;
             if (xCheckStudioInterface1) {
                 sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
-                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);               
+                sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
             }
 
             if (xCheckStudioInterface2) {
                 sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
-                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);               
+                sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
             }
 
             var sourceAClassWiseComponets = 0;
@@ -2721,8 +2786,9 @@
                 sourceAClassWiseComponets,
                 sourceBClassWiseComponets);
 
+
             $.ajax({
-                url: 'postData/analyticsDetailsDataWriter.php',
+                url: 'PHP/analyticsDetailsDataWriter.php',
                 type: "POST",
                 async: false,
                 data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
@@ -2734,7 +2800,7 @@
             // post comparison data
             if (comparisonCheckManager) {
                 $.ajax({
-                    url: 'postData/comparisonCheckpostDataWriter.php',
+                    url: 'PHP/comparisonCheckpostDataWriter.php',
                     type: "POST",
                     async: false,
                     data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
@@ -2748,10 +2814,10 @@
             // post source A compliance data
             if (sourceAComplianceCheckManager) {
                 $.ajax({
-                    url: 'postData/sourceAComplianceDataWriter.php',
-                    type: "POST",
+                    url: 'PHP/sourceAComplianceDataWriter.php',
+              		type: "POST",
                     async: false,
-                    data: { "SourceAComplianceCheckManager": JSON.stringify(sourceAComplianceCheckManager) },
+                    data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
                     success: function (data) {
                         //alert("success");
                         //$("#result").html(data);
@@ -2762,11 +2828,11 @@
             // post source B compliance data
             if (sourceBComplianceCheckManager) {
                 $.ajax({
-                    url: 'postData/sourceBComplianceDataWriter.php',
+                    url: 'PHP/sourceBComplianceDataWriter.php',
                     type: "POST",
                     async: false,
                     data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
-                    success: function (data) {                      
+                    success: function (data) {
                     }
                 });
             }
@@ -2774,9 +2840,9 @@
             // post source A viewer data
             if (xCheckStudioInterface1) {
                 if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvm"||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "dwg"||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
                     //virewer container Data
                     var viewerOptions = [];
@@ -2784,21 +2850,22 @@
                     viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
 
                     $.ajax({
-                        url: 'postData/sourceAViewerDataWriter.php',
+                        url: 'PHP/sourceAViewerDataWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
-                        success: function (data) {
-                            //alert("success");
-                            //$("#result").html(data);
-                        }
-                    });
-
+                        data: {
+                            "SourceAViewerData": JSON.stringify(viewerOptions)
+                        },
+                        success: function (msg) {
+                                //alert("success");
+                                //$("#result").html(data);
+                            }
+                    })
 
                     // postnode id and component data relation
                     if (xCheckStudioInterface1.nodeIdVsComponentData) {
                         $.ajax({
-                            url: 'postData/sourceANodeIdVsComponentDataWriter.php',
+                            url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
                             type: "POST",
                             async: false,
                             data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
@@ -2811,7 +2878,7 @@
 
                     if (xCheckStudioInterface1.componentIdVsComponentData) {
                         $.ajax({
-                            url: 'postData/sourceAComponentIdVsComponentDataWriter.php',
+                            url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
                             type: "POST",
                             async: false,
                             data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
@@ -2824,8 +2891,9 @@
                 }
 
                 else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+
                     $.ajax({
-                        url: 'postData/SourceASheetDataWriter.php',
+                        url: 'PHP/SourceASheetDataWriter.php',
                         type: "POST",
                         async: false,
                         data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
@@ -2850,20 +2918,21 @@
                     viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
 
                     $.ajax({
-                        url: 'postData/sourceBViewerDataWriter.php',
+                        url: 'PHP/sourceBViewerDataWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "SourceAViewerData": JSON.stringify(viewerOptions) },
+                        data: { "SourceBViewerData": JSON.stringify(viewerOptions) },
                         success: function (data) {
                             //alert("success");
                             //$("#result").html(data);
                         }
                     });
 
+
                     // postnode id and component data relation
                     if (xCheckStudioInterface2.nodeIdVsComponentData) {
                         $.ajax({
-                            url: 'postData/sourceBNodeIdVsComponentDataWriter.php',
+                            url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
                             type: "POST",
                             async: false,
                             data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
@@ -2876,7 +2945,7 @@
 
                     if (xCheckStudioInterface2.componentIdVsComponentData) {
                         $.ajax({
-                            url: 'postData/sourceBComponentIdVsComponentDataWriter.php',
+                            url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
                             type: "POST",
                             async: false,
                             data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
@@ -2886,11 +2955,13 @@
                             }
                         });
                     }
+
                 }
 
                 else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+
                     $.ajax({
-                        url: 'postData/SourceBSheetDataWriter.php',
+                        url: 'PHP/SourceBSheetDataWriter.php',
                         type: "POST",
                         async: false,
                         data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
@@ -2951,7 +3022,7 @@
             }
         }
 
-        function readExcelDataSource(file,           
+        function readExcelDataSource(file,
             viewerContainer,
             modelTreeContainer) {
 
@@ -2964,8 +3035,8 @@
             }
             else {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);      
-            }          
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
+            }
         }
 
         //open windows file selector dialog
@@ -3071,28 +3142,28 @@
                 if (component.classList.contains("disabledbutton")) {
                     component.classList.remove('disabledbutton');
                 }
-            }         
+            }
         }
 
         window.onclick = function (event) {
-                if (event.target.id == "projectselectiondialogModal") {
-                    document.getElementById('projectselectiondialogModal').style.display = "none";
-                }
-                
-                if (event.target.id == "maximizeViewerContainer") {
-                    returnViewer(maximizedViewerData);
-                    document.getElementById('maximizeViewerContainer').style.display = "none";
-                }
-                var closebutton = document.getElementById("closeLoadDialog");
-                if (event.target === closebutton) {
-                    document.getElementById('projectselectiondialogModal').style.display = "none";
-                }
-                var i = document.getElementById("menu").style;
-                if (i.visibility === "visible") {
-                    i.visibility = "hidden";
-                    //currentViewer = undefined;
-                }
+            if (event.target.id == "projectselectiondialogModal") {
+                document.getElementById('projectselectiondialogModal').style.display = "none";
             }
+
+            if (event.target.id == "maximizeViewerContainer") {
+                returnViewer(maximizedViewerData);
+                document.getElementById('maximizeViewerContainer').style.display = "none";
+            }
+            var closebutton = document.getElementById("closeLoadDialog");
+            if (event.target === closebutton) {
+                document.getElementById('projectselectiondialogModal').style.display = "none";
+            }
+            var i = document.getElementById("menu").style;
+            if (i.visibility === "visible") {
+                i.visibility = "hidden";
+                //currentViewer = undefined;
+            }
+        }
 
         function loadDataSource(event,
             dataSource,
@@ -3116,22 +3187,25 @@
                 return;
             }
 
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "PHP/getSourceData.php", true);
+            xhr.onload = function (data) {                
+                if(data.target.response === "undefined")
+                {
+                    OnShowToast('Valid data source not found');
+                    return;
+                }
+                else{
+                    addTabHeaders(modelTreeContainer, data.target.response);
+                    var fileExtension = xCheckStudio.Util.getFileExtension(data.target.response).toLowerCase();
+                    uploadAndLoadModel(fileExtension, data.target.response,viewerContainer, modelTreeContainer, dataSource, formId, event.target.files);
+                }
+            };
+            var formData = new FormData(document.getElementById(formId));
+            xhr.send(formData);
+        }
 
-            var file = xCheckStudio.UploadManager.getSourceData(event.target.files);
-            if (file === undefined) {
-                //alert("Valid data source not found");
-				OnShowToast('Valid data source not found');
-                return;
-            }
-
-            var fileName = file.name;
-            var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
-            if (!xCheckStudio.UploadManager.validateSource(fileExtension, event.target.files)) {
-                //alert("valid data source not found");
-				OnShowToast('Valid data source not found');
-                return;
-            }
-
+        function addTabHeaders(modelTreeContainer, fileName){
             var tabHeader;
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
@@ -3146,13 +3220,13 @@
                 document.getElementById("dataSource2ViewerContainerTab").innerText = fileName;
             }
             tabHeader.innerText = fileName;
+        }
 
-            //*******
-            // localStorage.setItem(dataSource, fileName);
-            //*******
+        function uploadAndLoadModel(fileExtension, fileName,viewerContainer, modelTreeContainer, dataSource, formId, files)
+        {
             if (fileExtension.toLowerCase() === "xml" ||
                 fileExtension.toLowerCase() === "rvm" ||
-                fileExtension.toLowerCase() === "sldasm"||
+                fileExtension.toLowerCase() === "sldasm" ||
                 fileExtension.toLowerCase() === "dwg" ||
                 fileExtension.toLowerCase() === "sldprt") {
                 var busySpinner = document.getElementById("divLoading");
@@ -3174,34 +3248,36 @@
                     busySpinner.classList.remove('show')
                 };
                 var formData = new FormData(document.getElementById(formId));
+                formData.append('viewerContainer', viewerContainer);
                 xhr.send(formData);
+
             }
             else if (fileExtension.toLowerCase() === "xls") {
                 {
-                   if( loadExcelDataSource(fileExtension, 
-                        file, 
+                    if (loadExcelDataSource(fileExtension,
+                        files,
                         viewerContainer,
-                        modelTreeContainer)){
-                            hideLoadButton(modelTreeContainer);
-                        }
+                        modelTreeContainer)) {
+                        hideLoadButton(modelTreeContainer);
+                    }
                 }
             }
         }
 
         function hideLoadButton(modelTreeContainer) {
-                if (modelTreeContainer === "modelTree1") {
-                    document.getElementById("createbtnA").style.display = "none";
-                    document.getElementById("loadDataA").style.display = "none";
-                }
-                else if (modelTreeContainer === "modelTree2") {
-                    document.getElementById("createbtnB").style.display = "none";
-                    document.getElementById("loadDataB").style.display = "none";
-                }
-
+            if (modelTreeContainer === "modelTree1") {
+                document.getElementById("createbtnA").style.display = "none";
+                document.getElementById("loadDataA").style.display = "none";
+            }
+            else if (modelTreeContainer === "modelTree2") {
+                document.getElementById("createbtnB").style.display = "none";
+                document.getElementById("loadDataB").style.display = "none";
             }
 
+        }
+
         function loadExcelDataSource(fileExtension,
-            file,           
+            file,
             viewerContainer,
             modelTreeContainer) {
             if (!checkCaseManager ||
@@ -3237,10 +3313,10 @@
                     return false;
                 }
             }
-            readExcelDataSource(file,               
+            readExcelDataSource(file[0],
                 viewerContainer,
                 modelTreeContainer);
-            
+
             return true;
 
         }
@@ -3293,7 +3369,15 @@
             fileName = fileName.substring(0, fileName.lastIndexOf('.'));
             fileName += '.scs';
 
-            var uri = "uploads/scs/" + fileName;
+            var uri = "uploads/scs/";
+            if(viewerContainer === "viewerContainer1")
+            {
+                uri += "SourceA/" + fileName;
+            }
+            else if(viewerContainer === "viewerContainer2")
+            {
+                uri += "SourceB/" + fileName;
+            }
 
             xCheckStudio.Util.fileExists(uri).then(function (success) {
                 if (success) {
@@ -3306,7 +3390,7 @@
 
                     if (viewerContainer === "viewerContainer1") {
                         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                        xCheckStudioInterface1.setupViewer(viewerOptions, true);                      
+                        xCheckStudioInterface1.setupViewer(viewerOptions, true);
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
@@ -3360,9 +3444,9 @@
 
                     if (xCheckStudioInterface1 && modelTreeContainer === "modelTree1") {
                         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
-                            xCheckStudioInterface1.SourceType.toLowerCase() === "rvm"||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
-                            xCheckStudioInterface1.SourceType.toLowerCase() === "dwg"||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
 
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
@@ -3402,9 +3486,9 @@
                         }
 
                     }
-                    if (xCheckStudioInterface2 && modelTreeContainer === "modelTree2" ) {
+                    if (xCheckStudioInterface2 && modelTreeContainer === "modelTree2") {
                         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
-                            xCheckStudioInterface2.SourceType.toLowerCase() === "rvm"||
+                            xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt") {
@@ -3421,7 +3505,7 @@
                             // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
                             // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
                             checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
-                            
+
                             if (checkBoxId === "checkAllSourceBCB" &&
                                 xCheckStudioInterface2 &&
                                 !xCheckStudioInterface2._modelTree.selectedCompoentExists(row)) {
@@ -3685,7 +3769,7 @@
             viewerdata.style.margin = "20px 0 0 20px";
             //margin: 20px 0 0 20px
             viewerContainer[0].appendChild(viewerdata);
-           
+
             if (viewerdata.id === "viewerContainer1" &&
                 xCheckStudioInterface1 &&
                 xCheckStudioInterface1._firstViewer) {
@@ -3704,7 +3788,7 @@
             // }, 500);
         };
 
-        var maximizedViewerData ;
+        var maximizedViewerData;
         function OnFullScreen() {
             var elem = document.getElementById("viewerContainer1");
             if (elem.style.display === "block") {
@@ -3720,8 +3804,8 @@
                 modalViewerContainer.style.width = "100%";
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
-                
-                
+
+
                 if (xCheckStudioInterface1 &&
                     xCheckStudioInterface1._firstViewer) {
                     xCheckStudioInterface1._firstViewer.resizeCanvas();
@@ -3796,7 +3880,7 @@
                 document.getElementById("tab1").style.backgroundColor = "#F3F0F4";
                 document.getElementById("tab1Viewer").style.backgroundColor = "#F3F0F4";
 
-                if (currentViewer && 
+                if (currentViewer &&
                     currentViewer._params.containerId !== "viewerContainer1") {
 
                     stopExplode();
@@ -3805,7 +3889,7 @@
 
                 if (xCheckStudioInterface1 && xCheckStudioInterface1._firstViewer) {
                     currentViewer = xCheckStudioInterface1._firstViewer;
-                }                
+                }
             }
             else if (tabName === "tab2" || tabName === "tab2Viewer") {
                 document.getElementById("dataSource1").style.display = "none";
@@ -3822,16 +3906,15 @@
                 document.getElementById("tab2").style.backgroundColor = "#F3F0F4";
                 document.getElementById("tab2Viewer").style.backgroundColor = "#F3F0F4";
 
-                if (currentViewer&& 
+                if (currentViewer &&
                     currentViewer._params.containerId !== "viewerContainer2") {
 
                     stopExplode();
                     currentViewer = undefined;
                 }
-                if(xCheckStudioInterface2 && xCheckStudioInterface2._firstViewer)
-                {
+                if (xCheckStudioInterface2 && xCheckStudioInterface2._firstViewer) {
                     currentViewer = xCheckStudioInterface2._firstViewer;
-                }    
+                }
             }
         }
 
@@ -3840,7 +3923,6 @@
             var modal = document.getElementById('projectselectiondialogModal');
 
             // When the user clicks the button, open the modal 
-
             modal.style.display = "block";
             $('#projectselectiondialog-content').load("/projectselectiondialog.html")
         }
@@ -3861,7 +3943,7 @@
             }
             return "";
         }
-      
+
         function OnShowHideMenu() {
             var x = document.getElementById("openmenu");
             if (x.style.display === "none") {
@@ -3903,11 +3985,11 @@
 
             var sourceAModelTree;
             var sourceBModelTree;
-            if (xCheckStudioInterface1) {              
+            if (xCheckStudioInterface1) {
                 sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
             }
 
-            if (xCheckStudioInterface2) {              
+            if (xCheckStudioInterface2) {
                 sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
             }
 
@@ -3924,62 +4006,55 @@
             }
 
             // for source A
-            if(sourceAFileName !== undefined)
-            {
+            if (sourceAFileName !== undefined) {
                 document.getElementById("headerval1").innerHTML = sourceAFileName;
             }
             var sourceACount = document.getElementById("SourceAComponentCount").innerText;
-            if(sourceACount.split(":")[1] !== undefined)
-            {
+            if (sourceACount.split(":")[1] !== undefined) {
                 document.getElementById("infoproperties1val1").innerHTML = sourceACount.split(":")[1].trim();
             }
-            else{
+            else {
                 document.getElementById("infoproperties1val1").innerHTML = 0;
             }
             document.getElementById("infoproperties1val2").innerHTML = sourceACheckedItemCount;
             var sourceACompliancebtn = document.getElementById("complianceSourceACB");
-            if(sourceACompliancebtn.className.includes("state2-to-state1"))
-            {
+            if (sourceACompliancebtn.className.includes("state2-to-state1")) {
                 document.getElementById("infoproperties1val3").innerHTML = "Enabled";
             }
-            else{
+            else {
                 document.getElementById("infoproperties1val3").innerHTML = "Disabled";
             }
 
             //for source B
-            if(sourceBFileName !== undefined)
-            {
+            if (sourceBFileName !== undefined) {
                 document.getElementById("headerval2").innerHTML = sourceBFileName;
             }
             var sourceBCount = document.getElementById("SourceBComponentCount").innerText;
-            if(sourceBCount.split(":")[1] !== undefined)
-            {
+            if (sourceBCount.split(":")[1] !== undefined) {
                 document.getElementById("infoproperties2val1").innerHTML = sourceBCount.split(":")[1].trim();
             }
-            else{
+            else {
                 document.getElementById("infoproperties2val1").innerHTML = 0;
             }
             document.getElementById("infoproperties2val2").innerHTML = sourceBCheckedItemCount;
             var sourceBCompliancebtn = document.getElementById("complianceSourceBCB");
-            if(sourceBCompliancebtn.className.includes("state2-to-state1"))
-            {
+            if (sourceBCompliancebtn.className.includes("state2-to-state1")) {
                 document.getElementById("infoproperties2val3").innerHTML = "Enabled";
             }
-            else{
+            else {
                 document.getElementById("infoproperties2val3").innerHTML = "Disabled";
             }
-            
+
             //for both sources
             document.getElementById("infoproperties3val1").innerHTML = checkCaseManager.CheckCase.Name;
             var comparisonBtn = document.getElementById("comparisonCB");
-            if(comparisonBtn.className.includes("state1-to-state2"))
-            {
+            if (comparisonBtn.className.includes("state1-to-state2")) {
                 document.getElementById("infoproperties3val2").innerHTML = "Enabled";
             }
-            else{
+            else {
                 document.getElementById("infoproperties3val2").innerHTML = "Disabled";
             }
-			//document.getElementById("infoproperties3val2").innerHTML = ;
+            //document.getElementById("infoproperties3val2").innerHTML = ;
         }
 
         function OnInfoClose() {

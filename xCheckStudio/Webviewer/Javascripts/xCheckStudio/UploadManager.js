@@ -55,22 +55,24 @@ var xCheckStudio;
        UploadManager.validateSource = validateSource;
 
         function getSourceData(files) {
-            if (files.length > 0) {
 
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
 
-                    var fileExtension = xCheckStudio.Util.getFileExtension(file.name);
-                    fileExtension = fileExtension.toLowerCase();
+            // if (files.length > 0) {
 
-                    if (ValidDataSources.indexOf(fileExtension) > -1) {
-                        // valid datasource found
-                        return file;
-                    }
-                }
-            }
+            //     for (var i = 0; i < files.length; i++) {
+            //         var file = files[i];
 
-            return undefined;
+            //         var fileExtension = xCheckStudio.Util.getFileExtension(file.name);
+            //         fileExtension = fileExtension.toLowerCase();
+
+            //         if (ValidDataSources.indexOf(fileExtension) > -1) {
+            //             // valid datasource found
+            //             return file;
+            //         }
+            //     }
+            // }
+
+            // return undefined;
         }
         UploadManager.getSourceData = getSourceData;
 

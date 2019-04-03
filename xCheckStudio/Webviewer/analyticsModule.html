@@ -406,6 +406,80 @@
         var analyticsManager;
 
         window.onload = function () {
+            var ComparisonCheckDataPHP = undefined;
+            var SourceAComplianceDataPHP = undefined;
+            var SourceBComplianceDataPHP = undefined;
+            var AnalyticsPHP = undefined;
+
+            $.ajax({
+                url: 'PHP/comparisonCheckpostDataReader.php',
+                type: "POST",
+                async: false,
+                data: {},
+                success: function (msg) {
+                    var int = 0;
+                    if(msg !== "not found")
+                    {
+                        ComparisonCheckDataPHP = JSON.parse(msg);
+                    }
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            })
+
+            $.ajax({
+                url: 'PHP/sourceAComplianceDataReader.php',
+                type: "POST",
+                async: false,
+                data: {},
+                success: function (msg) {
+                    var int = 0;
+                    if(msg !== "not found")
+                    {
+                        SourceAComplianceDataPHP = JSON.parse(msg);
+                    }
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            })
+
+            $.ajax({
+                url: 'PHP/sourceBComplianceDataReader.php',
+                type: "POST",
+                async: false,
+                data: {},
+                success: function (msg) {
+                    var int = 0;
+                    if(msg !== "not found")
+                    {
+                        SourceBComplianceDataPHP = JSON.parse(msg);
+                    }
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            })
+
+            $.ajax({
+                url: 'PHP/analyticsDetailsDataReader.php',
+                type: "POST",
+                async: false,
+                data: {},
+                success: function (msg) {
+                    var int = 0;
+                    if(msg !== "not found")
+                    {
+                        AnalyticsPHP = JSON.parse(msg);
+                    }
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            })
+
+            ComparisonCheckData = ComparisonCheckDataPHP;
+            AnalyticsData = AnalyticsPHP;
+            SourceAComplianceData = SourceAComplianceDataPHP;
+            SourceBComplianceData = SourceBComplianceDataPHP;
+
             analyticsManager = new AnalyticsManager();
 
             var checkCase = AnalyticsData.CheckCaseName;
@@ -800,7 +874,6 @@
                 document.getElementById("InfoTab").style.display = "block";
                 analyticsManager.drawInfoLineCharts();
             }
-
         }
     </script>
 

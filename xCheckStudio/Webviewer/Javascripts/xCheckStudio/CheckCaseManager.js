@@ -165,8 +165,25 @@ function CheckCaseManager() {
 
         //this.addCheckCase(checkCase);
         this.CheckCase = checkCase;
+        this.postData();
+    }
+
+    CheckCaseManager.prototype.postData = function () {
+        $.ajax({
+            url: 'PHP/CheckCaseDataWriter.php',
+            type: "POST",
+            async: false,
+            data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
+            success: function (data) {
+                // alert("success");
+            }
+        });
+
     }
 }
+
+
+
 
 function CheckCase(name/*, complianceCheck*/) {
     this.Name = name;

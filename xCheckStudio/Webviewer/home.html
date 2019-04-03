@@ -1,33 +1,3 @@
-<!-- <html>
-
-<head>
-
-</head>
-
-<body>
-    <table style="width: -webkit-fill-available; height:-webkit-fill-available;  margin: auto;">
-        <th style=" background-color: #333333; height: 15%;">
-            <img src="images/Header.png">
-        </th>
-        <tr style=" text-align: center; height: 70%;">
-            <td>
-
-                <img height="50%" src="images/Prep.png">
-                <img height="50%" onclick="goToCheck()" src="images/Check.png">
-                <img height="50.5%" src="images/Review.png">
-            </td>
-        </tr>
-        <th style=" background-color: #333333; height: 15%;">
-        </th>
-    </table>
-</body>
-<script>
-    function goToCheck() {
-        window.location = "/checkModule.html";
-    }
-</script>
-
-</html> -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -125,7 +95,7 @@
                             PROJECT:
                         </div>
                         <div class="selectaproject">
-                            <span class="span1">| </span><span class="span2">Select a Project</span><span class="span3">  |</span>
+                            <span class="span1">| </span><span class="span2">Select a Project</span><span class="span3">Â Â |</span>
                         </div>
                     </div>
                     <div class="inforight">
@@ -441,22 +411,10 @@
 		function OnCheckClick() {
                 // Get the modal
                 var modal = document.getElementById('projectselectiondialogModal');
-
                 // When the user clicks the button, open the modal 
-               
-                    modal.style.display = "block";
-                    $('#projectselectiondialog-content').load("/projectselectiondialog.html")
-
-                // When the user clicks anywhere outside of the modal, close it
-                // window.onclick = function (event) {
-                //     if (event.target == modal) {
-                //         modal.style.display = "none";
-                //     }
-                // }
-            // window.location = "/checkModule.html";
-            // return false;
-			// // alert("Check Clicked");
-		}
+                modal.style.display = "block";
+                $('#projectselectiondialog-content').load("/projectselectiondialog.html");
+            }
 		
 		function OnReviewClicked()
 		{

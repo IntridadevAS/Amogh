@@ -2,9 +2,10 @@ var comparisonCheckManager;
 var sourceAComplianceCheckManager;
 var sourceBComplianceCheckManager;
 
-function CheckManager() {
+function CheckManager(name) {
     this.Name = name;
 
+    this.CheckComponentsGroupsData = "";
     this.CheckComponentsGroups = {};
     this.SourceANotCheckedComponents = [];
     this.SourceBNotCheckedComponents = [];
@@ -35,11 +36,52 @@ function CheckManager() {
         comparisonCheck,
         interfaceObject) {
 
+            var $this = this;
         if (comparisonCheck) {
             this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
         }
         else {
-            this.checkDataSourceForCompliance(sourceProperties1, checkCaseType, interfaceObject);
+            var CheckCaseData = "";
+            $.ajax({
+                url: 'PHP/CheckCaseDataReader.php',
+                type: "POST",
+                async: false,
+                data: {},
+                success: function (msg) {
+                    CheckCaseData = msg;
+                }
+            })
+
+            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(interfaceObject.SourceType,"");
+            var SelectedCompoents;
+            if(interfaceObject._modelTree !== undefined)
+            {
+                SelectedCompoents = interfaceObject._modelTree.selectedCompoents;
+            }
+            else if(interfaceObject.excelReader !== undefined)
+            {
+                SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.selectedCompoents;
+            }
+
+
+            $.ajax({
+                url: 'PHP/checkDataSourceForCompliance.php',
+                type: "POST",
+                async: false,
+                data: { "SourceProperties": JSON.stringify(sourceProperties1), 
+                        "CheckCaseType": JSON.stringify(checkCaseType),
+                        "SourceType": interfaceObject.SourceType,
+                        "SelectedCompoents": JSON.stringify(SelectedCompoents),
+                        "ExcelSelectedCompoents": JSON.stringify(interfaceObject.excelReader.excelModelBrowser.selectedCompoents),
+                        "IdentifierProperties": JSON.stringify(identifierProperties),
+                        "CheckCaseData": CheckCaseData
+                },
+                success: function (data) {
+                    // alert("success");
+                    $this.CheckComponentsGroupsData = data;
+                }
+            });
+            // this.checkDataSourceForCompliance(sourceProperties1, checkCaseType, interfaceObject);
         }
     }
 

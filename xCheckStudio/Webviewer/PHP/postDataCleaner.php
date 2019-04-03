@@ -1,0 +1,20 @@
+<?php
+session_start();
+unset($_SESSION['ComparisonCheckManager'], 
+    $_SESSION['SourceAComplianceCheckManager'], 
+    $_SESSION['SourceBComplianceCheckManager'], 
+    $_SESSION['sourceAComponentIdVsComponentData'], 
+    $_SESSION['SourceANodeIdVsComponentData'], 
+    $_SESSION['sourceBComponentIdVsComponentData'], 
+    $_SESSION['SourceBNodeIdVsComponentData'],
+    $_SESSION['SourceASheetData'],
+    $_SESSION['SourceBSheetData'],
+    $_SESSION['sourceAViewerData1'],
+    $_SESSION['sourceBViewerData1'], 
+    $_SESSION['AnalyticsDetailsData']);
+
+    unset($_SESSION['ComparisonCheckManager1'], 
+    $_SESSION['SourceAComplianceCheckManager1'], 
+    $_SESSION['SourceBComplianceCheckManager1'], 
+    $_SESSION['AnalyticsDetailsData']);
+?>

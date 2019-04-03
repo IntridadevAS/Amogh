@@ -20,8 +20,17 @@ foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
 {
         $temp = $_FILES["dataSouresName"]["tmp_name"][$key];
         $name = $_FILES["dataSouresName"]["name"][$key];
-	 
-		$UploadFolder=__DIR__."/scs/".$name;	
+     
+       
+        if($_POST['viewerContainer'] == "viewerContainer1")
+        {
+            $UploadFolder=__DIR__."/scs/SourceA/".$name;	
+        }
+        if($_POST['viewerContainer'] == "viewerContainer2")
+        {
+            $UploadFolder=__DIR__."/scs/SourceB/".$name;
+        }
+        // $UploadFolder=__DIR__."/scs/".$name;
 
     if(empty($temp))
     {
@@ -82,9 +91,31 @@ if($counter>0)
 		$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 		if(in_array($ext, $validSources) == true)
 		{
-			$UploadFolder=__DIR__."/scs/".$fileName;		
-			$output_name=explode(".",$fileName);
-			$output_file_path=__DIR__."/scs/"."$output_name[0]";
+
+            if($_POST['viewerContainer'] == "viewerContainer1")
+            {
+                $UploadFolder=__DIR__."/scs/SourceA/".$fileName;	
+            }
+            if($_POST['viewerContainer'] == "viewerContainer2")
+            {
+                $UploadFolder=__DIR__."/scs/SourceB/".$fileName;
+            }
+
+
+
+			// $UploadFolder=__DIR__."/scs/".$fileName;		
+            $output_name=explode(".",$fileName);
+            
+            if($_POST['viewerContainer'] == "viewerContainer1")
+            {
+                $output_file_path=__DIR__."/scs/SourceA/"."$output_name[0]";
+            }
+            if($_POST['viewerContainer'] == "viewerContainer2")
+            {
+                $output_file_path=__DIR__."/scs/SourceB/"."$output_name[0]";
+            }
+
+			// $output_file_path=__DIR__."/scs/"."$output_name[0]";
 			
 			$command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
 			echo "Command : ".$command;
