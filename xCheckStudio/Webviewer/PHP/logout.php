@@ -1,11 +1,16 @@
 <?php
-session_start();
-session_unset();
-if(isset($_SESSION['AnalyticsDetailsData']))
-{
-    echo("true");
-}
-else{
-    echo("false");
-}
+        session_start();
+       
+		if(isset($_SESSION['name']))
+		{
+         $name =  $_SESSION['name'];
+        
+         session_unset();
+         
+         echo  $name ;
+        }
+        else
+        {
+            echo 'fail';
+        }		
 ?>

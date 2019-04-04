@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+       
+        <script type="text/javascript" src="Javascripts\xCheckStudio\HomePage.js"></script>
+
         <link href="/images/UIPackage/favicon.png" rel="shortcut icon"/>
         <meta charset="utf-8"/>
         <meta content="width=1280, maximum-scale=1.0" name="viewport"/>
@@ -95,7 +98,7 @@
                             PROJECT:
                         </div>
                         <div class="selectaproject">
-                            <span class="span1">| </span><span class="span2">Select a Project</span><span class="span3">Â Â |</span>
+                            <span class="span1">| </span><span class="span2">Select a Project</span><span class="span3"> |</span>
                         </div>
                     </div>
                     <div class="inforight">
@@ -408,7 +411,8 @@
             };
         </script>
 		<script>
-		function OnCheckClick() {
+        
+        function OnCheckClick() {
                 // Get the modal
                 var modal = document.getElementById('projectselectiondialogModal');
                 // When the user clicks the button, open the modal 
@@ -422,28 +426,11 @@
             modal.style.display = "block";
             $('#projectselectiondialog-content').load("/reviewprojectselectiondialog.html")
 		}
-		window.onload = function () {
-			var username = getCookie("username");
-			var pierrediv  = document.getElementById("pierre");
-			if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;	
-		}
-		function getCookie(cname) 
-		{
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-			  for(var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-				  c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-				  return c.substring(name.length, c.length);
-				}
-			}
-			return "";
-		}
+        
+        window.onload = function () {
+			setUserName();			
+		}        
+     
 		</script>
         <!-- End of Scripts -->
     </body>

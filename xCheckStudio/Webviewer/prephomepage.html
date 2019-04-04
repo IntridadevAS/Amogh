@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript" src="Javascripts\xCheckStudio\PreHomePage.js"></script>
+
         <link href=".\images\UIPackage/favicon.png" rel="shortcut icon"/>
         <meta charset="utf-8"/>
         <meta content="width=1280, maximum-scale=1.0" name="viewport"/>
@@ -182,27 +184,9 @@
         </script>
 		<script>
 		window.onload = function () {
-			var username = getCookie("username");
-			var pierrediv  = document.getElementById("pierre");
-			if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;	
-		}
-		function getCookie(cname) 
-		{
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-			  for(var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-				  c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-				  return c.substring(name.length, c.length);
-				}
-			}
-			return "";
-		}
+            setUserName();		
+        }
+        	
 		</script>
         <!-- End of Scripts -->
     </body>

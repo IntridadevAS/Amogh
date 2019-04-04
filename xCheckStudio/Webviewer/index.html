@@ -187,6 +187,7 @@
         anima_loadAsyncSrc();
         anima_old_onResize = window.onresize;
         anima_new_onResize = undefined;
+       
         anima_updateOnResize = function () {
             if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
                 anima_new_onResize = function (x) {
@@ -200,18 +201,14 @@
             }
         };
         anima_updateOnResize();
+      
         setTimeout(function () {
             anima_loadAsyncSrc();
         }, 200);
+
     </script>
     <script>
-        function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            var expires = "expires=" + d.toGMTString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
-
+            
         window.onload = function () {
             var loginButton = document.getElementById("loginButton");
             loginButton.onclick = function () {

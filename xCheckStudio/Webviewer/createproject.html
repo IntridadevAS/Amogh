@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript" src="Javascripts\xCheckStudio\CreateProject.js"></script>
+        <script type="text/javascript" src="Javascripts\xCheckStudio\SessionManager.js"></script>
+        
         <link href="/images/UIPackage/favicon.png" rel="shortcut icon"/>
         <meta charset="utf-8"/>
         <meta content="width=1280, maximum-scale=1.0" name="viewport"/>
@@ -181,51 +184,20 @@
         </div>
         <!-- Scripts -->
         <script>
-			function setCookie(cname,cvalue,exdays) {
-			  var d = new Date();
-			  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-			  var expires = "expires=" + d.toGMTString();
-			  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-			}
-
-			function getCookie(cname) {
-			  var name = cname + "=";
-			  var decodedCookie = decodeURIComponent(document.cookie);
-			  var ca = decodedCookie.split(';');
-			  for(var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-				  c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-				  return c.substring(name.length, c.length);
-				}
-			  }
-			  return "";
-			}
-
-			function checkCookie() {
-			  var project=getCookie("checkprojectname");
-			  if (project != "") {
-				alert("Selected Project is " + project);
-			  } else {
-				 project = prompt("Please enter project name:","");
-				 if (project != "" && project != null) {
-				   setCookie("checkprojectname", project, 1);
-				 }
-			  }
-			}
-	
+				
 			function OnLoadPowerPlant()
 			{
 				var projectname = "PowerPlant";
-				setCookie("checkprojectname", projectname, 1);
+                //setCookie("checkprojectname", projectname, 1);
+                setSessionVariable("projectname", projectname);
+
 				window.location.href = "/checkModule.html";
 			}
 			function OnLoadPowerPlant2()
 			{
 				var projectname = "Project 2";
-				setCookie("checkprojectname", projectname, 1);
+                //setCookie("checkprojectname", projectname, 1);
+                setSessionVariable("projectname", projectname);
 				window.location.href = "/checkModule.html";
 			}
              function OnCreateProjectClick(){
@@ -235,15 +207,8 @@
                 modal.style.display = "block";
                 document.getElementById("projectselectiondialog-content").innerHTML = "";
                 $('#projectselectiondialog-content').load("/newprojectcreationdialog.html")
-
            
-            
-            // When the user clicks anywhere outside of the modal, close it
-            // window.onclick = function (event) {
-            //     if (event.target == modal) {
-            //         modal.style.display = "none";
-            //     }
-            // }
+         
         }
 
 
@@ -323,28 +288,11 @@
             }, 200);
         </script>
 		<script>
-		window.onload = function () {
-			var username = getCookie("username");
-			var pierrediv  = document.getElementById("pierre");
-			if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;	
+        
+        window.onload = function () {
+            setUserName(); 			
 		}
-		function getCookie(cname) 
-		{
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-			  for(var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-				  c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-				  return c.substring(name.length, c.length);
-				}
-			}
-			return "";
-		}
+		
 		</script>
         <!-- End of Scripts -->
     </body>

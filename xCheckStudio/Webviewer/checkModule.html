@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModule.js"></script>
+
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
     <script type="text/javascript" src="Javascripts\dropZone\dropZone.js"></script>
@@ -2521,17 +2523,12 @@
             // disable controls on load
             disableControlsOnLoad();
 
-            var project = getCookie("checkprojectname");
-            var powerplantdiv = document.getElementById("powerplant");
-            if (project != "" && powerplantdiv != null)
-                powerplant.innerHTML = project;
+            // set project name
+            setProjectName();        
 
-            var username = getCookie("username");
-            var pierrediv = document.getElementById("pierre");
-            if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;
-
-
+            // set user name
+            setUserName();
+            
             //delete checkResultsArray from local storage
             delete (localStorage["CheckResultArray"]);
             delete (localStorage["CheckResultArrayInfo"])
@@ -3780,12 +3777,7 @@
                 xCheckStudioInterface2._firstViewer) {
                 xCheckStudioInterface2._firstViewer.resizeCanvas();
             }
-
-            // this._viewer.moveToWindow(window);
-            // this._viewer.resizeCanvas();
-            // window.setTimeout(function () {
-            //     _this._viewer.redraw();
-            // }, 500);
+          
         };
 
         var maximizedViewerData;
@@ -3810,14 +3802,7 @@
                     xCheckStudioInterface1._firstViewer) {
                     xCheckStudioInterface1._firstViewer.resizeCanvas();
                 }
-
-                // When the user clicks anywhere outside of the modal, close it
-                // window.onclick = function (event) {
-                //     if (event.target == modal) {
-                //         returnViewer(viewerdata);
-                //         modal.style.display = "none";
-                //     }
-                // }
+              
             }
 
             var elem2 = document.getElementById("viewerContainer2");
@@ -3837,15 +3822,7 @@
                 if (xCheckStudioInterface2 &&
                     xCheckStudioInterface2._firstViewer) {
                     xCheckStudioInterface2._firstViewer.resizeCanvas();
-                }
-
-                // When the user clicks anywhere outside of the modal, close it
-                // window.onclick = function (event) {
-                //     if (event.target == modal) {
-                //         returnViewer(maximizedViewerData);
-                //         modal.style.display = "none";
-                //     }
-                // }
+                }             
             }
         }
 
@@ -3928,22 +3905,7 @@
         }
     </script>
     <script>
-        function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
-
+       
         function OnShowHideMenu() {
             var x = document.getElementById("openmenu");
             if (x.style.display === "none") {

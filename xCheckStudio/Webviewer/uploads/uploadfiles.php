@@ -30,8 +30,7 @@ foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
         {
             $UploadFolder=__DIR__."/scs/SourceB/".$name;
         }
-        // $UploadFolder=__DIR__."/scs/".$name;
-
+       
     if(empty($temp))
     {
         break;
@@ -119,11 +118,11 @@ if($counter>0)
 			
 			$command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
 			echo "Command : ".$command;
-			print_r($command);
+			//print_r($command);
 			//'$command';
 			
 			exec($command, $output);
-			print_r($output);
+			//print_r($output);
 			
 			//`$launch_converter $dest $output_file_path`;
 			echo "<br>";

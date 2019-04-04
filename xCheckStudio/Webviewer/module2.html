@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModule.js"></script>
+
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
@@ -972,16 +974,12 @@
             var sourceAComplianceCheckManager;
             var sourceBComplianceCheckManager;
 
-            var project = getCookie("checkprojectname");
-            var powerplantdiv = document.getElementById("powerplant");
-            if (project != "" && powerplantdiv != null)
-                powerplant.innerHTML = project;
-
-            var username = getCookie("username");
-            var pierrediv = document.getElementById("pierre");
-            if (username != "" && pierrediv != null)
-                pierrediv.innerHTML = username;
-
+            // set project name
+            setProjectName();
+                     
+            // set user name
+            setUserName();
+        
             SourceAViewerData = SourceAViewerDataPHP;
             SourceBViewerData = SourceBViewerDataPHP;
             ComparisonCheckData = ComparisonCheckDataPHP;
@@ -1295,11 +1293,6 @@
 
             // // clear all contents of checksViewTable
             var checksViewTable = document.getElementById("checksViewTable");
-            // checksViewTable.innerHTML = "";
-
-            // // create table rows and viewer containers            
-            // var tbody = document.createElement("tbody");
-            // checksViewTable.appendChild(tbody);
 
             var viewerContainer1 = document.getElementById("viewerContainer1");
             //viewerContainer1.innerHTML = ""
@@ -1358,53 +1351,6 @@
                 sourceBViewerRow.style.top = "40px";
                 sourceBViewerRow.style.display = "block";
 
-
-                // // create row for source a viewer
-                // var tr = document.createElement("tr");
-                // tr.id = sourceAViewerContainerRowId;
-                // tr.style.width = "450px";
-                // tr.style.height = "50%";
-                // tr.style.top = "40px";
-                // //tr.style.borderStyle = "none";
-                // tbody.appendChild(tr);
-
-                // var td = document.createElement("td");
-                // td.style.borderStyle = "none";
-                // tr.appendChild(td);
-
-                // var div = document.createElement("div");
-                // div.className = "example-canvas-tiny";
-                // div.style.width = "550px";
-                // div.style.height = "270px";
-                // div.id = sourceAViewerContainerId;
-                // div.style.minWidth = "200px";
-                // div.style.borderStyle = "none";
-                // div.innerHTML = "Source A";
-                // td.appendChild(div);
-
-                // // create row for source b viewer
-                // tr = document.createElement("tr");
-                // tr.id = sourceBViewerContainerRowId;
-                // tr.style.width = "450px";
-                // tr.style.height = "50%";
-                // tr.style.top = "40px";
-                // //tr.style.borderStyle = "none";
-                // tbody.appendChild(tr);
-
-                // var td = document.createElement("td");
-                // td.style.borderStyle = "none";
-                // tr.appendChild(td);
-
-                // var div = document.createElement("div");
-                // div.className = "example-canvas-tiny";
-                // div.style.width = "550px";
-                // div.style.height = "270px";
-                // div.id = sourceBViewerContainerId;
-                // div.style.minWidth = "200px";
-                // div.style.borderStyle = "none";
-                // div.innerHTML = "Source B";
-                // td.appendChild(div);
-
                 //clear highlighted row
                 if (comparisonReviewManager.SelectedComponentRowFromSheetA) {
                     comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayA,
@@ -1442,31 +1388,7 @@
 
                 var sourceBViewerRow = document.getElementById(sourceBViewerContainerRowId);
                 sourceBViewerRow.style.display = "none";
-                // viewerContainer1.innerHTML = ""
-
-                // // create row for source a viewer
-                // var tr = document.createElement("tr");
-                // tr.id = sourceAViewerContainerRowId;
-                // tr.style.width = "100%";
-                // tr.style.height = "50%";
-                // tr.style.margin = "auto";
-                // tbody.appendChild(tr);
-
-                // var td = document.createElement("td");
-                // td.style.borderStyle = "none";
-                // tr.appendChild(td);
-
-                // var div = document.createElement("div");
-                // div.className = "example-canvas-tiny";
-                // div.style.width = "550px";
-                // div.style.height = "450px";
-                // div.style.top = "50px";
-                // div.id = sourceAViewerContainerId;
-                // div.style.minWidth = "400px";
-                // div.style.borderStyle = "none";
-                // div.innerHTML = "Source A";
-                // td.appendChild(div);
-
+    
                 //clear highlighted row
                 if (sourceAComplianceReviewManager.SelectedComponentRowFromSheetA) {
                     sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray,
@@ -1499,29 +1421,7 @@
 
                 var sourceAViewerRow = document.getElementById(sourceAViewerContainerRowId);
                 sourceAViewerRow.style.display = "none";
-                // // create row for source b viewer
-                // tr = document.createElement("tr");
-                // tr.id = sourceBViewerContainerRowId;
-                // tr.style.width = "100%";
-                // tr.style.height = "50%";
-                // tr.style.margin = "auto";
-                // tbody.appendChild(tr);
-
-                // var td = document.createElement("td");
-                // td.style.borderStyle = "none";
-                // tr.appendChild(td);
-
-                // var div = document.createElement("div");
-                // div.className = "example-canvas-tiny";
-                // div.style.width = "550px";
-                // div.style.height = "450px";
-                // div.style.top = "50px";
-                // div.id = sourceBViewerContainerId;
-                // div.style.minWidth = "400px";
-                // div.style.borderStyle = "none";
-                // div.innerHTML = "Source B";
-                // td.appendChild(div);
-
+      
                 //clear highlighted row
                 if (sourceBComplianceReviewManager.SelectedComponentRowFromSheetB) {
                     sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray,
@@ -1545,16 +1445,7 @@
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
                 }
-
-                // // clear for Excel data source
-                // if (document.getElementById(sourceAViewerContainerId) &&
-                //     document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
-                //     document.getElementById(sourceAViewerContainerId).innerHTML = ""
-                // }
-                // if (document.getElementById(sourceBViewerContainerId) &&
-                //     document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
-                //     document.getElementById(sourceBViewerContainerId).innerHTML = ""
-                // }
+            
             }
             if (typeof sourceAComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1562,11 +1453,7 @@
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                // // clear for Excel data source
-                // if (document.getElementById(sourceAViewerContainerId) &&
-                //     document.getElementById(sourceAViewerContainerId).getElementsByTagName("div")) {
-                //     document.getElementById(sourceAViewerContainerId).innerHTML = ""
-                // }
+              
             }
             if (typeof sourceBComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1574,11 +1461,7 @@
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-                // // clear for Excel data source
-                // if (document.getElementById(sourceBViewerContainerId) &&
-                //     document.getElementById(sourceBViewerContainerId).getElementsByTagName("div")) {
-                //     document.getElementById(sourceBViewerContainerId).innerHTML = ""
-                // }
+              
             }
 
             // load data sources in viewer
@@ -1594,23 +1477,7 @@
                 tabName === "SourceBComplianceTabPage") {
                 sourceBComplianceReviewManager.loadDatasource();
             }
-        }
-
-        function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
+        }     
 
         function gotoCheckModule() {
             window.location = "/checkModule.html";
@@ -1638,8 +1505,7 @@
             viewerContainer[0].children[0].appendChild(viewerdata);
             var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
             for (var i = 0; i < modalViewerContainer.length; i++) {
-                // fileExtension1 = AnalyticsData.SourceAName.split(".")[1];
-                // fileExtension2 = AnalyticsData.SourceBName.split(".")[1];
+                
                 var currentViewer = modalViewerContainer[i];
                 if (document.getElementById("dataSource1ModelBrowserTab").style.backgroundColor !== "lightgray") {
                     currentViewer.style.width = "550px";
@@ -1658,14 +1524,7 @@
             }
 
             // resize viewer canvas
-            resizeHoopsViewerCanvas();
-
-            // document.getElementById("ChecksTabPage").style.marginTop = "40px";
-            // this._viewer.moveToWindow(window);
-            // this._viewer.resizeCanvas();
-            // window.setTimeout(function () {
-            //     _this._viewer.redraw();
-            // }, 500);
+            resizeHoopsViewerCanvas();          
         };
 
         function OnFullScreen() {

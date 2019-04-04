@@ -5,20 +5,13 @@ var validateLogindetails = function () {
             password: $('#passwordtext').val()
         },
         type: "POST",
-        url: "index/login.php"
+        url: "PHP/login.php"
     }).done(function (msg) {
         if (msg == "correct match") {
             window.location.href = "/home.html";
         }
-        else if (msg == "no match") {
-            alert("Incorrect Password.\nPlease enter valid credentials.");
-        }
-        else if (msg == "no user found") {
-            alert("Please enter valid credentials.");
-        }
-        else if (msg == "Enter Details") {
-            alert("Please enter details.");
-
+        else {
+            alert("Incorrect Username/Password.");
         }
     });
 
