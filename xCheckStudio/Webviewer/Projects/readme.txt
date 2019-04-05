@@ -1,0 +1,1 @@
+This is Projects directory where all user's projects will be created and stored.
