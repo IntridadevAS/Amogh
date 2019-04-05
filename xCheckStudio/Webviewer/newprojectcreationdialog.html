@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+       <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+
         <script type="text/javascript" src="Javascripts\xCheckStudio\SessionManager.js"></script>
 
         <link href="/images/UIPackage/favicon.png" rel="shortcut icon"/>
@@ -36,7 +38,7 @@
                         <div class="description">
                             <div class="textfielddescription">
                                 <!-- <img src="/images/UIPackage/new-project-creation-dialog-text-field-function.png" class="textfielddescription1" /> -->
-                                <input type="text" name="description" class="textfielddescription1" style="border: solid 1px;  border-radius: 5px;"/>
+                                <input type="text" id="descriptionBox" name="description" class="textfielddescription1" style="border: solid 1px;  border-radius: 5px;"/>
                             </div>
                             <div class="description1">
                                 Description
@@ -45,7 +47,7 @@
                         <div class="function">
                             <div class="textfieldfunction">
                                 <!-- <img src="/images/UIPackage/new-project-creation-dialog-text-field-function.png" class="textfieldfunction1" /> -->
-                                <input type="text" name="function" class="textfieldfunction1" style="border: solid 1px;  border-radius: 5px;"/>
+                                <input type="text"  id="functionBox" name="function" class="textfieldfunction1" style="border: solid 1px;  border-radius: 5px;"/>
                             </div>
                             <div class="function1">
                                 Function
@@ -159,12 +161,31 @@
 		function OnCreateProject()
 		{		
             var projectname = document.getElementById("inputprojectname").value;
+            if(projectname === undefined || projectname ==="")
+            {
+                alert('Enter project name');
+                return;
+            }
+
             setSessionVariable("projectname", projectname);
+            
+            var descriptionText = document.getElementById("descriptionBox").value;
+            if (descriptionText == undefined) {
+                descriptionText = "";
+            }
+
+            var functionText = document.getElementById("functionBox").value;           
+            if (functionText == undefined) {
+                functionText = "";
+            }
+
+            // create project database
+            createProject(projectname, descriptionText, functionText);
+
 			
-			window.location.href = "/checkModule.html";
-		}
-		
-		</script>
+		}      
+
+      </script>
         <!-- End of Scripts -->
     </body>
 </html>

@@ -1,4 +1,20 @@
 <?php 
+
+session_start();
+// check if sourceA and sourceB paths are in session data
+if(!isset( $_SESSION["SourceAPath"]) ||
+   !isset( $_SESSION["SourceBPath"]) ||
+   !isset($_POST['viewerContainer']))
+   {
+       echo "fail";
+       return;
+   }
+
+   $sourceADirectory =  $_SESSION["SourceAPath"];
+   $sourceBDirectory =  $_SESSION["SourceBPath"];
+
+   $scriptParentDirectory = dirname ( __DIR__ );
+
 $array = explode("\\", __DIR__);
 unset($array[sizeof($array)-1]);
 unset($array[sizeof($array)-1]);
@@ -10,7 +26,16 @@ $mainFileName = $_POST['MainFile'];
 echo $studioPath;
 echo $launch_converter;
 
-$filename = __DIR__."/scs/".$mainFileName;
+if($_POST['viewerContainer'] == "viewerContainer1")
+{
+    $filename=  $scriptParentDirectory."/".$sourceADirectory."/".$mainFileName;               
+}
+if($_POST['viewerContainer'] == "viewerContainer2")
+{
+    $filename= $scriptParentDirectory."/".$sourceBDirectory."/".$mainFileName;               
+}
+
+//$filename = __DIR__."/scs/".$mainFileName;
 echo $filename;
 
 $file = fileExists($filename, false);
@@ -24,11 +49,30 @@ else
 }
 
 $file = basename($file); 
-$inputFileName = __DIR__."/scs/".$file;
+
+if($_POST['viewerContainer'] == "viewerContainer1")
+{
+    $inputFileName=  $scriptParentDirectory."/".$sourceADirectory."/".$file;               
+}
+if($_POST['viewerContainer'] == "viewerContainer2")
+{
+    $inputFileName= $scriptParentDirectory."/".$sourceBDirectory."/".$file;               
+}
+
+//$inputFileName = __DIR__."/scs/".$file;
 echo "inputFileName : ".$inputFileName;
 
 $output_name=explode(".",$file);
-$output_file_path=__DIR__."/scs/"."$output_name[0]";
+if($_POST['viewerContainer'] == "viewerContainer1")
+{
+    $output_file_path=  $scriptParentDirectory."/".$sourceADirectory."/".$output_name[0];               
+}
+if($_POST['viewerContainer'] == "viewerContainer2")
+{
+    $output_file_path= $scriptParentDirectory."/".$sourceBDirectory."/".$output_name[0];              
+}
+
+//$output_file_path=__DIR__."/scs/"."$output_name[0]";
 echo "output_file_path : ".$output_file_path;
 
 $command = '"'.$launch_converter. '" "'. $inputFileName. '" "'.$output_file_path.'"';

@@ -172,7 +172,7 @@ function CheckCaseManager() {
         $.ajax({
             url: 'PHP/CheckCaseDataWriter.php',
             type: "POST",
-            async: false,
+            async: true,
             data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
             success: function (data) {
                 // alert("success");

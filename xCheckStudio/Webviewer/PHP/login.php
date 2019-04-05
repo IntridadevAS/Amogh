@@ -1,8 +1,8 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    $json = file_get_contents('UserInformation/loginInfo.json');
-    $json_data = json_decode($json, true);
+    //$json = file_get_contents('UserInformation/loginInfo.json');
+    //$json_data = json_decode($json, true);
 
     // collect value of input field
     $name= $_POST['name'];

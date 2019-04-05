@@ -3186,9 +3186,8 @@
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "PHP/getSourceData.php", true);
-            xhr.onload = function (data) {                
-                if(data.target.response === "undefined")
-                {
+            xhr.onload = function (data) {
+                if (data.target.response === "undefined") {
                     OnShowToast('Valid data source not found');
                     return;
                 }
@@ -3232,16 +3231,11 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "uploads/uploadfiles.php", true);
                 xhr.onload = function (event) {
-                    //alert("The server says: " + event.target.response);
-                    //ShowToast('The server says: Success');                   
-                    if (loadModel(fileName, viewerContainer, modelTreeContainer)) {
-                        document.getElementById(dataSource).disabled = true;
-                        hideLoadButton(modelTreeContainer);
-                    }
-                    else {
-                        document.getElementById(formId).reset();
-                    }
-
+      
+                    loadModel(fileName, 
+                              viewerContainer, 
+                              modelTreeContainer);           
+                  
                     busySpinner.classList.remove('show')
                 };
                 var formData = new FormData(document.getElementById(formId));
@@ -3322,17 +3316,12 @@
             viewerContainer,
             modelTreeContainer) {
 
-
             if (!checkCaseManager ||
                 !checkCaseManager.CheckCase) {
                 alert("CheckCaseManager not found.");
                 return false;
             }
-
-            // let selectedFiles = document.getElementById(dataSource).files;
-            // let selectedFilesCount = selectedFiles.length;
-
-            // let fileName = selectedFiles[0].name;
+           
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
             var sourceAType;
@@ -3363,43 +3352,52 @@
                 }
             }
 
+            // get SCS file path and load model into viewer
             fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-            fileName += '.scs';
 
-            var uri = "uploads/scs/";
-            if(viewerContainer === "viewerContainer1")
-            {
-                uri += "SourceA/" + fileName;
-            }
-            else if(viewerContainer === "viewerContainer2")
-            {
-                uri += "SourceB/" + fileName;
-            }
+            $.ajax({
+                data: { 'viewerContainer': viewerContainer, 'fileName' : fileName },
+                type: "POST",
+                url: "PHP/GetSourceFilePath.php"
+            }).done(function (uri) {
+                if (uri !== 'fail') {
 
-            xCheckStudio.Util.fileExists(uri).then(function (success) {
-                if (success) {
-                    //alert("File found to load.");
-                    viewerOptions = {
-                        containerId: viewerContainer,
-                        endpointUri: uri,
-                        modelTree: modelTreeContainer
-                    };
+                    // uri contains SCS file path, so load
+                    xCheckStudio.Util.fileExists(uri).then(function (success) {
+                        if (success) {
+                           
+                            viewerOptions = {
+                                containerId: viewerContainer,
+                                endpointUri: uri,
+                                modelTree: modelTreeContainer
+                            };
 
-                    if (viewerContainer === "viewerContainer1") {
-                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                        xCheckStudioInterface1.setupViewer(viewerOptions, true);
-                    }
-                    else if (viewerContainer === "viewerContainer2") {
-                        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                        xCheckStudioInterface2.setupViewer(viewerOptions, false);
-                    }
+                            if (viewerContainer === "viewerContainer1") {
+                                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                                xCheckStudioInterface1.setupViewer(viewerOptions, true);
+                            }
+                            else if (viewerContainer === "viewerContainer2") {
+                                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                                xCheckStudioInterface2.setupViewer(viewerOptions, false);
+                            }
 
+                            manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
+                            return true;
+                        }
+                        else {
+                            document.getElementById(formId).reset();
+                            alert("File not found to load.");
+                            return false;
+                        }
+                    });
                 }
                 else {
-                    alert("File not found to load.");
+                    document.getElementById(formId).reset();
                     return false;
                 }
-            });
+
+            });            
+
             return true;
         }
 
@@ -3454,11 +3452,7 @@
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-
-                            // // additional identifying properties for PipingNetwork segment component
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+                                                      
                             checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceACB" &&
@@ -3496,11 +3490,7 @@
                             checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
                             checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                             checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-
-                            // additional identifying properties for PipingNetwork segment component
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] = row.cells[modelBrowserSourceColumn].textContent.trim();
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] = row.cells[modelBrowserDestinationColumn].textContent.trim();
-                            // checkedComponent[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] = row.cells[modelBrowserOwnerColumn].textContent.trim();
+    
                             checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceBCB" &&

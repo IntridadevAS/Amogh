@@ -8,6 +8,5 @@
 	}
    // file_put_contents($fileName);
    file_put_contents($fileName, $script, FILE_APPEND);
-   file_put_contents($fileName, "", FILE_APPEND);
-   echo $script
+   file_put_contents($fileName, "", FILE_APPEND);     
 ?>

@@ -44,6 +44,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
 
             var uploadFormData = new FormData();
             uploadFormData.append('files[]', items[0].getAsFile());
+            uploadFormData.append('viewerContainer', viewerContainer);
             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
         }
         else if (item.isDirectory) {
@@ -56,7 +57,9 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
                     uploadFormData.append('files[]', fileEntries[j]);
                 }
 
-                var mainFileName = getMainFileName(item, dropZoneId);
+                uploadFormData.append('viewerContainer', viewerContainer);
+
+                var mainFileName = getMainFileName(item, dropZoneId);                
                 uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
             });
         }
@@ -93,6 +96,7 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
 function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
     var formData = new FormData();
     formData.append("MainFile", mainFileName);
+    formData.append("viewerContainer", viewerContainer);
 
     // show busy loader
     var busySpinner = document.getElementById("divLoading");
@@ -178,6 +182,9 @@ function manageControlsOnDatasourceLoad(mainFileName,
         // enable drop zone for source B
         enableDropZone("dropZone2");
 
+        // disable dropzone 1
+        disbleDropZone("dropZone1")
+
         // disable load button for souece a
         component = document.getElementById('createbtnA');
         addClass(component, 'disabledbutton');
@@ -218,6 +225,9 @@ function manageControlsOnDatasourceLoad(mainFileName,
         // disble load button for souece b
         component = document.getElementById('createbtnB');
         addClass(component, 'disabledbutton');
+
+        // disable dropzone2
+        disbleDropZone("dropZone2")
     }
 }
 
@@ -309,13 +319,27 @@ function traverse_directory(entry) {
 function enableDropZone(dropZoneId) {
     let dropzone = document.getElementById(dropZoneId);
 
-    dropzone.addEventListener("dragover", function (event) {
-        event.preventDefault();
-        dropzone.classList.add('dropzone');
-    }, false);
+    dropzone.addEventListener("dragover", onDragOver, false);
 
-    dropzone.ondragleave = e => {
-        dropzone.classList.remove('dropzone');
-    }   
+    dropzone.addEventListener('dragleave',  onDragLeave, false);      
+       
 }
 
+function disbleDropZone(dropZoneId) {
+    let dropzone = document.getElementById(dropZoneId);
+
+    dropzone.removeEventListener("dragover", onDragOver);
+
+    dropzone.removeEventListener('dragleave',  onDragLeave);      
+       
+}
+
+function onDragOver(event)
+{
+    event.preventDefault();
+    event.target.classList.add('dropzone');
+}
+function onDragLeave(event)
+{
+    event.target.classList.remove('dropzone');
+}

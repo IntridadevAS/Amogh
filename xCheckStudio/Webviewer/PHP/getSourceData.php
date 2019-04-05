@@ -12,16 +12,20 @@ if($FileCount > 0)
     foreach($_FILES["dataSouresName"]["name"] as $key=>$tmp_name)
     {
         $file = $tmp_name;
+     
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
         $fileExtension = strtolower($fileExtension);
         $isFound = in_array($fileExtension, $ValidDataSources);
         if($isFound)
         {
             echo $file;
+            return;
         }
         else{
-            echo "undefined";
+            //echo "undefined";
         }
     }
+
+    echo "undefined";
 }
 ?>

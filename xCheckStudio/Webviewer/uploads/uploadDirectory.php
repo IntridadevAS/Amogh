@@ -1,5 +1,19 @@
 <?php 
-//phpinfo();
+
+session_start();
+// check if sourceA and sourceB paths are in session data
+if(!isset( $_SESSION["SourceAPath"]) ||
+   !isset( $_SESSION["SourceBPath"]) ||
+   !isset($_POST['viewerContainer']))
+   {
+       echo "fail";
+       return;
+   }
+
+   $sourceADirectory =  $_SESSION["SourceAPath"];
+   $sourceBDirectory =  $_SESSION["SourceBPath"];
+
+   $scriptParentDirectory = dirname ( __DIR__ );
 
 if(isset($_FILES['files']['name'][0]))
 {
@@ -7,8 +21,17 @@ if(isset($_FILES['files']['name'][0]))
     {       
         $sourcePath = $_FILES["files"]["tmp_name"][$keys];
         $targetPath = $_FILES["files"]["name"][$keys];
-	 
-        $UploadFolder=__DIR__."/scs/".$targetPath;	
+     
+        if($_POST['viewerContainer'] == "viewerContainer1")
+        {
+            $UploadFolder= $scriptParentDirectory."/".$sourceADirectory."/".$targetPath;        
+        }
+        if($_POST['viewerContainer'] == "viewerContainer2")
+        {
+            $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$targetPath;           
+        }
+
+        //$UploadFolder=__DIR__."/scs/".$targetPath;	
         
         if(move_uploaded_file($sourcePath, $UploadFolder))
         {
@@ -23,14 +46,4 @@ else
 {
     echo "Error";
 }
-
-
-// $name = $_FILES['file']['name'];
-// echo "Name: ".$name;
-// // echo '<br>'
-// echo "Temp Name: ".$_FILES['file']['tmp_name'];
-// // echo '\n'
-// $UploadFolder=__DIR__."/scs/".$name;	
-// echo "Upload Folder:".$UploadFolder;
-// move_uploaded_file($_FILES['file']['tmp_name'], $UploadFolder);
 

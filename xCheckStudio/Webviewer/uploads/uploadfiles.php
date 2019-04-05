@@ -1,5 +1,18 @@
 <?php 
 
+session_start();
+
+// check if sourceA and sourceB paths are in session data
+if(!isset( $_SESSION["SourceAPath"]) ||
+   !isset( $_SESSION["SourceBPath"]))
+   {
+       echo "fail";
+       return;
+   }
+
+   $sourceADirectory =  $_SESSION["SourceAPath"];
+   $sourceBDirectory =  $_SESSION["SourceBPath"];
+
 $errors = array();
 $uploadedFiles = array();
 $extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg", "sldprt", "SLDPRT");
@@ -16,6 +29,8 @@ unset($array[sizeof($array)-1]);
 $studioPath = implode("/", $array);
 $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
+$scriptParentDirectory = dirname ( __DIR__ );
+
 foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
 {
         $temp = $_FILES["dataSouresName"]["tmp_name"][$key];
@@ -24,11 +39,13 @@ foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
        
         if($_POST['viewerContainer'] == "viewerContainer1")
         {
-            $UploadFolder=__DIR__."/scs/SourceA/".$name;	
+            $UploadFolder= $scriptParentDirectory."/".$sourceADirectory."/".$name;
+            //$UploadFolder=__DIR__."/scs/SourceA/".$name;	
         }
         if($_POST['viewerContainer'] == "viewerContainer2")
         {
-            $UploadFolder=__DIR__."/scs/SourceB/".$name;
+            $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$name;
+            //$UploadFolder=__DIR__."/scs/SourceB/".$name;
         }
        
     if(empty($temp))
@@ -93,25 +110,23 @@ if($counter>0)
 
             if($_POST['viewerContainer'] == "viewerContainer1")
             {
-                $UploadFolder=__DIR__."/scs/SourceA/".$fileName;	
+                $UploadFolder=  $scriptParentDirectory."/".$sourceADirectory."/".$fileName;               
             }
             if($_POST['viewerContainer'] == "viewerContainer2")
             {
-                $UploadFolder=__DIR__."/scs/SourceB/".$fileName;
+                $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$fileName;               
             }
-
-
 
 			// $UploadFolder=__DIR__."/scs/".$fileName;		
             $output_name=explode(".",$fileName);
             
             if($_POST['viewerContainer'] == "viewerContainer1")
             {
-                $output_file_path=__DIR__."/scs/SourceA/"."$output_name[0]";
+                $output_file_path= $scriptParentDirectory."/".$sourceADirectory."/"."$output_name[0]";
             }
             if($_POST['viewerContainer'] == "viewerContainer2")
             {
-                $output_file_path=__DIR__."/scs/SourceB/"."$output_name[0]";
+                $output_file_path=$scriptParentDirectory."/".$sourceBDirectory."/"."$output_name[0]";
             }
 
 			// $output_file_path=__DIR__."/scs/"."$output_name[0]";
