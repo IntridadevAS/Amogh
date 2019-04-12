@@ -2254,7 +2254,7 @@
                                         <!-- <input type="file" name="dataSouresName" id="file-input" onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')">  -->
                                         <input id="file-input" name="dataSouresName[]" multiple="multiple" type="file"
                                             onchange="loadDataSource(event, 'file-input', 'uploadDatasourceAForm', 'viewerContainer1', 'modelTree1')"
-                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT" />
+                                            accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA" />
                                     </label>
                                 </div>
                             </form>
@@ -3224,7 +3224,9 @@
                 fileExtension.toLowerCase() === "rvm" ||
                 fileExtension.toLowerCase() === "sldasm" ||
                 fileExtension.toLowerCase() === "dwg" ||
-                fileExtension.toLowerCase() === "sldprt") {
+                fileExtension.toLowerCase() === "sldprt" ||
+                fileExtension.toLowerCase() === "rvt" ||
+                fileExtension.toLowerCase() === "rfa") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
