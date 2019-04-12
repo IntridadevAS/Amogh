@@ -34,6 +34,11 @@ var xCheckStudio;
          ComponentIdentificationManager.SLDPRTMainClassProperty = "Type";
          ComponentIdentificationManager.SLDPRTSubComponentClassProperty = "Component Class";
 
+         // Excel data source
+         ComponentIdentificationManager.RVTSourceNameProperty = "Name";
+         ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
+         ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
+
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
@@ -42,6 +47,21 @@ var xCheckStudio;
                 properties['name'] = ComponentIdentificationManager.XMLSourceNameProperty;
                 properties['mainCategory'] = ComponentIdentificationManager.XMLSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.XMLSourceSubComponentClassProperty;
+
+                // if (mainComponentClass !== undefined) {
+                //     if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
+                //         properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
+                //         properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
+                //         properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
+                //     }                    
+                // }
+            }
+            else if (fileExtension.toLowerCase() === "rvt") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.RVTSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.RVTSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
 
                 // if (mainComponentClass !== undefined) {
                 //     if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {

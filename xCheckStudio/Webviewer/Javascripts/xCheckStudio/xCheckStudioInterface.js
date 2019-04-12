@@ -277,10 +277,12 @@ var xCheckStudio;
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0 &&
                             identifierProperties !== undefined) {
+                            var name = _this._firstViewer.model.getNodeName(nodeId)
                             
                             var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
-                            //var name = _this._firstViewer.model.getNodeName(nodeId);
+                            if(name == undefined)
+                                name = _this._firstViewer.model.getNodeName(nodeId)
                             var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
 
                             if (mainComponentClass !== undefined &&
