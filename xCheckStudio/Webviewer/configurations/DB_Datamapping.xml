@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CheckCase name="DB_Compliance">
+<Check type="Compliance" sourceType="IBD" >
+   <ComponentGroup name="PipeLine" >
+      <ComponentClass name="PipeLine">
+			 <Property name="Name" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
+			 <Property name="Class" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="System" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Line Size [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Line Code" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Line Sequence Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Fluid Code" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="TO" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="FROM" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Comments"  rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Specification" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="P&amp;ID" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="P&amp;ID[2]" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="P&amp;ID[3]"  rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="DataSheet Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Install Drawing Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Discipline" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Duty" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Design Standard" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Hazardous Area Class."	rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Inquiry Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property name="Quote Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+	   </ComponentClass>                           
+   </ComponentGroup>
+   
+   <ComponentGroup name="Branch">
+      <ComponentClass name="Branch">
+		<Property sourceAName="Name" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Class" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="System" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Line Size [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Line Code" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Line Sequence Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Fluid Code" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="TO" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="FROM" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Comments" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Specification" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="P&amp;ID" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="P&amp;ID[2]" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="P&amp;ID[3]" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="DataSheet Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Install Drawing Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Discipline" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Duty" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Design Standard" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Hazardous Area Class." rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Inquiry Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+			 <Property sourceAName="Quote Number" rule="Must have value" severity="Error"    comment="Property must have value." />
+      </ComponentClass>
+   </ComponentGroup>
+   
+   <ComponentGroup name="Equipment">
+      <ComponentClass name="Equipment">	
+			   <Property name="Name" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Tag Prefix" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Tag Letter" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Tag Number" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Tag Suffix" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Description" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Location" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="ProcessArea" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="System" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="System Description" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="# of Nozzles" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Duty" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="P&amp;ID" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Model Number" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Manufacturer" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Hazardous Area Class." rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Gas Group" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Temperature Class" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Ex Classification" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Power Load [kW]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Power Rated [volt]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Length Overall [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Width or Diameter [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Length Tan to Tan [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+			   <Property name="Height Overall [mm]" rule="Should start with-S" severity="Error"    comment="Property Should start with S" />
+      </ComponentClass>
+    </ComponentGroup>
+	 
+   <ComponentGroup name="Nozzle">
+      <ComponentClass name="Flanged Nozzle">
+            <Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Size" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Tag Number" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Class" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="ProcessArea" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+      <ComponentClass name="Manway">
+            <Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Size" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Tag Number" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Class" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="ProcessArea" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+   </ComponentGroup>
+</Check>
+</CheckCase>
