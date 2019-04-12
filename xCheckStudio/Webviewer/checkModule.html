@@ -40,6 +40,8 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleStringCollection.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
@@ -3036,6 +3038,40 @@
             }
         }
 
+        function readDbDataSource(file,
+            viewerContainer,
+            modelTreeContainer) {
+
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+
+            // if (!xCheckStudioInterface1) {
+            //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            //     xCheckStudioInterface1.readDbFileData(file, modelTreeContainer);
+            // }
+            // else {
+            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            //     xCheckStudioInterface2.readDbFileData(file, modelTreeContainer);
+            // }
+            Db_data = new Array();
+            $.ajax({
+                url:'PHP/beginnerDbConnect.php',
+                type:'POST',
+                dataType: 'JSON',
+                data: ({functionality : 'importData'}),
+                async: false,
+                success: function (data) {                   
+                    Db_data = data;
+                },
+                error: function(xhr, status, error) {
+                    console.log(error)
+                },
+            });
+            console.log(Db_data);
+            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            xCheckStudioInterface1.readDbFileData(fileName, Db_data, modelTreeContainer);
+        }
+
         //open windows file selector dialog
         function OnLoadClick(isFirstDataSource) {
             var modal;
@@ -3255,6 +3291,16 @@
                     }
                 }
             }
+            else if (fileExtension.toLowerCase() === "ibd") {
+                {
+                    if (loadDbDataSource(fileExtension,
+                        files,
+                        viewerContainer,
+                        modelTreeContainer)) {
+                        hideLoadButton(modelTreeContainer);
+                    }
+                }
+            }
         }
 
         function hideLoadButton(modelTreeContainer) {
@@ -3307,6 +3353,51 @@
                 }
             }
             readExcelDataSource(file[0],
+                viewerContainer,
+                modelTreeContainer);
+
+            return true;
+
+        }
+
+        function loadDbDataSource(fileExtension,
+            file,
+            viewerContainer,
+            modelTreeContainer) {
+            if (!checkCaseManager ||
+                !checkCaseManager.CheckCase) {
+                alert("CheckCaseManager not found.");
+                return false;
+            }
+
+            var sourceAType;
+            var sourceBType;
+            for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+                var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+                if (checkType.Name.toLowerCase() === "comparison") {
+                    sourceAType = checkType.SourceAType;
+                    sourceBType = checkType.SourceBType;
+                }
+                else if (checkType.Name.toLowerCase() === "compliance") {
+                    sourceAType = checkType.SourceAType;
+                }
+            }
+
+            if (viewerContainer === "viewerContainer1") {
+                if (!sourceAType ||
+                    sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            else if (viewerContainer === "viewerContainer2") {
+                if (!sourceBType ||
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            readDbDataSource(file[0],
                 viewerContainer,
                 modelTreeContainer);
 
