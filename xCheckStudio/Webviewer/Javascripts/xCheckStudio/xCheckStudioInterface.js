@@ -14,11 +14,18 @@ var xCheckStudio;
             this.sourceProperties = [];
 
             this.excelReader = new ExcelReader(sourceType);
+            this.db_reader = new DBReader(sourceType);
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId) {
             this.excelReader.ReadFileData(file, containerId);
             this.sourceProperties = this.excelReader.sourceProperties;
+        }
+
+        xCheckStudioInterface.prototype.readDbFileData = function (fileName, Db_data, containerId)
+        {
+            this.db_reader.ReadDBData(fileName, Db_data, containerId);
+            this.sourceProperties = this.db_reader.sourceProperties;
         }
 
         xCheckStudioInterface.prototype.getClassWiseComponents = function () {
