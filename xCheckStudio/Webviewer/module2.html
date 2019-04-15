@@ -30,8 +30,6 @@
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <!-- <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> -->
 
-    <script src='postData/analyticsDetailsDataReader.php'></script>
-
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
@@ -762,443 +760,582 @@
             }
         }
 
-        var analyticsManager;;
+        var analyticsManager;
+      
+
         window.onload = function () {
-
-            var ComparisonCheckDataPHP = undefined;
-            var SourceAComplianceDataPHP = undefined;
-            var SourceBComplianceDataPHP = undefined;
-            var SourceAViewerDataPHP = undefined;
-            var SourceBViewerDataPHP = undefined;
-            var SourceAComponentIdVsComponentDataPHP = undefined;
-            var SourceANodeIdVsComponentDataPHP = undefined;
-            var SourceBComponentIdVsComponentDataPHP = undefined;
-            var SourceBNodeIdVsComponentDataPHP = undefined;
-            var SourceAPropertiesPHP = undefined;
-            var SourceBPropertiesPHP = undefined;
-            var AnalyticsPHP = undefined;
+            var _this = this;
+            var ComparisonCheckData = undefined;
+            var SourceAComplianceData = undefined;
+            var SourceBComplianceData = undefined;
+            var SourceAViewerData = undefined;
+            var SourceBViewerData = undefined;
+            var SourceAComponentIdVsComponentData = undefined;
+            var SourceANodeIdVsComponentData = undefined;
+            var SourceBComponentIdVsComponentData = undefined;
+            var SourceBNodeIdVsComponentData = undefined;
+            var SourceAProperties = undefined;
+            var SourceBProperties = undefined;
+            var AnalyticsData = undefined;
 
             $.ajax({
-                url: 'PHP/comparisonCheckpostDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        ComparisonCheckDataPHP = JSON.parse(msg);
+                    url: 'newPHP/sourceAComplianceDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+                })
 
-            $.ajax({
-                url: 'PHP/sourceAComplianceDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceAComplianceDataPHP = JSON.parse(msg);
+            // readData();
+            this.readComparisonCheckData(_this).then(function (success) {
+
+                if (success) {
+                    var comparisonCheckManager;
+                    var sourceAComplianceCheckManager;
+                    var sourceBComplianceCheckManager;
+
+                    // set project name
+                    setProjectName();
+
+                    // set user name
+                    setUserName();
+
+                    if (typeof this.ComparisonCheckData !== 'undefined') {
+
+                        // restore comparison check data
+                        comparisonCheckManager = new CheckManager("");
+                        comparisonCheckManager.restore(this.ComparisonCheckData)
+
+                        // create comparisonreviewmanager
+                        if (typeof this.SourceAViewerData !== 'undefined' &&
+                            typeof this.SourceBViewerData !== 'undefined' &&
+                            this.SourceAComponentIdVsComponentData !== 'undefined' &&
+                            this.SourceANodeIdVsComponentData !== 'undefined' &&
+                            this.SourceBComponentIdVsComponentData !== 'undefined' &&
+                            this.SourceBNodeIdVsComponentData !== 'undefined') {
+                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                                this.SourceAViewerData,
+                                this.SourceBViewerData,
+                                undefined,
+                                undefined,
+                                "ComparisonMainReviewCell",
+                                "ComparisonDetailedReviewCell",
+                                this.SourceAComponentIdVsComponentData,
+                                this.SourceANodeIdVsComponentData,
+                                this.SourceBComponentIdVsComponentData,
+                                this.SourceBNodeIdVsComponentData);
+                        }
+                        else if (typeof this.SourceAProperties !== 'undefined' && 
+                                typeof this.SourceBProperties !== 'undefined') {
+                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                                undefined,
+                                undefined,
+                                this.SourceAProperties,
+                                this.SourceBProperties,
+                                "ComparisonMainReviewCell",
+                                "ComparisonDetailedReviewCell",
+                                undefined,
+                                undefined,
+                                undefined,
+                                undefined);
+                        }
+                        else if (typeof this.SourceAProperties !== 'undefined' &&
+                            typeof this.SourceBViewerData !== 'undefined' &&
+                            this.SourceBComponentIdVsComponentData !== 'undefined' &&
+                            this.SourceBNodeIdVsComponentData !== 'undefined') {
+                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                                undefined,
+                                this.SourceBViewerData,
+                                this.SourceAProperties,
+                                undefined,
+                                "ComparisonMainReviewCell",
+                                "ComparisonDetailedReviewCell",
+                                undefined,
+                                undefined,
+                                this.SourceBComponentIdVsComponentData,
+                                this.SourceBNodeIdVsComponentData);
+                        }
+                        else if (typeof this.SourceAViewerData !== 'undefined' &&
+                            typeof this.SourceBProperties !== 'undefined' &&
+                            this.SourceAComponentIdVsComponentData !== 'undefined' &&
+                            this.SourceANodeIdVsComponentData !== 'undefined') {
+                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+                            this.SourceAViewerData,
+                                undefined,
+                                undefined,
+                                this.SourceBProperties,
+                                "ComparisonMainReviewCell",
+                                "ComparisonDetailedReviewCell",
+                                this.SourceAComponentIdVsComponentData,
+                                this.SourceANodeIdVsComponentData,
+                                undefined,
+                                undefined);
+                        }
+
+                        // populate review table
+                        comparisonReviewManager.populateReviewTable();
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/sourceBComplianceDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBComplianceDataPHP = JSON.parse(msg);
+                    else {
+                        $("#tab1Parent").addClass("disable");
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
 
-            $.ajax({
-                url: 'PHP/sourceAViewerDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceAViewerDataPHP = JSON.parse(msg);
+                    if (typeof this.SourceAComplianceData !== 'undefined') {
+
+                        // restore source A compliance check data
+                        sourceAComplianceCheckManager = new CheckManager("");
+                        sourceAComplianceCheckManager.restore(this.SourceAComplianceData)
+
+                        // create sourceAComplianceReviewManager
+                        if (typeof this.SourceAProperties !== 'undefined') {
+                            sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                                undefined,
+                                this.SourceAProperties,
+                                "SourceAComplianceMainReviewCell",
+                                "SourceAComplianceDetailedReviewCell",
+                                undefined,
+                                undefined,
+                                "SourceAComplianceDetailedReviewComment");
+                        }
+                        else if (typeof this.SourceAViewerData !== 'undefined') {
+                            sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+                            this.SourceAViewerData,
+                                undefined,
+                                "SourceAComplianceMainReviewCell",
+                                "SourceAComplianceDetailedReviewCell",
+                                this.SourceAComponentIdVsComponentData,
+                                this.SourceANodeIdVsComponentData,
+                                "SourceAComplianceDetailedReviewComment");
+                        }
+
+
+                        // populate review table
+                        sourceAComplianceReviewManager.populateReviewTable();
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/sourceBViewerDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBViewerDataPHP = JSON.parse(msg);
+                    else {
+                        $("#tab2Parent").addClass("disable");
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+                    if (typeof this.SourceBComplianceData !== 'undefined') {
 
-            $.ajax({
-                url: 'PHP/sourceAComponentIdVsComponentDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceAComponentIdVsComponentDataPHP = JSON.parse(msg);
+                        // restore source A compliance check data
+                        sourceBComplianceCheckManager = new CheckManager("");
+                        sourceBComplianceCheckManager.restore(this.SourceBComplianceData)
+
+                        // create sourceBComplianceReviewManager
+                        if (typeof this.SourceBProperties !== 'undefined') {
+                            sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                                undefined,
+                                this.SourceBProperties,
+                                "SourceBComplianceMainReviewCell",
+                                "SourceBComplianceDetailedReviewCell",
+                                undefined,
+                                undefined,
+                                "SourceBComplianceDetailedReviewComment");
+                        }
+                        else if (typeof this.SourceBViewerData !== 'undefined') {
+                            sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+                            this.SourceBViewerData,
+                                undefined,
+                                "SourceBComplianceMainReviewCell",
+                                "SourceBComplianceDetailedReviewCell",
+                                this.SourceBComponentIdVsComponentData,
+                                this.SourceBNodeIdVsComponentData,
+                                "SourceBComplianceDetailedReviewComment");
+                        }
+
+                        // populate review table
+                        sourceBComplianceReviewManager.populateReviewTable();
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/sourceANodeIdVsComponentDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceANodeIdVsComponentDataPHP = JSON.parse(msg);
+                    else {
+                        $("#tab3Parent").addClass("disable");
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
 
-            $.ajax({
-                url: 'PHP/sourceBComponentIdVsComponentDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBComponentIdVsComponentDataPHP = JSON.parse(msg);
+                    // make buttons collapsible
+                    setButtonsCollapsible();
+
+                    postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData);
+                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                    // remove post data js files from server from earlier check results, if any
+                    $.ajax({
+                        data: '',
+                        url: 'PHP/postDataCleaner.php',
+                        method: 'POST', // or GET
+                        async: true,
+                        success: function (msg) {
+                        }
+                    });
+
+                    // trigger comparison tab click manually
+                    /*/var tab1 = document.getElementById("tab1Parent");
+                    tab1.click();*/
+                    if (typeof this.ComparisonCheckData !== 'undefined') {
+                        openCheckResultTab('ComparisonTabPage');
+                        //var tab = document.getElementById("tab1Parent");
+                        //tab.click();
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/sourceBNodeIdVsComponentDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBNodeIdVsComponentDataPHP = JSON.parse(msg);
+                    else {
+                        // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
+                        // {
+                        // 	openCheckResultTab('SourceAComplianceTabPage');
+                        // 	// var tab2 = document.getElementById("tab2Parent");
+                        // 	// tab2.click();
+                        // }
+                        // else
+                        // {
+                        if (typeof this.SourceAComplianceData !== 'undefined') {
+                            openCheckResultTab('SourceAComplianceTabPage');
+                            // var tab3 = document.getElementById("tab3Parent");
+                            // tab3.click();
+                        }
+                        else if (typeof this.SourceBComplianceData !== 'undefined') {
+                            openCheckResultTab('SourceBComplianceTabPage');
+                            // var tab2 = document.getElementById("tab2Parent");
+                            // tab2.click();
+                        }
+                        //}
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/SourceASheetDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceAPropertiesPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/SourceBSheetDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBPropertiesPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            $.ajax({
-                url: 'PHP/analyticsDetailsDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        AnalyticsPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
-
-            var comparisonCheckManager;
-            var sourceAComplianceCheckManager;
-            var sourceBComplianceCheckManager;
-
-            // set project name
-            setProjectName();
-                     
-            // set user name
-            setUserName();
-        
-            SourceAViewerData = SourceAViewerDataPHP;
-            SourceBViewerData = SourceBViewerDataPHP;
-            ComparisonCheckData = ComparisonCheckDataPHP;
-            SourceAComponentIdVsComponentData = SourceAComponentIdVsComponentDataPHP;
-            SourceANodeIdVsComponentData = SourceANodeIdVsComponentDataPHP;
-            SourceBComponentIdVsComponentData = SourceBComponentIdVsComponentDataPHP;
-            SourceBNodeIdVsComponentData = SourceBNodeIdVsComponentDataPHP;
-            SourceAProperties = SourceAPropertiesPHP;
-            SourceBProperties = SourceBPropertiesPHP;
-            AnalyticsData = AnalyticsPHP;
-            SourceAComplianceData = SourceAComplianceDataPHP;
-            SourceBComplianceData = SourceBComplianceDataPHP;
-
-            if (typeof ComparisonCheckData !== 'undefined') {
-
-                // restore comparison check data
-                comparisonCheckManager = new CheckManager("");
-                comparisonCheckManager.restore(ComparisonCheckData)
-
-                // create comparisonreviewmanager
-                if (typeof SourceAViewerData !== 'undefined' &&
-                    typeof SourceBViewerData !== 'undefined' &&
-                    SourceAComponentIdVsComponentData !== 'undefined' &&
-                    SourceANodeIdVsComponentData !== 'undefined' &&
-                    SourceBComponentIdVsComponentData !== 'undefined' &&
-                    SourceBNodeIdVsComponentData !== 'undefined') {
-                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                        SourceAViewerData,
-                        SourceBViewerData,
-                        undefined,
-                        undefined,
-                        "ComparisonMainReviewCell",
-                        "ComparisonDetailedReviewCell",
-                        SourceAComponentIdVsComponentData,
-                        SourceANodeIdVsComponentData,
-                        SourceBComponentIdVsComponentData,
-                        SourceBNodeIdVsComponentData);
-                }
-                else if (typeof SourceAProperties !== 'undefined' && typeof SourceBProperties !== 'undefined') {
-                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                        undefined,
-                        undefined,
-                        SourceAProperties,
-                        SourceBProperties,
-                        "ComparisonMainReviewCell",
-                        "ComparisonDetailedReviewCell",
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined);
-                }
-                else if (typeof SourceAProperties !== 'undefined' &&
-                    typeof SourceBViewerData !== 'undefined' &&
-                    SourceBComponentIdVsComponentData !== 'undefined' &&
-                    SourceBNodeIdVsComponentData !== 'undefined') {
-                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                        undefined,
-                        SourceBViewerData,
-                        SourceAProperties,
-                        undefined,
-                        "ComparisonMainReviewCell",
-                        "ComparisonDetailedReviewCell",
-                        undefined,
-                        undefined,
-                        SourceBComponentIdVsComponentData,
-                        SourceBNodeIdVsComponentData);
-                }
-                else if (typeof SourceAViewerData !== 'undefined' &&
-                    typeof SourceBProperties !== 'undefined' &&
-                    SourceAComponentIdVsComponentData !== 'undefined' &&
-                    SourceANodeIdVsComponentData !== 'undefined') {
-                    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                        SourceAViewerData,
-                        undefined,
-                        undefined,
-                        SourceBProperties,
-                        "ComparisonMainReviewCell",
-                        "ComparisonDetailedReviewCell",
-                        SourceAComponentIdVsComponentData,
-                        SourceANodeIdVsComponentData,
-                        undefined,
-                        undefined);
-                }
-
-                // populate review table
-                comparisonReviewManager.populateReviewTable();
-            }
-            else {
-                $("#tab1Parent").addClass("disable");
-            }
-
-            if (typeof SourceAComplianceData !== 'undefined') {
-
-                // restore source A compliance check data
-                sourceAComplianceCheckManager = new CheckManager("");
-                sourceAComplianceCheckManager.restore(SourceAComplianceData)
-
-                // create sourceAComplianceReviewManager
-                if (typeof SourceAProperties !== 'undefined') {
-                    sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-                        undefined,
-                        SourceAProperties,
-                        "SourceAComplianceMainReviewCell",
-                        "SourceAComplianceDetailedReviewCell",
-                        undefined,
-                        undefined,
-                        "SourceAComplianceDetailedReviewComment");
-                }
-                else if (typeof SourceAViewerData !== 'undefined') {
-                    sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-                        SourceAViewerData,
-                        undefined,
-                        "SourceAComplianceMainReviewCell",
-                        "SourceAComplianceDetailedReviewCell",
-                        SourceAComponentIdVsComponentData,
-                        SourceANodeIdVsComponentData,
-                        "SourceAComplianceDetailedReviewComment");
-                }
-
-
-                // populate review table
-                sourceAComplianceReviewManager.populateReviewTable();
-            }
-            else {
-                $("#tab2Parent").addClass("disable");
-            }
-            if (typeof SourceBComplianceData !== 'undefined') {
-
-                // restore source A compliance check data
-                sourceBComplianceCheckManager = new CheckManager("");
-                sourceBComplianceCheckManager.restore(SourceBComplianceData)
-
-                // create sourceBComplianceReviewManager
-                if (typeof SourceBProperties !== 'undefined') {
-                    sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-                        undefined,
-                        SourceBProperties,
-                        "SourceBComplianceMainReviewCell",
-                        "SourceBComplianceDetailedReviewCell",
-                        undefined,
-                        undefined,
-                        "SourceBComplianceDetailedReviewComment");
-                }
-                else if (typeof SourceBViewerData !== 'undefined') {
-                    sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-                        SourceBViewerData,
-                        undefined,
-                        "SourceBComplianceMainReviewCell",
-                        "SourceBComplianceDetailedReviewCell",
-                        SourceBComponentIdVsComponentData,
-                        SourceBNodeIdVsComponentData,
-                        "SourceBComplianceDetailedReviewComment");
-                }
-
-                // populate review table
-                sourceBComplianceReviewManager.populateReviewTable();
-            }
-            else {
-                $("#tab3Parent").addClass("disable");
-            }
-
-            // make buttons collapsible
-            setButtonsCollapsible();
-
-            // remove post data js files from server from earlier check results, if any
-            $.ajax({
-                data: '',
-                url: 'postData/postDataCleaner.php',
-                method: 'POST', // or GET
-                async: false,
-                success: function (msg) {
-                    //alert('Post Data files deleted');
                 }
             });
-
-            postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager);
-            document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
-            // trigger comparison tab click manually
-            /*/var tab1 = document.getElementById("tab1Parent");
-            tab1.click();*/
-            if (typeof ComparisonCheckData !== 'undefined') {
-                openCheckResultTab('ComparisonTabPage');
-                //var tab = document.getElementById("tab1Parent");
-                //tab.click();
-            }
-            else {
-                // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
-                // {
-                // 	openCheckResultTab('SourceAComplianceTabPage');
-                // 	// var tab2 = document.getElementById("tab2Parent");
-                // 	// tab2.click();
-                // }
-                // else
-                // {
-                if (typeof SourceAComplianceData !== 'undefined') {
-                    openCheckResultTab('SourceAComplianceTabPage');
-                    // var tab3 = document.getElementById("tab3Parent");
-                    // tab3.click();
-                }
-                else if (typeof SourceBComplianceData !== 'undefined') {
-                    openCheckResultTab('SourceBComplianceTabPage');
-                    // var tab2 = document.getElementById("tab2Parent");
-                    // tab2.click();
-                }
-                //}
-            }
         };
 
-        function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager) {
+        function readComparisonCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/comparisonCheckpostDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.ComparisonCheckData = JSON.parse(msg);
+                        }
+                        __this.readSourceAComplianceCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceAComplianceCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceAComplianceDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceAComplianceData = JSON.parse(msg);
+                        }
+
+                        __this.readSourceBComplianceCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceBComplianceCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceBComplianceDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceBComplianceData = JSON.parse(msg);
+                        }
+                        
+                        __this.readSourceAViewerCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceAViewerCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceAViewerDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceAViewerData = JSON.parse(msg);
+                        }
+                        
+                        __this.readSourceBViewerCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceBViewerCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceBViewerDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceBViewerData = JSON.parse(msg);
+                        }
+
+                        __this.readSourceAComponentIdVsComponentCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceAComponentIdVsComponentCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceAComponentIdVsComponentDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceAComponentIdVsComponentData = JSON.parse(msg);
+                        }
+                        __this.readSourceBComponentIdVsComponentCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceBComponentIdVsComponentCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceBComponentIdVsComponentDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceBComponentIdVsComponentData = JSON.parse(msg);
+                        }
+
+                        __this.readSourceANodeIdVsComponentCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceANodeIdVsComponentCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceANodeIdVsComponentDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceANodeIdVsComponentData = JSON.parse(msg);
+                        }
+                        
+                        __this.readSourceBNodeIdVsComponentCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceBNodeIdVsComponentCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/sourceBNodeIdVsComponentDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceBNodeIdVsComponentData = JSON.parse(msg);
+                        }
+                        __this.readSourceASheetCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceASheetCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/SourceASheetDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceAProperties = JSON.parse(msg);
+                        }
+                        __this.readSourceBSheetCheckData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readSourceBSheetCheckData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/SourceBSheetDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.SourceBProperties = JSON.parse(msg);
+                        }
+                        
+                        __this.readAnalyticsData(__this).then(function (success){
+                            if(success)
+                            {
+                                return resolve(true);
+                            }
+                        });
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function readAnalyticsData(_this) {
+            var __this = _this;
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'PHP/analyticsDetailsDataReader.php',
+                    type: "GET",
+                    async: true,
+                    data: {},
+                    success: function (msg) {
+                        var int = 0;
+                        if (msg !== "not found") {
+                            __this.AnalyticsData = JSON.parse(msg);
+                        }                   
+                        return resolve(true);
+                    },
+                    error: function () {
+                        return resolve(true);
+                    }
+                })
+            });
+        }
+
+        function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData) {
             // post comparison data
             if (comparisonCheckManager) {
                 $.ajax({
-                    url: 'PHP/comparisonCheckpostDataWriter.php',
+                    url: 'PHP/comparisonCheckpostDataWriter.1.php',
                     type: "POST",
-                    async: false,
+                    async: true,
                     data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
                     success: function (data) {
-                        // alert("success");
-                        //$("#result").html(data);
+                       
                     }
                 });
             }
@@ -1206,13 +1343,11 @@
             // post source A compliance data
             if (sourceAComplianceCheckManager) {
                 $.ajax({
-                    url: 'PHP/sourceAComplianceDataWriter.php',
+                    url: 'PHP/sourceAComplianceDataWriter.1.php',
                     type: "POST",
-                    async: false,
+                    async: true,
                     data: { "SourceAComplianceCheckManager": JSON.stringify(sourceAComplianceCheckManager) },
-                    success: function (data) {
-                        //alert("success");
-                        //$("#result").html(data);
+                    success: function (data) {                       
                     }
                 });
             }
@@ -1220,23 +1355,22 @@
             // post source B compliance data
             if (sourceBComplianceCheckManager) {
                 $.ajax({
-                    url: 'PHP/sourceBComplianceDataWriter.php',
+                    url: 'PHP/sourceBComplianceDataWriter.1.php',
                     type: "POST",
-                    async: false,
+                    async: true,
                     data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
                     success: function (data) {
                     }
                 });
             }
-            
+
             if (typeof AnalyticsData !== 'undefined') {
                 $.ajax({
                     url: 'PHP/analyticsDetailsDataWriter.php',
                     type: "POST",
-                    async: false,
+                    async: true,
                     data: { "AnalyticsDetailsData": JSON.stringify(AnalyticsData) },
                     success: function (data) {
-                        // alert("success");
                     }
                 });
             }
@@ -1254,7 +1388,7 @@
             if (tabName === "AnalyticsTabPage") {
                 document.getElementById("AnalyticsViewTab").style.backgroundColor = "#F3F0F4";
                 document.getElementById("ChecksViewTab").style.backgroundColor = "lightgray";
-               
+
                 // window.open("/analyticsModule.html", 'popUpWindow', 'height=800,width=1500,left=100,top=100, status=yes');
 
                 // analyticsManager = new AnalyticsManager();
@@ -1388,7 +1522,7 @@
 
                 var sourceBViewerRow = document.getElementById(sourceBViewerContainerRowId);
                 sourceBViewerRow.style.display = "none";
-    
+
                 //clear highlighted row
                 if (sourceAComplianceReviewManager.SelectedComponentRowFromSheetA) {
                     sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray,
@@ -1421,7 +1555,7 @@
 
                 var sourceAViewerRow = document.getElementById(sourceAViewerContainerRowId);
                 sourceAViewerRow.style.display = "none";
-      
+
                 //clear highlighted row
                 if (sourceBComplianceReviewManager.SelectedComponentRowFromSheetB) {
                     sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray,
@@ -1445,7 +1579,7 @@
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
                     comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
                 }
-            
+
             }
             if (typeof sourceAComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1453,7 +1587,7 @@
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceAComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-              
+
             }
             if (typeof sourceBComplianceReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
@@ -1461,7 +1595,7 @@
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer) {
                     sourceBComplianceReviewManager.ReviewModuleViewerInterface.Viewer.model.clear();
                 }
-              
+
             }
 
             // load data sources in viewer
@@ -1477,7 +1611,7 @@
                 tabName === "SourceBComplianceTabPage") {
                 sourceBComplianceReviewManager.loadDatasource();
             }
-        }     
+        }
 
         function gotoCheckModule() {
             window.location = "/checkModule.html";
@@ -1505,7 +1639,7 @@
             viewerContainer[0].children[0].appendChild(viewerdata);
             var modalViewerContainer = viewerdata.getElementsByClassName("example-canvas-tiny");
             for (var i = 0; i < modalViewerContainer.length; i++) {
-                
+
                 var currentViewer = modalViewerContainer[i];
                 if (document.getElementById("dataSource1ModelBrowserTab").style.backgroundColor !== "lightgray") {
                     currentViewer.style.width = "550px";
@@ -1524,7 +1658,7 @@
             }
 
             // resize viewer canvas
-            resizeHoopsViewerCanvas();          
+            resizeHoopsViewerCanvas();
         };
 
         function OnFullScreen() {

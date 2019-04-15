@@ -25,7 +25,7 @@
             // path is text column
             $query = 'INSERT INTO Projects (projectname, userid, path) VALUES (?, ?, ?)';
             $stmt = $dbh->prepare($query);
-            $stmt->execute(array("test",  $userid, $path));     
+            $stmt->execute(array( $projectName,  $userid, $path));     
     
             $dbh = null; //This is how you close a PDO connection
             

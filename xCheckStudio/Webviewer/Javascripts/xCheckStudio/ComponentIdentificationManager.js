@@ -26,12 +26,12 @@ var xCheckStudio;
 
          // SolidWorks data source
          ComponentIdentificationManager.SLDSourceNameProperty = "SW-File Name(File Name)";
-         ComponentIdentificationManager.SLDSourceMainClassProperty = "Type";
+         ComponentIdentificationManager.SLDSourceMainClassProperty = "Component Class";
          ComponentIdentificationManager.SLDSourceSubComponentClassProperty = "Component Class";
 
          // SolidWorks part data source
          ComponentIdentificationManager.SLDPRTNameProperty = "SW-File Name(File Name)";
-         ComponentIdentificationManager.SLDPRTMainClassProperty = "Type";
+         ComponentIdentificationManager.SLDPRTMainClassProperty = "Component Class";
          ComponentIdentificationManager.SLDPRTSubComponentClassProperty = "Component Class";
 
          // Excel data source

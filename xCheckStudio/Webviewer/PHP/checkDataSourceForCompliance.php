@@ -21,129 +21,309 @@ $SourceProperties = json_decode($_POST['SourceProperties'],true);
 $SourceType = $_POST['SourceType'];
 $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
 $SelectedComponents = json_decode($_POST['SelectedCompoents'],true);
-$IdentifierProperties = json_decode($_POST['IdentifierProperties'],true);
-$CheckCaseData = json_decode($_POST['CheckCaseData'],true);
 
-// var_dump($CheckCaseData);
 $CheckComponentsGroups = array();
 
-for($index = 0; $index < count($SourceProperties) ; $index++)
-{
-    $sourceComponentProperties = $SourceProperties[$index];
+performComplianceCheck();
 
-    // check if this property is checked or not, in Source A
-    if ((strtolower($SourceType) === "xml" ||
-        strtolower($SourceType) === "rvm"||
-        strtolower($SourceType) === "sldasm" ||
-        strtolower($SourceType) === "sldprt") &&
-        !isComponentSelected($sourceComponentProperties))
+
+function performComplianceCheck(){
+    global $SourceProperties;
+    global $SourceType;
+    global $CheckCaseType;
+    global $CheckComponentsGroups;
+
+    $SourceANotCheckedComponents = array();
+    $SourceBNotCheckedComponents = array();
+    $SourceANotMatchedComponents = array();
+    $SourceBNotMatchedComponents = array();
+
+    $componentsList = restoreProperties ($SourceProperties) ;
+    for($index = 0; $index < count($componentsList) ; $index++)
+    {
+        $sourceComponent = $componentsList[$index];
+        // check if this property is checked or not, in Source A
+        if ((strtolower($SourceType) === "xml" ||
+            strtolower($SourceType) === "rvm"||
+            strtolower($SourceType) === "sldasm" ||
+            strtolower($SourceType) === "sldprt") &&
+            !isComponentSelected($sourceComponent))
+            {
+                if(!isset($SourceANotCheckedComponents[$sourceComponent->id]))
+                {
+                    array_push($SourceANotCheckedComponents, $sourceComponent);
+                }
+                continue;
+            }
+        else if(strtolower($SourceType) === "xls" &&
+                !isComponentSelected($sourceComponent))
+            {
+                if(!isset($SourceANotCheckedComponents[$sourceComponent->id]))
+                {
+                    array_push($SourceANotCheckedComponents, $sourceComponent);
+                }
+                continue;
+            }
+
+        // check if component class exists in checkcase
+        if(!isComponentGroupExists($sourceComponent->MainComponentClass, NULL))
         {
+            //source A not matched
+            if(!isset($SourceANotMatchedComponents[$sourceComponent->id]))
+                {
+                    array_push($SourceANotMatchedComponents, $sourceComponent);
+                }
             continue;
         }
-    else if(strtolower($SourceType) === "xls" &&
-            !isComponentSelected($sourceComponentProperties))
+        
+        // get check case group
+        $checkCaseGroup = getComponentGroup($sourceComponent->MainComponentClass, NULL);
+
+        // check if component exists in checkCaseGroup
+        if(!componentClassExists($sourceComponent->SubComponentClass, NULL, $checkCaseGroup, $sourceComponent->MainComponentClass)){
+            //source A not matched
+            if(!isset($SourceANotMatchedComponents[$sourceComponent->id]))
+            {
+                array_push($SourceANotMatchedComponents, $sourceComponent);
+            }
+            continue;
+        }
+        
+        // get check case component
+        $checkCaseComponentClass = getComponentClass($sourceComponent->SubComponentClass, NULL, $checkCaseGroup, $sourceComponent->MainComponentClass);
+        
+        $checkComponentGroup;
+        if(!empty($CheckComponentsGroups) &&
+            array_key_exists($sourceComponent->MainComponentClass, $CheckComponentsGroups))
+            {
+                $checkComponentGroup = $CheckComponentsGroups[$sourceComponent->MainComponentClass];
+            }
+        else{
+            $checkComponentGroup = new CheckComponentGroup($sourceComponent->MainComponentClass);
+            $CheckComponentsGroups[$sourceComponent->MainComponentClass] = $checkComponentGroup;
+        }
+
+        if(!$checkComponentGroup)
         {
+            //source A not matched
+            if(!isset($SourceANotMatchedComponents[$sourceComponent->id]))
+            {
+                array_push($SourceANotMatchedComponents, $sourceComponent);
+            }
             continue;
         }
 
-    // check if component class exists in checkcase
-    if(!isComponentGroupExists($sourceComponentProperties['MainComponentClass'], NULL))
-    {
-        continue;
-    }
-    
-    // get check case group
-    $checkCaseGroup = getComponentGroup($sourceComponentProperties['MainComponentClass'], NULL);
+        $checkComponent = new CheckComponent($sourceComponent->Name,
+                                        "",
+                                        $sourceComponent->SubComponentClass,
+                                        $sourceComponent->NodeId,
+                                        "");
 
-    // check if component exists in checkCaseGroup
-    // if(!componentClassExists($sourceComponentProperties['SubComponentClass'], NULL, $sourceComponentProperties['MainComponentClass'])){
-    //     continue;
-    // }
-    // echo componentClassExists($sourceComponentProperties['SubComponentClass'], NULL, $checkCaseGroup, $sourceComponentProperties['MainComponentClass']);
-    if(!componentClassExists($sourceComponentProperties['SubComponentClass'], NULL, $checkCaseGroup, $sourceComponentProperties['MainComponentClass'])){
-        continue;
-    }
-    
-    // get check case component
-    $checkCaseComponentClass = getComponentClass($sourceComponentProperties['SubComponentClass'], NULL, $checkCaseGroup, $sourceComponentProperties['MainComponentClass']);
-    
-    $checkComponentGroup;
-    if(!empty($CheckComponentsGroups) &&
-        array_key_exists($sourceComponentProperties['MainComponentClass'], $CheckComponentsGroups))
+        $checkComponentGroup->AddCheckComponent($checkComponent);
+
+    if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent->MainComponentClass))
         {
-            $checkComponentGroup = $CheckComponentsGroups[$sourceComponentProperties['MainComponentClass']];
-        }
-    else{
-        $checkComponentGroup = new CheckComponentGroup($sourceComponentProperties['MainComponentClass']);
-        $CheckComponentsGroups[$sourceComponentProperties['MainComponentClass']] = $checkComponentGroup;
-    }
+            for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
+            {
+                // get check case mapping property object
+                $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$propertiesIndex];
+                if(propertyExists($checkCaseMappingProperty['SourceAName'], $checkCaseGroup, $sourceComponent))
+                {
+                    $property = getProperty($checkCaseMappingProperty['SourceAName'], $checkCaseGroup, $sourceComponent);
+                    $propertyName = $property->Name;
+                    $propertyValue = $property->Value;
+                    $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
+                    $performCheck = true;
 
-    if(!$checkComponentGroup)
-    {
-        continue;
-    }
+                    $checkProperty = new CheckProperty($propertyName,
+                                                        $propertyValue,
+                                                        "",
+                                                        "",
+                                                        $checkCaseMappingProperty['Severity'],
+                                                        $performCheck,
+                                                        $checkCaseMappingProperty['Comment']);
+                    $checkProperty->Result = $result;
 
-    $checkComponent = new CheckComponent($sourceComponentProperties['Name'],
-                                    "",
-                                    $sourceComponentProperties['SubComponentClass'],
-                                    $sourceComponentProperties['NodeId'],
-                                    "");
-
-    $checkComponentGroup->AddCheckComponent($checkComponent);
-
-   // var_dump($checkCaseComponentClass['MappingProperties']);
-   if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponentProperties['MainComponentClass']))
-    {
-        for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
-        {
-              // get check case mapping property object
-              $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$propertiesIndex];
-              if(propertyExists($checkCaseMappingProperty['SourceAName'], $checkCaseGroup))
-              {
-                  $property = getProperty($checkCaseMappingProperty['SourceAName'], $checkCaseGroup);
-                 //  var_dump($property);
-                  $propertyName = $property['Name'];
-                  $propertyValue = $property['Value'];
-                 //  echo $propertyValue;
-                  $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
-                //   echo $result;
-                $performCheck = true;
-
-                $checkProperty = new CheckProperty($propertyName,
-                                                    $propertyValue,
-                                                    "",
-                                                    "",
-                                                    $checkCaseMappingProperty['Severity'],
-                                                    $performCheck,
-                                                    $checkCaseMappingProperty['Comment']);
-                $checkProperty->Result = $result;
-
-                $checkComponent->AddCheckProperty($checkProperty);
-              }
+                    $checkComponent->AddCheckProperty($checkProperty);
+                }
+            }
         }
     }
 
+   
+    $projectDBPath = getCurrentProjectDBPath();
 
-    // var_dump($CheckComponentsGroups);
+    if(strtolower($_POST['ContainerId']) == "viewercontainer1")
+    {
+        addComplianceACheckResultToDataBase($CheckComponentsGroups, $projectDBPath);
+    }
+    else if(strtolower($_POST['ContainerId']) == "viewercontainer2")
+    {
+        addComplianceBCheckResultToDataBase($CheckComponentsGroups, $projectDBPath);
+    }
+    $json_data = json_encode($CheckComponentsGroups);
+    echo $json_data;
 }
 
-$json_data = json_encode($CheckComponentsGroups);
 
-echo $json_data;
+function getCurrentProjectDBPath(){
+    session_start();
+    $projectName;
+    if(isset($_SESSION['projectname']))
+    {
+        $projectName = $_SESSION['projectname'];
+        // echo $projectName;
+    }
+
+    $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+    $query =  "SELECT path from Projects WHERE projectname='". $projectName."';";        
+
+    $result = $dbh->query($query)->fetch();
+    $Path = $result['path'];
+
+    return $Path;
+}
+
+function addComplianceACheckResultToDataBase($CheckComponentsGroups, $projectDBPath){
+
+    $dbh = new PDO("sqlite:../".$projectDBPath) or die("cannot open the database");
+    
+    //check if table exists
+    $table_name = 'SourceAComplianceCheckData'; 
+    $tableExists = "SELECT 1 FROM " . $table_name . " LIMIT 1";
+    $tableExists = $dbh->query($tableExists);
+
+    if($tableExists)
+    {
+        $result = "DELETE from " . $table_name;
+        $result = $dbh->query($result);
+    }
+
+    try{
+        $commands = ['CREATE TABLE IF NOT EXISTS SourceAComplianceCheckData (
+            class_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+            component_class TEXT NOT NULL UNIQUE,
+            classwise_check_data TEXT NOT NULL
+          )'];
+    
+            foreach ($commands as $command) {
+                $dbh->exec($command);
+            }
+    
+        foreach ($CheckComponentsGroups as $MainComponentClass=>$componentGroup)
+        {
+            $$MainComponentClass = $MainComponentClass;
+            $classwise_check_data = json_encode($componentGroup);
+        
+            $query = 'INSERT INTO SourceAComplianceCheckData (component_class, classwise_check_data) VALUES (?, ?)';
+            $stmt = $dbh->prepare($query);
+            $stmt->execute(array( $MainComponentClass, $classwise_check_data));  
+            // var_dump($componentGroup);
+        }
+           
+        // $dbh->exec($query);
+        
+        $dbh = null;
+        }
+        catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+            return;
+        } 
+   
+}
+
+function addComplianceBCheckResultToDataBase($CheckComponentsGroups, $projectDBPath){
+
+    $dbh = new PDO("sqlite:../".$projectDBPath) or die("cannot open the database");
+
+    $table_name = 'SourceBComplianceCheckData'; 
+    $tableExists = "SELECT 1 FROM " . $table_name . " LIMIT 1";
+    $tableExists = $dbh->query($tableExists);
+
+    if($tableExists)
+    {
+        $result = "DELETE from " . $table_name;
+        $result = $dbh->query($result);
+    }
+
+    try{    
+    $commands = ['CREATE TABLE IF NOT EXISTS SourceBComplianceCheckData (
+        class_id   INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0,
+        component_class TEXT NOT NULL UNIQUE,
+        classwise_check_data TEXT NOT NULL
+      )'];
+
+        foreach ($commands as $command) {
+            $dbh->exec($command);
+        }
+
+    foreach ($CheckComponentsGroups as $MainComponentClass=>$componentGroup)
+    {
+        $$MainComponentClass = $MainComponentClass;
+        $classwise_check_data = json_encode($componentGroup);
+    
+        $query = 'INSERT INTO SourceBComplianceCheckData  (component_class, classwise_check_data) VALUES (?, ?)';
+        $stmt = $dbh->prepare($query);
+        $stmt->execute(array( $MainComponentClass, $classwise_check_data));  
+        // var_dump($componentGroup);
+    }
+       
+    // $dbh->exec($query);
+    
+    $dbh = null;
+    }
+    catch(Exception $e) {
+        echo 'Message: ' .$e->getMessage();
+        return;
+    } 
+}
+
+
+function addComplianceCheckResultToDataBase($CheckComponentsGroups){
+    global $CheckCaseType;
+    try{
+    $dbh = new PDO("sqlite:../Projects/Project_2/Project_2.db") or die("cannot open the database");
+    $commands = ['CREATE TABLE IF NOT EXISTS Compliance_Check_Result_Table (
+        check_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+        check_type TEXT NOT NULL,
+        check_data TEXT NOT NULL,
+        check_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+      )'];
+
+        foreach ($commands as $command) {
+            $dbh->exec($command);
+        }
+
+    $check_type = $CheckCaseType['Name'];
+    $check_data = json_encode($CheckComponentsGroups);
+    $check_time = date('m/d/Y h:i:s a', time());
+    
+   // $query = "INSERT INTO Compliance_Check_Result_Table VALUES ('.NULL.','.$check_type.','.$check_data.','.$check_time.')";
+    $query = 'INSERT INTO Compliance_Check_Result_Table  (check_type, check_data, check_time) VALUES (?, ?, ?)';
+    $stmt = $dbh->prepare($query);
+    $stmt->execute(array( $check_type, $check_data, $check_time));     
+    // $dbh->exec($query);
+    
+    $dbh = null;
+    }
+    catch(Exception $e) {
+        echo 'Message: ' .$e->getMessage();
+        return;
+    } 
+}
+
 
 function isComponentSelected($componentProperties){
-    global $IdentifierProperties;
     global $SelectedComponents;
-
     for($index = 0; $index < count($SelectedComponents); $index++)
     {
         $component = $SelectedComponents[$index];
-        if($componentProperties['Name'] == $component[$IdentifierProperties['name']] &&
-           $componentProperties['MainComponentClass'] == $component[$IdentifierProperties['mainCategory']] && 
-           $componentProperties['SubComponentClass'] == $component[$IdentifierProperties['subClass']]){
+       if($componentProperties->Name == $component['Name'] &&
+           $componentProperties->MainComponentClass == $component['MainComponentClass'] && 
+           $componentProperties->SubComponentClass == $component['ComponentClass']){
                 if($component['NodeId'])
                 {
-                    if($component['NodeId'] == $componentProperties['NodeId'])
+                    if($component['NodeId'] == $componentProperties->NodeId)
                     {
                         return true;
                     }
@@ -157,7 +337,8 @@ function isComponentSelected($componentProperties){
 }
 
 function isComponentGroupExists($sourceAGroupName, $sourceBGroupName){
-    global $CheckCaseType;
+    global $CheckCaseType; 
+   
     for($index = 0; $index < count($CheckCaseType['ComponentGroups']); $index++)
     {
          // check for source A only
@@ -177,7 +358,6 @@ function isComponentGroupExists($sourceAGroupName, $sourceBGroupName){
         return true;
         }
     }
-
     return false;
 }
 
@@ -208,10 +388,8 @@ function getComponentGroup($sourceAGroupName, $sourceBGroupName){
 
 // $componentGroupName : main component class 
 function componentClassExists($sourceAClassName, $sourceBClassName, $checkCaseGroup, $componentGroupName){
-    // global $CheckCaseData;
-    // global $CheckCaseType;
-
-     if(strtolower($checkCaseGroup['SourceAName']) != strtolower($componentGroupName))
+    $componentClasses = $checkCaseGroup['ComponentClasses'];      
+    for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
     {
         return false;
     }
@@ -220,7 +398,6 @@ function componentClassExists($sourceAClassName, $sourceBClassName, $checkCaseGr
     for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
     {        
             $componentClass = $componentClasses[$classIndex];
-
             if ($sourceAClassName == NULL &&
             $sourceBClassName != NULL &&
             strtolower($componentClass['SourceBName']) == strtolower($sourceBClassName)) {
@@ -229,23 +406,26 @@ function componentClassExists($sourceAClassName, $sourceBClassName, $checkCaseGr
             
             if ($sourceBClassName == NULL &&
                 $sourceAClassName != NULL &&
-                strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName)) {
+                strtolower($componentClass['SourceAName']) == strtolower($sourceAClassName)) {
             
                 return true;
             }
 
             if ($sourceAClassName != NULL &&
                 $sourceBClassName != NULL &&
-                strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName) &&
+                strtolower($componentClass['SourceAName']) == strtolower($sourceAClassName) &&
                 strtolower($componentClass['SourceBName']) == strtolower($sourceBClassName)) {
                 return true;
-            }   
+            }
+        }
+        else{
+            continue;
+        }
     }
-    return false;   
+    return false;
 }
 
 function getComponentClass($sourceAClassName, $sourceBClassName, $checkCaseGroup, $componentGroupName){
-
     $componentClasses = $checkCaseGroup['ComponentClasses'];                    
     for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
     {
@@ -384,15 +564,15 @@ class CheckProperty{
 
 }
 
-function propertyExists($propertyName, $checkCaseGroup){
-    global $sourceComponentProperties;
-    if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponentProperties['MainComponentClass']))
+function propertyExists($propertyName, $checkCaseGroup, $sourceComponent){
+    // global $sourceComponent;
+    if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent->MainComponentClass))
     {
-        $componentProperties = $sourceComponentProperties['properties'];
+        $componentProperties = $sourceComponent->properties;
         // var_dump($componentProperties);
         for($index = 0; $index < count($componentProperties); $index++)
         {
-            if(strtolower($componentProperties[$index]['Name']) == strtolower($propertyName))
+            if(strtolower($componentProperties[$index]->Name) == strtolower($propertyName))
             {
                 return true;
             }
@@ -401,16 +581,15 @@ function propertyExists($propertyName, $checkCaseGroup){
     }
 }
 
-function getProperty($propertyName, $checkCaseGroup){
-    global $sourceComponentProperties;
-
-    if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponentProperties['MainComponentClass']))
+function getProperty($propertyName, $checkCaseGroup, $sourceComponent){
+    // global $sourceComponent;
+    if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent->MainComponentClass))
     {
-        $componentProperties = $sourceComponentProperties['properties'];
+        $componentProperties = $sourceComponent->properties;
         // var_dump($componentProperties);
         for($index = 0; $index < count($componentProperties); $index++)
         {
-            if(strtolower($componentProperties[$index]['Name']) == strtolower($propertyName))
+            if(strtolower($componentProperties[$index]->Name) == strtolower($propertyName))
             {
                 return $componentProperties[$index];
             }
@@ -418,11 +597,6 @@ function getProperty($propertyName, $checkCaseGroup){
         return NULL;
     }
 }
-
-// $checkCaseMappingProperty = json_decode($_POST['checkCaseMappingProperty'],true);
-
-// $result = checkComplianceRule($checkCaseMappingProperty, $_POST['propertyValue']);
-// echo $result;
 
 function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
@@ -437,7 +611,6 @@ function endsWith($value,$postfix,$case=true) {
 
 function checkComplianceRule($checkCaseMappingProperty, $propertyValue){
     global $ComplianceCheckRulesArray;
-    // echo($checkCaseMappingProperty['Rule']."-".$propertyValue ."---");
     $result = true;  
     if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['None'])
     {
@@ -560,4 +733,85 @@ function checkComplianceRule($checkCaseMappingProperty, $propertyValue){
         
 }
 
+
+function restoreProperties ($ComponentsList) 
+{
+        $Components = array();
+        foreach($ComponentsList as $key => $value) {
+
+        $component = new GenericComponent( $value->Name, 
+        $value->MainComponentClass, 
+        $value->SubComponentClass, 
+        $value->NodeId);
+
+        foreach($value->properties as $propertyKey => $propertyValue) {
+        $property = new GenericProperty($propertyValue->Name, $propertyValue->Format, $propertyValue->Value);
+        $component->addProperty( $property );
+        } 
+        array_push ( $Components, $component ) ;
+        }
+
+       
+        return $Components;
+}
+
+// classes
+class GenericComponent
+{
+var $Name; 
+var $MainComponentClass; 
+var $SubComponentClass;
+var $NodeId; 
+
+var $properties = array(); 
+// constructor
+public function __construct($name, $mainComponentClass, $subComponentClass, $nodeId) {
+        $this->Name = $name;
+        $this->MainComponentClass = $mainComponentClass;
+        $this->SubComponentClass = $subComponentClass;
+        $this->NodeId = $nodeId;
+}
+
+public function addProperty($genericProperty) {
+
+        // returns number of elements in an array
+        return array_push ( $this->properties, $genericProperty ) ;
+}
+
+public function propertyExists($propertyName) {
+
+        for ($i = 0; $i < count($this->properties); $i++) { 
+        if ( strtolower($this->properties[$i]->Name) === strtolower($propertyName)) {
+        return true;
+        }
+        }
+
+        return false;
+}
+
+public function getProperty($propertyName) {
+
+        for ($i = 0; $i < count($this->properties); $i++) { 
+        if ( strtolower($this->properties[$i]->Name) === strtolower($propertyName)) {
+        return $this->properties[$i];
+        }
+        }
+
+        return NULL;
+    } 
+}
+
+class GenericProperty
+{ 
+        var $Name ; 
+        var $Format ; 
+        var $Value ; 
+
+        // constructor
+        public function __construct($name, $format, $value) {
+        $this->Name = str_replace("world","", $name); 
+        $this->Format = $format;
+        $this->Value = $value; 
+        }
+}
 ?>

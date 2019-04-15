@@ -86,28 +86,26 @@ function CheckManager(name) {
             });
         }
         else {
-            var CheckCaseData = "";
-            $.ajax({
-                url: 'PHP/CheckCaseDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    CheckCaseData = msg;
-                }
-            })
-
-            var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(interfaceObject.SourceType,"");
             var SelectedCompoents;
+            var containerID;
             if(interfaceObject._modelTree !== undefined)
             {
                 SelectedCompoents = interfaceObject._modelTree.selectedCompoents;
+                containerID = interfaceObject._firstViewer._params.containerId;
             }
             else if(interfaceObject.excelReader !== undefined)
             {
                 SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.selectedCompoents;
+                if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase() == "modeltree1")
+                {
+                    containerID = "viewerContainer1"
+                }
+                else if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase()== "modeltree2")
+                {
+                    containerID = "viewerContainer2";
+                }
+                
             }
-
 
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',
@@ -117,13 +115,11 @@ function CheckManager(name) {
                         "CheckCaseType": JSON.stringify(checkCaseType),
                         "SourceType": interfaceObject.SourceType,
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
-                        "ExcelSelectedCompoents": JSON.stringify(interfaceObject.excelReader.excelModelBrowser.selectedCompoents),
-                        "IdentifierProperties": JSON.stringify(identifierProperties),
-                        "CheckCaseData": CheckCaseData
+                        "ContainerId": containerID
                 },
                 success: function (data) {
                     // alert("success");
-                    $this.CheckComponentsGroupsData = data;
+                   $this.CheckComponentsGroups = JSON.parse(data);
                 }
             });
             // this.checkDataSourceForCompliance(sourceProperties1, checkCaseType, interfaceObject);

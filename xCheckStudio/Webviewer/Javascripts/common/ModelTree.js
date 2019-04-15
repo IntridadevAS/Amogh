@@ -248,13 +248,11 @@ var xCheckStudio;
 
 
             ModelTree.prototype.selectedCompoentExists = function (componentRow) {
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, 
-                                                                                                                            componentRow.cells[2].textContent.trim());
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
-                        component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
-                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() /*&&                      
+                    if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                        component['ComponentClass'] === componentRow.cells[3].textContent.trim() /*&&                      
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()*/) {
@@ -273,13 +271,11 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.isComponentSelected = function (componentProperties) {
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, componentProperties.MainComponentClass);
-
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component[identifierProperties.name] === componentProperties.Name &&
-                        component[identifierProperties.mainCategory] === componentProperties.MainComponentClass &&
-                        component[identifierProperties.subClass] === componentProperties.SubComponentClass) {
+                    if (component['Name'] === componentProperties.Name &&
+                        component['MainComponentClass'] === componentProperties.MainComponentClass &&
+                        component['ComponentClass'] === componentProperties.SubComponentClass) {
 
                         if ("NodeId" in component) {
                             if (component["NodeId"] === componentProperties.NodeId.toString()) {
@@ -311,13 +307,11 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.removeFromselectedCompoents = function (componentRow) {
-
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, componentRow.cells[2].textContent.trim());
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var component = this.selectedCompoents[i];
-                    if (component[identifierProperties.name] === componentRow.cells[1].textContent.trim() &&
-                        component[identifierProperties.mainCategory] === componentRow.cells[2].textContent.trim() &&
-                        component[identifierProperties.subClass] === componentRow.cells[3].textContent.trim() /*&&
+                    if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                        component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                        component['ComponentClass'] === componentRow.cells[3].textContent.trim() /*&&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
                         component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()*/) {
@@ -376,12 +370,10 @@ var xCheckStudio;
                 if (currentCheckBox.checked &&
                     !this.selectedCompoentExists(currentRow)) {
 
-                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType, 
-                                                                                                                                currentRow.cells[modelBrowserMainClassColumn].textContent.trim());
                     var checkedComponent = {};
-                    checkedComponent[identifierProperties.name] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
-                    checkedComponent[identifierProperties.mainCategory] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
-                    checkedComponent[identifierProperties.subClass] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();                  
+                    checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
+                    checkedComponent['MainComponentClass'] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
+                    checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();                  
                     checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     this.selectedCompoents.push(checkedComponent);
@@ -562,6 +554,7 @@ var xCheckStudio;
             };
 
             ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
+                
                 if (nodeId !== null) {
                     var model = this._viewer.model;
                     var children = model.getNodeChildren(nodeId);
@@ -589,7 +582,6 @@ var xCheckStudio;
                             this.addModelBrowserComponent(child, collapsibleCellStyle);
                         }
                     }
-                  
                 }
 
             };

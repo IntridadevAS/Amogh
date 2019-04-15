@@ -9,26 +9,17 @@ function CheckCaseManager() {
     CheckCaseManager.prototype.readCheckCaseData = function (fileName) {
         var _this = this;
 
-        // set ready flag to false, to hold the execution of dependent code
-
-        //  _this.Ready = false;
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                _this.readCheckCaseXml(this);
-
-                // set ready flag to true
-                //_this.Ready = true;
-
-                // notify that check case data ready is complete
-                _this.onCheckCaseDataReadComplete();
-            }
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "PHP/readCheckCaseXml.php", true);
+        xhr.onload = function (data) {
+            var int = 0;
+            _this.CheckCase = JSON.parse(data.currentTarget.responseText);
+            _this.postData();
         };
+        var formData = new FormData();
+        formData.append('XMLFileName', fileName);
+        xhr.send(formData);
 
-        //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
-        xhttp.open("GET", "configurations/" + fileName, true);
-        xhttp.send();
     }
 
     CheckCaseManager.prototype.onCheckCaseDataReadComplete = function () {
