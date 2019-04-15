@@ -1,4 +1,5 @@
 <?php
+
 $ComplianceCheckRulesArray = array(
     "None"=> "1",
     "Must_Have_Value"=> "2",
@@ -210,11 +211,14 @@ function componentClassExists($sourceAClassName, $sourceBClassName, $checkCaseGr
     // global $CheckCaseData;
     // global $CheckCaseType;
 
+     if(strtolower($checkCaseGroup['SourceAName']) != strtolower($componentGroupName))
+    {
+        return false;
+    }
+
     $componentClasses = $checkCaseGroup['ComponentClasses'];                    
     for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
-    {
-        if(strtolower($checkCaseGroup['SourceAName']) == strtolower($componentGroupName))
-        {
+    {        
             $componentClass = $componentClasses[$classIndex];
 
             if ($sourceAClassName == NULL &&
@@ -235,71 +239,9 @@ function componentClassExists($sourceAClassName, $sourceBClassName, $checkCaseGr
                 strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName) &&
                 strtolower($componentClass['SourceBName']) == strtolower($sourceBClassName)) {
                 return true;
-            }
-        }
-        else{
-            continue;
-        }
+            }   
     }
-    return false;
-
-    // foreach($CheckCaseData as $key=>$value)
-    // {
-    //     if($key == "CheckTypes")
-    //     {
-    //         for($index = 0; $index < count($value); $index++)
-    //         {
-    //             $checkType = $value[$index];
-    //             if($checkType['Name'] != $CheckCaseType['Name'])
-    //             {
-    //                 continue;
-    //             }
-    //             else{
-    //                 for($ComponentGroupIndex = 0; $ComponentGroupIndex < count($checkType['ComponentGroups']); $ComponentGroupIndex++)
-    //                 {
-    //                     $componentGroup = $checkType['ComponentGroups'][$ComponentGroupIndex];
-    //                     if(strtolower($componentGroup['SourceAName']) == strtolower($componentGroupName))
-    //                     {
-    //                         $componentClasses = $componentGroup['ComponentClasses'];
-                            
-    //                         for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
-    //                         {
-    //                             $componentClass = $componentClasses[$classIndex];
-
-    //                             if ($sourceAClassName == NULL &&
-    //                             $sourceBClassName != NULL &&
-    //                             strtolower($componentClass['SourceBName']) == strtolower($sourceBClassName)) {
-    //                                 return true;
-    //                             }
-                                
-    //                             if ($sourceBClassName == NULL &&
-    //                                 $sourceAClassName != NULL &&
-    //                                 strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName)) {
-                                
-    //                                 return true;
-    //                             }
-
-    //                             if ($sourceAClassName != NULL &&
-    //                                 $sourceBClassName != NULL &&
-    //                                 strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName) &&
-    //                                 strtolower($componentClass['SourceBName']) == strtolower($sourceBClassName)) {
-    //                                 return true;
-    //                             }
-    //                         }
-    //                         return false;
-    //                     }
-    //                     else{
-    //                         continue;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else{
-    //         continue;
-    //     }
-    // }
-    // return false;
+    return false;   
 }
 
 function getComponentClass($sourceAClassName, $sourceBClassName, $checkCaseGroup, $componentGroupName){

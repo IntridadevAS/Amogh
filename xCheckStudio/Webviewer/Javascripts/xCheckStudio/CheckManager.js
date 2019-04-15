@@ -38,7 +38,52 @@ function CheckManager(name) {
 
             var $this = this;
         if (comparisonCheck) {
-            this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
+           //this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
+
+           var sourceAIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,"");
+           var sourceBIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,"");
+
+           var sourceASelectedCompoents;           
+            if (xCheckStudioInterface1.excelReader !== undefined) {
+                sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
+            }
+            else(xCheckStudioInterface1._modelTree !== undefined)
+            {
+                sourceASelectedCompoents = xCheckStudioInterface1._modelTree.selectedCompoents;
+            }
+
+            var sourceBSelectedCompoents;
+            if (xCheckStudioInterface2.excelReader !== undefined) {
+                sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
+            }
+            else(xCheckStudioInterface2._modelTree !== undefined)
+            {
+                sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
+            }
+
+            $.ajax({
+                url: 'PHP/checkDataSourceForComparison.php',
+                type: "POST",
+                async: false,
+                data: {
+                    "SourceAProperties": JSON.stringify(sourceProperties1),
+                    "SourceBProperties": JSON.stringify(sourceProperties2),
+                    "CheckCaseType": JSON.stringify(checkCaseType),
+                    "SourceAType": xCheckStudioInterface1.SourceType,
+                    "SourceBType": xCheckStudioInterface2.SourceType,
+                    "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
+                    "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
+                    "SourceAIdentifierProperties": JSON.stringify(sourceAIdentifierProperties),
+                    "SourceBIdentifierProperties": JSON.stringify(sourceBIdentifierProperties)
+                },
+                success: function (data) {
+                    // alert("success");
+                    $this.CheckComponentsGroupsData = data;
+                },
+                error: function (error) {
+                    alert('error; ' + eval(error));
+                }
+            });
         }
         else {
             var CheckCaseData = "";

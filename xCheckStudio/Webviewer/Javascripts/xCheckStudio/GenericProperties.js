@@ -1,11 +1,7 @@
 function GenericComponent(name,
                            mainComponentClass, 
-                           subComponentClass,
-                           //source,
-                           //destination,
-                           //ownerId,
-                           nodeId,
-                           /*ownerHandle*/)
+                           subComponentClass,                          
+                           nodeId)
 {
     this.Name = name;  
     this.MainComponentClass = mainComponentClass;
