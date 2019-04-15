@@ -63,127 +63,121 @@ class CheckCaseManager {
         // var complianceCheck = checkCaseElement.getAttribute("complianceCheck");
         //var checkCase = new CheckCase(checkCaseName/*, complianceCheck*/);
 
-        //for (var i = 0; i < checkCaseElement.children.length; i++) {
-        for (var checkTypeIndex = 0; checkTypeIndex < checkCaseElement.children.length; checkTypeIndex++) {
-            var checkTypeElement = checkCaseElement.children[checkTypeIndex];
-            if (checkTypeElement.localName != "Check") {
-                continue;
-            }
-
-            var checkTypeName = checkTypeElement.getAttribute("type");
-            var sourceAType = checkTypeElement.getAttribute("sourceType");
-            var sourceBType = undefined;
-
-            if (sourceAType === undefined ||
-                sourceAType === null) {
-                sourceAType = checkTypeElement.getAttribute("sourceAType");
-                sourceBType = checkTypeElement.getAttribute("sourceBType");
-            }
-
-            var checkType = new CheckType(checkTypeName, sourceAType, sourceBType);
-
-            //if (sourceAType === "XLS" && sourceBType === "XML") {
-            for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
-                var componentGroupElement = checkTypeElement.children[componentGroupIndex];
-                if (componentGroupElement.localName != "ComponentGroup") {
+        foreach ($checkCaseElement->childNodes AS $checkTypeElement) {
+            //print $checkTypeElement->nodeName . " = " . $checkTypeElement->nodeValue . "<br>";
+                if( $checkTypeElement->nodeName !="Check")
+                {
                     continue;
                 }
 
-                // ComponentGroup object
-                var sourceAGroupName = undefined;
-                var sourceBGroupName = undefined;
-                sourceAGroupName = componentGroupElement.getAttribute("name");
-                if (!sourceAGroupName) {
-                    sourceAGroupName = componentGroupElement.getAttribute("sourceAGroupName");
-                    sourceBGroupName = componentGroupElement.getAttribute("sourceBGroupName");
+                
+                $checkTypeName = $checkTypeElement->attributes()->type;
+                $sourceAType = $checkTypeElement.->attributes()->sourceType;
+                $sourceBType = NULL;
+
+                if ($sourceAType  == NULL) {
+                    $sourceAType = $checkTypeElement->attributes()->sourceAType;
+                    $sourceBType = $checkTypeElement->attributes()->sourceBType;
                 }
 
-                var checkCaseComponentGroup = new CheckCaseComponentGroup(sourceAGroupName, sourceBGroupName);
+                $checkType = new CheckType($checkTypeName, $sourceAType, $sourceBType);
 
-                for (var j = 0; j < componentGroupElement.children.length; j++) {
-                    var componentElement = componentGroupElement.children[j];
-                    if (componentElement.localName != "ComponentClass") {
+                
+
+                foreach ($checkTypeElement->childNodes AS $componentGroupElement) {
+                    if ($componentGroupElement->nodeName != "ComponentGroup") {
                         continue;
                     }
 
-                    // Component object
-                    var sourceAClassName = undefined;
-                    var sourceBClassName = undefined;
-                    sourceAClassName = componentElement.getAttribute("name");
-                    if (!sourceAClassName) {
-                        sourceAClassName = componentElement.getAttribute("sourceAComponentClass");
-                        sourceBClassName = componentElement.getAttribute("sourceBComponentClass");
-                    }
-                    var checkCaseComponentClass = new CheckCaseComponentClass(sourceAClassName, sourceBClassName);
-
-                    for (var k = 0; k < componentElement.children.length; k++) {
-                        var propertyElement = componentElement.children[k];
-
-                        if (propertyElement.localName.toLowerCase() === "matchwith") {
-                            //checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
-                            //checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
-
-                            var sourceAMatchProperty = propertyElement.getAttribute("sourceAPropertyname");
-                            var sourceBMatchProperty = propertyElement.getAttribute("sourceBPropertyname");
-
-                            if (sourceAMatchProperty !== undefined &&
-                                sourceBMatchProperty !== undefined &&
-                                !(sourceAMatchProperty in checkCaseComponentClass.MatchwithProperties)) {
-                                    checkCaseComponentClass.MatchwithProperties[sourceAMatchProperty] =  sourceBMatchProperty;
-                            }
-                        }
-                        else if (propertyElement.localName.toLowerCase() === "property") {
-
-                            var sourceAProperty = propertyElement.getAttribute("name");
-                            var sourceBProperty = undefined;
-                            var rule = undefined;
-                            if (sourceAProperty === undefined ||
-                                sourceAProperty === null) {
-                                sourceAProperty = propertyElement.getAttribute("sourceAName");
-                                sourceBProperty = propertyElement.getAttribute("sourceBName");
-                            }
-                            else {
-                                rule = propertyElement.getAttribute("rule");
-                            }
-                            var severity = propertyElement.getAttribute("severity");
-                            var comment = propertyElement.getAttribute("comment");
-
-                            // create mapping property object 
-                            var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-                                sourceBProperty,
-                                severity,
-                                rule,
-                                comment);
-                            checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-                        }
+                     // ComponentGroup object
+                    $sourceAGroupName = NULL;
+                    $sourceBGroupName = NULL;
+                    $sourceAGroupName = $componentGroupElement->attributes()->name;
+                    if ($sourceAGroupName == NULL) {
+                        $sourceAGroupName = $componentGroupElement->attributes()->sourceAGroupName;
+                        $sourceBGroupName = $componentGroupElement->attributes()->sourceBGroupName;
                     }
 
-                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+                    $checkCaseComponentGroup = new CheckCaseComponentGroup($sourceAGroupName, $sourceBGroupName);
+                    
+                        foreach ($componentGroupElement->childNodes AS $componentElement) {
+                                if ($componentElement->nodeName != "ComponentClass") {
+                                    continue;
+                                }
+
+                                // Component object
+                                $sourceAClassName = NULL;
+                                $sourceBClassName = NULL;
+                                $sourceAClassName = $componentElement->attributes()->name;
+                                if ($sourceAClassName == NULL) {
+                                    $sourceAClassName = $componentElement->attributes()->sourceAComponentClass;
+                                    $sourceBClassName = $componentElement->attributes()->sourceBComponentClass;
+                                }
+                                $checkCaseComponentClass = new CheckCaseComponentClass($sourceAClassName, $sourceBClassName);
+
+                                
+                                foreach ($componentElement->childNodes AS $propertyElement) {
+                                    if (strtolower($propertyElement->nodeName) === "matchwith") {
+                                                    
+                                        $sourceAMatchProperty = $propertyElement->attributes()->sourceAPropertyname;
+                                        $sourceBMatchProperty = $propertyElement->attributes()->sourceBPropertyname;
+            
+                                        if ( $sourceAMatchProperty !== NULL &&
+                                             $sourceBMatchProperty !== NULL) {
+                                                $checkCaseComponentClass->MatchwithProperties[$sourceAMatchProperty ] =  $sourceBMatchProperty;
+                                        }
+                                    }
+                                    else if (strtolower($propertyElement->nodeName) === "property") {
+
+                                        $sourceAProperty = $propertyElement->attributes()->name;
+                                        $sourceBProperty = NULL;
+                                        $rule = NULL;
+                                        if ($sourceAProperty === NULL) {
+                                            $sourceAProperty = $propertyElement->attributes()->sourceAName;
+                                            $sourceBProperty = $propertyElement->attributes()->sourceBName;
+                                        }
+                                        else {
+                                            $rule = $propertyElement->attributes()->rule;
+                                        }
+                                        $severity =  $propertyElement->attributes()->severity;
+                                        $comment =  $propertyElement->attributes()->comment;
+            
+                                        // create mapping property object 
+                                        $checkCaseMappingProperty = new CheckCaseMappingProperty($sourceAProperty,
+                                            $sourceBProperty,
+                                            $severity,
+                                            $rule,
+                                            $comment);
+                                        $checkCaseComponentClass->addMappingProperty($checkCaseMappingProperty);
+                                    }
+                                }
+
+                                $checkCaseComponentGroup->addComponent($checkCaseComponentClass);
+                        }
+                        
+                        $checkType->addComponentGroup($checkCaseComponentGroup);
                 }
 
-                checkType.addComponentGroup(checkCaseComponentGroup);
-            }
+                $checkCase->addCheckType($checkType);
+          }
 
-            checkCase.addCheckType(checkType);
-        }
-
-        //this.addCheckCase(checkCase);
-        this.CheckCase = checkCase;
-        this.postData();
+            //this.addCheckCase(checkCase);
+            $this->CheckCase = $checkCase;
+            //postData();
     }
 
-    CheckCaseManager.prototype.postData = function () {
-        $.ajax({
-            url: 'PHP/CheckCaseDataWriter.php',
-            type: "POST",
-            async: true,
-            data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
-            success: function (data) {
-                // alert("success");
-            }
-        });
+    // function postData = function () {
+    //     $.ajax({
+    //         url: 'PHP/CheckCaseDataWriter.php',
+    //         type: "POST",
+    //         async: true,
+    //         data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
+    //         success: function (data) {
+    //             // alert("success");
+    //         }
+    //     });
 
-    }
+    // }
 }
 
 class CheckCase{
