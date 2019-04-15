@@ -1314,6 +1314,7 @@ function readDbDataSource(file,
 
     let fileName = file.name;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+    var categoryPresent = false;
 
     // if (!xCheckStudioInterface1) {
     //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
@@ -1331,7 +1332,8 @@ function readDbDataSource(file,
         data: ({functionality : 'importData'}),
         async: false,
         success: function (data) {                   
-            Db_data = data;
+            Db_data = data[0];
+            categoryPresent = data[1];
         },
         error: function(xhr, status, error) {
             console.log(error)
