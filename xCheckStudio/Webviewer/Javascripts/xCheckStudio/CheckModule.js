@@ -1326,7 +1326,7 @@ function readDbDataSource(file,
     // }
     Db_data = new Array();
     $.ajax({
-        url:'PHP/beginnerDbConnect.php',
+        url:'PHP/PDOConnectionForDatabases.php',
         type:'POST',
         dataType: 'JSON',
         data: ({functionality : 'importData'}),
