@@ -99,10 +99,13 @@ var xCheckStudio;
                     viewer.view.fitWorld(); 
                     _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
 
-                   
+                   // show busy spinner
+                    var busySpinner = document.getElementById("divLoading");
+                    busySpinner.className = 'show';
+
                     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                     _this.RootNodeId = viewer.model.getAbsoluteRootNode();
-                    _this.readProperties(_this.RootNodeId, identifierProperties);                    
+                    _this.readProperties(_this.RootNodeId, identifierProperties, undefined);                    
                 },
                 selectionArray: function (selections) {
                     for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
@@ -270,7 +273,7 @@ var xCheckStudio;
         }
       
 
-        xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties) {
+        xCheckStudioInterface.prototype.readProperties = function (nodeId, identifierProperties, parentNodeId) {
             var _this = this;
             if (nodeId !== null &&
                 (_this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
@@ -294,31 +297,14 @@ var xCheckStudio;
 
                             if (mainComponentClass !== undefined &&
                                 name !== undefined &&
-                                subComponentClass !== undefined) {
-
-                                // var source;
-                                // var destination;
-                                // var ownerId;
-                                // var ownerHandle;
-                                // if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                                //     xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty in nodeProperties &&
-                                //     xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty in nodeProperties &&
-                                //     xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty in nodeProperties) {
-
-                                //     source = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty);
-                                //     destination = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty);
-                                //     ownerId = _this.getPropertyValue(nodeProperties, xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty);
-                                // }                               
+                                subComponentClass !== undefined) {                            
 
                                 // create generic properties object
                                 var genericPropertiesObject = new GenericComponent(name,
                                     mainComponentClass,
-                                    subComponentClass,
-                                    //source,
-                                   // destination,
-                                   // ownerId,
-                                    nodeId//,
-                                    /*ownerHandle*/);
+                                    subComponentClass,                                  
+                                    nodeId,
+                                    parentNodeId);
 
                                 // add component class as generic property
                                 var componentClassPropertyObject = new GenericProperty("ComponentClass", 
@@ -340,33 +326,18 @@ var xCheckStudio;
 
                                 var componentNodeData = new ComponentNodeData(name,
                                     mainComponentClass,
-                                    subComponentClass,
-                                    //source,
-                                    //destination,
-                                    //ownerId,
-                                    nodeId//,
-                                    /*ownerHandle*/);
-
-                                // if (mainComponentClass.toLowerCase() === "pipingnetworksegment" &&
-                                //     source !== undefined &&
-                                //     destination !== undefined &&
-                                //     ownerId !== undefined) {
-                                //     componentIdentifier = name + "_" + source + "_" + destination + "_" + ownerId;
-                                // }
+                                    subComponentClass,                                    
+                                    nodeId);                               
                     
                                 _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
                                 _this.nodeIdVsComponentData[nodeId] = componentNodeData;
-                            }
+                             }
                             else if (name !== undefined) {
 
                                 var componentNodeData = new ComponentNodeData(name,
                                     "",
-                                    "",
-                                    // "",
-                                    // "",
-                                    // "",
-                                    nodeId//,
-                                    /*""*/);
+                                    "",                                   
+                                    nodeId);
 
                                 // keep track of component vs node id
                                 var componentIdentifier = name
@@ -384,7 +355,7 @@ var xCheckStudio;
                                     (_this._firstViewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
                                         _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
-                                    _this.readProperties(child, identifierProperties)
+                                    _this.readProperties(child, identifierProperties, nodeId)
                                 }
                             }
                         }
@@ -393,13 +364,43 @@ var xCheckStudio;
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
                          if (_this.nodeIdArray.length == 0) {
-                            _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);                           
+                            _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined); 
+                            
+                            // add components to database
+                            _this.addComponentsToDB();
                         }
                     });
                 }
             }
 
         };
+
+        xCheckStudioInterface.prototype.addComponentsToDB = function () {
+
+            var source = undefined;
+            if( this._firstViewer._params.containerId.toLowerCase() == "viewercontainer1")
+            {
+                source = "SourceA"
+            }
+            else if( this._firstViewer._params.containerId.toLowerCase()== "viewercontainer2")
+            {
+                source = "SourceB"
+            }         
+
+            $.ajax({
+                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source },
+                type: "POST",
+                url: "PHP/AddComponentsToDB.php"
+            }).done(function (msg) {
+                if (msg !== 'fail') {
+
+                }
+                // remove busy spinner
+                var busySpinner = document.getElementById("divLoading");
+                busySpinner.classList.remove('show')
+            });
+
+        }
 
         xCheckStudioInterface.prototype.getModelBrowser = function () {
             if (this._modelTree !== undefined) {

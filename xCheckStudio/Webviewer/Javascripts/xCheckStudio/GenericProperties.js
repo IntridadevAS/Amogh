@@ -1,12 +1,13 @@
 function GenericComponent(name,
                            mainComponentClass, 
                            subComponentClass,                          
-                           nodeId)
+                           nodeId,
+                           parentNodeId)
 {
     this.Name = name;  
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
-
+    this.ParentNodeId = parentNodeId;
     // this.Source = source;
     // this.Destination = destination;
     // this.OwnerId = ownerId;

@@ -2,9 +2,7 @@
 <html>
 
 <head>
-   
-
-    <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsData.js"></script>
+       
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModule.js"></script>
 
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
@@ -2589,6 +2587,30 @@
 
     <script>
 
+        function AnalyticsData(checkCaseName,
+            sourceAName,
+            sourceBName,
+            sourceATotalItemCount,
+            sourceACheckedItemCount,
+            sourceBTotalItemCount,
+            sourceBCheckedItemCount,
+            sourceAClasswiseCheckedComponents,
+            sourceBClasswiseCheckedComponents,
+            sourceAClassWiseComponets,
+            sourceBClassWiseComponets) {
+            this.CheckCaseName = checkCaseName;
+            this.SourceAName = sourceAName;
+            this.SourceBName = sourceBName;
+            this.SourceATotalItemCount = sourceATotalItemCount;
+            this.SourceACheckedItemCount = sourceACheckedItemCount;
+            this.SourceBTotalItemCount = sourceBTotalItemCount;
+            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
+        }
+
         function OpenTab(tabName) {
             if (tabName === "tab1" || tabName === "tab1Viewer") {
                 document.getElementById("dataSource2").style.display = "none";
@@ -2671,6 +2693,7 @@
             sourceAComplianceCheckManager = undefined;
             sourceBComplianceCheckManager = undefined;
             comparisonCheckManager = undefined;
+           
             document.getElementById("checkcompletealert").style.display = "none";
         }
 
