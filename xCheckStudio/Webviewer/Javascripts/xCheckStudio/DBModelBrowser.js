@@ -7,7 +7,7 @@ function DBModelBrowser() {
     this.selectedCompoents = [];
     this.databasetabledata = [];
 
-    DBModelBrowser.prototype.createModelBrowserTable = function (filename, Db_data, containerId) {
+    DBModelBrowser.prototype.createModelBrowserTable = function (filename, Db_data, containerId, categoryPresent) {
         this.conatinerId = containerId;
         this.databasetabledata = Db_data;
         if (Db_data !== null) {
@@ -63,7 +63,8 @@ function DBModelBrowser() {
             //add each sheet to model browser 
             // iterate over sheets from excel file
             // filename.split('.')[0]
-                var mainComponentClass = filename.split('.')[0].charAt(0).toUpperCase() + filename.split('.')[0].slice(1);
+            for (var component in this.databasetabledata) {
+                var mainComponentClass = component;
                 var mainComponentStyleClass = mainComponentClass + "_" + this.conatinerId;
                 var styleList = undefined;
                 var componentStyleClass = this.getComponentstyleClass(mainComponentStyleClass);
@@ -125,7 +126,8 @@ function DBModelBrowser() {
                             tableData.push(tableRowContent);
                         }
                     }
-                }                
+                } 
+            }               
 
             var viewerContainer = "#"+this.conatinerId;
 
@@ -190,7 +192,7 @@ function DBModelBrowser() {
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
                 if (columnHeader.innerHTML.trim() === "Component Class" ||
-                    columnHeader.innerHTML.trim() === "Name" ||
+                    columnHeader.innerHTML.trim() === "EquipmentNo" ||
                     columnHeader.innerHTML.trim() === "Tagnumber" ||
                     columnHeader.innerHTML.trim() === "Description") {
                     identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
@@ -203,9 +205,9 @@ function DBModelBrowser() {
                 var dataRow = dataRows[i];
 
                 var nameColumnIndex ;
-                if(identifierColumns.Name !== undefined)
+                if(identifierColumns.EquipmentNo !== undefined)
                 {
-                    nameColumnIndex = identifierColumns.Name;
+                    nameColumnIndex = identifierColumns.EquipmentNo;
                 }
                 else if(identifierColumns.Tagnumber !== undefined)
                 {
