@@ -1,0 +1,21 @@
+{
+	"Check all": "Vérifie tout",
+	"Compliance": "Conformité",
+	"Check Case": "Vérifier Cas",
+	"Comparison": "Comparaison",
+	"Load data": "Charger des données",
+	"View data graphics": "Voir les graphiques de données",
+	"CHECK": "VÉRIFIER",
+	"Source 1":"La source 1",
+	"Source 2":"La source 2",
+	"PROJECT:": "PROJET:",
+	"UNITS:": "Unités:",
+	"Custom": "Douane",
+	"Metric": "Métrique",
+	"Imperial": "Impérial",
+    "USER": "UTILISATEUR",
+    "LOAD DATA": "Charger des données",
+	"Browse": "Feuilleter",
+	"Connect to data source": "Se connecter à la source de données",
+	"More sources…": "Plus de sources…"
+}
