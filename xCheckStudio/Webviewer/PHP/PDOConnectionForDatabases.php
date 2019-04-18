@@ -7,17 +7,17 @@ include 'importFromMsSql.php';
     ini_set('log_errors', 1);
     ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
     error_reporting(E_ALL);
-    // $databaseName = 'mysql';
-    // $host = '127.0.0.1';
-    // $schema = 'gregschema';
-    // $user = 'Pooja123';
-    // $password = 'ABCdsf@#12345';
+    $databaseName = 'mysql';
+    $host = '127.0.0.1';
+    $schema = 'gregschema';
+    $user = 'Pooja123';
+    $password = 'ABCdsf@#12345';
 
-    $databaseName = 'sqlsrv';
-    $host = 'PTS-PC-52\SQLEXPRESS01';
-    $schema = 'OGSTriningProject';
-    $user = '';
-    $password = '';
+    // $databaseName = 'sqlsrv';
+    // $host = 'PTS-PC-52\SQLEXPRESS01';
+    // $schema = 'OGSTriningProject';
+    // $user = '';
+    // $password = '';
     
     $dsn = $databaseName . ':server=' . $host . ';Database=' . $schema;
 

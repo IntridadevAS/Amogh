@@ -3,6 +3,7 @@
         {
             var $TableName; 
             var $properties = array();
+            var $categoryPresent =  false;
             public function __construct($name) {
                 $this->TableName = $name;
             }

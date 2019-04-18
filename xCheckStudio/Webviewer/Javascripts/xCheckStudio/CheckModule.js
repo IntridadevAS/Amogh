@@ -1332,8 +1332,7 @@ function readDbDataSource(file,
         data: ({functionality : 'importData'}),
         async: false,
         success: function (data) {                   
-            Db_data = data[0];
-            categoryPresent = data[1];
+            Db_data = data;
         },
         error: function(xhr, status, error) {
             console.log(error)
@@ -1341,5 +1340,5 @@ function readDbDataSource(file,
     });
     console.log(Db_data);
     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-    xCheckStudioInterface1.readDbFileData(fileName, Db_data, modelTreeContainer);
+    xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
 }

@@ -19,8 +19,6 @@
         $tableno = 0;
         $yourArray = array();
         $index = 0;
-        $responce = array();
-        $fieldpresent = false;
     
        while($tableno < count($tableNameArray))
         {
@@ -30,7 +28,7 @@
             $genericProp = new GenericComponent($tableNameArray[$tableno]['TABLE_NAME']);
             // echo $result;
             // output data of each row
-            while($row = $result->fetch()) {
+            while($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $genericProp->addProperty($row);   
             }
 
@@ -39,7 +37,7 @@
             {
                 if($column['Field'] == "category")
                 {                     
-                    $fieldpresent = true;
+                    $genericProp->categoryPresent = true;
                 }            
             }
             // echo json_encode($column_names->fetchAll());
@@ -47,7 +45,6 @@
                 $index++;
                 $tableno++;
         }
-        $responce = [$yourArray, $fieldpresent];
-        echo json_encode($responce);
+        echo json_encode($yourArray);
     }
 ?>

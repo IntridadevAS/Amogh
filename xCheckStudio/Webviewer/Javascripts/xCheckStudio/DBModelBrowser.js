@@ -7,7 +7,7 @@ function DBModelBrowser() {
     this.selectedCompoents = [];
     this.databasetabledata = [];
 
-    DBModelBrowser.prototype.createModelBrowserTable = function (filename, Db_data, containerId, categoryPresent) {
+    DBModelBrowser.prototype.createModelBrowserTable = function (Db_data, containerId) {
         this.conatinerId = containerId;
         this.databasetabledata = Db_data;
         if (Db_data !== null) {
@@ -192,7 +192,7 @@ function DBModelBrowser() {
             for (var i = 0; i < columnHeaders.length; i++) {
                 columnHeader = columnHeaders[i];
                 if (columnHeader.innerHTML.trim() === "Component Class" ||
-                    columnHeader.innerHTML.trim() === "EquipmentNo" ||
+                    columnHeader.innerHTML.trim() === "Name" ||
                     columnHeader.innerHTML.trim() === "Tagnumber" ||
                     columnHeader.innerHTML.trim() === "Description") {
                     identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
@@ -205,9 +205,9 @@ function DBModelBrowser() {
                 var dataRow = dataRows[i];
 
                 var nameColumnIndex ;
-                if(identifierColumns.EquipmentNo !== undefined)
+                if(identifierColumns.Name !== undefined)
                 {
-                    nameColumnIndex = identifierColumns.EquipmentNo;
+                    nameColumnIndex = identifierColumns.Name;
                 }
                 else if(identifierColumns.Tagnumber !== undefined)
                 {
@@ -241,6 +241,7 @@ function DBModelBrowser() {
 
     DBModelBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
         var mainclassname = browserRow.cells[2].innerText.trim();
+        // var SubClassName = browserRow.cells[3].innerText.trim()
         var viewerContainerData;
         if (this.conatinerId === "modelTree1") {
             viewerContainerData = document.getElementById("viewerContainer1")
@@ -249,7 +250,7 @@ function DBModelBrowser() {
             viewerContainerData = document.getElementById("viewerContainer2")
         }
 
-        if (viewerContainerData.childElementCount > 1) {
+        if (viewerContainerData.childElementCount > 1 && viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === mainclassname) {
             this.HighlightRowInSheetData(browserRow);
             return;
         }

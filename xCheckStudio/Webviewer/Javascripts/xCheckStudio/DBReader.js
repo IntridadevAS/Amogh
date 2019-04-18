@@ -9,14 +9,14 @@ function DBReader(sourceType)
     this.dbmodelbrowser = new DBModelBrowser();
 }
 
-DBReader.prototype.ReadDBData = function(fileName, Db_data, containerId, categoryPresent)
+DBReader.prototype.ReadDBData = function(Db_data, containerId)
 {
     this.containerId = containerId;
-    this.ProcessDbData(fileName, Db_data, categoryPresent);
-    this.dbmodelbrowser.createModelBrowserTable(fileName, this.dbdata, containerId, categoryPresent);
+    this.ProcessDbData(Db_data);
+    this.dbmodelbrowser.createModelBrowserTable(this.dbdata, containerId);
 }
 
-DBReader.prototype.ProcessDbData = function (fileName, Db_data, categoryPresent) {
+DBReader.prototype.ProcessDbData = function (Db_data) {
     for (var i = 0; i < Db_data.length; i++) {
         var sourcePropertiesTemp = {};
         var rows = Db_data[i].properties;
@@ -32,13 +32,17 @@ DBReader.prototype.ProcessDbData = function (fileName, Db_data, categoryPresent)
             {
                 name = row.Name;
             }
+            else if(row.CatalogNo != undefined)
+            {
+                name = row.CatalogNo;
+            }
             if(name === undefined)
             {
                 continue;
             }
 
             var mainComponentClass;
-            if(categoryPresent)
+            if(Db_data[i].categoryPresent)
             {
                 mainComponentClass = row.category.split('.')[0].charAt(0).toUpperCase() + row.category.split('.')[0].slice(1);
             }
@@ -52,9 +56,13 @@ DBReader.prototype.ProcessDbData = function (fileName, Db_data, categoryPresent)
             {
                 subComponentClass = row["EqType"];
             }
-            else if(row["EqType"])
+            else if(row["Class"])
             {
-                subComponentClass = row["EqType"];
+                subComponentClass = row["Class"];
+            }
+            else if(row["Component Class"])
+            {
+                subComponentClass = row["Component Class"];
             }
             else if(row.EqType)
             {

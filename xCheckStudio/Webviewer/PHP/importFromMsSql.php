@@ -1,4 +1,8 @@
 <?php
+ ini_set('display_errors', 1);
+ ini_set('log_errors', 1);
+ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
+ error_reporting(E_ALL);
     include_once 'StoreDBdata.php';
     // ini_set('memory_limit','32M');
     function importFromMsSql($conn, $databaseName)
@@ -19,39 +23,46 @@
         $tableno = 0;
         $yourArray = array();
         $index = 0;
-        $responce = array();
-        $fieldpresent = false;
     
-       while($tableno < count($tableNameArray))
-        {
-            $tablename = $tableNameArray[$tableno]['TABLE_NAME'];
+    //    while($tableno < 20)
+    //     {
+    //         $tablename = $tableNameArray[$tableno]['TABLE_NAME'];
+            $tablename = "DeviceCatalog";
             $sql = "SELECT * FROM " . $tablename;
             $result = $conn->query($sql);
-            $genericProp = new GenericComponent($tableNameArray[$tableno]['TABLE_NAME']);
+            $selected_data = $result->fetchAll(PDO::FETCH_ASSOC);
+            // $genericProp = new GenericComponent($tableNameArray[$tableno]['TABLE_NAME']);
+            $genericProp = new GenericComponent($tablename);
+
             // echo $tablename;
             // output data of each row
 
-            while($row = $result->fetch()) {
-                $genericProp->addProperty($row);   
-            }
- 
-            // $sql = "select column_name from information_schema.columns where table_name = '$tablename'";
-            // $stmt1 = $conn->prepare($sql);
-            // echo $stmt1->execute();
-            // $column_names = $stmt1->fetch();
-            // while ($column =  )
-            // {
-            //     if($column['column_name'] == "category")
-            //     {                     
-            //         $fieldpresent = true;
-            //     }            
+            // while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            //     $genericProp->addProperty($row);   
             // }
+            foreach ($selected_data as $row) {
+                $genericProp->addProperty($row);
+            }
+
+            // echo json_encode($genericProp);
+ 
+            $sql = "select column_name from information_schema.columns where table_name = '$tablename'";
+            $result = $conn->query($sql);
+            // $column_names = $stmt1->fetchAll();
+            $column_names = $result->fetchAll();
+            foreach ($column_names as $value)
+            {
+                if($value['column_name'] == "category")
+                {                     
+                    $genericProp->categoryPresent = true;
+                }            
+            }
             // echo json_encode($column_names);
             $yourArray[$index] = $genericProp;
+            // echo json_encode($yourArray);
             $index++;
-            $tableno++;
-        }
-        $responce = [$yourArray, false];
-        echo json_encode($responce);
+        //     $tableno++;
+        // }
+        echo json_encode($yourArray);
     }
 ?>
