@@ -391,7 +391,7 @@ var xCheckStudio;
                 data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source },
                 type: "POST",
                 url: "PHP/AddComponentsToDB.php"
-            }).done(function (msg) {
+               }).done(function (msg) {
                 if (msg !== 'fail') {
 
                 }
