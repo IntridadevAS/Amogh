@@ -7,13 +7,13 @@
     // ini_set('memory_limit','32M');
     function importFromMsSql($conn, $databaseName)
     {
-        $sql1 = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = '$databaseName' ORDER BY TABLE_NAME";
+        $sql1 = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME";
         $stmt = $conn->prepare($sql1);
         $stmt->execute();
         $tableNameArray = array();
         $index1 = 0;
         // $result = $stmt->fetch(PDO::FETCH_ASSOC); 
-        while($row=$stmt->fetch()) {
+        while($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $tableNameArray[$index1] = $row;
             $index1++;
         }
@@ -26,7 +26,7 @@
     
     //    while($tableno < 20)
     //     {
-    //         $tablename = $tableNameArray[$tableno]['TABLE_NAME'];
+            // $tablename = $tableNameArray[$tableno]['TABLE_NAME'];
             $tablename = "DeviceCatalog";
             $sql = "SELECT * FROM " . $tablename;
             $result = $conn->query($sql);
@@ -61,7 +61,7 @@
             $yourArray[$index] = $genericProp;
             // echo json_encode($yourArray);
             $index++;
-        //     $tableno++;
+            $tableno++;
         // }
         echo json_encode($yourArray);
     }
