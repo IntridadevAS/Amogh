@@ -48,6 +48,13 @@
             // write check result to database
             writeComparisonResultToDB();            
 
+            // write not checked components to database
+            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotCheckedComponents", $projectName);
+            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotCheckedComponents", $projectName);
+
+            // write not matched components to database
+            writeNotMatchedComponentsToDB($SourceANotMatchedComponents, "SourceANotMatchedComponents", $projectName);
+            writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, "SourceBNotMatchedComponents", $projectName);
             //var_dump($CheckComponentsGroups);
             //var_dump($SourceANotMatchedComponents);
 

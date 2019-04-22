@@ -144,12 +144,14 @@
 
     }
 
-    function writeNotCheckedComponentsToDB()
+    function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
+                                           $tableName,
+                                           $projectName)
     {
-        global $SourceANotCheckedComponents;
-        global $SourceBNotCheckedComponents;
+        // global $SourceANotCheckedComponents;
+        // global $SourceBNotCheckedComponents;
 
-        global $projectName;
+        //global $projectName;
         try
         {   
             // open database
@@ -159,6 +161,91 @@
             // begin the transaction
             $dbh->beginTransaction();
 
+            // SourceANotCheckedComponents table
+            $command = 'CREATE TABLE IF NOT EXISTS '.$tableName.'(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,
+                    mainClass TEXT,
+                    subClass TEXT,
+                    nodeId TEXT,
+                    mainTableId TEXT)'; 
+            $dbh->exec($command);    
+
+            foreach($notCheckedComponents as $key =>$value)            
+            {               
+                $name = $value["name"];
+                $mainclass = $value["mainclass"];
+                $subclass =  $value["subclass"];               
+
+                $nodeId = NULL;
+                if(array_key_exists("nodeid", $value))
+                { 
+                    $nodeId = $value["nodeid"];
+                }
+
+                $mainTableId = $value["id"];
+
+                $insertQuery = 'INSERT INTO '.$tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
+                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+
+                $insertStmt = $dbh->prepare($insertQuery);
+                $insertStmt->execute($values);  
+            }
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }
+    }
+    
+    function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
+                                            $tableName,
+                                            $projectName)
+    {        
+        try
+        {   
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();
+
+            // SourceANotCheckedComponents table
+            $command = 'CREATE TABLE IF NOT EXISTS '. $tableName.'(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,
+                    mainClass TEXT,
+                    subClass TEXT,
+                    nodeId TEXT,
+                    mainTableId TEXT)'; 
+            $dbh->exec($command);    
+
+            foreach($notMatchedComponents as $key =>$value)            
+            {               
+                $name = $value["name"];
+                $mainclass = $value["mainclass"];
+                $subclass =  $value["subclass"];               
+
+                $nodeId = NULL;
+                if(array_key_exists("nodeid", $value))
+                { 
+                    $nodeId = $value["nodeid"];
+                }
+
+                $mainTableId = $value["id"];
+
+                $insertQuery = 'INSERT INTO '. $tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
+                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+
+                $insertStmt = $dbh->prepare($insertQuery);
+                $insertStmt->execute($values);  
+            }
 
             // commit update
             $dbh->commit();
