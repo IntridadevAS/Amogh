@@ -3029,17 +3029,9 @@
             let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-            // if (!xCheckStudioInterface1) {
-            //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            //     xCheckStudioInterface1.readDbFileData(file, modelTreeContainer);
-            // }
-            // else {
-            //     xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            //     xCheckStudioInterface2.readDbFileData(file, modelTreeContainer);
-            // }
             Db_data = new Array();
             $.ajax({
-                url:'PHP/beginnerDbConnect.php',
+                url:'PHP/PDOConnectionForDatabases.php',
                 type:'POST',
                 dataType: 'JSON',
                 data: ({functionality : 'importData'}),
@@ -3053,7 +3045,7 @@
             });
             console.log(Db_data);
             xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            xCheckStudioInterface1.readDbFileData(fileName, Db_data, modelTreeContainer);
+            xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
         }
 
         //open windows file selector dialog
