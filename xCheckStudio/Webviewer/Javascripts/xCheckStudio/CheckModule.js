@@ -1314,6 +1314,7 @@ function readDbDataSource(file,
 
     let fileName = file.name;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+    var categoryPresent = false;
 
     // if (!xCheckStudioInterface1) {
     //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
@@ -1325,7 +1326,7 @@ function readDbDataSource(file,
     // }
     Db_data = new Array();
     $.ajax({
-        url:'PHP/beginnerDbConnect.php',
+        url:'PHP/PDOConnectionForDatabases.php',
         type:'POST',
         dataType: 'JSON',
         data: ({functionality : 'importData'}),
@@ -1339,5 +1340,5 @@ function readDbDataSource(file,
     });
     console.log(Db_data);
     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-    xCheckStudioInterface1.readDbFileData(fileName, Db_data, modelTreeContainer);
+    xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
 }

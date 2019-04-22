@@ -18,10 +18,12 @@ function importData($conn, $dbname)
     $tableno = 0;
     $yourArray = array();
     $index = 0;
+    $responce = array();
+    $fieldpresent = false;
 
    while($tableno < count($tableNameArray))
     {
-        $tablename = 'test.' . $tableNameArray[$tableno]['TABLE_NAME'];
+        $tablename = $dbname . "." . $tableNameArray[$tableno]['TABLE_NAME'];
         $sql = "SELECT * FROM " . $tablename;
         $result = mysqli_query($conn, $sql);
         // echo $result;
@@ -31,11 +33,24 @@ function importData($conn, $dbname)
                $yourArray[$index] = $row;
                $index++;       
             }
+
+            
+
+            while ($fieldinfo=mysqli_fetch_field($result))
+            {
+                if($fieldinfo->name == "AreaID")
+                {
+                    
+                    $fieldpresent = true;
+                }
+                    
+            }
         } else {
             echo "0 results";
         }
         $tableno++;
     }
-    echo json_encode($yourArray);
+    $responce = [$yourArray, $fieldpresent];
+    echo json_encode($responce);
 }
 ?>

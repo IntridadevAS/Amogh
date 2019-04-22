@@ -15,9 +15,9 @@ $port=3306;
 $socket="";
 $user="Pooja123";
 $password="ABCdsf@#12345";
-$dbname="test";
-$functionality = $_POST['functionality']; 
-// $functionality = "exportData"; 
+$dbname="gregschema";
+// $functionality = $_POST['functionality']; 
+$functionality = "importData"; 
 
 // $conn = new mysqli($host, $user, $password, $dbname, $port, $socket);
 
