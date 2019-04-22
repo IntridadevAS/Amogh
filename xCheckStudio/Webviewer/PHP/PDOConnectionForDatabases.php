@@ -1,6 +1,6 @@
 <?php
-include 'importFromMySql.php';
-include 'importFromMsSql.php';
+include 'ImportFromMySql.php';
+include 'ImportFromMsSql.php';
 
 
     ini_set('display_errors', 1);
