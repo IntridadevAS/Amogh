@@ -250,7 +250,7 @@
             // commit update
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection
-        }                
+        }
         catch(Exception $e)
         {        
             echo "fail"; 
