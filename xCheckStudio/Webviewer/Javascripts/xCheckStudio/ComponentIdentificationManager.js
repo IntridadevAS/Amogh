@@ -39,10 +39,10 @@ var xCheckStudio;
          ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
 
-        // IFC data source
-        ComponentIdentificationManager.IFCSourceNameProperty = "Name";
-        ComponentIdentificationManager.IFCSourceMainClassProperty = "TYPE";
-        ComponentIdentificationManager.IFCSourceSubComponentClassProperty = "TYPE";
+        //Step data source
+        ComponentIdentificationManager.STEPSourceNameProperty = "Name";
+        ComponentIdentificationManager.STEPSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STEPSourceSubComponentClassProperty = "TYPE";
 
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
@@ -69,12 +69,12 @@ var xCheckStudio;
                 properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
 
             }
-            else if (fileExtension.toLowerCase() === "ifc") {
+            else if (fileExtension.toLowerCase() === "step") {
 
                 properties = {};
-                properties['name'] = ComponentIdentificationManager.IFCSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.IFCSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
+                properties['name'] = ComponentIdentificationManager.STEPSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STEPSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STEPSourceSubComponentClassProperty;
 
             }
             else if (fileExtension.toLowerCase() === "rvm") {
