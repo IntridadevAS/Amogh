@@ -34,10 +34,15 @@ var xCheckStudio;
          ComponentIdentificationManager.SLDPRTMainClassProperty = "Component Class";
          ComponentIdentificationManager.SLDPRTSubComponentClassProperty = "Component Class";
 
-         // Excel data source
+         // RVT data source
          ComponentIdentificationManager.RVTSourceNameProperty = "Name";
          ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
+
+        // IFC data source
+        ComponentIdentificationManager.IFCSourceNameProperty = "Name";
+        ComponentIdentificationManager.IFCSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.IFCSourceSubComponentClassProperty = "TYPE";
 
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
@@ -63,13 +68,14 @@ var xCheckStudio;
                 properties['mainCategory'] = ComponentIdentificationManager.RVTSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
 
-                // if (mainComponentClass !== undefined) {
-                //     if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
-                //         properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
-                //         properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
-                //         properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
-                //     }                    
-                // }
+            }
+            else if (fileExtension.toLowerCase() === "ifc") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.IFCSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.IFCSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
+
             }
             else if (fileExtension.toLowerCase() === "rvm") {
                 properties = {
