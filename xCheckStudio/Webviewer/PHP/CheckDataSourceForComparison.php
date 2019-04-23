@@ -159,7 +159,7 @@
                     {
                             
                             //source A component not checked    
-                            $compKey = $sourceAComponent['name'] ."_".$sourceAComponent['mainclass']."_".$sourceAComponent['subclass'];                            
+                            $compKey = $sourceAComponent['id'];                            
                             if(!array_key_exists($compKey, $SourceANotCheckedComponents))
                             {
                                 $SourceANotCheckedComponents[$compKey] = $sourceAComponent;                                                   
@@ -229,7 +229,7 @@
                                                   $checkCaseComponentClass['MatchwithProperties']))
                             {
 
-                                $compKey = $sourceAComponent['name'] ."_".$sourceAComponent['mainclass']."_".$sourceAComponent['subclass'];
+                                $compKey = $sourceAComponent['id'];     
                                 //source A not matched
                                 if(!isset($SourceANotMatchedComponents[$compKey]))
                                 {
@@ -239,8 +239,9 @@
                             }
 
                             // mark this source B proerty compoent as matched
-                            array_push( $comparedSourceBComponents, $sourceBComponent);
-                            
+                            //array_push( $comparedSourceBComponents, $sourceBComponent);
+                            $comparedSourceBComponents[$sourceBComponent['id']] =  $sourceBComponent;
+
                             // set componentMatchFound flag to true
                             $componentMatchFound = true;
 
@@ -292,7 +293,7 @@
                     // check if this component is already compared. If yes, then do nothing
                     $componentCompared = false;              
                     
-                    $compKey = $sourceBComponent["name"]."_".$sourceBComponent["mainclass"]."_".$sourceBComponent["subclass"];
+                    $compKey = $sourceBComponent['id'];     
                     if(isset($comparedSourceBComponents[$compKey]))
                     {
                         $componentCompared = true;
@@ -307,7 +308,7 @@
                     if(!isComponentSelected($sourceBComponent, $SourceBSelectedComponents)) 
                     {
                         //source A component not checked    
-                        $compKey = $sourceBComponent['name'] ."_".$sourceBComponent['mainclass']."_".$sourceBComponent['subclass'];
+                        $compKey = $sourceBComponent['id'];     
                         if(!isset($SourceBNotCheckedComponents[$compKey]))
                         {
                             $SourceBNotCheckedComponents[$compKey] = $sourceBComponent;                                                   
@@ -384,7 +385,7 @@
                             continue;
                         }
                                             
-                        $compKey1 = $sourceAComponent["name"]."_".$sourceAComponent["mainclass"]."_".$sourceAComponent["subclass"];
+                        $compKey1 = $sourceAComponent['id'];     
                         if(isset($SourceANotCheckedComponents[$compKey1]))
                         {
                             unset($SourceANotCheckedComponents[$compKey1]);                                  

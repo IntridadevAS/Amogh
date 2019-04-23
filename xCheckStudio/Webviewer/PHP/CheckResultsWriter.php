@@ -1,9 +1,139 @@
 <?php
 
-    function writeComparisonResultToDB()
+    function writeComplianceResultToDB($checkGroupsTable, 
+                                       $checkComponentsTable,
+                                       $checkPropertiesTable)
     {
         global $CheckComponentsGroups;
         global $projectName;
+
+        try
+        {   
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();
+          
+            // CheckGroups table
+            $command = 'CREATE TABLE IF NOT EXISTS '.$checkGroupsTable.'(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                componentClass TEXT NOT NULL,
+                componentCount Integer)'; 
+            $dbh->exec($command);  
+
+             // CheckComponents table
+             $command = 'CREATE TABLE IF NOT EXISTS '.$checkComponentsTable.'(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,                
+                subComponentClass TEXT,
+                status TEXT,
+                nodeId TEXT,
+                ownerGroup INTEGER NOT NULL)'; 
+            $dbh->exec($command);    
+            
+             // ComparisonCheckProperties table
+             $command = 'CREATE TABLE IF NOT EXISTS '.$checkPropertiesTable.'(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,              
+                value TEXT,
+                result TEXT,
+                severity TEXT,
+                performCheck TEXT,
+                description TEXT,
+                ownerComponent INTEGER NOT NULL)'; 
+            $dbh->exec($command);    
+
+
+            foreach($CheckComponentsGroups as $mainClass => $checkComponentGroup)
+            {
+                // Insert group to database
+
+                $componentClass = $checkComponentGroup->ComponentClass;
+                $componentCount =  count(  $checkComponentGroup->Components );
+
+                $insertGroupQuery = 'INSERT INTO '.$checkGroupsTable.'(componentClass, componentCount) VALUES(?,?) ';                                        
+                $groupValues = array($componentClass,  $componentCount);
+
+                $insertGroupStmt = $dbh->prepare($insertGroupQuery);
+                $insertGroupStmt->execute($groupValues);  
+
+                // get group id for recently added row
+                $qry = 'SELECT id FROM '.$checkGroupsTable.' where rowid='.$dbh->lastInsertId();                
+                $stmt =  $dbh->query($qry); 
+                $groupId = -1;
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $groupId = $row['id'];
+                    break;                    
+                }
+
+                // Insert Components to database
+
+                foreach($checkComponentGroup->Components as $key => $checkComponent)
+                {
+                    $insertComponentQuery = 'INSERT INTO '.$checkComponentsTable.'(
+                        name, 
+                        subComponentClass, 
+                        status, 
+                        nodeId,
+                        ownerGroup) VALUES(?,?,?,?,?) ';                                        
+                    $componentValues = array($checkComponent->SourceAName, 
+                                             $checkComponent->SubComponentClass,
+                                             $checkComponent->Status,
+                                             $checkComponent->SourceANodeId,
+                                             $groupId);
+
+                    $insertComponentStmt = $dbh->prepare($insertComponentQuery);
+                    $insertComponentStmt->execute($componentValues);
+
+                    // get component id for recently added row
+                    $qry1 = 'SELECT id FROM '.$checkComponentsTable.' where rowid='.$dbh->lastInsertId();                
+                    $stmt1 =  $dbh->query($qry1); 
+                    $componentId=-1;
+                    while ($row1 = $stmt1->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        $componentId = $row1['id'];
+                        break;                    
+                    }
+
+                    // insert CheckProperties to database
+
+                    foreach($checkComponent->CheckProperties as $key => $checkProperty)
+                    {
+                        $insertPropertyQuery = 'INSERT INTO '.$checkPropertiesTable.'(
+                                                name,
+                                                value, 
+                                                result, 
+                                                severity,
+                                                performCheck,
+                                                description,
+                                                ownerComponent) VALUES(?,?,?,?,?,?,?) ';                                        
+                        $propertyValues = array($checkProperty->SourceAName,
+                                                $checkProperty->SourceAValue,
+                                                $checkProperty->Result,
+                                                $checkProperty->Severity,
+                                                $checkProperty->PerformCheck,
+                                                $checkProperty->Description,
+                                                $componentId);
+                        
+                        $insertPropertyStmt = $dbh->prepare($insertPropertyQuery);
+                        $insertPropertyStmt->execute($propertyValues);
+                    }
+                }
+            }
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+
     }
     
     function writeComparisonResultToDB()
