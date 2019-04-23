@@ -86,62 +86,101 @@
               )';         
              $dbh->exec($command);     
 
-             $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';           
-             $values = array();
+             //$qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';           
+             //$values = array();
 
         for ($i = 0; $i < count($ComponentsList); $i++) {
                 $component = $ComponentsList[$i];
 
-                $qry .= "(?,?,?,?,?,?), ";
-                
+                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES(?,?,?,?,?,?) ';    
+               
                 $name = $component->Name;
                 $mainComponentClass = $component->MainComponentClass;
                 $subComponentClass = $component->SubComponentClass;
                 $nodeId = $component->NodeId;
                 $parentNodeId = $component->ParentNodeId;
+                $values = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId);
+               
+                $stmt = $dbh->prepare($qry);
+                $stmt->execute($values);  
 
-                $values2 = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId);
-                $values = array_merge($values,$values2);
-
-                // insert 150 records at once
-                // otherwose pdo fails to prepare query
-                if($i%150 ==0 ||  $i == count($ComponentsList)-1)
+                // get component id for recently added row
+                $qry = 'SELECT id FROM '.$componentsTableName. ' where rowid='.$dbh->lastInsertId();                
+                $stmt =  $dbh->query($qry); 
+                $componentId;
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
                 {
-                    $qry = substr($qry, 0, strlen($qry)-2);       
-                    $stmt = $dbh->prepare($qry);
-                    $stmt->execute($values);   
+                    $componentId = $row['id'];
+                    break;                    
+                }                 
 
-                    // reset query string and values array
-                    $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';
-                    $values = array();
-                }  
-                
                 // add properties to DB
-                $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name, format, value,  ownercomponent) VALUES ';
-                $propertyValues = array();
-                for ($j = 0; $j < count($component->properties); $j++) {
+                for ($j = 0; $j < count($component->properties); $j++) 
+                {
                     $property = $component->properties[$j];
                    
                     $name = $property->Name;
                     $format = $property->Format;
                     $value = $property->Value;
-                   
-                    $insertPropertyQuery .= "(?,?,?,?), ";
-                    $values2 = array($name,  $format, $value,  $nodeId);
-                    $propertyValues = array_merge($propertyValues, $values2);                  
-                 
-                }
 
-                if( count($propertyValues) == 150 || count($ComponentsList)-1)
-                {
-                    $insertPropertyQuery = substr($insertPropertyQuery, 0, strlen($insertPropertyQuery)-2); 
+                    $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name, format, value,  ownercomponent) VALUES(?,?,?,?) ';
+                    $propertyValues = array($name,  $format, $value,  $componentId);
+                    
                     $stmt = $dbh->prepare($insertPropertyQuery);                    
                     $stmt->execute($propertyValues);   
+                }     
 
-                    // reset query string and values array
-                    $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name,  format, value, ownercomponent) VALUES ';
-                    $propertyValues = array();
-                }
+                ////////////////////////////////////////////
+                // $qry .= "(?,?,?,?,?,?), ";
+                
+                // $name = $component->Name;
+                // $mainComponentClass = $component->MainComponentClass;
+                // $subComponentClass = $component->SubComponentClass;
+                // $nodeId = $component->NodeId;
+                // $parentNodeId = $component->ParentNodeId;
+
+                // $values2 = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId);
+                // $values = array_merge($values,$values2);
+
+                // // insert 150 records at once
+                // // otherwose pdo fails to prepare query
+                // if($i%150 ==0 ||  $i == count($ComponentsList)-1)
+                // {
+                //     $qry = substr($qry, 0, strlen($qry)-2);       
+                //     $stmt = $dbh->prepare($qry);
+                //     $stmt->execute($values);   
+
+                //     // reset query string and values array
+                //     $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';
+                //     $values = array();
+                // }  
+                
+                // // add properties to DB
+                // $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name, format, value,  ownercomponent) VALUES ';
+                // $propertyValues = array();
+                // for ($j = 0; $j < count($component->properties); $j++) {
+                //     $property = $component->properties[$j];
+                   
+                //     $name = $property->Name;
+                //     $format = $property->Format;
+                //     $value = $property->Value;
+                   
+                //     $insertPropertyQuery .= "(?,?,?,?), ";
+                //     $values2 = array($name,  $format, $value,  $nodeId);
+                //     $propertyValues = array_merge($propertyValues, $values2);                  
+                 
+                // }
+
+                // if( count($propertyValues) == 150 || count($ComponentsList)-1)
+                // {
+                //     $insertPropertyQuery = substr($insertPropertyQuery, 0, strlen($insertPropertyQuery)-2); 
+                //     $stmt = $dbh->prepare($insertPropertyQuery);                    
+                //     $stmt->execute($propertyValues);   
+
+                //     // reset query string and values array
+                //     $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name,  format, value, ownercomponent) VALUES ';
+                //     $propertyValues = array();
+                // }
             }          
             
             // commit update

@@ -3518,10 +3518,9 @@
 
                             var checkedComponent = {};
 
-                            checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
-                            checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
-                            checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-                                                      
+                            checkedComponent['Name'] = row.cells[modelBrowserComponentColumn].textContent.trim();
+                            checkedComponent['MainComponentClass'] = row.cells[modelBrowserMainClassColumn].textContent.trim();
+                            checkedComponent['ComponentClass'] = row.cells[modelBrowserSubClassColumn].textContent.trim();                                                      
                             checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceACB" &&
@@ -3556,10 +3555,9 @@
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,
                                 row.cells[modelBrowserMainClassColumn].textContent.trim());
                             var checkedComponent = {};
-                            checkedComponent[identifierProperties.name] = row.cells[modelBrowserComponentColumn].textContent.trim();
-                            checkedComponent[identifierProperties.mainCategory] = row.cells[modelBrowserMainClassColumn].textContent.trim();
-                            checkedComponent[identifierProperties.subClass] = row.cells[modelBrowserSubClassColumn].textContent.trim();
-    
+                            checkedComponent["Name"] = row.cells[modelBrowserComponentColumn].textContent.trim();
+                            checkedComponent["MainComponentClass"] = row.cells[modelBrowserMainClassColumn].textContent.trim();
+                            checkedComponent["ComponentClass"] = row.cells[modelBrowserSubClassColumn].textContent.trim();    
                             checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                             if (checkBoxId === "checkAllSourceBCB" &&
