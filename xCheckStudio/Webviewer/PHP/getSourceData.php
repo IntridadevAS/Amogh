@@ -1,6 +1,6 @@
 <?php
 $FileCount = 0;
-$ValidDataSources = ["xml", "xls", "rvm", "sldasm", "dwg", "sldprt", "rvt", "rfa", "ibd", "ifc"];
+$ValidDataSources = ["xml", "xls", "rvm", "sldasm", "dwg", "sldprt", "rvt", "rfa", "ibd", "step", "stp", "ste"];
 
 foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
 {

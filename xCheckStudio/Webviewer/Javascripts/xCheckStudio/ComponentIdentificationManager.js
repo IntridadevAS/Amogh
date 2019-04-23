@@ -39,10 +39,20 @@ var xCheckStudio;
          ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
 
-        // IFC data source
-        ComponentIdentificationManager.IFCSourceNameProperty = "Name";
-        ComponentIdentificationManager.IFCSourceMainClassProperty = "TYPE";
-        ComponentIdentificationManager.IFCSourceSubComponentClassProperty = "TYPE";
+        //Step data source
+        ComponentIdentificationManager.STEPSourceNameProperty = "Name";
+        ComponentIdentificationManager.STEPSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STEPSourceSubComponentClassProperty = "TYPE";
+
+        //Ste data source
+        ComponentIdentificationManager.STESourceNameProperty = "Name";
+        ComponentIdentificationManager.STESourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STESourceSubComponentClassProperty = "TYPE";
+
+        //Stp data source
+        ComponentIdentificationManager.STPSourceNameProperty = "Name";
+        ComponentIdentificationManager.STPSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STPSourceSubComponentClassProperty = "TYPE";
 
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
@@ -69,12 +79,28 @@ var xCheckStudio;
                 properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
 
             }
-            else if (fileExtension.toLowerCase() === "ifc") {
+            else if (fileExtension.toLowerCase() === "step") {
 
                 properties = {};
-                properties['name'] = ComponentIdentificationManager.IFCSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.IFCSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
+                properties['name'] = ComponentIdentificationManager.STEPSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STEPSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STEPSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "stp") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.STPSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STPSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STPSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "ste") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.STESourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STESourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STESourceSubComponentClassProperty;
 
             }
             else if (fileExtension.toLowerCase() === "rvm") {
