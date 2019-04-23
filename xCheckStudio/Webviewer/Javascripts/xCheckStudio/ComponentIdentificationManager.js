@@ -44,6 +44,16 @@ var xCheckStudio;
         ComponentIdentificationManager.STEPSourceMainClassProperty = "TYPE";
         ComponentIdentificationManager.STEPSourceSubComponentClassProperty = "TYPE";
 
+        //Ste data source
+        ComponentIdentificationManager.STESourceNameProperty = "Name";
+        ComponentIdentificationManager.STESourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STESourceSubComponentClassProperty = "TYPE";
+
+        //Stp data source
+        ComponentIdentificationManager.STPSourceNameProperty = "Name";
+        ComponentIdentificationManager.STPSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.STPSourceSubComponentClassProperty = "TYPE";
+
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             if (fileExtension.toLowerCase() === "xml") {
@@ -75,6 +85,22 @@ var xCheckStudio;
                 properties['name'] = ComponentIdentificationManager.STEPSourceNameProperty;
                 properties['mainCategory'] = ComponentIdentificationManager.STEPSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.STEPSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "stp") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.STPSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STPSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STPSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "ste") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.STESourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.STESourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.STESourceSubComponentClassProperty;
 
             }
             else if (fileExtension.toLowerCase() === "rvm") {
