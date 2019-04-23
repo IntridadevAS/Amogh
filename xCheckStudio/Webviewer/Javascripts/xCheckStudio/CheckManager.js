@@ -78,7 +78,7 @@ function CheckManager(name) {
                 },
                 success: function (data) {
                     // alert("success");
-                    $this.CheckComponentsGroupsData = data;
+                    //$this.CheckComponentsGroupsData = data;
                 },
                 error: function (error) {
                     alert('error; ' + eval(error));
@@ -111,15 +111,15 @@ function CheckManager(name) {
                 url: 'PHP/checkDataSourceForCompliance.php',
                 type: "POST",
                 async: false,
-                data: { "SourceProperties": JSON.stringify(sourceProperties1), 
+                data: { /*"SourceProperties": JSON.stringify(sourceProperties1), */
                         "CheckCaseType": JSON.stringify(checkCaseType),
-                        "SourceType": interfaceObject.SourceType,
+                        /*"SourceType": interfaceObject.SourceType,*/
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
-                        "ContainerId": containerID
+                        "ContainerId": containerID                       
                 },
                 success: function (data) {
                     // alert("success");
-                   $this.CheckComponentsGroups = JSON.parse(data);
+                   //$this.CheckComponentsGroups = JSON.parse(data);
                 }
             });
             // this.checkDataSourceForCompliance(sourceProperties1, checkCaseType, interfaceObject);
