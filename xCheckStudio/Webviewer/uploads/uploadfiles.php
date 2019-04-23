@@ -15,8 +15,8 @@ if(!isset( $_SESSION["SourceAPath"]) ||
 
 $errors = array();
 $uploadedFiles = array();
-$extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg", "sldprt", "SLDPRT", "rvt", "rfa", "STEP", "STE", "STP");
-$validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "sldprt", "SLDPRT", "rvt", "rfa", "STEP", "STE", "STP");
+$extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg", "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP");
+$validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP");
 // $bytes = 1024;
 // $KB = 1024;
 // $totalBytes = $bytes * $KB;
