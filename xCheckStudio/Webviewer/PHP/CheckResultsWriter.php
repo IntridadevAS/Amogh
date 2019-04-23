@@ -4,6 +4,12 @@
     {
         global $CheckComponentsGroups;
         global $projectName;
+    }
+    
+    function writeComparisonResultToDB()
+    {
+        global $CheckComponentsGroups;
+        global $projectName;
         try
         {   
             // open database
