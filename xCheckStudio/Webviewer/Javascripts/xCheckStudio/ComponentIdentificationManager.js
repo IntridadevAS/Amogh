@@ -39,6 +39,12 @@ var xCheckStudio;
          ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
 
+         
+        //IFC data source
+        ComponentIdentificationManager.IFCSourceNameProperty = "Name";
+        ComponentIdentificationManager.IFCSourceMainClassProperty = "TYPE";
+        ComponentIdentificationManager.IFCSourceSubComponentClassProperty = "TYPE";
+
         //Step data source
         ComponentIdentificationManager.STEPSourceNameProperty = "Name";
         ComponentIdentificationManager.STEPSourceMainClassProperty = "TYPE";
@@ -77,6 +83,14 @@ var xCheckStudio;
                 properties['name'] = ComponentIdentificationManager.RVTSourceNameProperty;
                 properties['mainCategory'] = ComponentIdentificationManager.RVTSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "ifc") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.IFCSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.IFCSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
 
             }
             else if (fileExtension.toLowerCase() === "step") {
