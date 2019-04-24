@@ -15,9 +15,255 @@
 
 <CheckCase name="IFC_Compliance">
 	<Check type="Compliance"  sourceType="IFC" > 	  
-		<ComponentGroup>
-		  <ComponentClass>
-			 <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+		<ComponentGroup name="IFCPROJECT">
+		  <ComponentClass name="IFCPROJECT">
+			 <Property name="IFCPROJECT/ELECTRICCURRENTUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/VOLTAGEUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/FORCEUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/FREQUENCYUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/ILLUMINANCEUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/LUMINOUSFLUXUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/LUMINOUSINTENSITYUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/LongName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/MASSUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/POWERUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/PRESSUREUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/Phase" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/THERMODYNAMICTEMPERATUREUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCPROJECT/TIMEUNIT" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCSITE">
+		  <ComponentClass name="IFCSITE">
+			 <Property name="IFCSITE/CompositionType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSITE/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSITE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSITE/Latitude" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSITE/Longitude" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSITE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCBUILDING">
+		  <ComponentClass name="IFCBUILDING">
+			 <Property name="IFCBUILDING/CompositionType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCBUILDING/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_BuildingCommon/IsLandmarked" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_BuildingCommon/NumberOfStoreys" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCBUILDINGSTOREY">
+		  <ComponentClass name="IFCBUILDINGSTOREY">
+			 <Property name="IFCBUILDINGSTOREY/CompositionType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCBUILDINGSTOREY/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCBUILDINGSTOREY/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCBUILDINGSTOREY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCBUILDINGSTOREY/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_AirSideSystemInformation/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_BuildingStoreyCommon/AboveGround" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Name" rule="Must have value" severity="Error" comment="Property must have value." />			 
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCWALLSTANDARDCASE">
+		  <ComponentClass name="IFCWALLSTANDARDCASE">
+			 <Property name="IFCWALLSTANDARDCASE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLSTANDARDCASE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLSTANDARDCASE/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLSTANDARDCASE/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLTYPE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLTYPE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLTYPE/PredefinedType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWALLTYPE/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL(1)/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL(2)/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL(3)/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL(4)/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER(1)/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER(2)/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER(3)/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER(4)/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSET/LayerSetName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/DirectionSense" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/LayerSetDirection" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ElementShading/Roughness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_QuantityTakeOff/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ReinforcementBarPitchOfWall/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WallCommon/ExtendToStructure" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WallCommon/IsExternal" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WallCommon/LoadBearing" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WallCommon/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCSLAB">
+		  <ComponentClass name="IFCSLAB">
+			 <Property name="IFCSLAB/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLAB/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLAB/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLAB/PredefinedType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLAB/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLABTYPE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLABTYPE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLABTYPE/PredefinedType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCSLABTYPE/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSET/LayerSetName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/DirectionSense" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/LayerSetDirection" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ElementShading/Roughness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_QuantityTakeOff/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ReinforcementBarPitchOfWall/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_SlabCommon/IsExternal" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_SlabCommon/LoadBearing" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_SlabCommon/PitchAngle" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_SlabCommon/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Surface Area" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Volume" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCWINDOW">
+		  <ComponentClass name="IFCWINDOW">
+			 <Property name="IFCWINDOW/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOW/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOW/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOW/OverallHeight" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOW/OverallWidth" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOW/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/ConstructionType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/OperationType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/ParameterTakesPrecedence" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/Sizeable" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCWINDOWSTYLE/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_QuantityTakeOff/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WindowCommon/IsExternal" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_WindowCommon/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCDOOR">
+		  <ComponentClass name="IFCDOOR">
+			 <Property name="IFCDOOR/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOOR/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOOR/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOOR/OverallHeight" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOOR/OverallWidth" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOOR/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/ConstructionType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/OperationType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/ParameterTakesPrecedence" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/Sizeable" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCDOORSTYLE/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_DoorCommon/IsExternal" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_DoorCommon/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_QuantityTakeOff/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup name="IFCROOF">
+		  <ComponentClass name="IFCROOF">
+			 <Property name="COG" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCROOF/GlobalId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCROOF/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCROOF/ObjectType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCROOF/ShapeType" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="IFCROOF/Tag" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIAL/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYER/LayerThickness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="MATERIALLAYERSET/LayerSetName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationFullName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ApplicationIdentifier" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/ChangeAction" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/CreationDate" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/OwningUser/GivenName" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="OWNERHISTORY/Version" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ElementShading/Roughness" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_ProductRequirements/Category" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_QuantityTakeOff/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_RoofCommon/IsExternal" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_RoofCommon/ProjectedArea" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_RoofCommon/Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Pset_RoofCommon/TotalArea" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Surface Area" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Volume" rule="Must have value" severity="Error" comment="Property must have value." />
 		  </ComponentClass>
 	   </ComponentGroup>
 	</Check>
