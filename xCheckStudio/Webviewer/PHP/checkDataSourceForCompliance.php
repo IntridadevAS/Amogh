@@ -4,7 +4,7 @@
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SelectedCompoents'] ) ||
-               !isset($_POST['ContainerId'] ))
+               !isset($_POST['ContainerId'] ) )
             {
                 echo 'fail';
                 return;
@@ -43,15 +43,15 @@
     
         $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
         $SelectedComponents = json_decode($_POST['SelectedCompoents'],true);
-        $ContainerId = $_POST['ContainerId'] ;
-        
+        $ContainerId = $_POST['ContainerId'] ;       
+       
         $Source= NULL;
         $CheckGroupsTable = NULL;
         $CheckComponentsTable = NULL;
         $CheckPropertiesTable = NULL;
 
         $NotCheckedComponentsTable = NULL;
-        $NotMatchedComponentsTable = NULL;
+        $NotMatchedComponentsTable = NULL;       
         if( $ContainerId =='viewerContainer1')
         {
             $Source="SourceA";
@@ -61,7 +61,7 @@
             $CheckPropertiesTable = "SourceAComplianceCheckProperties";
 
             $NotCheckedComponentsTable = "SourceAComplianceNotCheckedComponents";
-            $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";
+            $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";           
         }
         else if($ContainerId == 'viewerContainer2')
         {
@@ -97,15 +97,16 @@
                                   $CheckComponentsTable,
                                   $CheckPropertiesTable);
 
-         // write not checked components to database
-         writeNotCheckedComponentsToDB($SourceNotCheckedComponents, 
+        // write not checked components to database
+        writeNotCheckedComponentsToDB($SourceNotCheckedComponents, 
                                        $NotCheckedComponentsTable, 
                                        $projectName);
 
-          // write not matched components to database
-          writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 
-                                        $NotMatchedComponentsTable, 
-                                        $projectName);
+        // write not matched components to database
+        writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 
+                                      $NotMatchedComponentsTable, 
+                                      $projectName);
+                                             
 
         // get source components
         function getSourceComponents()

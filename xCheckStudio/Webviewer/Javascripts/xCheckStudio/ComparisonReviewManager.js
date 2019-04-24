@@ -4,11 +4,12 @@ function ComparisonReviewManager(comparisonCheckManager,
     sourceAProperties,
     sourceBProperties,
     mainReviewTableContainer,
-    detailedReviewTableContainer,
+    detailedReviewTableContainer/*,
     sourceAComponentIdVsComponentData,
     sourceANodeIdVsComponentData,
     sourceBComponentIdVsComponentData,
-    sourceBNodeIdVsComponentData) {
+    sourceBNodeIdVsComponentData*/) 
+    {
 
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
@@ -28,10 +29,10 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.ComparisonCheckManager = comparisonCheckManager;
 
-    this.SourceAComponentIdVsComponentData = sourceAComponentIdVsComponentData;
-    this.SourceANodeIdVsComponentData = sourceANodeIdVsComponentData;
-    this.SourceBComponentIdVsComponentData = sourceBComponentIdVsComponentData;
-    this.SourceBNodeIdVsComponentData = sourceBNodeIdVsComponentData;
+    // this.SourceAComponentIdVsComponentData = sourceAComponentIdVsComponentData;
+    // this.SourceANodeIdVsComponentData = sourceANodeIdVsComponentData;
+    // this.SourceBComponentIdVsComponentData = sourceBComponentIdVsComponentData;
+    // this.SourceBNodeIdVsComponentData = sourceBNodeIdVsComponentData;
 
     this.SelectedComponentRowFromSheetA;
     this.SelectedComponentRowFromSheetB;
@@ -42,6 +43,174 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.detailedReviewRowComments = {};
 
+    ComparisonReviewManager.prototype.populateReviewTable = function () {
+
+        var parentTable = document.getElementById(this.MainReviewTableContainer);
+
+
+        for (var key in this.ComparisonCheckManager) {
+            if (!this.ComparisonCheckManager.hasOwnProperty(key)) {
+                continue;
+            }
+
+            var checkGroups = this.ComparisonCheckManager[key];
+            for (var groupId in checkGroups) {
+                if (!checkGroups.hasOwnProperty(groupId)) {
+                    continue;
+                }
+
+                var componentsGroup = checkGroups[groupId];
+
+                //var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
+                if (componentsGroup.CheckComponents.length === 0) {
+                    continue;
+                }
+
+                var btn = document.createElement("BUTTON");       // Create a <button> element
+                btn.className = "collapsible";
+                var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
+                btn.appendChild(t);
+                parentTable.appendChild(btn);
+
+                var div = document.createElement("DIV");
+                div.className = "content scrollable";
+                div.id = componentsGroup.ComponentClass.replace(/\s/g, '');
+                parentTable.appendChild(div);
+
+                var div2 = document.createElement("DIV");
+                div2.id = componentsGroup.ComponentClass + "_child";
+                div2.style.fontSize = "10px";
+                div.appendChild(div2);
+
+                // create column headers
+                var columnHeaders = [];
+                for (var i = 0; i < 5; i++) {
+                    columnHeader = {};
+                    var title;
+                    if (i === 0) {
+                        title = 'SourceA';//"Source A";
+                        name = "SourceA";
+                        width = "35";
+                    }
+                    else if (i === 1) {
+                        title = "SourceB";//"Source B";
+                        name = "SourceB";
+                        width = "34";
+                    }
+                    else if (i === 2) {
+                        title = "Status";
+                        name = "Status"
+                        width = "34";
+                    }
+                    else if (i === 3) {
+                        title = "SourceANodeId";
+                        name = "SourceANodeId"
+                        width = "10";
+                    }
+                    else if (i === 4) {
+                        title = "SourceBNodeId";
+                        name = "SourceBNodeId"
+                        width = "10";
+                    }
+
+                    columnHeader["title"] = title;
+                    columnHeader["name"] = name;
+                    columnHeader["type"] = "text";
+                    columnHeader["width"] = width;
+                    columnHeaders.push(columnHeader);
+                }
+
+                // create table data
+                var tableData = [];
+                for (var componentId in componentsGroup.CheckComponents)
+                {
+                    if (!componentsGroup.CheckComponents.hasOwnProperty(componentId)) {
+                        continue;
+                    }
+
+                    component = componentsGroup.CheckComponents[componentId];            
+                                      
+                    tableRowContent = {};
+                    tableRowContent[columnHeaders[0].name] = component.SourceAName;
+                    tableRowContent[columnHeaders[1].name] = component.SourceBName;
+                    tableRowContent[columnHeaders[2].name] = component.Status;
+                    tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
+                    tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
+
+                    tableData.push(tableRowContent);
+                }
+
+                var id = "#" + div.id;
+                this.LoadReviewTableData(this, columnHeaders, tableData, id);
+                this.highlightMainReviewTableFromCheckStatus(div.id);
+
+                var modelBrowserData = document.getElementById(div.id);
+                // jsGridHeaderTableIndex = 0 
+                // jsGridTbodyTableIndex = 1
+                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
+                var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+
+                var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
+                modelBrowserHeaderTable.style.position = "fixed"
+                modelBrowserHeaderTable.style.width = "565px";
+                modelBrowserHeaderTable.style.overflowX = "hide";
+                var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
+                for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
+                    var currentRow = modelBrowserHeaderTableRows[j];
+                    for (var i = 0; i < currentRow.cells.length; i++) {
+                        if (i > 2) {
+                            currentRow.cells[i].style.display = "none";
+                        }
+                    }
+                }
+
+
+                // keep track of component id vs table row and status 
+                // jsGridHeaderTableIndex = 0 
+                // jsGridTbodyTableIndex = 1    
+                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
+                var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
+                for (var j = 0; j < modelBrowserDataRows.length; j++) {
+                    var currentRow = modelBrowserDataRows[j];
+
+                    var status = currentRow.cells[2].innerText;
+                    if (currentRow.cells.length === 5) {
+                        if (currentRow.cells[3].innerText !== undefined &&
+                            currentRow.cells[3].innerText !== "") {
+
+                            var sourceANodeId = currentRow.cells[3].innerText;
+                            this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
+                        }
+                        if (currentRow.cells[4].innerText !== undefined &&
+                            currentRow.cells[4].innerText !== "") {
+
+                            var sourceBNodeId = currentRow.cells[4].innerText;
+                            this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
+                        }
+                    }
+
+                    // hide additional columns
+                    for (var i = 0; i < currentRow.cells.length; i++) {
+                        if (i > 2) {
+                            currentRow.cells[i].style.display = "none";
+                        }
+                    }
+                }
+
+                modelBrowserDataTable.style.position = "static"
+                modelBrowserDataTable.style.width = "578px";
+                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+
+                var div2 = document.createElement("DIV");
+                div2.id = componentsGroup.ComponentClass + "_child";
+                div2.innerText = "Count :" + modelBrowserTableRows.length;
+                div2.style.fontSize = "10px";
+                div.appendChild(div2);
+            }
+        }
+
+    }
+    
     ComparisonReviewManager.prototype.loadDatasources = function () {
         var modal = document.getElementById('maximizeViewerContainer');              
 
@@ -89,177 +258,177 @@ function ComparisonReviewManager(comparisonCheckManager,
         return false;
     }
 
-    ComparisonReviewManager.prototype.populateReviewTable = function () {
+    // ComparisonReviewManager.prototype.populateReviewTable = function () {
 
-        var parentTable = document.getElementById(this.MainReviewTableContainer);
+    //     var parentTable = document.getElementById(this.MainReviewTableContainer);
 
 
-        for (var componentsGroupName in this.ComparisonCheckManager.CheckComponentsGroups) {
-            var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
-            if(componentsGroup.Components.length === 0)
-            {
-                continue;
-            }
+    //     for (var componentsGroupName in this.ComparisonCheckManager.CheckComponentsGroups) {
+    //         var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
+    //         if(componentsGroup.Components.length === 0)
+    //         {
+    //             continue;
+    //         }
             
-            var btn = document.createElement("BUTTON");       // Create a <button> element
-            btn.className = "collapsible";
-            var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
-            btn.appendChild(t);
-            parentTable.appendChild(btn);
+    //         var btn = document.createElement("BUTTON");       // Create a <button> element
+    //         btn.className = "collapsible";
+    //         var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
+    //         btn.appendChild(t);
+    //         parentTable.appendChild(btn);
 
-            var div = document.createElement("DIV");
-            div.className = "content scrollable";           
-            div.id = componentsGroup.ComponentClass.replace(/\s/g,'');
-            parentTable.appendChild(div);
+    //         var div = document.createElement("DIV");
+    //         div.className = "content scrollable";           
+    //         div.id = componentsGroup.ComponentClass.replace(/\s/g,'');
+    //         parentTable.appendChild(div);
 
-            var div2 = document.createElement("DIV");
-            div2.id = componentsGroup.ComponentClass + "_child";
-            div2.style.fontSize = "10px";
-            div.appendChild(div2);
+    //         var div2 = document.createElement("DIV");
+    //         div2.id = componentsGroup.ComponentClass + "_child";
+    //         div2.style.fontSize = "10px";
+    //         div.appendChild(div2);
 
-            var tableData = [];
-            var columnHeaders = [];
+    //         var tableData = [];
+    //         var columnHeaders = [];
 
-            for (var i = 0; i < 5; i++) {
-                columnHeader = {};
-                var title;
-                if (i === 0) {
-                    title = AnalyticsData.SourceAName;//"Source A";
-                    name = "SourceA";
-                    width = "35";
-                }
-                else if (i === 1) {
-                    title = AnalyticsData.SourceBName;//"Source B";
-                    name = "SourceB";
-                    width = "34";
-                }
-                else if (i === 2) {
-                    title = "Status";
-                    name = "Status"
-                    width = "34";
-                }
-                else if (i === 3) {
-                    title = "SourceANodeId";
-                    name = "SourceANodeId"
-                    width = "10";
-                }
-                else if (i === 4) {
-                    title = "SourceBNodeId";
-                    name = "SourceBNodeId"
-                    width = "10";
-                }
+    //         for (var i = 0; i < 5; i++) {
+    //             columnHeader = {};
+    //             var title;
+    //             if (i === 0) {
+    //                 title = AnalyticsData.SourceAName;//"Source A";
+    //                 name = "SourceA";
+    //                 width = "35";
+    //             }
+    //             else if (i === 1) {
+    //                 title = AnalyticsData.SourceBName;//"Source B";
+    //                 name = "SourceB";
+    //                 width = "34";
+    //             }
+    //             else if (i === 2) {
+    //                 title = "Status";
+    //                 name = "Status"
+    //                 width = "34";
+    //             }
+    //             else if (i === 3) {
+    //                 title = "SourceANodeId";
+    //                 name = "SourceANodeId"
+    //                 width = "10";
+    //             }
+    //             else if (i === 4) {
+    //                 title = "SourceBNodeId";
+    //                 name = "SourceBNodeId"
+    //                 width = "10";
+    //             }
 
-                columnHeader["title"] = title;
-                columnHeader["name"] = name;
-                columnHeader["type"] = "text";
-                columnHeader["width"] = width;
-                columnHeaders.push(columnHeader);
-            }
+    //             columnHeader["title"] = title;
+    //             columnHeader["name"] = name;
+    //             columnHeader["type"] = "text";
+    //             columnHeader["width"] = width;
+    //             columnHeaders.push(columnHeader);
+    //         }
 
-            for (var j = 0; j < componentsGroup.Components.length; j++) {
+    //         for (var j = 0; j < componentsGroup.Components.length; j++) {
 
-                tableRowContent = {};
+    //             tableRowContent = {};
 
-                var component = componentsGroup.Components[j];
+    //             var component = componentsGroup.Components[j];
 
-                tableRowContent[columnHeaders[0].name] = component.SourceAName;
-                tableRowContent[columnHeaders[1].name] = component.SourceBName;
-                tableRowContent[columnHeaders[2].name] = component.Status;
-                tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
-                tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
+    //             tableRowContent[columnHeaders[0].name] = component.SourceAName;
+    //             tableRowContent[columnHeaders[1].name] = component.SourceBName;
+    //             tableRowContent[columnHeaders[2].name] = component.Status;
+    //             tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
+    //             tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
 
-                tableData.push(tableRowContent);
-            }
+    //             tableData.push(tableRowContent);
+    //         }
 
-            var id = "#" + div.id;
-            this.LoadReviewTableData(this, columnHeaders, tableData, id);
-            this.highlightMainReviewTableFromCheckStatus(div.id);
+    //         var id = "#" + div.id;
+    //         this.LoadReviewTableData(this, columnHeaders, tableData, id);
+    //         this.highlightMainReviewTableFromCheckStatus(div.id);
 
-            var modelBrowserData = document.getElementById(div.id);
-            // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
-            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
-            var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+    //         var modelBrowserData = document.getElementById(div.id);
+    //         // jsGridHeaderTableIndex = 0 
+    //         // jsGridTbodyTableIndex = 1
+    //         var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
+    //         var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
-            var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-            modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "565px";
-            modelBrowserHeaderTable.style.overflowX = "hide";
-            var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
-            for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
-                var currentRow = modelBrowserHeaderTableRows[j];
-                for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i > 2) {
-                        currentRow.cells[i].style.display = "none";
-                    }
-                }
-            }
+    //         var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
+    //         modelBrowserHeaderTable.style.position = "fixed"
+    //         modelBrowserHeaderTable.style.width = "565px";
+    //         modelBrowserHeaderTable.style.overflowX = "hide";
+    //         var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
+    //         for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
+    //             var currentRow = modelBrowserHeaderTableRows[j];
+    //             for (var i = 0; i < currentRow.cells.length; i++) {
+    //                 if (i > 2) {
+    //                     currentRow.cells[i].style.display = "none";
+    //                 }
+    //             }
+    //         }
 
 
-            // keep track of component id vs table row and status 
-            // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1    
-            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
-            var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
-            for (var j = 0; j < modelBrowserDataRows.length; j++) {
-                var currentRow = modelBrowserDataRows[j];
+    //         // keep track of component id vs table row and status 
+    //         // jsGridHeaderTableIndex = 0 
+    //         // jsGridTbodyTableIndex = 1    
+    //         var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
+    //         var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
+    //         for (var j = 0; j < modelBrowserDataRows.length; j++) {
+    //             var currentRow = modelBrowserDataRows[j];
 
-                // var componentIdentifier = "";
-                // if (currentRow.cells[0].innerText !== undefined ||
-                //     currentRow.cells[0].innerText !== "") {
-                //     componentIdentifier = currentRow.cells[0].innerText;
-                // }
+    //             // var componentIdentifier = "";
+    //             // if (currentRow.cells[0].innerText !== undefined ||
+    //             //     currentRow.cells[0].innerText !== "") {
+    //             //     componentIdentifier = currentRow.cells[0].innerText;
+    //             // }
 
-                // if (currentRow.cells[1].innerText !== undefined ||
-                //     currentRow.cells[1].innerText !== "") {
-                //     if (componentIdentifier !== "") {
-                //         componentIdentifier += "_";
-                //     }
+    //             // if (currentRow.cells[1].innerText !== undefined ||
+    //             //     currentRow.cells[1].innerText !== "") {
+    //             //     if (componentIdentifier !== "") {
+    //             //         componentIdentifier += "_";
+    //             //     }
 
-                //     componentIdentifier += currentRow.cells[1].innerText;
-                // }
+    //             //     componentIdentifier += currentRow.cells[1].innerText;
+    //             // }
 
-                // if (componentIdentifier === undefined ||
-                //     componentIdentifier === "") {
-                //     continue;
-                // }
+    //             // if (componentIdentifier === undefined ||
+    //             //     componentIdentifier === "") {
+    //             //     continue;
+    //             // }
 
-                var status = currentRow.cells[2].innerText;
-                if (currentRow.cells.length === 5) {
-                    if (currentRow.cells[3].innerText !== undefined &&
-                        currentRow.cells[3].innerText !== "") {
+    //             var status = currentRow.cells[2].innerText;
+    //             if (currentRow.cells.length === 5) {
+    //                 if (currentRow.cells[3].innerText !== undefined &&
+    //                     currentRow.cells[3].innerText !== "") {
 
-                        var sourceANodeId = currentRow.cells[3].innerText;
-                        this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
-                    }
-                    if (currentRow.cells[4].innerText !== undefined &&
-                        currentRow.cells[4].innerText !== "") {
+    //                     var sourceANodeId = currentRow.cells[3].innerText;
+    //                     this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
+    //                 }
+    //                 if (currentRow.cells[4].innerText !== undefined &&
+    //                     currentRow.cells[4].innerText !== "") {
 
-                        var sourceBNodeId = currentRow.cells[4].innerText;
-                        this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
-                    }
-                } 
+    //                     var sourceBNodeId = currentRow.cells[4].innerText;
+    //                     this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
+    //                 }
+    //             } 
 
-                // hide additional columns
-                for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i > 2) {
-                        currentRow.cells[i].style.display = "none";
-                    }
-                }
-            }
+    //             // hide additional columns
+    //             for (var i = 0; i < currentRow.cells.length; i++) {
+    //                 if (i > 2) {
+    //                     currentRow.cells[i].style.display = "none";
+    //                 }
+    //             }
+    //         }
 
-            modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width = "578px";
-            modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
+    //         modelBrowserDataTable.style.position = "static"
+    //         modelBrowserDataTable.style.width = "578px";
+    //         modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
-            var div2 = document.createElement("DIV");
-            div2.id = componentsGroup.ComponentClass + "_child";
-            div2.innerText = "Count :" + modelBrowserTableRows.length;
-            div2.style.fontSize = "10px";
-            div.appendChild(div2);
-        }
+    //         var div2 = document.createElement("DIV");
+    //         div2.id = componentsGroup.ComponentClass + "_child";
+    //         div2.innerText = "Count :" + modelBrowserTableRows.length;
+    //         div2.style.fontSize = "10px";
+    //         div.appendChild(div2);
+    //     }
 
-    }
+    // }
 
     ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
         var modelBrowserData = document.getElementById(containerId);

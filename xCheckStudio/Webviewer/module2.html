@@ -18,7 +18,8 @@
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>
+    <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script> -->
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
 
@@ -760,298 +761,348 @@
             }
         }
 
-        var analyticsManager;
-      
-
+        var analyticsManager;       
+        var comparisonReviewManager;
+        var sourceAComplianceReviewManager;
+        var sourceBComplianceReviewManager;
         window.onload = function () {
             var _this = this;
-            var ComparisonCheckData = undefined;
-            var SourceAComplianceData = undefined;
-            var SourceBComplianceData = undefined;
-            var SourceAViewerData = undefined;
-            var SourceBViewerData = undefined;
-            var SourceAComponentIdVsComponentData = undefined;
-            var SourceANodeIdVsComponentData = undefined;
-            var SourceBComponentIdVsComponentData = undefined;
-            var SourceBNodeIdVsComponentData = undefined;
-            var SourceAProperties = undefined;
-            var SourceBProperties = undefined;
-            var AnalyticsData = undefined;
 
+            // var comparisonCheckManager;
+            // var sourceAComplianceCheckManager;
+            // var sourceBComplianceCheckManager;
+
+            // var ComparisonCheckData = undefined;
+            // var SourceAComplianceData = undefined;
+            // var SourceBComplianceData = undefined;
+            // var SourceAViewerData = undefined;
+            // var SourceBViewerData = undefined;
+            // var SourceAComponentIdVsComponentData = undefined;
+            // var SourceANodeIdVsComponentData = undefined;
+            // var SourceBComponentIdVsComponentData = undefined;
+            // var SourceBNodeIdVsComponentData = undefined;
+            // var SourceAProperties = undefined;
+            // var SourceBProperties = undefined;
+            // var AnalyticsData = undefined;
+
+            
+            // set project name
+            setProjectName();
+
+            // set user name
+            setUserName();
+
+            // var checkComponentGroups = undefined;
+
+            // read  comparison check data
             $.ajax({
-                    url: 'newPHP/sourceAComplianceDataReader.php',
-                    type: "GET",
+                    url: 'PHP/CheckDataReader.php',
+                    type: "POST",
                     async: true,
                     data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        
+                    success: function (msg) 
+                    {
+                        var checkResults = JSON.parse(msg);
+                       
+                        var comparisonCheckGroups = undefined;
+                        var sourceAComplianceCheckGroups = undefined;
+                        var sourceBComplianceCheckGroups = undefined;
+
+                        for (var key in checkResults) 
+                        {
+                            if (!checkResults.hasOwnProperty(key)) 
+                            {
+                                continue;
+                            }
+
+                            
+                            if (key == 'Comparison') 
+                            {
+                                comparisonCheckGroups = new CheckGroups();
+                                comparisonCheckGroups.restore(checkResults[key], false);                                
+                            }
+                            else if(key == 'SourceACompliance')
+                            {
+                                sourceAComplianceCheckGroups = new CheckGroups();
+                                sourceAComplianceCheckGroups.restore(checkResults[key], true);   
+                            }
+                            else if(key == 'SourceBCompliance')
+                            {
+                                sourceBComplianceCheckGroups = new CheckGroups();
+                                sourceBComplianceCheckGroups.restore(checkResults[key], true);  
+                            }                           
+                        }                       
+                          
+                         // populate check results
+                         populateCheckResults(comparisonCheckGroups, 
+                                                 sourceAComplianceCheckGroups, 
+                                                 sourceBComplianceCheckGroups);
                     }
-                })
+                });
 
             // readData();
-            this.readComparisonCheckData(_this).then(function (success) {
+            // this.readComparisonCheckData(_this).then(function (success) {
 
-                if (success) {
-                    var comparisonCheckManager;
-                    var sourceAComplianceCheckManager;
-                    var sourceBComplianceCheckManager;
+            //     if (success) {
+            //         var comparisonCheckManager;
+            //         var sourceAComplianceCheckManager;
+            //         var sourceBComplianceCheckManager;
 
-                    // set project name
-                    setProjectName();
+            //         // set project name
+            //         setProjectName();
 
-                    // set user name
-                    setUserName();
+            //         // set user name
+            //         setUserName();
 
-                    if (typeof this.ComparisonCheckData !== 'undefined') {
+            //         if (typeof this.ComparisonCheckData !== 'undefined') {
 
-                        // restore comparison check data
-                        comparisonCheckManager = new CheckManager("");
-                        comparisonCheckManager.restore(this.ComparisonCheckData)
+            //             // restore comparison check data
+            //             comparisonCheckManager = new CheckManager("");
+            //             comparisonCheckManager.restore(this.ComparisonCheckData)
 
-                        // create comparisonreviewmanager
-                        if (typeof this.SourceAViewerData !== 'undefined' &&
-                            typeof this.SourceBViewerData !== 'undefined' &&
-                            this.SourceAComponentIdVsComponentData !== 'undefined' &&
-                            this.SourceANodeIdVsComponentData !== 'undefined' &&
-                            this.SourceBComponentIdVsComponentData !== 'undefined' &&
-                            this.SourceBNodeIdVsComponentData !== 'undefined') {
-                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                                this.SourceAViewerData,
-                                this.SourceBViewerData,
-                                undefined,
-                                undefined,
-                                "ComparisonMainReviewCell",
-                                "ComparisonDetailedReviewCell",
-                                this.SourceAComponentIdVsComponentData,
-                                this.SourceANodeIdVsComponentData,
-                                this.SourceBComponentIdVsComponentData,
-                                this.SourceBNodeIdVsComponentData);
-                        }
-                        else if (typeof this.SourceAProperties !== 'undefined' && 
-                                typeof this.SourceBProperties !== 'undefined') {
-                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                                undefined,
-                                undefined,
-                                this.SourceAProperties,
-                                this.SourceBProperties,
-                                "ComparisonMainReviewCell",
-                                "ComparisonDetailedReviewCell",
-                                undefined,
-                                undefined,
-                                undefined,
-                                undefined);
-                        }
-                        else if (typeof this.SourceAProperties !== 'undefined' &&
-                            typeof this.SourceBViewerData !== 'undefined' &&
-                            this.SourceBComponentIdVsComponentData !== 'undefined' &&
-                            this.SourceBNodeIdVsComponentData !== 'undefined') {
-                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                                undefined,
-                                this.SourceBViewerData,
-                                this.SourceAProperties,
-                                undefined,
-                                "ComparisonMainReviewCell",
-                                "ComparisonDetailedReviewCell",
-                                undefined,
-                                undefined,
-                                this.SourceBComponentIdVsComponentData,
-                                this.SourceBNodeIdVsComponentData);
-                        }
-                        else if (typeof this.SourceAViewerData !== 'undefined' &&
-                            typeof this.SourceBProperties !== 'undefined' &&
-                            this.SourceAComponentIdVsComponentData !== 'undefined' &&
-                            this.SourceANodeIdVsComponentData !== 'undefined') {
-                            comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-                            this.SourceAViewerData,
-                                undefined,
-                                undefined,
-                                this.SourceBProperties,
-                                "ComparisonMainReviewCell",
-                                "ComparisonDetailedReviewCell",
-                                this.SourceAComponentIdVsComponentData,
-                                this.SourceANodeIdVsComponentData,
-                                undefined,
-                                undefined);
-                        }
+            //             // create comparisonreviewmanager
+            //             if (typeof this.SourceAViewerData !== 'undefined' &&
+            //                 typeof this.SourceBViewerData !== 'undefined' &&
+            //                 this.SourceAComponentIdVsComponentData !== 'undefined' &&
+            //                 this.SourceANodeIdVsComponentData !== 'undefined' &&
+            //                 this.SourceBComponentIdVsComponentData !== 'undefined' &&
+            //                 this.SourceBNodeIdVsComponentData !== 'undefined') {
+            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+            //                     this.SourceAViewerData,
+            //                     this.SourceBViewerData,
+            //                     undefined,
+            //                     undefined,
+            //                     "ComparisonMainReviewCell",
+            //                     "ComparisonDetailedReviewCell",
+            //                     this.SourceAComponentIdVsComponentData,
+            //                     this.SourceANodeIdVsComponentData,
+            //                     this.SourceBComponentIdVsComponentData,
+            //                     this.SourceBNodeIdVsComponentData);
+            //             }
+            //             else if (typeof this.SourceAProperties !== 'undefined' && 
+            //                     typeof this.SourceBProperties !== 'undefined') {
+            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+            //                     undefined,
+            //                     undefined,
+            //                     this.SourceAProperties,
+            //                     this.SourceBProperties,
+            //                     "ComparisonMainReviewCell",
+            //                     "ComparisonDetailedReviewCell",
+            //                     undefined,
+            //                     undefined,
+            //                     undefined,
+            //                     undefined);
+            //             }
+            //             else if (typeof this.SourceAProperties !== 'undefined' &&
+            //                 typeof this.SourceBViewerData !== 'undefined' &&
+            //                 this.SourceBComponentIdVsComponentData !== 'undefined' &&
+            //                 this.SourceBNodeIdVsComponentData !== 'undefined') {
+            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+            //                     undefined,
+            //                     this.SourceBViewerData,
+            //                     this.SourceAProperties,
+            //                     undefined,
+            //                     "ComparisonMainReviewCell",
+            //                     "ComparisonDetailedReviewCell",
+            //                     undefined,
+            //                     undefined,
+            //                     this.SourceBComponentIdVsComponentData,
+            //                     this.SourceBNodeIdVsComponentData);
+            //             }
+            //             else if (typeof this.SourceAViewerData !== 'undefined' &&
+            //                 typeof this.SourceBProperties !== 'undefined' &&
+            //                 this.SourceAComponentIdVsComponentData !== 'undefined' &&
+            //                 this.SourceANodeIdVsComponentData !== 'undefined') {
+            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
+            //                 this.SourceAViewerData,
+            //                     undefined,
+            //                     undefined,
+            //                     this.SourceBProperties,
+            //                     "ComparisonMainReviewCell",
+            //                     "ComparisonDetailedReviewCell",
+            //                     this.SourceAComponentIdVsComponentData,
+            //                     this.SourceANodeIdVsComponentData,
+            //                     undefined,
+            //                     undefined);
+            //             }
 
-                        // populate review table
-                        comparisonReviewManager.populateReviewTable();
-                    }
-                    else {
-                        $("#tab1Parent").addClass("disable");
-                    }
+            //             // populate review table
+            //             comparisonReviewManager.populateReviewTable();
+            //         }
+            //         else {
+            //             $("#tab1Parent").addClass("disable");
+            //         }
 
-                    if (typeof this.SourceAComplianceData !== 'undefined') {
+            //         if (typeof this.SourceAComplianceData !== 'undefined') {
 
-                        // restore source A compliance check data
-                        sourceAComplianceCheckManager = new CheckManager("");
-                        sourceAComplianceCheckManager.restore(this.SourceAComplianceData)
+            //             // restore source A compliance check data
+            //             sourceAComplianceCheckManager = new CheckManager("");
+            //             sourceAComplianceCheckManager.restore(this.SourceAComplianceData)
 
-                        // create sourceAComplianceReviewManager
-                        if (typeof this.SourceAProperties !== 'undefined') {
-                            sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-                                undefined,
-                                this.SourceAProperties,
-                                "SourceAComplianceMainReviewCell",
-                                "SourceAComplianceDetailedReviewCell",
-                                undefined,
-                                undefined,
-                                "SourceAComplianceDetailedReviewComment");
-                        }
-                        else if (typeof this.SourceAViewerData !== 'undefined') {
-                            sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-                            this.SourceAViewerData,
-                                undefined,
-                                "SourceAComplianceMainReviewCell",
-                                "SourceAComplianceDetailedReviewCell",
-                                this.SourceAComponentIdVsComponentData,
-                                this.SourceANodeIdVsComponentData,
-                                "SourceAComplianceDetailedReviewComment");
-                        }
+            //             // create sourceAComplianceReviewManager
+            //             if (typeof this.SourceAProperties !== 'undefined') {
+            //                 sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+            //                     undefined,
+            //                     this.SourceAProperties,
+            //                     "SourceAComplianceMainReviewCell",
+            //                     "SourceAComplianceDetailedReviewCell",
+            //                     undefined,
+            //                     undefined,
+            //                     "SourceAComplianceDetailedReviewComment");
+            //             }
+            //             else if (typeof this.SourceAViewerData !== 'undefined') {
+            //                 sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
+            //                 this.SourceAViewerData,
+            //                     undefined,
+            //                     "SourceAComplianceMainReviewCell",
+            //                     "SourceAComplianceDetailedReviewCell",
+            //                     this.SourceAComponentIdVsComponentData,
+            //                     this.SourceANodeIdVsComponentData,
+            //                     "SourceAComplianceDetailedReviewComment");
+            //             }
 
 
-                        // populate review table
-                        sourceAComplianceReviewManager.populateReviewTable();
-                    }
-                    else {
-                        $("#tab2Parent").addClass("disable");
-                    }
-                    if (typeof this.SourceBComplianceData !== 'undefined') {
+            //             // populate review table
+            //             sourceAComplianceReviewManager.populateReviewTable();
+            //         }
+            //         else {
+            //             $("#tab2Parent").addClass("disable");
+            //         }
+            //         if (typeof this.SourceBComplianceData !== 'undefined') {
 
-                        // restore source A compliance check data
-                        sourceBComplianceCheckManager = new CheckManager("");
-                        sourceBComplianceCheckManager.restore(this.SourceBComplianceData)
+            //             // restore source A compliance check data
+            //             sourceBComplianceCheckManager = new CheckManager("");
+            //             sourceBComplianceCheckManager.restore(this.SourceBComplianceData)
 
-                        // create sourceBComplianceReviewManager
-                        if (typeof this.SourceBProperties !== 'undefined') {
-                            sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-                                undefined,
-                                this.SourceBProperties,
-                                "SourceBComplianceMainReviewCell",
-                                "SourceBComplianceDetailedReviewCell",
-                                undefined,
-                                undefined,
-                                "SourceBComplianceDetailedReviewComment");
-                        }
-                        else if (typeof this.SourceBViewerData !== 'undefined') {
-                            sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-                            this.SourceBViewerData,
-                                undefined,
-                                "SourceBComplianceMainReviewCell",
-                                "SourceBComplianceDetailedReviewCell",
-                                this.SourceBComponentIdVsComponentData,
-                                this.SourceBNodeIdVsComponentData,
-                                "SourceBComplianceDetailedReviewComment");
-                        }
+            //             // create sourceBComplianceReviewManager
+            //             if (typeof this.SourceBProperties !== 'undefined') {
+            //                 sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+            //                     undefined,
+            //                     this.SourceBProperties,
+            //                     "SourceBComplianceMainReviewCell",
+            //                     "SourceBComplianceDetailedReviewCell",
+            //                     undefined,
+            //                     undefined,
+            //                     "SourceBComplianceDetailedReviewComment");
+            //             }
+            //             else if (typeof this.SourceBViewerData !== 'undefined') {
+            //                 sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
+            //                 this.SourceBViewerData,
+            //                     undefined,
+            //                     "SourceBComplianceMainReviewCell",
+            //                     "SourceBComplianceDetailedReviewCell",
+            //                     this.SourceBComponentIdVsComponentData,
+            //                     this.SourceBNodeIdVsComponentData,
+            //                     "SourceBComplianceDetailedReviewComment");
+            //             }
 
-                        // populate review table
-                        sourceBComplianceReviewManager.populateReviewTable();
-                    }
-                    else {
-                        $("#tab3Parent").addClass("disable");
-                    }
+            //             // populate review table
+            //             sourceBComplianceReviewManager.populateReviewTable();
+            //         }
+            //         else {
+            //             $("#tab3Parent").addClass("disable");
+            //         }
 
-                    // make buttons collapsible
-                    setButtonsCollapsible();
+            //         // make buttons collapsible
+            //         setButtonsCollapsible();
 
-                    postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData);
-                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
-                    // remove post data js files from server from earlier check results, if any
-                    $.ajax({
-                        data: '',
-                        url: 'PHP/postDataCleaner.php',
-                        method: 'POST', // or GET
-                        async: true,
-                        success: function (msg) {
-                        }
-                    });
+            //         postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData);
+            //         document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+            //         // remove post data js files from server from earlier check results, if any
+            //         // $.ajax({
+            //         //     data: '',
+            //         //     url: 'PHP/postDataCleaner.php',
+            //         //     method: 'POST', // or GET
+            //         //     async: true,
+            //         //     success: function (msg) {
+            //         //     }
+            //         // });
 
-                    // trigger comparison tab click manually
-                    /*/var tab1 = document.getElementById("tab1Parent");
-                    tab1.click();*/
-                    if (typeof this.ComparisonCheckData !== 'undefined') {
-                        openCheckResultTab('ComparisonTabPage');
-                        //var tab = document.getElementById("tab1Parent");
-                        //tab.click();
-                    }
-                    else {
-                        // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
-                        // {
-                        // 	openCheckResultTab('SourceAComplianceTabPage');
-                        // 	// var tab2 = document.getElementById("tab2Parent");
-                        // 	// tab2.click();
-                        // }
-                        // else
-                        // {
-                        if (typeof this.SourceAComplianceData !== 'undefined') {
-                            openCheckResultTab('SourceAComplianceTabPage');
-                            // var tab3 = document.getElementById("tab3Parent");
-                            // tab3.click();
-                        }
-                        else if (typeof this.SourceBComplianceData !== 'undefined') {
-                            openCheckResultTab('SourceBComplianceTabPage');
-                            // var tab2 = document.getElementById("tab2Parent");
-                            // tab2.click();
-                        }
-                        //}
-                    }
-                }
-            });
+            //         // trigger comparison tab click manually
+            //         /*/var tab1 = document.getElementById("tab1Parent");
+            //         tab1.click();*/
+            //         if (typeof this.ComparisonCheckData !== 'undefined') {
+            //             openCheckResultTab('ComparisonTabPage');
+            //             //var tab = document.getElementById("tab1Parent");
+            //             //tab.click();
+            //         }
+            //         else {
+            //             // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
+            //             // {
+            //             // 	openCheckResultTab('SourceAComplianceTabPage');
+            //             // 	// var tab2 = document.getElementById("tab2Parent");
+            //             // 	// tab2.click();
+            //             // }
+            //             // else
+            //             // {
+            //             if (typeof this.SourceAComplianceData !== 'undefined') {
+            //                 openCheckResultTab('SourceAComplianceTabPage');
+            //                 // var tab3 = document.getElementById("tab3Parent");
+            //                 // tab3.click();
+            //             }
+            //             else if (typeof this.SourceBComplianceData !== 'undefined') {
+            //                 openCheckResultTab('SourceBComplianceTabPage');
+            //                 // var tab2 = document.getElementById("tab2Parent");
+            //                 // tab2.click();
+            //             }
+            //             //}
+            //         }
+            //     }
+            // });
         };
 
         function readComparisonCheckData(_this) {
             var __this = _this;
             return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/comparisonCheckpostDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.ComparisonCheckData = JSON.parse(msg);
-                        }
-                        __this.readSourceAComplianceCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
+                // $.ajax({
+                //     url: 'PHP/comparisonCheckpostDataReader.php',
+                //     type: "GET",
+                //     async: true,
+                //     data: {},
+                //     success: function (msg) {
+                //         var int = 0;
+                //         if (msg !== "not found") {
+                //             __this.ComparisonCheckData = JSON.parse(msg);
+                //         }
+                //         __this.readSourceAComplianceCheckData(__this).then(function (success){
+                //             if(success)
+                //             {
+                //                 return resolve(true);
+                //             }
+                //         });
+                //     },
+                //     error: function () {
+                //         return resolve(true);
+                //     }
+                // })
             });
         }
 
         function readSourceAComplianceCheckData(_this) {
             var __this = _this;
             return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceAComplianceDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceAComplianceData = JSON.parse(msg);
-                        }
+                // $.ajax({
+                //     url: 'PHP/sourceAComplianceDataReader.php',
+                //     type: "GET",
+                //     async: true,
+                //     data: {},
+                //     success: function (msg) {
+                //         var int = 0;
+                //         if (msg !== "not found") {
+                //             __this.SourceAComplianceData = JSON.parse(msg);
+                //         }
 
-                        __this.readSourceBComplianceCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
+                //         __this.readSourceBComplianceCheckData(__this).then(function (success){
+                //             if(success)
+                //             {
+                //                 return resolve(true);
+                //             }
+                //         });
+                //     },
+                //     error: function () {
+                //         return resolve(true);
+                //     }
+                // })
             });
         }
 
@@ -1486,16 +1537,18 @@
                 sourceBViewerRow.style.display = "block";
 
                 //clear highlighted row
-                if (comparisonReviewManager.SelectedComponentRowFromSheetA) {
-                    comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayA,
-                        comparisonReviewManager.SelectedComponentRowFromSheetA);
-                }
-                if (comparisonReviewManager.SelectedComponentRowFromSheetB) {
-                    comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayB,
-                        comparisonReviewManager.SelectedComponentRowFromSheetB);
-                }
-                if (comparisonReviewManager.SelectedComponentRow) {
-                    comparisonReviewManager.RestoreBackgroundColor(comparisonReviewManager.SelectedComponentRow);
+                if (comparisonReviewManager) {
+                    if (comparisonReviewManager.SelectedComponentRowFromSheetA) {
+                        comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayA,
+                            comparisonReviewManager.SelectedComponentRowFromSheetA);
+                    }
+                    if (comparisonReviewManager.SelectedComponentRowFromSheetB) {
+                        comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayB,
+                            comparisonReviewManager.SelectedComponentRowFromSheetB);
+                    }
+                    if (comparisonReviewManager.SelectedComponentRow) {
+                        comparisonReviewManager.RestoreBackgroundColor(comparisonReviewManager.SelectedComponentRow);
+                    }
                 }
             }
             else if (tabName === "SourceAComplianceTabPage") {
@@ -1524,12 +1577,14 @@
                 sourceBViewerRow.style.display = "none";
 
                 //clear highlighted row
-                if (sourceAComplianceReviewManager.SelectedComponentRowFromSheetA) {
-                    sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray,
-                        sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
-                }
-                if (sourceAComplianceReviewManager.SelectedComponentRow) {
-                    sourceAComplianceReviewManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                if (sourceAComplianceReviewManager) {
+                    if (sourceAComplianceReviewManager.SelectedComponentRowFromSheetA) {
+                        sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray,
+                            sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
+                    }
+                    if (sourceAComplianceReviewManager.SelectedComponentRow) {
+                        sourceAComplianceReviewManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                    }
                 }
             }
             else if (tabName === "SourceBComplianceTabPage") {
@@ -1557,12 +1612,14 @@
                 sourceAViewerRow.style.display = "none";
 
                 //clear highlighted row
-                if (sourceBComplianceReviewManager.SelectedComponentRowFromSheetB) {
-                    sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray,
-                        sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
-                }
-                if (sourceBComplianceReviewManager.SelectedComponentRow) {
-                    sourceBComplianceReviewManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                if (sourceBComplianceReviewManager) {
+                    if (sourceBComplianceReviewManager.SelectedComponentRowFromSheetB) {
+                        sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray,
+                            sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
+                    }
+                    if (sourceBComplianceReviewManager.SelectedComponentRow) {
+                        sourceBComplianceReviewManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                    }
                 }
             }
 

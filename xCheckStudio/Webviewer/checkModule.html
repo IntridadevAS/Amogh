@@ -2717,8 +2717,8 @@
             checkCaseFilesData.readCheckCaseFiles();
         };
 
-        function postData(url, method) {
-            // remove post data js files from server from earlier check results, if any
+        function postData(url, method) {            
+           // remove post data js files from server from earlier check results, if any
             $.ajax({
                 data: '',
                 url: 'postData/postDataCleaner.php',
@@ -2781,44 +2781,44 @@
             });
 
             // post comparison data
-            if (comparisonCheckManager) {
-                $.ajax({
-                    url: 'PHP/comparisonCheckpostDataWriter.php',
-                    type: "POST",
-                    async: false,
-                    data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
-                    success: function (data) {
-                        // alert("success");
-                        //$("#result").html(data);
-                    }
-                });
-            }
+            // if (comparisonCheckManager) {
+            //     $.ajax({
+            //         url: 'PHP/comparisonCheckpostDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+            //         success: function (data) {
+            //             // alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
 
-            // post source A compliance data
-            if (sourceAComplianceCheckManager) {
-                $.ajax({
-                    url: 'PHP/sourceAComplianceDataWriter.php',
-              		type: "POST",
-                    async: false,
-                    data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
-                    success: function (data) {
-                        //alert("success");
-                        //$("#result").html(data);
-                    }
-                });
-            }
+            // // post source A compliance data
+            // if (sourceAComplianceCheckManager) {
+            //     $.ajax({
+            //         url: 'PHP/sourceAComplianceDataWriter.php',
+            //   		type: "POST",
+            //         async: false,
+            //         data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
 
-            // post source B compliance data
-            if (sourceBComplianceCheckManager) {
-                $.ajax({
-                    url: 'PHP/sourceBComplianceDataWriter.php',
-                    type: "POST",
-                    async: false,
-                    data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
-                    success: function (data) {
-                    }
-                });
-            }
+            // // post source B compliance data
+            // if (sourceBComplianceCheckManager) {
+            //     $.ajax({
+            //         url: 'PHP/sourceBComplianceDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+            //         success: function (data) {
+            //         }
+            //     });
+            // }
 
             // post source A viewer data
             if (xCheckStudioInterface1) {
@@ -2833,44 +2833,47 @@
                     viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
 
                     $.ajax({
-                        url: 'PHP/sourceAViewerDataWriter.php',
+                        url: 'PHP/ViewerOptionsWriter.php',
                         type: "POST",
                         async: false,
-                        data: {
-                            "SourceAViewerData": JSON.stringify(viewerOptions)
+                        data: 
+                        {
+                            "SourceViewerOptions": JSON.stringify(viewerOptions),
+                            "SourceViewerOptionsTable": "SourceAViewerOptions"
                         },
-                        success: function (msg) {
+                        success: function (msg) 
+                        {
                                 //alert("success");
                                 //$("#result").html(data);
-                            }
-                    })
+                        }
+                    });
 
                     // postnode id and component data relation
-                    if (xCheckStudioInterface1.nodeIdVsComponentData) {
-                        $.ajax({
-                            url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
-                            type: "POST",
-                            async: false,
-                            data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
-                            success: function (data) {
-                                //alert("success");
-                                //$("#result").html(data);
-                            }
-                        });
-                    }
+                    // if (xCheckStudioInterface1.nodeIdVsComponentData) {
+                    //     $.ajax({
+                    //         url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
+                    //         type: "POST",
+                    //         async: false,
+                    //         data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+                    //         success: function (data) {
+                    //             //alert("success");
+                    //             //$("#result").html(data);
+                    //         }
+                    //     });
+                    // }
 
-                    if (xCheckStudioInterface1.componentIdVsComponentData) {
-                        $.ajax({
-                            url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
-                            type: "POST",
-                            async: false,
-                            data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
-                            success: function (data) {
-                                //alert("success");
-                                //$("#result").html(data);
-                            }
-                        });
-                    }
+                    // if (xCheckStudioInterface1.componentIdVsComponentData) {
+                    //     $.ajax({
+                    //         url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
+                    //         type: "POST",
+                    //         async: false,
+                    //         data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+                    //         success: function (data) {
+                    //             //alert("success");
+                    //             //$("#result").html(data);
+                    //         }
+                    //     });
+                    // }
                 }
 
                 else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
@@ -2901,46 +2904,51 @@
                     viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
 
                     $.ajax({
-                        url: 'PHP/sourceBViewerDataWriter.php',
+                        url: 'PHP/ViewerOptionsWriter.php',
                         type: "POST",
                         async: false,
-                        data: { "SourceBViewerData": JSON.stringify(viewerOptions) },
-                        success: function (data) {
-                            //alert("success");
-                            //$("#result").html(data);
+                        data: 
+                        {
+                            "SourceViewerOptions": JSON.stringify(viewerOptions),
+                            "SourceViewerOptionsTable": "SourceBViewerOptions"
+                        },
+                        success: function (msg) 
+                        {
+                                //alert("success");
+                                //$("#result").html(data);
                         }
                     });
 
 
-                    // postnode id and component data relation
-                    if (xCheckStudioInterface2.nodeIdVsComponentData) {
-                        $.ajax({
-                            url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
-                            type: "POST",
-                            async: false,
-                            data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
-                            success: function (data) {
-                                //alert("success");
-                                //$("#result").html(data);
-                            }
-                        });
-                    }
 
-                    if (xCheckStudioInterface2.componentIdVsComponentData) {
-                        $.ajax({
-                            url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
-                            type: "POST",
-                            async: false,
-                            data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
-                            success: function (data) {
-                                //alert("success");
-                                //$("#result").html(data);
-                            }
-                        });
-                    }
+                    // // postnode id and component data relation
+                    // if (xCheckStudioInterface2.nodeIdVsComponentData) {
+                    //     $.ajax({
+                    //         url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
+                    //         type: "POST",
+                    //         async: false,
+                    //         data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+                    //         success: function (data) {
+                    //             //alert("success");
+                    //             //$("#result").html(data);
+                    //         }
+                    //     });
+                    // }
+
+                    // if (xCheckStudioInterface2.componentIdVsComponentData) {
+                    //     $.ajax({
+                    //         url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
+                    //         type: "POST",
+                    //         async: false,
+                    //         data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+                    //         success: function (data) {
+                    //             //alert("success");
+                    //             //$("#result").html(data);
+                    //         }
+                    //     });
+                    // }
 
                 }
-
                 else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
 
                     $.ajax({
