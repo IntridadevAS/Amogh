@@ -3515,7 +3515,13 @@
                             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
                             xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
-                            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "ifc" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
+                                
 
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
                                 row.cells[modelBrowserMainClassColumn].textContent.trim());
@@ -3547,6 +3553,20 @@
                                 xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
+                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
+                                'ComponentClass': row.cells[3].textContent.trim(),
+                                'Description': row.cells[4].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceACB" &&
+                                xCheckStudioInterface1 &&
+                                !xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
+                                xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
+                            }
+                        }
 
                     }
                     if (xCheckStudioInterface2 && modelTreeContainer === "modelTree2") {
@@ -3554,7 +3574,12 @@
                             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
                             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
-                            xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt") {
+                            xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "ifc" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
+                            xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
 
                             var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,
                                 row.cells[modelBrowserMainClassColumn].textContent.trim());
@@ -3582,6 +3607,20 @@
                                 xCheckStudioInterface2 &&
                                 !xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
                                 xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
+                            }
+                        }
+                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
+                                'ComponentClass': row.cells[3].textContent.trim(),
+                                'Description': row.cells[4].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceACB" &&
+                                xCheckStudioInterface1 &&
+                                !xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoentExists(row)) {
+                                xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
                     }
