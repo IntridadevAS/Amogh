@@ -3547,6 +3547,20 @@
                                 xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
+                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                            checkedComponent = {
+                                'Name': row.cells[1].textContent.trim(),
+                                'MainComponentClass': row.cells[2].textContent.trim(),
+                                'ComponentClass': row.cells[3].textContent.trim(),
+                                'Description': row.cells[4].textContent.trim()
+                            };
+
+                            if (checkBoxId === "checkAllSourceACB" &&
+                                xCheckStudioInterface1 &&
+                                !xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoentExists(row)) {
+                                xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents.push(checkedComponent);
+                            }
+                        }
 
                     }
                     if (xCheckStudioInterface2 && modelTreeContainer === "modelTree2") {
