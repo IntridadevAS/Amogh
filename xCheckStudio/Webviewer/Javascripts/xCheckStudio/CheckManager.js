@@ -93,7 +93,7 @@ function CheckManager(name) {
                 SelectedCompoents = interfaceObject._modelTree.selectedCompoents;
                 containerID = interfaceObject._firstViewer._params.containerId;
             }
-            else if(interfaceObject.excelReader !== undefined)
+            else if(interfaceObject.excelReader !== undefined  && interfaceObject.excelReader.SourceType == "xls")
             {
                 SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.selectedCompoents;
                 if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase() == "modeltree1")
@@ -101,6 +101,19 @@ function CheckManager(name) {
                     containerID = "viewerContainer1"
                 }
                 else if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase()== "modeltree2")
+                {
+                    containerID = "viewerContainer2";
+                }
+                
+            }
+            else if(interfaceObject.db_reader !== undefined)
+            {
+                SelectedCompoents = interfaceObject.db_reader.dbmodelbrowser.selectedCompoents;
+                if(interfaceObject.db_reader.dbmodelbrowser.conatinerId.toLowerCase() == "modeltree1")
+                {
+                    containerID = "viewerContainer1"
+                }
+                else if(interfaceObject.db_reader.dbmodelbrowser.conatinerId.toLowerCase()== "modeltree2")
                 {
                     containerID = "viewerContainer2";
                 }

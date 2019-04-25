@@ -9,7 +9,7 @@ include 'ImportFromMsSql.php';
     error_reporting(E_ALL);
     $databaseName = 'mysql';
     $host = '127.0.0.1';
-    $schema = 'gregschema';
+    $schema = 'test';
     $user = 'Pooja123';
     $password = 'ABCdsf@#12345';
 
