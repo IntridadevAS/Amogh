@@ -173,6 +173,147 @@ function DBModelBrowser() {
         row.style.backgroundColor = "#ffffff";
     }
 
+    DBModelBrowser.prototype.getClassWiseCheckedComponents = function (sourceType) {
+        var classwiseCheckedComponents = {};
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+        var mainCategoryPropertyName = identifierProperties['mainCategory'];
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var selectedComponent = this.selectedCompoents[i];
+            if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
+                // increment count of checked components for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
+            }
+            else {
+                // add checked components count for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] = 1;
+            }
+        }
+
+
+        return classwiseCheckedComponents;
+    }
+
+    DBModelBrowser.prototype.selectedCompoentExists = function (componentRow) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                component['Description'] == componentRow.cells[4].textContent.trim()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    DBModelBrowser.prototype.isComponentSelected = function (componentProperties) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentProperties.Name &&
+                component['MainComponentClass'] === componentProperties.MainComponentClass &&
+                component['ComponentClass'] === componentProperties.SubComponentClass)
+
+                // for (var j = 0; j < componentProperties.properties.length; j++) {
+                //     if (componentProperties.properties[j].Name === "Description") {
+                        // component['Description'] === componentProperties.properties[j].Value;
+                        return true;
+                //     }
+                // }
+
+
+        }
+
+        return false;
+    }
+
+    DBModelBrowser.prototype.removeFromselectedCompoents = function (componentRow) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                component['Description'] === componentRow.cells[4].textContent.trim()) {
+
+                this.selectedCompoents.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    DBModelBrowser.prototype.handleComponentCheck = function (currentCheckBox) {
+
+        var currentCell = currentCheckBox.parentElement;
+        if (currentCell.tagName.toLowerCase() !== 'td') {
+            return;
+        }
+
+        var currentRow = currentCell.parentElement;
+        if (currentRow.tagName.toLowerCase() !== 'tr' ||
+            currentRow.cells.length < 2) {
+            return;
+        }
+
+        // maintain track of selected/deselected components
+        if (currentCheckBox.checked &&
+            !this.selectedCompoentExists(currentRow)) {
+
+            var checkedComponent = {
+                'Name': currentRow.cells[1].textContent.trim(),
+                'MainComponentClass': currentRow.cells[2].textContent.trim(),
+                'ComponentClass': currentRow.cells[3].textContent.trim(),
+                'Description': currentRow.cells[4].textContent.trim()
+            };
+
+            this.selectedCompoents.push(checkedComponent);
+        }
+        else if (this.selectedCompoentExists(currentRow)) {
+            this.removeFromselectedCompoents(currentRow);
+        }
+
+        var currentTable = currentRow.parentElement;
+        if (currentTable.tagName.toLowerCase() !== 'tbody') {
+            return;
+        }
+
+        var currentComponentCell = currentRow.cells[1];
+        var currentRowStyle = currentComponentCell.className;
+
+        var currentClassList = currentRow.classList;
+        // var currentClassName = currentRow.className;
+        // var index = currentClassName.lastIndexOf(" ");
+
+        // check/uncheck all child and further child rows
+        // var styleToCheck = currentClassName + " " + currentRowStyle;
+
+        //index 1 and 2 for class names from parent row
+        var styleToCheck = currentClassList[1] + " " + currentClassList[2]+ " "+ currentRowStyle;
+        for (var i = 0; i < currentTable.rows.length; i++) {
+
+            var row = currentTable.rows[i];
+            if (row === currentRow) {
+                continue;
+            }
+
+            var rowClassList = row.classList;
+
+            //index 1 and 2 for class names inherited from parent row 
+            // rowClassList[rowClassList.length -1] is for class applied for current row
+            var rowStyleCheck = rowClassList[1] + " "+ rowClassList[2]+ " "+ rowClassList[rowClassList.length -1];
+
+            if (rowStyleCheck === styleToCheck) {
+
+                var checkBox = row.cells[0].children[0];
+                if (checkBox.checked === currentCheckBox.checked) {
+                    continue;
+                }
+
+                checkBox.checked = currentCheckBox.checked;
+                this.handleComponentCheck(checkBox);
+            }
+        }
+    }
+
     DBModelBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
         var viewerContainerData;
         if (this.conatinerId === "modelTree1") {
