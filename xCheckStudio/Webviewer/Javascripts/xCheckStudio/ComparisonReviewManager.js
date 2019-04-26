@@ -84,7 +84,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 // create column headers
                 var columnHeaders = [];
-                for (var i = 0; i < 5; i++) {
+                for (var i = 0; i < 6; i++) {
                     columnHeader = {};
                     var title;
                     if (i === 0) {
@@ -112,6 +112,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                         name = "SourceBNodeId"
                         width = "10";
                     }
+                    else if (i === 5) {
+                        title = "ID";
+                        name = "ID"
+                        width = "10";
+                    }
 
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
@@ -136,6 +141,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     tableRowContent[columnHeaders[2].name] = component.Status;
                     tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
                     tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
+                    tableRowContent[columnHeaders[5].name] = component.ID;
 
                     tableData.push(tableRowContent);
                 }
@@ -165,9 +171,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
 
 
-                // keep track of component id vs table row and status 
-                // jsGridHeaderTableIndex = 0 
-                // jsGridTbodyTableIndex = 1    
+                // keep track of component id vs table row and status                
                 var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
                 var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
                 for (var j = 0; j < modelBrowserDataRows.length; j++) {
@@ -1037,8 +1041,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     .append($("<th>").width(110));
 
                     result = result.add($("<tr>")
-                    .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceAName))
-                    .append($("<th>").attr("colspan", 2).text(AnalyticsData.SourceBName)))
+                    .append($("<th>").attr("colspan", 2).text("SourceA"/*AnalyticsData.SourceAName*/))
+                    .append($("<th>").attr("colspan", 2).text("SourceB"/*AnalyticsData.SourceBName*/)))
 
 
                     var tr = $("<tr class='jsgrid-header-row'>");
@@ -1253,87 +1257,101 @@ function ComparisonReviewManager(comparisonCheckManager,
         var tableData = [];
         var columnHeaders = [];
 
-
-        for (var componentsGroupName in this.ComparisonCheckManager.CheckComponentsGroups) {
+        var componentId =  Number(row.cells[5].innerText)
+        for (var componentsGroupID in this.ComparisonCheckManager) {
 
             // get the componentgroupd corresponding to selected component 
-            var componentsGroup = this.ComparisonCheckManager.CheckComponentsGroups[componentsGroupName];
-            if (componentsGroup.ComponentClass.replace(/\s/g,'') != reviewTableId) {
+            var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
+            var componentsGroup = undefined;
+            for(var groupId in  componentsGroupList)
+            {               
+                if ( componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
+                    continue;
+                }
+
+                componentsGroup = componentsGroupList[groupId];
+            }
+            if (!componentsGroup) {
                 continue;
             }
 
-            for (var i = 0; i < componentsGroup.Components.length; i++) {
-                var component = componentsGroup.Components[i];
+            if (!(componentId in componentsGroup.CheckComponents)) {
+                continue;
+            }
+            var component = componentsGroup.CheckComponents[componentId];
+
+            // for (var componentId in componentsGroup.CheckComponents) {
+            //     var component = componentsGroup.Components[i];
               
                 // var source1NodeIdCell = row.getElementsByTagName("td")[3];
                 // var source2NodeIdCell = row.getElementsByTagName("td")[4];
 
-                if (row.cells[2].innerText.toLowerCase() === 'no match') {
+                // if (row.cells[2].innerText.toLowerCase() === 'no match') {
 
-                    if (this.SourceAViewerData !== undefined && 
-                        row.getElementsByTagName("td")[0].innerText !="") {
-                        var source1NodeIdCell = row.getElementsByTagName("td")[3];
-                        if (component.SourceANodeId !== Number(source1NodeIdCell.innerText)) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceBViewerData !== undefined&& 
-                        row.getElementsByTagName("td")[1].innerText !="") {
-                        var source2NodeIdCell = row.getElementsByTagName("td")[4];
-                        if (component.SourceBNodeId !== Number(source2NodeIdCell.innerText)) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceAProperties !== undefined) {
-                        var source1NameCell = row.getElementsByTagName("td")[0];
-                        if (component.SourceAName !== source1NameCell.innerText) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceBProperties !== undefined) {
-                        var source2NameCell = row.getElementsByTagName("td")[1];
-                        if (component.SourceBName !== source2NameCell.innerText) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
-                }
-                else {
+                //     if (this.SourceAViewerData !== undefined && 
+                //         row.getElementsByTagName("td")[0].innerText !="") {
+                //         var source1NodeIdCell = row.getElementsByTagName("td")[3];
+                //         if (component.SourceANodeId !== Number(source1NodeIdCell.innerText)) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceBViewerData !== undefined&& 
+                //         row.getElementsByTagName("td")[1].innerText !="") {
+                //         var source2NodeIdCell = row.getElementsByTagName("td")[4];
+                //         if (component.SourceBNodeId !== Number(source2NodeIdCell.innerText)) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceAProperties !== undefined) {
+                //         var source1NameCell = row.getElementsByTagName("td")[0];
+                //         if (component.SourceAName !== source1NameCell.innerText) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceBProperties !== undefined) {
+                //         var source2NameCell = row.getElementsByTagName("td")[1];
+                //         if (component.SourceBName !== source2NameCell.innerText) {
+                //             continue;
+                //         }
+                //     }
+                //     else {
+                //         continue;
+                //     }
+                // }
+                // else {
 
-                    if (this.SourceAViewerData !== undefined &&
-                        this.SourceBViewerData !== undefined) {
-                        if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
-                            component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceAViewerData !== undefined &&
-                        this.SourceBProperties !== undefined) {
-                        if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
-                            component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceAProperties !== undefined &&
-                        this.SourceBViewerData !== undefined) {
-                        if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
-                            component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
-                            continue;
-                        }
-                    }
-                    else if (this.SourceAProperties !== undefined &&
-                        this.SourceBProperties !== undefined) {
-                        if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
-                            component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
-                }
+                //     if (this.SourceAViewerData !== undefined &&
+                //         this.SourceBViewerData !== undefined) {
+                //         if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
+                //             component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceAViewerData !== undefined &&
+                //         this.SourceBProperties !== undefined) {
+                //         if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
+                //             component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceAProperties !== undefined &&
+                //         this.SourceBViewerData !== undefined) {
+                //         if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
+                //             component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
+                //             continue;
+                //         }
+                //     }
+                //     else if (this.SourceAProperties !== undefined &&
+                //         this.SourceBProperties !== undefined) {
+                //         if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
+                //             component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
+                //             continue;
+                //         }
+                //     }
+                //     else {
+                //         continue;
+                //     }
+                // }
 
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
@@ -1376,42 +1394,42 @@ function ComparisonReviewManager(comparisonCheckManager,
                 // show component class name as property in detailed review table    
 
                 var property;
-                if (component.Status.toLowerCase() === "no match") {
-                    if (component.SourceAName !== "") {
-                        property = new CheckProperty("ComponentClass",
-                            component.SubComponentClass,
-                            "",
-                            "",
-                            "No Match",
-                            true,
-                            "No Match");
-                    }
-                    else if (component.SourceBName !== "") {
-                        property = new CheckProperty("",
-                            "",
-                            "ComponentClass",
-                            component.SubComponentClass,
-                            "No Match",
-                            true,
-                            "No Match");
-                    }
-                }
-                else {
-                    property = new CheckProperty("ComponentClass",
-                        component.SubComponentClass,
-                        "ComponentClass",
-                        component.SubComponentClass,
-                        "",
-                        true,
-                        "Match");
-                }
-                this.detailedReviewRowComments[0] = property.Description;
+                // if (component.Status.toLowerCase() === "no match") {
+                //     if (component.SourceAName !== "") {
+                //         property = new CheckProperty("ComponentClass",
+                //             component.SubComponentClass,
+                //             "",
+                //             "",
+                //             "No Match",
+                //             true,
+                //             "No Match");
+                //     }
+                //     else if (component.SourceBName !== "") {
+                //         property = new CheckProperty("",
+                //             "",
+                //             "ComponentClass",
+                //             component.SubComponentClass,
+                //             "No Match",
+                //             true,
+                //             "No Match");
+                //     }
+                // }
+                // else {
+                //     property = new CheckProperty("ComponentClass",
+                //         component.SubComponentClass,
+                //         "ComponentClass",
+                //         component.SubComponentClass,
+                //         "",
+                //         true,
+                //         "Match");
+                // }
+                // this.detailedReviewRowComments[0] = property.Description;
 
-                tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-                tableData.push(tableRowContent);
+                // tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
+                // tableData.push(tableRowContent);
 
-                for (var j = 0; j < component.CheckProperties.length; j++) {
-                    property = component.CheckProperties[j];
+                for (var propertyId in component.properties) {
+                     property = component.properties[propertyId];
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
 
                     this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
@@ -1449,8 +1467,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                 modelBrowserDataTable.style.width = "579px";
                 modelBrowserDataTable.style.margin = "52px 0px 0px 0px"
 
-                break;
-            }
+            //     break;
+            // }
         }
     }
 

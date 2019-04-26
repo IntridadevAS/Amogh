@@ -17,6 +17,22 @@ if(count($checkCaseElements)< 0 )
     return;
 }
 
+$ComplianceCheckRulesArray = array(
+    "None"=> "1",
+    "Must_Have_Value"=> "2",
+    "Should_Start_With"=> "3",
+    "Should_Contain"=>"4",
+    "Should_Be_Number" =>"5",
+    "Equal_To"=>"6",
+    "Should_End_With"=>"7",
+    "Should_Not_Start_With"=>"8",
+    "Should_Not_End_With"=>"9",
+    "Should_Not_Contain"=>"10",
+    "Not_Equal_To"=>"11",
+    "Should_Not_Be_Number"=>"12",
+    "Should_Be_Text"=>"13",
+    "Should_Not_Be_Text"=>"14");
+
 $checkCaseElement = $checkCaseElements[0];
 
 // CheckCase object
@@ -112,6 +128,7 @@ foreach($checkTypeElements as $checkTypeElement)
                                                                         $severity,
                                                                         $rule,
                                                                         $comment);
+                //var_dump($checkCaseMappingProperty);
                 
                 $checkCaseComponentClass->addMappingProperty($checkCaseMappingProperty);
             }
@@ -205,24 +222,8 @@ class CheckCaseComponentClass{
         }
 }
 
-$ComplianceCheckRulesArray = array(
-    "None"=> "1",
-    "Must_Have_Value"=> "2",
-    "Should_Start_With"=> "3",
-    "Should_Contain"=>"4",
-    "Should_Be_Number" =>"5",
-    "Equal_To"=>"6",
-    "Should_End_With"=>"7",
-    "Should_Not_Start_With"=>"8",
-    "Should_Not_End_With"=>"9",
-    "Should_Not_Contain"=>"10",
-    "Not_Equal_To"=>"11",
-    "Should_Not_Be_Number"=>"12",
-    "Should_Be_Text"=>"13",
-    "Should_Not_Be_Text"=>"14",
-);
-
-class CheckCaseMappingProperty{
+class CheckCaseMappingProperty
+{
 
     var $SourceAName;
     var $SourceBName;
@@ -231,59 +232,76 @@ class CheckCaseMappingProperty{
     var $Comment ;
     var $Rule;
 
-    function __construct( $sourceAName, $sourceBName, $severity, $ruleString, $comment) 
+    public  function __construct( $sourceAName, $sourceBName, $severity, $ruleString, $comment) 
         {
-            global $ComplianceCheckRulesArray;
+            global $ComplianceCheckRulesArray;          
+  
             $this->SourceAName = $sourceAName;
             $this->SourceBName = $sourceBName;
             $this->Severity = $severity;
             $this->RuleString = $ruleString;
             $this->Comment = $comment;
             if($this->RuleString)
-            {
-                if ($ruleString == NULL) {
+            {               
+
+                if ($ruleString == NULL) 
+                {                  
                     $this->Rule = $ComplianceCheckRulesArray['None'];
                 }
-                else if (strtolower($ruleString) === "must have value") {
-                   $this->Rule =  $ComplianceCheckRulesArray['Must_Have_Value'];
+                else if (strtolower($ruleString) === "must have value") 
+                {
+                     $this->Rule = $ComplianceCheckRulesArray['Must_Have_Value'];
                 }
-                else if (strtolower($ruleString) === "should be number") {
-                   $this->Rule = $ComplianceCheckRulesArray['Should_Be_Number'];
+                else if (strtolower($ruleString) === "should be number") 
+                {
+                   $this->Rule =$ComplianceCheckRulesArray['Should_Be_Number'];
                 }
-                else if (strtolower($ruleString) === "should not be number") {
+                else if (strtolower($ruleString) === "should not be number") 
+                {
                    $this->Rule = $ComplianceCheckRulesArray['Should_Not_Be_Number'];
                 }
-                else if (strtolower($ruleString) === "should be text") {
+                else if (strtolower($ruleString) === "should be text") 
+                {
                    $this->Rule = $ComplianceCheckRulesArray['Should_Be_Text'];
                 }
-                else if (strtolower($ruleString) === "should not be text") {
+                else if (strtolower($ruleString) === "should not be text") 
+                {
                    $this->Rule = $ComplianceCheckRulesArray['Should_Not_Be_Text'];
                 }
-                else {
+                else 
+                {
                     $ruleArray = explode("-",$ruleString);
-                    if (strtolower($ruleArray[0]) === "should start with") {
+                    if (strtolower($ruleArray[0]) === "should start with") 
+                    {
                        $this->Rule = $ComplianceCheckRulesArray['Should_Start_With'];
                     }
-                    else if (strtolower($ruleArray[0]) === "should contain") {
+                    else if (strtolower($ruleArray[0]) === "should contain") 
+                    {
                        $this->Rule = $ComplianceCheckRulesArray['Should_Contain'];
                     }
-                    else if (strtolower($ruleArray[0]) === "equal to") {
+                    else if (strtolower($ruleArray[0]) === "equal to") 
+                    {
                        $this->Rule = $ComplianceCheckRulesArray['Equal_To'];
                     }
-                    else if (strtolower($ruleArray[0]) === "should end with") {
+                    else if (strtolower($ruleArray[0]) === "should end with") 
+                    {
                        $this->Rule = $ComplianceCheckRulesArray['Should_End_With'];
                     }
-                    else if (strtolower($ruleArray[0]) === "should not start with") {
+                    else if (strtolower($ruleArray[0]) === "should not start with") 
+                    {
                        $this->Rule = $ComplianceCheckRulesArray['Should_Not_Start_With'];
                     }
-                    else if (strtolower($ruleArray[0]) === "should not end with") {
-                       $this->Rule = $ComplianceCheckRulesArray['Should_Not_End_With'];
+                    else if (strtolower($ruleArray[0]) === "should not end with") 
+                    {
+                       $this->Rule =$ComplianceCheckRulesArray['Should_Not_End_With'];
                     }
-                    else if (strtolower($ruleArray[0]) === "should not contain") {
-                       $this->Rule = $ComplianceCheckRulesArray['Should_Not_Contain'];
+                    else if (strtolower($ruleArray[0]) === "should not contain") 
+                    {
+                       $this->Rule =$ComplianceCheckRulesArray['Should_Not_Contain'];
                     }
-                    else if (strtolower($ruleArray[0]) === "not equal to") {
-                       $this->Rule = $ComplianceCheckRulesArray['Not_Equal_To'];
+                    else if (strtolower($ruleArray[0]) === "not equal to") 
+                    {
+                       $this->Rule =$ComplianceCheckRulesArray['Not_Equal_To'];
                     }
                 }
             }

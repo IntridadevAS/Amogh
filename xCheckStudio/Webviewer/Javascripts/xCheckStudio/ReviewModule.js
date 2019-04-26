@@ -51,14 +51,12 @@ function populateCheckResults(comparisonCheckGroups,
 
             if (sourceAComplianceCheckGroups) {
                 loadSourceAComplianceData(sourceAComplianceCheckGroups,
-                    viewerOptions,
-                    "SourceAComplianceMainReviewCell",
-                    "SourceAComplianceDetailedReviewCell",
-                    "SourceAComplianceDetailedReviewComment");
+                    viewerOptions);
             }
 
             if (sourceBComplianceCheckGroups) {
-                loadSourceBComplianceData(sourceBComplianceCheckGroups, viewerOptions);
+                loadSourceBComplianceData(sourceBComplianceCheckGroups, 
+                                          viewerOptions);
             }
 
             // make buttons collapsible

@@ -38,7 +38,7 @@
                 "Not_Equal_To"=>"11",
                 "Should_Not_Be_Number"=>"12",
                 "Should_Be_Text"=>"13",
-                "Should_Not_Be_Text"=>"14",
+                "Should_Not_Be_Text"=>"14"
             );
     
         $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
@@ -342,10 +342,10 @@
             return NULL;
         }
 
-        function startsWith($haystack, $needle) {
+        function startsWith($stringValue, $subString) {
             // search backwards starting from haystack length characters from the end
-            return $needle === ''
-              || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+            return $subString === ''
+              || strrpos($stringValue, $subString, -strlen($stringValue)) !== false;
         }
         
         function endsWith($value,$postfix,$case=true) {
@@ -354,60 +354,99 @@
         }
         
         function checkComplianceRule($checkCaseMappingProperty, $propertyValue)
-        {
+        {          
             global $ComplianceCheckRulesArray;
             $result = true;  
+           
             if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['None'])
             {
-                
+               
             }
-            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Must_Have_Value']){
-                if($propertyValue === NULL || empty($propertyValue))
+            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Must_Have_Value'])
+            {
+                if($propertyValue == NULL ||  empty($propertyValue))
                 {
-                    $result = 0;
+                    $result = false;
                 }
             }
-            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Be_Number']){
-                if($propertyValue == NULL || empty($propertyValue))
+            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Be_Number'])
+            {               
+                if($propertyValue == NULL ||
+                   $propertyValue == "" ||
+                   !is_numeric($propertyValue) )
                 {
-                    $result = 0;
+                    $result = false;
                 }
             }
-            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Not_Be_Number']){
-                if($propertyValue == NULL || empty($propertyValue))
+            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Not_Be_Number'])
+            {
+                if(is_numeric($propertyValue) )
                 {
-                    $result = 0;
-                }
+                    $result = false;
+                }               
             }
-            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Be_Text']){
-                if($propertyValue == NULL || empty($propertyValue))
+            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Be_Text'])
+            {              
+                if ($propertyValue == NULL ||
+                    $propertyValue == ""  ||
+                    is_numeric($propertyValue))
                 {
-                    $result = 0;
-                }
+                    $result = false;
+                }               
             }
-            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Not_Be_Text']){
-                if($propertyValue == NULL || empty($propertyValue))
+            else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Not_Be_Text'])
+            {
+                if ($propertyValue != NULL  &&
+                    !is_numeric($propertyValue))
                 {
-                    $result = 0;
-                }
+                    $result = false;
+                }                
             }
             else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Start_With']){
-                if($propertyValue == NULL || empty($propertyValue))
+                if($propertyValue == NULL )
                 {
-                    $result = 0;
+                    $result = false;
+                }
+                else
+                {
+                    $ruleArray = explode("-", $checkCaseMappingProperty['RuleString']);
+                    if(count($ruleArray) < 2)
+                    {
+                        $result = false;
+                    }
+                    else{
+                        $prefix = $ruleArray[1];
+                        $result = startsWith($propertyValue, $prefix);
+                    }
                 }
             }
             else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Should_Contain']){
-                if($propertyValue == NULL || empty($propertyValue))
+                if($propertyValue == NULL)
                 {
-                    $result = 0;
+                    $result = false;
+                }
+                else
+                {
+                    $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
+                    if(count($ruleArray) < 2)
+                    {
+                        $result = false;
+                    }
+                    else
+                    {
+                        $prefix = $ruleArray[1];
+                        if(strpos($propertyValue, $prefix) === false)
+                        {
+                            $result = false;
+                        }                    
+                    }                
                 }
             }
             else if($checkCaseMappingProperty['Rule'] == $ComplianceCheckRulesArray['Equal_To']){
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $prefix = $ruleArray[1];
@@ -418,7 +457,7 @@
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $prefix = $ruleArray[1];
@@ -429,7 +468,7 @@
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $prefix = $ruleArray[1];
@@ -440,7 +479,7 @@
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $prefix = $ruleArray[1];
@@ -451,14 +490,14 @@
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $substring = $ruleArray[1];
                 
                     if(strpos($propertyValue, $substring) != false)
                     {
-                        $result = 0;
+                        $result = false;
                     }
                 }
             }
@@ -466,7 +505,7 @@
                 $ruleArray = explode("-",$checkCaseMappingProperty['RuleString']);
                 if(count($ruleArray) < 2)
                 {
-                    $result = 0;
+                    $result = false;
                 }
                 else{
                     $subString = $ruleArray[1];
@@ -604,7 +643,7 @@
                                                             $performCheck,
                                                             $checkCaseMappingProperty['Comment']);
                         $checkProperty->Result = $result;
-        
+                     
                         $checkComponent->AddCheckProperty($checkProperty);
                     }
                 }

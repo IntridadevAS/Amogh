@@ -1,11 +1,5 @@
 <?php
-        include 'Utility.php';
-
-        // if(!isset($_POST['ResultType']))
-        // {
-        //     echo 'fail';
-        //     return;    
-        // }
+        include 'Utility.php';       
 
         session_start();
             
@@ -43,34 +37,11 @@
 
         if($sourceBComplianceResult != NULL)
         {
-            $results['SourceBCompliance'] = $sourceAComplianceResult;
+            $results['SourceBCompliance'] = $sourceBComplianceResult;
         }
 
         echo json_encode($results);
-
-        //$ResultType = $_POST['ResultType'];
-        // if($ResultType == 'Comparison')
-        // {
-        //     readComparisonCheckData();
-        // }
-        // else if($ResultType == 'SourceACompliance')
-        // {
-        //     readComplianceCheckData('SourceAComplianceCheckGroups',
-        //                             'SourceAComplianceCheckComponents',
-        //                             'SourceAComplianceCheckProperties');
-        // }
-        // else if($ResultType == 'SourceBCompliance')
-        // {
-        //     readComplianceCheckData('SourceBComplianceCheckGroups',
-        //                             'SourceBComplianceCheckComponents',
-        //                             'SourceBComplianceCheckProperties');
-        // }
-        // else
-        // {
-        //     echo 'fail';
-        //     return;              
-        // }	
-
+        
         function readComplianceCheckData($checkGroupTable,
                                          $CheckComponentsTable,
                                          $CheckPropertiesTable)
@@ -91,15 +62,7 @@
                                             $checkGroupTable,
                                             $CheckComponentsTable,
                                             $CheckPropertiesTable);
-                // if(result == N)
-                // {
-                //     //echo "success"; 
-                // }
-                // else 
-                // {
-                //     echo "fail"; 
-                // }
-
+             
                 // commit update
                 $dbh->commit();
                 $dbh = null; //This is how you close a PDO connection
@@ -131,15 +94,7 @@
 
                 // get comparison check data
                 $result = readComparisonCheckResults($dbh);
-                // if(readComparisonCheckResults($dbh))
-                // {
-                //     //echo "success"; 
-                // }
-                // else 
-                // {
-                //     echo "fail"; 
-                // }
-
+                
                 // commit update
                 $dbh->commit();
                 $dbh = null; //This is how you close a PDO connection
@@ -161,9 +116,7 @@
                                             $CheckPropertiesTable)
         {
             $complianceComponentGroups = array();
-            // $complianceComponents = array();
-            // $complianceProperties = array();
-
+           
             // read components groups
             $checkGroupResults = $dbh->query("SELECT *FROM $checkGroupTable;");
             if($checkGroupResults) 

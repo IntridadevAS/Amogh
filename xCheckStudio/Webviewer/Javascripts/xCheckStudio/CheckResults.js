@@ -106,8 +106,21 @@ function Component(id,
             {
                 sourceAName = propertyData.sourceAName;
                 sourceBName = propertyData.sourceBName;
-                sourceANodeId = propertyData.sourceAValue;
-                sourceBNodeId = propertyData.sourceBValue;
+                sourceAValue = propertyData.sourceAValue;
+                sourceBValue = propertyData.sourceBValue;
+            }
+
+            // parse bool values
+            var performCheck = false;            
+            if(propertyData.performCheck =="1")
+            {
+                performCheck = true;
+            }
+
+            var result = false;
+            if(propertyData.result =="1")
+            {
+                result = true;
             }
 
             var property = new Property(propertyData.id,
@@ -115,9 +128,9 @@ function Component(id,
                                         sourceBName,
                                         sourceAValue,
                                         sourceBValue,
-                                        propertyData.result,
+                                        result,
                                         propertyData.severity,
-                                        propertyData.performCheck,
+                                        performCheck,
                                         propertyData.description) ;
 
             this.properties.push(property);
