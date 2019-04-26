@@ -407,8 +407,12 @@ var xCheckStudio;
                 return this._modelTree;
             }
             else if (this.excelReader !== undefined &&
-                this.excelReader.excelModelBrowser !== undefined) {
+                this.excelReader.excelModelBrowser !== undefined && this.excelReader.SourceType == "xls") {
                 return this.excelReader.excelModelBrowser;
+            }
+            else if (this.db_reader !== undefined &&
+                this.db_reader.dbmodelbrowser !== undefined && this.db_reader.SourceType == "ibd") {
+                return this.db_reader.dbmodelbrowser;
             }
 
             return undefined;
