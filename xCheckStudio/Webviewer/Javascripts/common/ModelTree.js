@@ -170,11 +170,12 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) {
+            ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) 
+            {
                 var _this = this;
 
                 var model = this._viewer.model;
-                var componentName = model.getNodeName(nodeId);
+                //var componentName = model.getNodeName(nodeId);
                 if (styleList !== undefined) {
                     // row.classList = styleList;
                     _this.NodeIdVsRowClassList[nodeId] = styleList;
@@ -183,52 +184,51 @@ var xCheckStudio;
                 //add node properties to model browser table
                 var nodeData;
                 if (this._viewer._params.containerId === "viewerContainer1") {
-                    nodeData = xCheckStudioInterface1.nodeIdVsComponentData[nodeId];
+                    nodeData = xCheckStudioInterface1.sourceProperties[nodeId];
                 }
                 else if (this._viewer._params.containerId === "viewerContainer2") {
-                    nodeData = xCheckStudioInterface2.nodeIdVsComponentData[nodeId];
+                    nodeData = xCheckStudioInterface2.sourceProperties[nodeId];
                 }
 
-                tableRowContent = {};
-              
-                if (nodeData != undefined) {
+                if (nodeData == undefined) 
+                {
+                    return;
+                }
 
+                tableRowContent = {};              
+                // if (nodeData != undefined) 
+                // {
                     var checkBox = document.createElement("INPUT");
-                checkBox.setAttribute("type", "checkbox");
-                checkBox.checked = false;
+                    checkBox.setAttribute("type", "checkbox");
+                    checkBox.checked = false;
 
-                tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
+                    tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
 
-                // select component check box state change event
-                checkBox.onchange = function () {
-                    _this.handleComponentCheck(this);
-                }
+                    // select component check box state change event
+                    checkBox.onchange = function () 
+                    {
+                        _this.handleComponentCheck(this);
+                    }
 
                     tableRowContent[this.modelTreeColumnHeaders[1].name] = nodeData.Name;
                     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
-                    if (isAssemblyNodeType) {
-                        if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
+                    if (isAssemblyNodeType) 
+                    {
+                        if (this.NodeGroups.indexOf(componentStyleClass) === -1)
+                         {
                             this.NodeIdVsCellClassList[nodeData.NodeId]  = componentStyleClass;
                         }
                     }
 
                     tableRowContent[this.modelTreeColumnHeaders[2].name] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-
                     tableRowContent[this.modelTreeColumnHeaders[3].name] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-
-                    // // extra cells for row item identification
-                    // tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.Source != undefined ? nodeData.Source : "");
-
-                    // tableRowContent[this.modelTreeColumnHeaders[5].name] = (nodeData.Destination != undefined ? nodeData.Destination : "");
-
-                    // tableRowContent[this.modelTreeColumnHeaders[6].name] = (nodeData.OwnerId != undefined ? nodeData.OwnerId : nodeData.OwnerHandle != undefined ? nodeData.OwnerHandle : "");
-
                     tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
-                }
-                 else {
-                     return;            
+                // }
+                //  else 
+                //  {
+                //      return;            
                     
-                 }
+                //  }
 
                 this.modelTreeRowData.push(tableRowContent);
 
@@ -252,10 +252,7 @@ var xCheckStudio;
                     var component = this.selectedCompoents[i];
                     if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                         component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-                        component['ComponentClass'] === componentRow.cells[3].textContent.trim() /*&&                      
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegSourceProperty] == componentRow.cells[4].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegDestinationProperty] == componentRow.cells[5].textContent.trim() &&
-                        component[xCheckStudio.ComponentIdentificationManager.XMLPipingNWSegOwnerProperty] == componentRow.cells[6].textContent.trim()*/) {
+                        component['ComponentClass'] === componentRow.cells[3].textContent.trim() ) {
                         if ("NodeId" in component) {
                             if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
                                 return true;
@@ -511,13 +508,15 @@ var xCheckStudio;
                 return componentStyleClass;
             }
 
-            ModelTree.prototype.addModelBrowser = function (nodeId, styleList) {
+            ModelTree.prototype.addModelBrowser = function (nodeId, styleList) 
+            {
                 this.addModelBrowserComponent(nodeId, styleList);
 
                 if (this.modelTreeColumnHeaders === undefined ||
                     this.modelTreeColumnHeaders.length === 0 ||
                     this.modelTreeRowData === undefined ||
-                    this.modelTreeRowData.length === 0) {
+                    this.modelTreeRowData.length === 0) 
+                {
                     return;
                 }
 
@@ -553,13 +552,15 @@ var xCheckStudio;
                 modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
             };
 
-            ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
+            ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) 
+            {
                 
                 if (nodeId !== null) {
                     var model = this._viewer.model;
                     var children = model.getNodeChildren(nodeId);
 
-                    if (children.length > 0) {
+                    if (children.length > 0) 
+                    {
                         var componentName = model.getNodeName(nodeId);
 
                         var componentStyleClass = this.getComponentstyleClass(componentName);
@@ -568,16 +569,20 @@ var xCheckStudio;
 
                         this.addComponentRow(nodeId, styleList, componentStyleClass);
 
-                        for (var _i = 0, children_1 = children; _i < children_1.length; _i++) {
+                        for (var _i = 0, children_1 = children; _i < children_1.length; _i++)
+                         {
                             var child = children_1[_i];
 
                             var collapsibleCellStyle;
-                            if (styleList !== undefined) {
+                            if (styleList !== undefined) 
+                            {
                                 collapsibleCellStyle = styleList + " " + componentStyleClass;
                             }
-                            else {
+                            else 
+                            {
                                 collapsibleCellStyle = componentStyleClass;
                             }
+
                             collapsibleCellStyle = collapsibleCellStyle.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
                             this.addModelBrowserComponent(child, collapsibleCellStyle);
                         }
@@ -867,40 +872,26 @@ var xCheckStudio;
             }
 
 
-            ModelTree.prototype.HighlightModelBrowserRow = function (componentIdentifier) {
+            ModelTree.prototype.HighlightModelBrowserRow = function (selectedNodeId)
+            {
                 // if (checkManager != undefined) {
                 var modelBrowser = document.getElementById(this._elementId);
-                var modelBrowserHeader = modelBrowser.children[0];
+               // var modelBrowserHeader = modelBrowser.children[0];
                 var modelBrowserRowTable = modelBrowser.children[1].getElementsByTagName("table")[0];
                 var browserTableRows = modelBrowserRowTable.getElementsByTagName("tr");
-                for (var i = 0; i < browserTableRows.length; i++) {
+                for (var i = 0; i < browserTableRows.length; i++) 
+                {
                     var childRow = browserTableRows[i];
                     var childRowColumns = childRow.cells;
-                    var rowIdentifier = childRowColumns[modelBrowserComponentColumn].innerText;
-                    /*
-                    add comment
-                    */
-                    rowIdentifier = rowIdentifier.trim();
-                    if (childRowColumns.length > 0) {
-                        // if (childRowColumns[2].innerText.trim() === "PipingNetworkSegment") {
-                        //     for (var j = 1; j < childRowColumns.length; j++) {
-                        //         if ((j == modelBrowserSourceColumn || j == modelBrowserDestinationColumn || j == modelBrowserOwnerColumn) && 
-                        //              childRowColumns[j].innerText != undefined) {
-                                    
-                        //             inner_Text = (childRowColumns[j].innerText);
-                        //             inner_Text = inner_Text.trim();
-                        //             if(inner_Text === "")
-                        //             {
-                        //                 inner_Text = "undefined"
-                        //             }
-                        //             rowIdentifier += "_" + inner_Text;
-                        //         }
-                        //     }
-                        // }
-                       
-
-                        if (componentIdentifier === rowIdentifier) {
-                            if (this.SelectedComponentRow) {
+                    var nodeIdString = childRowColumns[modelBrowserNodeIdColumn].innerText;
+                    
+                    var nodeId = parseInt(nodeIdString.trim());
+                    if (childRowColumns.length > 0) 
+                    {                                              
+                        if (selectedNodeId === nodeId) 
+                        {
+                            if (this.SelectedComponentRow) 
+                            {
                                 this.RestoreBackgroundColor(this.SelectedComponentRow);
                             }
 
@@ -914,7 +905,6 @@ var xCheckStudio;
                             modelBrowserRowTable.parentElement.parentElement.scrollTop = childRow.offsetTop - childRow.offsetHeight;        
                             break;
                         }
-
                     }
 
                 }

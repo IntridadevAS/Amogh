@@ -86,10 +86,10 @@
               )';         
              $dbh->exec($command);     
 
-             //$qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';           
-             //$values = array();
-
-        for ($i = 0; $i < count($ComponentsList); $i++) {
+             
+             $nodeIdvsComponentIdList = NULL;
+            for ($i = 0; $i < count($ComponentsList); $i++) 
+            {
                 $component = $ComponentsList[$i];
 
                 $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES(?,?,?,?,?,?) ';    
@@ -107,12 +107,16 @@
                 // get component id for recently added row
                 $qry = 'SELECT id FROM '.$componentsTableName. ' where rowid='.$dbh->lastInsertId();                
                 $stmt =  $dbh->query($qry); 
-                $componentId;
+                $componentId = NULL;
                 while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
                 {
                     $componentId = $row['id'];
                     break;                    
                 }                 
+                if( $componentId == NULL)
+                {
+                    continue;
+                }
 
                 // add properties to DB
                 for ($j = 0; $j < count($component->properties); $j++) 
@@ -128,66 +132,17 @@
                     
                     $stmt = $dbh->prepare($insertPropertyQuery);                    
                     $stmt->execute($propertyValues);   
-                }     
-
-                ////////////////////////////////////////////
-                // $qry .= "(?,?,?,?,?,?), ";
+                } 
                 
-                // $name = $component->Name;
-                // $mainComponentClass = $component->MainComponentClass;
-                // $subComponentClass = $component->SubComponentClass;
-                // $nodeId = $component->NodeId;
-                // $parentNodeId = $component->ParentNodeId;
-
-                // $values2 = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId);
-                // $values = array_merge($values,$values2);
-
-                // // insert 150 records at once
-                // // otherwose pdo fails to prepare query
-                // if($i%150 ==0 ||  $i == count($ComponentsList)-1)
-                // {
-                //     $qry = substr($qry, 0, strlen($qry)-2);       
-                //     $stmt = $dbh->prepare($qry);
-                //     $stmt->execute($values);   
-
-                //     // reset query string and values array
-                //     $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';
-                //     $values = array();
-                // }  
-                
-                // // add properties to DB
-                // $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name, format, value,  ownercomponent) VALUES ';
-                // $propertyValues = array();
-                // for ($j = 0; $j < count($component->properties); $j++) {
-                //     $property = $component->properties[$j];
-                   
-                //     $name = $property->Name;
-                //     $format = $property->Format;
-                //     $value = $property->Value;
-                   
-                //     $insertPropertyQuery .= "(?,?,?,?), ";
-                //     $values2 = array($name,  $format, $value,  $nodeId);
-                //     $propertyValues = array_merge($propertyValues, $values2);                  
-                 
-                // }
-
-                // if( count($propertyValues) == 150 || count($ComponentsList)-1)
-                // {
-                //     $insertPropertyQuery = substr($insertPropertyQuery, 0, strlen($insertPropertyQuery)-2); 
-                //     $stmt = $dbh->prepare($insertPropertyQuery);                    
-                //     $stmt->execute($propertyValues);   
-
-                //     // reset query string and values array
-                //     $insertPropertyQuery = 'INSERT INTO '.  $propertiesTableName.'(name,  format, value, ownercomponent) VALUES ';
-                //     $propertyValues = array();
-                // }
+                // keep track of Node id vs component id
+                $nodeIdvsComponentIdList[$nodeId]= (int)$componentId ;
             }          
             
             // commit update
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection
                 
-            echo 'success';               
+            echo json_encode($nodeIdvsComponentIdList);               
             return;
         }
         catch(Exception $e) {        

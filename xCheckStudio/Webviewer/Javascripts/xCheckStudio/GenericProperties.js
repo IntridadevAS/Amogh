@@ -8,14 +8,12 @@ function GenericComponent(name,
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
     this.ParentNodeId = parentNodeId;
-    // this.Source = source;
-    // this.Destination = destination;
-    // this.OwnerId = ownerId;
+   
     
     this.NodeId = nodeId;
+   
+    this.ID = undefined;
 
-    //this.OwnerHandle = ownerHandle;
-    
     this.properties=[];
     GenericComponent.prototype.addProperty = function(genericProperty)
     {
