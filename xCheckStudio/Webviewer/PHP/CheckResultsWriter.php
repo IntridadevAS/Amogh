@@ -1,5 +1,6 @@
 <?php
 
+
     function writeComplianceResultToDB($checkGroupsTable, 
                                        $checkComponentsTable,
                                        $checkPropertiesTable)

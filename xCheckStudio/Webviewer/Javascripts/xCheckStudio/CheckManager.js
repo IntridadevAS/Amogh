@@ -13,7 +13,8 @@ function CheckManager(name) {
     this.SourceBNotMatchedComponents = [];
 
 
-    CheckManager.prototype.restore = function (checkManagerData) {
+    CheckManager.prototype.restore = function (checkManagerData)
+    {
         for (var property in checkManagerData.CheckComponentsGroups) {
             if (checkManagerData.CheckComponentsGroups.hasOwnProperty(property)) {
                 var componentGroupData = checkManagerData.CheckComponentsGroups[property];
@@ -65,16 +66,10 @@ function CheckManager(name) {
                 url: 'PHP/checkDataSourceForComparison.php',
                 type: "POST",
                 async: false,
-                data: {
-                    "SourceAProperties": JSON.stringify(sourceProperties1),
-                    "SourceBProperties": JSON.stringify(sourceProperties2),
-                    "CheckCaseType": JSON.stringify(checkCaseType),
-                    "SourceAType": xCheckStudioInterface1.SourceType,
-                    "SourceBType": xCheckStudioInterface2.SourceType,
+                data: {                    
+                    "CheckCaseType": JSON.stringify(checkCaseType),                  
                     "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
-                    "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
-                    "SourceAIdentifierProperties": JSON.stringify(sourceAIdentifierProperties),
-                    "SourceBIdentifierProperties": JSON.stringify(sourceBIdentifierProperties)
+                    "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents)
                 },
                 success: function (data) {
                     // alert("success");
@@ -105,7 +100,7 @@ function CheckManager(name) {
                     containerID = "viewerContainer2";
                 }
                 
-            }
+            }         
 
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',
@@ -115,7 +110,7 @@ function CheckManager(name) {
                         "CheckCaseType": JSON.stringify(checkCaseType),
                         /*"SourceType": interfaceObject.SourceType,*/
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
-                        "ContainerId": containerID                       
+                        "ContainerId": containerID                     
                 },
                 success: function (data) {
                     // alert("success");

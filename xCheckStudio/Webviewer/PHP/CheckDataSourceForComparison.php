@@ -4,7 +4,7 @@
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SourceASelectedCompoents'] )||
-               !isset($_POST['SourceBSelectedCompoents'] ))
+               !isset($_POST['SourceBSelectedCompoents'] ) )
             {
                 echo 'fail';
                 return;
@@ -26,7 +26,7 @@
           
             $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
             $SourceASelectedComponents = json_decode($_POST['SourceASelectedCompoents'],true);
-            $SourceBSelectedComponents = json_decode($_POST['SourceBSelectedCompoents'],true);
+            $SourceBSelectedComponents = json_decode($_POST['SourceBSelectedCompoents'],true);          
            
             $CheckComponentsGroups = array();
 
@@ -55,7 +55,7 @@
             // write not matched components to database
             writeNotMatchedComponentsToDB($SourceANotMatchedComponents, "SourceANotMatchedComponents", $projectName);
             writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, "SourceBNotMatchedComponents", $projectName);
-           
+            
             // get source components
             function getSourceComponents()
             {
