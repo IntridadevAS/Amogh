@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
        Intrida Compliance check rules keywords.
@@ -6,14 +5,285 @@
        ""
        Must have value
        Should start with-somevalue
+	   Should Not Start With-somevalue
        Should be number
+	   Should not be number
+	   Should be text
+	   Should not be text
        Equal to-somevalue
+	   Not Equal to-somevalue
        Should end with-somevalue
+	   Should Not End With-somevalue
+	   Should contain-somevalue
+	   Should not contain-somevalue
 	   
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="IFC_Compliance">
+<CheckCase name="IFC_2_IFC"> 
+    <Check type="Comparison" sourceAType="IFC" sourceBType="IFC">
+		<ComponentGroup sourceAGroupName="IFCPROJECT" sourceBGroupName="IFCPROJECT">
+		  <ComponentClass sourceAComponentClass="IFCPROJECT"  sourceBComponentClass="IFCPROJECT">
+			 <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCPROJECT/ELECTRICCURRENTUNIT" sourceBName="IFCPROJECT/ELECTRICCURRENTUNIT" severity="Error" />
+			 <Property sourceAName="IFCPROJECT/VOLTAGEUNIT" sourceBName="IFCPROJECT/VOLTAGEUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/FORCEUNIT" sourceBName="IFCPROJECT/FORCEUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/FREQUENCYUNIT" sourceBName="IFCPROJECT/FREQUENCYUNIT" severity="Error" />
+			 <Property sourceAName="IFCPROJECT/GlobalId" sourceBName="IFCPROJECT/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCPROJECT/ILLUMINANCEUNIT" sourceBName="IFCPROJECT/ILLUMINANCEUNIT" severity="Error" />
+			 <Property sourceAName="IFCPROJECT/LUMINOUSFLUXUNIT" sourceBName="IFCPROJECT/LUMINOUSFLUXUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/LUMINOUSINTENSITYUNIT" sourceBName="IFCPROJECT/LUMINOUSINTENSITYUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/LongName" sourceBName="IFCPROJECT/LongName" severity="Error"/>
+			 <Property sourceAName="IFCPROJECT/MASSUNIT" sourceBName="IFCPROJECT/MASSUNIT" severity="Error" />
+			 <Property sourceAName="IFCPROJECT/Name" sourceBName="IFCPROJECT/Name" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/POWERUNIT" sourceBName="IFCPROJECT/POWERUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/PRESSUREUNIT" sourceBName="IFCPROJECT/PRESSUREUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/Phase" sourceBName="IFCPROJECT/Phase" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/THERMODYNAMICTEMPERATUREUNIT" sourceBName="IFCPROJECT/THERMODYNAMICTEMPERATUREUNIT" severity="Error"  />
+			 <Property sourceAName="IFCPROJECT/TIMEUNIT" sourceBName="IFCPROJECT/TIMEUNIT" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName" severity="Error"  />
+			 <Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version" severity="Error"  />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error"  />
+		  </ComponentClass>
+	  </ComponentGroup>
+	  <ComponentGroup sourceAGroupName="IFCSITE" sourceBGroupName="IFCSITE">
+		  <ComponentClass sourceAComponentClass="IFCSITE"  sourceBComponentClass="IFCSITE">
+		  	<Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			<Property sourceAName="IFCSITE/CompositionType" sourceBName="IFCSITE/CompositionType"  severity="Error"/>
+			<Property sourceAName="IFCSITE/Elevation" sourceBName="IFCSITE/Elevation"  severity="Error"/>
+			<Property sourceAName="IFCSITE/GlobalId" sourceBName="IFCSITE/GlobalId"  severity="Error"/>
+			<Property sourceAName="IFCSITE/Latitude" sourceBName="IFCSITE/Latitude"  severity="Error"/>
+			<Property sourceAName="IFCSITE/Longitude" sourceBName="IFCSITE/Longitude"  severity="Error"/>
+			<Property sourceAName="IFCSITE/Name" sourceBName="IFCSITE/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCBUILDING" sourceBGroupName="IFCBUILDING">
+		  <ComponentClass sourceAComponentClass="IFCBUILDING"  sourceBComponentClass="IFCBUILDING">
+		  	 <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCBUILDING/CompositionType" sourceBName="IFCBUILDING/CompositionType" severity="Error" />
+			 <Property sourceAName="IFCBUILDING/GlobalId" sourceBName="IFCBUILDING/GlobalId" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_BuildingCommon/IsLandmarked" sourceBName="Pset_BuildingCommon/IsLandmarked" severity="Error" />
+			 <Property sourceAName="Pset_BuildingCommon/NumberOfStoreys" sourceBName="Pset_BuildingCommon/NumberOfStoreys" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCBUILDINGSTOREY" sourceBGroupName="IFCBUILDINGSTOREY">
+		  <ComponentClass sourceAComponentClass="IFCBUILDINGSTOREY"  sourceBComponentClass="IFCBUILDINGSTOREY">
+		      <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCBUILDINGSTOREY/CompositionType" sourceBName="IFCBUILDINGSTOREY/CompositionType" severity="Error" />
+			 <Property sourceAName="IFCBUILDINGSTOREY/Elevation" sourceBName="IFCBUILDINGSTOREY/Elevation" severity="Error" />
+			 <Property sourceAName="IFCBUILDINGSTOREY/GlobalId" sourceBName="IFCBUILDINGSTOREY/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCBUILDINGSTOREY/Name" sourceBName="IFCBUILDINGSTOREY/Name" severity="Error" />
+			 <Property sourceAName="IFCBUILDINGSTOREY/ObjectType" sourceBName="IFCBUILDINGSTOREY/ObjectType" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_AirSideSystemInformation/Name" sourceBName="Pset_AirSideSystemInformation/Name" severity="Error" />
+			 <Property sourceAName="Pset_BuildingStoreyCommon/AboveGround" sourceBName="Pset_BuildingStoreyCommon/AboveGround" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Name" sourceBName="Pset_ProductRequirements/Name" severity="Error" />			 
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCWALLSTANDARDCASE" sourceBGroupName="IFCWALLSTANDARDCASE">
+		  <ComponentClass sourceAComponentClass="IFCWALLSTANDARDCASE"  sourceBComponentClass="IFCWALLSTANDARDCASE">
+		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCWALLSTANDARDCASE/GlobalId" sourceBName="IFCWALLSTANDARDCASE/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCWALLSTANDARDCASE/Name" sourceBName="IFCWALLSTANDARDCASE/Name" severity="Error" />
+			 <Property sourceAName="IFCWALLSTANDARDCASE/ObjectType" sourceBName="IFCWALLSTANDARDCASE/ObjectType" severity="Error" />
+			 <Property sourceAName="IFCWALLSTANDARDCASE/Tag" sourceBName="IFCWALLSTANDARDCASE/Tag" severity="Error" />
+			 <Property sourceAName="IFCWALLTYPE/GlobalId" sourceBName="IFCWALLTYPE/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCWALLTYPE/Name" sourceBName="IFCWALLTYPE/Name" severity="Error" />
+			 <Property sourceAName="IFCWALLTYPE/PredefinedType" sourceBName="IFCWALLTYPE/PredefinedType" severity="Error" />
+			 <Property sourceAName="IFCWALLTYPE/Tag" sourceBName="IFCWALLTYPE/Tag" severity="Error" />
+			 <Property sourceAName="MATERIAL(1)/Name" sourceBName="MATERIAL(1)/Name" severity="Error" />
+			 <Property sourceAName="MATERIAL(2)/Name" sourceBName="MATERIAL(2)/Name" severity="Error" />
+			 <Property sourceAName="MATERIAL(3)/Name" sourceBName="MATERIAL(3)/Name" severity="Error" />
+			 <Property sourceAName="MATERIAL(4)/Name" sourceBName="MATERIAL(4)/Name" severity="Error" />
+			 <Property sourceAName="MATERIAL/Name" sourceBName="MATERIAL/Name" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER(1)/LayerThickness" sourceBName="MATERIALLAYER(1)/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER(2)/LayerThickness" sourceBName="MATERIALLAYER(2)/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER(3)/LayerThickness" sourceBName="MATERIALLAYER(3)/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER(4)/LayerThickness" sourceBName="MATERIALLAYER(4)/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER/LayerThickness" sourceBName="MATERIALLAYER/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSET/LayerSetName" sourceBName="MATERIALLAYERSET/LayerSetName" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/DirectionSense" sourceBName="MATERIALLAYERSETUSAGE/DirectionSense" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/LayerSetDirection" sourceBName="MATERIALLAYERSETUSAGE/LayerSetDirection" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" sourceBName="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_ElementShading/Roughness" sourceBName="Pset_ElementShading/Roughness" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_QuantityTakeOff/Reference" sourceBName="Pset_QuantityTakeOff/Reference" severity="Error" />
+			 <Property sourceAName="Pset_ReinforcementBarPitchOfWall/Reference" sourceBName="Pset_ReinforcementBarPitchOfWall/Reference" severity="Error" />
+			 <Property sourceAName="Pset_WallCommon/ExtendToStructure" sourceBName="Pset_WallCommon/ExtendToStructure" severity="Error" />
+			 <Property sourceAName="Pset_WallCommon/IsExternal" sourceBName="Pset_WallCommon/IsExternal" severity="Error" />
+			 <Property sourceAName="Pset_WallCommon/LoadBearing" sourceBName="Pset_WallCommon/LoadBearing" severity="Error" />
+			 <Property sourceAName="Pset_WallCommon/Reference" sourceBName="Pset_WallCommon/Reference" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCSLAB" sourceBGroupName="IFCSLAB">
+		  <ComponentClass sourceAComponentClass="IFCSLAB"  sourceBComponentClass="IFCSLAB">
+		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCSLAB/GlobalId" sourceBName="IFCSLAB/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCSLAB/Name" sourceBName="IFCSLAB/Name" severity="Error" />
+			 <Property sourceAName="IFCSLAB/ObjectType" sourceBName="IFCSLAB/ObjectType" severity="Error" />
+			 <Property sourceAName="IFCSLAB/PredefinedType" sourceBName="IFCSLAB/PredefinedType" severity="Error" />
+			 <Property sourceAName="IFCSLAB/Tag" sourceBName="IFCSLAB/Tag" severity="Error" />
+			 <Property sourceAName="IFCSLABTYPE/GlobalId" sourceBName="IFCSLABTYPE/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCSLABTYPE/Name" sourceBName="IFCSLABTYPE/Name" severity="Error" />
+			 <Property sourceAName="IFCSLABTYPE/PredefinedType" sourceBName="IFCSLABTYPE/PredefinedType" severity="Error" />
+			 <Property sourceAName="IFCSLABTYPE/Tag" sourceBName="IFCSLABTYPE/Tag" severity="Error" />
+			 <Property sourceAName="MATERIAL/Name" sourceBName="MATERIAL/Name" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER/LayerThickness" sourceBName="MATERIALLAYER/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSET/LayerSetName" sourceBName="MATERIALLAYERSET/LayerSetName" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/DirectionSense" sourceBName="MATERIALLAYERSETUSAGE/DirectionSense" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/LayerSetDirection" sourceBName="MATERIALLAYERSETUSAGE/LayerSetDirection" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" sourceBName="MATERIALLAYERSETUSAGE/OffsetFromReferenceLine" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_ElementShading/Roughness" sourceBName="Pset_ElementShading/Roughness" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_QuantityTakeOff/Reference" sourceBName="Pset_QuantityTakeOff/Reference"  severity="Error" />
+			 <Property sourceAName="Pset_ReinforcementBarPitchOfWall/Reference" sourceBName="Pset_ReinforcementBarPitchOfWall/Reference" severity="Error" />
+			 <Property sourceAName="Pset_SlabCommon/IsExternal" sourceBName="Pset_SlabCommon/IsExternal" severity="Error" />
+			 <Property sourceAName="Pset_SlabCommon/LoadBearing" sourceBName="Pset_SlabCommon/LoadBearing" severity="Error" />
+			 <Property sourceAName="Pset_SlabCommon/PitchAngle" sourceBName="Pset_SlabCommon/PitchAngle" severity="Error" />
+			 <Property sourceAName="Pset_SlabCommon/Reference" sourceBName="Pset_SlabCommon/Reference" severity="Error" />
+			 <Property sourceAName="Surface Area" sourceBName="Surface Area" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+			 <Property sourceAName="Volume" sourceBName="Volume" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCWINDOW" sourceBGroupName="IFCWINDOW">
+		  <ComponentClass sourceAComponentClass="IFCWINDOW"  sourceBComponentClass="IFCWINDOW">
+		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCWINDOW/GlobalId" sourceBName="IFCWINDOW/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCWINDOW/Name" sourceBName="IFCWINDOW/Name" severity="Error" />
+			 <Property sourceAName="IFCWINDOW/ObjectType" sourceBName="IFCWINDOW/ObjectType" severity="Error" />
+			 <Property sourceAName="IFCWINDOW/OverallHeight" sourceBName="IFCWINDOW/OverallHeight" severity="Error" />
+			 <Property sourceAName="IFCWINDOW/OverallWidth" sourceBName="IFCWINDOW/OverallWidth" severity="Error" />
+			 <Property sourceAName="IFCWINDOW/Tag" sourceBName="IFCWINDOW/Tag" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/ConstructionType" sourceBName="IFCWINDOWSTYLE/ConstructionType" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/GlobalId" sourceBName="IFCWINDOWSTYLE/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/Name" sourceBName="IFCWINDOWSTYLE/Name" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/OperationType" sourceBName="IFCWINDOWSTYLE/OperationType" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/ParameterTakesPrecedence" sourceBName="IFCWINDOWSTYLE/ParameterTakesPrecedence" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/Sizeable" sourceBName="IFCWINDOWSTYLE/Sizeable" severity="Error" />
+			 <Property sourceAName="IFCWINDOWSTYLE/Tag" sourceBName="IFCWINDOWSTYLE/Tag" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_QuantityTakeOff/Reference" sourceBName="Pset_QuantityTakeOff/Reference" severity="Error" />
+			 <Property sourceAName="Pset_WindowCommon/IsExternal" sourceBName="Pset_WindowCommon/IsExternal" severity="Error" />
+			 <Property sourceAName="Pset_WindowCommon/Reference" sourceBName="Pset_WindowCommon/Reference" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCDOOR" sourceBGroupName="IFCDOOR">
+		  <ComponentClass sourceAComponentClass="IFCDOOR"  sourceBComponentClass="IFCDOOR">
+		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="IFCDOOR/GlobalId" sourceBName="IFCDOOR/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCDOOR/Name" sourceBName="IFCDOOR/Name" severity="Error" />
+			 <Property sourceAName="IFCDOOR/ObjectType" sourceBName="IFCDOOR/ObjectType" severity="Error" />
+			 <Property sourceAName="IFCDOOR/OverallHeight" sourceBName="IFCDOOR/OverallHeight" severity="Error" />
+			 <Property sourceAName="IFCDOOR/OverallWidth" sourceBName="IFCDOOR/OverallWidth" severity="Error" />
+			 <Property sourceAName="IFCDOOR/Tag" sourceBName="IFCDOOR/Tag" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/ConstructionType" sourceBName="IFCDOORSTYLE/ConstructionType" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/GlobalId" sourceBName="IFCDOORSTYLE/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/Name" sourceBName="IFCDOORSTYLE/Name" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/OperationType" sourceBName="IFCDOORSTYLE/OperationType" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/ParameterTakesPrecedence" sourceBName="IFCDOORSTYLE/ParameterTakesPrecedence" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/Sizeable" sourceBName="IFCDOORSTYLE/Sizeable" severity="Error" />
+			 <Property sourceAName="IFCDOORSTYLE/Tag" sourceBName="IFCDOORSTYLE/Tag" severity="Error" />
+			<Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_DoorCommon/IsExternal" sourceBName="Pset_DoorCommon/IsExternal" severity="Error" />
+			 <Property sourceAName="Pset_DoorCommon/Reference" sourceBName="Pset_DoorCommon/Reference" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_QuantityTakeOff/Reference" sourceBName="Pset_QuantityTakeOff/Reference" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCROOF" sourceBGroupName="IFCROOF">	
+			<ComponentClass sourceAComponentClass="IFCROOF"  sourceBComponentClass="IFCROOF">
+			<Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
+			 <Property sourceAName="COG" sourceBName="COG" severity="Error" />
+			 <Property sourceAName="IFCROOF/GlobalId" sourceBName="IFCROOF/GlobalId" severity="Error" />
+			 <Property sourceAName="IFCROOF/Name" sourceBName="IFCROOF/Name" severity="Error" />
+			 <Property sourceAName="IFCROOF/ObjectType" sourceBName="IFCROOF/ObjectType" severity="Error" />
+			 <Property sourceAName="IFCROOF/ShapeType" sourceBName="IFCROOF/ShapeType" severity="Error" />
+			 <Property sourceAName="IFCROOF/Tag" sourceBName="IFCROOF/Tag" severity="Error" />
+			 <Property sourceAName="MATERIAL/Name" sourceBName="MATERIAL/Name" severity="Error" />
+			 <Property sourceAName="MATERIALLAYER/LayerThickness" sourceBName="MATERIALLAYER/LayerThickness" severity="Error" />
+			 <Property sourceAName="MATERIALLAYERSET/LayerSetName" sourceBName="MATERIALLAYERSET/LayerSetName" severity="Error" />
+			 <Property sourceAName="OWNERHISTORY/ApplicationFullName" sourceBName="OWNERHISTORY/ApplicationFullName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ApplicationIdentifier" sourceBName="OWNERHISTORY/ApplicationIdentifier"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/ChangeAction" sourceBName="OWNERHISTORY/ChangeAction"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/CreationDate" sourceBName="OWNERHISTORY/CreationDate"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Name" sourceBName="OWNERHISTORY/Name"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/OwningUser/GivenName" sourceBName="OWNERHISTORY/OwningUser/GivenName"  severity="Error"/>
+			<Property sourceAName="OWNERHISTORY/Version" sourceBName="OWNERHISTORY/Version"  severity="Error"/>
+			 <Property sourceAName="Pset_ElementShading/Roughness" sourceBName="Pset_ElementShading/Roughness" severity="Error" />
+			 <Property sourceAName="Pset_ProductRequirements/Category" sourceBName="Pset_ProductRequirements/Category" severity="Error" />
+			 <Property sourceAName="Pset_QuantityTakeOff/Reference" sourceBName="Pset_QuantityTakeOff/Reference" severity="Error" />
+			 <Property sourceAName="Pset_RoofCommon/IsExternal" sourceBName="Pset_RoofCommon/IsExternal" severity="Error" />
+			 <Property sourceAName="Pset_RoofCommon/ProjectedArea" sourceBName="Pset_RoofCommon/ProjectedArea" severity="Error" />
+			 <Property sourceAName="Pset_RoofCommon/Reference" sourceBName="Pset_RoofCommon/Reference" severity="Error" />
+			 <Property sourceAName="Pset_RoofCommon/TotalArea" sourceBName="Pset_RoofCommon/TotalArea" severity="Error" />
+			 <Property sourceAName="Surface Area" sourceBName="Surface Area" severity="Error" />
+			 <Property sourceAName="Type" sourceBName="Type" severity="Error" />
+			 <Property sourceAName="Volume" sourceBName="Volume" severity="Error" />
+		   </ComponentClass>
+	   </ComponentGroup>  
+</Check>
+
 	<Check type="Compliance"  sourceType="IFC" > 	  
 		<ComponentGroup name="IFCPROJECT">
 		  <ComponentClass name="IFCPROJECT">
