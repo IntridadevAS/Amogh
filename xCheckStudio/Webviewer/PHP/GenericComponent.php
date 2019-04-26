@@ -5,12 +5,21 @@
                 $Components = array();
                 foreach($ComponentsList as $key => $value) {
 
+                    $nodeId = null;
+                    $parentNodeId = null;
+                    if(isset($value->NodeId))
+                    {                        
+                        $nodeId = $value->NodeId;
+                    }
+                    if(isset($value->ParentNodeId))
+                    {                       
+                        $parentNodeId = $value->ParentNodeId;
+                    }
                     $component = new GenericComponent( $value->Name, 
                                                        $value->MainComponentClass, 
                                                        $value->SubComponentClass, 
-                                                       $value->NodeId,
-                                                       $value->ParentNodeId);
-
+                                                       $nodeId,
+                                                       $parentNodeId);
                     foreach($value->properties as $propertyKey => $propertyValue) {
                         $property = new GenericProperty($propertyValue->Name, $propertyValue->Format, $propertyValue->Value);
                         $component->addProperty( $property );
@@ -23,7 +32,7 @@
             }
             
                // classes
-                class GenericComponent
+            class GenericComponent
             {
                 var $Name; 
                 var $MainComponentClass; 

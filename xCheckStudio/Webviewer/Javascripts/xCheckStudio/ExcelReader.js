@@ -15,7 +15,7 @@ function ExcelReader(sourceType) {
     this.excelModelBrowser = new ExcelModeBrowser();
 }
 
-ExcelReader.prototype.ReadFileData = function (file, containerId) {
+ExcelReader.prototype.ReadFileData = function (file, containerId, viewerContainer) {
     this.containerId = containerId;
     if (file) {
         var reader = new FileReader();
@@ -23,22 +23,48 @@ ExcelReader.prototype.ReadFileData = function (file, containerId) {
         reader.onload = function (readerEvt) {
             var data = readerEvt.target.result;
             data = new Uint8Array(data);
-            _this.process_wb(XLSX.read(data, { type: 'array' }), containerId);
+            _this.process_wb(XLSX.read(data, { type: 'array' }), containerId, viewerContainer);
         };
         reader.readAsArrayBuffer(file);
     }
 }
 
-ExcelReader.prototype.process_wb = function (wb, containerId) {
+ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
     var _this = this;
     this.global_wb = wb;
 
     wb.SheetNames.forEach(function (sheetName) {
         _this.ReadSheetData(sheetName);
     });
+    this.addComponentsToDB(viewerContainer);
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 };
+
+ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
+
+    var source = undefined;
+    if( viewerContainer.toLowerCase() == "viewercontainer1")
+    {
+        source = "SourceA"
+    }
+    else if(viewerContainer.toLowerCase()== "viewercontainer2")
+    {
+        source = "SourceB"
+    }         
+
+    $.ajax({
+        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'TypeOfDataSource' : '1D'},
+        type: "POST",
+        url: "PHP/AddComponentsToDB.php"
+       }).done(function (data) {
+        console.log(data);
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
+}
 
 ExcelReader.prototype.ChangeBackgroundColor = function (row) {
     row.style.backgroundColor = "#9999ff";
