@@ -6,7 +6,11 @@ function ComplianceReviewManager(complianceCheckManager,
     detailedReviewTableContainer,
     //componentIdVsComponentData,
     //nodeIdVsComponentData,
-    detailedReviewRowCommentDiv) {
+    detailedReviewRowCommentDiv) 
+{
+
+    this.MainReviewTableColumns = 4;    
+    this.MainReviewTableIdColumn = 3;    
 
     this.ViewerData = viewerData;
 
@@ -32,6 +36,9 @@ function ComplianceReviewManager(complianceCheckManager,
 
     this.detailedReviewRowComments = {};
     this.DetailedReviewRowCommentDiv = detailedReviewRowCommentDiv;
+
+    this.SourceNodeIdvsCheckComponent = {};
+    this.SourceComponentIdvsNodeId = {};        
 
     ComplianceReviewManager.prototype.loadDatasource = function () {
         if (this.ViewerData !== undefined) {
@@ -156,6 +163,17 @@ function ComplianceReviewManager(complianceCheckManager,
                     tableRowContent[columnHeaders[3].name] = component.ID;
 
                     tableData.push(tableRowContent);
+
+                     // maintain track of check components
+                     if (component.SourceANodeId ) 
+                    {                      
+                        this.SourceNodeIdvsCheckComponent[component.SourceANodeId] = { "Id" :component.ID, 
+                                                                                    "SourceAName": component.SourceAName,                                                                                    
+                                                                                    "MainClass": componentsGroup.ComponentClass,
+                                                                                    "SourceANodeId": component.SourceANodeId};
+
+                        this.SourceComponentIdvsNodeId[component.ID] = component.SourceANodeId;                       
+                    }
                 }
 
                 var id = "#" + div.id;

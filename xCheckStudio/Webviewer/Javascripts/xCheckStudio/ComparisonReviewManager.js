@@ -10,6 +10,9 @@ function ComparisonReviewManager(comparisonCheckManager,
     sourceBComponentIdVsComponentData,
     sourceBNodeIdVsComponentData*/) 
     {
+        
+    this.MainReviewTableColumns = 6;   
+    this.MainReviewTableIdColumn = 5;    
 
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
@@ -42,6 +45,12 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.checkStatusArrayB = {};
 
     this.detailedReviewRowComments = {};
+
+    this.SourceANodeIdvsCheckComponent = {};
+    this.SourceBNodeIdvsCheckComponent= {};
+
+    this.SourceAComponentIdvsNodeId = {};
+    this.SourceABComponentIdvsNodeId = {};
 
     ComparisonReviewManager.prototype.populateReviewTable = function () {
 
@@ -102,17 +111,20 @@ function ComparisonReviewManager(comparisonCheckManager,
                         name = "Status"
                         width = "34";
                     }
-                    else if (i === 3) {
+                    else if (i === 3) 
+                    {
                         title = "SourceANodeId";
                         name = "SourceANodeId"
                         width = "10";
                     }
-                    else if (i === 4) {
+                    else if (i === 4) 
+                    {
                         title = "SourceBNodeId";
                         name = "SourceBNodeId"
                         width = "10";
                     }
-                    else if (i === 5) {
+                    else if (i === 5) 
+                    {
                         title = "ID";
                         name = "ID"
                         width = "10";
@@ -144,6 +156,28 @@ function ComparisonReviewManager(comparisonCheckManager,
                     tableRowContent[columnHeaders[5].name] = component.ID;
 
                     tableData.push(tableRowContent);
+
+                    // maintain track of check components
+                    if (component.SourceANodeId ) 
+                    {
+                        this.SourceANodeIdvsCheckComponent[component.SourceANodeId] = { "Id" :component.ID, 
+                                                                                     "SourceAName": component.SourceAName,
+                                                                                     "SourceBName": component.SourceBName,
+                                                                                     "MainClass": componentsGroup.ComponentClass,
+                                                                                     "SourceANodeId": component.SourceANodeId,
+                                                                                     "SourceBNodeId": component.SourceBNodeId,};
+                        this.SourceAComponentIdvsNodeId[component.ID] = component.SourceANodeId;
+                    }
+                    if(component.SourceBNodeId)
+                    {
+                        this.SourceBNodeIdvsCheckComponent[component.SourceBNodeId] = { "Id" :component.ID, 
+                                                                                    "SourceAName": component.SourceAName,
+                                                                                    "SourceBName": component.SourceBName,
+                                                                                    "MainClass": componentsGroup.ComponentClass,
+                                                                                    "SourceANodeId": component.SourceANodeId,
+                                                                                    "SourceBNodeId": component.SourceBNodeId,};                       
+                        this.SourceABComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
+                    }
                 }
 
                 var id = "#" + div.id;

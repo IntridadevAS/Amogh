@@ -9,12 +9,14 @@ var xCheckStudio;
             this._selectedNodeId = null;
             //this._selectedComponentId = null;
             this.nodeIdArray = [];
-            this.componentIdVsComponentData = {};
-            this.nodeIdVsComponentData = {};
-            this.sourceProperties = [];
+            // this.componentIdVsComponentData = {};
+            // this.nodeIdVsComponentData = {};
+            this.sourceProperties = {};
 
             this.excelReader = new ExcelReader(sourceType);
             this.db_reader = new DBReader(sourceType);
+
+            this.NodeIdvsComponentIdList ={}
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId) {
@@ -212,33 +214,35 @@ var xCheckStudio;
                 this._selectedNodeId = selection.getNodeId();
                 var model = this._firstViewer.model;
 
-                if (model.isNodeLoaded(this._selectedNodeId)) {
-                    // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
-                    if (model.getNodeType(this._selectedNodeId) === Communicator.NodeType.BodyInstance) {
-                        var parent_1 = model.getNodeParent(this._selectedNodeId);
-                        if (parent_1 !== null) {
+                if (!model.isNodeLoaded(this._selectedNodeId)) {
+                    return;
+                }
+
+                // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
+                if (model.getNodeType(this._selectedNodeId) === Communicator.NodeType.BodyInstance) {
+
+                    while (model.getNodeType(this._selectedNodeId) === Communicator.NodeType.BodyInstance) {
+                        var parent_1 = model.getNodeParent(this._selectedNodeId);                        
+
+                        if (parent_1 !== null &&
+                            (model.getNodeType(parent_1) === Communicator.NodeType.AssemblyNode ||
+                            model.getNodeType(parent_1) === Communicator.NodeType.Part ||
+                            model.getNodeType(parent_1) === Communicator.NodeType.PartInstance)) {
                             this._selectedNodeId = parent_1;
+                            // select this node
+                            this._firstViewer.selectPart(parent_1);
                         }
-                    }
-
-                    if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
-                        let data = this.nodeIdVsComponentData[this._selectedNodeId];
-                        if (data === undefined) {
-                            return;
+                        else {
+                            break;
                         }
-                        // if (this._selectedComponentId === data.NodeId) {
-                        //     return;
-                        // }
-
-                        var componentIdentifier = data["Name"];
-                        // if (data.MainComponentClass === "PipingNetworkSegment") {
-                        //     componentIdentifier += "_" + data["Source"] + "_" + data["Destination"] + "_" + data["ownerId"];
-                        // }
-               
-                        // highlight corresponding component in model browser table
-                        this._modelTree.HighlightModelBrowserRow(componentIdentifier);
                     }
                 }
+
+                if (model.getNodeType(this._selectedNodeId) !== Communicator.NodeType.BodyInstance) {
+                    // highlight corresponding component in model browser table
+                    this._modelTree.HighlightModelBrowserRow(this._selectedNodeId);
+                }
+               
             }
         };
 
@@ -301,10 +305,10 @@ var xCheckStudio;
 
                                 // create generic properties object
                                 var genericPropertiesObject = new GenericComponent(name,
-                                    mainComponentClass,
-                                    subComponentClass,                                  
-                                    nodeId,
-                                    parentNodeId);
+                                                                                   mainComponentClass,
+                                                                                   subComponentClass,                                  
+                                                                                   nodeId,
+                                                                                   parentNodeId);
 
                                 // add component class as generic property
                                 var componentClassPropertyObject = new GenericProperty("ComponentClass", 
@@ -319,42 +323,45 @@ var xCheckStudio;
                                 }
 
                                 // add genericProperties object to sourceproperties collection
-                                _this.sourceProperties.push(genericPropertiesObject);
+                                _this.sourceProperties[nodeId] = (genericPropertiesObject);
 
-                                // keep track of component vs node id
-                                var componentIdentifier = name
+                                // // keep track of component vs node id
+                                // var componentIdentifier = name
 
-                                var componentNodeData = new ComponentNodeData(name,
-                                    mainComponentClass,
-                                    subComponentClass,                                    
-                                    nodeId);                               
+                                // var componentNodeData = new ComponentNodeData(name,
+                                //     mainComponentClass,
+                                //     subComponentClass,                                    
+                                //     nodeId);                               
                     
-                                _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                                _this.nodeIdVsComponentData[nodeId] = componentNodeData;
+                                // _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                                // _this.nodeIdVsComponentData[nodeId] = componentNodeData;
                              }
-                            else if (name !== undefined) {
+                            // else if (name !== undefined) {
 
-                                var componentNodeData = new ComponentNodeData(name,
-                                    "",
-                                    "",                                   
-                                    nodeId);
+                            //     var componentNodeData = new ComponentNodeData(name,
+                            //         "",
+                            //         "",                                   
+                            //         nodeId);
 
-                                // keep track of component vs node id
-                                var componentIdentifier = name
-                                _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                                _this.nodeIdVsComponentData[nodeId] = componentNodeData;
-                            }
+                            //     // keep track of component vs node id
+                            //     var componentIdentifier = name
+                            //     _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
+                            //     _this.nodeIdVsComponentData[nodeId] = componentNodeData;
+                            // }
                         }
 
                         var children = _this._firstViewer.model.getNodeChildren(nodeId);
-                        if (children.length > 0) {
-                            for (var i = 0, children_1 = children; i < children_1.length; i++) {
+                        if (children.length > 0)
+                        {
+                            for (var i = 0, children_1 = children; i < children_1.length; i++) 
+                            {
                                 var child = children_1[i];
 
                                 if (child !== null &&
                                     (_this._firstViewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
-                                        _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
-                                        _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
+                                    _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.Part ||
+                                    _this._firstViewer.model.getNodeType(child) === Communicator.NodeType.PartInstance))
+                                {
                                     _this.readProperties(child, identifierProperties, nodeId)
                                 }
                             }
@@ -363,7 +370,8 @@ var xCheckStudio;
                         if (_this.nodeIdArray.indexOf(nodeId) != -1) {
                             _this.nodeIdArray.splice(_this.nodeIdArray.indexOf(nodeId), 1);
                         }
-                         if (_this.nodeIdArray.length == 0) {
+                         if (_this.nodeIdArray.length == 0) 
+                         {
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined); 
                             
                             // add components to database
@@ -392,8 +400,9 @@ var xCheckStudio;
                 type: "POST",
                 url: "PHP/AddComponentsToDB.php"
                }).done(function (msg) {
-                if (msg !== 'fail') {
-
+                if (msg !== 'fail') 
+                {
+                    this.NodeIdvsComponentIdList =  JSON.parse(msg);
                 }
                 // remove busy spinner
                 var busySpinner = document.getElementById("divLoading");
