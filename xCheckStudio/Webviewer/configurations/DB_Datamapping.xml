@@ -90,18 +90,18 @@
 	 
    <ComponentGroup name="Nozzle">
       <ComponentClass name="Flanged Nozzle">
-            <Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+      		<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Size" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Tag Number" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Class" rule="Must have value" severity="Error" comment="Property must have value." />
-            <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+     	    <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="ProcessArea" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="System" rule="Must have value" severity="Error" comment="Property must have value." />
       </ComponentClass>
       <ComponentClass name="Manway">
-            <Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+      		<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Size" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
 			<Property name="Tag Number" rule="Must have value" severity="Error" comment="Property must have value." />

@@ -48,6 +48,10 @@ function CheckManager(name) {
             if (xCheckStudioInterface1.excelReader !== undefined) {
                 sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
             }
+            else if(xCheckStudioInterface1.db_reader !== undefined)
+            {
+                SelectedCompoents = xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents;
+            }
             else if(xCheckStudioInterface1._modelTree !== undefined)
             {
                 sourceASelectedCompoents = xCheckStudioInterface1._modelTree.selectedCompoents;
@@ -100,7 +104,20 @@ function CheckManager(name) {
                     containerID = "viewerContainer2";
                 }
                 
-            }         
+            }
+            else if(interfaceObject.db_reader !== undefined)
+            {
+                SelectedCompoents = interfaceObject.db_reader.dbmodelbrowser.selectedCompoents;
+                if(interfaceObject.db_reader.dbmodelbrowser.conatinerId.toLowerCase() == "modeltree1")
+                {
+                    containerID = "viewerContainer1"
+                }
+                else if(interfaceObject.db_reader.dbmodelbrowser.conatinerId.toLowerCase()== "modeltree2")
+                {
+                    containerID = "viewerContainer2";
+                }
+                
+            }
 
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',

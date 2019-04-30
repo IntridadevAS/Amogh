@@ -165,6 +165,269 @@ function DBModelBrowser() {
 
     };
 
+    DBModelBrowser.prototype.addComponentRow = function (styleList, componentStyleClass, rowData) {
+        var row = document.createElement("tr");
+        row.style.backgroundColor = "#ffffff";
+        if (styleList !== undefined) {
+            row.classList = styleList;
+        }
+
+        var td = document.createElement("td");
+        var checkBox = document.createElement("INPUT");
+        checkBox.setAttribute("type", "checkbox");
+        checkBox.checked = false;
+        td.appendChild(checkBox);
+        row.appendChild(td);
+
+        // select component check box state change event
+        checkBox.onchange = function () {
+            _this.handleComponentCheck(this);
+        }
+
+
+        var td = document.createElement("td");
+        td.innerHTML = rowData[0];
+        if (componentStyleClass != "") {
+            td.className = componentStyleClass;
+        }
+        td.style.fontSize = "13px";
+        row.appendChild(td);
+
+        var td = document.createElement("td");
+        td.innerHTML = rowData[1];
+        td.style.fontSize = "13px";
+        row.appendChild(td);
+
+        var td = document.createElement("td");
+        td.innerHTML = rowData[2];
+        td.style.fontSize = "13px";
+        row.appendChild(td);
+
+        var td = document.createElement("td");
+        td.innerHTML = rowData[3];
+        td.style.fontSize = "13px";
+        row.appendChild(td);
+
+        this.ModelBrowserTable.appendChild(row);
+
+        // maintain track of selected components
+        var checkedComponent = {
+            'Name': row.cells[1].textContent,
+            'MainComponentClass': row.cells[2].textContent,
+            'ComponentClass': row.cells[3].textContent,
+            'Description': row.cells[4].textContent
+        };
+        this.selectedCompoents.push(checkedComponent);
+
+        if (componentStyleClass != "") {
+            if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
+                this.NodeGroups.push(componentStyleClass);
+            }
+        }
+
+        // click event for each row
+        var _this = this;
+        row.onclick = function () {
+
+            if (_this.SelectedComponentRow === this) {
+                return;
+            }
+
+            if (_this.SelectedComponentRow) {
+                _this.RestoreBackgroundColor(_this.SelectedComponentRow);
+            }
+
+            _this.BrowserItemClick(this);
+            _this.SelectedComponentRow = this;
+
+
+        };
+
+        // row mouse hover event
+        var createMouseHoverHandler = function (currentRow) {
+            return function () {
+                _this.ChangeBackgroundColor(currentRow);
+            };
+        };
+        row.onmouseover = createMouseHoverHandler(row);
+
+        // row mouse out event
+        var createMouseOutHandler = function (currentRow) {
+            return function () {
+                if (_this.SelectedComponentRow !== currentRow) {
+                    _this.RestoreBackgroundColor(currentRow);
+                }
+            };
+        };
+        row.onmouseout = createMouseOutHandler(row);
+    }
+
+    DBModelBrowser.prototype.getClassWiseCheckedComponents = function (sourceType) {
+        var classwiseCheckedComponents = {};
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+        var mainCategoryPropertyName = identifierProperties['mainCategory'];
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var selectedComponent = this.selectedCompoents[i];
+            if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
+                // increment count of checked components for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
+            }
+            else {
+                // add checked components count for this main category
+                classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] = 1;
+            }
+        }
+
+
+        return classwiseCheckedComponents;
+    }
+
+    DBModelBrowser.prototype.addselectedRowsToArray = function (viewerContainer){
+        var container = document.getElementById(viewerContainer.replace("#", ""));
+        var modelTreeContainerElement = container;
+
+        var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
+
+        var modelBrowserTable = modelTreeContainerElement.children[1];
+        var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
+
+        for(var i =0; i < modelBrowserTableRows.length; i++)
+        {
+            var row = modelBrowserTableRows[i];
+
+            var checkedComponent = {
+                'Name': row.cells[1].textContent,
+                'MainComponentClass': row.cells[2].textContent,
+                'ComponentClass': row.cells[3].textContent,
+                'Description': row.cells[4].textContent
+            };
+            this.selectedCompoents.push(checkedComponent);
+        }
+
+       
+    }
+
+    DBModelBrowser.prototype.selectedCompoentExists = function (componentRow) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                component['Description'] == componentRow.cells[4].textContent.trim()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    DBModelBrowser.prototype.isComponentSelected = function (componentProperties) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentProperties.Name &&
+                component['MainComponentClass'] === componentProperties.MainComponentClass &&
+                component['ComponentClass'] === componentProperties.SubComponentClass)
+
+                // for (var j = 0; j < componentProperties.properties.length; j++) {
+                //     if (componentProperties.properties[j].Name === "Description") {
+                        // component['Description'] === componentProperties.properties[j].Value;
+                        return true;
+                //     }
+                // }
+
+
+        }
+
+        return false;
+    }
+
+    DBModelBrowser.prototype.removeFromselectedCompoents = function (componentRow) {
+        for (var i = 0; i < this.selectedCompoents.length; i++) {
+            var component = this.selectedCompoents[i];
+            if (component['Name'] === componentRow.cells[1].textContent.trim() &&
+                component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
+                component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
+                component['Description'] === componentRow.cells[4].textContent.trim()) {
+
+                this.selectedCompoents.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    DBModelBrowser.prototype.handleComponentCheck = function (currentCheckBox) {
+
+        var currentCell = currentCheckBox.parentElement;
+        if (currentCell.tagName.toLowerCase() !== 'td') {
+            return;
+        }
+
+        var currentRow = currentCell.parentElement;
+        if (currentRow.tagName.toLowerCase() !== 'tr' ||
+            currentRow.cells.length < 2) {
+            return;
+        }
+
+        // maintain track of selected/deselected components
+        if (currentCheckBox.checked &&
+            !this.selectedCompoentExists(currentRow)) {
+
+            var checkedComponent = {
+                'Name': currentRow.cells[1].textContent.trim(),
+                'MainComponentClass': currentRow.cells[2].textContent.trim(),
+                'ComponentClass': currentRow.cells[3].textContent.trim(),
+                'Description': currentRow.cells[4].textContent.trim()
+            };
+
+            this.selectedCompoents.push(checkedComponent);
+        }
+        else if (this.selectedCompoentExists(currentRow)) {
+            this.removeFromselectedCompoents(currentRow);
+        }
+
+        var currentTable = currentRow.parentElement;
+        if (currentTable.tagName.toLowerCase() !== 'tbody') {
+            return;
+        }
+
+        var currentComponentCell = currentRow.cells[1];
+        var currentRowStyle = currentComponentCell.className;
+
+        var currentClassList = currentRow.classList;
+        // var currentClassName = currentRow.className;
+        // var index = currentClassName.lastIndexOf(" ");
+
+        // check/uncheck all child and further child rows
+        // var styleToCheck = currentClassName + " " + currentRowStyle;
+
+        //index 1 and 2 for class names from parent row
+        var styleToCheck = currentClassList[1] + " " + currentClassList[2]+ " "+ currentRowStyle;
+        for (var i = 0; i < currentTable.rows.length; i++) {
+
+            var row = currentTable.rows[i];
+            if (row === currentRow) {
+                continue;
+            }
+
+            var rowClassList = row.classList;
+
+            //index 1 and 2 for class names inherited from parent row 
+            // rowClassList[rowClassList.length -1] is for class applied for current row
+            var rowStyleCheck = rowClassList[1] + " "+ rowClassList[2]+ " "+ rowClassList[rowClassList.length -1];
+
+            if (rowStyleCheck === styleToCheck) {
+
+                var checkBox = row.cells[0].children[0];
+                if (checkBox.checked === currentCheckBox.checked) {
+                    continue;
+                }
+
+                checkBox.checked = currentCheckBox.checked;
+                this.handleComponentCheck(checkBox);
+            }
+        }
+    }
+
     DBModelBrowser.prototype.ChangeBackgroundColor = function (row) {
         row.style.backgroundColor = "#9999ff";
     }
