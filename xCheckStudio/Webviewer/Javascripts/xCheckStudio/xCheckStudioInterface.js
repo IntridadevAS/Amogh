@@ -13,20 +13,22 @@ var xCheckStudio;
             // this.nodeIdVsComponentData = {};
             this.sourceProperties = {};
 
-            this.excelReader = new ExcelReader(sourceType);
-            this.db_reader = new DBReader(sourceType);
+            this.excelReader = undefined;
+            this.db_reader = undefined;
 
             this.NodeIdvsComponentIdList ={}
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
+            this.excelReader = new ExcelReader(this.SourceType);
             this.excelReader.ReadFileData(file, containerId, viewerContainer);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
-        xCheckStudioInterface.prototype.readDbFileData = function (Db_data, containerId)
+        xCheckStudioInterface.prototype.readDbFileData = function (Db_data, containerId, viewerContainer)
         {
-            this.db_reader.ReadDBData(Db_data, containerId);
+            this.db_reader = new DBReader(this.SourceType);
+            this.db_reader.ReadDBData(Db_data, containerId, viewerContainer);
             this.sourceProperties = this.db_reader.sourceProperties;
         }
 

@@ -9,11 +9,37 @@ function DBReader(sourceType)
     this.dbmodelbrowser = new DBModelBrowser();
 }
 
-DBReader.prototype.ReadDBData = function(Db_data, containerId)
+DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
 {
     this.containerId = containerId;
     this.ProcessDbData(Db_data);
+    this.addComponentsToDB(viewerContainer);
     this.dbmodelbrowser.createModelBrowserTable(this.dbdata, containerId);
+}
+
+DBReader.prototype.addComponentsToDB = function (viewerContainer) {
+
+    var source = undefined;
+    if( viewerContainer.toLowerCase() == "viewercontainer1")
+    {
+        source = "SourceA"
+    }
+    else if(viewerContainer.toLowerCase()== "viewercontainer2")
+    {
+        source = "SourceB"
+    }         
+
+    $.ajax({
+        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'DataSourceType' : '1D'},
+        type: "POST",
+        url: "PHP/AddComponentsToDB.php"
+       }).done(function (data) {
+        console.log(data);
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
 }
 
 DBReader.prototype.ProcessDbData = function (Db_data) {

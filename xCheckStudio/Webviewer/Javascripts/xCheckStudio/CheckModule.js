@@ -1339,8 +1339,15 @@ function readDbDataSource(file,
         },
     });
     console.log(Db_data);
-    xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-    xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
+    if (!xCheckStudioInterface1) {
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
+    }
+    else {
+        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface2.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
+    }
+    
 }
 
 function postData(url, method) {
