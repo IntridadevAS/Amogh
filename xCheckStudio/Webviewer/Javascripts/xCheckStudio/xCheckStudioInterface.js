@@ -385,6 +385,8 @@ var xCheckStudio;
 
         xCheckStudioInterface.prototype.addComponentsToDB = function () {
 
+            var _this = this;
+
             var source = undefined;
             if( this._firstViewer._params.containerId.toLowerCase() == "viewercontainer1")
             {
@@ -402,7 +404,7 @@ var xCheckStudio;
                }).done(function (msg) {
                 if (msg !== 'fail') 
                 {
-                    this.NodeIdvsComponentIdList =  JSON.parse(msg);
+                    _this.NodeIdvsComponentIdList =  JSON.parse(msg);
                 }
                 // remove busy spinner
                 var busySpinner = document.getElementById("divLoading");

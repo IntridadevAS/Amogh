@@ -328,7 +328,8 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.getClassWiseCheckedComponents = function () {
+            ModelTree.prototype.getClassWiseCheckedComponents = function () 
+            {
                 var classwiseCheckedComponents = {};
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
                 var mainCategoryPropertyName = identifierProperties['mainCategory'];
@@ -365,7 +366,8 @@ var xCheckStudio;
 
                 // maintain track of selected/deselected components
                 if (currentCheckBox.checked &&
-                    !this.selectedCompoentExists(currentRow)) {
+                    !this.selectedCompoentExists(currentRow)) 
+                {
 
                     var checkedComponent = {};
                     checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
@@ -375,7 +377,8 @@ var xCheckStudio;
 
                     this.selectedCompoents.push(checkedComponent);
                 }
-                else if (this.selectedCompoentExists(currentRow)) {
+                else if (this.selectedCompoentExists(currentRow)) 
+                {
                     this.removeFromselectedCompoents(currentRow);
                 }
 
