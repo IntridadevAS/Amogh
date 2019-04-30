@@ -1342,3 +1342,284 @@ function readDbDataSource(file,
     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
     xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
 }
+
+function postData(url, method) {
+    // remove post data js files from server from earlier check results, if any
+    // $.ajax({
+    //     data: '',
+    //     url: 'postData/postDataCleaner.php',
+    //     method: 'POST', // or GET
+    //     async: false,
+    //     success: function (msg) {
+    //         //alert('Post Data files deleted');
+    //     }
+    // });
+
+    checkCaseName = checkCaseManager.CheckCase.Name;
+
+    var sourceAClasswiseCheckedComponents = 0;
+    var sourceBClasswiseCheckedComponents = 0;
+
+    var sourceAModelTree;
+    var sourceBModelTree;
+    if (xCheckStudioInterface1) {
+        sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
+        sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+    }
+
+    if (xCheckStudioInterface2) {
+        sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
+        sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+    }
+
+    var sourceAClassWiseComponets = 0;
+    var sourceBClassWiseComponets = 0;
+
+    if (sourceAModelTree) {
+        var count = sourceAModelTree.selectedCompoents.length;
+        sourceACheckedItemCount = count > 0 ? count : 0;
+        sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
+    }
+    if (sourceBModelTree) {
+        var count = sourceBModelTree.selectedCompoents.length;
+        sourceBCheckedItemCount = count > 0 ? count : 0;
+        sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+        // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+    }
+
+    var analyticsDetailsData = new AnalyticsData(checkCaseName,
+        sourceAFileName,
+        sourceBFileName,
+        sourceATotalItemCount,
+        sourceACheckedItemCount,
+        sourceBTotalItemCount,
+        sourceBCheckedItemCount,
+        sourceAClasswiseCheckedComponents,
+        sourceBClasswiseCheckedComponents,
+        sourceAClassWiseComponets,
+        sourceBClassWiseComponets);
+
+
+    $.ajax({
+        url: 'PHP/analyticsDetailsDataWriter.php',
+        type: "POST",
+        async: true,
+        data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+        success: function (data) {
+            // alert("success");
+        }
+    });
+
+    // post comparison data
+    // if (comparisonCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/comparisonCheckpostDataWriter.php',
+    //         type: "POST",
+    //         async: false,
+    //         data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+    //         success: function (data) {
+    //             // alert("success");
+    //             //$("#result").html(data);
+    //         }
+    //     });
+    // }
+
+    // // post source A compliance data
+    // if (sourceAComplianceCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/sourceAComplianceDataWriter.php',
+    //   		type: "POST",
+    //         async: false,
+    //         data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
+    //         success: function (data) {
+    //             //alert("success");
+    //             //$("#result").html(data);
+    //         }
+    //     });
+    // }
+
+    // // post source B compliance data
+    // if (sourceBComplianceCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/sourceBComplianceDataWriter.php',
+    //         type: "POST",
+    //         async: false,
+    //         data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+    //         success: function (data) {
+    //         }
+    //     });
+    // }
+
+    // post source A viewer data
+    var sourceANodeIdvsComponentIdList;
+    var sourceASelectedComponents;
+    var sourceBNodeIdvsComponentIdList;
+    var sourceBSelectedComponents;
+
+    if (xCheckStudioInterface1) {
+        if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+            //virewer container Data
+            var viewerOptions = [];
+            viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
+            viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
+
+            // write viewer options data to data base
+            $.ajax({
+                url: 'PHP/ViewerOptionsWriter.php',
+                type: "POST",
+                async: true,
+                data:
+                {
+                    "SourceViewerOptions": JSON.stringify(viewerOptions),
+                    "SourceViewerOptionsTable": "SourceAViewerOptions"
+                },
+                success: function (msg) {
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            });
+
+            sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
+            sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
+
+            
+            // postnode id and component data relation
+            // if (xCheckStudioInterface1.nodeIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
+
+            // if (xCheckStudioInterface1.componentIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
+        }
+        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+            $.ajax({
+                url: 'PHP/SourceASheetDataWriter.php',
+                type: "POST",
+                async: true,
+                data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
+                success: function (data) {
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            });
+        }     
+      
+ }
+
+    if (xCheckStudioInterface2) {
+        if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+
+            //virewer container Data
+            var viewerOptions = [];
+            viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
+            viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
+
+            // write viewer options data to data base
+            $.ajax({
+                url: 'PHP/ViewerOptionsWriter.php',
+                type: "POST",
+                async: true,
+                data:
+                {
+                    "SourceViewerOptions": JSON.stringify(viewerOptions),
+                    "SourceViewerOptionsTable": "SourceBViewerOptions"
+                },
+                success: function (msg) {
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            });
+
+
+            sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
+            sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
+
+            // // postnode id and component data relation
+            // if (xCheckStudioInterface2.nodeIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
+
+            // if (xCheckStudioInterface2.componentIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
+
+        }
+        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+
+            $.ajax({
+                url: 'PHP/SourceBSheetDataWriter.php',
+                type: "POST",
+                async: true,
+                data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
+                success: function (data) {
+                    //alert("success");
+                    //$("#result").html(data);
+                }
+            });
+        }
+    }
+
+    // write source A selected components, differet control statuses to DB        
+    $.ajax({
+        url: 'PHP/ProjectDatawriter.php',
+        type: "POST",
+        async: true,
+        data:
+        {
+            "SourceANodeIdvsComponentIdList": JSON.stringify(sourceANodeIdvsComponentIdList),
+            "SourceASelectedComponents": JSON.stringify(sourceASelectedComponents),
+            "SourceBNodeIdvsComponentIdList": JSON.stringify(sourceBNodeIdvsComponentIdList),
+            "SourceBSelectedComponents": JSON.stringify(sourceBSelectedComponents)
+        },
+        success: function (msg) 
+        {
+            //alert("success");
+            //$("#result").html(data);
+        }
+    });
+}
