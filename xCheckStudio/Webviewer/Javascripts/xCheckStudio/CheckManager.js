@@ -45,7 +45,7 @@ function CheckManager(name) {
            var sourceBIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,"");
 
            var sourceASelectedCompoents;           
-            if (xCheckStudioInterface1.excelReader !== undefined && xCheckStudioInterface1.excelReader.SourceType == "xls") {
+            if (xCheckStudioInterface1.excelReader !== undefined) {
                 sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
             }
             else if(xCheckStudioInterface1.db_reader !== undefined)
@@ -92,7 +92,7 @@ function CheckManager(name) {
                 SelectedCompoents = interfaceObject._modelTree.selectedCompoents;
                 containerID = interfaceObject._firstViewer._params.containerId;
             }
-            else if(interfaceObject.excelReader !== undefined  && interfaceObject.excelReader.SourceType == "xls")
+            else if(interfaceObject.excelReader !== undefined)
             {
                 SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.selectedCompoents;
                 if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase() == "modeltree1")

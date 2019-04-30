@@ -1338,7 +1338,6 @@ function readDbDataSource(file,
             console.log(error)
         },
     });
-    console.log(Db_data);
     if (!xCheckStudioInterface1) {
         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
         xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
