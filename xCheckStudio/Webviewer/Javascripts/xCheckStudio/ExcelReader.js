@@ -54,7 +54,7 @@ ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
     }         
 
     $.ajax({
-        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'TypeOfDataSource' : '1D'},
+        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'DataSourceType' : '1D'},
         type: "POST",
         url: "PHP/AddComponentsToDB.php"
        }).done(function (data) {
