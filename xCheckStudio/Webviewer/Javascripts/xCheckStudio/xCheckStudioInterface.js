@@ -420,11 +420,19 @@ var xCheckStudio;
                 return this._modelTree;
             }
             else if (this.excelReader !== undefined &&
+<<<<<<< HEAD
                 this.excelReader.excelModelBrowser !== undefined && this.excelReader.SourceType == "xls") {
                 return this.excelReader.excelModelBrowser;
             }
             else if (this.db_reader !== undefined &&
                 this.db_reader.dbmodelbrowser !== undefined && this.db_reader.SourceType == "ibd") {
+=======
+                this.excelReader.excelModelBrowser !== undefined &&  this.excelReader.SourceType == "xls") {
+                return this.excelReader.excelModelBrowser;
+            }
+            else if(this.db_reader !== undefined && this.db_reader.dbmodelbrowser !== undefined)
+            {
+>>>>>>> 58b5a11bc393f6367fde6542464168ceb61d7a3a
                 return this.db_reader.dbmodelbrowser;
             }
 
