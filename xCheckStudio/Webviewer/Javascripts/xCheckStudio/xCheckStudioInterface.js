@@ -19,8 +19,8 @@ var xCheckStudio;
             this.NodeIdvsComponentIdList ={}
         }
 
-        xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId) {
-            this.excelReader.ReadFileData(file, containerId);
+        xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
+            this.excelReader.ReadFileData(file, containerId, viewerContainer);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 

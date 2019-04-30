@@ -3022,11 +3022,11 @@
 
             if (!xCheckStudioInterface1) {
                 xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer);
+                xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer, viewerContainer);
             }
             else {
                 xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer);
+                xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer, viewerContainer);
             }
         }
 
