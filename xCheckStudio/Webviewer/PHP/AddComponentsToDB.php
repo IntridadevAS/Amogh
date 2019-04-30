@@ -3,7 +3,8 @@
     include 'GenericComponent.php';
 
     if(!isset($_POST['Components']) ||
-       !isset($_POST['Source']))
+       !isset($_POST['Source']) ||
+       !isset($_POST['DataSourceType']))
     {
         echo 'fail';
         return;
@@ -27,15 +28,22 @@
     // var_dump($Components);
     // return;
     $ComponentsList = restoreProperties( $Components);  
-    $TypeOfDataSource = $_POST['TypeOfDataSource']; 
+    $DataSourceType = $_POST['DataSourceType']; 
     
     // var_dump($ComponentsList);
     // return;
 
-    if($TypeOfDataSource == '1D')
+    if(strtolower($DataSourceType) == '1d')
+    {
         add1DComponentsToDB($ComponentsList);
-    else
+    }     
+    else if(strtolower($DataSourceType) == '3d') {
         addComponentsToDB($ComponentsList);
+    }
+    else {
+            echo 'fail';
+            return;
+    }
     
     function addComponentsToDB($ComponentsList)
     {
