@@ -398,7 +398,7 @@ var xCheckStudio;
             }         
 
             $.ajax({
-                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source },
+                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source, 'DataSourceType' : '3D' },
                 type: "POST",
                 url: "PHP/AddComponentsToDB.php"
                }).done(function (msg) {

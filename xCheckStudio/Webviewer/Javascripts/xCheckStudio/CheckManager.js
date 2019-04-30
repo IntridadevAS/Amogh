@@ -48,7 +48,7 @@ function CheckManager(name) {
             if (xCheckStudioInterface1.excelReader !== undefined) {
                 sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
             }
-            else(xCheckStudioInterface1._modelTree !== undefined)
+            else if(xCheckStudioInterface1._modelTree !== undefined)
             {
                 sourceASelectedCompoents = xCheckStudioInterface1._modelTree.selectedCompoents;
             }
@@ -57,7 +57,7 @@ function CheckManager(name) {
             if (xCheckStudioInterface2.excelReader !== undefined) {
                 sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
             }
-            else(xCheckStudioInterface2._modelTree !== undefined)
+            else if(xCheckStudioInterface2._modelTree !== undefined)
             {
                 sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
             }
