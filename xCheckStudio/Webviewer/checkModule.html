@@ -2784,32 +2784,35 @@
             }
         }
 
-        // function readDbDataSource(file,
-        //     viewerContainer,
-        //     modelTreeContainer) 
-        // {
+        function readDbDataSource(file,
+            viewerContainer,
+            modelTreeContainer) {
 
-        //     let fileName = file.name;
-        //     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-        //     Db_data = new Array();
-        //     $.ajax({
-        //         url:'PHP/PDOConnectionForDatabases.php',
-        //         type:'POST',
-        //         dataType: 'JSON',
-        //         data: ({functionality : 'importData'}),
-        //         async: false,
-        //         success: function (data) {                   
-        //             Db_data = data;
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.log(error)
-        //         },
-        //     });
-        //     console.log(Db_data);
-        //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-        //     xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
-        // }
+            Db_data = new Array();
+            $.ajax({
+                url:'PHP/PDOConnectionForDatabases.php',
+                type:'POST',
+                dataType: 'JSON',
+                data: ({functionality : 'importData'}),
+                async: false,
+                success: function (data) {                   
+                    Db_data = data;
+                },
+                error: function(xhr, status, error) {
+                },
+            });
+            if (!xCheckStudioInterface1) {
+                xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
+            }
+            else {
+                xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                xCheckStudioInterface2.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
+            }
+        }
 
         //open windows file selector dialog
         function OnLoadClick(isFirstDataSource) {
@@ -3372,7 +3375,7 @@
                                 xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
-                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "ibd") {
                             checkedComponent = {
                                 'Name': row.cells[1].textContent.trim(),
                                 'MainComponentClass': row.cells[2].textContent.trim(),
@@ -3380,10 +3383,10 @@
                                 'Description': row.cells[4].textContent.trim()
                             };
 
-                            if (checkBoxId === "checkAllSourceACB" &&
-                                xCheckStudioInterface1 &&
-                                !xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoentExists(row)) {
-                                xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents.push(checkedComponent);
+                            if (checkBoxId === "checkAllSourceBCB" &&
+                            xCheckStudioInterface2 &&
+                                !xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoentExists(row)) {
+                                    xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
                     }
@@ -3393,21 +3396,45 @@
             if (!checkBox) {
                 if (checkBoxId === "checkAllSourceACB" &&
                     xCheckStudioInterface1) {
-                    if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml") {
+                    if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "ifc" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
+                        xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
                         xCheckStudioInterface1._modelTree.selectedCompoents = [];
                     }
                     else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
-                        xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents = [];
+                        xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
+                    }
+                    else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                        xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
 
                 }
                 else if (checkBoxId === "checkAllSourceBCB" &&
                     xCheckStudioInterface2) {
-                    if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml") {
+                    if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "ifc" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "step" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "stp" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "ste" ||
+                        xCheckStudioInterface2.SourceType.toLowerCase() === "rvt") {
                         xCheckStudioInterface2._modelTree.selectedCompoents = [];
                     }
                     else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
-                        xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents = [];
+                        xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents = [];
+                    }
+                    else if (xCheckStudioInterface2.SourceType.toLowerCase() === "ibd") {
+                        xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
                 }
             }

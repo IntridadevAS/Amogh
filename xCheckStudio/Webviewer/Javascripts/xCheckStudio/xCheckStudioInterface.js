@@ -13,20 +13,22 @@ var xCheckStudio;
             // this.nodeIdVsComponentData = {};
             this.sourceProperties = {};
 
-            this.excelReader = new ExcelReader(sourceType);
-            this.db_reader = new DBReader(sourceType);
+            this.excelReader = undefined;
+            this.db_reader = undefined;
 
             this.NodeIdvsComponentIdList ={}
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
+            this.excelReader = new ExcelReader(this.SourceType);
             this.excelReader.ReadFileData(file, containerId, viewerContainer);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
-        xCheckStudioInterface.prototype.readDbFileData = function (Db_data, containerId)
+        xCheckStudioInterface.prototype.readDbFileData = function (Db_data, containerId, viewerContainer)
         {
-            this.db_reader.ReadDBData(Db_data, containerId);
+            this.db_reader = new DBReader(this.SourceType);
+            this.db_reader.ReadDBData(Db_data, containerId, viewerContainer);
             this.sourceProperties = this.db_reader.sourceProperties;
         }
 
@@ -398,7 +400,7 @@ var xCheckStudio;
             }         
 
             $.ajax({
-                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source },
+                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source, 'DataSourceType' : '3D' },
                 type: "POST",
                 url: "PHP/AddComponentsToDB.php"
                }).done(function (msg) {
@@ -418,11 +420,11 @@ var xCheckStudio;
                 return this._modelTree;
             }
             else if (this.excelReader !== undefined &&
-                this.excelReader.excelModelBrowser !== undefined && this.excelReader.SourceType == "xls") {
+                this.excelReader.excelModelBrowser !== undefined) {
                 return this.excelReader.excelModelBrowser;
             }
-            else if (this.db_reader !== undefined &&
-                this.db_reader.dbmodelbrowser !== undefined && this.db_reader.SourceType == "ibd") {
+            else if(this.db_reader !== undefined && this.db_reader.dbmodelbrowser !== undefined)
+            {
                 return this.db_reader.dbmodelbrowser;
             }
 

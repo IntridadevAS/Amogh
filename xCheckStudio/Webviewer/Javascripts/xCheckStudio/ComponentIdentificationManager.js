@@ -24,6 +24,10 @@ var xCheckStudio;
          ComponentIdentificationManager.XLSSourceMainClassProperty = "MainComponentClass";
          ComponentIdentificationManager.XLSSourceSubComponentClassProperty = "ComponentClass";
 
+         ComponentIdentificationManager.DBSourceNameProperty = "Name";
+         ComponentIdentificationManager.DBSourceMainClassProperty = "MainComponentClass";
+         ComponentIdentificationManager.DBSourceSubComponentClassProperty = "ComponentClass";
+
          // SolidWorks data source
          ComponentIdentificationManager.SLDSourceNameProperty = "SW-File Name(File Name)";
          ComponentIdentificationManager.SLDSourceMainClassProperty = "Component Class";
@@ -129,6 +133,13 @@ var xCheckStudio;
                     'name': ComponentIdentificationManager.XLSSourceNameProperty,
                     'mainCategory': ComponentIdentificationManager.XLSSourceMainClassProperty,
                     'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
+                };
+            }
+            else if (fileExtension.toLowerCase() === "ibd") {
+                properties = {
+                    'name': ComponentIdentificationManager.DBSourceNameProperty,
+                    'mainCategory': ComponentIdentificationManager.DBSourceMainClassProperty,
+                    'subClass': ComponentIdentificationManager.DBSourceSubComponentClassProperty
                 };
             }
             else if (fileExtension.toLowerCase() === "sldasm") {
