@@ -188,10 +188,10 @@
                         
                         // check if component exists in checkCaseGroup
                         if (!componentClassExists($sourceAComponent['subclass'], 
-                                                $sourceBComponent['subclass'],
-                                                $checkCaseGroup, 
-                                                $sourceAComponent['mainclass'],
-                                                $sourceBComponent['mainclass'])) 
+                                                  $sourceBComponent['subclass'],
+                                                  $checkCaseGroup, 
+                                                  $sourceAComponent['mainclass'],
+                                                  $sourceBComponent['mainclass'])) 
                             {
                                             
                                if (componentClassExists($sourceAComponent['subclass'], 
@@ -245,12 +245,23 @@
                             // set componentMatchFound flag to true
                             $componentMatchFound = true;
 
+                            $sourceANodeId = NULL;
+                            if(isset( $sourceAComponent['nodeid']))
+                            {
+                                $sourceANodeId = $sourceAComponent['nodeid'];
+                            }
+                            $sourceBNodeId = NULL;
+                            if(isset( $sourceBComponent['nodeid']))
+                            {
+                                $sourceBNodeId = $sourceBComponent['nodeid'];
+                            }
+
                             // create checkcomponent object                      
                             $checkComponent = new CheckComponent($sourceAComponent['name'],
                                 $sourceBComponent['name'],
                                 $sourceAComponent['subclass'],
-                                $sourceAComponent['nodeid'],
-                                $sourceBComponent['nodeid']);
+                                $sourceANodeId,
+                                $sourceBNodeId);
 
                             
                             $checkComponentGroup->AddCheckComponent($checkComponent);
@@ -545,10 +556,15 @@
                 {
                     global $SourceAProperties;                  
 
+                    $nodeId = NUll;
+                    if(isset($sourceComponent['nodeid']))
+                    {
+                        $nodeId = $sourceComponent['nodeid'];
+                    }
                     $checkComponent = new CheckComponent($sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
-                                                        $sourceComponent["nodeid"],
+                                                        $nodeId ,
                                                         NULL);
 
                     $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
@@ -572,11 +588,16 @@
                 {
                     global $SourceBProperties;
 
+                    $nodeId = NUll;
+                    if(isset($sourceComponent['nodeid']))
+                    {
+                        $nodeId = $sourceComponent['nodeid'];
+                    }
                     $checkComponent = new CheckComponent("",
                                                         $sourceComponent["name"],
                                                         $sourceComponent["subclass"],
                                                         NULL,
-                                                        $sourceComponent["nodeid"]);
+                                                        $nodeId);
 
                     $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
                     foreach ($sourceBComponentProperties as $name => $property) 
@@ -798,7 +819,7 @@
                        $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
                        $component['subclass']  ==  $selectedComponent['ComponentClass']){
                            
-                               if($selectedComponent['NodeId'])
+                             if(isset($selectedComponent['NodeId']))
                             {                          
                                 if($selectedComponent['NodeId'] == $component['nodeid'])
                                 {                               

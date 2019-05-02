@@ -54,11 +54,16 @@ ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
     }         
 
     $.ajax({
-        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'TypeOfDataSource' : '1D'},
+        data: { 'Components': JSON.stringify(this.sourceProperties), 
+                'Source' : source , 
+                'TypeOfDataSource' : '1D'
+              },
         type: "POST",
         url: "PHP/AddComponentsToDB.php"
-       }).done(function (data) {
+       }).done(function (data) 
+    {
         console.log(data);
+       
         // remove busy spinner
         var busySpinner = document.getElementById("divLoading");
         busySpinner.classList.remove('show')

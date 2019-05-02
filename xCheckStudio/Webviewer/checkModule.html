@@ -2768,7 +2768,8 @@
 
         function readExcelDataSource(file,
             viewerContainer,
-            modelTreeContainer) {
+            modelTreeContainer) 
+        {
 
             let fileName = file.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
@@ -2783,31 +2784,32 @@
             }
         }
 
-        function readDbDataSource(file,
-            viewerContainer,
-            modelTreeContainer) {
+        // function readDbDataSource(file,
+        //     viewerContainer,
+        //     modelTreeContainer) 
+        // {
 
-            let fileName = file.name;
-            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+        //     let fileName = file.name;
+        //     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-            Db_data = new Array();
-            $.ajax({
-                url:'PHP/PDOConnectionForDatabases.php',
-                type:'POST',
-                dataType: 'JSON',
-                data: ({functionality : 'importData'}),
-                async: false,
-                success: function (data) {                   
-                    Db_data = data;
-                },
-                error: function(xhr, status, error) {
-                    console.log(error)
-                },
-            });
-            console.log(Db_data);
-            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
-            xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
-        }
+        //     Db_data = new Array();
+        //     $.ajax({
+        //         url:'PHP/PDOConnectionForDatabases.php',
+        //         type:'POST',
+        //         dataType: 'JSON',
+        //         data: ({functionality : 'importData'}),
+        //         async: false,
+        //         success: function (data) {                   
+        //             Db_data = data;
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.log(error)
+        //         },
+        //     });
+        //     console.log(Db_data);
+        //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        //     xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer);
+        // }
 
         //open windows file selector dialog
         function OnLoadClick(isFirstDataSource) {
@@ -3101,50 +3103,50 @@
 
         }
 
-        function loadDbDataSource(fileExtension,
-            file,
-            viewerContainer,
-            modelTreeContainer) {
-            if (!checkCaseManager ||
-                !checkCaseManager.CheckCase) {
-                alert("CheckCaseManager not found.");
-                return false;
-            }
+        // function loadDbDataSource(fileExtension,
+        //     file,
+        //     viewerContainer,
+        //     modelTreeContainer) {
+        //     if (!checkCaseManager ||
+        //         !checkCaseManager.CheckCase) {
+        //         alert("CheckCaseManager not found.");
+        //         return false;
+        //     }
 
-            var sourceAType;
-            var sourceBType;
-            for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-                if (checkType.Name.toLowerCase() === "comparison") {
-                    sourceAType = checkType.SourceAType;
-                    sourceBType = checkType.SourceBType;
-                }
-                else if (checkType.Name.toLowerCase() === "compliance") {
-                    sourceAType = checkType.SourceAType;
-                }
-            }
+        //     var sourceAType;
+        //     var sourceBType;
+        //     for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+        //         var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+        //         if (checkType.Name.toLowerCase() === "comparison") {
+        //             sourceAType = checkType.SourceAType;
+        //             sourceBType = checkType.SourceBType;
+        //         }
+        //         else if (checkType.Name.toLowerCase() === "compliance") {
+        //             sourceAType = checkType.SourceAType;
+        //         }
+        //     }
 
-            if (viewerContainer === "viewerContainer1") {
-                if (!sourceAType ||
-                    sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-                    alert("Data source type doesn't match with check case.");
-                    return false;
-                }
-            }
-            else if (viewerContainer === "viewerContainer2") {
-                if (!sourceBType ||
-                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-                    alert("Data source type doesn't match with check case.");
-                    return false;
-                }
-            }
-            readDbDataSource(file[0],
-                viewerContainer,
-                modelTreeContainer);
+        //     if (viewerContainer === "viewerContainer1") {
+        //         if (!sourceAType ||
+        //             sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        //             alert("Data source type doesn't match with check case.");
+        //             return false;
+        //         }
+        //     }
+        //     else if (viewerContainer === "viewerContainer2") {
+        //         if (!sourceBType ||
+        //             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        //             alert("Data source type doesn't match with check case.");
+        //             return false;
+        //         }
+        //     }
+        //     readDbDataSource(file[0],
+        //         viewerContainer,
+        //         modelTreeContainer);
 
-            return true;
+        //     return true;
 
-        }
+        // }
 
         function loadModel(fileName,
             viewerContainer,

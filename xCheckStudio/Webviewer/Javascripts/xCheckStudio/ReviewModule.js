@@ -36,7 +36,7 @@ function populateCheckResults(comparisonCheckGroups,
     {
         return;
     }
-
+   
     $.ajax({
         url: 'PHP/SourceViewerOptionsReader.php',
         type: "POST",
@@ -45,18 +45,79 @@ function populateCheckResults(comparisonCheckGroups,
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
 
-            if (comparisonCheckGroups) {
-                loadComparisonData(comparisonCheckGroups, viewerOptions);
+            var sourceAViewerOptions = undefined;
+            var sourceAClassWiseComponents = undefined;
+            if(viewerOptions['SourceAContainerId'] === undefined ||
+               viewerOptions['SourceAEndPointUri'] === undefined)
+            {
+                 // this ajax call is synchronous
+
+                 // get class wise properties for excel and other 1D datasources
+                 $.ajax({
+                    url: 'PHP/ClasswiseComponentsReader.php',
+                    type: "POST",
+                    async: false,
+                    data: {'Source' : "SourceA"},
+                     success: function (msg) {
+                         if (msg != 'fail') {
+                             sourceAClassWiseComponents = JSON.parse(msg);
+                         }
+                     }
+                 });
+            }
+            else
+            {
+                sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
             }
 
-            if (sourceAComplianceCheckGroups) {
+            var sourceBViewerOptions = undefined;
+            var sourceBClassWiseComponents = undefined;
+            if(viewerOptions['SourceBContainerId'] === undefined ||
+               viewerOptions['SourceBEndPointUri'] === undefined)
+            {
+                // this ajax call is synchronous
+
+                // get class wise properties for excel and other 1D datasources
+                $.ajax({
+                    url: 'PHP/ClasswiseComponentsReader.php',
+                    type: "POST",
+                    async: false,
+                    data: {'Source' : "SourceB"},
+                    success: function (msg) 
+                    {
+                        if (msg != 'fail') {
+                            sourceBClassWiseComponents = JSON.parse(msg);
+                        }
+                    }
+                });
+            }
+            else
+            {
+                sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
+            }
+
+
+            if (comparisonCheckGroups) 
+            {
+                loadComparisonData(comparisonCheckGroups, 
+                                   sourceAViewerOptions, 
+                                   sourceBViewerOptions,
+                                   sourceAClassWiseComponents,
+                                   sourceBClassWiseComponents);
+            }
+
+            if (sourceAComplianceCheckGroups) 
+            {
                 loadSourceAComplianceData(sourceAComplianceCheckGroups,
-                    viewerOptions);
+                                          sourceAViewerOptions,
+                                          sourceAClassWiseComponents);
             }
 
-            if (sourceBComplianceCheckGroups) {
+            if (sourceBComplianceCheckGroups) 
+            {
                 loadSourceBComplianceData(sourceBComplianceCheckGroups, 
-                                          viewerOptions);
+                                          sourceBViewerOptions,
+                                          sourceBClassWiseComponents);
             }
 
             // make buttons collapsible
@@ -72,51 +133,135 @@ function populateCheckResults(comparisonCheckGroups,
                 openCheckResultTab('SourceBComplianceTabPage');
             }
         }
-    });
-
-    function loadSourceAComplianceData(complianceCheckGroups,
-        viewerOptions) {
-
-        sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
-            [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']],
-            'SourceAComplianceMainReviewCell',
-            'SourceAComplianceDetailedReviewCell',
-            'SourceAComplianceDetailedReviewComment');
-
-        // populate review table
-        sourceAComplianceReviewManager.populateReviewTable();
-
-    }
-
-    function loadSourceBComplianceData(complianceCheckGroups,
-        viewerOptions) {
-
-        sourceBComplianceReviewManager = new  ComplianceReviewManager(complianceCheckGroups,
-            [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']],
-            'SourceBComplianceMainReviewCell',
-            'SourceBComplianceDetailedReviewCell',
-            'SourceBComplianceDetailedReviewComment');
-
-        // populate review table
-        sourceBComplianceReviewManager.populateReviewTable();
-    }
-
-    function loadComparisonData(comparisonCheckGroups, 
-                                viewerOptions)
-    {
-        comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
-            [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']],
-            [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']],
-            undefined,
-            undefined,
-            "ComparisonMainReviewCell",
-            "ComparisonDetailedReviewCell"/*,
-            undefined,
-            undefined,
-            undefined,
-            undefined*/);
-
-        // populate review table
-        comparisonReviewManager.populateReviewTable();     
-    }
+    });  
 }
+
+function loadSourceAComplianceData(complianceCheckGroups,
+    sourceViewerOptions,
+    sourceAClassWiseComponents) {
+
+    // var sourceViewerOptions = undefined;
+    // if(viewerOptions['SourceAContainerId'] !== undefined &&
+    //    viewerOptions['SourceAEndPointUri'] !== undefined)
+    // {
+    //         sourceViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
+    // }
+
+    sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
+        sourceViewerOptions,
+        sourceAClassWiseComponents,
+        'SourceAComplianceMainReviewCell',
+        'SourceAComplianceDetailedReviewCell',
+        'SourceAComplianceDetailedReviewComment');
+
+    // populate review table
+    sourceAComplianceReviewManager.populateReviewTable();
+
+}
+
+function loadSourceBComplianceData(complianceCheckGroups,
+                                   sourceViewerOptions,
+                                   sourceBClassWiseComponents) {
+
+    // var sourceViewerOptions = undefined;
+    // if(viewerOptions['SourceBContainerId'] !== undefined &&
+    //     viewerOptions['SourceBEndPointUri'] !== undefined)
+    // {
+    //     sourceViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
+    // }
+
+    sourceBComplianceReviewManager = new  ComplianceReviewManager(complianceCheckGroups,
+        sourceViewerOptions,
+        sourceBClassWiseComponents,
+        'SourceBComplianceMainReviewCell',
+        'SourceBComplianceDetailedReviewCell',
+        'SourceBComplianceDetailedReviewComment');
+
+    // populate review table
+    sourceBComplianceReviewManager.populateReviewTable();
+}
+
+function loadComparisonData(comparisonCheckGroups, 
+                            sourceAViewerOptions, 
+                            sourceBViewerOptions,
+                            sourceAClassWiseComponents,
+                            sourceBClassWiseComponents)
+{
+    // var sourceAViewerOptions = undefined;
+    // var sourceAClasswiseData = undefined;
+    // if(viewerOptions['SourceAContainerId'] !== undefined &&
+    //    viewerOptions['SourceAEndPointUri'] !== undefined)
+    // {
+    //     sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
+    // }        
+
+    // var sourceBViewerOptions = undefined;
+    // var sourceBClasswiseData = undefined;
+    // if(viewerOptions['SourceBContainerId'] !== undefined &&
+    //     viewerOptions['SourceBEndPointUri'] !== undefined)
+    // {
+    //     sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
+    // }
+    
+
+    comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
+                                                          sourceAViewerOptions,
+                                                          sourceBViewerOptions,
+                                                          sourceAClassWiseComponents,
+                                                          sourceBClassWiseComponents,
+                                                          "ComparisonMainReviewCell",
+                                                          "ComparisonDetailedReviewCell"/*,
+                                                            undefined,
+                                                            undefined,
+                                                            undefined,
+                                                            undefined*/);
+
+    // populate review table
+    comparisonReviewManager.populateReviewTable();     
+}
+
+// function getClassWiseComponents() 
+// {
+//     return new Promise(function (resolve, reject) 
+//     {
+
+//          // get class wise properties for excel and other 1D datasources
+//          $.ajax({
+//             url: 'PHP/ClasswiseComponentsReader.php',
+//             type: "POST",
+//             async: true,
+//             data: {'Source' : "SourceA"},
+//             success: function (msg) 
+//             {
+//                 if(msg != 'fail')                
+//                 {
+//                     var sourceAClassWiseComps = JSON.parse(msg);
+//                 }
+
+            
+//                 // get class wise properties for excel and other 1D datasources
+//                 $.ajax({
+//                     url: 'PHP/ClasswiseComponentsReader.php',
+//                     type: "POST",
+//                     async: true,
+//                     data: {'Source' : "SourceB"},
+//                     success: function (msg1) 
+//                     {
+//                         if(msg1 != 'fail')                
+//                         {
+//                             var sourceBClassWiseComps = JSON.parse(msg1);
+//                         }
+
+
+//                         return resolve(true);
+//                     }
+//                 });
+
+//             }//,
+//             // error: function () 
+//             // {
+//             //     return resolve(true);
+//             // }
+//         });
+//     });
+// }

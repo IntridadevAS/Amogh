@@ -37,18 +37,18 @@ function CheckManager(name) {
         comparisonCheck,
         interfaceObject) {
 
-            var $this = this;
+            // var $this = this;
         if (comparisonCheck) {
            //this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
 
-           var sourceAIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,"");
-           var sourceBIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,"");
+        //    var sourceAIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,"");
+        //    var sourceBIdentifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,"");
 
            var sourceASelectedCompoents;           
             if (xCheckStudioInterface1.excelReader !== undefined) {
                 sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
             }
-            else(xCheckStudioInterface1._modelTree !== undefined)
+            else if(xCheckStudioInterface1._modelTree !== undefined)
             {
                 sourceASelectedCompoents = xCheckStudioInterface1._modelTree.selectedCompoents;
             }
@@ -57,7 +57,7 @@ function CheckManager(name) {
             if (xCheckStudioInterface2.excelReader !== undefined) {
                 sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
             }
-            else(xCheckStudioInterface2._modelTree !== undefined)
+            else if(xCheckStudioInterface2._modelTree !== undefined)
             {
                 sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
             }
@@ -65,7 +65,7 @@ function CheckManager(name) {
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',
                 type: "POST",
-                async: false,
+                async: true,
                 data: {                    
                     "CheckCaseType": JSON.stringify(checkCaseType),                  
                     "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
@@ -105,7 +105,7 @@ function CheckManager(name) {
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',
                 type: "POST",
-                async: false,
+                async: true,
                 data: { /*"SourceProperties": JSON.stringify(sourceProperties1), */
                         "CheckCaseType": JSON.stringify(checkCaseType),
                         /*"SourceType": interfaceObject.SourceType,*/

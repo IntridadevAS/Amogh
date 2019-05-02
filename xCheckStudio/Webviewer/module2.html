@@ -880,7 +880,7 @@
             //                     this.SourceBNodeIdVsComponentData);
             //             }
             //             else if (typeof this.SourceAProperties !== 'undefined' && 
-            //                     typeof this.SourceBProperties !== 'undefined') {
+            //                      typeof this.SourceBProperties !== 'undefined') {
             //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
             //                     undefined,
             //                     undefined,
@@ -1051,331 +1051,331 @@
             // });
         };
 
-        function readComparisonCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                // $.ajax({
-                //     url: 'PHP/comparisonCheckpostDataReader.php',
-                //     type: "GET",
-                //     async: true,
-                //     data: {},
-                //     success: function (msg) {
-                //         var int = 0;
-                //         if (msg !== "not found") {
-                //             __this.ComparisonCheckData = JSON.parse(msg);
-                //         }
-                //         __this.readSourceAComplianceCheckData(__this).then(function (success){
-                //             if(success)
-                //             {
-                //                 return resolve(true);
-                //             }
-                //         });
-                //     },
-                //     error: function () {
-                //         return resolve(true);
-                //     }
-                // })
-            });
-        }
+        // function readComparisonCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         // $.ajax({
+        //         //     url: 'PHP/comparisonCheckpostDataReader.php',
+        //         //     type: "GET",
+        //         //     async: true,
+        //         //     data: {},
+        //         //     success: function (msg) {
+        //         //         var int = 0;
+        //         //         if (msg !== "not found") {
+        //         //             __this.ComparisonCheckData = JSON.parse(msg);
+        //         //         }
+        //         //         __this.readSourceAComplianceCheckData(__this).then(function (success){
+        //         //             if(success)
+        //         //             {
+        //         //                 return resolve(true);
+        //         //             }
+        //         //         });
+        //         //     },
+        //         //     error: function () {
+        //         //         return resolve(true);
+        //         //     }
+        //         // })
+        //     });
+        // }
 
-        function readSourceAComplianceCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                // $.ajax({
-                //     url: 'PHP/sourceAComplianceDataReader.php',
-                //     type: "GET",
-                //     async: true,
-                //     data: {},
-                //     success: function (msg) {
-                //         var int = 0;
-                //         if (msg !== "not found") {
-                //             __this.SourceAComplianceData = JSON.parse(msg);
-                //         }
+        // function readSourceAComplianceCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         // $.ajax({
+        //         //     url: 'PHP/sourceAComplianceDataReader.php',
+        //         //     type: "GET",
+        //         //     async: true,
+        //         //     data: {},
+        //         //     success: function (msg) {
+        //         //         var int = 0;
+        //         //         if (msg !== "not found") {
+        //         //             __this.SourceAComplianceData = JSON.parse(msg);
+        //         //         }
 
-                //         __this.readSourceBComplianceCheckData(__this).then(function (success){
-                //             if(success)
-                //             {
-                //                 return resolve(true);
-                //             }
-                //         });
-                //     },
-                //     error: function () {
-                //         return resolve(true);
-                //     }
-                // })
-            });
-        }
+        //         //         __this.readSourceBComplianceCheckData(__this).then(function (success){
+        //         //             if(success)
+        //         //             {
+        //         //                 return resolve(true);
+        //         //             }
+        //         //         });
+        //         //     },
+        //         //     error: function () {
+        //         //         return resolve(true);
+        //         //     }
+        //         // })
+        //     });
+        // }
 
-        function readSourceBComplianceCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceBComplianceDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceBComplianceData = JSON.parse(msg);
-                        }
+        // function readSourceBComplianceCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceBComplianceDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceBComplianceData = JSON.parse(msg);
+        //                 }
                         
-                        __this.readSourceAViewerCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readSourceAViewerCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceAViewerCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceAViewerDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceAViewerData = JSON.parse(msg);
-                        }
+        // function readSourceAViewerCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceAViewerDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceAViewerData = JSON.parse(msg);
+        //                 }
                         
-                        __this.readSourceBViewerCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readSourceBViewerCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceBViewerCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceBViewerDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceBViewerData = JSON.parse(msg);
-                        }
+        // function readSourceBViewerCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceBViewerDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceBViewerData = JSON.parse(msg);
+        //                 }
 
-                        __this.readSourceAComponentIdVsComponentCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readSourceAComponentIdVsComponentCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceAComponentIdVsComponentCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceAComponentIdVsComponentDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceAComponentIdVsComponentData = JSON.parse(msg);
-                        }
-                        __this.readSourceBComponentIdVsComponentCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        // function readSourceAComponentIdVsComponentCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceAComponentIdVsComponentDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceAComponentIdVsComponentData = JSON.parse(msg);
+        //                 }
+        //                 __this.readSourceBComponentIdVsComponentCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceBComponentIdVsComponentCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceBComponentIdVsComponentDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceBComponentIdVsComponentData = JSON.parse(msg);
-                        }
+        // function readSourceBComponentIdVsComponentCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceBComponentIdVsComponentDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceBComponentIdVsComponentData = JSON.parse(msg);
+        //                 }
 
-                        __this.readSourceANodeIdVsComponentCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readSourceANodeIdVsComponentCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceANodeIdVsComponentCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceANodeIdVsComponentDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceANodeIdVsComponentData = JSON.parse(msg);
-                        }
+        // function readSourceANodeIdVsComponentCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceANodeIdVsComponentDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceANodeIdVsComponentData = JSON.parse(msg);
+        //                 }
                         
-                        __this.readSourceBNodeIdVsComponentCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readSourceBNodeIdVsComponentCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceBNodeIdVsComponentCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/sourceBNodeIdVsComponentDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceBNodeIdVsComponentData = JSON.parse(msg);
-                        }
-                        __this.readSourceASheetCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        // function readSourceBNodeIdVsComponentCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/sourceBNodeIdVsComponentDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceBNodeIdVsComponentData = JSON.parse(msg);
+        //                 }
+        //                 __this.readSourceASheetCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceASheetCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/SourceASheetDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceAProperties = JSON.parse(msg);
-                        }
-                        __this.readSourceBSheetCheckData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        // function readSourceASheetCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/SourceASheetDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceAProperties = JSON.parse(msg);
+        //                 }
+        //                 __this.readSourceBSheetCheckData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readSourceBSheetCheckData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/SourceBSheetDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.SourceBProperties = JSON.parse(msg);
-                        }
+        // function readSourceBSheetCheckData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/SourceBSheetDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.SourceBProperties = JSON.parse(msg);
+        //                 }
                         
-                        __this.readAnalyticsData(__this).then(function (success){
-                            if(success)
-                            {
-                                return resolve(true);
-                            }
-                        });
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        //                 __this.readAnalyticsData(__this).then(function (success){
+        //                     if(success)
+        //                     {
+        //                         return resolve(true);
+        //                     }
+        //                 });
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
-        function readAnalyticsData(_this) {
-            var __this = _this;
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: 'PHP/analyticsDetailsDataReader.php',
-                    type: "GET",
-                    async: true,
-                    data: {},
-                    success: function (msg) {
-                        var int = 0;
-                        if (msg !== "not found") {
-                            __this.AnalyticsData = JSON.parse(msg);
-                        }                   
-                        return resolve(true);
-                    },
-                    error: function () {
-                        return resolve(true);
-                    }
-                })
-            });
-        }
+        // function readAnalyticsData(_this) {
+        //     var __this = _this;
+        //     return new Promise(function (resolve, reject) {
+        //         $.ajax({
+        //             url: 'PHP/analyticsDetailsDataReader.php',
+        //             type: "GET",
+        //             async: true,
+        //             data: {},
+        //             success: function (msg) {
+        //                 var int = 0;
+        //                 if (msg !== "not found") {
+        //                     __this.AnalyticsData = JSON.parse(msg);
+        //                 }                   
+        //                 return resolve(true);
+        //             },
+        //             error: function () {
+        //                 return resolve(true);
+        //             }
+        //         })
+        //     });
+        // }
 
         function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData) {
             // post comparison data

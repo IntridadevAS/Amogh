@@ -188,7 +188,7 @@
                    $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
                    $component['subclass']  ==  $selectedComponent['ComponentClass']){
                        
-                           if($selectedComponent['NodeId'])
+                           if(isset($selectedComponent['NodeId']))
                         {                          
                             if($selectedComponent['NodeId'] == $component['nodeid'])
                             {                               
@@ -606,10 +606,16 @@
                     continue;
                 }
 
+                $nodeId = NULL;
+                if(isset($sourceComponent['nodeid']))
+                {
+                    $nodeId =$sourceComponent['nodeid'];
+                }
+
                 $checkComponent = new CheckComponent($sourceComponent['name'],
                                                      "",
                                                     $sourceComponent['subclass'],
-                                                    $sourceComponent['nodeid'],
+                                                    $nodeId ,
                                                     "");
 
                 $checkComponentGroup->AddCheckComponent($checkComponent);
