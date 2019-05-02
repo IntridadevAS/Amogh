@@ -57,6 +57,10 @@ function createProject(projectname, descriptionText, functionText) {
                     window.location.href = "/checkModule.html";
                 }                            
             });
-        }                    
+        }
+        else{
+            alert(msg);
+        }
+
     });
 }
