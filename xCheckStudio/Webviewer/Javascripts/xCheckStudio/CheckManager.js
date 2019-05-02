@@ -50,7 +50,7 @@ function CheckManager(name) {
             }
             else if(xCheckStudioInterface1.db_reader !== undefined)
             {
-                SelectedCompoents = xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents;
+                sourceASelectedCompoents = xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents;
             }
             else if(xCheckStudioInterface1._modelTree !== undefined)
             {
@@ -60,6 +60,10 @@ function CheckManager(name) {
             var sourceBSelectedCompoents;
             if (xCheckStudioInterface2.excelReader !== undefined) {
                 sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
+            }
+            else if(xCheckStudioInterface1.db_reader !== undefined)
+            {
+                sourceBSelectedCompoents = xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents;
             }
             else if(xCheckStudioInterface2._modelTree !== undefined)
             {
