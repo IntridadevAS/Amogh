@@ -16,214 +16,8 @@ var hiidenEntities = [];
 var currentViewer;
 
 
-window.onload = function () {
-
-    // disable controls on load
-    disableControlsOnLoad();
-
-    // set project name
-    setProjectName();        
-
-    // set user name
-    setUserName();    
-    
-    var checkButton = document.getElementById("checkButton");
-    checkButton.onclick = function () {
-        // show busy loader
-        var busySpinner = document.getElementById("divLoading");
-        busySpinner.className = 'show';
-
-        sourceAComplianceCheckManager = undefined;
-        sourceBComplianceCheckManager = undefined;
-        comparisonCheckManager = undefined;
-
-        var checkCaseSelect = document.getElementById("checkCaseSelect");
-        if (checkCaseSelect.value === "None") {
-            // hide busy spinner
-            busySpinner.classList.remove('show');           
-            OnShowToast('Please select check case from list.');
-            return;
-        }
-
-        // check if any check case type is selected
-        var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-        var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-        var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-        if (!comparisonCB.classList.contains("state2") &&
-            !complianceSourceACB.classList.contains("state1") &&
-            !complianceSourceBCB.classList.contains("state1")) {
-            // hide busy spinner
-            busySpinner.classList.remove('show');
-            OnShowToast('No selected check type found.</br>Please select check type.');           
-            return;
-        }
-
-        var checkPerformed = false;
-        //var checkMethod;
-        for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-            var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-            var comparisonCB = document.getElementById('comparisonCB');
-            if (checkType.Name.toLowerCase() === "comparison" &&
-                xCheckStudioInterface1 &&
-                xCheckStudioInterface2 &&
-                checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
-                checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
-                var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-                if (component.classList.contains("state2")) {
-
-                    var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-                    var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-                    if (!sourceAModelBrowser || !sourceBModelBrowser) {
-                        continue;
-                    }
-
-                    // check if there are no selected components
-                    if (sourceAModelBrowser.selectedCompoents.length === 0 &&
-                        sourceBModelBrowser.selectedCompoents.length === 0) {
-                        //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
-                        OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-                        continue;
-                    }
-
-                    if (!comparisonCheckManager) {
-                        comparisonCheckManager = new CheckManager();
-                        comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                            xCheckStudioInterface2.sourceProperties,
-                            checkType,
-                            true,
-                            undefined);
-
-                        checkPerformed = true;
-                    }
-                }
-            }
-
-            else {
-                if (xCheckStudioInterface1) {
-                    var complianceSourceACB = document.getElementById("complianceSourceACB");
-                    if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourcea") {
-                        if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase()) {
-                            var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                            if (component.classList.contains("state1")) {
-
-                                // check if there are no selected components
-                                var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-                                if (!sourceAModelBrowser) {
-                                    continue;
-                                }
-
-                                if (sourceAModelBrowser.selectedCompoents.length === 0) {
-                                    //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
-                                    OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-                                    //continue;
-                                }
-                                else {
-                                    if (!sourceAComplianceCheckManager) {
-                                        sourceAComplianceCheckManager = new CheckManager();
-                                        sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                            undefined,
-                                            checkType,
-                                            false,
-                                            xCheckStudioInterface1);
-
-                                        checkPerformed = true;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                if (xCheckStudioInterface2) {
-                    var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                    if (checkType.Name.toLowerCase() === "compliance" || checkType.Name.toLowerCase() === "compliancesourceb") {
-                        if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
-                            var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-                            if (component.classList.contains("state1")) {
-
-                                // check if there are no selected components
-                                var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-                                if (!sourceBModelBrowser) {
-                                    continue;
-                                }
-
-                                if (sourceBModelBrowser.selectedCompoents.length === 0) {
-                                    //alert("Compliance check on Source B can not be performed.\nNo selected components found.");
-                                    //continue;
-
-                                    OnShowToast('Compliance check on Source B can not be performed.</br>No selected components found.');
-                                }
-                                else {
-                                    if (!sourceBComplianceCheckManager) {
-                                        sourceBComplianceCheckManager = new CheckManager();
-                                        sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
-                                            undefined,
-                                            checkType,
-                                            false,
-                                            xCheckStudioInterface2);
-
-                                        checkPerformed = true;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-        // hide busy spinner
-        busySpinner.classList.remove('show');
-        if (!checkPerformed) {
-            return;
-        }
-        document.getElementById("checkcompletealert").style.display = "block";
-    };
-
-    var checkCaseSelect = document.getElementById("checkCaseSelect");
-    checkCaseSelect.onchange = function () {
-        if (this.value === "None") {
-            checkCaseManager = undefined;
-
-            // disable controls
-            disableControlsOnLoad();
-
-            return;
-        }
-
-        var fileName;
-        for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-            var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-            if (checkCaseFileData.CheckCaseName === this.value) {
-                fileName = checkCaseFileData.FileName;
-                break;
-            }
-        }
-        if (fileName === undefined) {
-            return;
-        }
-
-        // read check case data from XML checkcase data file
-        checkCaseManager = new CheckCaseManager();
-        checkCaseManager.readCheckCaseData(fileName);
-
-        // if valid check case is selected, then enable source A controls              
-        var component = document.getElementById('createbtnA');
-        if (component.classList.contains("disabledbutton")) {
-            component.classList.remove('disabledbutton');
-        }
-
-        // enable drop zone for source A
-        enableDropZone("dropZone1");
-    }
-
-    // read check cases files list
-    checkCaseFilesData = new CheckCaseFilesData();
-    checkCaseFilesData.readCheckCaseFiles();
-};
-
-document.addEventListener("contextmenu", function (e) {
+document.addEventListener("contextmenu", function (e) 
+{
     e.preventDefault();
 }, false);
 
@@ -1392,60 +1186,60 @@ function postData(url, method) {
     //     }
     // });
 
-    checkCaseName = checkCaseManager.CheckCase.Name;
+    // checkCaseName = checkCaseManager.CheckCase.Name;
 
-    var sourceAClasswiseCheckedComponents = 0;
-    var sourceBClasswiseCheckedComponents = 0;
+    // var sourceAClasswiseCheckedComponents = 0;
+    // var sourceBClasswiseCheckedComponents = 0;
 
-    var sourceAModelTree;
-    var sourceBModelTree;
-    if (xCheckStudioInterface1) {
-        sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
-        sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
-    }
+    // var sourceAModelTree;
+    // var sourceBModelTree;
+    // if (xCheckStudioInterface1) {
+    //     sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
+    //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+    // }
 
-    if (xCheckStudioInterface2) {
-        sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
-        sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
-    }
+    // if (xCheckStudioInterface2) {
+    //     sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
+    //     sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+    // }
 
-    var sourceAClassWiseComponets = 0;
-    var sourceBClassWiseComponets = 0;
+    // var sourceAClassWiseComponets = 0;
+    // var sourceBClassWiseComponets = 0;
 
-    if (sourceAModelTree) {
-        var count = sourceAModelTree.selectedCompoents.length;
-        sourceACheckedItemCount = count > 0 ? count : 0;
-        sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
-    }
-    if (sourceBModelTree) {
-        var count = sourceBModelTree.selectedCompoents.length;
-        sourceBCheckedItemCount = count > 0 ? count : 0;
-        sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
-        // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
-    }
+    // if (sourceAModelTree) {
+    //     var count = sourceAModelTree.selectedCompoents.length;
+    //     sourceACheckedItemCount = count > 0 ? count : 0;
+    //     sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
+    // }
+    // if (sourceBModelTree) {
+    //     var count = sourceBModelTree.selectedCompoents.length;
+    //     sourceBCheckedItemCount = count > 0 ? count : 0;
+    //     sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+    //     // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+    // }
 
-    var analyticsDetailsData = new AnalyticsData(checkCaseName,
-        sourceAFileName,
-        sourceBFileName,
-        sourceATotalItemCount,
-        sourceACheckedItemCount,
-        sourceBTotalItemCount,
-        sourceBCheckedItemCount,
-        sourceAClasswiseCheckedComponents,
-        sourceBClasswiseCheckedComponents,
-        sourceAClassWiseComponets,
-        sourceBClassWiseComponets);
+    // var analyticsDetailsData = new AnalyticsData(checkCaseName,
+    //     sourceAFileName,
+    //     sourceBFileName,
+    //     sourceATotalItemCount,
+    //     sourceACheckedItemCount,
+    //     sourceBTotalItemCount,
+    //     sourceBCheckedItemCount,
+    //     sourceAClasswiseCheckedComponents,
+    //     sourceBClasswiseCheckedComponents,
+    //     sourceAClassWiseComponets,
+    //     sourceBClassWiseComponets);
 
 
-    $.ajax({
-        url: 'PHP/analyticsDetailsDataWriter.php',
-        type: "POST",
-        async: true,
-        data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
-        success: function (data) {
-            // alert("success");
-        }
-    });
+    // $.ajax({
+    //     url: 'PHP/analyticsDetailsDataWriter.php',
+    //     type: "POST",
+    //     async: true,
+    //     data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+    //     success: function (data) {
+    //         // alert("success");
+    //     }
+    // });
 
     // post comparison data
     // if (comparisonCheckManager) {
@@ -1487,11 +1281,13 @@ function postData(url, method) {
     //     });
     // }
 
-    // post source A viewer data
+    
     var sourceANodeIdvsComponentIdList;
     var sourceASelectedComponents;
     var sourceBNodeIdvsComponentIdList;
     var sourceBSelectedComponents;
+    var sourceAType;
+    var sourceBType;
 
     if (xCheckStudioInterface1) {
         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
@@ -1522,7 +1318,7 @@ function postData(url, method) {
 
             sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
-
+            sourceAType = xCheckStudioInterface1.SourceType;
             
             // postnode id and component data relation
             // if (xCheckStudioInterface1.nodeIdVsComponentData) {
@@ -1597,6 +1393,7 @@ function postData(url, method) {
 
             sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
+            sourceBType = xCheckStudioInterface2.SourceType;
 
             // // postnode id and component data relation
             // if (xCheckStudioInterface2.nodeIdVsComponentData) {
@@ -1651,12 +1448,20 @@ function postData(url, method) {
             "SourceANodeIdvsComponentIdList": JSON.stringify(sourceANodeIdvsComponentIdList),
             "SourceASelectedComponents": JSON.stringify(sourceASelectedComponents),
             "SourceBNodeIdvsComponentIdList": JSON.stringify(sourceBNodeIdvsComponentIdList),
-            "SourceBSelectedComponents": JSON.stringify(sourceBSelectedComponents)
+            "SourceBSelectedComponents": JSON.stringify(sourceBSelectedComponents),
+            "SourceAFileName": sourceAFileName,
+            "SourceBFileName":sourceBFileName,
+            "SourceAType": sourceAType,
+            "SourceBType": sourceBType,
+            "CheckCaseManager": JSON.stringify(checkCaseManager)                        
         },
         success: function (msg) 
         {
             //alert("success");
             //$("#result").html(data);
+        },
+        error: function(error) {
+            console.log(error)
         }
     });
 }

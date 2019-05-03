@@ -10,10 +10,10 @@
     <script type="text/javascript" src="Javascripts/common/Example.js"></script>
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
 
-    <script src='postData/comparisonCheckpostDataReader.php'></script>
+    <!-- <script src='postData/comparisonCheckpostDataReader.php'></script>
     <script src='postData/sourceAComplianceDataReader.php'></script>
     <script src='postData/sourceBComplianceDataReader.php'></script>
-    <script src='postData/analyticsDetailsDataReader.php'></script>
+    <script src='postData/analyticsDetailsDataReader.php'></script> -->
     <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleCharts.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleLoaderCharts.js"></script>
     <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\PDFExporter.js"></script> -->
@@ -405,114 +405,278 @@
 
         var analyticsManager;
 
-        window.onload = function () {
-            var ComparisonCheckDataPHP = undefined;
-            var SourceAComplianceDataPHP = undefined;
-            var SourceBComplianceDataPHP = undefined;
-            var AnalyticsPHP = undefined;
+            var comparisonCheckGroups = false;
+            var sourceAComplianceCheckGroups = false;
+            var sourceBComplianceCheckGroups = false;
 
+            window.onload = function () {
+            // var ComparisonCheckDataPHP = undefined;
+            // var SourceAComplianceDataPHP = undefined;
+            // var SourceBComplianceDataPHP = undefined;
+            // var AnalyticsPHP = undefined;
+
+            // $.ajax({
+            //     url: 'PHP/comparisonCheckpostDataReader.php',
+            //     type: "POST",
+            //     async: false,
+            //     data: {},
+            //     success: function (msg) {
+            //         var int = 0;
+            //         if(msg !== "not found")
+            //         {
+            //             ComparisonCheckDataPHP = JSON.parse(msg);
+            //         }
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // })
+
+            // $.ajax({
+            //     url: 'PHP/sourceAComplianceDataReader.php',
+            //     type: "POST",
+            //     async: false,
+            //     data: {},
+            //     success: function (msg) {
+            //         var int = 0;
+            //         if(msg !== "not found")
+            //         {
+            //             SourceAComplianceDataPHP = JSON.parse(msg);
+            //         }
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // })
+
+            // $.ajax({
+            //     url: 'PHP/sourceBComplianceDataReader.php',
+            //     type: "POST",
+            //     async: false,
+            //     data: {},
+            //     success: function (msg) {
+            //         var int = 0;
+            //         if(msg !== "not found")
+            //         {
+            //             SourceBComplianceDataPHP = JSON.parse(msg);
+            //         }
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // })
+
+            // read data source info
             $.ajax({
-                url: 'PHP/comparisonCheckpostDataReader.php',
+                url: 'PHP/DataSourceInfoReader.php',
                 type: "POST",
-                async: false,
+                async: true,
+                data: {},
+                success: function (msg) 
+                {                   
+                    if(msg !== "fail")
+                    {
+                        var dataSourceInfo = JSON.parse(msg);
+
+                        if('sourceBFileName' in dataSourceInfo)
+                        {
+                            var source = dataSourceInfo['sourceBFileName'];
+                            if (source !== undefined) {
+                                //fileName1 = source.split(".");
+                                document.getElementById("dataSource1").innerHTML = source;
+                                document.getElementById("dataSource1").style.fontSize = "13px"
+                                
+                                if ('sourceBType' in dataSourceInfo) {
+                                    document.getElementById("extension1").innerHTML = dataSourceInfo['sourceBType'];
+                                }
+                            }
+                        }
+
+                        if('sourceAFileName' in dataSourceInfo)
+                        {
+                            var source = dataSourceInfo['sourceAFileName'];
+                            if(source !== undefined)
+                            {
+                                //fileName2 = source2.split(".");
+                                document.getElementById("dataSource2").innerHTML = source;
+                                document.getElementById("dataSource2").style.fontSize = "13px";
+
+                                if ('sourceAType' in dataSourceInfo) {
+                                    document.getElementById("extension2").innerHTML =dataSourceInfo['sourceAType'];
+                                }
+                            }
+                        }
+                    }                   
+                }
+            });
+
+            // read check case info
+            $.ajax({
+                url: 'PHP/CheckCasenfoReader.php',
+                type: "POST",
+                async: true,
                 data: {},
                 success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        ComparisonCheckDataPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+                    if (msg !== "fail") {
+                        var checkCaseInfo = JSON.parse(msg);
 
+                        if ('checkCaseData' in checkCaseInfo) {
+                            var checkCaseData = JSON.parse(checkCaseInfo['checkCaseData']);
+
+                            if ('CheckCase' in checkCaseData) {
+                                var checkCase = checkCaseData['CheckCase'];
+                                if ('Name' in checkCase) {
+
+                                    var checkCaseName = checkCase['Name'];
+                                    document.getElementById("checkCaseAnalytics").innerHTML = checkCaseName;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            // read check results data
+            // read  check data
             $.ajax({
-                url: 'PHP/sourceAComplianceDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
+                    url: 'PHP/CheckDataReader.php',
+                    type: "POST",
+                    async: true,
+                    data: {},
+                    success: function (msg) 
                     {
-                        SourceAComplianceDataPHP = JSON.parse(msg);
+                        var checkResults = JSON.parse(msg);                      
+                        
+                        for (var key in checkResults) 
+                        {
+                            if (!checkResults.hasOwnProperty(key)) 
+                            {
+                                continue;
+                            }
+
+                            
+                            if (key == 'Comparison') 
+                            {
+                                comparisonCheckGroups = true;
+                                // comparisonCheckGroups = new CheckGroups();
+                                // comparisonCheckGroups.restore(checkResults[key], false);                                
+                            }
+                            else if(key == 'SourceACompliance')
+                            {
+                                sourceAComplianceCheckGroups = true;
+                                // sourceAComplianceCheckGroups = new CheckGroups();
+                                // sourceAComplianceCheckGroups.restore(checkResults[key], true);   
+                            }
+                            else if(key == 'SourceBCompliance')
+                            {
+                                sourceBComplianceCheckGroups = true;
+                                // sourceBComplianceCheckGroups = new CheckGroups();
+                                // sourceBComplianceCheckGroups.restore(checkResults[key], true);  
+                            }                           
+                        }      
+                        
+                        if (!comparisonCheckGroups) 
+                        {
+                            $("#compare").addClass("disable");
+                            openCheckResultTab('ComplianceTab');
+                            var tab = document.getElementById("ComplianceTab");
+                            tab.click();
+                        }
+
+                        if (!sourceAComplianceCheckGroups &&
+                            !sourceBComplianceCheckGroups) {
+                            $("#compliance").addClass("disable");
+                        }
+
+                        analyticsManager = new AnalyticsManager();
+
+                        // draw pie and bar charts 
+                        if (comparisonCheckGroups) {
+                            // draw comparison results pie chartts (total 3)           
+                            analyticsManager.drawPieCharts("comparison");
+
+                            // //  draw comparison info pie charts (total 2)
+                            // analyticsManager.drawInfoPieCharts("comparison");
+
+                            // //  draw bar chart (total 1)
+                            // analyticsManager.drawBarCharts("comparison");
+
+                            // // draw comparison  info bar charts (total 1)
+                            // analyticsManager.drawInfoBarCharts("comparison");
+
+                            // // draw severity line chart
+                            // analyticsManager.drawLineCharts();
+                        }      
+                        
+                        if (sourceAComplianceCheckGroups) {
+                            // // draw source A compliance pie charts (total 3)
+                            // analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+
+                            // // draw source A compliance bar charts (total 1)
+                            // analyticsManager.drawBarCharts("compliance", "ComplianceABarChartTab");
+                        }
+
+
+                        if (sourceBComplianceCheckGroups) {
+                            // //  draw source B compliance pie charts (total 3)
+                            // analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
+
+                            // // draw source B compliance bar charts (total 1)
+                            // analyticsManager.drawBarCharts("compliance", "ComplianceBBarChartTab");
+                        }
+
+                        //load severity line chart 
+                        document.getElementById("SeverityTab").style.display = "block";
+                        // if (typeof ComparisonCheckData !== 'undefined') {
+                        //     analyticsManager.drawLineCharts();
+                        // }
+
+
+                        //load comparison pie chart by default
+                        var currentDiv = document.getElementById("compare");
+                        currentDiv.style.fontSize = "22px";
+                        currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+                        var otherDiv = document.getElementById("compliance");
+                        otherDiv.style.fontSize = "18px";
+                        otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+                        document.getElementById("ComparisonTab").style.display = "block";
+                        document.getElementById("PieChartTab").style.display = "block";
+
                     }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+                });
 
-            $.ajax({
-                url: 'PHP/sourceBComplianceDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        SourceBComplianceDataPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+            // ComparisonCheckData = ComparisonCheckDataPHP;
+            // AnalyticsData = AnalyticsPHP;
+            // SourceAComplianceData = SourceAComplianceDataPHP;
+            // SourceBComplianceData = SourceBComplianceDataPHP;
 
-            $.ajax({
-                url: 'PHP/analyticsDetailsDataReader.php',
-                type: "POST",
-                async: false,
-                data: {},
-                success: function (msg) {
-                    var int = 0;
-                    if(msg !== "not found")
-                    {
-                        AnalyticsPHP = JSON.parse(msg);
-                    }
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            })
+            // analyticsManager = new AnalyticsManager();
 
-            ComparisonCheckData = ComparisonCheckDataPHP;
-            AnalyticsData = AnalyticsPHP;
-            SourceAComplianceData = SourceAComplianceDataPHP;
-            SourceBComplianceData = SourceBComplianceDataPHP;
+            //var checkCase = AnalyticsData.CheckCaseName;
+            //document.getElementById("checkCaseAnalytics").innerHTML = checkCase;
 
-            analyticsManager = new AnalyticsManager();
+           
 
-            var checkCase = AnalyticsData.CheckCaseName;
-            document.getElementById("checkCaseAnalytics").innerHTML = checkCase;
-
-            var source1 = AnalyticsData.SourceBName;
-            if(source1 !== undefined){
-                fileName1 = source1.split(".");
-                document.getElementById("dataSource1").innerHTML = fileName1[0];
-                document.getElementById("dataSource1").style.fontSize = "13px"
-                document.getElementById("extension1").innerHTML = fileName1[1];
-            }
-
-            var source2 = AnalyticsData.SourceAName;
-            if(source2 !== undefined)
-            {
-                fileName2 = source2.split(".");
-                document.getElementById("dataSource2").innerHTML = fileName2[0];
-                document.getElementById("dataSource2").style.fontSize = "13px";
-                document.getElementById("extension2").innerHTML = fileName2[1];
-            }
+            // var source2 = AnalyticsData.SourceAName;
+            // if(source2 !== undefined)
+            // {
+            //     fileName2 = source2.split(".");
+            //     document.getElementById("dataSource2").innerHTML = fileName2[0];
+            //     document.getElementById("dataSource2").style.fontSize = "13px";
+            //     document.getElementById("extension2").innerHTML = fileName2[1];
+            // }
 			
-			if (typeof ComparisonCheckData === 'undefined')
-			{
-				$("#compare").addClass("disable");
-				openCheckResultTab('ComplianceTab');
-				var tab = document.getElementById("ComplianceTab");
-				tab.click();
-			}
-			if (typeof SourceAComplianceData === 'undefined' && typeof SourceBComplianceData === 'undefined') 
-			{
-				$("#compliance").addClass("disable");
-			}
+			// if (typeof ComparisonCheckData === 'undefined')
+			// {
+			// 	$("#compare").addClass("disable");
+			// 	openCheckResultTab('ComplianceTab');
+			// 	var tab = document.getElementById("ComplianceTab");
+			// 	tab.click();
+			// }
+            // if (typeof SourceAComplianceData === 'undefined' && 
+            //     typeof SourceBComplianceData === 'undefined') 
+			// {
+			// 	$("#compliance").addClass("disable");
+			// }
 			
 			
 			/*if (typeof SourceAComplianceData === 'undefined')
@@ -522,27 +686,27 @@
 			if (typeof SourceBComplianceData === 'undefined')
 			{
 				$("#compliance").addClass("disable");
-			}*/
-			
-			
-            //load comparison pie chart default
-            var currentDiv = document.getElementById("compare");
-            currentDiv.style.fontSize = "22px";
-            currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-            var otherDiv = document.getElementById("compliance");
-            otherDiv.style.fontSize = "18px";
-            otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+			}*/		           
+      
 
-            document.getElementById("ComparisonTab").style.display = "block";
-            document.getElementById("PieChartTab").style.display = "block";
-            analyticsManager.drawPieCharts("comparison");
+            // //load severity line chart 
+            // document.getElementById("SeverityTab").style.display = "block";
+            // if(typeof ComparisonCheckData !== 'undefined')
+            // {
+            //     analyticsManager.drawLineCharts();
+            // }
 
-            //load severity line chart 
-            document.getElementById("SeverityTab").style.display = "block";
-            if(typeof ComparisonCheckData !== 'undefined')
-            {
-                analyticsManager.drawLineCharts();
-            }
+
+            //  //load comparison pie chart by default
+            //  var currentDiv = document.getElementById("compare");
+            // currentDiv.style.fontSize = "22px";
+            // currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
+            // var otherDiv = document.getElementById("compliance");
+            // otherDiv.style.fontSize = "18px";
+            // otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
+
+            // document.getElementById("ComparisonTab").style.display = "block";
+            // document.getElementById("PieChartTab").style.display = "block";
         }
 
         function getData(newData) {
@@ -578,7 +742,7 @@
                 otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
 
                 document.getElementById("PieChartTab").style.display = "block";
-                analyticsManager.drawPieCharts("comparison");
+                //analyticsManager.drawPieCharts("comparison");
             }
             else if (tabName === "ComplianceTab") {
                 var currentDiv = document.getElementById("compliance");
@@ -600,7 +764,7 @@
                 sourceBButton = parentTab.getElementsByClassName("ComplianceB");
                 sourceBButton[0].style.backgroundColor = "white";
 
-                analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+                //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
             }
             else if (tabName === "ComparisonTabInfo") {
                 var currentDiv = document.getElementById("compareInfo");
@@ -611,7 +775,7 @@
                 otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
 
                 document.getElementById("PieChartTabInfo").style.display = "block";
-                analyticsManager.drawInfoPieCharts("comparison");
+                //analyticsManager.drawInfoPieCharts("comparison");
             }
         }
 
@@ -636,7 +800,7 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawBarCharts("comparison");
+                //analyticsManager.drawBarCharts("comparison");
             }
             if (tabName === "PieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -647,7 +811,7 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawPieCharts("comparison");
+                //analyticsManager.drawPieCharts("comparison");
             }
             //for info 
             if (tabName === "BarChartTabInfo") {
@@ -660,7 +824,7 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawInfoBarCharts("comparison");
+                //analyticsManager.drawInfoBarCharts("comparison");
             }
             if (tabName === "PieChartTabInfo") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -671,7 +835,7 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawInfoPieCharts("comparison");
+                //analyticsManager.drawInfoPieCharts("comparison");
             }
         }
 
@@ -698,7 +862,8 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawBarCharts("compliance", tabName);
+                //analyticsManager.drawBarCharts("compliance", tabName);              
+              
             }
             if (tabName === "ComplianceAPieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -709,7 +874,7 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawPieCharts("compliance", tabName);
+                //analyticsManager.drawPieCharts("compliance", tabName);               
             }
 
             //for compliance B
@@ -724,7 +889,7 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
 
-                analyticsManager.drawBarCharts("compliance", tabName);
+                //analyticsManager.drawBarCharts("compliance", tabName);
             }
             if (tabName === "ComplianceBPieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -735,7 +900,7 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                analyticsManager.drawPieCharts("compliance", tabName);
+                //analyticsManager.drawPieCharts("compliance", tabName);               
             }
         }
 
@@ -770,7 +935,7 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 document.getElementById("ComplianceAPieChartTab").style.display = "block";
-                analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+                //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
             }
 
             if (tabName === "ComplianceBTab") {
@@ -789,7 +954,7 @@
                 currentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 document.getElementById("ComplianceBPieChartTab").style.display = "block";
-                analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
+                //analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
             }
 
         }
@@ -870,7 +1035,7 @@
                 document.getElementById("PieChartTabInfo").style.display = "block";
 
 
-                analyticsManager.drawInfoPieCharts("comparison");
+                //analyticsManager.drawInfoPieCharts("comparison");
                 document.getElementById("InfoTab").style.display = "block";
                 analyticsManager.drawInfoLineCharts();
             }

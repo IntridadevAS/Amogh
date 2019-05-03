@@ -3,9 +3,12 @@
     include 'Utility.php';       
 
     if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||
-       //!isset($_POST['SourceBNodeIdvsComponentIdList']) ||
-       !isset($_POST["SourceASelectedComponents"]) //||
-       /*!isset($_POST["SourceBSelectedComponents"])*/)
+       !isset($_POST['SourceBNodeIdvsComponentIdList']) ||
+       !isset($_POST["SourceASelectedComponents"]) ||
+       !isset($_POST["SourceBSelectedComponents"]) ||
+       !isset($_POST["SourceAFileName"]) ||
+       !isset($_POST["SourceBFileName"]) ||
+       !isset($_POST["CheckCaseManager"]))
        {
            echo 'fail';
            return;
@@ -25,6 +28,108 @@
            return;
        }	
 
+       // write Source A file name, source B file name
+       writeDatasourceInfo($projectName);
+       function writeDatasourceInfo($projectName)
+       {
+        
+            $sourceAName  = NULL;
+            $sourceBName  = NULL;
+            $sourceAType  = NULL;
+            $sourceBType  = NULL;
+            if(isset($_POST["SourceAFileName"]))
+            {
+                $sourceAName =  $_POST['SourceAFileName'];   
+            }
+            if(isset($_POST["SourceBFileName"]))
+            {
+                $sourceBName =  $_POST['SourceBFileName'];   
+            }
+
+            if(isset($_POST["SourceAType"]))
+            {
+                $sourceAType =  $_POST['SourceAType'];   
+            }
+            if(isset($_POST["SourceBType"]))
+            {
+                $sourceBType =  $_POST['SourceBType'];   
+            }           
+          
+            $dbh;
+            try
+            {        
+                // open database
+                $dbPath = getProjectDatabasePath($projectName);
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+                
+                // begin the transaction
+                $dbh->beginTransaction();
+
+                // create selected components table
+                $command = 'CREATE TABLE IF NOT EXISTS DatasourceInfo(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    sourceAFileName TEXT,
+                    sourceBFileName TEXT,
+                    sourceAType TEXT,
+                    sourceBType TEXT)';         
+                $dbh->exec($command);    
+
+                $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceAType, sourceBType) VALUES(?,?,?,?) ';
+                $values = array($sourceAName,  $sourceBName,  $sourceAType,  $sourceBType);
+                
+                $stmt = $dbh->prepare($insertQuery);                    
+                $stmt->execute($values);   
+
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection                 
+            }
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return;
+            } 
+       }
+
+       // write check case data(as JSON string)     
+       writeCheckCaseData($projectName);
+       function writeCheckCaseData($projectName)
+       {            
+            $checkCaseData =  $_POST['CheckCaseManager'];   
+            
+            $dbh;
+            try
+            {        
+                // open database
+                $dbPath = getProjectDatabasePath($projectName);
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+                
+                // begin the transaction
+                $dbh->beginTransaction();
+
+                // create selected components table
+                $command = 'CREATE TABLE IF NOT EXISTS CheckCaseInfo(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    checkCaseData TEXT)';         
+                $dbh->exec($command);    
+
+                $insertQuery = 'INSERT INTO CheckCaseInfo(checkCaseData) VALUES(?) ';
+                $values = array($checkCaseData);
+                
+                $stmt = $dbh->prepare($insertQuery);                    
+                $stmt->execute($values);   
+
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection                 
+            }
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return;
+            } 
+       }
+       
        $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
        $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);
 
@@ -39,7 +144,7 @@
                                 $SourceASelectedComponents, 
                                 $SourceANodeIdvsComponentIdList );
         
-        // write source a selected components
+        // write source b selected components
         writeSelectedComponents($projectName, 
                                 'SourceBSelectedComponents', 
                                 $SourceBSelectedComponents, 
