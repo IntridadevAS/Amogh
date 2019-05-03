@@ -2280,29 +2280,29 @@
     <!-- Scripts -->
     <script>
 
-        function AnalyticsData(checkCaseName,
-            sourceAName,
-            sourceBName,
-            sourceATotalItemCount,
-            sourceACheckedItemCount,
-            sourceBTotalItemCount,
-            sourceBCheckedItemCount,
-            sourceAClasswiseCheckedComponents,
-            sourceBClasswiseCheckedComponents,
-            sourceAClassWiseComponets,
-            sourceBClassWiseComponets) {
-            this.CheckCaseName = checkCaseName;
-            this.SourceAName = sourceAName;
-            this.SourceBName = sourceBName;
-            this.SourceATotalItemCount = sourceATotalItemCount;
-            this.SourceACheckedItemCount = sourceACheckedItemCount;
-            this.SourceBTotalItemCount = sourceBTotalItemCount;
-            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
-            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
-            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
-            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
-            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
-        }
+        // function AnalyticsData(checkCaseName,
+        //     sourceAName,
+        //     sourceBName,
+        //     //sourceATotalItemCount,
+        //     //sourceACheckedItemCount,
+        //     //sourceBTotalItemCount,
+        //     //sourceBCheckedItemCount,
+        //    // sourceAClasswiseCheckedComponents,
+        //    // sourceBClasswiseCheckedComponents,
+        //    // sourceAClassWiseComponets,
+        //    /* sourceBClassWiseComponets*/) {
+        //     this.CheckCaseName = checkCaseName;
+        //     this.SourceAName = sourceAName;
+        //     this.SourceBName = sourceBName;
+        //    // this.SourceATotalItemCount = sourceATotalItemCount;
+        //     //this.SourceACheckedItemCount = sourceACheckedItemCount;
+        //     //this.SourceBTotalItemCount = sourceBTotalItemCount;
+        //     //this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+        //     //this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+        //     //this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+        //     this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+        //     this.SourceBClasswiseComponents = sourceAClassWiseComponets;
+        // }
 
         var xCheckStudioInterface1;
         var xCheckStudioInterface2;
@@ -2312,10 +2312,10 @@
         var checkCaseName;
         var sourceAFileName;
         var sourceBFileName;
-        var sourceATotalItemCount = 0;
-        var sourceACheckedItemCount = 0;
-        var sourceBTotalItemCount = 0;
-        var sourceBCheckedItemCount = 0;
+        //var sourceATotalItemCount = 0;
+        //var sourceACheckedItemCount = 0;
+        //var sourceBTotalItemCount = 0;
+        //var sourceBCheckedItemCount = 0;
 
         var hiidenEntities = [];
 
@@ -2516,8 +2516,8 @@
             setUserName();
             
             //delete checkResultsArray from local storage
-            delete (localStorage["CheckResultArray"]);
-            delete (localStorage["CheckResultArrayInfo"])
+            // delete (localStorage["CheckResultArray"]);
+            // delete (localStorage["CheckResultArrayInfo"])
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
@@ -2984,13 +2984,13 @@
             var tabHeader;
             if (modelTreeContainer === "modelTree1") {
                 tabHeader = document.getElementById("dataSource1ModelBrowserTab");
-                localStorage.setItem("SourceAName", fileName);
+                //localStorage.setItem("SourceAName", fileName);
                 sourceAFileName = fileName;
                 document.getElementById("dataSource1ViewerContainerTab").innerText = fileName;
             }
             else if (modelTreeContainer === "modelTree2") {
                 tabHeader = document.getElementById("dataSource2ModelBrowserTab");
-                localStorage.setItem("SourceBName", fileName);
+                //localStorage.setItem("SourceBName", fileName);
                 sourceBFileName = fileName;
                 document.getElementById("dataSource2ViewerContainerTab").innerText = fileName;
             }
@@ -3743,29 +3743,29 @@
 
     <script>
 
-        function AnalyticsData(checkCaseName,
-            sourceAName,
-            sourceBName,
-            sourceATotalItemCount,
-            sourceACheckedItemCount,
-            sourceBTotalItemCount,
-            sourceBCheckedItemCount,
-            sourceAClasswiseCheckedComponents,
-            sourceBClasswiseCheckedComponents,
-            sourceAClassWiseComponets,
-            sourceBClassWiseComponets) {
-            this.CheckCaseName = checkCaseName;
-            this.SourceAName = sourceAName;
-            this.SourceBName = sourceBName;
-            this.SourceATotalItemCount = sourceATotalItemCount;
-            this.SourceACheckedItemCount = sourceACheckedItemCount;
-            this.SourceBTotalItemCount = sourceBTotalItemCount;
-            this.SourceBCheckedItemCount = sourceBCheckedItemCount;
-            this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
-            this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
-            this.SourceAClasswiseComponents = sourceAClassWiseComponets;
-            this.SourceBClasswiseComponents = sourceAClassWiseComponets;
-        }
+        // function AnalyticsData(checkCaseName,
+        //     sourceAName,
+        //     sourceBName,
+        //     sourceATotalItemCount,
+        //     sourceACheckedItemCount,
+        //     sourceBTotalItemCount,
+        //     sourceBCheckedItemCount,
+        //     sourceAClasswiseCheckedComponents,
+        //     sourceBClasswiseCheckedComponents,
+        //     sourceAClassWiseComponets,
+        //     sourceBClassWiseComponets) {
+        //     this.CheckCaseName = checkCaseName;
+        //     this.SourceAName = sourceAName;
+        //     this.SourceBName = sourceBName;
+        //     this.SourceATotalItemCount = sourceATotalItemCount;
+        //     this.SourceACheckedItemCount = sourceACheckedItemCount;
+        //     this.SourceBTotalItemCount = sourceBTotalItemCount;
+        //     this.SourceBCheckedItemCount = sourceBCheckedItemCount;
+        //     this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
+        //     this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
+        //     this.SourceAClasswiseComponents = sourceAClassWiseComponets;
+        //     this.SourceBClasswiseComponents = sourceAClassWiseComponets;
+        // }
 
         function OpenTab(tabName) {
             if (tabName === "tab1" || tabName === "tab1Viewer") {
