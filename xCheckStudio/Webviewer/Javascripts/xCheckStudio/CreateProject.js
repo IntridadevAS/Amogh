@@ -30,12 +30,13 @@ function setProjectName() {
 function createProject(projectname, descriptionText, functionText) {
     $.ajax({
         data: {
+            'InvokeFunction': 'CreateProject',
             'projectName': projectname,
             'description': descriptionText,
             'function': functionText
         },
         type: "POST",
-        url: "PHP/CreateProject.php"
+        url: "PHP/ProjectManager.php"
     }).done(function (msg) {
 
         if (msg === 'success') {
@@ -45,11 +46,14 @@ function createProject(projectname, descriptionText, functionText) {
             // add this project's entry in main DB
             $.ajax({
                 data: {
+                    'InvokeFunction': 'AddProjectToMainDB',
                     'projectName': projectname,
+                    'description': descriptionText,
+                    'function': functionText,
                     'path': path                                
                 },
                 type: "POST",
-                url: "PHP/AddProjectToMainDB.php"
+                url: "PHP/ProjectManager.php"
             }).done(function (msg) {                           
 
                 if (msg === 'success') {
