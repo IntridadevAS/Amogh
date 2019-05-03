@@ -4,7 +4,8 @@ session_start();
 
 // check if sourceA and sourceB paths are in session data
 if(!isset( $_SESSION["SourceAPath"]) ||
-   !isset( $_SESSION["SourceBPath"]))
+   !isset( $_SESSION["SourceBPath"]) ||
+   !isset( $_POST["ConvertToSCS"]))
    {
        echo "fail";
        return;
@@ -12,6 +13,9 @@ if(!isset( $_SESSION["SourceAPath"]) ||
 
    $sourceADirectory =  $_SESSION["SourceAPath"];
    $sourceBDirectory =  $_SESSION["SourceBPath"];
+   $ConvertToSCS = $_POST["ConvertToSCS"];
+//    var_dump($ConvertToSCS);
+//    echo $ConvertToSCS;
 
 $errors = array();
 $uploadedFiles = array();
@@ -98,54 +102,58 @@ if($counter>0)
 	
 	
 	echo 'Model Has Been Uploaded !';
-	echo "<br>";
-	echo 'Starting File Conversion....';
-	echo "<br>";
-
-	foreach($uploadedFiles as $fileName)
-	{
-		$ext = pathinfo($fileName, PATHINFO_EXTENSION);
-		if(in_array($ext, $validSources) == true)
-		{
-
-            if($_POST['viewerContainer'] == "viewerContainer1")
+    echo "<br>";
+    
+    if($ConvertToSCS === "true" )
+    {
+        echo 'Starting File Conversion....';
+        echo "<br>";
+    
+        foreach($uploadedFiles as $fileName)
+        {
+            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+            if(in_array($ext, $validSources) == true)
             {
-                $UploadFolder=  $scriptParentDirectory."/".$sourceADirectory."/".$fileName;               
+    
+                if($_POST['viewerContainer'] == "viewerContainer1")
+                {
+                    $UploadFolder=  $scriptParentDirectory."/".$sourceADirectory."/".$fileName;               
+                }
+                if($_POST['viewerContainer'] == "viewerContainer2")
+                {
+                    $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$fileName;               
+                }
+    
+                // $UploadFolder=__DIR__."/scs/".$fileName;		
+                $output_name=explode(".",$fileName);
+                
+                if($_POST['viewerContainer'] == "viewerContainer1")
+                {
+                    $output_file_path= $scriptParentDirectory."/".$sourceADirectory."/"."$output_name[0]";
+                }
+                if($_POST['viewerContainer'] == "viewerContainer2")
+                {
+                    $output_file_path=$scriptParentDirectory."/".$sourceBDirectory."/"."$output_name[0]";
+                }
+    
+                // $output_file_path=__DIR__."/scs/"."$output_name[0]";
+                
+                $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
+                echo "Command : ".$command;
+                //print_r($command);
+                //'$command';
+                
+                exec($command, $output);
+                //print_r($output);
+                
+                //`$launch_converter $dest $output_file_path`;
+                echo "<br>";
+                echo 'File Conversion Complete..You can load the model..';
+    
+                break; 
             }
-            if($_POST['viewerContainer'] == "viewerContainer2")
-            {
-                $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$fileName;               
-            }
-
-			// $UploadFolder=__DIR__."/scs/".$fileName;		
-            $output_name=explode(".",$fileName);
-            
-            if($_POST['viewerContainer'] == "viewerContainer1")
-            {
-                $output_file_path= $scriptParentDirectory."/".$sourceADirectory."/"."$output_name[0]";
-            }
-            if($_POST['viewerContainer'] == "viewerContainer2")
-            {
-                $output_file_path=$scriptParentDirectory."/".$sourceBDirectory."/"."$output_name[0]";
-            }
-
-			// $output_file_path=__DIR__."/scs/"."$output_name[0]";
-			
-			$command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
-			echo "Command : ".$command;
-			//print_r($command);
-			//'$command';
-			
-			exec($command, $output);
-			//print_r($output);
-			
-			//`$launch_converter $dest $output_file_path`;
-			echo "<br>";
-			echo 'File Conversion Complete..You can load the model..';
-
-			break; 
-		}
-	}     
+        }
+    }	     
 }
 else
 {
