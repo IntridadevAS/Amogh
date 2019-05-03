@@ -794,7 +794,7 @@
 
             // var checkComponentGroups = undefined;
 
-            // read  comparison check data
+            // read  check data
             $.ajax({
                     url: 'PHP/CheckDataReader.php',
                     type: "POST",
@@ -837,6 +837,9 @@
                          populateCheckResults(comparisonCheckGroups, 
                                                  sourceAComplianceCheckGroups, 
                                                  sourceBComplianceCheckGroups);
+
+                        // load analytics data
+                        document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
                     }
                 });
 

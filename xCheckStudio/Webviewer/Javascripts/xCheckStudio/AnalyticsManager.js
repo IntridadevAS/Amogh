@@ -1,183 +1,291 @@
 function AnalyticsManager() {
-    this.ComparisonResultArray = [];
-    this.ComplianceResultArrayForSourceA = [];
-    this.ComplianceResultArrayForSourceB = [];
+    // this.ComparisonResultArray = [];
+    // this.ComplianceResultArrayForSourceA = [];
+    // this.ComplianceResultArrayForSourceB = [];
 
-    AnalyticsManager.prototype.drawPieCharts = function (type, tabName) {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = [];
-        }
+    AnalyticsManager.prototype.drawPieCharts = function (type, tabName) 
+    {
+        // if (this.ComparisonResultArray.length > 0) 
+        // {
+        //     this.ComparisonResultArray = [];
+        // }
 
-        var totalItemsChecked = 0;
-        var errorsCount = 0;
-        var warningsCount = 0;
-        var okCount = 0;
 
-        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison") {
-            var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if(currentComponent.SourceAName !== "")
+        if (comparisonCheckGroups &&  
+            type === "comparison")
+         {               
+            $.ajax({
+                    url: 'PHP/AnalyticsDataReader.php',
+                    type: "POST",
+                    async: true,
+                    data: {},
+                    success: function (msg) 
                     {
-                        totalItemsChecked += 1;
-                        if (currentComponent.Status.toLowerCase() === "ok") {
-                            okCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "error") {
-                            errorsCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "warning") {
-                            warningsCount++;
+                        if (msg != 'fail') {
+                            var checkResults = JSON.parse(msg);
+
+
+                            var totalItemsChecked = 0;
+                            var errorsCount = 0;
+                            var warningsCount = 0;
+                            var okCount = 0;
+                            var noMatchCount = 0;
+                            var sourceASelectedCount = 0;
+                            var sourceBSelectedCount = 0;
+
+                            if ("okCount" in checkResults) {
+                                okCount = parseInt(checkResults["okCount"]);
+                            }
+
+                            if ("errorCount" in checkResults) {
+                                errorsCount = parseInt(checkResults["errorCount"]);
+                            }
+
+                            if ("warningCount" in checkResults) {
+                                warningsCount = parseInt(checkResults["warningCount"]);
+                            }
+
+                            if ("nomatchCount" in checkResults) {
+                                noMatchCount = parseInt(checkResults["nomatchCount"]);
+                            }
+
+                            if ("sourceASelectedCount" in checkResults) {
+                                sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
+                            }
+
+                            if ("sourceBSelectedCount" in checkResults) {
+                                sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
+                            }
+
+                            totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
+                             
+                            //add data to summary
+                            document.getElementById("a37").innerText = totalItemsChecked;
+                            document.getElementById("a18").innerText = errorsCount;
+                            document.getElementById("a13").innerText = warningsCount;
+                            document.getElementById("a6").innerText = okCount;
+
+
+                            // draw pie chart for Errors
+                            var comparisonResultArray = [];
+                            var titleArray = [];
+                            titleArray.push("Name");
+                            titleArray.push("Value");
+                            comparisonResultArray.push(titleArray);
+                            var valueArray = [];
+                            valueArray.push("Error");
+
+                            var percent = errorsCount * 100 / totalItemsChecked;
+                            fixedPercent = parseFloat((percent).toFixed(1))
+                            document.getElementById("a40").innerText = fixedPercent + "%";
+                            valueArray.push(fixedPercent);
+                            comparisonResultArray.push(valueArray);
+
+                            var valueArray = [];
+                            valueArray.push("");
+                            complementryPercent = 100 - fixedPercent;
+                            if (complementryPercent < 0) {
+                                complementryPercent = 0;
+                            }
+                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
+                            valueArray.push(complementryPercent);
+                            comparisonResultArray.push(valueArray);
+                            getData(comparisonResultArray);
+                            colorsArray = ["#F43742", "#EDEDED"]
+                            drawPieChart(dataTable, "", group2_pie, colorsArray)
+
+                            // draw pie chart for Warnings
+                            comparisonResultArray = [];
+
+                            titleArray = [];
+                            titleArray.push("Name");
+                            titleArray.push("Value");
+                            comparisonResultArray.push(titleArray);
+                            var valueArray = [];
+                            valueArray.push("Warning");
+                            var percent = warningsCount * 100 / totalItemsChecked;
+                            fixedPercent = parseFloat((percent).toFixed(1))
+                            document.getElementById("a30").innerText = fixedPercent + "%";
+                            valueArray.push(fixedPercent);
+                            comparisonResultArray.push(valueArray);
+                            var valueArray = [];
+                            valueArray.push("");
+                            complementryPercent = 100 - fixedPercent;
+                            if (complementryPercent < 0) {
+                                complementryPercent = 0;
+                            }
+                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
+                            valueArray.push(complementryPercent);
+                            comparisonResultArray.push(valueArray);
+                            colorsArray = ["#F8C13B", "#EDEDED"]
+                            getData(comparisonResultArray);
+                            drawPieChart(dataTable, "", group4_pie, colorsArray)
+
+                            // draw pie chart for Oks
+                            comparisonResultArray = [];
+
+                            titleArray = [];
+                            titleArray.push("Name");
+                            titleArray.push("Value");
+                            comparisonResultArray.push(titleArray);
+                            var valueArray = [];
+                            valueArray.push("OK");
+                            var percent = okCount * 100 / totalItemsChecked;
+                            fixedPercent = parseFloat((percent).toFixed(1))
+                            document.getElementById("a10").innerText = fixedPercent + "%";
+                            valueArray.push(fixedPercent);
+                            comparisonResultArray.push(valueArray);
+                            var valueArray = [];
+                            valueArray.push("");
+                            complementryPercent = 100 - fixedPercent;
+                            if (complementryPercent < 0) {
+                                complementryPercent = 0;
+                            }
+                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
+                            valueArray.push(complementryPercent);
+                            comparisonResultArray.push(valueArray);
+                            colorsArray = ["#98DE32", "#EDEDED"];
+
+                            getData(comparisonResultArray);
+                            drawPieChart(dataTable, "", group5_pie, colorsArray);
+
                         }
                     }
-                    if(currentComponent.SourceBName !== "")
-                    {
-                        totalItemsChecked += 1;
-                        if (currentComponent.Status.toLowerCase() === "ok") {
-                            okCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "error") {
-                            errorsCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "warning") {
-                            warningsCount++;
-                        }
-                    }
-                }
-            }
-            //add data to summary
-            document.getElementById("a37").innerText = totalItemsChecked;
-            document.getElementById("a18").innerText = errorsCount;
-            document.getElementById("a13").innerText = warningsCount;
-            document.getElementById("a6").innerText = okCount;
-
-
-            //Add comparison check data for project health(severity chart)
-            var checkResultArray = localStorage.CheckResultArray;
-            if (checkResultArray === undefined) {
-                checkResultArray = {};
-                // var checkCase = AnalyticsData.CheckCaseName;
-                // var SourceAName = AnalyticsData.SourceAName.split(".")[0];
-                // var SourceBName = AnalyticsData.SourceBName.split(".")[0];
-
-                // var dataSourceIdentifier = checkCase;
-                // if(SourceAName !== undefined)
-                // {
-                //     dataSourceIdentifier += "_" + SourceAName;
-                // }
-                // if(SourceBName !== undefined)
-                // {
-                //     dataSourceIdentifier += "_" + SourceBName;
-                // }
-
-                var temp = [errorsCount, warningsCount, okCount];
-
-                checkResultArray[Date.now()] = temp;
-                localStorage.setItem("CheckResultArray", JSON.stringify(checkResultArray));
-            }
-            // else {
-            //     StorageData = localStorage.CheckResultArray;
-            //     StorageArray = JSON.parse(StorageData);
-            //     // if(Object.keys(StorageArray).length >= 10)
-            //     // {
-            //     //     var firstElement = Object.keys(StorageArray)[0];
-            //     //     delete StorageArray[firstElement];
-            //     // }
-            //     var temp = [errorsCount, warningsCount, okCount];
-            //     StorageArray[Date.now()] = temp;
-            //     localStorage.setItem("CheckResultArray", JSON.stringify(StorageArray));
+                });
+            // var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
+            // for (var componentGroup in componentGroupsArray) 
+            // {
+            //     var components = componentGroupsArray[componentGroup].Components
+            //     // totalItemsChecked += components.length;
+            //     for (var i = 0; i < components.length; i++) {
+            //         currentComponent = components[i];
+            //         if(currentComponent.SourceAName !== "")
+            //         {
+            //             totalItemsChecked += 1;
+            //             if (currentComponent.Status.toLowerCase() === "ok") {
+            //                 okCount++;
+            //             }
+            //             if (currentComponent.Status.toLowerCase() === "error") {
+            //                 errorsCount++;
+            //             }
+            //             if (currentComponent.Status.toLowerCase() === "warning") {
+            //                 warningsCount++;
+            //             }
+            //         }
+            //         if(currentComponent.SourceBName !== "")
+            //         {
+            //             totalItemsChecked += 1;
+            //             if (currentComponent.Status.toLowerCase() === "ok") {
+            //                 okCount++;
+            //             }
+            //             if (currentComponent.Status.toLowerCase() === "error") {
+            //                 errorsCount++;
+            //             }
+            //             if (currentComponent.Status.toLowerCase() === "warning") {
+            //                 warningsCount++;
+            //             }
+            //         }
+            //     }
             // }
+            // //add data to summary
+            // document.getElementById("a37").innerText = totalItemsChecked;
+            // document.getElementById("a18").innerText = errorsCount;
+            // document.getElementById("a13").innerText = warningsCount;
+            // document.getElementById("a6").innerText = okCount;           
 
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComparisonResultArray.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Error");
+            // // draw pie chart for Errors
+            // var titleArray = [];
+            // titleArray.push("Name");
+            // titleArray.push("Value");
+            // this.ComparisonResultArray.push(titleArray);
+            // var valueArray = [];
+            // valueArray.push("Error");
 
-            var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a40").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComparisonResultArray.push(valueArray);
+            // var percent = errorsCount * 100 / totalItemsChecked;
+            //  fixedPercent =  parseFloat((percent).toFixed(1))
+            // document.getElementById("a40").innerText = fixedPercent + "%";
+            // valueArray.push(fixedPercent);
+            // this.ComparisonResultArray.push(valueArray);
 
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-            complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComparisonResultArray.push(valueArray);
-            getData(this.ComparisonResultArray);
-            colorsArray = ["#F43742", "#EDEDED"]
-            drawPieChart(dataTable, "", group2_pie, colorsArray)
+            // var valueArray = [];
+            // valueArray.push("");
+            // complementryPercent = 100 - fixedPercent;
+            // if(complementryPercent < 0)
+            // {
+            //     complementryPercent = 0;
+            // }
+            // complementryPercent=  parseFloat((complementryPercent).toFixed(1))
+            // valueArray.push(complementryPercent);
+            // this.ComparisonResultArray.push(valueArray);
+            // getData(this.ComparisonResultArray);
+            // colorsArray = ["#F43742", "#EDEDED"]
+            // drawPieChart(dataTable, "", group2_pie, colorsArray)
 
-            this.ComparisonResultArray = [];
+            // // draw pie chart for Warnings
+            // this.ComparisonResultArray = [];
 
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComparisonResultArray.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Warning");
-            var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a30").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComparisonResultArray.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComparisonResultArray.push(valueArray);
-            colorsArray = ["#F8C13B", "#EDEDED"]
-            getData(this.ComparisonResultArray);
-            drawPieChart(dataTable, "", group4_pie, colorsArray)
+            // titleArray = [];
+            // titleArray.push("Name");
+            // titleArray.push("Value");
+            // this.ComparisonResultArray.push(titleArray);
+            // var valueArray = [];
+            // valueArray.push("Warning");
+            // var percent = warningsCount * 100 / totalItemsChecked;
+            //  fixedPercent =  parseFloat((percent).toFixed(1))
+            // document.getElementById("a30").innerText = fixedPercent + "%";
+            // valueArray.push(fixedPercent);
+            // this.ComparisonResultArray.push(valueArray);
+            // var valueArray = [];
+            // valueArray.push("");
+            // complementryPercent = 100 - fixedPercent;
+            // if(complementryPercent < 0)
+            // {
+            //     complementryPercent = 0;
+            // }
+            //  complementryPercent=  parseFloat((complementryPercent).toFixed(1))
+            // valueArray.push(complementryPercent);
+            // this.ComparisonResultArray.push(valueArray);
+            // colorsArray = ["#F8C13B", "#EDEDED"]
+            // getData(this.ComparisonResultArray);
+            // drawPieChart(dataTable, "", group4_pie, colorsArray)
 
-            this.ComparisonResultArray = [];
+            //  // draw pie chart for Oks
+            // this.ComparisonResultArray = [];
 
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComparisonResultArray.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Ok");
-            var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a10").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComparisonResultArray.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComparisonResultArray.push(valueArray);
-            colorsArray = ["#98DE32", "#EDEDED"];
+            // titleArray = [];
+            // titleArray.push("Name");
+            // titleArray.push("Value");
+            // this.ComparisonResultArray.push(titleArray);
+            // var valueArray = [];
+            // valueArray.push("OK");
+            // var percent = okCount * 100 / totalItemsChecked;
+            //  fixedPercent =  parseFloat((percent).toFixed(1))
+            // document.getElementById("a10").innerText = fixedPercent + "%";
+            // valueArray.push(fixedPercent);
+            // this.ComparisonResultArray.push(valueArray);
+            // var valueArray = [];
+            // valueArray.push("");
+            // complementryPercent = 100 - fixedPercent;
+            // if(complementryPercent < 0)
+            // {
+            //     complementryPercent = 0;
+            // }
+            //  complementryPercent=  parseFloat((complementryPercent).toFixed(1))
+            // valueArray.push(complementryPercent);
+            // this.ComparisonResultArray.push(valueArray);
+            // colorsArray = ["#98DE32", "#EDEDED"];
 
-            getData(this.ComparisonResultArray);
-            drawPieChart(dataTable, "", group5_pie, colorsArray)
+            // getData(this.ComparisonResultArray);
+            // drawPieChart(dataTable, "", group5_pie, colorsArray)
         }
 
-        if (typeof SourceAComplianceData !== 'undefined' && type === "compliance" && tabName === "ComplianceAPieChartTab") {
-            if (this.ComplianceResultArrayForSourceA.length > 0) {
-                this.ComplianceResultArrayForSourceA = [];
-            }
+        if (typeof SourceAComplianceData !== 'undefined' && 
+            type === "compliance" && 
+            tabName === "ComplianceAPieChartTab") 
+        {
+                if (this.ComplianceResultArrayForSourceA.length > 0) {
+                    this.ComplianceResultArrayForSourceA = [];
+                }
 
             var componentGroupsArray = SourceAComplianceData.CheckComponentsGroups;
             for (var componentGroup in componentGroupsArray) {
@@ -817,88 +925,88 @@ function AnalyticsManager() {
     }
 
     AnalyticsManager.prototype.drawLineCharts = function () {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = [];
-        }
-        checkResultArray = localStorage.CheckResultArray;
-        checkResultObject = JSON.parse(checkResultArray);
-        titleArray = [];
-        titleArray.push("Name");
-        titleArray.push("Error");
-        titleArray.push("Ok");
-        titleArray.push("Warning");
+        // if (this.ComparisonResultArray.length > 0) {
+        //     this.ComparisonResultArray = [];
+        // }
+        // checkResultArray = localStorage.CheckResultArray;
+        // checkResultObject = JSON.parse(checkResultArray);
+        // titleArray = [];
+        // titleArray.push("Name");
+        // titleArray.push("Error");
+        // titleArray.push("Ok");
+        // titleArray.push("Warning");
         
-        this.ComparisonResultArray.push(titleArray);
+        // this.ComparisonResultArray.push(titleArray);
 
-        var counter = 1;
-        for (var checkObject in checkResultObject) {
-            var valueArray = [];
-            var currentCheckObject = checkResultObject[checkObject];
-            valueArray.push("C_" + counter);
-            counter++;
+        // var counter = 1;
+        // for (var checkObject in checkResultObject) {
+        //     var valueArray = [];
+        //     var currentCheckObject = checkResultObject[checkObject];
+        //     valueArray.push("C_" + counter);
+        //     counter++;
 
-            valueArray.push(currentCheckObject[0]);
-            valueArray.push(currentCheckObject[2]);
-            valueArray.push(currentCheckObject[1]);
+        //     valueArray.push(currentCheckObject[0]);
+        //     valueArray.push(currentCheckObject[2]);
+        //     valueArray.push(currentCheckObject[1]);
             
-            this.ComparisonResultArray.push(valueArray);
-        }
-
-        getData(this.ComparisonResultArray);
-        document.getElementById("SeverityTab").style.display = "block";
-        if (document.getElementById("LineChart") !== null) {
-            document.getElementById("LineChart").innerHTML = "";
-        }
-
-        colorsArray = ["#F43742", "#98DE32", "#F8C13B"];
-        // if(LineChart.id !== undefined)
-        // {
-        drawLineChart(dataTable, "", "LineChart", colorsArray)
+        //     this.ComparisonResultArray.push(valueArray);
         // }
-        // else{
-        //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
+
+        // getData(this.ComparisonResultArray);
+        // document.getElementById("SeverityTab").style.display = "block";
+        // if (document.getElementById("LineChart") !== null) {
+        //     document.getElementById("LineChart").innerHTML = "";
         // }
+
+        // colorsArray = ["#F43742", "#98DE32", "#F8C13B"];
+        // // if(LineChart.id !== undefined)
+        // // {
+        // drawLineChart(dataTable, "", "LineChart", colorsArray)
+        // // }
+        // // else{
+        // //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
+        // // }
 
     }
 
     AnalyticsManager.prototype.drawInfoLineCharts = function () {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = [];
-        }
-        checkResultArrayForInfo = localStorage.CheckResultArrayInfo;
-        checkResultObject = JSON.parse(checkResultArrayForInfo);
-        titleArray = [];
-        titleArray.push("Name");
-        titleArray.push("Not Checked");
-        titleArray.push("No match");
-        this.ComparisonResultArray.push(titleArray);
-
-        var counter = 1;
-        for (var checkObject in checkResultObject) {
-            var valueArray = [];
-            var currentCheckObject = checkResultObject[checkObject];
-            valueArray.push("C_" + counter);
-            counter++;
-
-            valueArray.push(currentCheckObject[0]);
-            valueArray.push(currentCheckObject[1]);
-            this.ComparisonResultArray.push(valueArray);
-        }
-
-        getData(this.ComparisonResultArray);
-        document.getElementById("InfoTab").style.display = "block";
-        if (document.getElementById("InfoTabLineChart") !== null) {
-            document.getElementById("InfoTabLineChart").innerHTML = "";
-        }
-
-        colorsArray = ["#AFD3C5", "#839192"];
-        // if(LineChart.id !== undefined)
-        // {
-        drawLineChart(dataTable, "", "InfoTabLineChart", colorsArray)
+        // if (this.ComparisonResultArray.length > 0) {
+        //     this.ComparisonResultArray = [];
         // }
-        // else{
-        //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
+        // checkResultArrayForInfo = localStorage.CheckResultArrayInfo;
+        // checkResultObject = JSON.parse(checkResultArrayForInfo);
+        // titleArray = [];
+        // titleArray.push("Name");
+        // titleArray.push("Not Checked");
+        // titleArray.push("No match");
+        // this.ComparisonResultArray.push(titleArray);
+
+        // var counter = 1;
+        // for (var checkObject in checkResultObject) {
+        //     var valueArray = [];
+        //     var currentCheckObject = checkResultObject[checkObject];
+        //     valueArray.push("C_" + counter);
+        //     counter++;
+
+        //     valueArray.push(currentCheckObject[0]);
+        //     valueArray.push(currentCheckObject[1]);
+        //     this.ComparisonResultArray.push(valueArray);
         // }
+
+        // getData(this.ComparisonResultArray);
+        // document.getElementById("InfoTab").style.display = "block";
+        // if (document.getElementById("InfoTabLineChart") !== null) {
+        //     document.getElementById("InfoTabLineChart").innerHTML = "";
+        // }
+
+        // colorsArray = ["#AFD3C5", "#839192"];
+        // // if(LineChart.id !== undefined)
+        // // {
+        // drawLineChart(dataTable, "", "InfoTabLineChart", colorsArray)
+        // // }
+        // // else{
+        // //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
+        // // }
 
     }
 }
