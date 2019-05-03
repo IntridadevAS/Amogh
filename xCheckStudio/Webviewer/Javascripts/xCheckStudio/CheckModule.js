@@ -1318,7 +1318,7 @@ function loadDbDataSource(fileExtension,
             if (uri !== 'fail') {
                 xCheckStudio.Util.fileExists(uri).then(function (success) {
                     if (success) {
-                        readDbDataSource(file[0],
+                        readDbDataSource(uri, file[0],
                             viewerContainer,
                             modelTreeContainer);
                 }
@@ -1339,13 +1339,13 @@ function loadDbDataSource(fileExtension,
 
 }
 
-function readDbDataSource(file,
+function readDbDataSource(uri, file,
     viewerContainer,
     modelTreeContainer) {
 
     let fileName = file.name;
+    var uri = "../" + uri;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
-    var categoryPresent = false;
 
     // if (!xCheckStudioInterface1) {
     //     xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
@@ -1360,7 +1360,7 @@ function readDbDataSource(file,
         url:'PHP/PDOConnectionForDatabases.php',
         type:'POST',
         dataType: 'JSON',
-        data: ({functionality : 'importData'}),
+        data: ({uri : uri}),
         async: false,
         success: function (data) {                   
             Db_data = data;

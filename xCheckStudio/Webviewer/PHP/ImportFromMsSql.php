@@ -5,18 +5,18 @@
  error_reporting(E_ALL);
     include_once 'StoreDBdata.php';
     // ini_set('memory_limit','32M');
-    function importFromMsSql($conn, $databaseName)
+    function importFromMsSql($conn, $databaseName, $listoftables)
     {
-        $sql1 = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME";
-        $stmt = $conn->prepare($sql1);
-        $stmt->execute();
-        $tableNameArray = array();
-        $index1 = 0;
-        // $result = $stmt->fetch(PDO::FETCH_ASSOC); 
-        while($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            $tableNameArray[$index1] = $row;
-            $index1++;
-        }
+        // $sql1 = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME";
+        // $stmt = $conn->prepare($sql1);
+        // $stmt->execute();
+        // $tableNameArray = array();
+        // $index1 = 0;
+        // // $result = $stmt->fetch(PDO::FETCH_ASSOC); 
+        // while($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+        //     $tableNameArray[$index1] = $row;
+        //     $index1++;
+        // }
 
         // echo json_encode($tableNameArray);
 
@@ -24,10 +24,9 @@
         $yourArray = array();
         $index = 0;
     
-    //    while($tableno < 20)
-    //     {
-            // $tablename = $tableNameArray[$tableno]['TABLE_NAME'];
-            $tablename = "DeviceCatalog";
+       while($tableno < count($listoftables))
+        {
+            $tablename = $listoftables[$tableno];
             $sql = "SELECT * FROM " . $tablename;
             $result = $conn->query($sql);
             $selected_data = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -62,7 +61,7 @@
             // echo json_encode($yourArray);
             $index++;
             $tableno++;
-        // }
+        }
         echo json_encode($yourArray);
     }
 ?>

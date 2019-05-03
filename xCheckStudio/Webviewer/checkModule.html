@@ -2784,11 +2784,12 @@
             }
         }
 
-        function readDbDataSource(file,
+        function readDbDataSource(uri, file,
             viewerContainer,
             modelTreeContainer) {
 
             let fileName = file.name;
+            var uri = "../" +  uri;
             var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
             Db_data = new Array();
@@ -2796,7 +2797,7 @@
                 url:'PHP/PDOConnectionForDatabases.php',
                 type:'POST',
                 dataType: 'JSON',
-                data: ({functionality : 'importData'}),
+                data: ({uri : uri}),
                 async: false,
                 success: function (data) {                   
                     Db_data = data;
