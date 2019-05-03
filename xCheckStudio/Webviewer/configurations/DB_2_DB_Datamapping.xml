@@ -1,6 +1,6 @@
 <CheckCase name="DB_2_DB">
 
-	<Check type="Comparison" sourceAType="IBD" sourceBType="IBD">
+	<Check type="Comparison" sourceAType="JSON" sourceBType="JSON">
 	   <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipeLine">
 	   
 		   <ComponentClass sourceAComponentClass="PipeLine" sourceBComponentClass="PipeLine">
@@ -215,7 +215,7 @@
 		
 	</Check>
 	
-	<Check type="Compliance" sourceType="IBD" >
+	<Check type="Compliance" sourceType="JSON" >
 	   <ComponentGroup name="PipeLine" >
 		  <ComponentClass name="PipeLine">
 				 <Property name="Name" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />

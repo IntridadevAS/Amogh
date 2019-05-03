@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <CheckCase name="DB_Compliance">
-<Check type="Compliance" sourceType="IBD" >
+<Check type="Compliance" sourceType="JSON" >
    <ComponentGroup name="PipeLine" >
       <ComponentClass name="PipeLine">
 			 <Property name="Name" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
