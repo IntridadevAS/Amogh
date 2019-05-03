@@ -61,7 +61,7 @@ function CheckManager(name) {
             if (xCheckStudioInterface2.excelReader !== undefined) {
                 sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
             }
-            else if(xCheckStudioInterface1.db_reader !== undefined)
+            else if(xCheckStudioInterface2.db_reader !== undefined)
             {
                 sourceBSelectedCompoents = xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents;
             }
