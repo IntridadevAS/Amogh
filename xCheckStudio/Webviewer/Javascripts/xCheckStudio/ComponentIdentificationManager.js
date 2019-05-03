@@ -135,7 +135,7 @@ var xCheckStudio;
                     'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
                 };
             }
-            else if (fileExtension.toLowerCase() === "ibd") {
+            else if (fileExtension.toLowerCase() === "json") {
                 properties = {
                     'name': ComponentIdentificationManager.DBSourceNameProperty,
                     'mainCategory': ComponentIdentificationManager.DBSourceMainClassProperty,

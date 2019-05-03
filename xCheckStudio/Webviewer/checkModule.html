@@ -3008,22 +3008,38 @@
                 fileExtension.toLowerCase() === "ifc" ||
                 fileExtension.toLowerCase() === "step" ||
                 fileExtension.toLowerCase() === "stp" ||
-                fileExtension.toLowerCase() === "ste") {
+                fileExtension.toLowerCase() === "ste" ||
+                fileExtension.toLowerCase() === "json") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "uploads/uploadfiles.php", true);
                 xhr.onload = function (event) {
-      
+                    if (fileExtension.toLowerCase() === "json") {
+                            if (loadDbDataSource(fileExtension,
+                            files,
+                            viewerContainer,
+                            modelTreeContainer)) {
+                            hideLoadButton(modelTreeContainer);
+                        }
+                    }
+                    else {
                     loadModel(fileName, 
                               viewerContainer, 
-                              modelTreeContainer);           
+                              modelTreeContainer);    
+                    }       
                   
                     busySpinner.classList.remove('show')
                 };
                 var formData = new FormData(document.getElementById(formId));
                 formData.append('viewerContainer', viewerContainer);
+
+                // var convertToSCS = 'true';
+                // if (fileExtension.toLowerCase() === "json") {
+                //     convertToSCS = 'false';
+                // }
+                // formData.append('ConvertToSCS', convertToSCS);
                 xhr.send(formData);
 
             }
@@ -3037,16 +3053,11 @@
                     }
                 }
             }
-            else if (fileExtension.toLowerCase() === "ibd") {
-                {
-                    if (loadDbDataSource(fileExtension,
-                        files,
-                        viewerContainer,
-                        modelTreeContainer)) {
-                        hideLoadButton(modelTreeContainer);
-                    }
-                }
-            }
+            // else if (fileExtension.toLowerCase() === "json") {
+            //     {
+                   
+            //     }
+            // }
         }
 
         function hideLoadButton(modelTreeContainer) {
@@ -3195,7 +3206,7 @@
             fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 
             $.ajax({
-                data: { 'viewerContainer': viewerContainer, 'fileName' : fileName },
+                data: { 'viewerContainer': viewerContainer, 'fileName' : fileName, 'dataSourceType' : '3D' },
                 type: "POST",
                 url: "PHP/GetSourceFilePath.php"
             }).done(function (uri) {
@@ -3319,7 +3330,7 @@
                                 xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
-                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
                             checkedComponent = {
                                 'Name': row.cells[1].textContent.trim(),
                                 'MainComponentClass': row.cells[2].textContent.trim(),
@@ -3375,7 +3386,7 @@
                                 xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents.push(checkedComponent);
                             }
                         }
-                        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "ibd") {
+                        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "json") {
                             checkedComponent = {
                                 'Name': row.cells[1].textContent.trim(),
                                 'MainComponentClass': row.cells[2].textContent.trim(),
@@ -3411,7 +3422,7 @@
                     else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
                         xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
-                    else if (xCheckStudioInterface1.SourceType.toLowerCase() === "ibd") {
+                    else if (xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
                         xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
 
@@ -3433,7 +3444,7 @@
                     else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
                         xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
-                    else if (xCheckStudioInterface2.SourceType.toLowerCase() === "ibd") {
+                    else if (xCheckStudioInterface2.SourceType.toLowerCase() === "json") {
                         xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents = [];
                     }
                 }

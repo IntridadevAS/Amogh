@@ -945,10 +945,19 @@ function uploadAndLoadModel(fileExtension, fileName,viewerContainer, modelTreeCo
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "uploads/uploadfiles.php", true);
         xhr.onload = function (event) {
-
-            loadModel(fileName, 
-                      viewerContainer, 
-                      modelTreeContainer);           
+            if (fileExtension.toLowerCase() === "json") {
+                    if (loadDbDataSource(fileExtension,
+                    files,
+                    viewerContainer,
+                    modelTreeContainer)) {
+                    hideLoadButton(modelTreeContainer);
+                }
+           }
+            else {
+                loadModel(fileName, 
+                        viewerContainer, 
+                        modelTreeContainer);  
+            }         
           
             busySpinner.classList.remove('show')
         };
@@ -967,16 +976,16 @@ function uploadAndLoadModel(fileExtension, fileName,viewerContainer, modelTreeCo
             }
         }
     }
-    else if (fileExtension.toLowerCase() === "ibd") {
-        {
-            if (loadDbDataSource(fileExtension,
-                files,
-                viewerContainer,
-                modelTreeContainer)) {
-                hideLoadButton(modelTreeContainer);
-            }
-        }
-    }
+    // else if (fileExtension.toLowerCase() === "json") {
+    //     {
+    //         if (loadDbDataSource(fileExtension,
+    //             files,
+    //             viewerContainer,
+    //             modelTreeContainer)) {
+    //             hideLoadButton(modelTreeContainer);
+    //         }
+    //     }
+    // }
 }
 
 function hideLoadButton(modelTreeContainer) {
@@ -1079,7 +1088,7 @@ function loadModel(fileName,
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 
     $.ajax({
-        data: { 'viewerContainer': viewerContainer, 'fileName' : fileName },
+        data: { 'viewerContainer': viewerContainer, 'fileName' : fileName, 'dataSourceType' : '3D'},
         type: "POST",
         url: "PHP/GetSourceFilePath.php"
     }).done(function (uri) {
@@ -1300,10 +1309,32 @@ function loadDbDataSource(fileExtension,
             return false;
         }
     }
-    readDbDataSource(file[0],
-        viewerContainer,
-        modelTreeContainer);
-
+        var fileName = file[0].name.substring(0, file[0].name.lastIndexOf('.'));
+        $.ajax({
+            data: { 'viewerContainer': viewerContainer, 'fileName' : fileName, 'dataSourceType' : '1D' },
+            type: "POST",
+            url: "PHP/GetSourceFilePath.php"
+        }).done(function (uri) {
+            if (uri !== 'fail') {
+                xCheckStudio.Util.fileExists(uri).then(function (success) {
+                    if (success) {
+                        readDbDataSource(file[0],
+                            viewerContainer,
+                            modelTreeContainer);
+                }
+                else {
+                    document.getElementById(formId).reset();
+                    alert("File not found to load.");
+                    return false;
+                }
+            });
+        }
+        else {
+            document.getElementById(formId).reset();
+            return false;
+        }
+    });
+   
     return true;
 
 }
