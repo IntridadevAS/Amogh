@@ -85,7 +85,7 @@ function populateCheckResults(comparisonCheckGroups,
                     data: {'Source' : "SourceB"},
                     success: function (msg) 
                     {
-                        if (msg != 'fail') {
+                        if (msg != 'fail' && msg != "") {
                             sourceBClassWiseComponents = JSON.parse(msg);
                         }
                     }
