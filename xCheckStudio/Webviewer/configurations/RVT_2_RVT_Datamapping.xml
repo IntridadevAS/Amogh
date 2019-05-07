@@ -13,12 +13,67 @@
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="RVT_Compliance">
+<CheckCase name="RVT_2_RVT">
+	<Check type="Comparison"  sourceAType="RVT" sourceBType="RVT"> 	  
+		<ComponentGroup sourceAGroupName="IFCSITE" sourceBGroupName="IFCSITE">
+		  <ComponentClass sourceAComponentClass="IFCSITE" sourceBComponentClass="IFCSITE">
+			 <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+		     <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
+			 <Property sourceAName="Organization Name" sourceBName="Organization Name rule=" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Organization Description" sourceBName="Organization Description" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Building Name" sourceBName="Organization Description" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Author" sourceBName="Author" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Project Issue Date" sourceBName="Project Issue Date" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Project Status" sourceBName="Project Status" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Client Name" sourceBName="Client Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Project Address" sourceBName="Project Address" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Project Name" sourceBName="Project Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Project Number" sourceBName="Project Number" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="TYPE" sourceBName="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCBUILDING" sourceBGroupName="IFCBUILDING">
+	   <ComponentClass sourceAComponentClass="IFCBUILDING" sourceBComponentClass="IFCBUILDING">
+	         <Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
+			 <Property sourceAName="TYPE" sourceBName="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+       </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="IFCBUILDINGSTOREY" sourceBGroupName="IFCBUILDINGSTOREY">
+		  <ComponentClass sourceAComponentClass="IFCBUILDINGSTOREY" sourceBComponentClass="IFCBUILDINGSTOREY">
+			<Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+		     <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
+			 <Property sourceAName="persistentId" sourceBName="persistentId" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Edited by" sourceBName="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Name" sourceBName="Identity Data/Name" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Structural" sourceBName="Identity Data/Structural" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Building Story" sourceBName="Identity Data/Structural" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Display/Is ground plane" sourceBName="Display/Is ground plane" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Constraints/Elevation" sourceBName="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Dimensions/Computation Height" sourceBName="Dimensions/Computation Height" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="TYPE" sourceBName="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   <ComponentGroup sourceAGroupName="Doors" sourceBGroupName="Doors">
+		  <ComponentClass sourceAComponentClass="Doors" sourceBComponentClass="Doors">
+			<Matchwith sourceAPropertyname="Name"  sourceBPropertyname ="Name"/>
+		     <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
+			 <Property sourceAName="Other/Head Height" sourceBName="Other/Head Height" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Edited by" sourceBName="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Constraints/Sill Height" sourceBName="Constraints/Sill Height" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Identity Data/Comments" sourceBName="Identity Data/Comments" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Dimensions/Width" sourceBName="Dimensions/Width" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Constraints/Elevation" sourceBName="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Dimensions/Rough Width" sourceBName="Dimensions/Rough Width" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property sourceAName="Dimensions/Rough Height" sourceBName="Dimensions/Rough Height" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	</Check>
 	<Check type="Compliance"  sourceType="RVT" > 	  
 		<ComponentGroup name="IFCSITE">
 		  <ComponentClass name="IFCSITE">
 			 <Property name="Organization Name" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Organization Description" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Building Name" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Author" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -34,13 +89,13 @@
 	   <ComponentGroup name="IFCBUILDING">
 	   <ComponentClass name="IFCBUILDING">
 			 <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
        </ComponentClass>
 	   </ComponentGroup>
 	   <ComponentGroup name="IFCBUILDINGSTOREY">
 		  <ComponentClass name="IFCBUILDINGSTOREY">
 			 <Property name="persistentId" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Identity Data/Name" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Identity Data/Structural" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -54,7 +109,7 @@
 	   <ComponentGroup name="Doors">
 		  <ComponentClass name="Doors">
 			 <Property name="Other/Head Height" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Sill Height" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Identity Data/Comments" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -67,7 +122,7 @@
 	   <ComponentGroup name="Curtain Panels">
 		  <ComponentClass name="Curtain Panels">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Dimensions/Width" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Surface Area" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -79,7 +134,7 @@
 	   <ComponentGroup name="Curtain Wall Mullions">
 		  <ComponentClass name="Curtain Wall Mullions">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Dimensions/Length" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Surface Area" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -90,7 +145,7 @@
 	   <ComponentGroup name="Structural Columns">
 		  <ComponentClass name="Structural Columns">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Constraints/Moves Top With Grids" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Moves With Grids" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -107,7 +162,7 @@
 	   <ComponentGroup name="Generic Models">
 		  <ComponentClass name="Generic Models">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Constraints/Moves With Nearby Elements" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Host" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -117,7 +172,7 @@
 	   <ComponentGroup name="Specialty Equipment">
 		  <ComponentClass name="Specialty Equipment">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Constraints/Host" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
 		  </ComponentClass>
@@ -125,7 +180,7 @@
 	   <ComponentGroup name="Mechanical Equipment">
 		  <ComponentClass name="Mechanical Equipment">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Identity Data/Mark" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Host" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -134,7 +189,7 @@
 	   <ComponentGroup name="Plumbing Fixtures">
 		  <ComponentClass name="Plumbing Fixtures">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Identity Data/Mark" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
 		  </ComponentClass>
@@ -142,7 +197,7 @@
 	   <ComponentGroup name="Windows">
 		  <ComponentClass name="Windows">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Dimensions/Width" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Elevation" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Dimensions/Height" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -151,7 +206,7 @@
 	   <ComponentGroup name="Lighting Fixtures">
 		  <ComponentClass name="Lighting Fixtures">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Identity Data/Mark" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Host" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Electrical - Circuiting/Electrical Data" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -164,7 +219,7 @@
 	    <ComponentGroup name="Structural Framing">
 		  <ComponentClass name="Structural Framing">
 			 <Property name="Identity Data/Edited by" rule="Must have value" severity="Error" comment="Property must have value." />
-			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Warning"/>
 			 <Property name="Dimensions/Length" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/Start Level Offset" rule="Must have value" severity="Error" comment="Property must have value." />
 			 <Property name="Constraints/End Level Offset" rule="Must have value" severity="Error" comment="Property must have value." />
@@ -186,5 +241,5 @@
 			 <Property name="Geometric Position/z Offset Value" rule="Must have value" severity="Error" comment="Property must have value." />
 		  </ComponentClass>
 	   </ComponentGroup>
-	</Check>
+	</Check> 
 </CheckCase>

@@ -293,14 +293,19 @@ var xCheckStudio;
                         if (nodeProperties != null &&
                             Object.keys(nodeProperties).length > 0 &&
                             identifierProperties !== undefined) {
-                            var name = _this._firstViewer.model.getNodeName(nodeId)
-                            
-                            var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
                             var name = _this.getPropertyValue(nodeProperties, identifierProperties.name);
-                            if(name == undefined)
+                            if(name == undefined) {
                                 name = _this._firstViewer.model.getNodeName(nodeId)
-                            var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
+                            }
+                            var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
+                            if(mainComponentClass == undefined)
+                            {
+                                mainComponentClass = _this._firstViewer.model.getNodeName(parentNodeId);
+                            }
 
+                            var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
+                            if(subComponentClass == undefined)
+                                subComponentClass = mainComponentClass
                             if (mainComponentClass !== undefined &&
                                 name !== undefined &&
                                 subComponentClass !== undefined) {                            
@@ -316,7 +321,18 @@ var xCheckStudio;
                                 var componentClassPropertyObject = new GenericProperty("ComponentClass", 
                                                                                        "String", 
                                                                                        subComponentClass);
+
                                 genericPropertiesObject.addProperty(componentClassPropertyObject);
+
+
+                                if(_this.SourceType.toLowerCase() == "rvt")
+                                {
+                                    var elementName = new GenericProperty("Name", 
+                                    "String", 
+                                    name);
+
+                                    genericPropertiesObject.addProperty(elementName);
+                                }
 
                                 // iterate node properties and add to generic properties object
                                 for (var key in nodeProperties) {
