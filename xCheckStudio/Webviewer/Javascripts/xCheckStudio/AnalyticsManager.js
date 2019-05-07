@@ -1,942 +1,662 @@
 function AnalyticsManager() {
-    // this.ComparisonResultArray = [];
-    // this.ComplianceResultArrayForSourceA = [];
-    // this.ComplianceResultArrayForSourceB = [];
 
-    AnalyticsManager.prototype.drawPieCharts = function (type, tabName) 
-    {
-        // if (this.ComparisonResultArray.length > 0) 
-        // {
-        //     this.ComparisonResultArray = [];
-        // }
+    var ComparisonTotalItemsChecked = 0;
+    var ComparisonErrorsCount = 0;
+    var ComparisonOKCount = 0;
+    var ComparisonWarningsCount = 0;
+    
+    var ComparisonTotalItemsCount = 0;
+    var ComparisonTotalItemsNotChecked = 0;
+    var ComparisonNoMatchCount = 0;
 
+    var SourceAComplianceTotalItemsChecked = 0;
+    var SourceAComplianceErrorsCount = 0;
+    var SourceAComplianceOKCount = 0;
+    var SourceAComplianceWarningsCount = 0;
 
-        if (comparisonCheckGroups &&  
-            type === "comparison")
-         {               
-            $.ajax({
-                    url: 'PHP/AnalyticsDataReader.php',
-                    type: "POST",
-                    async: true,
-                    data: {},
-                    success: function (msg) 
-                    {
-                        if (msg != 'fail') {
-                            var checkResults = JSON.parse(msg);
+    var SourceBComplianceTotalItemsChecked = 0;
+    var SourceBComplianceErrorsCount = 0;
+    var SourceBComplianceOKCount = 0;
+    var SourceBComplianceWarningsCount = 0;
 
-
-                            var totalItemsChecked = 0;
-                            var errorsCount = 0;
-                            var warningsCount = 0;
-                            var okCount = 0;
-                            var noMatchCount = 0;
-                            var sourceASelectedCount = 0;
-                            var sourceBSelectedCount = 0;
-
-                            if ("okCount" in checkResults) {
-                                okCount = parseInt(checkResults["okCount"]);
-                            }
-
-                            if ("errorCount" in checkResults) {
-                                errorsCount = parseInt(checkResults["errorCount"]);
-                            }
-
-                            if ("warningCount" in checkResults) {
-                                warningsCount = parseInt(checkResults["warningCount"]);
-                            }
-
-                            if ("nomatchCount" in checkResults) {
-                                noMatchCount = parseInt(checkResults["nomatchCount"]);
-                            }
-
-                            if ("sourceASelectedCount" in checkResults) {
-                                sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
-                            }
-
-                            if ("sourceBSelectedCount" in checkResults) {
-                                sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
-                            }
-
-                            totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
-                             
-                            //add data to summary
-                            document.getElementById("a37").innerText = totalItemsChecked;
-                            document.getElementById("a18").innerText = errorsCount;
-                            document.getElementById("a13").innerText = warningsCount;
-                            document.getElementById("a6").innerText = okCount;
+    AnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
+       
+        var _this = this;
+        $.ajax({
+            url: 'PHP/AnalyticsDataReader.php',
+            type: "POST",
+            async: true,
+            data: { 'CheckType': 'Comparison' },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var checkResults = JSON.parse(msg);
 
 
-                            // draw pie chart for Errors
-                            var comparisonResultArray = [];
-                            var titleArray = [];
-                            titleArray.push("Name");
-                            titleArray.push("Value");
-                            comparisonResultArray.push(titleArray);
-                            var valueArray = [];
-                            valueArray.push("Error");
+                    var totalItemsChecked = 0;
+                    var errorsCount = 0;
+                    var warningsCount = 0;
+                    var okCount = 0;
+                    var noMatchCount = 0;
+                    var sourceASelectedCount = 0;
+                    var sourceBSelectedCount = 0;
+                    var sourceATotalComponentsCount = 0;
+                    var sourceBTotalComponentsCount = 0;
+                    var checkGroupsInfo = 0;
 
-                            var percent = errorsCount * 100 / totalItemsChecked;
-                            fixedPercent = parseFloat((percent).toFixed(1))
-                            document.getElementById("a40").innerText = fixedPercent + "%";
-                            valueArray.push(fixedPercent);
-                            comparisonResultArray.push(valueArray);
+                    var sourceANotSelectedComponents;
+                    var sourceBNotSelectedComponents;
 
-                            var valueArray = [];
-                            valueArray.push("");
-                            complementryPercent = 100 - fixedPercent;
-                            if (complementryPercent < 0) {
-                                complementryPercent = 0;
-                            }
-                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
-                            valueArray.push(complementryPercent);
-                            comparisonResultArray.push(valueArray);
-                            getData(comparisonResultArray);
-                            colorsArray = ["#F43742", "#EDEDED"]
-                            drawPieChart(dataTable, "", group2_pie, colorsArray)
-
-                            // draw pie chart for Warnings
-                            comparisonResultArray = [];
-
-                            titleArray = [];
-                            titleArray.push("Name");
-                            titleArray.push("Value");
-                            comparisonResultArray.push(titleArray);
-                            var valueArray = [];
-                            valueArray.push("Warning");
-                            var percent = warningsCount * 100 / totalItemsChecked;
-                            fixedPercent = parseFloat((percent).toFixed(1))
-                            document.getElementById("a30").innerText = fixedPercent + "%";
-                            valueArray.push(fixedPercent);
-                            comparisonResultArray.push(valueArray);
-                            var valueArray = [];
-                            valueArray.push("");
-                            complementryPercent = 100 - fixedPercent;
-                            if (complementryPercent < 0) {
-                                complementryPercent = 0;
-                            }
-                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
-                            valueArray.push(complementryPercent);
-                            comparisonResultArray.push(valueArray);
-                            colorsArray = ["#F8C13B", "#EDEDED"]
-                            getData(comparisonResultArray);
-                            drawPieChart(dataTable, "", group4_pie, colorsArray)
-
-                            // draw pie chart for Oks
-                            comparisonResultArray = [];
-
-                            titleArray = [];
-                            titleArray.push("Name");
-                            titleArray.push("Value");
-                            comparisonResultArray.push(titleArray);
-                            var valueArray = [];
-                            valueArray.push("OK");
-                            var percent = okCount * 100 / totalItemsChecked;
-                            fixedPercent = parseFloat((percent).toFixed(1))
-                            document.getElementById("a10").innerText = fixedPercent + "%";
-                            valueArray.push(fixedPercent);
-                            comparisonResultArray.push(valueArray);
-                            var valueArray = [];
-                            valueArray.push("");
-                            complementryPercent = 100 - fixedPercent;
-                            if (complementryPercent < 0) {
-                                complementryPercent = 0;
-                            }
-                            complementryPercent = parseFloat((complementryPercent).toFixed(1))
-                            valueArray.push(complementryPercent);
-                            comparisonResultArray.push(valueArray);
-                            colorsArray = ["#98DE32", "#EDEDED"];
-
-                            getData(comparisonResultArray);
-                            drawPieChart(dataTable, "", group5_pie, colorsArray);
-
-                        }
+                    if ("okCount" in checkResults) {
+                        okCount = parseInt(checkResults["okCount"]);
                     }
-                });
-            // var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
-            // for (var componentGroup in componentGroupsArray) 
-            // {
-            //     var components = componentGroupsArray[componentGroup].Components
-            //     // totalItemsChecked += components.length;
-            //     for (var i = 0; i < components.length; i++) {
-            //         currentComponent = components[i];
-            //         if(currentComponent.SourceAName !== "")
-            //         {
-            //             totalItemsChecked += 1;
-            //             if (currentComponent.Status.toLowerCase() === "ok") {
-            //                 okCount++;
-            //             }
-            //             if (currentComponent.Status.toLowerCase() === "error") {
-            //                 errorsCount++;
-            //             }
-            //             if (currentComponent.Status.toLowerCase() === "warning") {
-            //                 warningsCount++;
-            //             }
-            //         }
-            //         if(currentComponent.SourceBName !== "")
-            //         {
-            //             totalItemsChecked += 1;
-            //             if (currentComponent.Status.toLowerCase() === "ok") {
-            //                 okCount++;
-            //             }
-            //             if (currentComponent.Status.toLowerCase() === "error") {
-            //                 errorsCount++;
-            //             }
-            //             if (currentComponent.Status.toLowerCase() === "warning") {
-            //                 warningsCount++;
-            //             }
-            //         }
-            //     }
-            // }
-            // //add data to summary
-            // document.getElementById("a37").innerText = totalItemsChecked;
-            // document.getElementById("a18").innerText = errorsCount;
-            // document.getElementById("a13").innerText = warningsCount;
-            // document.getElementById("a6").innerText = okCount;           
 
-            // // draw pie chart for Errors
-            // var titleArray = [];
-            // titleArray.push("Name");
-            // titleArray.push("Value");
-            // this.ComparisonResultArray.push(titleArray);
-            // var valueArray = [];
-            // valueArray.push("Error");
-
-            // var percent = errorsCount * 100 / totalItemsChecked;
-            //  fixedPercent =  parseFloat((percent).toFixed(1))
-            // document.getElementById("a40").innerText = fixedPercent + "%";
-            // valueArray.push(fixedPercent);
-            // this.ComparisonResultArray.push(valueArray);
-
-            // var valueArray = [];
-            // valueArray.push("");
-            // complementryPercent = 100 - fixedPercent;
-            // if(complementryPercent < 0)
-            // {
-            //     complementryPercent = 0;
-            // }
-            // complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            // valueArray.push(complementryPercent);
-            // this.ComparisonResultArray.push(valueArray);
-            // getData(this.ComparisonResultArray);
-            // colorsArray = ["#F43742", "#EDEDED"]
-            // drawPieChart(dataTable, "", group2_pie, colorsArray)
-
-            // // draw pie chart for Warnings
-            // this.ComparisonResultArray = [];
-
-            // titleArray = [];
-            // titleArray.push("Name");
-            // titleArray.push("Value");
-            // this.ComparisonResultArray.push(titleArray);
-            // var valueArray = [];
-            // valueArray.push("Warning");
-            // var percent = warningsCount * 100 / totalItemsChecked;
-            //  fixedPercent =  parseFloat((percent).toFixed(1))
-            // document.getElementById("a30").innerText = fixedPercent + "%";
-            // valueArray.push(fixedPercent);
-            // this.ComparisonResultArray.push(valueArray);
-            // var valueArray = [];
-            // valueArray.push("");
-            // complementryPercent = 100 - fixedPercent;
-            // if(complementryPercent < 0)
-            // {
-            //     complementryPercent = 0;
-            // }
-            //  complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            // valueArray.push(complementryPercent);
-            // this.ComparisonResultArray.push(valueArray);
-            // colorsArray = ["#F8C13B", "#EDEDED"]
-            // getData(this.ComparisonResultArray);
-            // drawPieChart(dataTable, "", group4_pie, colorsArray)
-
-            //  // draw pie chart for Oks
-            // this.ComparisonResultArray = [];
-
-            // titleArray = [];
-            // titleArray.push("Name");
-            // titleArray.push("Value");
-            // this.ComparisonResultArray.push(titleArray);
-            // var valueArray = [];
-            // valueArray.push("OK");
-            // var percent = okCount * 100 / totalItemsChecked;
-            //  fixedPercent =  parseFloat((percent).toFixed(1))
-            // document.getElementById("a10").innerText = fixedPercent + "%";
-            // valueArray.push(fixedPercent);
-            // this.ComparisonResultArray.push(valueArray);
-            // var valueArray = [];
-            // valueArray.push("");
-            // complementryPercent = 100 - fixedPercent;
-            // if(complementryPercent < 0)
-            // {
-            //     complementryPercent = 0;
-            // }
-            //  complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            // valueArray.push(complementryPercent);
-            // this.ComparisonResultArray.push(valueArray);
-            // colorsArray = ["#98DE32", "#EDEDED"];
-
-            // getData(this.ComparisonResultArray);
-            // drawPieChart(dataTable, "", group5_pie, colorsArray)
-        }
-
-        if (typeof SourceAComplianceData !== 'undefined' && 
-            type === "compliance" && 
-            tabName === "ComplianceAPieChartTab") 
-        {
-                if (this.ComplianceResultArrayForSourceA.length > 0) {
-                    this.ComplianceResultArrayForSourceA = [];
-                }
-
-            var componentGroupsArray = SourceAComplianceData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
+                    if ("errorCount" in checkResults) {
+                        errorsCount = parseInt(checkResults["errorCount"]);
                     }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
+
+                    if ("warningCount" in checkResults) {
+                        warningsCount = parseInt(checkResults["warningCount"]);
                     }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
+
+                    if ("nomatchCount" in checkResults) {
+                        noMatchCount = parseInt(checkResults["nomatchCount"]);
                     }
+
+                    if ("sourceASelectedCount" in checkResults) {
+                        sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
+                    }
+
+                    if ("sourceBSelectedCount" in checkResults) {
+                        sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
+                    }
+
+                    if ("sourceATotalComponentsCount" in checkResults) {
+                        sourceATotalComponentsCount = parseInt(checkResults["sourceATotalComponentsCount"]);
+                    }
+
+                    if ("sourceBTotalComponentsCount" in checkResults) {
+                        sourceBTotalComponentsCount = parseInt(checkResults["sourceBTotalComponentsCount"]);
+                    }
+
+                    if ("CheckGroupsInfo" in checkResults) {
+                        checkGroupsInfo = checkResults["CheckGroupsInfo"];
+                    }
+
+                    if ("SourceANotSelectedComps" in checkResults) {
+                        sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
+                    }
+
+                    if ("SourceBNotSelectedComps" in checkResults) {
+                        sourceBNotSelectedComponents = checkResults["SourceBNotSelectedComps"];
+                    }
+                    totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
+
+                    //add data to summary
+                    document.getElementById("a37").innerText = totalItemsChecked;
+                    document.getElementById("a18").innerText = errorsCount;
+                    document.getElementById("a13").innerText = warningsCount;
+                    document.getElementById("a6").innerText = okCount;
+
+                    _this.ComparisonTotalItemsChecked = totalItemsChecked;
+                    _this.ComparisonErrorsCount = errorsCount;
+                    _this.ComparisonWarningsCount = warningsCount;
+                    _this.ComparisonOKCount = okCount;
+                    
+
+                    // draw pie charts
+                    _this.drawComparisonPieCharts(okCount,
+                        warningsCount,
+                        errorsCount,
+                        totalItemsChecked);
+
+                    // draw info pie charts
+                    _this.drawInfoPieCharts('comparison',
+                        sourceATotalComponentsCount,
+                        sourceBTotalComponentsCount,
+                        noMatchCount,
+                        totalItemsChecked);
+
+                    //  draw bar chart (total 1)
+                    _this.drawBarCharts("comparison", checkGroupsInfo);
+
+                    // draw comparison  info bar charts (total 1)
+                    _this.drawInfoBarCharts("comparison",
+                        checkGroupsInfo,
+                        sourceANotSelectedComponents,
+                        sourceBNotSelectedComponents);
+
+                    // draw severity line chart
+                    _this.drawLineCharts(errorsCount, okCount, warningsCount);
+
                 }
             }
-
-            //add data to summary
-            document.getElementById("a37").innerText = totalItemsChecked;
-            document.getElementById("a18").innerText = errorsCount;
-            document.getElementById("a13").innerText = warningsCount;
-            document.getElementById("a6").innerText = okCount;
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceA.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Error");
-
-            var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a40_Apie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-            getData(this.ComplianceResultArrayForSourceA);
-            colorsArray = ["#F43742", "#EDEDED"]
-            drawPieChart(dataTable, "", SourceACompliance_pie2, colorsArray)
-
-            this.ComplianceResultArrayForSourceA = [];
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceA.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Warning");
-            var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a30_Apie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-            colorsArray = ["#F8C13B", "#EDEDED"]
-            getData(this.ComplianceResultArrayForSourceA);
-            drawPieChart(dataTable, "", SourceACompliance_pie4, colorsArray)
-
-            this.ComplianceResultArrayForSourceA = [];
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceA.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Ok");
-            var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a10_Apie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceA.push(valueArray);
-            colorsArray = ["#98DE32", "#EDEDED"];
-
-            getData(this.ComplianceResultArrayForSourceA);
-            drawPieChart(dataTable, "", SourceACompliance_pie5, colorsArray)
-        }
-        if (typeof SourceBComplianceData !== 'undefined' && type === "compliance" && tabName === "ComplianceBPieChartTab") {
-            if (this.ComplianceResultArrayForSourceB.length > 0) {
-                this.ComplianceResultArrayForSourceB = [];
-            }
-
-            var componentGroupsArray = SourceBComplianceData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                totalItemsChecked += components.length;
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
-                    }
-                }
-            }
-
-            //add data to summary
-            document.getElementById("a37").innerText = totalItemsChecked;
-            document.getElementById("a18").innerText = errorsCount;
-            document.getElementById("a13").innerText = warningsCount;
-            document.getElementById("a6").innerText = okCount;
-
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceB.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Error");
-
-            var percent = errorsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a40_Bpie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-            getData(this.ComplianceResultArrayForSourceB);
-            colorsArray = ["#F43742", "#EDEDED"]
-            drawPieChart(dataTable, "", SourceBCompliance_pie2, colorsArray)
-
-            this.ComplianceResultArrayForSourceB = [];
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceB.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Warning");
-            var percent = warningsCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a30_Bpie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-            colorsArray = ["#F8C13B", "#EDEDED"]
-            getData(this.ComplianceResultArrayForSourceB);
-            drawPieChart(dataTable, "", SourceBCompliance_pie4, colorsArray)
-
-            this.ComplianceResultArrayForSourceB = [];
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComplianceResultArrayForSourceB.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Ok");
-            var percent = okCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a10_Bpie").innerText = fixedPercent + "%";
-            valueArray.push(fixedPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComplianceResultArrayForSourceB.push(valueArray);
-            colorsArray = ["#98DE32", "#EDEDED"];
-
-            getData(this.ComplianceResultArrayForSourceB);
-            drawPieChart(dataTable, "", SourceBCompliance_pie5, colorsArray)
-        }
+        });
     }
 
-    AnalyticsManager.prototype.drawInfoPieCharts = function (type, tabName) {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = [];
-        }
-        var totalItemsCount = 0;;
-        var totalItemsChecked = 0;
-        var totalItemsNotChecked = 0;
-        var noMatchCount = 0;
+    AnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = function () {
 
-        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison" && typeof AnalyticsData !== 'undefined') {
-            var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "no match") {
-                        noMatchCount++;
+        var _this = this;
+        $.ajax({
+            url: 'PHP/AnalyticsDataReader.php',
+            type: "POST",
+            async: true,
+            data: { 'CheckType': 'SourceACompliance' },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var checkResults = JSON.parse(msg);
+                    var totalItemsChecked = 0;
+                    var errorsCount = 0;
+                    var warningsCount = 0;
+                    var okCount = 0;
+                   
+                    var sourceASelectedCount = 0;                  
+                    var sourceATotalComponentsCount = 0;                  
+                    var checkGroupsInfo = 0;
+
+                    var sourceANotSelectedComponents;
+                    var sourceBNotSelectedComponents;
+
+                    if ("okCount" in checkResults) {
+                        okCount = parseInt(checkResults["okCount"]);
                     }
-                    if(currentComponent.SourceAName !== "")
-                    {
-                        totalItemsChecked += 1;
+
+                    if ("errorCount" in checkResults) {
+                        errorsCount = parseInt(checkResults["errorCount"]);
                     }
-                    if(currentComponent.SourceBName !== "")
-                    {
-                        totalItemsChecked += 1;
+
+                    if ("warningCount" in checkResults) {
+                        warningsCount = parseInt(checkResults["warningCount"]);
                     }
+
+                    if ("sourceASelectedCount" in checkResults) {
+                        sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
+                    }                 
+
+                    if ("sourceATotalComponentsCount" in checkResults) {
+                        sourceATotalComponentsCount = parseInt(checkResults["sourceATotalComponentsCount"]);
+                    }                   
+
+                    if ("CheckGroupsInfo" in checkResults) {
+                        checkGroupsInfo = checkResults["CheckGroupsInfo"];
+                    }
+
+                    if ("SourceANotSelectedComps" in checkResults) {
+                        sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
+                    }
+                   
+                    totalItemsChecked = sourceASelectedCount;
+
+                    // //add data to summary
+                    // document.getElementById("a37_SourceACompliance").innerText = totalItemsChecked;
+                    // document.getElementById("a18_SourceACompliance").innerText = errorsCount;
+                    // document.getElementById("a13_SourceACompliance").innerText = warningsCount;
+                    // document.getElementById("a6_SourceACompliance").innerText = okCount;
+
+                    _this.SourceAComplianceTotalItemsChecked = totalItemsChecked;
+                    _this.SourceAComplianceErrorsCount = errorsCount;
+                    _this.SourceAComplianceWarningsCount= warningsCount;
+                    _this.SourceAComplianceOKCount  = okCount;
+
+                    // draw pie charts
+                    _this.drawSourceACompliancePieCharts(okCount,
+                        warningsCount,
+                        errorsCount,
+                        totalItemsChecked);
+
+                    // draw source A compliance bar charts (total 1)
+                    _this.drawBarCharts("SourceACompliance", checkGroupsInfo);
                 }
             }
+        });
+    }
 
-            totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
-            totalItemsNotChecked = totalItemsCount - totalItemsChecked;
-            if(totalItemsNotChecked < 0)
-            {
+    AnalyticsManager.prototype.populateSourceBComplianceAnalyticsData = function () {
+
+        var _this = this;
+        $.ajax({
+            url: 'PHP/AnalyticsDataReader.php',
+            type: "POST",
+            async: true,
+            data: { 'CheckType': 'SourceBCompliance' },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var checkResults = JSON.parse(msg);
+                    var totalItemsChecked = 0;
+                    var errorsCount = 0;
+                    var warningsCount = 0;
+                    var okCount = 0;
+
+                    var sourceBSelectedCount = 0;
+                    var checkGroupsInfo = 0;
+
+                    if ("okCount" in checkResults) {
+                        okCount = parseInt(checkResults["okCount"]);
+                    }
+
+                    if ("errorCount" in checkResults) {
+                        errorsCount = parseInt(checkResults["errorCount"]);
+                    }
+
+                    if ("warningCount" in checkResults) {
+                        warningsCount = parseInt(checkResults["warningCount"]);
+                    }
+
+                    if ("sourceBSelectedCount" in checkResults) {
+                        sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
+                    }
+
+
+                    if ("CheckGroupsInfo" in checkResults) {
+                        checkGroupsInfo = checkResults["CheckGroupsInfo"];
+                    }
+
+                    totalItemsChecked = sourceBSelectedCount;
+
+                    // //add data to summary
+                    // document.getElementById("a37_SourceBCompliance").innerText = totalItemsChecked;
+                    // document.getElementById("a18_SourceBCompliance").innerText = errorsCount;
+                    // document.getElementById("a13_SourceBCompliance").innerText = warningsCount;
+                    // document.getElementById("a6_SourceBCompliance").innerText = okCount;
+
+                    _this.SourceBComplianceTotalItemsChecked = totalItemsChecked;
+                    _this.SourceBComplianceErrorsCount = errorsCount;
+                    _this.SourceBComplianceWarningsCount  = warningsCount;
+                    _this.SourceBComplianceOKCount = okCount;
+
+                    // draw pie charts
+                    _this.drawSourceBCompliancePieCharts(okCount,
+                        warningsCount,
+                        errorsCount,
+                        totalItemsChecked);
+
+                    // draw source A compliance bar charts (total 1)
+                    _this.drawBarCharts("SourceBCompliance", checkGroupsInfo);
+                }
+            }
+        });
+    }
+
+    AnalyticsManager.prototype.drawSourceBCompliancePieCharts = function (okCount,
+        warningsCount,
+        errorsCount,
+        totalItemsChecked) {
+
+        // draw pie chart for Errors 
+        var errorDiv = document.getElementById('SourceBCompliance_pie2');
+        var colorsArray = ["#F43742", "#EDEDED"];
+        this.drawPieChart("Error",
+            errorsCount,
+            totalItemsChecked,
+            SourceBCompliance_pie2,
+            colorsArray,
+            "a40_Bpie");
+
+        // draw pie chart for Warnings
+        var warningDiv = document.getElementById('SourceBCompliance_pie4');
+        colorsArray = ["#F8C13B", "#EDEDED"];
+        this.drawPieChart("Warning",
+            warningsCount,
+            totalItemsChecked,
+            SourceBCompliance_pie4,
+            colorsArray,
+            'a30_Bpie');
+
+        // draw pie chart for Oks
+        var okDiv = document.getElementById('SourceBCompliance_pie5');
+        colorsArray = ["#98DE32", "#EDEDED"];
+        this.drawPieChart("OK",
+            okCount,
+            totalItemsChecked,
+            SourceBCompliance_pie5,
+            colorsArray,
+            'a10_Bpie');
+    }
+
+    AnalyticsManager.prototype.drawSourceACompliancePieCharts = function (okCount,
+        warningsCount,
+        errorsCount,
+        totalItemsChecked) {
+
+        // draw pie chart for Errors 
+        //var errorDiv = document.getElementById('SourceACompliance_pie2');
+        var colorsArray = ["#F43742", "#EDEDED"];
+        this.drawPieChart("Error",
+            errorsCount,
+            totalItemsChecked,
+            SourceACompliance_pie2,
+            colorsArray,
+            "a40_Apie");
+
+        // draw pie chart for Warnings
+        var warningDiv = document.getElementById('SourceACompliance_pie4');
+        colorsArray = ["#F8C13B", "#EDEDED"];
+        this.drawPieChart("Warning",
+            warningsCount,
+            totalItemsChecked,
+            SourceACompliance_pie4,
+            colorsArray,
+            'a30_Apie');
+
+        // draw pie chart for Oks
+        var okDiv = document.getElementById('SourceACompliance_pie5');
+        colorsArray = ["#98DE32", "#EDEDED"];
+        this.drawPieChart("OK",
+            okCount,
+            totalItemsChecked,
+            SourceACompliance_pie5,
+            colorsArray,
+            'a10_Apie');
+
+    }
+
+    AnalyticsManager.prototype.drawComparisonPieCharts = function (okCount,
+        warningsCount,
+        errorsCount,
+        totalItemsChecked) {
+
+        // draw pie chart for Errors 
+        var errorDiv = document.getElementById('group2_pie');
+        var colorsArray = ["#F43742", "#EDEDED"];
+        this.drawPieChart("Error",
+            errorsCount,
+            totalItemsChecked,
+            errorDiv,
+            colorsArray,
+            "a40");
+
+        // draw pie chart for Warnings
+        var warningDiv = document.getElementById('group4_pie');
+        colorsArray = ["#F8C13B", "#EDEDED"];
+        this.drawPieChart("Warning",
+            warningsCount,
+            totalItemsChecked,
+            warningDiv,
+            colorsArray,
+            'a30');
+
+        // draw pie chart for Oks
+        var okDiv = document.getElementById('group5_pie');
+        colorsArray = ["#98DE32", "#EDEDED"];
+        this.drawPieChart("OK",
+            okCount,
+            totalItemsChecked,
+            okDiv,
+            colorsArray,
+            'a10');
+    }
+
+    AnalyticsManager.prototype.drawPieChart = function (mainChartItem,
+        itemCount,
+        totalItemCount,
+        div,
+        colorsArray,
+        percentageDiv) {
+
+        var resultArray = [];
+
+        titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Value");
+        resultArray.push(titleArray);
+
+        var percent = itemCount * 100 / totalItemCount;
+        var fixedPercent = parseFloat((percent).toFixed(1));
+
+        document.getElementById(percentageDiv).innerText = fixedPercent + "%";
+
+        var valueArray = [];
+        valueArray.push(mainChartItem);
+        valueArray.push(fixedPercent);
+        resultArray.push(valueArray);
+
+        complementryPercent = 100 - fixedPercent;
+        if (complementryPercent < 0) {
+            complementryPercent = 0;
+        }
+        complementryPercent = parseFloat((complementryPercent).toFixed(1));
+
+        valueArray = [];
+        valueArray.push("");
+        valueArray.push(complementryPercent);
+        resultArray.push(valueArray);
+
+        //colorsArray = ["#98DE32", "#EDEDED"];
+
+        var dataTable = getData(resultArray);
+        drawPieChart(dataTable, "", div, colorsArray);
+    }
+
+    AnalyticsManager.prototype.drawInfoPieCharts = function (type,
+        sourceATotalComponentsCount,
+        sourceBTotalComponentsCount,
+        noMatchCount,
+        totalItemsChecked) {
+      
+        if (type === "comparison") {
+         
+            var totalItemsCount = sourceATotalComponentsCount + sourceBTotalComponentsCount;
+            var totalItemsNotChecked = totalItemsCount - totalItemsChecked;
+            if (totalItemsNotChecked < 0) {
                 totalItemsNotChecked = 0;
             }
+           
             //add data to summary
             document.getElementById("a37Info").innerText = totalItemsCount;
-            document.getElementById("a18Info").innerText = totalItemsNotChecked ;
+            document.getElementById("a18Info").innerText = totalItemsNotChecked;
             document.getElementById("a13Info").innerText = noMatchCount;
 
-            //Add comparison check data for project health(Info chart)
-            var checkResultArrayForInfo = localStorage.CheckResultArrayInfo;
-            if (checkResultArrayForInfo === undefined) {
-                checkResultArrayForInfo = {};
-                var temp = [totalItemsNotChecked, noMatchCount];
-                checkResultArrayForInfo[Date.now()] = temp;
-                localStorage.setItem("CheckResultArrayInfo", JSON.stringify(checkResultArrayForInfo));
-            }
-            // else {
-            //     StorageData = localStorage.CheckResultArrayInfo;
-            //     StorageArray = JSON.parse(StorageData);
-            //     var temp = [totalItemsNotChecked, noMatchCount];
-            //     StorageArray[Date.now()] = temp;
-            //     localStorage.setItem("CheckResultArrayInfo", JSON.stringify(StorageArray));
-            // }
+             this.ComparisonTotalItemsCount = totalItemsCount;
+             this.ComparisonTotalItemsNotChecked = totalItemsNotChecked;
+             this.ComparisonNoMatchCount = noMatchCount;
 
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComparisonResultArray.push(titleArray);
-            var valueArray = [];
-            valueArray.push("No Match");
-
-            var percent = noMatchCount * 100 / totalItemsChecked;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a40Info").innerText = fixedPercent + "%";
+            // draw pie chart for No Match 
+            var noMatchDiv = document.getElementById('group2_pieInfo');
+            var colorsArray = ["#AFD3C5", "#EDEDED"];
+            this.drawPieChart("No Match",
+                noMatchCount,
+                totalItemsChecked,
+                noMatchDiv,
+                colorsArray,
+                'a40Info');
             document.getElementById("a40Info").style.color = "#AFD3C5";
-            valueArray.push(fixedPercent);
-            this.ComparisonResultArray.push(valueArray);
 
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComparisonResultArray.push(valueArray);
-            getData(this.ComparisonResultArray);
-            colorsArray = ["#AFD3C5", "#EDEDED"]
-            drawPieChart(dataTable, "", group2_pieInfo, colorsArray)
-
-            this.ComparisonResultArray = [];
-
-            var titleArray = [];
-            titleArray.push("Name");
-            titleArray.push("Value");
-            this.ComparisonResultArray.push(titleArray);
-            var valueArray = [];
-            valueArray.push("Not Checked");
-            var percent = totalItemsNotChecked * 100 / totalItemsCount;
-             fixedPercent =  parseFloat((percent).toFixed(1))
-            document.getElementById("a10Info").innerText = fixedPercent + "%";
-            document.getElementById("a10Info").style.color = "#839192";
-            valueArray.push(fixedPercent);
-            this.ComparisonResultArray.push(valueArray);
-            var valueArray = [];
-            valueArray.push("");
-            complementryPercent = 100 - fixedPercent;
-            if(complementryPercent < 0)
-            {
-                complementryPercent = 0;
-            }
-             complementryPercent=  parseFloat((complementryPercent).toFixed(1))
-            valueArray.push(complementryPercent);
-            this.ComparisonResultArray.push(valueArray);
-            colorsArray = ["#839192", "#EDEDED"];
-
-            getData(this.ComparisonResultArray);
-            drawPieChart(dataTable, "", group5_pieInfo, colorsArray)
+            // draw pie chart for not checked
+            var notCheckedDiv = document.getElementById('group5_pieInfo');
+            colorsArray = ["#839192", "#EDEDED"];;
+            this.drawPieChart("Not Checked",
+                totalItemsNotChecked,
+                totalItemsCount,
+                notCheckedDiv,
+                colorsArray,
+                'a10Info');
+            document.getElementById("a10Info").style.color = "#839192";            
         }
-
     }
 
-    AnalyticsManager.prototype.drawInfoBarCharts = function (type, tabName) {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = []
-        }
+    AnalyticsManager.prototype.drawInfoBarCharts = function (type,
+        checkGroupsInfo,
+        sourceANotSelectedComponents,
+        sourceBNotSelectedComponents) {
+      
+        if (type === "comparison") {
+            var resultArray = [];
 
-        var totalItemsCheckedForDataSource = 0;
-        var noMatchCountForDataSource = 0;
-
-        var totalItemsChecked = 0;
-
-        var titleArray = [];
-
-
-        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison") {
-            titleArray = [];
+            var titleArray = [];
             titleArray.push("Name");
             titleArray.push("No Match");
             titleArray.push("Not Checked");
-            this.ComparisonResultArray.push(titleArray);
+            resultArray.push(titleArray);
 
-            var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                totalItemsCheckedForDataSource += components.length;
+            for (var groupName in checkGroupsInfo) {
+                var groupNameArray = groupName.split('-');
+
+                var SourceANotSelectedCount = 0;
+                var SourceBNotSelectedCount = 0;
+                if (groupNameArray.length == 2) {
+                    var sourceAClassName = groupNameArray[0];
+                    var sourceBClassName = groupNameArray[1];
+
+                    if (sourceAClassName in sourceANotSelectedComponents) {
+                        SourceANotSelectedCount = parseInt(sourceANotSelectedComponents[sourceAClassName]);
+                    }
+
+                    if (sourceBClassName in sourceBNotSelectedComponents) {
+                        SourceBNotSelectedCount = parseInt(sourceBNotSelectedComponents[sourceBClassName]);
+                    }
+                }
+                else if (groupNameArray.length == 1) {
+                    sourceAClassName = groupNameArray[0];
+
+                    if (sourceAClassName in sourceANotSelectedComponents) {
+                        SourceANotSelectedCount = parseInt(sourceANotSelectedComponents[sourceAClassName]);
+                    }
+                }
+                else {
+                    continue;
+                }
+
+                var totalNotSelected = SourceANotSelectedCount + SourceBNotSelectedCount;
+
+                var statistics = checkGroupsInfo[groupName];
+                var nomatchCount = parseInt(statistics['No Match']);
+
                 var valueArray = [];
-                valueArray.push(componentGroup);
+                valueArray.push(groupName);
+                valueArray.push(nomatchCount);
+                valueArray.push(totalNotSelected);
+                resultArray.push(valueArray);
+            }           
 
-                var noMatchCount = 0;
-                var notCheckedCount = 0;
-                var classwiseCheckedItemsCount = 0;
-
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "no match") {
-                        noMatchCount++;
-                    }
-                    if(currentComponent.SourceAName !== "")
-                    {
-                        totalItemsChecked += 1;
-                        classwiseCheckedItemsCount +=1;
-                    }
-                    if(currentComponent.SourceBName !== "")
-                    {
-                        totalItemsChecked += 1;
-                        classwiseCheckedItemsCount +=1;
-                    }
-                }
-
-                noMatchCountForDataSource += noMatchCount;
-                var componentGroupName = componentGroup.split("-");
-                var sourceAcomponentGroupCount = AnalyticsData.SourceAClasswiseComponents[componentGroupName[0]];
-                var sourceBcomponentGroupCount = AnalyticsData.SourceBClasswiseComponents[componentGroupName[1]];
-                var classWiseTotalItems = sourceAcomponentGroupCount + sourceBcomponentGroupCount;
-                var classWiseTotalNotCheckedItems = classWiseTotalItems - classwiseCheckedItemsCount;
-                if(classWiseTotalNotCheckedItems < 0)
-                {
-                    classWiseTotalNotCheckedItems =0;
-                }
-                valueArray.push(noMatchCount);
-                valueArray.push(classWiseTotalNotCheckedItems);
-                this.ComparisonResultArray.push(valueArray);
-            }
-
-            var totalItemsCount = AnalyticsData.SourceATotalItemCount + AnalyticsData.SourceBTotalItemCount;
-            var totalItemsNotChecked = totalItemsCount - totalItemsChecked;
-            if(totalItemsNotChecked < 0)
-            {
-                totalItemsNotChecked = 0;
-            }
-            document.getElementById("a37Info").innerText = totalItemsCount;
-            document.getElementById("a18Info").innerText = totalItemsNotChecked;
-            document.getElementById("a13Info").innerText = noMatchCountForDataSource;
-
-
-            getData(this.ComparisonResultArray);
-            colorsArray = ["#AFD3C5", "#839192"];
+            var dataTable = getData(resultArray);
+            var colorsArray = ["#AFD3C5", "#839192"];
             drawBarChart(dataTable, "", group2_barInfo, colorsArray);
         }
-        
+
     }
 
-    AnalyticsManager.prototype.drawBarCharts = function (type, tabName) {
-        if (this.ComparisonResultArray.length > 0) {
-            this.ComparisonResultArray = []
-        }
+    AnalyticsManager.prototype.drawBarCharts = function (type,
+        checkGroupsInfo) {
 
-        var totalItemsCheckedForDataSource = 0;
-        var errorsCountForDataSource = 0;
-        var warningsCountForDataSource = 0;
-        var okCountForDataSource = 0;
+        if (type === "comparison") {
 
-        var totalItemsChecked = 0;
-        // var okCount = 0;
-        // var errorsCount = 0;
-        // var warningsCount = 0;
+            var resultsArray = [];
 
-        var titleArray = [];
-
-
-        if (typeof ComparisonCheckData !== 'undefined' && type === "comparison") {
-            titleArray = [];
+            var titleArray = [];
             titleArray.push("Name");
             titleArray.push("Error");
             titleArray.push("Warning");
             titleArray.push("Ok");
-            this.ComparisonResultArray.push(titleArray);
+            resultsArray.push(titleArray);
 
-            var componentGroupsArray = ComparisonCheckData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                totalItemsCheckedForDataSource += components.length;
+            for (var groupName in checkGroupsInfo) {
+                var statistics = checkGroupsInfo[groupName];
+                var errorCount = parseInt(statistics['Error']);
+                //var nomatchCount  = parseInt(statistics['No Match']);
+                var okCount = parseInt(statistics['OK']);
+                var warningCount = parseInt(statistics['Warning']);
+
                 var valueArray = [];
-                valueArray.push(componentGroup);
-
-                var okCount = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
-
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if(currentComponent.SourceAName !== "")
-                    {
-                        totalItemsChecked += 1;
-                        if (currentComponent.Status.toLowerCase() === "ok") {
-                            okCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "error") {
-                            errorsCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "warning") {
-                            warningsCount++;
-                        }
-                    }
-                    if(currentComponent.SourceBName !== "")
-                    {
-                        totalItemsChecked += 1;
-                        if (currentComponent.Status.toLowerCase() === "ok") {
-                            okCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "error") {
-                            errorsCount++;
-                        }
-                        if (currentComponent.Status.toLowerCase() === "warning") {
-                            warningsCount++;
-                        }
-                    }
-                }
-
-                errorsCountForDataSource += errorsCount;
-                okCountForDataSource += okCount;
-                warningsCountForDataSource += warningsCount;
-                // document.getElementById("a37").innerText = totalItemsChecked;
-                // document.getElementById("a18").innerText = errorsCount;
-                // document.getElementById("a13").innerText = warningsCount;
-                // document.getElementById("a6").innerText = okCount;
-
-                valueArray.push(errorsCount);
-                valueArray.push(warningsCount);
+                valueArray.push(groupName);
+                valueArray.push(errorCount);
+                valueArray.push(warningCount);
                 valueArray.push(okCount);
-                this.ComparisonResultArray.push(valueArray);
+                resultsArray.push(valueArray);
             }
 
-            document.getElementById("a37").innerText = totalItemsChecked;
-            document.getElementById("a18").innerText = errorsCountForDataSource;
-            document.getElementById("a13").innerText = warningsCountForDataSource;
-            document.getElementById("a6").innerText = okCountForDataSource;
-
-
-            getData(this.ComparisonResultArray);
+            var dataTable = getData(resultsArray);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
             drawBarChart(dataTable, "", group2_bar, colorsArray);
         }
 
-        if (typeof SourceAComplianceData !== 'undefined' && type === "compliance" && tabName === "ComplianceABarChartTab") {
+        if (type.toLowerCase() === "sourceacompliance") {
+            var resultsArray = [];
 
-            if (this.ComplianceResultArrayForSourceA.length > 0) {
-                this.ComplianceResultArrayForSourceA = [];
-            }
-
-            titleArray = [];
+            var titleArray = [];
             titleArray.push("Name");
             titleArray.push("Error");
             titleArray.push("Warning");
             titleArray.push("Ok");
-            this.ComplianceResultArrayForSourceA.push(titleArray);
+            resultsArray.push(titleArray);
 
-            var componentGroupsArray = SourceAComplianceData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                totalItemsCheckedForDataSource += components.length;
-
-                var okCount = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
+            for (var groupName in checkGroupsInfo) {
+                var statistics = checkGroupsInfo[groupName];
+                var errorCount = parseInt(statistics['Error']);
+                //var nomatchCount  = parseInt(statistics['No Match']);
+                var okCount = parseInt(statistics['OK']);
+                var warningCount = parseInt(statistics['Warning']);
 
                 var valueArray = [];
-                valueArray.push(componentGroup);
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
-                    }
-                }
-
-                // document.getElementById("a37").innerText = totalItemsChecked;
-                // document.getElementById("a18").innerText = errorsCount;
-                // document.getElementById("a13").innerText = warningsCount;
-                // document.getElementById("a6").innerText = okCount;
-
-                errorsCountForDataSource += errorsCount;
-                okCountForDataSource += okCount;
-                warningsCountForDataSource += warningsCount;
-
-                valueArray.push(errorsCount);
-                valueArray.push(warningsCount);
+                valueArray.push(groupName);
+                valueArray.push(errorCount);
+                valueArray.push(warningCount);
                 valueArray.push(okCount);
-                this.ComplianceResultArrayForSourceA.push(valueArray);
+                resultsArray.push(valueArray);
             }
 
-            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
-            document.getElementById("a18").innerText = errorsCountForDataSource;
-            document.getElementById("a13").innerText = warningsCountForDataSource;
-            document.getElementById("a6").innerText = okCountForDataSource;
 
-            getData(this.ComplianceResultArrayForSourceA);
+            var dataTable = getData(resultsArray);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
             drawBarChart(dataTable, "", SourceACompliance_bar, colorsArray);
         }
-        if (typeof SourceBComplianceData !== 'undefined' && type === "compliance" && tabName === "ComplianceBBarChartTab") {
-            if (this.ComplianceResultArrayForSourceB.length > 0) {
-                this.ComplianceResultArrayForSourceB = [];
-            }
+        if (type.toLowerCase() === "sourcebcompliance") {
 
-            titleArray = [];
+
+            var resultsArray = [];
+
+            var titleArray = [];
             titleArray.push("Name");
             titleArray.push("Error");
             titleArray.push("Warning");
             titleArray.push("Ok");
-            this.ComplianceResultArrayForSourceB.push(titleArray);
+            resultsArray.push(titleArray);
 
-            var componentGroupsArray = SourceBComplianceData.CheckComponentsGroups;
-            for (var componentGroup in componentGroupsArray) {
-                var components = componentGroupsArray[componentGroup].Components
-                // totalItemsChecked += components.length;
-                totalItemsCheckedForDataSource += components.length;
-
-                var okCount = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
+            for (var groupName in checkGroupsInfo) {
+                var statistics = checkGroupsInfo[groupName];
+                var errorCount = parseInt(statistics['Error']);
+                //var nomatchCount  = parseInt(statistics['No Match']);
+                var okCount = parseInt(statistics['OK']);
+                var warningCount = parseInt(statistics['Warning']);
 
                 var valueArray = [];
-                valueArray.push(componentGroup);
-                for (var i = 0; i < components.length; i++) {
-                    currentComponent = components[i];
-                    if (currentComponent.Status.toLowerCase() === "ok") {
-                        okCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "error") {
-                        errorsCount++;
-                    }
-                    if (currentComponent.Status.toLowerCase() === "warning") {
-                        warningsCount++;
-                    }
-                }
-
-                errorsCountForDataSource += errorsCount;
-                okCountForDataSource += okCount;
-                warningsCountForDataSource += warningsCount;
-
-                // document.getElementById("a37").innerText = totalItemsChecked;
-                // document.getElementById("a18").innerText = errorsCount;
-                // document.getElementById("a13").innerText = warningsCount;
-                // document.getElementById("a6").innerText = okCount;
-
-                valueArray.push(errorsCount);
-                valueArray.push(warningsCount);
+                valueArray.push(groupName);
+                valueArray.push(errorCount);
+                valueArray.push(warningCount);
                 valueArray.push(okCount);
-                this.ComplianceResultArrayForSourceB.push(valueArray);
+                resultsArray.push(valueArray);
             }
 
-            document.getElementById("a37").innerText = totalItemsCheckedForDataSource;
-            document.getElementById("a18").innerText = errorsCountForDataSource;
-            document.getElementById("a13").innerText = warningsCountForDataSource;
-            document.getElementById("a6").innerText = okCountForDataSource;
 
-            getData(this.ComplianceResultArrayForSourceB);
+            var dataTable = getData(resultsArray);
             colorsArray = ["#F43742", "#F8C13B", "#98DE32"];
             drawBarChart(dataTable, "", SourceBCompliance_bar, colorsArray);
         }
     }
 
-    AnalyticsManager.prototype.drawLineCharts = function () {
+    AnalyticsManager.prototype.drawLineCharts = function (errorCount, 
+                                                        okCount, warningCount) 
+    {
         // if (this.ComparisonResultArray.length > 0) {
         //     this.ComparisonResultArray = [];
         // }
         // checkResultArray = localStorage.CheckResultArray;
-        // checkResultObject = JSON.parse(checkResultArray);
-        // titleArray = [];
-        // titleArray.push("Name");
-        // titleArray.push("Error");
-        // titleArray.push("Ok");
-        // titleArray.push("Warning");
-        
-        // this.ComparisonResultArray.push(titleArray);
+        //checkResultObject = JSON.parse(checkResultArray);
+        var resultsArray =[];
+
+        var titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Error");
+        titleArray.push("Ok");
+        titleArray.push("Warning");
+
+       resultsArray.push(titleArray);
+
+       var valueArray = [];
+       valueArray.push("Check1");
+       valueArray.push(errorCount);
+       valueArray.push(okCount);
+       valueArray.push(warningCount);
+
+       resultsArray.push(valueArray);
 
         // var counter = 1;
         // for (var checkObject in checkResultObject) {
@@ -948,65 +668,57 @@ function AnalyticsManager() {
         //     valueArray.push(currentCheckObject[0]);
         //     valueArray.push(currentCheckObject[2]);
         //     valueArray.push(currentCheckObject[1]);
-            
-        //     this.ComparisonResultArray.push(valueArray);
+
+        //     resultsArray.push(valueArray);
         // }
 
-        // getData(this.ComparisonResultArray);
-        // document.getElementById("SeverityTab").style.display = "block";
-        // if (document.getElementById("LineChart") !== null) {
-        //     document.getElementById("LineChart").innerHTML = "";
-        // }
+        var dataTable =  getData(resultsArray);
+        document.getElementById("SeverityTab").style.display = "block";
+        if (document.getElementById("LineChart") !== null) {
+            document.getElementById("LineChart").innerHTML = "";
+        }
 
-        // colorsArray = ["#F43742", "#98DE32", "#F8C13B"];
-        // // if(LineChart.id !== undefined)
-        // // {
-        // drawLineChart(dataTable, "", "LineChart", colorsArray)
-        // // }
-        // // else{
-        // //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
-        // // }
+        colorsArray = ["#F43742", "#98DE32", "#F8C13B"];
+        // if(LineChart.id !== undefined)
+        // {
+        drawLineChart(dataTable, "", "LineChart", colorsArray)
+        // }
+        // else{
+        //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
+        // }
 
     }
 
-    AnalyticsManager.prototype.drawInfoLineCharts = function () {
-        // if (this.ComparisonResultArray.length > 0) {
-        //     this.ComparisonResultArray = [];
+    AnalyticsManager.prototype.drawInfoLineCharts = function (notCheckedCount, 
+                                                              noMatchCount) {
+
+       var resultsArray = [];
+
+        titleArray = [];
+        titleArray.push("Name");
+        titleArray.push("Not Checked");
+        titleArray.push("No match");
+        resultsArray.push(titleArray);
+
+        var valueArray = [];
+        valueArray.push("Check1");
+        valueArray.push(notCheckedCount);
+        valueArray.push(noMatchCount);
+        resultsArray.push(valueArray);
+
+        var dataTable = getData(resultsArray);
+        document.getElementById("InfoTab").style.display = "block";
+        if (document.getElementById("InfoTabLineChart") !== null) {
+            document.getElementById("InfoTabLineChart").innerHTML = "";
+        }
+
+        colorsArray = ["#AFD3C5", "#839192"];
+        // if(LineChart.id !== undefined)
+        // {
+        drawLineChart(dataTable, "", "InfoTabLineChart", colorsArray)
         // }
-        // checkResultArrayForInfo = localStorage.CheckResultArrayInfo;
-        // checkResultObject = JSON.parse(checkResultArrayForInfo);
-        // titleArray = [];
-        // titleArray.push("Name");
-        // titleArray.push("Not Checked");
-        // titleArray.push("No match");
-        // this.ComparisonResultArray.push(titleArray);
-
-        // var counter = 1;
-        // for (var checkObject in checkResultObject) {
-        //     var valueArray = [];
-        //     var currentCheckObject = checkResultObject[checkObject];
-        //     valueArray.push("C_" + counter);
-        //     counter++;
-
-        //     valueArray.push(currentCheckObject[0]);
-        //     valueArray.push(currentCheckObject[1]);
-        //     this.ComparisonResultArray.push(valueArray);
+        // else{
+        //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
         // }
-
-        // getData(this.ComparisonResultArray);
-        // document.getElementById("InfoTab").style.display = "block";
-        // if (document.getElementById("InfoTabLineChart") !== null) {
-        //     document.getElementById("InfoTabLineChart").innerHTML = "";
-        // }
-
-        // colorsArray = ["#AFD3C5", "#839192"];
-        // // if(LineChart.id !== undefined)
-        // // {
-        // drawLineChart(dataTable, "", "InfoTabLineChart", colorsArray)
-        // // }
-        // // else{
-        // //     drawLineChart(dataTable, "", LineChart.container.id, colorsArray)
-        // // }
-
     }
 }

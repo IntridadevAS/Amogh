@@ -40,6 +40,8 @@ function  drawPieChart(data,title_field,div, colorsArray)
 {
     var options = {
        isStacked: true,
+       height: 180,
+       width: 180
     };  
     // document.getElementById(div.id).style.border = "solid 2px black"; 
     options.title = title_field; 
@@ -50,8 +52,8 @@ function  drawPieChart(data,title_field,div, colorsArray)
     options.pieSliceText="none";
     options.chartArea={left:"2.5%",top:"2.5%",width:'95%',height:'95%'}
     pieChart = new google.visualization.PieChart(document.getElementById(div.id));   
-    pieChart.draw(data, options);
     
+    pieChart.draw(data, options);    
 }
 
 // Creates a Bar chart for provided data

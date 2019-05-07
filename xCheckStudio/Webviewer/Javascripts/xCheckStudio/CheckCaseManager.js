@@ -14,7 +14,7 @@ function CheckCaseManager() {
         xhr.onload = function (data) {
             var int = 0;
             _this.CheckCase = JSON.parse(data.currentTarget.responseText);
-            _this.postData();
+           // _this.postData();
         };
         var formData = new FormData();
         formData.append('XMLFileName', fileName);
@@ -159,18 +159,18 @@ function CheckCaseManager() {
         this.postData();
     }
 
-    CheckCaseManager.prototype.postData = function () {
-        $.ajax({
-            url: 'PHP/CheckCaseDataWriter.php',
-            type: "POST",
-            async: true,
-            data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
-            success: function (data) {
-                // alert("success");
-            }
-        });
+    // CheckCaseManager.prototype.postData = function () {
+    //     $.ajax({
+    //         url: 'PHP/CheckCaseDataWriter.php',
+    //         type: "POST",
+    //         async: true,
+    //         data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
+    //         success: function (data) {
+    //             // alert("success");
+    //         }
+    //     });
 
-    }
+    // }
 }
 
 

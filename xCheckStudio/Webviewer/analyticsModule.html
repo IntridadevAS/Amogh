@@ -2,6 +2,9 @@
 <html>
 
 <head>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsModule.js"></script>
+
     <meta charset="utf-8" />
     <meta content="width=1360, maximum-scale=1.0" name="viewport" />
     <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
@@ -347,6 +350,8 @@
                     Info
                 </div>
             </div>
+
+             <!-- Source A Comparison -->
             <div class="blocksummary" id="blocksummarySeverity">
                 <img anima-src="/images/Analytics/01-1-rectangle-copy-11.png" class="rectanglecopy11" src="/images/Analytics/01-1-rectangle-copy-11.png" />
                 <img anima-src="/images/Analytics/01-1-rectangle-copy-5@2x.png" class="rectanglecopy5" src="/images/Analytics/01-1-rectangle-copy-5@2x.png" />
@@ -397,7 +402,8 @@
                     Summary
                 </div>
 
-            </div>
+            </div>            
+
         </div>
     </div>
 
@@ -409,60 +415,7 @@
             var sourceAComplianceCheckGroups = false;
             var sourceBComplianceCheckGroups = false;
 
-            window.onload = function () {
-            // var ComparisonCheckDataPHP = undefined;
-            // var SourceAComplianceDataPHP = undefined;
-            // var SourceBComplianceDataPHP = undefined;
-            // var AnalyticsPHP = undefined;
-
-            // $.ajax({
-            //     url: 'PHP/comparisonCheckpostDataReader.php',
-            //     type: "POST",
-            //     async: false,
-            //     data: {},
-            //     success: function (msg) {
-            //         var int = 0;
-            //         if(msg !== "not found")
-            //         {
-            //             ComparisonCheckDataPHP = JSON.parse(msg);
-            //         }
-            //         //alert("success");
-            //         //$("#result").html(data);
-            //     }
-            // })
-
-            // $.ajax({
-            //     url: 'PHP/sourceAComplianceDataReader.php',
-            //     type: "POST",
-            //     async: false,
-            //     data: {},
-            //     success: function (msg) {
-            //         var int = 0;
-            //         if(msg !== "not found")
-            //         {
-            //             SourceAComplianceDataPHP = JSON.parse(msg);
-            //         }
-            //         //alert("success");
-            //         //$("#result").html(data);
-            //     }
-            // })
-
-            // $.ajax({
-            //     url: 'PHP/sourceBComplianceDataReader.php',
-            //     type: "POST",
-            //     async: false,
-            //     data: {},
-            //     success: function (msg) {
-            //         var int = 0;
-            //         if(msg !== "not found")
-            //         {
-            //             SourceBComplianceDataPHP = JSON.parse(msg);
-            //         }
-            //         //alert("success");
-            //         //$("#result").html(data);
-            //     }
-            // })
-
+            window.onload = function () {            
             // read data source info
             $.ajax({
                 url: 'PHP/DataSourceInfoReader.php',
@@ -509,7 +462,7 @@
 
             // read check case info
             $.ajax({
-                url: 'PHP/CheckCasenfoReader.php',
+                url: 'PHP/CheckCaseinfoReader.php',
                 type: "POST",
                 async: true,
                 data: {},
@@ -545,239 +498,11 @@
                     {
                         var checkResults = JSON.parse(msg);                      
                         
-                        for (var key in checkResults) 
-                        {
-                            if (!checkResults.hasOwnProperty(key)) 
-                            {
-                                continue;
-                            }
-
-                            
-                            if (key == 'Comparison') 
-                            {
-                                comparisonCheckGroups = true;
-                                // comparisonCheckGroups = new CheckGroups();
-                                // comparisonCheckGroups.restore(checkResults[key], false);                                
-                            }
-                            else if(key == 'SourceACompliance')
-                            {
-                                sourceAComplianceCheckGroups = true;
-                                // sourceAComplianceCheckGroups = new CheckGroups();
-                                // sourceAComplianceCheckGroups.restore(checkResults[key], true);   
-                            }
-                            else if(key == 'SourceBCompliance')
-                            {
-                                sourceBComplianceCheckGroups = true;
-                                // sourceBComplianceCheckGroups = new CheckGroups();
-                                // sourceBComplianceCheckGroups.restore(checkResults[key], true);  
-                            }                           
-                        }      
-                        
-                        if (!comparisonCheckGroups) 
-                        {
-                            $("#compare").addClass("disable");
-                            openCheckResultTab('ComplianceTab');
-                            var tab = document.getElementById("ComplianceTab");
-                            tab.click();
-                        }
-
-                        if (!sourceAComplianceCheckGroups &&
-                            !sourceBComplianceCheckGroups) {
-                            $("#compliance").addClass("disable");
-                        }
-
-                        analyticsManager = new AnalyticsManager();
-
-                        // draw pie and bar charts 
-                        if (comparisonCheckGroups) {
-                            // draw comparison results pie chartts (total 3)           
-                            analyticsManager.drawPieCharts("comparison");
-
-                            // //  draw comparison info pie charts (total 2)
-                            // analyticsManager.drawInfoPieCharts("comparison");
-
-                            // //  draw bar chart (total 1)
-                            // analyticsManager.drawBarCharts("comparison");
-
-                            // // draw comparison  info bar charts (total 1)
-                            // analyticsManager.drawInfoBarCharts("comparison");
-
-                            // // draw severity line chart
-                            // analyticsManager.drawLineCharts();
-                        }      
-                        
-                        if (sourceAComplianceCheckGroups) {
-                            // // draw source A compliance pie charts (total 3)
-                            // analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
-
-                            // // draw source A compliance bar charts (total 1)
-                            // analyticsManager.drawBarCharts("compliance", "ComplianceABarChartTab");
-                        }
-
-
-                        if (sourceBComplianceCheckGroups) {
-                            // //  draw source B compliance pie charts (total 3)
-                            // analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
-
-                            // // draw source B compliance bar charts (total 1)
-                            // analyticsManager.drawBarCharts("compliance", "ComplianceBBarChartTab");
-                        }
-
-                        //load severity line chart 
-                        document.getElementById("SeverityTab").style.display = "block";
-                        // if (typeof ComparisonCheckData !== 'undefined') {
-                        //     analyticsManager.drawLineCharts();
-                        // }
-
-
-                        //load comparison pie chart by default
-                        var currentDiv = document.getElementById("compare");
-                        currentDiv.style.fontSize = "22px";
-                        currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                        var otherDiv = document.getElementById("compliance");
-                        otherDiv.style.fontSize = "18px";
-                        otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                        document.getElementById("ComparisonTab").style.display = "block";
-                        document.getElementById("PieChartTab").style.display = "block";
-
+                        populateAnalyticsData(checkResults);                    
                     }
-                });
-
-            // ComparisonCheckData = ComparisonCheckDataPHP;
-            // AnalyticsData = AnalyticsPHP;
-            // SourceAComplianceData = SourceAComplianceDataPHP;
-            // SourceBComplianceData = SourceBComplianceDataPHP;
-
-            // analyticsManager = new AnalyticsManager();
-
-            //var checkCase = AnalyticsData.CheckCaseName;
-            //document.getElementById("checkCaseAnalytics").innerHTML = checkCase;
-
-           
-
-            // var source2 = AnalyticsData.SourceAName;
-            // if(source2 !== undefined)
-            // {
-            //     fileName2 = source2.split(".");
-            //     document.getElementById("dataSource2").innerHTML = fileName2[0];
-            //     document.getElementById("dataSource2").style.fontSize = "13px";
-            //     document.getElementById("extension2").innerHTML = fileName2[1];
-            // }
-			
-			// if (typeof ComparisonCheckData === 'undefined')
-			// {
-			// 	$("#compare").addClass("disable");
-			// 	openCheckResultTab('ComplianceTab');
-			// 	var tab = document.getElementById("ComplianceTab");
-			// 	tab.click();
-			// }
-            // if (typeof SourceAComplianceData === 'undefined' && 
-            //     typeof SourceBComplianceData === 'undefined') 
-			// {
-			// 	$("#compliance").addClass("disable");
-			// }
-			
-			
-			/*if (typeof SourceAComplianceData === 'undefined')
-			{
-				$("#compare").addClass("disable");
-			}
-			if (typeof SourceBComplianceData === 'undefined')
-			{
-				$("#compliance").addClass("disable");
-			}*/		           
-      
-
-            // //load severity line chart 
-            // document.getElementById("SeverityTab").style.display = "block";
-            // if(typeof ComparisonCheckData !== 'undefined')
-            // {
-            //     analyticsManager.drawLineCharts();
-            // }
-
-
-            //  //load comparison pie chart by default
-            //  var currentDiv = document.getElementById("compare");
-            // currentDiv.style.fontSize = "22px";
-            // currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-            // var otherDiv = document.getElementById("compliance");
-            // otherDiv.style.fontSize = "18px";
-            // otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-            // document.getElementById("ComparisonTab").style.display = "block";
-            // document.getElementById("PieChartTab").style.display = "block";
-        }
-
-        function getData(newData) {
-            dataTable = new google.visualization.DataTable();
-            var numRows = newData.length;
-            var numCols = newData[0].length;
-            for (var i = 0; i < numCols; i++)
-                dataTable.addColumn(typeof (newData[1][i]), newData[0][i]);
-            for (var i = 1; i < numRows; i++) {
-                dataTable.addRow(newData[i]);
-            }
-        }
-
-        function openCheckResultTab(tabName) {
-
-            var tabs = document.getElementsByClassName("AnalyticsResultsContainerTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
-            var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
-
-            document.getElementById(tabName).style.display = "block";
-
-            if (tabName === "ComparisonTab") {
-                var currentDiv = document.getElementById("compare");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("compliance");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                document.getElementById("PieChartTab").style.display = "block";
-                //analyticsManager.drawPieCharts("comparison");
-            }
-            else if (tabName === "ComplianceTab") {
-                var currentDiv = document.getElementById("compliance");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("compare");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                document.getElementById("ComplianceATab").style.display = "block";
-                document.getElementById("ComplianceAPieChartTab").style.display = "block";
-
-                var currentTab = document.getElementById("ComplianceATab");
-                var parentTab = currentTab.parentElement;
-
-                sourceAButton = parentTab.getElementsByClassName("ComplianceA");
-                sourceAButton[0].style.backgroundColor = "red";
-
-                sourceBButton = parentTab.getElementsByClassName("ComplianceB");
-                sourceBButton[0].style.backgroundColor = "white";
-
-                //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
-            }
-            else if (tabName === "ComparisonTabInfo") {
-                var currentDiv = document.getElementById("compareInfo");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("complianceInfo");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                document.getElementById("PieChartTabInfo").style.display = "block";
-                //analyticsManager.drawInfoPieCharts("comparison");
-            }
-        }
+                });            
+        }      
+       
 
         function openChartTabComparison(tabName) {
             var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
@@ -801,6 +526,11 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 //analyticsManager.drawBarCharts("comparison");
+                 //add data to summary
+                 document.getElementById("a37").innerText = analyticsManager.ComparisonTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.ComparisonErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.ComparisonWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.ComparisonOKCount;
             }
             if (tabName === "PieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -812,6 +542,11 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 //analyticsManager.drawPieCharts("comparison");
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.ComparisonTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.ComparisonErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.ComparisonWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.ComparisonOKCount;
             }
             //for info 
             if (tabName === "BarChartTabInfo") {
@@ -825,6 +560,10 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 //analyticsManager.drawInfoBarCharts("comparison");
+                //add data to summary
+                document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
+                document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
+                document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
             }
             if (tabName === "PieChartTabInfo") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -836,6 +575,10 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 //analyticsManager.drawInfoPieCharts("comparison");
+                //add data to summary
+                document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
+                document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
+                document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
             }
         }
 
@@ -862,7 +605,12 @@
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                //analyticsManager.drawBarCharts("compliance", tabName);              
+                //analyticsManager.drawBarCharts("compliance", tabName);   
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;           
               
             }
             if (tabName === "ComplianceAPieChartTab") {
@@ -874,7 +622,12 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                //analyticsManager.drawPieCharts("compliance", tabName);               
+                //analyticsManager.drawPieCharts("compliance", tabName);      
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;         
             }
 
             //for compliance B
@@ -890,6 +643,11 @@
 
 
                 //analyticsManager.drawBarCharts("compliance", tabName);
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;
             }
             if (tabName === "ComplianceBPieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -900,7 +658,12 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
                 parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
-                //analyticsManager.drawPieCharts("compliance", tabName);               
+                //analyticsManager.drawPieCharts("compliance", tabName);  
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;             
             }
         }
 
@@ -936,6 +699,11 @@
 
                 document.getElementById("ComplianceAPieChartTab").style.display = "block";
                 //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;         
             }
 
             if (tabName === "ComplianceBTab") {
@@ -955,91 +723,15 @@
 
                 document.getElementById("ComplianceBPieChartTab").style.display = "block";
                 //analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
+                //add data to summary
+                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
+                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
+                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
+                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;    
             }
 
         }
-
-        function openProjectHealthTab(tabName) {
-            var tabs = document.getElementsByClassName("AnalyticsProjectHealthTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
-            var tabs = document.getElementsByClassName("AnalyticsResultsContainerTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
-            var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].style.display = "none";
-            }
-
-            
-            document.getElementById(tabName).style.display = "block";
-            if (tabName === "SeverityTab") {
-                var currentDiv = document.getElementById("severity1");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("info");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                document.getElementById("compare").style.display = "block";
-                document.getElementById("compliance").style.display = "block";
-                document.getElementById("ComparisonTab").style.display = "block";
-                document.getElementById("blocksummarySeverity").style.display = "block";
-                document.getElementById("compareInfo").style.display = "none";
-                document.getElementById("complianceInfo").style.display = "none";
-                document.getElementById("blocksummaryInfo").style.display = "none";
-
-                document.getElementById("SeverityTab").style.display = "block";
-                analyticsManager.drawLineCharts();
-
-                openCheckResultTab("ComparisonTab");
-            }
-
-            if (tabName === "InfoTab") {
-                var currentDiv = document.getElementById("info");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("severity1");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                document.getElementById("compare").style.display = "none";
-                document.getElementById("compliance").style.display = "none";
-                document.getElementById("ComparisonTab").style.display = "none";
-                document.getElementById("blocksummarySeverity").style.display = "none";
-                document.getElementById("compareInfo").style.display = "block";
-                document.getElementById("complianceInfo").style.display = "block";
-                document.getElementById("blocksummaryInfo").style.display = "block";
-
-                var currentDiv = document.getElementById("compareInfo");
-                currentDiv.style.fontSize = "22px";
-                currentDiv.style.color = "rgba(51, 51, 51, 1.0)";
-                var otherDiv = document.getElementById("complianceInfo");
-                otherDiv.style.fontSize = "18px";
-                otherDiv.style.color = "rgba(153, 153, 153, 1.0)";
-
-                var currentTab = document.getElementById("PieChartTabInfo");
-                var parentTab = currentTab.parentElement;
-
-                barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-                pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-                barChartDiv.src = "/images/Analytics/01-1-rectangle-copy-16@2x.png"
-                pieChartDiv.src = "/images/Analytics/01-1-rectangle-copy-15@2x.png"
-
-                parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-                parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-                
-                document.getElementById("ComparisonTabInfo").style.display = "block";
-                document.getElementById("PieChartTabInfo").style.display = "block";
-
-
-                //analyticsManager.drawInfoPieCharts("comparison");
-                document.getElementById("InfoTab").style.display = "block";
-                analyticsManager.drawInfoLineCharts();
-            }
-        }
+       
     </script>
 
 
