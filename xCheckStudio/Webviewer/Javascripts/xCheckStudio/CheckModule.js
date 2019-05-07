@@ -1091,14 +1091,16 @@ function loadDbDataSource(fileExtension,
 
     if (viewerContainer === "viewerContainer1") {
         if (!sourceAType ||
-            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+            sourceAType.toLowerCase() !== fileExtension.toLowerCase() && !sourceBType ||
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
             alert("Data source type doesn't match with check case.");
             return false;
         }
     }
     else if (viewerContainer === "viewerContainer2") {
         if (!sourceBType ||
-            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase() && !sourceAType ||
+            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
             alert("Data source type doesn't match with check case.");
             return false;
         }
