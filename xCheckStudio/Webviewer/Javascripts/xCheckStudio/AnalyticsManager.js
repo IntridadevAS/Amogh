@@ -1,4 +1,10 @@
-function AnalyticsManager() {
+function AnalyticsManager(comparisonCheckGroups, 
+                        sourceAComplianceCheckGroups, 
+                        sourceBComplianceCheckGroups) {
+
+    this.ComparisonCheckGroups = comparisonCheckGroups;
+    this.SourceAComplianceCheckGroups = sourceAComplianceCheckGroups;
+    this.SourceBComplianceCheckGroups = sourceBComplianceCheckGroups
 
     var ComparisonTotalItemsChecked = 0;
     var ComparisonErrorsCount = 0;
@@ -18,6 +24,96 @@ function AnalyticsManager() {
     var SourceBComplianceErrorsCount = 0;
     var SourceBComplianceOKCount = 0;
     var SourceBComplianceWarningsCount = 0;
+
+    
+    AnalyticsManager.prototype.setSeveritySummary = function (checkType) 
+    {
+
+        var comparisonTotalItemsChecked;
+        var comparisonErrorsCount;
+        var comparisonOKCount ;
+        var comparisonWarningsCount;
+        
+        this.clearSeveritySummary();
+
+        if (checkType.toLowerCase() == "comparison") {
+             comparisonTotalItemsChecked = this.ComparisonTotalItemsChecked;
+             comparisonErrorsCount = this.ComparisonErrorsCount;
+             comparisonOKCount = this.ComparisonOKCount;
+             comparisonWarningsCount = this.ComparisonWarningsCount;    
+        }
+        else if (checkType.toLowerCase() == "sourceacompliance") {
+       
+            comparisonTotalItemsChecked = this.SourceAComplianceTotalItemsChecked;
+            comparisonErrorsCount = this.SourceAComplianceErrorsCount;
+            comparisonOKCount = this.SourceAComplianceOKCount;
+            comparisonWarningsCount = this.SourceAComplianceWarningsCount; 
+        }
+        else if (checkType.toLowerCase() == "sourcebcompliance") {
+
+            comparisonTotalItemsChecked = this.SourceBComplianceTotalItemsChecked;
+            comparisonErrorsCount = this.SourceBComplianceErrorsCount;
+            comparisonOKCount = this.SourceBComplianceOKCount;
+            comparisonWarningsCount = this.SourceBComplianceWarningsCount; 
+        }
+        else
+        {
+            return;
+        }
+
+        if (comparisonTotalItemsChecked == undefined &&
+            comparisonErrorsCount == undefined &&
+            comparisonWarningsCount == undefined &&
+            comparisonOKCount == undefined) {
+            
+            comparisonTotalItemsChecked = "";
+            comparisonErrorsCount = "";
+            comparisonWarningsCount = "";
+            comparisonOKCount = "";
+        }
+        
+        document.getElementById("a37").innerText = comparisonTotalItemsChecked;
+        document.getElementById("a18").innerText = comparisonErrorsCount;
+        document.getElementById("a13").innerText = comparisonWarningsCount;
+        document.getElementById("a6").innerText = comparisonOKCount;
+    } 
+
+    AnalyticsManager.prototype.clearSeveritySummary = function () 
+    {
+       
+        document.getElementById("a37").innerText = "";
+        document.getElementById("a18").innerText = "";
+        document.getElementById("a13").innerText = "";
+        document.getElementById("a6").innerText = "";
+    }
+
+    AnalyticsManager.prototype.setNonSeveritySummary = function () {
+
+        var comparisonTotalItemsCount = this.ComparisonTotalItemsCount;
+        var comparisonTotalItemsNotChecked = this.ComparisonTotalItemsNotChecked;
+        var comparisonNoMatchCount = this.ComparisonNoMatchCount;
+
+        this.clearNonSeveritySummary();
+
+        if (comparisonTotalItemsCount == undefined &&
+            comparisonTotalItemsNotChecked == undefined &&
+            comparisonNoMatchCount == undefined) {
+
+            comparisonTotalItemsCount = "";
+            comparisonTotalItemsNotChecked = "";
+            comparisonNoMatchCount = "";
+        }
+
+        document.getElementById("a37Info").innerText = comparisonTotalItemsCount;
+        document.getElementById("a18Info").innerText = comparisonTotalItemsNotChecked;
+        document.getElementById("a13Info").innerText = comparisonNoMatchCount;
+    }
+
+    AnalyticsManager.prototype.clearNonSeveritySummary = function () {
+        document.getElementById("a37Info").innerText = "";
+        document.getElementById("a18Info").innerText = "";
+        document.getElementById("a13Info").innerText = "";
+    }
 
     AnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
        
@@ -90,19 +186,15 @@ function AnalyticsManager() {
                         sourceBNotSelectedComponents = checkResults["SourceBNotSelectedComps"];
                     }
                     totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
-
-                    //add data to summary
-                    document.getElementById("a37").innerText = totalItemsChecked;
-                    document.getElementById("a18").innerText = errorsCount;
-                    document.getElementById("a13").innerText = warningsCount;
-                    document.getElementById("a6").innerText = okCount;
-
+                 
                     _this.ComparisonTotalItemsChecked = totalItemsChecked;
                     _this.ComparisonErrorsCount = errorsCount;
                     _this.ComparisonWarningsCount = warningsCount;
                     _this.ComparisonOKCount = okCount;
-                    
-
+                     
+                    //add data to summary
+                    _this.setSeveritySummary('Comparison');
+                     
                     // draw pie charts
                     _this.drawComparisonPieCharts(okCount,
                         warningsCount,
@@ -184,18 +276,18 @@ function AnalyticsManager() {
                         sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
                     }
                    
-                    totalItemsChecked = sourceASelectedCount;
-
-                    // //add data to summary
-                    // document.getElementById("a37_SourceACompliance").innerText = totalItemsChecked;
-                    // document.getElementById("a18_SourceACompliance").innerText = errorsCount;
-                    // document.getElementById("a13_SourceACompliance").innerText = warningsCount;
-                    // document.getElementById("a6_SourceACompliance").innerText = okCount;
+                    totalItemsChecked = sourceASelectedCount;                 
 
                     _this.SourceAComplianceTotalItemsChecked = totalItemsChecked;
                     _this.SourceAComplianceErrorsCount = errorsCount;
                     _this.SourceAComplianceWarningsCount= warningsCount;
                     _this.SourceAComplianceOKCount  = okCount;
+
+                      // //add data to summary
+                      if (! _this.ComparisonCheckGroups) 
+                      {
+                        _this.setSeveritySummary('SourceACompliance');                          
+                      }
 
                     // draw pie charts
                     _this.drawSourceACompliancePieCharts(okCount,
@@ -252,16 +344,17 @@ function AnalyticsManager() {
 
                     totalItemsChecked = sourceBSelectedCount;
 
-                    // //add data to summary
-                    // document.getElementById("a37_SourceBCompliance").innerText = totalItemsChecked;
-                    // document.getElementById("a18_SourceBCompliance").innerText = errorsCount;
-                    // document.getElementById("a13_SourceBCompliance").innerText = warningsCount;
-                    // document.getElementById("a6_SourceBCompliance").innerText = okCount;
-
                     _this.SourceBComplianceTotalItemsChecked = totalItemsChecked;
                     _this.SourceBComplianceErrorsCount = errorsCount;
                     _this.SourceBComplianceWarningsCount  = warningsCount;
                     _this.SourceBComplianceOKCount = okCount;
+
+                    //add data to summary
+                    if (!_this.ComparisonCheckGroups &&
+                        !_this.SourceAComplianceCheckGroups) {
+                        _this.setSeveritySummary('SourceBCompliance');
+                    }                 
+
 
                     // draw pie charts
                     _this.drawSourceBCompliancePieCharts(okCount,
@@ -635,6 +728,10 @@ function AnalyticsManager() {
     AnalyticsManager.prototype.drawLineCharts = function (errorCount, 
                                                         okCount, warningCount) 
     {
+        if(!this.ComparisonCheckGroups)
+        {
+            return;
+        }
         // if (this.ComparisonResultArray.length > 0) {
         //     this.ComparisonResultArray = [];
         // }
@@ -689,10 +786,14 @@ function AnalyticsManager() {
 
     }
 
-    AnalyticsManager.prototype.drawInfoLineCharts = function (notCheckedCount, 
-                                                              noMatchCount) {
+    AnalyticsManager.prototype.drawInfoLineCharts = function (notCheckedCount,
+        noMatchCount) {
 
-       var resultsArray = [];
+        if (!this.ComparisonCheckGroups) {
+            return;
+        }
+
+        var resultsArray = [];
 
         titleArray = [];
         titleArray.push("Name");

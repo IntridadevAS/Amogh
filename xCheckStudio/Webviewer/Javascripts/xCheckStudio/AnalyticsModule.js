@@ -17,19 +17,9 @@ function populateAnalyticsData(checkResults) {
         }
     }
 
-    if (!comparisonCheckGroups) {
-        $("#compare").addClass("disable");
-        openCheckResultTab('ComplianceTab');
-        var tab = document.getElementById("ComplianceTab");
-        tab.click();
-    }
-
-    if (!sourceAComplianceCheckGroups &&
-        !sourceBComplianceCheckGroups) {
-        $("#compliance").addClass("disable");
-    }
-
-    analyticsManager = new AnalyticsManager();
+    analyticsManager = new AnalyticsManager(comparisonCheckGroups, 
+                                            sourceAComplianceCheckGroups, 
+                                            sourceBComplianceCheckGroups);
 
     // draw pie and bar charts 
     if (comparisonCheckGroups) {
@@ -57,6 +47,19 @@ function populateAnalyticsData(checkResults) {
 
     document.getElementById("ComparisonTab").style.display = "block";
     document.getElementById("PieChartTab").style.display = "block";
+
+    
+    if (!comparisonCheckGroups) {
+        $("#compare").addClass("disable");
+        openCheckResultTab('ComplianceTab');
+        var tab = document.getElementById("ComplianceTab");
+        tab.click();
+    }
+
+    if (!sourceAComplianceCheckGroups &&
+        !sourceBComplianceCheckGroups) {
+        $("#compliance").addClass("disable");
+    }
 }
 
 function getData(newData) {
@@ -98,10 +101,7 @@ function openCheckResultTab(tabName) {
         //analyticsManager.drawPieCharts("comparison");
 
         //add data to summary
-        document.getElementById("a37").innerText = analyticsManager.ComparisonTotalItemsChecked;
-        document.getElementById("a18").innerText = analyticsManager.ComparisonErrorsCount;
-        document.getElementById("a13").innerText = analyticsManager.ComparisonWarningsCount;
-        document.getElementById("a6").innerText = analyticsManager.ComparisonOKCount;
+        analyticsManager.setSeveritySummary ('Comparison');               
     }
     else if (tabName === "ComplianceTab") {
 
@@ -133,10 +133,7 @@ function openCheckResultTab(tabName) {
 
         //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
         //add data to summary
-        document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
-        document.getElementById("a18").innerText = analyticsManager.SourceAComplianceErrorsCount;
-        document.getElementById("a13").innerText = analyticsManager.SourceAComplianceWarningsCount;
-        document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;
+        analyticsManager.setSeveritySummary ('SourceACompliance');       
     }
     else if (tabName === "ComparisonTabInfo") {
         var currentDiv = document.getElementById("compareInfo");
@@ -150,10 +147,7 @@ function openCheckResultTab(tabName) {
         //analyticsManager.drawInfoPieCharts("comparison");
 
         //add data to summary
-        document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
-        document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
-        document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
-
+        analyticsManager.setNonSeveritySummary();               
     }
 }
 
@@ -242,8 +236,6 @@ function openProjectHealthTab(tabName) {
             analyticsManager.ComparisonNoMatchCount);
 
         //add data to summary
-        document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
-        document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
-        document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
+        analyticsManager.setNonSeveritySummary();                
     }
 }

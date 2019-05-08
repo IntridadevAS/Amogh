@@ -526,11 +526,8 @@
                 parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
 
                 //analyticsManager.drawBarCharts("comparison");
-                 //add data to summary
-                 document.getElementById("a37").innerText = analyticsManager.ComparisonTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.ComparisonErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.ComparisonWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.ComparisonOKCount;
+                //add data to summary
+                analyticsManager.setSeveritySummary('Comparison');                
             }
             if (tabName === "PieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -543,10 +540,7 @@
 
                 //analyticsManager.drawPieCharts("comparison");
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.ComparisonTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.ComparisonErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.ComparisonWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.ComparisonOKCount;
+                analyticsManager.setSeveritySummary('Comparison');
             }
             //for info 
             if (tabName === "BarChartTabInfo") {
@@ -561,9 +555,7 @@
 
                 //analyticsManager.drawInfoBarCharts("comparison");
                 //add data to summary
-                document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
-                document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
-                document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
+                analyticsManager.setNonSeveritySummary();               
             }
             if (tabName === "PieChartTabInfo") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -576,9 +568,7 @@
 
                 //analyticsManager.drawInfoPieCharts("comparison");
                 //add data to summary
-                document.getElementById("a37Info").innerText = analyticsManager.ComparisonTotalItemsCount;
-                document.getElementById("a18Info").innerText = analyticsManager.ComparisonTotalItemsNotChecked;
-                document.getElementById("a13Info").innerText = analyticsManager.ComparisonNoMatchCount;
+                analyticsManager.setNonSeveritySummary();                        
             }
         }
 
@@ -607,11 +597,7 @@
 
                 //analyticsManager.drawBarCharts("compliance", tabName);   
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;           
-              
+                analyticsManager.setSeveritySummary('SourceACompliance');
             }
             if (tabName === "ComplianceAPieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -624,10 +610,7 @@
 
                 //analyticsManager.drawPieCharts("compliance", tabName);      
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;         
+                analyticsManager.setSeveritySummary('SourceACompliance');                
             }
 
             //for compliance B
@@ -644,10 +627,7 @@
 
                 //analyticsManager.drawBarCharts("compliance", tabName);
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;
+                analyticsManager.setSeveritySummary("SourceBCompliance");
             }
             if (tabName === "ComplianceBPieChartTab") {
                 barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
@@ -660,10 +640,7 @@
 
                 //analyticsManager.drawPieCharts("compliance", tabName);  
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;             
+                analyticsManager.setSeveritySummary("SourceBCompliance");
             }
         }
 
@@ -700,10 +677,7 @@
                 document.getElementById("ComplianceAPieChartTab").style.display = "block";
                 //analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceAComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceAComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceAComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceAComplianceOKCount;         
+                analyticsManager.setSeveritySummary("SourceACompliance");
             }
 
             if (tabName === "ComplianceBTab") {
@@ -724,10 +698,7 @@
                 document.getElementById("ComplianceBPieChartTab").style.display = "block";
                 //analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
                 //add data to summary
-                document.getElementById("a37").innerText = analyticsManager.SourceBComplianceTotalItemsChecked;
-                document.getElementById("a18").innerText =  analyticsManager.SourceBComplianceErrorsCount;
-                document.getElementById("a13").innerText =  analyticsManager.SourceBComplianceWarningsCount;
-                document.getElementById("a6").innerText = analyticsManager.SourceBComplianceOKCount;    
+                analyticsManager.setSeveritySummary("SourceBCompliance");
             }
 
         }

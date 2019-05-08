@@ -3,11 +3,11 @@
     include 'Utility.php';       
 
     if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||
-       !isset($_POST['SourceBNodeIdvsComponentIdList']) ||
+       //!isset($_POST['SourceBNodeIdvsComponentIdList']) ||
        !isset($_POST["SourceASelectedComponents"]) ||
-       !isset($_POST["SourceBSelectedComponents"]) ||
+       //!isset($_POST["SourceBSelectedComponents"]) ||
        !isset($_POST["SourceAFileName"]) ||
-       !isset($_POST["SourceBFileName"]) ||
+       //!isset($_POST["SourceBFileName"]) ||
        !isset($_POST["CheckCaseManager"]))
        {
            echo 'fail';
@@ -131,10 +131,7 @@
        }
        
        $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
-       $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);
-
-       $SourceBSelectedComponents =  json_decode($_POST['SourceBSelectedComponents'],true);
-       $SourceBNodeIdvsComponentIdList =  json_decode($_POST['SourceBNodeIdvsComponentIdList'],true);  
+       $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      
       
         //var_dump( $SourceANodeIdvsComponentIdList);
 
@@ -144,11 +141,18 @@
                                 $SourceASelectedComponents, 
                                 $SourceANodeIdvsComponentIdList );
         
-        // write source b selected components
-        writeSelectedComponents($projectName, 
+        if(isset($_POST['SourceBSelectedComponents']) &&
+           isset($_POST['SourceBNodeIdvsComponentIdList']))
+        {
+            $SourceBSelectedComponents =  json_decode($_POST['SourceBSelectedComponents'],true);
+            $SourceBNodeIdvsComponentIdList =  json_decode($_POST['SourceBNodeIdvsComponentIdList'],true);  
+
+            // write source b selected components
+            writeSelectedComponents($projectName, 
                                 'SourceBSelectedComponents', 
                                 $SourceBSelectedComponents, 
                                 $SourceBNodeIdvsComponentIdList );
+        }
 
         function writeSelectedComponents($projectName, 
                                         $selectedComponentsTable, 
