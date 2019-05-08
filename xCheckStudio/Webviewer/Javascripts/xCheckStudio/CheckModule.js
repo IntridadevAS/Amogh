@@ -1294,7 +1294,8 @@ function postData(url, method) {
             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
-            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
             //virewer container Data
             var viewerOptions = [];
             viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -1367,7 +1368,8 @@ function postData(url, method) {
             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
-            xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+            xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "rvt") {
 
             //virewer container Data
             var viewerOptions = [];
