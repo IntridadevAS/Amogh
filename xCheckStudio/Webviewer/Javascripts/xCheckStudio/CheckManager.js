@@ -82,6 +82,7 @@ function CheckManager(name) {
                 success: function (data) {
                     // alert("success");
                     //$this.CheckComponentsGroupsData = data;
+
                 },
                 error: function (error) {
                     alert('error; ' + eval(error));
@@ -154,7 +155,8 @@ function CheckManager(name) {
             if ((interfaceObject.SourceType.toLowerCase() === "xml" ||
                 interfaceObject.SourceType.toLowerCase() === "rvm"||
                 interfaceObject.SourceType.toLowerCase() === "sldasm" ||
-                interfaceObject.SourceType.toLowerCase() === "sldprt") &&
+                interfaceObject.SourceType.toLowerCase() === "sldprt" ||
+                interfaceObject.SourceType.toLowerCase() === "rvt") &&
                 !interfaceObject._modelTree.isComponentSelected(sourceComponentProperties)) {
                      //source A not checked
                      if(this.SourceANotCheckedComponents.indexOf(sourceComponentProperties) === -1)
