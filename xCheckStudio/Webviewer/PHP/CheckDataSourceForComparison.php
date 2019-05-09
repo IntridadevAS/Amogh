@@ -27,8 +27,10 @@
             $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
             $SourceASelectedComponents = json_decode($_POST['SourceASelectedCompoents'],true);
             $SourceBSelectedComponents = json_decode($_POST['SourceBSelectedCompoents'],true); 
-            $orderMaintained = 'true';         
+            $orderMaintained = $_POST['orderMaintained'];        
+            // $orderMaintained = 'true'; 
            
+            var_dump($orderMaintained);
             $CheckComponentsGroups = array();
 
             $SourceANotCheckedComponents = array();
@@ -356,30 +358,51 @@
 
                     foreach ($SourceAComponents as $id => $sourceAComponent)
                     {
+
+                        $sourceAGroupName = NULL;
+                        $sourceBGroupName = NULL;
+                        if($orderMaintained == 'true')
+                        {
+                            $sourceAGroupName = $sourceAComponent['mainclass'];
+                            $sourceBGroupName = $sourceBComponent['mainclass'];
+                            $sourceAClassName = $sourceAComponent['subclass'];
+                            $sourceBClassName = $sourceBComponent['subclass'];
+                        }
+                        else if($orderMaintained == 'false')
+                        {
+                            $sourceAGroupName = $sourceBComponent['mainclass'];
+                            $sourceBGroupName = $sourceAComponent['mainclass'];
+                            $sourceAClassName = $sourceBComponent['subclass'];
+                            $sourceBClassName = $sourceAComponent['subclass'];
+                        }
+                        else
+                        {
+                            continue;
+                        }
                        // $sourceAComponent = $SourceAComponents[$j];
 
                         // check if component class exists in checkcase for Source B
-                        if (!isComponentGroupExists($sourceAComponent["mainclass"], $sourceBComponent["mainclass"])) 
+                        if (!isComponentGroupExists($sourceAGroupName, $sourceBGroupName)) 
                         {
                             continue;
                         }
                     
                         // get check case group for both sources
-                        $checkCaseGroup = getComponentGroup($sourceAComponent["mainclass"], $sourceBComponent["mainclass"]);
+                        $checkCaseGroup = getComponentGroup($sourceAGroupName, $sourceBGroupName);
                 
                         // check if component exists in checkCaseGroup
-                        if (!componentClassExists($sourceAComponent["subclass"], 
-                                                $sourceBComponent["subclass"],
+                        if (!componentClassExists($sourceAClassName, 
+                                                $sourceBClassName,
                                                 $checkCaseGroup, 
-                                                $sourceAComponent["mainclass"],
-                                                $sourceBComponent["mainclass"])) 
+                                                $sourceAGroupName,
+                                                $sourceBGroupName)) 
                         {
                             
                             if (componentClassExists(NULL, 
-                                                    $sourceBComponent["subclass"], 
+                                                    $sourceBClassName, 
                                                     $checkCaseGroup, 
                                                     NULL,
-                                                    $sourceBComponent["mainclass"])) 
+                                                    $sourceBGroupName)) 
                             {
                                 $checkComponentGroup = getCheckComponentGroup($sourceAComponent["mainclass"] . "-" . $sourceBComponent["mainclass"]);
                                 $componentGroupMapped = true;
@@ -389,11 +412,11 @@
                         }
 
                         // get check case component
-                        $checkCaseComponentClass = getComponentClass($sourceAComponent["subclass"], 
-                                                                    $sourceBComponent["subclass"],
+                        $checkCaseComponentClass = getComponentClass($sourceAClassName, 
+                                                                    $sourceBClassName,
                                                                     $checkCaseGroup, 
-                                                                    $sourceAComponent["mainclass"],
-                                                                    $sourceBComponent["mainclass"]);
+                                                                    $sourceAGroupName,
+                                                                    $sourceBGroupName);
 
                         $componentGroupMapped  =  true;
                         // create or get check component group
@@ -689,7 +712,6 @@
                                         $sourceAcomponentGroupName,
                                         $sourceBcomponentGroupName)
                     {
-
                         if(strtolower($checkCaseGroup['SourceAName']) != strtolower($sourceAcomponentGroupName) ||
                         strtolower($checkCaseGroup['SourceBName']) != strtolower($sourceBcomponentGroupName))
                         {
