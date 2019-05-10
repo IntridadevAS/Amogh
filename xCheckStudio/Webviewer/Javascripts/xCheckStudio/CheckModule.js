@@ -170,8 +170,12 @@ function onCheckButtonClick() {
     if(xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1"))
     {
         checkType = checkcase.getCheckType("ComplianceSourceA");
-        if(checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
+        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
             checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface1.SourceType.toLowerCase())
+        }
+        else if(!checkType)
+        {
+            checkType = checkcase.getCheckType("Compliance");
         }
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         if (!sourceAModelBrowser) {
@@ -201,8 +205,12 @@ function onCheckButtonClick() {
     if(xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1"))
     {
         checkType = checkcase.getCheckType("ComplianceSourceB");
-        if(checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
+        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
             checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface2.SourceType.toLowerCase())
+        }
+        else if(!checkType)
+        {
+            checkType = checkcase.getCheckType("Compliance");
         }
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
         if (!sourceBModelBrowser) {
