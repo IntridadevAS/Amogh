@@ -30,7 +30,6 @@
             $orderMaintained = $_POST['orderMaintained'];        
             // $orderMaintained = 'true'; 
            
-            var_dump($orderMaintained);
             $CheckComponentsGroups = array();
 
             $SourceANotCheckedComponents = array();
