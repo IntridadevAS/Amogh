@@ -2522,158 +2522,7 @@
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
                 // show busy loader
-                var busySpinner = document.getElementById("divLoading");
-                busySpinner.className = 'show';
-
-                sourceAComplianceCheckManager = undefined;
-                sourceBComplianceCheckManager = undefined;
-                comparisonCheckManager = undefined;
-
-                var checkCaseSelect = document.getElementById("checkCaseSelect");
-                if (checkCaseSelect.value === "None") {
-                    // hide busy spinner
-                    busySpinner.classList.remove('show');
-                    //alert("Please select check case from list.")
-                    OnShowToast('Please select check case from list.');
-                    return;
-                }
-
-                // check if any check case type is selected
-                var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-                var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-                if (!comparisonCB.classList.contains("state2") &&
-                    !complianceSourceACB.classList.contains("state1") &&
-                    !complianceSourceBCB.classList.contains("state1")) {
-                    // hide busy spinner
-                    busySpinner.classList.remove('show');
-                    OnShowToast('No selected check type found.</br>Please select check type.');
-                    //alert("No selected check type found. Please select check type.");
-                    return;
-                }
-
-                var checkPerformed = false;
-                //var checkMethod;
-                for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-                    var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-                    var comparisonCB = document.getElementById('comparisonCB');
-                    if (checkType.Name.toLowerCase() === "comparison" &&
-                        xCheckStudioInterface1 &&
-                        xCheckStudioInterface2 /*&&
-                        checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase() &&
-                        checkType.SourceBType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()*/) {
-                        var component = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-                        if (component.classList.contains("state2")) {
-
-                            var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-                            var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-                            if (!sourceAModelBrowser || !sourceBModelBrowser) {
-                                continue;
-                            }
-
-                            // check if there are no selected components
-                            if (sourceAModelBrowser.selectedCompoents.length === 0 &&
-                                sourceBModelBrowser.selectedCompoents.length === 0) {
-                                //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
-                                OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-                                continue;
-                            }
-
-                            if (!comparisonCheckManager) {
-                                comparisonCheckManager = new CheckManager();
-                                comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                    xCheckStudioInterface2.sourceProperties,
-                                    checkType,
-                                    true,
-                                    undefined);
-
-                                checkPerformed = true;
-                            }
-                        }
-                    }
-
-                    else {
-                        if (xCheckStudioInterface1 && checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase()) {
-                            var complianceSourceACB = document.getElementById("complianceSourceACB");
-                            if (checkType.Name.toLowerCase() === "compliance") {
-                                /*if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface1.SourceType.toLowerCase())*/ {
-                                    var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-                                    if (component.classList.contains("state1")) {
-
-                                        // check if there are no selected components
-                                        var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-                                        
-                                        if (!sourceAModelBrowser) {
-                                            continue;
-                                        }
-
-                                        if (sourceAModelBrowser.selectedCompoents.length === 0) {
-                                            //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
-                                            OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-                                            //continue;
-                                        }
-                                        else {
-                                            if (!sourceAComplianceCheckManager) {
-                                                sourceAComplianceCheckManager = new CheckManager();
-                                                sourceAComplianceCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-                                                    undefined,
-                                                    checkType,
-                                                    false,
-                                                    xCheckStudioInterface1);
-
-                                                checkPerformed = true;
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-
-                        if (xCheckStudioInterface2 && checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase()) {
-                            var complianceSourceBCB = document.getElementById("complianceSourceBCB");
-                            if (checkType.Name.toLowerCase() === "compliance") {
-                                /*if (checkType.SourceAType.toLowerCase() === xCheckStudioInterface2.SourceType.toLowerCase())*/ {
-                                    var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-                                    if (component.classList.contains("state1")) {
-
-                                        // check if there are no selected components
-                                        var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-                                        if (!sourceBModelBrowser) {
-                                            continue;
-                                        }
-
-                                        if (sourceBModelBrowser.selectedCompoents.length === 0) {
-                                            //alert("Compliance check on Source B can not be performed.\nNo selected components found.");
-                                            //continue;
-
-                                            OnShowToast('Compliance check on Source B can not be performed.</br>No selected components found.');
-                                        }
-                                        else {
-                                            if (!sourceBComplianceCheckManager) {
-                                                sourceBComplianceCheckManager = new CheckManager();
-                                                sourceBComplianceCheckManager.performCheck(xCheckStudioInterface2.sourceProperties,
-                                                    undefined,
-                                                    checkType,
-                                                    false,
-                                                    xCheckStudioInterface2);
-
-                                                checkPerformed = true;
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-                // hide busy spinner
-                busySpinner.classList.remove('show');
-                if (!checkPerformed) {
-                    return;
-                }
-                document.getElementById("checkcompletealert").style.display = "block";
+                onCheckButtonClick();
             };
 
             var checkCaseSelect = document.getElementById("checkCaseSelect");
@@ -3091,11 +2940,9 @@
                 if (checkType.Name.toLowerCase() === "comparison") {
                     sourceAType = checkType.SourceAType;
                     sourceBType = checkType.SourceBType;
-                    break;
                 }
                 else if (checkType.Name.toLowerCase() === "compliance") {
                     sourceAType = checkType.SourceAType;
-                    break;
                 }
             }
 
@@ -3192,11 +3039,9 @@
                 if (checkType.Name.toLowerCase() === "comparison") {
                     sourceAType = checkType.SourceAType;
                     sourceBType = checkType.SourceBType;
-                    break;
                 }
                 else if (checkType.Name.toLowerCase() === "compliance") {
                     sourceAType = checkType.SourceAType;
-                    break;
                 }
             }
 

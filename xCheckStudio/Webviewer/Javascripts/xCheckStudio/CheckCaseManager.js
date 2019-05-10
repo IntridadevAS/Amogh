@@ -205,6 +205,19 @@ function CheckCase(name/*, complianceCheck*/) {
 
         return undefined;
     }
+
+    CheckCase.prototype.getCheckTypeFromSourceType = function (checktypecomliance, sourceType) {
+        for (var i = 0; i < this.CheckTypes.length; i++) {
+            if (this.CheckTypes[i].SourceAType.toLowerCase() === sourceType) {
+                if(checktypecomliance && this.CheckTypes[i].Name !== "Comparison")
+                    return this.CheckTypes[i];
+                else
+                    continue;
+            }
+        }
+
+        return undefined;
+    }
 }
 
 function CheckType(name,
