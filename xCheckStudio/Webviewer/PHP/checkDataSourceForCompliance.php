@@ -623,35 +623,37 @@
                 if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent['mainclass']))
                 {
                     $sourceComponentProperties =  $SourceProperties[$sourceComponent['id']];
-
-                    for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
-                    {                       
-                        // get check case mapping property object
-                        $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$propertiesIndex];
-                        $mappingPropertyName = $checkCaseMappingProperty['SourceAName'];
-                        if (!array_key_exists($mappingPropertyName, $sourceComponentProperties))
-                        {
-                           continue;
-                        }
-                        
-                        $property = $sourceComponentProperties[$mappingPropertyName];
+                    if(is_countable($checkCaseComponentClass['MappingProperties'])) {
+                        for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
+                        {                       
+                            // get check case mapping property object
+                            $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$propertiesIndex];
+                            $mappingPropertyName = $checkCaseMappingProperty['SourceAName'];
+                            if (!array_key_exists($mappingPropertyName, $sourceComponentProperties))
+                            {
+                            continue;
+                            }
                             
-                        $propertyName = $property['name'];
-                        $propertyValue = $property["value"];
-                        $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
-                        $performCheck = true;
-        
-                        $checkProperty = new CheckProperty($propertyName,
-                                                            $propertyValue,
-                                                            "",
-                                                            "",
-                                                            $checkCaseMappingProperty['Severity'],
-                                                            $performCheck,
-                                                            $checkCaseMappingProperty['Comment']);
-                        $checkProperty->Result = $result;
-                     
-                        $checkComponent->AddCheckProperty($checkProperty);
+                            $property = $sourceComponentProperties[$mappingPropertyName];
+                                
+                            $propertyName = $property['name'];
+                            $propertyValue = $property["value"];
+                            $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
+                            $performCheck = true;
+            
+                            $checkProperty = new CheckProperty($propertyName,
+                                                                $propertyValue,
+                                                                "",
+                                                                "",
+                                                                $checkCaseMappingProperty['Severity'],
+                                                                $performCheck,
+                                                                $checkCaseMappingProperty['Comment']);
+                            $checkProperty->Result = $result;
+                        
+                            $checkComponent->AddCheckProperty($checkProperty);
+                        }
                     }
+                    
                 }
             }                                                   
         }

@@ -99,6 +99,152 @@ function startExplode() {
     }
 }
 
+function onCheckButtonClick() {
+    var busySpinner = document.getElementById("divLoading");
+    busySpinner.className = 'show';
+
+    sourceAComplianceCheckManager = undefined;
+    sourceBComplianceCheckManager = undefined;
+    comparisonCheckManager = undefined;
+
+    var checkCaseSelect = document.getElementById("checkCaseSelect");
+    if (checkCaseSelect.value === "None") {
+        // hide busy spinner
+        busySpinner.classList.remove('show');
+        //alert("Please select check case from list.")
+        OnShowToast('Please select check case from list.');
+        return;
+    }
+
+                // check if any check case type is selected
+    var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+    var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+    var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+    if (!comparisonCB.classList.contains("state2") &&
+        !complianceSourceACB.classList.contains("state1") &&
+        !complianceSourceBCB.classList.contains("state1")) {
+        // hide busy spinner
+        busySpinner.classList.remove('show');
+        OnShowToast('No selected check type found.</br>Please select check type.');
+        //alert("No selected check type found. Please select check type.");
+        return;
+    }
+
+    var checkPerformed = false;
+    var checkType = null;
+    var sourcePropsForCompliance = null;
+    var studioInterface = null;
+    var checkcase = new CheckCase("");
+    checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
+    //var checkMethod;
+    if (xCheckStudioInterface1 && xCheckStudioInterface2 && comparisonCB.classList.contains("state2")) {
+
+        var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
+        var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
+        if (!sourceAModelBrowser || !sourceBModelBrowser) {
+            OnShowToast('Comparison check can not be performed.');
+        }
+
+        // check if there are no selected components
+        if (sourceAModelBrowser.selectedCompoents.length === 0 &&
+            sourceBModelBrowser.selectedCompoents.length === 0) {
+            //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
+            OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
+            //return;
+        }
+
+        checkType = checkcase.getCheckType("Comparison");
+
+        if (!comparisonCheckManager) {
+            comparisonCheckManager = new CheckManager();
+            comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+                xCheckStudioInterface2.sourceProperties,
+                checkType,
+                true,
+                undefined);
+
+            checkPerformed = true;
+        }
+    }
+    if(xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1"))
+    {
+        checkType = checkcase.getCheckType("ComplianceSourceA");
+        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
+            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface1.SourceType.toLowerCase())
+        }
+        else if(!checkType)
+        {
+            checkType = checkcase.getCheckType("Compliance");
+        }
+        var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
+        if (!sourceAModelBrowser) {
+            OnShowToast('Compliance check can not be performed.');
+        }
+        studioInterface = xCheckStudioInterface1; 
+        sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+
+        if (sourceAModelBrowser.selectedCompoents.length === 0) {
+            //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+            OnShowToast('Compliance check can not be performed.</br>No selected components found for data source A.');
+            //continue;
+        }
+        else {
+            if (!sourceAComplianceCheckManager) {
+                sourceAComplianceCheckManager = new CheckManager();
+                sourceAComplianceCheckManager.performCheck(sourcePropsForCompliance,
+                    undefined,
+                    checkType,
+                    false,
+                    studioInterface);
+
+                checkPerformed = true;
+            }
+        }
+    }
+    if(xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1"))
+    {
+        checkType = checkcase.getCheckType("ComplianceSourceB");
+        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
+            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface2.SourceType.toLowerCase())
+        }
+        else if(!checkType)
+        {
+            checkType = checkcase.getCheckType("Compliance");
+        }
+        var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
+        if (!sourceBModelBrowser) {
+            OnShowToast('Compliance check can not be performed.');
+        }
+        studioInterface = xCheckStudioInterface2; 
+        sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+
+        if (sourceBModelBrowser.selectedCompoents.length === 0) {
+            //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+            OnShowToast('Compliance check can not be performed.</br>No selected components found for data source B.');
+            //continue;
+        }
+        else {
+            if (!sourceBComplianceCheckManager) {
+                sourceBComplianceCheckManager = new CheckManager();
+                sourceBComplianceCheckManager.performCheck(sourcePropsForCompliance,
+                    undefined,
+                    checkType,
+                    false,
+                    studioInterface);
+
+                checkPerformed = true;
+            }
+        }
+    }
+        
+    // hide busy spinner
+    busySpinner.classList.remove('show');
+    if (!checkPerformed) {
+        return;
+    }
+    document.getElementById("checkcompletealert").style.display = "block";
+}
+
 function stopExplode() {
     if (currentViewer) {
         var explodeManager = currentViewer.getExplodeManager();
@@ -817,17 +963,24 @@ function loadExcelDataSource(fileExtension,
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if (!sourceAType ||
-            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
+    
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (!sourceBType ||
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
     }
     readExcelDataSource(file[0],
@@ -864,17 +1017,24 @@ function loadModel(fileName,
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if (!sourceAType ||
-            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
+    
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (!sourceBType ||
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
     }
 
@@ -1090,17 +1250,24 @@ function loadDbDataSource(fileExtension,
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if (!sourceAType ||
-            sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
+    
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (!sourceBType ||
+        if(sourceAType || sourceBType)
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-            alert("Data source type doesn't match with check case.");
-            return false;
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
         }
     }
         var fileName = file[0].name.substring(0, file[0].name.lastIndexOf('.'));
