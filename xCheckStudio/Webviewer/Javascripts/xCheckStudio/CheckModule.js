@@ -132,7 +132,6 @@ function onCheckButtonClick() {
 
     var checkPerformed = false;
     var checkType = null;
-    var complianceperformedForSourceA = false;
     var sourcePropsForCompliance = null;
     var studioInterface = null;
     var checkcase = new CheckCase("");
