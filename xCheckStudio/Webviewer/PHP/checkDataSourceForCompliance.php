@@ -623,7 +623,9 @@
                 if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent['mainclass']))
                 {
                     $sourceComponentProperties =  $SourceProperties[$sourceComponent['id']];
-                    if(is_countable($checkCaseComponentClass['MappingProperties'])) {
+                    if(is_array ($checkCaseComponentClass['MappingProperties']) || 
+                       is_object ($checkCaseComponentClass['MappingProperties'])) 
+                       {
                         for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
                         {                       
                             // get check case mapping property object
