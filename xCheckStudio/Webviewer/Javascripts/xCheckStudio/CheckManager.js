@@ -79,7 +79,7 @@ function CheckManager(name) {
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data: {                    
                     "CheckCaseType": JSON.stringify(checkCaseType),                  
                     "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
@@ -134,7 +134,7 @@ function CheckManager(name) {
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data: { /*"SourceProperties": JSON.stringify(sourceProperties1), */
                         "CheckCaseType": JSON.stringify(checkCaseType),
                         /*"SourceType": interfaceObject.SourceType,*/

@@ -1341,7 +1341,7 @@ function readDbDataSource(uri, file,
     
 }
 
-function postData(url, method) {
+function postData() {
     // remove post data js files from server from earlier check results, if any
     // $.ajax({
     //     data: '',
@@ -1473,7 +1473,7 @@ function postData(url, method) {
             $.ajax({
                 url: 'PHP/ViewerOptionsWriter.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data:
                 {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
@@ -1552,7 +1552,7 @@ function postData(url, method) {
             $.ajax({
                 url: 'PHP/ViewerOptionsWriter.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data:
                 {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
@@ -1619,7 +1619,7 @@ function postData(url, method) {
     $.ajax({
         url: 'PHP/ProjectDatawriter.php',
         type: "POST",
-        async: true,
+        async: false,
         data:
         {
             "SourceANodeIdvsComponentIdList": JSON.stringify(sourceANodeIdvsComponentIdList),
