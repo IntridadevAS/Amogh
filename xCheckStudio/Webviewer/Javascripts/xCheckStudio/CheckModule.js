@@ -1462,7 +1462,8 @@ function postData(url, method) {
             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt" ||
-            xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
+            xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "ifc") {
             //virewer container Data
             var viewerOptions = [];
             viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -1515,20 +1516,20 @@ function postData(url, method) {
             //     });
             // }
         }
-        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+        else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls" || xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
             sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
             sourceAType = xCheckStudioInterface1.SourceType;
-            $.ajax({
-                url: 'PHP/SourceASheetDataWriter.php',
-                type: "POST",
-                async: true,
-                data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
-                success: function (data) {
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            });
+            // $.ajax({
+            //     url: 'PHP/SourceASheetDataWriter.php',
+            //     type: "POST",
+            //     async: true,
+            //     data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
+            //     success: function (data) {
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // });
         }     
       
  }
@@ -1539,7 +1540,8 @@ function postData(url, method) {
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt" ||
-            xCheckStudioInterface2.SourceType.toLowerCase() === "rvt") {
+            xCheckStudioInterface2.SourceType.toLowerCase() === "rvt" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "ifc") {
 
             //virewer container Data
             var viewerOptions = [];
@@ -1595,21 +1597,21 @@ function postData(url, method) {
             // }
 
         }
-        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+        else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls" || xCheckStudioInterface2.SourceType.toLowerCase() === "json") {
 
             sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
             sourceBType = xCheckStudioInterface2.SourceType;
-            $.ajax({
-                url: 'PHP/SourceBSheetDataWriter.php',
-                type: "POST",
-                async: true,
-                data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
-                success: function (data) {
-                    //alert("success");
-                    //$("#result").html(data);
-                }
-            });
+            // $.ajax({
+            //     url: 'PHP/SourceBSheetDataWriter.php',
+            //     type: "POST",
+            //     async: true,
+            //     data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
+            //     success: function (data) {
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // });
         }
     }
 
