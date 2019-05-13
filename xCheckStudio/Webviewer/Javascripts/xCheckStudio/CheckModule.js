@@ -1516,6 +1516,9 @@ function postData(url, method) {
             // }
         }
         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+            sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
+            sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
+            sourceAType = xCheckStudioInterface1.SourceType;
             $.ajax({
                 url: 'PHP/SourceASheetDataWriter.php',
                 type: "POST",
@@ -1594,6 +1597,9 @@ function postData(url, method) {
         }
         else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
 
+            sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
+            sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
+            sourceBType = xCheckStudioInterface2.SourceType;
             $.ajax({
                 url: 'PHP/SourceBSheetDataWriter.php',
                 type: "POST",
