@@ -189,13 +189,13 @@
                     $mainClass =  $selectedComponent['MainComponentClass'];
                     $subClass =$selectedComponent['ComponentClass'];
                     $nodeId = null;
-                    if($selectedComponent['NodeId'])
+                    if(isset($selectedComponent['NodeId']))
                     {
                         $nodeId = (int)$selectedComponent['NodeId'];
                     }
 
                     $mainCompId = null;
-                    if($nodeIdvsComponentIdList[$nodeId])
+                    if($nodeId !== NULL && $nodeIdvsComponentIdList[$nodeId])
                     {
                         $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
                     }
