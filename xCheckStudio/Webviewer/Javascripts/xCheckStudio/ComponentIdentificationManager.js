@@ -43,6 +43,11 @@ var xCheckStudio;
          ComponentIdentificationManager.RVTSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.RVTSourceSubComponentClassProperty = "TYPE";
 
+         // IGS data source
+         ComponentIdentificationManager.IGSSourceNameProperty = "Name";
+         ComponentIdentificationManager.IGSSourceMainClassProperty = "TYPE";
+         ComponentIdentificationManager.IGSSourceSubComponentClassProperty = "TYPE";
+
          
         //IFC data source
         ComponentIdentificationManager.IFCSourceNameProperty = "Name";
@@ -87,6 +92,14 @@ var xCheckStudio;
                 properties['name'] = ComponentIdentificationManager.RVTSourceNameProperty;
                 properties['mainCategory'] = ComponentIdentificationManager.RVTSourceMainClassProperty;
                 properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
+
+            }
+            else if (fileExtension.toLowerCase() === "igs") {
+
+                properties = {};
+                properties['name'] = ComponentIdentificationManager.IGSSourceNameProperty;
+                properties['mainCategory'] = ComponentIdentificationManager.IGSSourceMainClassProperty;
+                properties['subClass'] = ComponentIdentificationManager.IGSSourceSubComponentClassProperty;
 
             }
             else if (fileExtension.toLowerCase() === "ifc") {

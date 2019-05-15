@@ -882,7 +882,8 @@ function uploadAndLoadModel(fileExtension, fileName,viewerContainer, modelTreeCo
                 fileExtension.toLowerCase() === "step" ||
                 fileExtension.toLowerCase() === "stp" ||
                 fileExtension.toLowerCase() === "ste" ||
-                fileExtension.toLowerCase() === "json") {
+                fileExtension.toLowerCase() === "json" ||
+                fileExtension.toLowerCase() === "igs") {
                 var busySpinner = document.getElementById("divLoading");
                 busySpinner.className = 'show';
 
@@ -961,14 +962,16 @@ function loadExcelDataSource(fileExtension,
         if (checkType.Name.toLowerCase() === "comparison") {
             sourceAType = checkType.SourceAType;
             sourceBType = checkType.SourceBType;
+            break;
         }
         else if (checkType.Name.toLowerCase() === "compliance") {
             sourceAType = checkType.SourceAType;
+            break;
         }
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
@@ -976,13 +979,29 @@ function loadExcelDataSource(fileExtension,
                 return false;
             }
         }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
     
     }
     else if (viewerContainer === "viewerContainer2") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -1016,14 +1035,16 @@ function loadModel(fileName,
         if (checkType.Name.toLowerCase() === "comparison") {
             sourceAType = checkType.SourceAType;
             sourceBType = checkType.SourceBType;
+            break;
         }
         else if (checkType.Name.toLowerCase() === "compliance") {
             sourceAType = checkType.SourceAType;
+            break;
         }
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
@@ -1031,13 +1052,29 @@ function loadModel(fileName,
                 return false;
             }
         }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
     
     }
     else if (viewerContainer === "viewerContainer2") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -1138,7 +1175,8 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                     xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "igs") {
                         
 
                     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
@@ -1197,7 +1235,8 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                     xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
-                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
+                    xCheckStudioInterface1.SourceType.toLowerCase() === "igs") {
 
                     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface2.SourceType,
                         row.cells[modelBrowserMainClassColumn].textContent.trim());
@@ -1257,7 +1296,8 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                 xCheckStudioInterface1.SourceType.toLowerCase() === "step" ||
                 xCheckStudioInterface1.SourceType.toLowerCase() === "stp" ||
                 xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
-                xCheckStudioInterface1.SourceType.toLowerCase() === "rvt") {
+                xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
+                xCheckStudioInterface1.SourceType.toLowerCase() === "igs") {
                 xCheckStudioInterface1._modelTree.selectedCompoents = [];
             }
             else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
@@ -1279,7 +1319,8 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                 xCheckStudioInterface2.SourceType.toLowerCase() === "step" ||
                 xCheckStudioInterface2.SourceType.toLowerCase() === "stp" ||
                 xCheckStudioInterface2.SourceType.toLowerCase() === "ste" ||
-                xCheckStudioInterface2.SourceType.toLowerCase() === "rvt") {
+                xCheckStudioInterface2.SourceType.toLowerCase() === "rvt" ||
+                xCheckStudioInterface2.SourceType.toLowerCase() === "igs") {
                 xCheckStudioInterface2._modelTree.selectedCompoents = [];
             }
             else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
@@ -1309,14 +1350,16 @@ function loadDbDataSource(fileExtension,
         if (checkType.Name.toLowerCase() === "comparison") {
             sourceAType = checkType.SourceAType;
             sourceBType = checkType.SourceBType;
+            break;
         }
         else if (checkType.Name.toLowerCase() === "compliance") {
             sourceAType = checkType.SourceAType;
+            break;
         }
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
@@ -1324,13 +1367,29 @@ function loadDbDataSource(fileExtension,
                 return false;
             }
         }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
     
     }
     else if (viewerContainer === "viewerContainer2") {
-        if(sourceAType || sourceBType)
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                alert("Data source type doesn't match with check case.");
+                return false;
+            }
+        }
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -1519,7 +1578,8 @@ function postData() {
             xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt" ||
             xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
-            xCheckStudioInterface1.SourceType.toLowerCase() === "ifc") {
+            xCheckStudioInterface1.SourceType.toLowerCase() === "ifc" ||
+            xCheckStudioInterface1.SourceType.toLowerCase() === "igs") {
             //virewer container Data
             var viewerOptions = [];
             viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
@@ -1597,7 +1657,8 @@ function postData() {
             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldprt" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "rvt" ||
-            xCheckStudioInterface2.SourceType.toLowerCase() === "ifc") {
+            xCheckStudioInterface2.SourceType.toLowerCase() === "ifc" ||
+            xCheckStudioInterface2.SourceType.toLowerCase() === "igs") {
 
             //virewer container Data
             var viewerOptions = [];
