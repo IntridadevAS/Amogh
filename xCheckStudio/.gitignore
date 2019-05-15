@@ -3,3 +3,11 @@
 *.db
 *.tx
 *.prc
+*.att
+*.rvm
+*.step
+*.ste
+*.stp
+*.ifc
+*.igs
+*.rvt
