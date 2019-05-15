@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+       Intrida Compliance check rules keywords.
+       
+       ""
+       Must have value
+       Should start with-somevalue
+       Should be number
+       Equal to-somevalue
+       Should end with-somevalue
+	   
+	   Note: These keywords are not case sensitive.
+-->
+
+<CheckCase name="IGS_Compliance">
+	<Check type="Compliance"  sourceType="IGS" > 	  
+		<ComponentGroup>
+		  <ComponentClass>
+			 <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	</Check>
+</CheckCase>
