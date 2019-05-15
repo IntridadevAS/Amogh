@@ -16,19 +16,26 @@ var xCheckStudio;
         function fileExists(fileURL) {
 
             return new Promise(function (resolve, reject) {
-                var http = new XMLHttpRequest();
-
-                http.onload = function (event) {
-                    if (this.status === 404) {
-                        return reject(false);
-                    }
-                    else {
-                        return resolve(true);
-                    }                
+                try {
+                    var request = new XMLHttpRequest();
+                    request.open('HEAD', fileURL, true);
+                    request.onreadystatechange = function () {
+                        if (request.readyState === 4) {
+        
+                            if (this.status == 200) {
+                                return resolve(true);
+                            }
+                            else {
+                                return resolve(false);
+                            }
+                        }
+                    };
+        
+                    request.send();
                 }
-
-                http.open('HEAD', fileURL, true);
-                http.send();
+                catch (err) {
+                    return resolve(false);
+                }
             });   
         }
         Util.fileExists = fileExists;
