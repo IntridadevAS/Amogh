@@ -170,20 +170,31 @@ function onCheckButtonClick() {
     }
     if(xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1"))
     {
-        checkType = checkcase.getCheckType("ComplianceSourceA");
-        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface1.SourceType.toLowerCase())
-        }
-        else if(!checkType)
+        if(dataSourceOrderMaintained == 'true')
         {
-            checkType = checkcase.getCheckType("Compliance");
+            checkType = checkcase.getCheckType("ComplianceSourceA");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface1; 
+            sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+        }
+        else
+        {
+            checkType = checkcase.getCheckType("ComplianceSourceB");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface1; 
+            sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
         }
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         if (!sourceAModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-        studioInterface = xCheckStudioInterface1; 
-        sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+       
 
         if (sourceAModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
@@ -206,20 +217,31 @@ function onCheckButtonClick() {
     }
     if(xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1"))
     {
-        checkType = checkcase.getCheckType("ComplianceSourceB");
-        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface2.SourceType.toLowerCase())
-        }
-        else if(!checkType)
+        if(dataSourceOrderMaintained == 'true')
         {
-            checkType = checkcase.getCheckType("Compliance");
+            checkType = checkcase.getCheckType("ComplianceSourceB");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface2; 
+            sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+        }
+        else
+        {
+            checkType = checkcase.getCheckType("ComplianceSourceA");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface2; 
+            sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
         }
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
         if (!sourceBModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-        studioInterface = xCheckStudioInterface2; 
-        sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+        
 
         if (sourceBModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
