@@ -35,9 +35,9 @@ function CheckManager(name) {
         sourceProperties2,
         checkCaseType,
         comparisonCheck,
-        interfaceObject) {
+        interfaceObject,
+        orderMaintained) {
 
-        var orderMaintained = 'true';
             // var $this = this;
         if (comparisonCheck) {
            //this.checkDataSources(sourceProperties1, sourceProperties2, checkCaseType);
@@ -71,10 +71,7 @@ function CheckManager(name) {
                 sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
             }
 
-            if(xCheckStudioInterface1.SourceType !== checkCaseType.SourceAType.toLowerCase() && xCheckStudioInterface2.SourceType !== checkCaseType.SourceBType.toLowerCase())
-            {
-                orderMaintained = 'false';
-            }
+            // orderMaintained = this.hasDataSourceOrderMaintained(checkCaseType);
 
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',
