@@ -136,6 +136,7 @@ function onCheckButtonClick() {
     var studioInterface = null;
     var checkcase = new CheckCase("");
     checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
+    var dataSourceOrderMaintained = checkCaseManager.orderMaintained;
     //var checkMethod;
     if (xCheckStudioInterface1 && xCheckStudioInterface2 && comparisonCB.classList.contains("state2")) {
 
@@ -161,7 +162,8 @@ function onCheckButtonClick() {
                 xCheckStudioInterface2.sourceProperties,
                 checkType,
                 true,
-                undefined);
+                undefined,
+                dataSourceOrderMaintained);
 
             checkPerformed = true;
         }
@@ -195,7 +197,8 @@ function onCheckButtonClick() {
                     undefined,
                     checkType,
                     false,
-                    studioInterface);
+                    studioInterface,
+                    dataSourceOrderMaintained);
 
                 checkPerformed = true;
             }
@@ -230,7 +233,8 @@ function onCheckButtonClick() {
                     undefined,
                     checkType,
                     false,
-                    studioInterface);
+                    studioInterface,
+                    dataSourceOrderMaintained);
 
                 checkPerformed = true;
             }
@@ -824,7 +828,8 @@ function loadDataSource(event,
 
     let selectedFiles = document.getElementById(dataSource).files;
     let selectedFilesCount = selectedFiles.length;
-    if (selectedFilesCount == 0) {
+    if (selectedFilesCount == 0) 
+    {
         document.getElementById(formId).reset();
         return;
     }
@@ -945,6 +950,14 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
+function checkIsOrderMaintained(sourceAType)
+{
+    if(xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
+    {
+        checkCaseManager.orderMaintained = 'false';
+    }
+}
+
 function loadExcelDataSource(fileExtension,
     file,
     viewerContainer,
@@ -1011,6 +1024,8 @@ function loadExcelDataSource(fileExtension,
         viewerContainer,
         modelTreeContainer);
 
+    checkIsOrderMaintained(sourceAType);
+
     return true;
 
 }
@@ -1028,16 +1043,21 @@ function loadModel(fileName,
     // formId = undefined;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
+    // iterate over checkcase types and find checktype for comparion.
+    // If found, sourceATYpe and sourceBtype from comparison checktype
+    // If comparison check type doesnt exist, get compliance check type.
     var sourceAType;
     var sourceBType;
     for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
         var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-        if (checkType.Name.toLowerCase() === "comparison") {
+        if (checkType.Name.toLowerCase() === "comparison") 
+        {
             sourceAType = checkType.SourceAType;
             sourceBType = checkType.SourceBType;
             break;
         }
-        else if (checkType.Name.toLowerCase() === "compliance") {
+        else if (checkType.Name.toLowerCase() === "compliance") 
+        {
             sourceAType = checkType.SourceAType;
             break;
         }
@@ -1047,7 +1067,8 @@ function loadModel(fileName,
         if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
-            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+               sourceBType.toLowerCase() !== fileExtension.toLowerCase()) 
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -1108,7 +1129,7 @@ function loadModel(fileName,
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
                     }
-
+                    checkIsOrderMaintained(sourceAType);
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
                     return true;
                 }
@@ -1124,7 +1145,7 @@ function loadModel(fileName,
             return false;
         }
 
-    });            
+    }); 
 
     return true;
 }
@@ -1407,6 +1428,7 @@ function loadDbDataSource(fileExtension,
                         readDbDataSource(uri, file[0],
                             viewerContainer,
                             modelTreeContainer);
+                            checkIsOrderMaintained(SourceAType);
                 }
                 else {
                     document.getElementById(formId).reset();
