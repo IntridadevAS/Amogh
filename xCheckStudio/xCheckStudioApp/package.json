@@ -3,12 +3,30 @@
 	"version": "1.0.0",
 	"main": "main.js",
 	"devDependencies": {
-		"electron": "^3.0.6"
+		"electron": "^3.0.6",
+		"electron-builder": "^20.40.2"
 	},
 	"scripts": {
-		"start": "electron ."
+		"start": "electron .",
+		"dist" :"build"
 	},
 	"dependencies": {
 		"ajax-request": "^1.2.3"
+	},
+	"build": {
+		"appId":"com.intrida.xCheckStudioApp",
+		"productName":"xCheckStudio App",
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"icon": "build/coffee-icon (1).ico"
+		},
+		"nsis":{
+			"installerIcon" : "build/coffee-icon (1).ico",
+			"uninstallerIcon" : "build/coffee-icon (1).ico",
+			"runAfterFinish" : false
+		}
 	}
+	
 }

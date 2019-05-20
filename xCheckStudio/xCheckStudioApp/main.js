@@ -1,19 +1,23 @@
 const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-//const path = require("path");
+const path = require("path");
 //const url = require("url");
+let host = null;
 
 let win;
 function createWindow()
 {
 
-    win = new BrowserWindow({title:'xCheckStudio'});
+    win = new BrowserWindow({title:'xCheckStudio', show: false});
+    win.maximize();
+    win.show();
     
-    win.loadURL('http://172.16.16.113:11180/xCheckStudio.html');
+    var serverDetailsPageUrl = path.join(__dirname, 'index.html');
+    win.loadURL(serverDetailsPageUrl);
 
-   //win.setMenu(null);    
-    win.webContents.openDevTools();
+    //win.setMenu(null);    
+   
     win.on('closed', ()=>{
         win = null;
     })
