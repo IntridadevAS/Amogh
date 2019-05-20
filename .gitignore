@@ -1,0 +1,8 @@
+HOOPS_Communicator_2018_SP2/
+HOOPS_Communicator_2019/
+php-7.2.11-nts-Win32-VC15-x64/
+*.dll
+*.tx
+*.scs
+*.prc
+*.db
