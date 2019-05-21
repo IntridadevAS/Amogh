@@ -217,15 +217,24 @@
                                                   $sourceBGroupName)) 
                             {
                                             
-                               if (componentClassExists($sourceAClassName, 
-                                                        NULL, 
-                                                        $checkCaseGroup, 
-                                                        $sourceAGroupName,
-                                                        NULL)) 
-                                    {                                                                     
+                               if ($orderMaintained == 'true' && componentClassExists($sourceAClassName, 
+                                    NULL, 
+                                    $checkCaseGroup, 
+                                    $sourceAGroupName,
+                                    NULL)) 
+                                    {                                                          
                                         $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                         $componentGroupMapped = true;
-                                    }                                            
+                                    } 
+                                if ($orderMaintained == 'false' && componentClassExists(NULL, 
+                                    $sourceBClassName, 
+                                    $checkCaseGroup, 
+                                    NULL,
+                                    $sourceBGroupName)) 
+                                {
+                                    $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                    $componentGroupMapped = true;
+                                }                                         
 
                                     continue;
                             }
@@ -390,17 +399,25 @@
                 
                         // check if component exists in checkCaseGroup
                         if (!componentClassExists($sourceAClassName, 
-                                                $sourceBClassName,
-                                                $checkCaseGroup, 
-                                                $sourceAGroupName,
-                                                $sourceBGroupName)) 
+                                                  $sourceBClassName,
+                                                  $checkCaseGroup, 
+                                                  $sourceAGroupName,
+                                                  $sourceBGroupName)) 
                         {
-                            
-                            if (componentClassExists(NULL, 
+                            if ($orderMaintained == 'true' && componentClassExists(NULL, 
                                                     $sourceBClassName, 
                                                     $checkCaseGroup, 
                                                     NULL,
                                                     $sourceBGroupName)) 
+                            {
+                                $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                $componentGroupMapped = true;
+                            }
+                            if ($orderMaintained == 'false' && componentClassExists($sourceAClassName, 
+                                                    NULL, 
+                                                    $checkCaseGroup, 
+                                                    $sourceAGroupName,
+                                                    NULL)) 
                             {
                                 $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                 $componentGroupMapped = true;
@@ -410,10 +427,10 @@
 
                         // get check case component
                         $checkCaseComponentClass = getComponentClass($sourceAClassName, 
-                                                                    $sourceBClassName,
-                                                                    $checkCaseGroup, 
-                                                                    $sourceAGroupName,
-                                                                    $sourceBGroupName);
+                                                                     $sourceBClassName,
+                                                                     $checkCaseGroup, 
+                                                                     $sourceAGroupName,
+                                                                     $sourceBGroupName);
 
                         $componentGroupMapped  =  true;
                         // create or get check component group
@@ -797,7 +814,6 @@
                         if ($sourceBClassName == NULL &&
                         $sourceAClassName != NULL &&
                         strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName)) {
-
                         return true;
                         }
 
