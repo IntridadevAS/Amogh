@@ -1,7 +1,7 @@
-function DBReader(sourceType)
+function DBReader(sourceType, checkType)
 {
     this.SourceType = sourceType;
-
+    this.checkType = checkType;
     this.global_wb = "";
     this.containerId = "";
     this.sourceProperties = [];
@@ -14,6 +14,7 @@ DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
     this.containerId = containerId;
     this.ProcessDbData(Db_data);
     this.addComponentsToDB(viewerContainer);
+    checkIsOrderMaintained(_this.SourceType, _this.checkType);
     this.dbmodelbrowser.createModelBrowserTable(this.dbdata, containerId);
 }
 

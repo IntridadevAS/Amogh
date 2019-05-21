@@ -693,13 +693,13 @@ function CreateNewTab() {
 
 function readExcelDataSource(file,
     viewerContainer,
-    modelTreeContainer) {
+    modelTreeContainer, checkType) {
 
     let fileName = file.name;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
     if (!xCheckStudioInterface1) {
-        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer, viewerContainer);
     }
     else {
@@ -972,11 +972,60 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
-function checkIsOrderMaintained(sourceAType)
+function checkIsOrderMaintained(sourceAType, checkType)
 {
-    if(xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
+    if(checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
     {
         checkCaseManager.orderMaintained = 'false';
+    }
+    else if(checkType)
+    {
+        var checkCaseType = checkType;
+        outer_loop:
+        for(var i = 0; i < checkCaseType.ComponentGroups.length; i++)
+        {
+            var ComponentGroup = checkCaseType.ComponentGroups[i];
+            for(var j = 0; j < ComponentGroup.ComponentClasses.length; j++)
+            {
+                var componentClass = ComponentGroup.ComponentClasses[j];
+                for (var sourceAMatchwithPropertyName in componentClass.MatchwithProperties)
+                {
+                    var sourceBMatchwithPropertyName = componentClass.MatchwithProperties[sourceAMatchwithPropertyName];
+                    for(var genericObject in xCheckStudioInterface1.sourceProperties)
+                    { 
+                        if(xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceAName)
+                        {
+                            if(xCheckStudioInterface1.sourceProperties[genericObject].SubComponentClass == componentClass.SourceAName)
+                            {
+                                for(var l = 0; l < xCheckStudioInterface1.sourceProperties[genericObject].properties.length; l++)
+                                {
+                                    var genericComponent = xCheckStudioInterface1.sourceProperties[genericObject].properties[l];
+                                    if(genericComponent.Name == sourceAMatchwithPropertyName)
+                                    {
+                                        continue;
+                                    }
+                                    else if(genericComponent.Name == sourceBMatchwithPropertyName)
+                                    {
+                                        checkCaseManager.orderMaintained = 'false';
+                                        break outer_loop;
+                                    }
+                                }
+                            }
+                            else if(xCheckStudioInterface1.sourceProperties[genericObject].SubComponentClass == componentClass.SourceBName)
+                            {
+                                checkCaseManager.orderMaintained = 'false';
+                                break outer_loop;
+                            }
+                        }
+                        else if(xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceBName)
+                        {
+                            checkCaseManager.orderMaintained = 'false';
+                            break outer_loop;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1044,9 +1093,7 @@ function loadExcelDataSource(fileExtension,
     }
     readExcelDataSource(file[0],
         viewerContainer,
-        modelTreeContainer);
-
-    checkIsOrderMaintained(sourceAType);
+        modelTreeContainer, checkType);
 
     return true;
 
@@ -1144,14 +1191,13 @@ function loadModel(fileName,
                     };
 
                     if (viewerContainer === "viewerContainer1") {
-                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
                         xCheckStudioInterface1.setupViewer(viewerOptions, true);
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
                     }
-                    checkIsOrderMaintained(sourceAType);
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
                     return true;
                 }
@@ -1449,8 +1495,7 @@ function loadDbDataSource(fileExtension,
                     if (success) {
                         readDbDataSource(uri, file[0],
                             viewerContainer,
-                            modelTreeContainer);
-                            checkIsOrderMaintained(SourceAType);
+                            modelTreeContainer, checkType);
                 }
                 else {
                     document.getElementById(formId).reset();
@@ -1491,7 +1536,7 @@ function readDbDataSource(uri, file,
         },
     });
     if (!xCheckStudioInterface1) {
-        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
     }
     else {

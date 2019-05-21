@@ -3,8 +3,9 @@ var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
 
-        function xCheckStudioInterface(sourceType) {
+        function xCheckStudioInterface(sourceType, checkType) {
             this.SourceType = sourceType;
+            this.checkType = checkType;
 
             this._selectedNodeId = null;
             //this._selectedComponentId = null;
@@ -20,14 +21,14 @@ var xCheckStudio;
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
-            this.excelReader = new ExcelReader(this.SourceType);
+            this.excelReader = new ExcelReader(this.SourceType, this.checkType);
             this.excelReader.ReadFileData(file, containerId, viewerContainer);
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
         xCheckStudioInterface.prototype.readDbFileData = function (Db_data, containerId, viewerContainer)
         {
-            this.db_reader = new DBReader(this.SourceType);
+            this.db_reader = new DBReader(this.SourceType, this.checkType);
             this.db_reader.ReadDBData(Db_data, containerId, viewerContainer);
             this.sourceProperties = this.db_reader.sourceProperties;
         }
@@ -394,6 +395,7 @@ var xCheckStudio;
                             
                             // add components to database
                             _this.addComponentsToDB();
+                            checkIsOrderMaintained(_this.SourceType, _this.checkType);
                         }
                     });
                 }

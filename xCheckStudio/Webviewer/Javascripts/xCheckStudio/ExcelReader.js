@@ -4,9 +4,9 @@ if(typeof(require) !=='undefined')
     XLSX = require('xlsx');
 }
 
-function ExcelReader(sourceType) {
+function ExcelReader(sourceType, checkType) {
     this.SourceType = sourceType;
-
+    this.checkType = checkType;
     this.global_wb = "";
     this.containerId = "";
     this.sourceProperties = [];
@@ -37,6 +37,7 @@ ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
         _this.ReadSheetData(sheetName);
     });
     this.addComponentsToDB(viewerContainer);
+    checkIsOrderMaintained(_this.SourceType, _this.checkType);
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 };

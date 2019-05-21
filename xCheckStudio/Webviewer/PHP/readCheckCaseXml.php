@@ -70,7 +70,7 @@ foreach($checkTypeElements as $checkTypeElement)
         if($sourceAGroupName == NULL)
         {
             $sourceAGroupName = $componentGroupElement->getAttribute('sourceAGroupName');
-            $sourceBGroupName = $componentGroupElement->getAttribute('sourceAGroupName');
+            $sourceBGroupName = $componentGroupElement->getAttribute('sourceBGroupName');
         }
 
         $checkCaseComponentGroup = new checkCaseComponentGroup($sourceAGroupName, $sourceBGroupName);
