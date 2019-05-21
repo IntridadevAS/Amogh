@@ -167,7 +167,6 @@ function onCheckButtonClick() {
             checkPerformed = true;
         }
     }
-<<<<<<< HEAD
     if(xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1"))
     {
         if(dataSourceOrderMaintained == 'true')
@@ -189,26 +188,12 @@ function onCheckButtonClick() {
             }
             studioInterface = xCheckStudioInterface1; 
             sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
-=======
-    if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) {
-        checkType = checkcase.getCheckType("ComplianceSourceA");
-        if (checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface1.SourceType.toLowerCase())
-        }
-        else if (!checkType) {
-            checkType = checkcase.getCheckType("Compliance");
->>>>>>> Updated code to open saved projects.
         }
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         if (!sourceAModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-<<<<<<< HEAD
        
-=======
-        studioInterface = xCheckStudioInterface1;
-        sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
->>>>>>> Updated code to open saved projects.
 
         if (sourceAModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
@@ -229,7 +214,6 @@ function onCheckButtonClick() {
             }
         }
     }
-<<<<<<< HEAD
     if(xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1"))
     {
         if(dataSourceOrderMaintained == 'true')
@@ -251,26 +235,12 @@ function onCheckButtonClick() {
             }
             studioInterface = xCheckStudioInterface2; 
             sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
-=======
-    if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) {
-        checkType = checkcase.getCheckType("ComplianceSourceB");
-        if (checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface2.SourceType.toLowerCase())
-        }
-        else if (!checkType) {
-            checkType = checkcase.getCheckType("Compliance");
->>>>>>> Updated code to open saved projects.
         }
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
         if (!sourceBModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-<<<<<<< HEAD
         
-=======
-        studioInterface = xCheckStudioInterface2;
-        sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
->>>>>>> Updated code to open saved projects.
 
         if (sourceBModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
@@ -291,7 +261,7 @@ function onCheckButtonClick() {
             }
         }
     }
-
+        
     // hide busy spinner
     busySpinner.classList.remove('show');
     if (!checkPerformed) {
@@ -431,6 +401,246 @@ function setProjectName() {
         }
     });
 }
+
+// function postData(url, method) {
+//     // remove post data js files from server from earlier check results, if any
+//     $.ajax({
+//         data: '',
+//         url: 'postData/postDataCleaner.php',
+//         method: 'POST', // or GET
+//         async: false,
+//         success: function (msg) {
+//             //alert('Post Data files deleted');
+//         }
+//     });
+
+//     checkCaseName = checkCaseManager.CheckCase.Name;
+
+//     var sourceAClasswiseCheckedComponents = 0;
+//     var sourceBClasswiseCheckedComponents = 0;
+
+//     var sourceAModelTree;
+//     var sourceBModelTree;
+//     if (xCheckStudioInterface1) {
+//         sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
+//         sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+//     }
+
+//     if (xCheckStudioInterface2) {
+//         sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
+//         sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+//     }
+
+//     var sourceAClassWiseComponets = 0;
+//     var sourceBClassWiseComponets = 0;
+
+//     if (sourceAModelTree) {
+//         var count = sourceAModelTree.selectedCompoents.length;
+//         sourceACheckedItemCount = count > 0 ? count : 0;
+//         sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
+//     }
+//     if (sourceBModelTree) {
+//         var count = sourceBModelTree.selectedCompoents.length;
+//         sourceBCheckedItemCount = count > 0 ? count : 0;
+//         sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+//         // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+//     }
+
+//     var analyticsDetailsData = new AnalyticsData(checkCaseName, sourceAFileName, sourceBFileName,
+//         sourceATotalItemCount, sourceACheckedItemCount,
+//         sourceBTotalItemCount, sourceBCheckedItemCount,
+//         sourceAClasswiseCheckedComponents,
+//         sourceBClasswiseCheckedComponents,
+//         sourceAClassWiseComponets,
+//         sourceBClassWiseComponets);
+
+
+//     $.ajax({
+//         url: 'PHP/analyticsDetailsDataWriter.php',
+//         type: "POST",
+//         async: false,
+//         data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+//         success: function (data) {
+//             // alert("success");
+//         }
+//     });
+
+//     // post comparison data
+//     if (comparisonCheckManager) {
+//         $.ajax({
+//             url: 'PHP/comparisonCheckpostDataWriter.php',
+//             type: "POST",
+//             async: false,
+//             data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+//             success: function (data) {
+//                 // alert("success");
+//                 //$("#result").html(data);
+//             }
+//         });
+//     }
+
+//     // post source A compliance data
+//     if (sourceAComplianceCheckManager) {
+//         $.ajax({
+//             url: 'PHP/sourceAComplianceDataWriter.php',
+//               type: "POST",
+//             async: false,
+//             data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
+//             success: function (data) {
+//                 //alert("success");
+//                 //$("#result").html(data);
+//             }
+//         });
+//     }
+
+//     // post source B compliance data
+//     if (sourceBComplianceCheckManager) {
+//         $.ajax({
+//             url: 'PHP/sourceBComplianceDataWriter.php',
+//             type: "POST",
+//             async: false,
+//             data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+//             success: function (data) {
+//             }
+//         });
+//     }
+
+//     // post source A viewer data
+//     if (xCheckStudioInterface1) {
+//         if (xCheckStudioInterface1.SourceType.toLowerCase() === "xml" ||
+//             xCheckStudioInterface1.SourceType.toLowerCase() === "rvm" ||
+//             xCheckStudioInterface1.SourceType.toLowerCase() === "sldasm" ||
+//             xCheckStudioInterface1.SourceType.toLowerCase() === "dwg" ||
+//             xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+//             //virewer container Data
+//             var viewerOptions = [];
+//             viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
+//             viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
+
+//             $.ajax({
+//                 url: 'PHP/sourceAViewerDataWriter.php',
+//                 type: "POST",
+//                 async: false,
+//                 data: {
+//                     "SourceAViewerData": JSON.stringify(viewerOptions)
+//                 },
+//                 success: function (msg) {
+//                         //alert("success");
+//                         //$("#result").html(data);
+//                     }
+//             })
+
+//             // postnode id and component data relation
+//             if (xCheckStudioInterface1.nodeIdVsComponentData) {
+//                 $.ajax({
+//                     url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
+//                     type: "POST",
+//                     async: false,
+//                     data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+//                     success: function (data) {
+//                         //alert("success");
+//                         //$("#result").html(data);
+//                     }
+//                 });
+//             }
+
+//             if (xCheckStudioInterface1.componentIdVsComponentData) {
+//                 $.ajax({
+//                     url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
+//                     type: "POST",
+//                     async: false,
+//                     data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+//                     success: function (data) {
+//                         //alert("success");
+//                         //$("#result").html(data);
+//                     }
+//                 });
+//             }
+//         }
+
+//         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls") {
+
+//             $.ajax({
+//                 url: 'PHP/SourceASheetDataWriter.php',
+//                 type: "POST",
+//                 async: false,
+//                 data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
+//                 success: function (data) {
+//                     //alert("success");
+//                     //$("#result").html(data);
+//                 }
+//             });
+//         }
+
+//     }
+
+//     if (xCheckStudioInterface2) {
+//         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
+//             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
+//             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
+//             xCheckStudioInterface2.SourceType.toLowerCase() === "dwg" ||
+//             xCheckStudioInterface1.SourceType.toLowerCase() === "sldprt") {
+//             //virewer container Data
+//             var viewerOptions = [];
+//             viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
+//             viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
+
+//             $.ajax({
+//                 url: 'PHP/sourceBViewerDataWriter.php',
+//                 type: "POST",
+//                 async: false,
+//                 data: { "SourceBViewerData": JSON.stringify(viewerOptions) },
+//                 success: function (data) {
+//                     //alert("success");
+//                     //$("#result").html(data);
+//                 }
+//             });
+
+
+//             // postnode id and component data relation
+//             if (xCheckStudioInterface2.nodeIdVsComponentData) {
+//                 $.ajax({
+//                     url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
+//                     type: "POST",
+//                     async: false,
+//                     data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+//                     success: function (data) {
+//                         //alert("success");
+//                         //$("#result").html(data);
+//                     }
+//                 });
+//             }
+
+//             if (xCheckStudioInterface2.componentIdVsComponentData) {
+//                 $.ajax({
+//                     url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
+//                     type: "POST",
+//                     async: false,
+//                     data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+//                     success: function (data) {
+//                         //alert("success");
+//                         //$("#result").html(data);
+//                     }
+//                 });
+//             }
+
+//         }
+
+//         else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls") {
+
+//             $.ajax({
+//                 url: 'PHP/SourceBSheetDataWriter.php',
+//                 type: "POST",
+//                 async: false,
+//                 data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
+//                 success: function (data) {
+//                     //alert("success");
+//                     //$("#result").html(data);
+//                 }
+//             });
+//         }
+//     }
+// }
 
 function CreateNewTab() {
     var parent = document.getElementById("tab2Parent");
@@ -618,7 +828,7 @@ window.onclick = function (event) {
     }
     var i = document.getElementById("menu").style;
     if (i.visibility === "visible") {
-        i.visibility = "hidden";
+        i.visibility = "hidden";        
     }
 }
 
@@ -652,23 +862,23 @@ function loadDataSource(event,
             OnShowToast('Valid data source not found');
             return;
         }
-        else {
+        else{
             addTabHeaders(modelTreeContainer, data.target.response);
             var fileExtension = xCheckStudio.Util.getFileExtension(data.target.response).toLowerCase();
-            uploadAndLoadModel(fileExtension,
-                data.target.response,
-                viewerContainer,
-                modelTreeContainer,
-                dataSource,
-                formId,
-                event.target.files);
+            uploadAndLoadModel(fileExtension, 
+                              data.target.response,
+                              viewerContainer, 
+                              modelTreeContainer, 
+                              dataSource, 
+                              formId, 
+                              event.target.files);
         }
     };
     var formData = new FormData(document.getElementById(formId));
     xhr.send(formData);
 }
 
-function addTabHeaders(modelTreeContainer, fileName) {
+function addTabHeaders(modelTreeContainer, fileName){
     var tabHeader;
     if (modelTreeContainer === "modelTree1") {
         tabHeader = document.getElementById("dataSource1ModelBrowserTab");
@@ -685,69 +895,70 @@ function addTabHeaders(modelTreeContainer, fileName) {
     tabHeader.innerText = fileName;
 }
 
-function uploadAndLoadModel(fileExtension, fileName, viewerContainer, modelTreeContainer, dataSource, formId, files) {
-    if (fileExtension.toLowerCase() === "xml" ||
-        fileExtension.toLowerCase() === "rvm" ||
-        fileExtension.toLowerCase() === "sldasm" ||
-        fileExtension.toLowerCase() === "dwg" ||
-        fileExtension.toLowerCase() === "sldprt" ||
-        fileExtension.toLowerCase() === "rvt" ||
-        fileExtension.toLowerCase() === "rfa" ||
-        fileExtension.toLowerCase() === "ifc" ||
-        fileExtension.toLowerCase() === "step" ||
-        fileExtension.toLowerCase() === "stp" ||
-        fileExtension.toLowerCase() === "ste" ||
-        fileExtension.toLowerCase() === "json" ||
-        fileExtension.toLowerCase() === "igs") {
-        var busySpinner = document.getElementById("divLoading");
-        busySpinner.className = 'show';
+function uploadAndLoadModel(fileExtension, fileName,viewerContainer, modelTreeContainer, dataSource, formId, files)
+        {
+            if (fileExtension.toLowerCase() === "xml" ||
+                fileExtension.toLowerCase() === "rvm" ||
+                fileExtension.toLowerCase() === "sldasm" ||
+                fileExtension.toLowerCase() === "dwg" ||
+                fileExtension.toLowerCase() === "sldprt" ||
+                fileExtension.toLowerCase() === "rvt" ||
+                fileExtension.toLowerCase() === "rfa" ||
+                fileExtension.toLowerCase() === "ifc" ||
+                fileExtension.toLowerCase() === "step" ||
+                fileExtension.toLowerCase() === "stp" ||
+                fileExtension.toLowerCase() === "ste" ||
+                fileExtension.toLowerCase() === "json" ||
+                fileExtension.toLowerCase() === "igs") {
+                var busySpinner = document.getElementById("divLoading");
+                busySpinner.className = 'show';
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "uploads/uploadfiles.php", true);
-        xhr.onload = function (event) {
-            if (fileExtension.toLowerCase() === "json") {
-                if (loadDbDataSource(fileExtension,
-                    files,
-                    viewerContainer,
-                    modelTreeContainer)) {
-                    hideLoadButton(modelTreeContainer);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "uploads/uploadfiles.php", true);
+                xhr.onload = function (event) {
+                    if (fileExtension.toLowerCase() === "json") {
+                            if (loadDbDataSource(fileExtension,
+                            files,
+                            viewerContainer,
+                            modelTreeContainer)) {
+                            hideLoadButton(modelTreeContainer);
+                        }
+                    }
+                    else {
+                    loadModel(fileName, 
+                              viewerContainer, 
+                              modelTreeContainer, formId);    
+                    }       
+                  
+                    busySpinner.classList.remove('show')
+                };
+                var formData = new FormData(document.getElementById(formId));
+                formData.append('viewerContainer', viewerContainer);
+
+                var convertToSCS = 'true';
+                if (fileExtension.toLowerCase() === "json") {
+                    convertToSCS = 'false';
+                }
+                formData.append('ConvertToSCS', convertToSCS);
+                xhr.send(formData);
+
+            }
+            else if (fileExtension.toLowerCase() === "xls") {
+                {
+                    if (loadExcelDataSource(fileExtension,
+                        files,
+                        viewerContainer,
+                        modelTreeContainer)) {
+                        hideLoadButton(modelTreeContainer);
+                    }
                 }
             }
-            else {
-                loadModel(fileName,
-                    viewerContainer,
-                    modelTreeContainer, formId);
-            }
-
-            busySpinner.classList.remove('show')
-        };
-        var formData = new FormData(document.getElementById(formId));
-        formData.append('viewerContainer', viewerContainer);
-
-        var convertToSCS = 'true';
-        if (fileExtension.toLowerCase() === "json") {
-            convertToSCS = 'false';
+            // else if (fileExtension.toLowerCase() === "json") {
+            //     {
+                   
+            //     }
+            // }
         }
-        formData.append('ConvertToSCS', convertToSCS);
-        xhr.send(formData);
-
-    }
-    else if (fileExtension.toLowerCase() === "xls") {
-        {
-            if (loadExcelDataSource(fileExtension,
-                files,
-                viewerContainer,
-                modelTreeContainer)) {
-                hideLoadButton(modelTreeContainer);
-            }
-        }
-    }
-    // else if (fileExtension.toLowerCase() === "json") {
-    //     {
-
-    //     }
-    // }
-}
 
 function hideLoadButton(modelTreeContainer) {
     if (modelTreeContainer === "modelTree1") {
@@ -843,31 +1054,37 @@ function loadExcelDataSource(fileExtension,
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-
+    
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -889,7 +1106,7 @@ function loadModel(fileName,
         alert("CheckCaseManager not found.");
         return false;
     }
-
+   
     // formId = undefined;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
@@ -914,23 +1131,19 @@ function loadModel(fileName,
     }
 
     if (viewerContainer === "viewerContainer1") {
-<<<<<<< HEAD
         if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) 
             {
-=======
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
->>>>>>> Updated code to open saved projects.
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -938,15 +1151,18 @@ function loadModel(fileName,
 
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -956,7 +1172,7 @@ function loadModel(fileName,
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 
     $.ajax({
-        data: { 'viewerContainer': viewerContainer, 'fileName': fileName, 'dataSourceType': '3D' },
+        data: { 'viewerContainer': viewerContainer, 'fileName' : fileName, 'dataSourceType' : '3D' },
         type: "POST",
         url: "PHP/GetSourceFilePath.php"
     }).done(function (uri) {
@@ -965,7 +1181,7 @@ function loadModel(fileName,
             // uri contains SCS file path, so load
             xCheckStudio.Util.fileExists(uri).then(function (success) {
                 if (success) {
-
+                   
                     viewerOptions = {
                         containerId: viewerContainer,
                         endpointUri: uri,
@@ -973,15 +1189,10 @@ function loadModel(fileName,
                     };
 
                     if (viewerContainer === "viewerContainer1") {
-<<<<<<< HEAD
                         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
-                        xCheckStudioInterface1.setupViewer(viewerOptions, true);
-=======
-                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface1.setupViewer(viewerOptions, true).then(function (result) {
 
                         });
->>>>>>> Updated code to open saved projects.
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
@@ -989,12 +1200,7 @@ function loadModel(fileName,
 
                         });
                     }
-<<<<<<< HEAD
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
-=======
-
-                    manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
->>>>>>> Updated code to open saved projects.
                     return true;
                 }
                 else {
@@ -1009,11 +1215,7 @@ function loadModel(fileName,
             return false;
         }
 
-<<<<<<< HEAD
     }); 
-=======
-    });
->>>>>>> Updated code to open saved projects.
 
     return true;
 }
@@ -1066,7 +1268,7 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                     xCheckStudioInterface1.SourceType.toLowerCase() === "ste" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "rvt" ||
                     xCheckStudioInterface1.SourceType.toLowerCase() === "igs") {
-
+                        
 
                     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(xCheckStudioInterface1.SourceType,
                         row.cells[modelBrowserMainClassColumn].textContent.trim());
@@ -1075,7 +1277,7 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
 
                     checkedComponent['Name'] = row.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent['MainComponentClass'] = row.cells[modelBrowserMainClassColumn].textContent.trim();
-                    checkedComponent['ComponentClass'] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                    checkedComponent['ComponentClass'] = row.cells[modelBrowserSubClassColumn].textContent.trim();                                                      
                     checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     if (checkBoxId === "checkAllSourceACB" &&
@@ -1132,7 +1334,7 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                     var checkedComponent = {};
                     checkedComponent["Name"] = row.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent["MainComponentClass"] = row.cells[modelBrowserMainClassColumn].textContent.trim();
-                    checkedComponent["ComponentClass"] = row.cells[modelBrowserSubClassColumn].textContent.trim();
+                    checkedComponent["ComponentClass"] = row.cells[modelBrowserSubClassColumn].textContent.trim();    
                     checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     if (checkBoxId === "checkAllSourceBCB" &&
@@ -1164,9 +1366,9 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                     };
 
                     if (checkBoxId === "checkAllSourceBCB" &&
-                        xCheckStudioInterface2 &&
+                    xCheckStudioInterface2 &&
                         !xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoentExists(row)) {
-                        xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents.push(checkedComponent);
+                            xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents.push(checkedComponent);
                     }
                 }
             }
@@ -1248,37 +1450,42 @@ function loadDbDataSource(fileExtension,
     }
 
     if (viewerContainer === "viewerContainer1") {
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-
+    
     }
     else if (viewerContainer === "viewerContainer2") {
-        if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+        if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
+            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
-        else {
-            if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+        else
+        {
+            if(sourceAType.toLowerCase() !== fileExtension.toLowerCase())
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
         }
     }
-<<<<<<< HEAD
         var fileName = file[0].name.substring(0, file[0].name.lastIndexOf('.'));
         $.ajax({
             data: { 'viewerContainer': viewerContainer, 'fileName' : fileName, 'dataSourceType' : '1D' },
@@ -1291,20 +1498,6 @@ function loadDbDataSource(fileExtension,
                         readDbDataSource(uri, file[0],
                             viewerContainer,
                             modelTreeContainer, checkType);
-=======
-    var fileName = file[0].name.substring(0, file[0].name.lastIndexOf('.'));
-    $.ajax({
-        data: { 'viewerContainer': viewerContainer, 'fileName': fileName, 'dataSourceType': '1D' },
-        type: "POST",
-        url: "PHP/GetSourceFilePath.php"
-    }).done(function (uri) {
-        if (uri !== 'fail') {
-            xCheckStudio.Util.fileExists(uri).then(function (success) {
-                if (success) {
-                    readDbDataSource(uri, file[0],
-                        viewerContainer,
-                        modelTreeContainer);
->>>>>>> Updated code to open saved projects.
                 }
                 else {
                     document.getElementById(formId).reset();
@@ -1318,7 +1511,7 @@ function loadDbDataSource(fileExtension,
             return false;
         }
     });
-
+   
     return true;
 
 }
@@ -1328,20 +1521,20 @@ function readDbDataSource(uri, file,
     modelTreeContainer) {
 
     let fileName = file.name;
-    var uri = "../" + uri;
+    var uri = "../" +  uri;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
     Db_data = new Array();
     $.ajax({
-        url: 'PHP/PDOConnectionForDatabases.php',
-        type: 'POST',
+        url:'PHP/PDOConnectionForDatabases.php',
+        type:'POST',
         dataType: 'JSON',
-        data: ({ uri: uri }),
+        data: ({uri : uri}),
         async: false,
-        success: function (data) {
+        success: function (data) {                   
             Db_data = data;
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
         },
     });
     if (!xCheckStudioInterface1) {
@@ -1355,7 +1548,113 @@ function readDbDataSource(uri, file,
 }
 
 function postData() {
+    // remove post data js files from server from earlier check results, if any
+    // $.ajax({
+    //     data: '',
+    //     url: 'postData/postDataCleaner.php',
+    //     method: 'POST', // or GET
+    //     async: false,
+    //     success: function (msg) {
+    //         //alert('Post Data files deleted');
+    //     }
+    // });
 
+    // checkCaseName = checkCaseManager.CheckCase.Name;
+
+    // var sourceAClasswiseCheckedComponents = 0;
+    // var sourceBClasswiseCheckedComponents = 0;
+
+    // var sourceAModelTree;
+    // var sourceBModelTree;
+    // if (xCheckStudioInterface1) {
+    //     sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
+    //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
+    // }
+
+    // if (xCheckStudioInterface2) {
+    //     sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
+    //     sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
+    // }
+
+    // var sourceAClassWiseComponets = 0;
+    // var sourceBClassWiseComponets = 0;
+
+    // if (sourceAModelTree) {
+    //     var count = sourceAModelTree.selectedCompoents.length;
+    //     sourceACheckedItemCount = count > 0 ? count : 0;
+    //     sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
+    // }
+    // if (sourceBModelTree) {
+    //     var count = sourceBModelTree.selectedCompoents.length;
+    //     sourceBCheckedItemCount = count > 0 ? count : 0;
+    //     sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
+    //     // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
+    // }
+
+    // var analyticsDetailsData = new AnalyticsData(checkCaseName,
+    //     sourceAFileName,
+    //     sourceBFileName,
+    //     sourceATotalItemCount,
+    //     sourceACheckedItemCount,
+    //     sourceBTotalItemCount,
+    //     sourceBCheckedItemCount,
+    //     sourceAClasswiseCheckedComponents,
+    //     sourceBClasswiseCheckedComponents,
+    //     sourceAClassWiseComponets,
+    //     sourceBClassWiseComponets);
+
+
+    // $.ajax({
+    //     url: 'PHP/analyticsDetailsDataWriter.php',
+    //     type: "POST",
+    //     async: true,
+    //     data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
+    //     success: function (data) {
+    //         // alert("success");
+    //     }
+    // });
+
+    // post comparison data
+    // if (comparisonCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/comparisonCheckpostDataWriter.php',
+    //         type: "POST",
+    //         async: false,
+    //         data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
+    //         success: function (data) {
+    //             // alert("success");
+    //             //$("#result").html(data);
+    //         }
+    //     });
+    // }
+
+    // // post source A compliance data
+    // if (sourceAComplianceCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/sourceAComplianceDataWriter.php',
+    //   		type: "POST",
+    //         async: false,
+    //         data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
+    //         success: function (data) {
+    //             //alert("success");
+    //             //$("#result").html(data);
+    //         }
+    //     });
+    // }
+
+    // // post source B compliance data
+    // if (sourceBComplianceCheckManager) {
+    //     $.ajax({
+    //         url: 'PHP/sourceBComplianceDataWriter.php',
+    //         type: "POST",
+    //         async: false,
+    //         data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
+    //         success: function (data) {
+    //         }
+    //     });
+    // }
+
+    
     var sourceANodeIdvsComponentIdList;
     var sourceASelectedComponents;
     var sourceBNodeIdvsComponentIdList;
@@ -1388,21 +1687,59 @@ function postData() {
                     "SourceViewerOptionsTable": "SourceAViewerOptions"
                 },
                 success: function (msg) {
+                    //alert("success");
+                    //$("#result").html(data);
                 }
             });
 
-            sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
+            sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
             sourceAType = xCheckStudioInterface1.SourceType;
+            
+            // postnode id and component data relation
+            // if (xCheckStudioInterface1.nodeIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
 
+            // if (xCheckStudioInterface1.componentIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
         }
         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls" || xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
-            sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
+            sourceANodeIdvsComponentIdList =  xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
             sourceAType = xCheckStudioInterface1.SourceType;
-        }
-
-    }
+            // $.ajax({
+            //     url: 'PHP/SourceASheetDataWriter.php',
+            //     type: "POST",
+            //     async: true,
+            //     data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
+            //     success: function (data) {
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // });
+        }     
+      
+ }
 
     if (xCheckStudioInterface2) {
         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
@@ -1436,17 +1773,53 @@ function postData() {
             });
 
 
-            sourceBNodeIdvsComponentIdList = xCheckStudioInterface2.NodeIdvsComponentIdList;
+            sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
             sourceBType = xCheckStudioInterface2.SourceType;
+
+            // // postnode id and component data relation
+            // if (xCheckStudioInterface2.nodeIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
+
+            // if (xCheckStudioInterface2.componentIdVsComponentData) {
+            //     $.ajax({
+            //         url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
+            //         type: "POST",
+            //         async: false,
+            //         data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
+            //         success: function (data) {
+            //             //alert("success");
+            //             //$("#result").html(data);
+            //         }
+            //     });
+            // }
 
         }
         else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls" || xCheckStudioInterface2.SourceType.toLowerCase() === "json") {
 
-            sourceBNodeIdvsComponentIdList = xCheckStudioInterface2.NodeIdvsComponentIdList;
+            sourceBNodeIdvsComponentIdList =  xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
             sourceBType = xCheckStudioInterface2.SourceType;
-
+            // $.ajax({
+            //     url: 'PHP/SourceBSheetDataWriter.php',
+            //     type: "POST",
+            //     async: true,
+            //     data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
+            //     success: function (data) {
+            //         //alert("success");
+            //         //$("#result").html(data);
+            //     }
+            // });
         }
     }
 
@@ -1462,16 +1835,17 @@ function postData() {
             "SourceBNodeIdvsComponentIdList": JSON.stringify(sourceBNodeIdvsComponentIdList),
             "SourceBSelectedComponents": JSON.stringify(sourceBSelectedComponents),
             "SourceAFileName": sourceAFileName,
-            "SourceBFileName": sourceBFileName,
+            "SourceBFileName":sourceBFileName,
             "SourceAType": sourceAType,
             "SourceBType": sourceBType,
-            "CheckCaseManager": JSON.stringify(checkCaseManager)
+            "CheckCaseManager": JSON.stringify(checkCaseManager)                        
         },
-        success: function (msg) {
+        success: function (msg) 
+        {
             //alert("success");
             //$("#result").html(data);
         },
-        error: function (error) {
+        error: function(error) {
             console.log(error)
         }
     });
@@ -1490,8 +1864,8 @@ function OnInfoClick() {
         sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
     }
 
-    // var sourceAClassWiseComponets = 0;
-    // var sourceBClassWiseComponets = 0;
+    var sourceAClassWiseComponets = 0;
+    var sourceBClassWiseComponets = 0;
 
     if (sourceAModelTree) {
         var count = sourceAModelTree.selectedCompoents.length;
@@ -1638,7 +2012,7 @@ function cancelreviewresults() {
     sourceAComplianceCheckManager = undefined;
     sourceBComplianceCheckManager = undefined;
     comparisonCheckManager = undefined;
-
+   
     document.getElementById("checkcompletealert").style.display = "none";
 }
 
@@ -1808,8 +2182,10 @@ function loadSourceB(viewerParams, dataSourceInfo) {
     });
 }
 
-function getDataSourceInfo() {
-    return new Promise((resolve) => {
+function getDataSourceInfo() 
+{
+    return new Promise((resolve) => 
+    {
         // read data source info
         $.ajax({
             url: 'PHP/DataSourceInfoReader.php',
