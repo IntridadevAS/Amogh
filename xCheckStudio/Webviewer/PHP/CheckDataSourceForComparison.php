@@ -217,15 +217,24 @@
                                                   $sourceBGroupName)) 
                             {
                                             
-                               if (componentClassExists($sourceAClassName, 
-                                                        NULL, 
-                                                        $checkCaseGroup, 
-                                                        $sourceAGroupName,
-                                                        NULL)) 
-                                    {                                                                            
-                                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                               if ($orderMaintained == 'true' && componentClassExists($sourceAClassName, 
+                                    NULL, 
+                                    $checkCaseGroup, 
+                                    $sourceAGroupName,
+                                    NULL)) 
+                                    {                                                          
+                                        $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                         $componentGroupMapped = true;
-                                    }                                            
+                                    } 
+                                if ($orderMaintained == 'false' && componentClassExists(NULL, 
+                                    $sourceBClassName, 
+                                    $checkCaseGroup, 
+                                    NULL,
+                                    $sourceBGroupName)) 
+                                {
+                                    $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                    $componentGroupMapped = true;
+                                }                                         
 
                                     continue;
                             }
@@ -241,7 +250,7 @@
                             $componentGroupMapped = true;
 
                             // create or get check component group
-                            $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                            $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                             if ($checkComponentGroup == NULL) {
                                 continue;
                             }     
@@ -310,28 +319,27 @@
 
                         if($checkComponentGroup == NULL)
                         {
-                            $checkComponentGroup =  getCheckComponentGroup($sourceAComponent['mainclass']);
+                            $checkComponentGroup =  getCheckComponentGroup($sourceAGroupName);
                         }
                         if ($checkComponentGroup == NULL) {
                             continue;
                         }
-
                         $checkComponentGroup->AddCheckComponent($checkComponent);
                     }
                 }  
                 
-                
+
                 // compare checked properties from source B with corresponding source A properties                
                 foreach ($SourceBComponents as $id => $sourceBComponent) 
                 {                   
                     // check if this component is already compared. If yes, then do nothing
-                    $componentCompared = false;              
-                    
-                    $compKey = $sourceBComponent['id'];     
+                    $componentCompared = false;
+
+                    $compKey = $sourceBComponent['id'];   
                     if(isset($comparedSourceBComponents[$compKey]))
                     {
                         $componentCompared = true;
-                        break;
+                        continue;
                     }
                     if ($componentCompared) 
                     {
@@ -341,7 +349,7 @@
                     // check is component is selected or not for performing check
                     if(!isComponentSelected($sourceBComponent, $SourceBSelectedComponents)) 
                     {
-                        //source A component not checked    
+                        //source A component not checked   
                         $compKey = $sourceBComponent['id'];     
                         if(!isset($SourceBNotCheckedComponents[$compKey]))
                         {
@@ -391,35 +399,42 @@
                 
                         // check if component exists in checkCaseGroup
                         if (!componentClassExists($sourceAClassName, 
-                                                $sourceBClassName,
-                                                $checkCaseGroup, 
-                                                $sourceAGroupName,
-                                                $sourceBGroupName)) 
+                                                  $sourceBClassName,
+                                                  $checkCaseGroup, 
+                                                  $sourceAGroupName,
+                                                  $sourceBGroupName)) 
                         {
-                            
-                            if (componentClassExists(NULL, 
+                            if ($orderMaintained == 'true' && componentClassExists(NULL, 
                                                     $sourceBClassName, 
                                                     $checkCaseGroup, 
                                                     NULL,
                                                     $sourceBGroupName)) 
                             {
-                                $checkComponentGroup = getCheckComponentGroup($sourceAComponent["mainclass"] . "-" . $sourceBComponent["mainclass"]);
+                                $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                 $componentGroupMapped = true;
                             }
-
+                            if ($orderMaintained == 'false' && componentClassExists($sourceAClassName, 
+                                                    NULL, 
+                                                    $checkCaseGroup, 
+                                                    $sourceAGroupName,
+                                                    NULL)) 
+                            {
+                                $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                $componentGroupMapped = true;
+                            }
                             continue;
                         }
 
                         // get check case component
                         $checkCaseComponentClass = getComponentClass($sourceAClassName, 
-                                                                    $sourceBClassName,
-                                                                    $checkCaseGroup, 
-                                                                    $sourceAGroupName,
-                                                                    $sourceBGroupName);
+                                                                     $sourceBClassName,
+                                                                     $checkCaseGroup, 
+                                                                     $sourceAGroupName,
+                                                                     $sourceBGroupName);
 
                         $componentGroupMapped  =  true;
                         // create or get check component group
-                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent["mainclass"] . "-" . $sourceBComponent["mainclass"]);
+                        $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                         if ($checkComponentGroup == NULL) 
                         {
                             continue;
@@ -432,7 +447,7 @@
                                             $checkCaseComponentClass['MatchwithProperties'])) {
                             // source A componenet is not checked and source b component is checked
                             // both components are not match
-                            // push source b component to src B not matched array                         
+                            // push source b component to src B not matched array
                             if(!isset($SourceBNotMatchedComponents[$compKey]))
                             {
                                 $SourceBNotMatchedComponents[$compKey] = $sourceBComponent;                                                   
@@ -452,11 +467,11 @@
                         $componentMatchFound = true;
 
                         // create checkcomponent object
-                        $checkComponent = new CheckComponent($sourceAComponent["name"],
-                                                            $sourceBComponent["name"],
-                                                            $sourceAComponent["subclass"],
-                                                            $sourceAComponent["nodeid"],
-                                                            $sourceBComponent["nodeid"]);
+                        $checkComponent = new CheckComponent($sourceAComponent['name'],
+                                                            $sourceBComponent['name'],
+                                                            $sourceAComponent['subclass'],
+                                                            $sourceAComponent['nodeid'],
+                                                            $sourceBComponent['nodeid']);
                         $checkComponentGroup->AddCheckComponent($checkComponent);
 
                         for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) {
@@ -477,12 +492,11 @@
                     if (!$componentMatchFound && $componentGroupMapped) {
                         $checkComponent = getNoMatchComponent($sourceBComponent, $checkCaseComponentClass, false);
                         if ($checkComponentGroup === NULL) {
-                            $checkComponentGroup = getCheckComponentGroup($sourceBComponent["mainclass"]);
+                            $checkComponentGroup = getCheckComponentGroup($sourceBGroupName);
                         }
                         if ($checkComponentGroup == NULL) {
                             continue;
                         }
-
                         $checkComponentGroup->AddCheckComponent($checkComponent);
                     }
                 }
@@ -672,6 +686,7 @@
 
                         global  $SourceAProperties;
                         global  $SourceBProperties;
+                        global $orderMaintained;
 
                         if (count($matchwithProperties) == 0)
                          {
@@ -680,8 +695,19 @@
 
                         foreach ($matchwithProperties as $key => $value) 
                         {                                            
-                            $sourceAMatchwithPropertyName = $key;
-                            $sourceBMatchwithPropertyName = $value;
+                            // $sourceAMatchwithPropertyName = $key;
+                            // $sourceBMatchwithPropertyName = $value;
+
+                            if($orderMaintained == 'true')
+                            {
+                                $sourceAMatchwithPropertyName = $key;
+                                $sourceBMatchwithPropertyName = $value;
+                            }  
+                            else
+                            {
+                                $sourceAMatchwithPropertyName = $value;
+                                $sourceBMatchwithPropertyName = $key;
+                            }     
 
                             $sourceAComponentProperties =  $SourceAProperties[$sourceAComponent['id']];
                             $sourceBComponentProperties =  $SourceBProperties[$sourceBComponent['id']];
@@ -773,7 +799,7 @@
                                         $sourceAcomponentGroupName,
                                         $sourceBcomponentGroupName){               
 
-                    $componentClasses = $checkCaseGroup['ComponentClasses'];                    
+                    $componentClasses = $checkCaseGroup['ComponentClasses'];
                     for($classIndex = 0; $classIndex < count($componentClasses); $classIndex++)
                     {
 
@@ -788,7 +814,6 @@
                         if ($sourceBClassName == NULL &&
                         $sourceAClassName != NULL &&
                         strtolower($componentClass['SourceAName']) === strtolower($sourceAClassName)) {
-
                         return true;
                         }
 

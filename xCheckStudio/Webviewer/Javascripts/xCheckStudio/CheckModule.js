@@ -136,6 +136,7 @@ function onCheckButtonClick() {
     var studioInterface = null;
     var checkcase = new CheckCase("");
     checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
+    var dataSourceOrderMaintained = checkCaseManager.orderMaintained;
     //var checkMethod;
     if (xCheckStudioInterface1 && xCheckStudioInterface2 && comparisonCB.classList.contains("state2")) {
 
@@ -161,27 +162,39 @@ function onCheckButtonClick() {
                 xCheckStudioInterface2.sourceProperties,
                 checkType,
                 true,
-                undefined);
+                undefined,
+                dataSourceOrderMaintained);
 
             checkPerformed = true;
         }
     }
     if(xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1"))
     {
-        checkType = checkcase.getCheckType("ComplianceSourceA");
-        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface1.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface1.SourceType.toLowerCase())
-        }
-        else if(!checkType)
+        if(dataSourceOrderMaintained == 'true')
         {
-            checkType = checkcase.getCheckType("Compliance");
+            checkType = checkcase.getCheckType("ComplianceSourceA");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface1; 
+            sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+        }
+        else
+        {
+            checkType = checkcase.getCheckType("ComplianceSourceB");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface1; 
+            sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
         }
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         if (!sourceAModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-        studioInterface = xCheckStudioInterface1; 
-        sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+       
 
         if (sourceAModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
@@ -195,7 +208,8 @@ function onCheckButtonClick() {
                     undefined,
                     checkType,
                     false,
-                    studioInterface);
+                    studioInterface,
+                    dataSourceOrderMaintained);
 
                 checkPerformed = true;
             }
@@ -203,20 +217,31 @@ function onCheckButtonClick() {
     }
     if(xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1"))
     {
-        checkType = checkcase.getCheckType("ComplianceSourceB");
-        if(checkType && checkType.SourceAType.toLowerCase() !== xCheckStudioInterface2.SourceType.toLowerCase()) {
-            checkType = checkcase.getCheckTypeFromSourceType(true, xCheckStudioInterface2.SourceType.toLowerCase())
-        }
-        else if(!checkType)
+        if(dataSourceOrderMaintained == 'true')
         {
-            checkType = checkcase.getCheckType("Compliance");
+            checkType = checkcase.getCheckType("ComplianceSourceB");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface2; 
+            sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+        }
+        else
+        {
+            checkType = checkcase.getCheckType("ComplianceSourceA");
+            if(!checkType)
+            {
+                checkType = checkcase.getCheckType("Compliance");
+            }
+            studioInterface = xCheckStudioInterface2; 
+            sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
         }
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
         if (!sourceBModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
         }
-        studioInterface = xCheckStudioInterface2; 
-        sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+        
 
         if (sourceBModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
@@ -230,7 +255,8 @@ function onCheckButtonClick() {
                     undefined,
                     checkType,
                     false,
-                    studioInterface);
+                    studioInterface,
+                    dataSourceOrderMaintained);
 
                 checkPerformed = true;
             }
@@ -667,13 +693,13 @@ function CreateNewTab() {
 
 function readExcelDataSource(file,
     viewerContainer,
-    modelTreeContainer) {
+    modelTreeContainer, checkType) {
 
     let fileName = file.name;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
     if (!xCheckStudioInterface1) {
-        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer, viewerContainer);
     }
     else {
@@ -824,7 +850,8 @@ function loadDataSource(event,
 
     let selectedFiles = document.getElementById(dataSource).files;
     let selectedFilesCount = selectedFiles.length;
-    if (selectedFilesCount == 0) {
+    if (selectedFilesCount == 0) 
+    {
         document.getElementById(formId).reset();
         return;
     }
@@ -945,6 +972,63 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
+function checkIsOrderMaintained(sourceAType, checkType)
+{
+    if(checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
+    {
+        checkCaseManager.orderMaintained = 'false';
+    }
+    else if(checkType)
+    {
+        var checkCaseType = checkType;
+        outer_loop:
+        for(var i = 0; i < checkCaseType.ComponentGroups.length; i++)
+        {
+            var ComponentGroup = checkCaseType.ComponentGroups[i];
+            for(var j = 0; j < ComponentGroup.ComponentClasses.length; j++)
+            {
+                var componentClass = ComponentGroup.ComponentClasses[j];
+                for (var sourceAMatchwithPropertyName in componentClass.MatchwithProperties)
+                {
+                    var sourceBMatchwithPropertyName = componentClass.MatchwithProperties[sourceAMatchwithPropertyName];
+                    for(var genericObject in xCheckStudioInterface1.sourceProperties)
+                    { 
+                        if(xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceAName)
+                        {
+                            if(xCheckStudioInterface1.sourceProperties[genericObject].SubComponentClass == componentClass.SourceAName)
+                            {
+                                for(var l = 0; l < xCheckStudioInterface1.sourceProperties[genericObject].properties.length; l++)
+                                {
+                                    var genericComponent = xCheckStudioInterface1.sourceProperties[genericObject].properties[l];
+                                    if(genericComponent.Name == sourceAMatchwithPropertyName)
+                                    {
+                                        continue;
+                                    }
+                                    else if(genericComponent.Name == sourceBMatchwithPropertyName)
+                                    {
+                                        checkCaseManager.orderMaintained = 'false';
+                                        break outer_loop;
+                                    }
+                                }
+                            }
+                            else if(xCheckStudioInterface1.sourceProperties[genericObject].SubComponentClass == componentClass.SourceBName)
+                            {
+                                checkCaseManager.orderMaintained = 'false';
+                                break outer_loop;
+                            }
+                        }
+                        else if(xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceBName)
+                        {
+                            checkCaseManager.orderMaintained = 'false';
+                            break outer_loop;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 function loadExcelDataSource(fileExtension,
     file,
     viewerContainer,
@@ -1009,7 +1093,9 @@ function loadExcelDataSource(fileExtension,
     }
     readExcelDataSource(file[0],
         viewerContainer,
-        modelTreeContainer);
+        modelTreeContainer, checkType);
+
+    checkIsOrderMaintained(sourceAType);
 
     return true;
 
@@ -1028,16 +1114,21 @@ function loadModel(fileName,
     // formId = undefined;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
+    // iterate over checkcase types and find checktype for comparion.
+    // If found, sourceATYpe and sourceBtype from comparison checktype
+    // If comparison check type doesnt exist, get compliance check type.
     var sourceAType;
     var sourceBType;
     for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
         var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-        if (checkType.Name.toLowerCase() === "comparison") {
+        if (checkType.Name.toLowerCase() === "comparison") 
+        {
             sourceAType = checkType.SourceAType;
             sourceBType = checkType.SourceBType;
             break;
         }
-        else if (checkType.Name.toLowerCase() === "compliance") {
+        else if (checkType.Name.toLowerCase() === "compliance") 
+        {
             sourceAType = checkType.SourceAType;
             break;
         }
@@ -1047,7 +1138,8 @@ function loadModel(fileName,
         if(checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType))
         {
             if(sourceAType.toLowerCase() !== fileExtension.toLowerCase() && 
-            sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+               sourceBType.toLowerCase() !== fileExtension.toLowerCase()) 
+            {
                 alert("Data source type doesn't match with check case.");
                 return false;
             }
@@ -1101,14 +1193,13 @@ function loadModel(fileName,
                     };
 
                     if (viewerContainer === "viewerContainer1") {
-                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
                         xCheckStudioInterface1.setupViewer(viewerOptions, true);
                     }
                     else if (viewerContainer === "viewerContainer2") {
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
                     }
-
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
                     return true;
                 }
@@ -1124,7 +1215,7 @@ function loadModel(fileName,
             return false;
         }
 
-    });            
+    }); 
 
     return true;
 }
@@ -1406,7 +1497,7 @@ function loadDbDataSource(fileExtension,
                     if (success) {
                         readDbDataSource(uri, file[0],
                             viewerContainer,
-                            modelTreeContainer);
+                            modelTreeContainer, checkType);
                 }
                 else {
                     document.getElementById(formId).reset();
@@ -1447,7 +1538,7 @@ function readDbDataSource(uri, file,
         },
     });
     if (!xCheckStudioInterface1) {
-        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
     }
     else {
