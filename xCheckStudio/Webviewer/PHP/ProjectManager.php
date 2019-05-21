@@ -14,9 +14,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetProjects":
             GetProjects();
             break;
+        case "IsLoadProject":
+            IsLoadProject();
+            break;
+        case "CreateProjectSession":
+             CreateProjectSession();
+            break;
         default:
             echo "No Function Found!";
     }
+}
+
+function CreateProjectSession()
+{
+    if(!isset($_POST['projectName']) || 
+       !isset($_POST['loadProject']) ||
+       !isset($_POST['sourceAPath']) ||
+       !isset($_POST['sourceBPath']) ||
+       !isset($_POST['projectId']))
+       {
+           echo "fail";
+           return;
+       }
+
+    session_start();
+
+    $_SESSION['ProjectName'] = $_POST['projectName'];
+    $_SESSION['LoadProject'] = $_POST['loadProject'];
+    $_SESSION['ProjectId'] =  $_POST['projectId'];
+    $_SESSION['SourceAPath'] =  $_POST['SourceAPath'];
+    $_SESSION['SourceBPath'] =  $_POST['SourceBPath'];
+       
+    echo 'success';
+}
+
+function IsLoadProject()
+{
+    session_start();
+    if(isset($_SESSION['LoadProject'] ))
+    {
+        echo $_SESSION['LoadProject'];
+        return;
+    }
+    
+    echo 'false';    
 }
 
 /*
@@ -95,13 +136,13 @@ function CreateProject()
 function AddProjectToMainDB()
 {
     session_start();
-    if( !isset($_SESSION['name']))
+    if( !isset($_SESSION['Name']))
     {
         echo "fail";           
         return;
     }
 
-    $userName  = $_SESSION['name'];
+    $userName  = $_SESSION['Name'];
     $projectName = trim($_POST["projectName"], " ");      
     $path = trim($_POST["path"], " ");
     $description = trim($_POST["description"], " ");
@@ -122,9 +163,18 @@ function AddProjectToMainDB()
         $query = 'INSERT INTO Projects (userid, projectname, description, function, path) VALUES (?, ?, ?, ?, ?)';
         $stmt = $dbh->prepare($query);
         $stmt->execute(array( $userid, $projectName, $description, $function, $path));     
+      
+        
+        // get project id for recently added row and write it into session variable
+        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();    
+        $stmt =  $dbh->query($qry);       
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $_SESSION['ProjectId'] = $row['projectid'];
+            break;                    
+        }
 
         $dbh = null; //This is how you close a PDO connection
-        
         echo 'success';                
         
         return;
@@ -179,7 +229,7 @@ function GetProjects()
     $userid = trim($_POST["userid"], " ");
     if($userid == "")
     {
-        echo "UserId cannot be empty";
+        echo 'fail';
         return;
     }
     try{
@@ -191,7 +241,7 @@ function GetProjects()
         $dbh = null;
       }
       catch(Exception $e) {
-        echo 'Message: ' .$e->getMessage();
+        echo 'fail';
         return;
       } 
 }

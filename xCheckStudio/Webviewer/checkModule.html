@@ -2278,44 +2278,16 @@
         }, false);
     </script>
     <!-- Scripts -->
-    <script>
+    <script>       
 
-        // function AnalyticsData(checkCaseName,
-        //     sourceAName,
-        //     sourceBName,
-        //     //sourceATotalItemCount,
-        //     //sourceACheckedItemCount,
-        //     //sourceBTotalItemCount,
-        //     //sourceBCheckedItemCount,
-        //    // sourceAClasswiseCheckedComponents,
-        //    // sourceBClasswiseCheckedComponents,
-        //    // sourceAClassWiseComponets,
-        //    /* sourceBClassWiseComponets*/) {
-        //     this.CheckCaseName = checkCaseName;
-        //     this.SourceAName = sourceAName;
-        //     this.SourceBName = sourceBName;
-        //    // this.SourceATotalItemCount = sourceATotalItemCount;
-        //     //this.SourceACheckedItemCount = sourceACheckedItemCount;
-        //     //this.SourceBTotalItemCount = sourceBTotalItemCount;
-        //     //this.SourceBCheckedItemCount = sourceBCheckedItemCount;
-        //     //this.SourceAClasswiseCheckedComponents = sourceAClasswiseCheckedComponents;
-        //     //this.SourceBClasswiseCheckedComponents = sourceBClasswiseCheckedComponents;
-        //     this.SourceAClasswiseComponents = sourceAClassWiseComponets;
-        //     this.SourceBClasswiseComponents = sourceAClassWiseComponets;
-        // }
-
-        var xCheckStudioInterface1;
-        var xCheckStudioInterface2;
+        // var xCheckStudioInterface1;
+        // var xCheckStudioInterface2;
         var checkCaseManager;
         var checkCaseFilesData;
 
         var checkCaseName;
         var sourceAFileName;
-        var sourceBFileName;
-        //var sourceATotalItemCount = 0;
-        //var sourceACheckedItemCount = 0;
-        //var sourceBTotalItemCount = 0;
-        //var sourceBCheckedItemCount = 0;
+        var sourceBFileName;            
 
         var hiidenEntities = [];
 
@@ -2466,8 +2438,6 @@
 
         window.onload = function () {
 
-            //enableDropZone();
-
             // disable controls on load
             disableControlsOnLoad();
 
@@ -2476,57 +2446,65 @@
 
             // set user name
             setUserName();
-            
-            //delete checkResultsArray from local storage
-            // delete (localStorage["CheckResultArray"]);
-            // delete (localStorage["CheckResultArrayInfo"])
+                      
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
                 // show busy loader
                 onCheckButtonClick();
             };
+            
+            isLoadProject().then(function (result) {
 
-            var checkCaseSelect = document.getElementById("checkCaseSelect");
-            checkCaseSelect.onchange = function () {
-                if (this.value === "None") {
-                    checkCaseManager = undefined;
-
-                    // disable controls
-                    disableControlsOnLoad();
-
-                    return;
+                if (result) {
+                    // the already created project is being loaded
+                    loadProjectForCheck();
                 }
+                else {
 
-                var fileName;
-                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-                    if (checkCaseFileData.CheckCaseName === this.value) {
-                        fileName = checkCaseFileData.FileName;
-                        break;
+                    // this new project to be created
+                    var checkCaseSelect = document.getElementById("checkCaseSelect");
+                    checkCaseSelect.onchange = function () {
+                        if (this.value === "None") {
+                            checkCaseManager = undefined;
+
+                            // disable controls
+                            disableControlsOnLoad();
+
+                            return;
+                        }
+
+                        var fileName;
+                        for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                            var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                            if (checkCaseFileData.CheckCaseName === this.value) {
+                                fileName = checkCaseFileData.FileName;
+                                break;
+                            }
+                        }
+                        if (fileName === undefined) {
+                            return;
+                        }
+
+                        // read check case data from XML checkcase data file
+                        checkCaseManager = new CheckCaseManager();
+                        checkCaseManager.readCheckCaseData(fileName);
+
+                        // if valid check case is selected, then enable source A controls              
+                        var component = document.getElementById('createbtnA');
+                        if (component.classList.contains("disabledbutton")) {
+                            component.classList.remove('disabledbutton');
+                        }
+
+                        // enable drop zone for source A
+                        enableDropZone("dropZone1");
                     }
+
+                    // read check cases files list
+                    checkCaseFilesData = new CheckCaseFilesData();
+                    checkCaseFilesData.readCheckCaseFiles();
                 }
-                if (fileName === undefined) {
-                    return;
-                }
-
-                // read check case data from XML checkcase data file
-                checkCaseManager = new CheckCaseManager();
-                checkCaseManager.readCheckCaseData(fileName);
-
-                // if valid check case is selected, then enable source A controls              
-                var component = document.getElementById('createbtnA');
-                if (component.classList.contains("disabledbutton")) {
-                    component.classList.remove('disabledbutton');
-                }
-
-                // enable drop zone for source A
-                enableDropZone("dropZone1");
-            }
-
-            // read check cases files list
-            checkCaseFilesData = new CheckCaseFilesData();
-            checkCaseFilesData.readCheckCaseFiles();
+            });
         };
         
         window.onclick = function (event) {

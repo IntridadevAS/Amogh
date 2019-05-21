@@ -1,20 +1,20 @@
 function setUserName() {
     $.ajax({
-        data: { 'variable': 'name' },
+        data: { 'variable': 'Name' },
         type: "POST",
         url: "PHP/GetSessionVariable.php"
     }).done(function (msg) {
         if (msg !== 'fail') {
-            var pierrediv  = document.getElementById("pierre");
-			 if (msg != "" && pierrediv != null)
-                 pierrediv.innerHTML = msg;	
+            var pierrediv = document.getElementById("pierre");
+            if (msg != "" && pierrediv != null)
+                pierrediv.innerHTML = msg;
         }
     });
 }
 
 function setProjectName() {
     $.ajax({
-        data: { 'variable': 'projectname' },
+        data: { 'variable': 'ProjectName' },
         type: "POST",
         url: "PHP/GetSessionVariable.php"
     }).done(function (msg) {
@@ -40,9 +40,9 @@ function createProject(projectname, descriptionText, functionText) {
     }).done(function (msg) {
 
         if (msg === 'success') {
-                                   
-            var path =  "Projects/"+ projectname + "/"+ projectname +".db";
-           
+
+            var path = "Projects/" + projectname + "/" + projectname + ".db";
+
             // add this project's entry in main DB
             $.ajax({
                 data: {
@@ -50,19 +50,19 @@ function createProject(projectname, descriptionText, functionText) {
                     'projectName': projectname,
                     'description': descriptionText,
                     'function': functionText,
-                    'path': path                                
+                    'path': path
                 },
                 type: "POST",
                 url: "PHP/ProjectManager.php"
-            }).done(function (msg) {                           
+            }).done(function (msg) {
 
                 if (msg === 'success') {
                     //alert("Main.db record added.");
                     window.location.href = "/checkModule.html";
-                }                            
+                }
             });
         }
-        else{
+        else {
             alert(msg);
         }
 

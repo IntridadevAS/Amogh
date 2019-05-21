@@ -6,9 +6,9 @@
     
         // get project name
         $projectName = NULL;
-        if(isset($_SESSION['projectname']))
+        if(isset($_SESSION['ProjectName']))
         {
-            $projectName =  $_SESSION['projectname'];              
+            $projectName =  $_SESSION['ProjectName'];              
         }
         else
         {

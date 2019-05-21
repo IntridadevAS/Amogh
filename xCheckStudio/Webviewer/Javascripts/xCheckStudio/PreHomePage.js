@@ -1,6 +1,6 @@
 function setUserName() {
     $.ajax({
-        data: { 'variable': 'name' },
+        data: { 'variable': 'Name' },
         type: "POST",
         url: "PHP/GetSessionVariable.php"
     }).done(function (msg) {

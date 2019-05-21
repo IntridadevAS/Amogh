@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             {
              // set session variables   
              session_start();
-             $_SESSION['name']= $name;
+             $_SESSION['Name']= $name;
 
                 echo "correct match";
                 return;
