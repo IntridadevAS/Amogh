@@ -118,20 +118,20 @@
 			        <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="TagName"/> 
 			        <Matchwith sourceAPropertyname="ID"  sourceBPropertyname ="ID"/>
 			  
-			        <Property sourceAName="TagName" sourceBName="TagName"  severity="Error"/>
-			 		<Property sourceAName="ID" sourceBName="ID"  severity="Error"/>
-			        <Property sourceAName="BallValve" sourceBName="BallValve"  severity="Error"/>  
-					<Property sourceAName="Block" sourceBName="Block"  severity="Error"/>
-					<Property sourceAName="TagBlock" sourceBName="TagBlock"  severity="Error"/>
-					<Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
-					<Property sourceAName="TagFunction" sourceBName="TagFunction"  severity="Error"/>
-					<Property sourceAName="Prefix" sourceBName="Prefix"  severity="Error"/>
-					<Property sourceAName="TagPrefix" sourceBName="TagPrefix"  severity="Error"/>
-					<Property sourceAName="Type" sourceBName="Type"  severity="Error"/>
-					<Property sourceAName="TagType" sourceBName="TagType"  severity="Error"/>
-					<Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
-					<Property sourceAName="TagSequenceNo" sourceBName="TagSequenceNo"  severity="Error"/>
-					<Property sourceAName="Suffix" sourceBName="Suffix"  severity="Error"/>
+			        <Property sourceAName="TagName"        sourceBName="TagName"  severity="Error"/>
+			 		<Property sourceAName="ID"             sourceBName="ID"  severity="Error"/>
+			        <Property sourceAName="BallValve"      sourceBName="BallValve"  severity="Error"/>  
+					<Property sourceAName="Block"          sourceBName="Block"  severity="Error"/>
+					<Property sourceAName="TagBlock"       sourceBName="TagBlock"  severity="Error"/>
+					<Property sourceAName="Function"       sourceBName="Function"  severity="Error"/>
+					<Property sourceAName="TagFunction"    sourceBName="TagFunction"  severity="Error"/>
+					<Property sourceAName="Prefix"         sourceBName="Prefix"  severity="Error"/>
+					<Property sourceAName="TagPrefix"      sourceBName="TagPrefix"  severity="Error"/>
+					<Property sourceAName="Type"           sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="TagType"        sourceBName="TagType"  severity="Error"/>
+					<Property sourceAName="Number"         sourceBName="Number"  severity="Error"/>
+					<Property sourceAName="TagSequenceNo"  sourceBName="TagSequenceNo"  severity="Error"/>
+					<Property sourceAName="Suffix"         sourceBName="Suffix"  severity="Error"/>
 					<Property sourceAName="TagSuffix" sourceBName="TagSuffix"  severity="Error"/>
 					<Property sourceAName="ConnectionPoint" sourceBName="ConnectionPoint"  severity="Error"/>
 					<Property sourceAName="Closure" sourceBName="Closure"  severity="Error"/>
