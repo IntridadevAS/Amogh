@@ -972,6 +972,7 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
+<<<<<<< HEAD
 function checkIsOrderMaintained(sourceAType, checkType)
 {
     if(checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
@@ -1027,6 +1028,14 @@ function checkIsOrderMaintained(sourceAType, checkType)
             }
         }
     }
+=======
+function checkIsOrderMaintained(sourceAType)
+{
+    if(xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase())
+    {
+        checkCaseManager.orderMaintained = 'false';
+    }
+>>>>>>> 0adc90d5ca300634765cf6bc6a07cd04ac6d3769
 }
 
 function loadExcelDataSource(fileExtension,
@@ -1094,6 +1103,8 @@ function loadExcelDataSource(fileExtension,
     readExcelDataSource(file[0],
         viewerContainer,
         modelTreeContainer, checkType);
+
+    checkIsOrderMaintained(sourceAType);
 
     return true;
 
@@ -1198,6 +1209,10 @@ function loadModel(fileName,
                         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false);
                     }
+<<<<<<< HEAD
+=======
+                    checkIsOrderMaintained(sourceAType);
+>>>>>>> 0adc90d5ca300634765cf6bc6a07cd04ac6d3769
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer); 
                     return true;
                 }
@@ -1495,7 +1510,12 @@ function loadDbDataSource(fileExtension,
                     if (success) {
                         readDbDataSource(uri, file[0],
                             viewerContainer,
+<<<<<<< HEAD
                             modelTreeContainer, checkType);
+=======
+                            modelTreeContainer);
+                            checkIsOrderMaintained(SourceAType);
+>>>>>>> 0adc90d5ca300634765cf6bc6a07cd04ac6d3769
                 }
                 else {
                     document.getElementById(formId).reset();
