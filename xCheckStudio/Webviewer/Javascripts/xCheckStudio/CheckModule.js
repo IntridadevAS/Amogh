@@ -1094,9 +1094,6 @@ function loadExcelDataSource(fileExtension,
     readExcelDataSource(file[0],
         viewerContainer,
         modelTreeContainer, checkType);
-
-    checkIsOrderMaintained(sourceAType);
-
     return true;
 
 }
