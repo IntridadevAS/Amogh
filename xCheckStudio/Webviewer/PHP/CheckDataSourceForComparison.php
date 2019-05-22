@@ -206,7 +206,7 @@
                             $sourceBcomponentsChecked++;
                             if($sourceBcomponentsChecked === count($SourceBComponents))
                             {
-                                if(isComponentGroupUndefined($sourceAGroupName,  true)) {
+                                if(isComponentGroupUndefined($sourceAComponent['mainclass'],  true)) {
                                     $hasComponentGroupMatched =  false;
                                 }
                             }
@@ -416,7 +416,7 @@
                             $sourceAcomponentsChecked++;
                             if($sourceAcomponentsChecked === count($SourceAComponents))
                             {
-                                if(isComponentGroupUndefined($sourceBGroupName,  false)) {
+                                if(isComponentGroupUndefined($sourceBComponent['mainclass'],  false)) {
                                     $hasComponentGroupMatched =  false;
                                 }
                             }
@@ -967,7 +967,21 @@
             }
 
             function isComponentGroupUndefined($sourceGroupName,  $isSourceAGroup){
-                global $CheckCaseType;
+                global $CheckCaseType;       
+                global $orderMaintained;
+                var_dump($isSourceAGroup);
+                if($orderMaintained == 'false')
+                {
+                    if($isSourceAGroup)
+                    {
+                        $isSourceAGroup =  false;
+                    }
+                    else
+                    {
+                        $isSourceAGroup = true;
+                    }
+                    var_dump($isSourceAGroup);
+                }
                 for($index = 0; $index < count($CheckCaseType['ComponentGroups']); $index++)
                 {
                      // check for source A only
