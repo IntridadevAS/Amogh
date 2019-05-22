@@ -233,7 +233,7 @@ function openProjectHealthTab(tabName) {
         //analyticsManager.drawInfoPieCharts("comparison");
         document.getElementById("InfoTab").style.display = "block";
         analyticsManager.drawInfoLineCharts(analyticsManager.ComparisonTotalItemsNotChecked,
-            analyticsManager.ComparisonNoMatchCount);
+            analyticsManager.ComparisonNoMatchCount, analyticsManager.ComparisonUndefinedCount);
 
         //add data to summary
         analyticsManager.setNonSeveritySummary();                

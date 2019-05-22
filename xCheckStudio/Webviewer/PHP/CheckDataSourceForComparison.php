@@ -173,10 +173,11 @@
 
                     // componentMatchFound flag
                     $componentMatchFound = false;
-                    $checkComponentGroup;
+                    $checkComponentGroup = NULL;;
                     $checkCaseComponentClass;
                     $componentGroupMapped = false;
-
+                    $hasComponentGroupMatched =  true;
+                    $sourceBcomponentsChecked = 0;
                     foreach ($SourceBComponents as $id =>$sourceBComponent) 
                     {
                         $sourceAGroupName = NULL;
@@ -202,6 +203,13 @@
                         // check if component class exists in checkcase for Source A
                         if (!isComponentGroupExists($sourceAGroupName, $sourceBGroupName)) 
                         {
+                            $sourceBcomponentsChecked++;
+                            if($sourceBcomponentsChecked === count($SourceBComponents))
+                            {
+                                if(isComponentGroupUndefined($sourceAComponent['mainclass'],  true)) {
+                                    $hasComponentGroupMatched =  false;
+                                }
+                            }
                             continue;
                         }
                     
@@ -226,7 +234,7 @@
                                         $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                         $componentGroupMapped = true;
                                     } 
-                                if ($orderMaintained == 'false' && componentClassExists(NULL, 
+                                else if ($orderMaintained == 'false' && componentClassExists(NULL, 
                                     $sourceBClassName, 
                                     $checkCaseGroup, 
                                     NULL,
@@ -314,12 +322,25 @@
                     }
 
                     // if component match not found 
+
                     if (!$componentMatchFound && $componentGroupMapped) {
                         $checkComponent = getNoMatchComponent($sourceAComponent, $checkCaseComponentClass, true);
 
                         if($checkComponentGroup == NULL)
                         {
                             $checkComponentGroup =  getCheckComponentGroup($sourceAGroupName);
+                        }
+                        if ($checkComponentGroup == NULL) {
+                            continue;
+                        }
+                        $checkComponentGroup->AddCheckComponent($checkComponent);
+                    }
+                    if(!$hasComponentGroupMatched)
+                    {
+                        $checkComponent = getUndefinedComponent($sourceAComponent, $checkCaseComponentClass, true);
+                        if($checkComponentGroup === NULL)
+                        {
+                            $checkComponentGroup =  getCheckComponentGroup("Undefined");
                         }
                         if ($checkComponentGroup == NULL) {
                             continue;
@@ -362,7 +383,8 @@
                     $checkComponentGroup = NULL;
                     $checkCaseComponentClass = NULL;
                     $componentGroupMapped = false;
-
+                    $hasComponentGroupMatched =  true;
+                    $sourceAcomponentsChecked = 0;
                     foreach ($SourceAComponents as $id => $sourceAComponent)
                     {
 
@@ -391,6 +413,13 @@
                         // check if component class exists in checkcase for Source B
                         if (!isComponentGroupExists($sourceAGroupName, $sourceBGroupName)) 
                         {
+                            $sourceAcomponentsChecked++;
+                            if($sourceAcomponentsChecked === count($SourceAComponents))
+                            {
+                                if(isComponentGroupUndefined($sourceBComponent['mainclass'],  false)) {
+                                    $hasComponentGroupMatched =  false;
+                                }
+                            }
                             continue;
                         }
                     
@@ -413,7 +442,7 @@
                                 $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
                                 $componentGroupMapped = true;
                             }
-                            if ($orderMaintained == 'false' && componentClassExists($sourceAClassName, 
+                            else if ($orderMaintained == 'false' && componentClassExists($sourceAClassName, 
                                                     NULL, 
                                                     $checkCaseGroup, 
                                                     $sourceAGroupName,
@@ -493,6 +522,18 @@
                         $checkComponent = getNoMatchComponent($sourceBComponent, $checkCaseComponentClass, false);
                         if ($checkComponentGroup === NULL) {
                             $checkComponentGroup = getCheckComponentGroup($sourceBGroupName);
+                        }
+                        if ($checkComponentGroup == NULL) {
+                            continue;
+                        }
+                        $checkComponentGroup->AddCheckComponent($checkComponent);
+                    }
+                    if(!$hasComponentGroupMatched)
+                    {
+                        $checkComponent = getUndefinedComponent($sourceBComponent, $checkCaseComponentClass, false);
+                        if($checkComponentGroup === NULL)
+                        {
+                            $checkComponentGroup =  getCheckComponentGroup("Undefined");
                         }
                         if ($checkComponentGroup == NULL) {
                             continue;
@@ -679,6 +720,78 @@
                 return $checkComponent;
             }
 
+            function getUndefinedComponent ($sourceComponent, $checkCaseComponentClass, $sourceAComponent) 
+            {
+                $checkComponent;
+                if ($sourceAComponent) 
+                {
+                    global $SourceAProperties;                  
+
+                    $nodeId = NUll;
+                    if(isset($sourceComponent['nodeid']))
+                    {
+                        $nodeId = $sourceComponent['nodeid'];
+                    }
+                    $checkComponent = new CheckComponent($sourceComponent["name"],
+                                                        "",
+                                                        $sourceComponent["subclass"],
+                                                        $nodeId ,
+                                                        NULL);
+
+                    $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
+                
+                    foreach ($sourceAComponentProperties as $name => $property) 
+                    {                       
+                        $checkProperty = new CheckProperty($property["name"],
+                                                            $property["value"],
+                                                            NULL,
+                                                            NULL,
+                                                            "undefined",
+                                                            NULL,
+                                                            NULL);
+
+                        $checkProperty->PerformCheck = false;
+                        $checkComponent->AddCheckProperty($checkProperty);
+                    }               
+                   
+                }
+                else 
+                {
+                    global $SourceBProperties;
+
+                    $nodeId = NUll;
+                    if(isset($sourceComponent['nodeid']))
+                    {
+                        $nodeId = $sourceComponent['nodeid'];
+                    }
+                    $checkComponent = new CheckComponent("",
+                                                        $sourceComponent["name"],
+                                                        $sourceComponent["subclass"],
+                                                        NULL,
+                                                        $nodeId);
+
+                    $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
+                    foreach ($sourceBComponentProperties as $name => $property) 
+                    {                       
+                        $checkProperty = new CheckProperty(NULL,
+                                                        NULL,
+                                                        $property["name"],
+                                                        $property["value"],
+                                                        "undefined",
+                                                        NULL,
+                                                        NULL);
+
+
+                        $checkProperty->PerformCheck = false;
+                        $checkComponent->AddCheckProperty($checkProperty);
+                    }           
+
+                }
+
+                $checkComponent->Status = "undefined";
+                return $checkComponent;
+            }
+
             function isComponentMatch ($sourceAComponent,
                                        $sourceBComponent,
                                        $matchwithProperties) 
@@ -846,6 +959,39 @@
                     // check for both sources
                     if (strtolower($CheckCaseType['ComponentGroups'][$index]['SourceAName']) == strtolower($sourceAGroupName) &&
                         strtolower($CheckCaseType['ComponentGroups'][$index]['SourceBName']) == strtolower($sourceBGroupName)) {
+                    return true;
+                    }
+                }
+            
+                return false;
+            }
+
+            function isComponentGroupUndefined($sourceGroupName,  $isSourceAGroup){
+                global $CheckCaseType;       
+                global $orderMaintained;
+                var_dump($isSourceAGroup);
+                if($orderMaintained == 'false')
+                {
+                    if($isSourceAGroup)
+                    {
+                        $isSourceAGroup =  false;
+                    }
+                    else
+                    {
+                        $isSourceAGroup = true;
+                    }
+                    var_dump($isSourceAGroup);
+                }
+                for($index = 0; $index < count($CheckCaseType['ComponentGroups']); $index++)
+                {
+                     // check for source A only
+                     if ($isSourceAGroup &&
+                        strtolower($CheckCaseType['ComponentGroups'][$index]['SourceAName']) == strtolower($sourceGroupName)) {
+                     return true;
+                    }
+                    // check for source B only
+                    if (!$isSourceAGroup &&
+                        strtolower($CheckCaseType['ComponentGroups'][$index]['SourceBName']) == strtolower($sourceGroupName)) {
                     return true;
                     }
                 }

@@ -130,6 +130,13 @@
                 $nomatchCount = $results->fetchColumn();
             }
 
+            $undefinedCount = 0;
+            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
+            if($results)
+            {
+                $undefinedCount = $results->fetchColumn();
+            }
+
             // get spource A selected components count
             $sourceASelectedCount =  0;
 
@@ -221,9 +228,14 @@
                              $noMatches = $nomatchResults->fetchColumn();
                          }    
                          
-
+                         $undefinedItem = 0;
+                         $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");     
+                         if($results)
+                         {
+                             $undefinedItem = $results->fetchColumn();
+                         }
                          // keep track of check groups and corresponding stastics
-                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings, 'No Match'=>$noMatches);
+                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem);
                     }
                 }              
             }
@@ -292,6 +304,7 @@
                         "errorCount" =>$errorCount,
                         "warningCount" =>$warningCount,
                         "nomatchCount" =>$nomatchCount,
+                        "undefinedCount" =>$undefinedCount,
                         "sourceASelectedCount" =>$sourceASelectedCount,
                         "sourceBSelectedCount" =>$sourceBSelectedCount,
                         "sourceATotalComponentsCount" => $sourceATotalComponentsCount,

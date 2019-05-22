@@ -1842,6 +1842,25 @@ div {
   text-align          : left;
   line-height         : 39.0px;
 }
+.a011 .blocksummary .a20 {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 221px;
+  height              : auto;
+  width               : auto;
+  position            : absolute;
+  margin              : 0;
+  left                : 22px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  font-family         : "Roboto", Helvetica, Arial, serif;
+  font-weight         : 400;
+  font-style          : normal;
+  font-size           : 20.0px;
+  color               : rgba(246, 167, 36, 1.0);
+  text-align          : left;
+  line-height         : 39.0px;
+}
 .a011 .blocksummary .a6 {
   background-color    : rgba(255,255,255,0.0);
   top                 : 221px;

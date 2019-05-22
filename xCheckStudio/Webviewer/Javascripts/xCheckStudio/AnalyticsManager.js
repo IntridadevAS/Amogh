@@ -14,6 +14,7 @@ function AnalyticsManager(comparisonCheckGroups,
     var ComparisonTotalItemsCount = 0;
     var ComparisonTotalItemsNotChecked = 0;
     var ComparisonNoMatchCount = 0;
+    var ComparisonUndefinedCount = 0;
 
     var SourceAComplianceTotalItemsChecked = 0;
     var SourceAComplianceErrorsCount = 0;
@@ -92,27 +93,32 @@ function AnalyticsManager(comparisonCheckGroups,
         var comparisonTotalItemsCount = this.ComparisonTotalItemsCount;
         var comparisonTotalItemsNotChecked = this.ComparisonTotalItemsNotChecked;
         var comparisonNoMatchCount = this.ComparisonNoMatchCount;
+        var comparisonUndefinedCount = this.ComparisonUndefinedCount;
 
         this.clearNonSeveritySummary();
 
         if (comparisonTotalItemsCount == undefined &&
             comparisonTotalItemsNotChecked == undefined &&
-            comparisonNoMatchCount == undefined) {
+            comparisonNoMatchCount == undefined && 
+            comparisonUndefinedCount == undefined) {
 
             comparisonTotalItemsCount = "";
             comparisonTotalItemsNotChecked = "";
             comparisonNoMatchCount = "";
+            comparisonUndefinedCount = "";
         }
 
         document.getElementById("a37Info").innerText = comparisonTotalItemsCount;
         document.getElementById("a18Info").innerText = comparisonTotalItemsNotChecked;
         document.getElementById("a13Info").innerText = comparisonNoMatchCount;
+        document.getElementById("a20Info").innerText = comparisonUndefinedCount;
     }
 
     AnalyticsManager.prototype.clearNonSeveritySummary = function () {
         document.getElementById("a37Info").innerText = "";
         document.getElementById("a18Info").innerText = "";
         document.getElementById("a13Info").innerText = "";
+        document.getElementById("a20Info").innerText = "";
     }
 
     AnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
@@ -133,6 +139,7 @@ function AnalyticsManager(comparisonCheckGroups,
                     var warningsCount = 0;
                     var okCount = 0;
                     var noMatchCount = 0;
+                    var undefinedCount = 0;
                     var sourceASelectedCount = 0;
                     var sourceBSelectedCount = 0;
                     var sourceATotalComponentsCount = 0;
@@ -156,6 +163,10 @@ function AnalyticsManager(comparisonCheckGroups,
 
                     if ("nomatchCount" in checkResults) {
                         noMatchCount = parseInt(checkResults["nomatchCount"]);
+                    }
+
+                    if ("undefinedCount" in checkResults) {
+                        undefinedCount = parseInt(checkResults["undefinedCount"]);
                     }
 
                     if ("sourceASelectedCount" in checkResults) {
@@ -206,6 +217,7 @@ function AnalyticsManager(comparisonCheckGroups,
                         sourceATotalComponentsCount,
                         sourceBTotalComponentsCount,
                         noMatchCount,
+                        undefinedCount,
                         totalItemsChecked);
 
                     //  draw bar chart (total 1)
@@ -522,7 +534,7 @@ function AnalyticsManager(comparisonCheckGroups,
     AnalyticsManager.prototype.drawInfoPieCharts = function (type,
         sourceATotalComponentsCount,
         sourceBTotalComponentsCount,
-        noMatchCount,
+        noMatchCount, undefinedCount,
         totalItemsChecked) {
       
         if (type === "comparison") {
@@ -537,10 +549,12 @@ function AnalyticsManager(comparisonCheckGroups,
             document.getElementById("a37Info").innerText = totalItemsCount;
             document.getElementById("a18Info").innerText = totalItemsNotChecked;
             document.getElementById("a13Info").innerText = noMatchCount;
+            document.getElementById("a20Info").innerText = undefinedCount;
 
              this.ComparisonTotalItemsCount = totalItemsCount;
              this.ComparisonTotalItemsNotChecked = totalItemsNotChecked;
              this.ComparisonNoMatchCount = noMatchCount;
+             this.ComparisonUndefinedCount = undefinedCount;
 
             // draw pie chart for No Match 
             var noMatchDiv = document.getElementById('group2_pieInfo');
@@ -552,6 +566,17 @@ function AnalyticsManager(comparisonCheckGroups,
                 colorsArray,
                 'a40Info');
             document.getElementById("a40Info").style.color = "#AFD3C5";
+
+             // draw pie chart for undefined items
+            var undefinedItemsDiv = document.getElementById('group4_pieInfo');
+            var colorsArray = ["#aebcd2", "#EDEDED"];
+            this.drawPieChart("Undefined",
+                undefinedCount,
+                totalItemsChecked,
+                undefinedItemsDiv,
+                colorsArray,
+                'a30Info');
+            document.getElementById("a30Info").style.color = "#aebcd2";
 
             // draw pie chart for not checked
             var notCheckedDiv = document.getElementById('group5_pieInfo');
@@ -577,6 +602,7 @@ function AnalyticsManager(comparisonCheckGroups,
             var titleArray = [];
             titleArray.push("Name");
             titleArray.push("No Match");
+            titleArray.push("Undefined Item");
             titleArray.push("Not Checked");
             resultArray.push(titleArray);
 
@@ -612,16 +638,18 @@ function AnalyticsManager(comparisonCheckGroups,
 
                 var statistics = checkGroupsInfo[groupName];
                 var nomatchCount = parseInt(statistics['No Match']);
+                var undefinedItems = parseInt(statistics['undefined Item']);
 
                 var valueArray = [];
                 valueArray.push(groupName);
                 valueArray.push(nomatchCount);
+                valueArray.push(undefinedItems);
                 valueArray.push(totalNotSelected);
                 resultArray.push(valueArray);
             }           
 
             var dataTable = getData(resultArray);
-            var colorsArray = ["#AFD3C5", "#839192"];
+            var colorsArray = ["#AFD3C5", "#aebcd2"];
             drawBarChart(dataTable, "", group2_barInfo, colorsArray);
         }
 
@@ -787,7 +815,7 @@ function AnalyticsManager(comparisonCheckGroups,
     }
 
     AnalyticsManager.prototype.drawInfoLineCharts = function (notCheckedCount,
-        noMatchCount) {
+        noMatchCount, undefinedCount) {
 
         if (!this.ComparisonCheckGroups) {
             return;
@@ -799,12 +827,14 @@ function AnalyticsManager(comparisonCheckGroups,
         titleArray.push("Name");
         titleArray.push("Not Checked");
         titleArray.push("No match");
+        titleArray.push("Undefined");
         resultsArray.push(titleArray);
 
         var valueArray = [];
         valueArray.push("Check1");
         valueArray.push(notCheckedCount);
         valueArray.push(noMatchCount);
+        valueArray.push(undefinedCount);
         resultsArray.push(valueArray);
 
         var dataTable = getData(resultsArray);
@@ -813,7 +843,7 @@ function AnalyticsManager(comparisonCheckGroups,
             document.getElementById("InfoTabLineChart").innerHTML = "";
         }
 
-        colorsArray = ["#AFD3C5", "#839192"];
+        colorsArray = ["#AFD3C5", "#839192", "#aebcd2"];
         // if(LineChart.id !== undefined)
         // {
         drawLineChart(dataTable, "", "InfoTabLineChart", colorsArray)
