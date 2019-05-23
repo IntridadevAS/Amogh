@@ -20,9 +20,129 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CreateProjectSession":
              CreateProjectSession();
             break;
+        case "ReadSelectedComponents":
+            ReadSelectedComponents();
+           break;
         default:
             echo "No Function Found!";
     }
+}
+
+function ReadSelectedComponents()
+{
+    if(!isset($_POST['source']))
+    {
+        echo "fail";
+        return;
+    }
+    $source = $_POST['source'];
+
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+        try
+        {        
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+            // begin the transaction
+            $dbh->beginTransaction();  
+            
+            // source a selected components
+            $sourceAIdwiseComponents = NULL;
+            $sourceANodeIdwiseComponents = NULL;
+            if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
+            {
+                $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
+                if($results)
+                {
+                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        // id wise components
+                        $sourceAIdwiseComponents[$component['id']] = array('id'=>$component['id'], 
+                                                                             'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']);
+                        // node id wise components
+                        $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+                                                                            'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']); 
+                    }    
+                }
+            }
+            
+            // source b selected components
+            $sourceBIdwiseComponents = NULL;
+            $sourceBNodeIdwiseComponents = NULL;
+            if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
+            {
+                $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
+                if($results)
+                {
+                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        // id wise components
+                        $sourceBIdwiseComponents[$component['id']] = array('id'=>$component['id'], 
+                                                                             'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']);
+                        // node id wise components
+                        $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+                                                                            'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']); 
+                    }    
+                }
+            }
+           
+            $selectedComponents =array();
+
+            if( $sourceAIdwiseComponents !== NULL && 
+                $sourceANodeIdwiseComponents !== NULL)
+            {
+                $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
+                $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
+            }
+
+            if( $sourceBIdwiseComponents !== NULL && 
+                $sourceBNodeIdwiseComponents !== NULL)
+            {
+                $selectedComponents['SourceABwiseSelectedComps'] = $sourceBIdwiseComponents;
+                $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
+            }
+
+            echo json_encode($selectedComponents);
+
+             // commit update
+             $dbh->commit();
+             $dbh = null; //This is how you close a PDO connection    
+        }
+        catch(Exception $e) 
+        {        
+            return "fail"; 
+            //return;
+        } 
 }
 
 function CreateProjectSession()
@@ -42,8 +162,8 @@ function CreateProjectSession()
     $_SESSION['ProjectName'] = $_POST['projectName'];
     $_SESSION['LoadProject'] = $_POST['loadProject'];
     $_SESSION['ProjectId'] =  $_POST['projectId'];
-    $_SESSION['SourceAPath'] =  $_POST['SourceAPath'];
-    $_SESSION['SourceBPath'] =  $_POST['SourceBPath'];
+    $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
+    $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
        
     echo 'success';
 }

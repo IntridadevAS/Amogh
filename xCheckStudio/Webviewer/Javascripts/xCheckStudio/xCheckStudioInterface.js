@@ -66,6 +66,19 @@ var xCheckStudio;
 
                 viewer.start();
 
+                _this._firstViewer = viewer;
+
+                // set viewer's background color
+                _this.setViewerBackgroundColor();
+
+                var excelSheetParentContainer = document.getElementById("dataSourceViewer");
+                for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
+                    currentChild = excelSheetParentContainer.children[i];
+                    if (currentChild.className === "viewdatagraphics") {
+                        currentChild.style.display = "none";
+                    }
+                }
+
                 viewer.setCallbacks({
                     firstModelLoaded: function () {
 
@@ -76,10 +89,7 @@ var xCheckStudio;
 
                         // register viewer evenets
                         _this._bindEvents(viewer, isFirstViewer);
-
-                        // set viewer's background color
-                        _this.setViewerBackgroundColor();
-
+                        
                         viewer.view.fitWorld();
 
                         _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
@@ -87,20 +97,13 @@ var xCheckStudio;
                         // show busy spinner
                         var busySpinner = document.getElementById("divLoading");
                         busySpinner.className = 'show';
-
+                        
                         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                         _this.RootNodeId = viewer.model.getAbsoluteRootNode();
-                        _this.readProperties(_this.RootNodeId, identifierProperties, undefined);
-
-                        var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-                        for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-                            currentChild = excelSheetParentContainer.children[i];
-                            if (currentChild.className === "viewdatagraphics") {
-                                currentChild.style.display = "none";
-                            }
-                        }
-
-                        return resolve(true);
+                        _this.readProperties(_this.RootNodeId, identifierProperties, undefined);   
+                        
+                        return resolve(true);                                   
+                        
                     },
                     modelLoadFailure: function () {
                         
@@ -429,7 +432,7 @@ var xCheckStudio;
             }
 
         };
-
+        
         xCheckStudioInterface.prototype.addComponentsToDB = function () {
 
             var _this = this;

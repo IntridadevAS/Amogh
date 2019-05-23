@@ -66,7 +66,12 @@
                 $dbh->beginTransaction();
 
                 // create selected components table
-                $command = 'CREATE TABLE IF NOT EXISTS DatasourceInfo(
+
+                // drop table if exists
+                $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
+                $dbh->exec($command);
+
+                $command = 'CREATE TABLE DatasourceInfo(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     sourceAFileName TEXT,
                     sourceBFileName TEXT,
@@ -108,7 +113,12 @@
                 $dbh->beginTransaction();
 
                 // create selected components table
-                $command = 'CREATE TABLE IF NOT EXISTS CheckCaseInfo(
+                
+                // drop table if exists
+                $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
+                $dbh->exec($command);
+
+                $command = 'CREATE TABLE CheckCaseInfo(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     checkCaseData TEXT)';         
                 $dbh->exec($command);    
@@ -170,7 +180,12 @@
                 $dbh->beginTransaction();
 
                 // create selected components table
-                $command = 'CREATE TABLE IF NOT EXISTS '. $selectedComponentsTable. '(
+
+                // drop table if exists
+                $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
+                $dbh->exec($command);
+
+                $command = 'CREATE TABLE '. $selectedComponentsTable. '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT NOT NULL,
                     mainClass TEXT NOT NULL,

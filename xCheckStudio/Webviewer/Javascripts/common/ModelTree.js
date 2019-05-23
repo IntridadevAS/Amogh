@@ -552,7 +552,7 @@ var xCheckStudio;
     
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width= "556px";
-                modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
+                modelBrowserDataTable.style.margin = "47px 0px 0px 0px"               
             };
 
             ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) 
@@ -665,6 +665,12 @@ var xCheckStudio;
                                 for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
                                     xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
                                 }
+                            }
+
+
+                            if(loadSavedProject)
+                            {
+                                selectComponents(_this._elementId);
                             }
                         },
                         rowClick: function (args) {

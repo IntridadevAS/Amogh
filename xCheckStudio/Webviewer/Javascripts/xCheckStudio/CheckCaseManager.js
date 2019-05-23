@@ -1,6 +1,6 @@
 function CheckCaseManager() {
     this.CheckCase;
-    this.orderMaintained = 'true';
+    this.OrderMaintained = 'true';
 
     //this.Ready = true;
     // CheckCaseManager.prototype.addCheckCase = function (checkCase) {

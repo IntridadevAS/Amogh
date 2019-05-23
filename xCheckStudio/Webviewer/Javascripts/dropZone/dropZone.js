@@ -196,9 +196,8 @@ function manageControlsOnDatasourceLoad(mainFileName,
         document.getElementById("dataSource2ModelBrowserTab").innerText = mainFileName;  
         document.getElementById("dataSource2ViewerContainerTab").innerText = mainFileName;
 
-        // enable source b controls
-        // enable source a controls
-        // enable check all CB for source A
+        // enable source b controls        
+        // enable check all CB for source B
         var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
         if (component.classList.contains("disabledbutton")) {
             component.classList.remove('disabledbutton');

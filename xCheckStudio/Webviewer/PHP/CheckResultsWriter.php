@@ -18,14 +18,24 @@
             $dbh->beginTransaction();
           
             // CheckGroups table
-            $command = 'CREATE TABLE IF NOT EXISTS '.$checkGroupsTable.'(
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $checkGroupsTable. ';';
+            $dbh->exec($command);   
+
+            $command = 'CREATE TABLE '.$checkGroupsTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 componentClass TEXT NOT NULL,
                 componentCount Integer)'; 
             $dbh->exec($command);  
 
-             // CheckComponents table
-             $command = 'CREATE TABLE IF NOT EXISTS '.$checkComponentsTable.'(
+            // CheckComponents table
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $checkComponentsTable. ';';
+            $dbh->exec($command);
+
+             $command = 'CREATE TABLE '.$checkComponentsTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT,                
                 subComponentClass TEXT,
@@ -35,7 +45,12 @@
             $dbh->exec($command);    
             
              // ComparisonCheckProperties table
-             $command = 'CREATE TABLE IF NOT EXISTS '.$checkPropertiesTable.'(
+
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $checkPropertiesTable. ';';
+            $dbh->exec($command);
+
+             $command = 'CREATE TABLE '.$checkPropertiesTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT,              
                 value TEXT,
@@ -151,14 +166,24 @@
             $dbh->beginTransaction();
 
             // ComparisonCheckGroups table
-            $command = 'CREATE TABLE IF NOT EXISTS ComparisonCheckGroups(
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ComparisonCheckGroups(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         componentClass TEXT NOT NULL,
                         componentCount Integer)'; 
             $dbh->exec($command);    
 
             // ComparisonCheckComponents table
-            $command = 'CREATE TABLE IF NOT EXISTS ComparisonCheckComponents(
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ComparisonCheckComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 sourceAName TEXT,
                 sourceBName TEXT,
@@ -170,7 +195,12 @@
             $dbh->exec($command);    
 
             // ComparisonCheckProperties table
-            $command = 'CREATE TABLE IF NOT EXISTS ComparisonCheckProperties(
+
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ComparisonCheckProperties(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 sourceAName TEXT,
                 sourceBName TEXT,
@@ -299,7 +329,12 @@
             $dbh->beginTransaction();
 
             // SourceANotCheckedComponents table
-            $command = 'CREATE TABLE IF NOT EXISTS '.$tableName.'(
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE '.$tableName.'(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT,
                     mainClass TEXT,
@@ -354,7 +389,12 @@
             $dbh->beginTransaction();
 
             // SourceANotCheckedComponents table
-            $command = 'CREATE TABLE IF NOT EXISTS '. $tableName.'(
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE '.$tableName.'(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT,
                     mainClass TEXT,

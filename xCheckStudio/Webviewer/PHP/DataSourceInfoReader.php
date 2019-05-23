@@ -40,9 +40,10 @@
             
             $results = $dbh->query("SELECT *FROM  DatasourceInfo;");     
 
+            $data = array();
             while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
             {
-                return array('sourceAFileName' => $record['sourceAFileName'], 
+                $data = array('sourceAFileName' => $record['sourceAFileName'], 
                              'sourceBFileName'=> $record['sourceBFileName'], 
                              'sourceAType'=>$record['sourceAType'], 
                              'sourceBType'=>$record['sourceBType']);                                 
@@ -52,7 +53,7 @@
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection                 
                             
-            return;
+            return  $data;
         }
         catch(Exception $e) 
         {        
