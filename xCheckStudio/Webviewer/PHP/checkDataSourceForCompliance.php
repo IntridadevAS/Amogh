@@ -51,7 +51,7 @@
         $CheckPropertiesTable = NULL;
 
         $NotCheckedComponentsTable = NULL;
-        $NotMatchedComponentsTable = NULL;       
+        //$NotMatchedComponentsTable = NULL;       
         if( $ContainerId =='viewerContainer1')
         {
             $Source="SourceA";
@@ -61,7 +61,7 @@
             $CheckPropertiesTable = "SourceAComplianceCheckProperties";
 
             $NotCheckedComponentsTable = "SourceAComplianceNotCheckedComponents";
-            $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";           
+           // $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";           
         }
         else if($ContainerId == 'viewerContainer2')
         {
@@ -72,7 +72,7 @@
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
 
             $NotCheckedComponentsTable = "SourceBComplianceNotCheckedComponents";
-            $NotMatchedComponentsTable = "SourceBComplianceNotMatchedComponents";
+            //$NotMatchedComponentsTable = "SourceBComplianceNotMatchedComponents";
         }
         else 
         {
@@ -102,10 +102,10 @@
                                        $NotCheckedComponentsTable, 
                                        $projectName);
 
-        // write not matched components to database
-        writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 
-                                      $NotMatchedComponentsTable, 
-                                      $projectName);
+        // // write not matched components to database
+        // writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 
+        //                               $NotMatchedComponentsTable, 
+        //                               $projectName);
                                              
 
         // get source components
