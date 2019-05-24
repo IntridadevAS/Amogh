@@ -1818,7 +1818,25 @@ function OnShowHideMenu() {
 }
 
 function clearData() {
-    window.location.reload();
+    // window.location.reload();
+    document.getElementById("modelTree1").innerHTML = "";;
+    document.getElementById("SourceAComponentCount").innerHTML = "";
+    document.getElementById("dataSource1ModelBrowserTab").innerHTML = "Source 1";
+    document.getElementById("dataSource1ViewerContainerTab").innerHTML = "Source 1";
+    $("#viewerContainer1").empty();
+    document.getElementById("createbtnA").style.display = "block";
+    document.getElementById("loadDataA").style.display = "block";
+
+
+    document.getElementById("modelTree2").innerHTML = "";
+    document.getElementById("SourceBComponentCount").innerHTML = "";
+    document.getElementById("dataSource2ModelBrowserTab").innerText = "Source 2";
+    document.getElementById("dataSource2ViewerContainerTab").innerHTML = "Source 2";
+    $("#viewerContainer2").empty();
+    document.getElementById("createbtnB").style.display = "block";
+    document.getElementById("loadDataB").style.display = "block";
+
+    document.getElementById("checkCaseSelect").value = "None";
 }
 function cancelreviewresults() {
     sourceAComplianceCheckManager = undefined;
