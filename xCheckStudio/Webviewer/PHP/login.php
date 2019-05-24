@@ -25,9 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              // set session variables   
              session_start();
              $_SESSION['Name']= $name;
+             $_SESSION['UserId']= $row[0];
 
-                echo "correct match";
-                return;
+            echo "correct match";
+            return;
             }            
         }
         $dbh = null; //This is how you close a PDO connection
