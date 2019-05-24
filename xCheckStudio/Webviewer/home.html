@@ -413,6 +413,10 @@
 		<script>
         
         function OnCheckClick() {
+                // set local storage variable to know where did it come from to
+                // createProject.html i.e. Check tile click or Review tile click
+                localStorage.setItem("FromCheckClick",true);
+
                 // Get the modal
                 var modal = document.getElementById('projectselectiondialogModal');
                 // When the user clicks the button, open the modal 
@@ -422,6 +426,10 @@
 		
 		function OnReviewClicked()
 		{
+            // set local storage variable to know where did it come from to
+            // createProject.html i.e. Check tile click or Review tile click
+            localStorage.setItem("FromCheckClick", false);
+
 			var modal = document.getElementById('projectselectiondialogModal');
             modal.style.display = "block";
             $('#projectselectiondialog-content').load("reviewprojectselectiondialog.html")

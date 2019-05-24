@@ -8,7 +8,7 @@ var validateLogindetails = function () {
         url: "PHP/login.php"
     }).done(function (msg) {
         if (msg == "correct match") {
-            window.location.href = "/home.html";
+            window.location.href = "home.html";
         }
         else {
             alert("Incorrect Username/Password.");

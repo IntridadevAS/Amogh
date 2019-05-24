@@ -4,8 +4,7 @@ var LogoutUser = function(){
         },
         type: "POST",
         url: "PHP/logout.php"
-    }).done(function (msg) {
-        var int = 0;
-        window.location = "/index.html";
+    }).done(function (msg) {       
+        window.location = "index.html";
     });
 }
