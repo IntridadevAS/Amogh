@@ -1,6 +1,6 @@
 function setUserName() {
     $.ajax({
-        data: { 'variable': 'name' },
+        data: { 'variable': 'Name' },
         type: "POST",
         url: "PHP/GetSessionVariable.php"
     }).done(function (msg) {
@@ -14,7 +14,7 @@ function setUserName() {
 
 function setProjectName() {
     $.ajax({
-        data: { 'variable': 'projectname' },
+        data: { 'variable': 'ProjectName' },
         type: "POST",
         url: "PHP/GetSessionVariable.php"
     }).done(function (msg) {
@@ -186,23 +186,7 @@ function loadComparisonData(comparisonCheckGroups,
                             sourceBViewerOptions,
                             sourceAClassWiseComponents,
                             sourceBClassWiseComponents)
-{
-    // var sourceAViewerOptions = undefined;
-    // var sourceAClasswiseData = undefined;
-    // if(viewerOptions['SourceAContainerId'] !== undefined &&
-    //    viewerOptions['SourceAEndPointUri'] !== undefined)
-    // {
-    //     sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
-    // }        
-
-    // var sourceBViewerOptions = undefined;
-    // var sourceBClasswiseData = undefined;
-    // if(viewerOptions['SourceBContainerId'] !== undefined &&
-    //     viewerOptions['SourceBEndPointUri'] !== undefined)
-    // {
-    //     sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
-    // }
-    
+{      
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
                                                           sourceAViewerOptions,
@@ -219,49 +203,3 @@ function loadComparisonData(comparisonCheckGroups,
     // populate review table
     comparisonReviewManager.populateReviewTable();     
 }
-
-// function getClassWiseComponents() 
-// {
-//     return new Promise(function (resolve, reject) 
-//     {
-
-//          // get class wise properties for excel and other 1D datasources
-//          $.ajax({
-//             url: 'PHP/ClasswiseComponentsReader.php',
-//             type: "POST",
-//             async: true,
-//             data: {'Source' : "SourceA"},
-//             success: function (msg) 
-//             {
-//                 if(msg != 'fail')                
-//                 {
-//                     var sourceAClassWiseComps = JSON.parse(msg);
-//                 }
-
-            
-//                 // get class wise properties for excel and other 1D datasources
-//                 $.ajax({
-//                     url: 'PHP/ClasswiseComponentsReader.php',
-//                     type: "POST",
-//                     async: true,
-//                     data: {'Source' : "SourceB"},
-//                     success: function (msg1) 
-//                     {
-//                         if(msg1 != 'fail')                
-//                         {
-//                             var sourceBClassWiseComps = JSON.parse(msg1);
-//                         }
-
-
-//                         return resolve(true);
-//                     }
-//                 });
-
-//             }//,
-//             // error: function () 
-//             // {
-//             //     return resolve(true);
-//             // }
-//         });
-//     });
-// }

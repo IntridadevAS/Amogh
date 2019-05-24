@@ -10,9 +10,9 @@
         
     // get project name
     $projectName = NULL;
-    if(isset($_SESSION['projectname']))
+    if(isset($_SESSION['ProjectName']))
     {
-        $projectName =  $_SESSION['projectname'];              
+        $projectName =  $_SESSION['ProjectName'];              
     }
     else
     {
@@ -55,8 +55,8 @@
             $sourceAComponentsTable = 'SourceAComponents';
             $sourceBComponentsTable = 'SourceBComponents';
 
-            $sourceAnotSelectedCompsTable = "SourceANotCheckedComponents";
-            $sourceBnotSelectedCompsTable = "SourceBNotCheckedComponents";
+            $sourceAnotSelectedCompsTable = "SourceANotSelectedComponents";
+            $sourceBnotSelectedCompsTable = "SourceBNotSelectedComponents";
         }
         else if(strtolower($_POST['CheckType']) === 'sourceacompliance')
         {
@@ -68,7 +68,7 @@
             
             $sourceAComponentsTable = 'SourceAComponents';
 
-            $sourceAnotSelectedCompsTable = "SourceANotCheckedComponents";
+            $sourceAnotSelectedCompsTable = "SourceANotSelectedComponents";
         }
         else if(strtolower($_POST['CheckType']) === 'sourcebcompliance')
         {          
@@ -80,7 +80,7 @@
 
             $sourceBComponentsTable = 'SourceBComponents';
 
-            $sourceBnotSelectedCompsTable = "SourceBNotCheckedComponents";
+            $sourceBnotSelectedCompsTable = "SourceBNotSelectedComponents";
         }
         else 
         {

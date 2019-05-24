@@ -14,9 +14,9 @@
     
     // get project name
     $projectName = NULL;
-    if(isset($_SESSION['projectname']))
+    if(isset($_SESSION['ProjectName']))
     {
-        $projectName =  $_SESSION['projectname'];              
+        $projectName =  $_SESSION['ProjectName'];              
     }
     else
     {
@@ -80,8 +80,12 @@
              // begin the transaction
              $dbh->beginTransaction();
 
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $componentsTableName. ';';
+            $dbh->exec($command);      
+
             // ischecked can have values 'true' or 'false'
-            $command = 'CREATE TABLE IF NOT EXISTS '. $componentsTableName. '(
+            $command = 'CREATE TABLE '. $componentsTableName. '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
                 mainclass TEXT NOT NULL,
@@ -91,9 +95,13 @@
                 parentid INTEGER
               )';         
              $dbh->exec($command);                                                            
+                       
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $propertiesTableName. ';';
+            $dbh->exec($command);    
 
-             // create properties table
-             $command = 'CREATE TABLE IF NOT EXISTS '.  $propertiesTableName.'(
+            // create properties table
+            $command = 'CREATE TABLE '.  $propertiesTableName.'(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         name TEXT NOT NULL,
                         format TEXT,
@@ -200,8 +208,12 @@
              // begin the transaction
              $dbh->beginTransaction();
 
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $componentsTableName. ';';
+            $dbh->exec($command);    
+
             // ischecked can have values 'true' or 'false'
-            $command = 'CREATE TABLE IF NOT EXISTS '. $componentsTableName. '(
+            $command = 'CREATE TABLE '. $componentsTableName. '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
                 mainclass TEXT NOT NULL,
@@ -210,8 +222,12 @@
               )';         
              $dbh->exec($command);                                                            
 
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '. $propertiesTableName. ';';
+            $dbh->exec($command);   
+
              // create properties table
-             $command = 'CREATE TABLE IF NOT EXISTS '.  $propertiesTableName.'(
+             $command = 'CREATE TABLE '.  $propertiesTableName.'(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         name TEXT NOT NULL,
                         format TEXT,

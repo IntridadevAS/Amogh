@@ -3,7 +3,7 @@ var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
 
-        function xCheckStudioInterface(sourceType, checkType) {
+        function xCheckStudioInterface(sourceType, checkType, selectedComponents) {
             this.SourceType = sourceType;
             this.checkType = checkType;
 
@@ -18,6 +18,7 @@ var xCheckStudio;
             this.db_reader = undefined;
 
             this.NodeIdvsComponentIdList ={}
+            this.NodeIdvsSelectedComponents = selectedComponents;
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
@@ -55,34 +56,64 @@ var xCheckStudio;
         xCheckStudioInterface.prototype.setupViewer = function (viewerOptions, isFirstViewer) {
             var _this = this;
 
-            // create and start viewer
-            var viewer = new Communicator.WebViewer({
-                containerId: viewerOptions.containerId, //"myContainer",
-                //endpointUri: "uploads/scs/"+file_name+".scs"
-                endpointUri: viewerOptions.endpointUri, //"uploads/scs/bearingassembly.scs"	
-                model: viewerOptions.model
+            return new Promise((resolve) => {
+                // create and start viewer
+                var viewer = new Communicator.WebViewer({
+                    containerId: viewerOptions.containerId, //"myContainer",
+                    //endpointUri: "uploads/scs/"+file_name+".scs"
+                    endpointUri: viewerOptions.endpointUri, //"uploads/scs/bearingassembly.scs"	
+                    model: viewerOptions.model
+                });
+
+                viewer.start();
+
+                _this._firstViewer = viewer;
+
+                // set viewer's background color
+                _this.setViewerBackgroundColor();
+
+                var excelSheetParentContainer = document.getElementById("dataSourceViewer");
+                for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
+                    currentChild = excelSheetParentContainer.children[i];
+                    if (currentChild.className === "viewdatagraphics") {
+                        currentChild.style.display = "none";
+                    }
+                }
+
+                viewer.setCallbacks({
+                    firstModelLoaded: function () {
+
+                        _this._firstViewer = viewer;
+
+                        // construct model tree
+                        _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, _this.SourceType, _this.NodeIdvsSelectedComponents);
+
+                        // register viewer evenets
+                        _this._bindEvents(viewer, isFirstViewer);
+                        
+                        viewer.view.fitWorld();
+
+                        _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
+
+                        // show busy spinner
+                        var busySpinner = document.getElementById("divLoading");
+                        busySpinner.className = 'show';
+                        
+                        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
+                        _this.RootNodeId = viewer.model.getAbsoluteRootNode();
+                        _this.readProperties(_this.RootNodeId, identifierProperties, undefined);   
+                        
+                        return resolve(true);                                   
+                        
+                    },
+                    modelLoadFailure: function () {
+                        
+                        return resolve(false);
+                    }
+                });
+
             });
 
-            viewer.start();
-
-            var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-            for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-                currentChild = excelSheetParentContainer.children[i];
-                if (currentChild.className === "viewdatagraphics") {
-                    currentChild.style.display = "none";
-                }
-            }
-
-            _this._firstViewer = viewer;
-
-            // construct model tree
-            _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, this.SourceType);
-
-            // register viewer evenets
-            _this._bindEvents(viewer, isFirstViewer);
-
-            // set viewer's background color
-            _this.setViewerBackgroundColor();
         }
 
         xCheckStudioInterface.prototype.setViewerBackgroundColor = function () {
@@ -100,18 +131,18 @@ var xCheckStudio;
             var _this = this;
 
             viewer.setCallbacks({
-                firstModelLoaded: function () {
-                    viewer.view.fitWorld(); 
-                    _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
+                // firstModelLoaded: function () {
+                //     viewer.view.fitWorld(); 
+                //     _this.createNodeIdArray(viewer.model.getAbsoluteRootNode());
 
-                   // show busy spinner
-                    var busySpinner = document.getElementById("divLoading");
-                    busySpinner.className = 'show';
+                //    // show busy spinner
+                //     var busySpinner = document.getElementById("divLoading");
+                //     busySpinner.className = 'show';
 
-                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
-                    _this.RootNodeId = viewer.model.getAbsoluteRootNode();
-                    _this.readProperties(_this.RootNodeId, identifierProperties, undefined);                    
-                },
+                //     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
+                //     _this.RootNodeId = viewer.model.getAbsoluteRootNode();
+                //     _this.readProperties(_this.RootNodeId, identifierProperties, undefined);                    
+                // },
                 selectionArray: function (selections) {
                     for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
                         var selection = selections_1[_i];
@@ -402,7 +433,7 @@ var xCheckStudio;
             }
 
         };
-
+        
         xCheckStudioInterface.prototype.addComponentsToDB = function () {
 
             var _this = this;

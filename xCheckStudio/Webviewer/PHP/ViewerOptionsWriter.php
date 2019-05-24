@@ -13,9 +13,9 @@
     
     // get project name
     $projectName = NULL;
-    if(isset($_SESSION['projectname']))
+    if(isset($_SESSION['ProjectName']))
     {
-        $projectName =  $_SESSION['projectname'];              
+        $projectName =  $_SESSION['ProjectName'];              
     }
     else
     {
@@ -42,7 +42,11 @@
             // begin the transaction
             $dbh->beginTransaction();             
 
-            $command = 'CREATE TABLE IF NOT EXISTS '.$viewerOptionsTable.'(
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '.$viewerOptionsTable. ';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE '.$viewerOptionsTable.'(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
                         containerId TEXT,
                         endpointUri TEXT)';            

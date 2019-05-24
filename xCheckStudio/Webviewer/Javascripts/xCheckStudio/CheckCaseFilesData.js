@@ -1,14 +1,4 @@
 var CheckCaseFilesData = function () {     
-    // this.ComplianceCheckDataList = [];
-    // this.NonComplianceCheckData = [];
-
-    // CheckCaseFilesData.prototype.addComplianceCheckFileData = function (checkCaseFileData) {
-    //     this.ComplianceCheckDataList.push(checkCaseFileData);
-    // }
-
-    // CheckCaseFilesData.prototype.addNonComplianceCheckFileData = function (checkCaseFileData) {
-    //     this.NonComplianceCheckData.push(checkCaseFileData);
-    // }
 
     this.CheckCaseFileDataList = [];
     CheckCaseFilesData.prototype.addCheckCaseFileData = function (checkCaseFileData) {
@@ -47,33 +37,13 @@ var CheckCaseFilesData = function () {
 
 
                     var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
-                    _this.addCheckCaseFileData(checkCaseFileData);
-                    // var complianceCheckAttribute = fileData[0];
-                    // if (complianceCheckAttribute !== null &&
-                    //     complianceCheckAttribute !== undefined) {
-
-                    //     var filePathArray = this.responseURL.split("/");
-                    //     if(filePathArray.length ==0)
-                    //     {
-                    //         return;
-                    //     }
-                    //     var fileName = filePathArray[filePathArray.length -1];
-                    //     var checkCaseFileData = new CheckCaseFileData(fileName, fileData[1]);
-                    //     if (complianceCheckAttribute.toLowerCase() === "true") {
-                    //         checkCaseFilesData.addComplianceCheckFileData(checkCaseFileData);
-                    //     }
-                    //     else if (complianceCheckAttribute.toLowerCase() === "false") {
-                    //         checkCaseFilesData.addNonComplianceCheckFileData(checkCaseFileData);
-                    //     }
-                    // }
+                    _this.addCheckCaseFileData(checkCaseFileData);                                       
 
                     filesPending--;
                     if (filesPending == 0) {
                         _this.populateCheckCases();
                     }
                 }
-
-
             };
 
             //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
@@ -89,15 +59,7 @@ var CheckCaseFilesData = function () {
         for (var i = checkCaseSelect.length - 1; i >= 0; i--) {
             checkCaseSelect.remove(i);
         }
-       
-        // var checkDataList;
-        // if (complianceCheck) {
-        //     checkDataList = this.ComplianceCheckDataList;
-        // }
-        // else {
-        //     checkDataList = this.NonComplianceCheckData
-        // }
-
+             
         // add None option
         checkCaseSelect.options.add(new Option("None", "None"));
 

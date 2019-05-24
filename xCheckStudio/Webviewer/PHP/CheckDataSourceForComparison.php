@@ -14,9 +14,9 @@
     
             // get project name
             $projectName = NULL;
-            if(isset($_SESSION['projectname']))
+            if(isset($_SESSION['ProjectName']))
             {
-                $projectName =  $_SESSION['projectname'];              
+                $projectName =  $_SESSION['ProjectName'];              
             }
             else
             {
@@ -51,8 +51,8 @@
             writeComparisonResultToDB();            
 
             // write not checked components to database
-            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotCheckedComponents", $projectName);
-            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotCheckedComponents", $projectName);
+            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotSelectedComponents", $projectName);
+            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotSelectedComponents", $projectName);
 
             // write not matched components to database
             writeNotMatchedComponentsToDB($SourceANotMatchedComponents, "SourceANotMatchedComponents", $projectName);

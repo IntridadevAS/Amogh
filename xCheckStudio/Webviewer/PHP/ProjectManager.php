@@ -14,9 +14,415 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetProjects":
             GetProjects();
             break;
+        case "IsLoadProject":
+            IsLoadProject();
+            break;
+        case "CreateProjectSession":
+            CreateProjectSession();
+            break;
+        case "ReadSelectedComponents":
+            ReadSelectedComponents();
+           break;
+        case "ReadCheckModuleControlsState":
+            ReadCheckModuleControlsState();
+            break;
+        case "DeleteComparisonResults":
+            DeleteComparisonResults();
+            break;
+        case "DeleteSourceAComplianceResults":
+            DeleteSourceAComplianceResults();
+            break;
+        case "DeleteSourceBComplianceResults":
+            DeleteSourceBComplianceResults();
+            break;
         default:
             echo "No Function Found!";
     }
+}
+
+
+/*
+|
+|   Deletes all tables which store comparison check results
+|
+*/  
+function DeleteComparisonResults()
+{
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+    try
+    {    
+        // open database
+        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+        // begin the transaction
+        $dbh->beginTransaction();  
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
+        $dbh->exec($command);      
+
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+         $dbh->exec($command);     
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
+        $dbh->exec($command);     
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceANotSelectedComponents;';
+        $dbh->exec($command);     
+     
+             // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBNotSelectedComponents;';
+        $dbh->exec($command);    
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    }
+    catch(Exception $e) 
+    {        
+        return "fail";         
+    } 
+
+    return "success"; 
+}
+
+/*
+|
+|   Deletes all tables which store source A compliance check results
+|
+*/  
+function DeleteSourceAComplianceResults()
+{
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+    try
+    {    
+        // open database
+        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+        // begin the transaction
+        $dbh->beginTransaction();  
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
+        $dbh->exec($command);      
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
+        $dbh->exec($command);     
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
+        $dbh->exec($command);     
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceNotCheckedComponents;';
+        $dbh->exec($command);           
+     
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    }
+    catch(Exception $e) 
+    {        
+        return "fail";         
+    } 
+
+    return "success"; 
+}
+
+/*
+|
+|   Deletes all tables which store source B compliance check results
+|
+*/ 
+function DeleteSourceBComplianceResults()
+{
+     // get project name
+     session_start();   
+     $projectName = NULL;
+     if(isset($_SESSION['ProjectName']))
+     {
+         $projectName =  $_SESSION['ProjectName'];              
+     }
+     else
+     {
+         echo 'fail';
+         return;
+     }	
+ 
+     $dbh;
+     try
+     {    
+         // open database
+         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+ 
+         // begin the transaction
+         $dbh->beginTransaction();  
+ 
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
+         $dbh->exec($command);      
+ 
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
+         $dbh->exec($command);     
+ 
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
+         $dbh->exec($command);     
+ 
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS SourceBComplianceNotCheckedComponents;';
+         $dbh->exec($command);           
+      
+         // commit update
+         $dbh->commit();
+         $dbh = null; //This is how you close a PDO connection    
+     }
+     catch(Exception $e) 
+     {        
+         return "fail";         
+     } 
+ 
+     return "success"; 
+}
+
+function ReadCheckModuleControlsState()
+{
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+        try
+        {        
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+            // begin the transaction
+            $dbh->beginTransaction();  
+            
+            $results = $dbh->query("SELECT *FROM  CheckModuleControlsState;");   
+            
+            $checkModuleControlsState = array();
+            if($results)
+            {
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $checkModuleControlsState = array('comparisonSwith'=>$record['comparisonSwith'], 
+                                                      'sourceAComplianceSwitch'=>$record['sourceAComplianceSwitch'],  
+                                                      'sourceBComplianceSwitch'=>$record['sourceBComplianceSwitch'],
+                                                      'sourceACheckAllSwitch'=>$record['sourceACheckAllSwitch'],
+                                                      'sourceBCheckAllSwitch'=>$record['sourceBCheckAllSwitch']);
+                    break;
+                }
+            }
+            
+            echo json_encode($checkModuleControlsState);
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection    
+        }
+        catch(Exception $e) 
+        {        
+            return "fail"; 
+            //return;
+        } 
+}
+
+function ReadSelectedComponents()
+{
+    if(!isset($_POST['source']))
+    {
+        echo "fail";
+        return;
+    }
+    $source = $_POST['source'];
+
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+        try
+        {        
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+            // begin the transaction
+            $dbh->beginTransaction();  
+            
+            // source a selected components
+            $sourceAIdwiseComponents = NULL;
+            $sourceANodeIdwiseComponents = NULL;
+            if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
+            {
+                $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
+                if($results)
+                {
+                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        // id wise components
+                        $sourceAIdwiseComponents[$component['id']] = array('id'=>$component['id'], 
+                                                                             'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']);
+                        // node id wise components
+                        $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+                                                                            'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']); 
+                    }    
+                }
+            }
+            
+            // source b selected components
+            $sourceBIdwiseComponents = NULL;
+            $sourceBNodeIdwiseComponents = NULL;
+            if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
+            {
+                $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
+                if($results)
+                {
+                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        // id wise components
+                        $sourceBIdwiseComponents[$component['id']] = array('id'=>$component['id'], 
+                                                                             'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']);
+                        // node id wise components
+                        $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+                                                                            'name'=>$component['name'],  
+                                                                             'mainClass'=>$component['mainClass'],
+                                                                             'subClass'=>$component['subClass'],
+                                                                             'nodeId'=>$component['nodeId'],
+                                                                             'mainComponentId'=>$component['mainComponentId']); 
+                    }    
+                }
+            }
+           
+            $selectedComponents =array();
+
+            if( $sourceAIdwiseComponents !== NULL && 
+                $sourceANodeIdwiseComponents !== NULL)
+            {
+                $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
+                $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
+            }
+
+            if( $sourceBIdwiseComponents !== NULL && 
+                $sourceBNodeIdwiseComponents !== NULL)
+            {
+                $selectedComponents['SourceABwiseSelectedComps'] = $sourceBIdwiseComponents;
+                $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
+            }
+
+            echo json_encode($selectedComponents);
+
+             // commit update
+             $dbh->commit();
+             $dbh = null; //This is how you close a PDO connection    
+        }
+        catch(Exception $e) 
+        {        
+            return "fail"; 
+            //return;
+        } 
+}
+
+function CreateProjectSession()
+{
+    if(!isset($_POST['projectName']) || 
+       !isset($_POST['loadProject']) ||
+       !isset($_POST['sourceAPath']) ||
+       !isset($_POST['sourceBPath']) ||
+       !isset($_POST['projectId']))
+       {
+           echo "fail";
+           return;
+       }
+
+    session_start();
+
+    $_SESSION['ProjectName'] = $_POST['projectName'];
+    $_SESSION['LoadProject'] = $_POST['loadProject'];
+    $_SESSION['ProjectId'] =  $_POST['projectId'];
+    $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
+    $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
+       
+    echo 'success';
+}
+
+function IsLoadProject()
+{
+    session_start();
+    if(isset($_SESSION['LoadProject'] ))
+    {
+        echo $_SESSION['LoadProject'];
+        return;
+    }
+    
+    echo 'false';    
 }
 
 /*
@@ -95,13 +501,13 @@ function CreateProject()
 function AddProjectToMainDB()
 {
     session_start();
-    if( !isset($_SESSION['name']))
+    if( !isset($_SESSION['Name']))
     {
         echo "fail";           
         return;
     }
 
-    $userName  = $_SESSION['name'];
+    $userName  = $_SESSION['Name'];
     $projectName = trim($_POST["projectName"], " ");      
     $path = trim($_POST["path"], " ");
     $description = trim($_POST["description"], " ");
@@ -122,9 +528,18 @@ function AddProjectToMainDB()
         $query = 'INSERT INTO Projects (userid, projectname, description, function, path) VALUES (?, ?, ?, ?, ?)';
         $stmt = $dbh->prepare($query);
         $stmt->execute(array( $userid, $projectName, $description, $function, $path));     
+      
+        
+        // get project id for recently added row and write it into session variable
+        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();    
+        $stmt =  $dbh->query($qry);       
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $_SESSION['ProjectId'] = $row['projectid'];
+            break;                    
+        }
 
         $dbh = null; //This is how you close a PDO connection
-        
         echo 'success';                
         
         return;
@@ -179,7 +594,7 @@ function GetProjects()
     $userid = trim($_POST["userid"], " ");
     if($userid == "")
     {
-        echo "UserId cannot be empty";
+        echo 'fail';
         return;
     }
     try{
@@ -191,7 +606,7 @@ function GetProjects()
         $dbh = null;
       }
       catch(Exception $e) {
-        echo 'Message: ' .$e->getMessage();
+        echo 'fail';
         return;
       } 
 }

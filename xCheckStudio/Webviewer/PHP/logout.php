@@ -1,9 +1,9 @@
 <?php
         session_start();
        
-		if(isset($_SESSION['name']))
+		if(isset($_SESSION['Name']))
 		{
-         $name =  $_SESSION['name'];
+         $name =  $_SESSION['Name'];
         
          session_unset();
          

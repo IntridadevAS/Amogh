@@ -12,8 +12,8 @@ var xCheckStudio;
     var Ui;
     (function (Ui) {
         var ModelTree = /** @class */ (function () {
-            function ModelTree(elementId, viewer, sourceType) {
-                this._size = new Communicator.Point2(556, 364);
+            function ModelTree(elementId, viewer, sourceType, nodeIdvsSelectedComponents) {
+               
                 this._elementId = elementId;
                 this._viewer = viewer;
                 this.SourceType = sourceType;
@@ -21,16 +21,29 @@ var xCheckStudio;
                 this.NodeIdVsCellClassList = {};
                 this.NodeIdVsRowClassList = {};
                 this.modelTreeColumnHeaders = [];
-                this.modelTreeRowData = [];
-
-                this.selectedCompoents = [];
+                this.modelTreeRowData = [];                
 
                 this.NodeGroups = [];
 
                 this._createElements();
                 this._initEvents();
 
-                
+                this.NodeIdvsSelectedComponents = nodeIdvsSelectedComponents;
+                this.selectedCompoents = [];
+                if(nodeIdvsSelectedComponents)
+                {
+                    for(var nodeId in this.NodeIdvsSelectedComponents)
+                    {
+                        var selectedComponent = this.NodeIdvsSelectedComponents[nodeId];
+                        var checkedComponent = {};
+                        checkedComponent['Name'] = selectedComponent['name'];
+                        checkedComponent['MainComponentClass'] =  selectedComponent['mainClass'];
+                        checkedComponent['ComponentClass'] =  selectedComponent['subClass'];
+                        checkedComponent["NodeId"] =  selectedComponent['nodeId'];
+    
+                        this.selectedCompoents.push(checkedComponent);
+                    }
+                }
             }
             ModelTree.prototype._createElements = function () {
                 var _this = this;
@@ -38,11 +51,13 @@ var xCheckStudio;
                 // get container element Id 
                 var containerElement = document.getElementById(this._elementId);
 
+                var size = new Communicator.Point2(556, 364);
+
                 // create div element to hold model browser 
                 var tableDiv = document.createElement("div");
                 tableDiv.className = "scrollable";
-                tableDiv.style.width = this._size.x + "px";
-                tableDiv.style.height = this._size.y + "px";
+                tableDiv.style.width = size.x + "px";
+                tableDiv.style.height = size.y + "px";
                 containerElement.appendChild(tableDiv);
 
                 // create model browser table
@@ -69,7 +84,7 @@ var xCheckStudio;
                 columnHeader["name"] = "MainComponentClass";
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "100";
-                _this.modelTreeColumnHeaders.push(columnHeader);             
+                _this.modelTreeColumnHeaders.push(columnHeader);
 
                 columnHeader = {};
                 columnHeader["title"] = "Item Class";
@@ -111,8 +126,8 @@ var xCheckStudio;
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "0";
                 columnHeader["filtering"] = "false";
-                columnHeader["sorting"] = "false";                
-                _this.modelTreeColumnHeaders.push(columnHeader);             
+                columnHeader["sorting"] = "false";
+                _this.modelTreeColumnHeaders.push(columnHeader);
 
             };
 
@@ -140,15 +155,15 @@ var xCheckStudio;
             ModelTree.prototype.revisedRandId = function () {
                 return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
             }
-            
-            ModelTree.prototype.addClassesToModelBrowser = function(){
+
+            ModelTree.prototype.addClassesToModelBrowser = function () {
                 var modelBrowser = document.getElementById(this._elementId);
                 var modelBrowserHeader = modelBrowser.children[0];
                 var modelBrowserRowTable = modelBrowser.children[1].getElementsByTagName("table")[0];
                 var modelBrowserRows = modelBrowserRowTable.getElementsByTagName("tr");
                 for (var i = 0; i < modelBrowserRows.length; i++) {
                     var currentRow = modelBrowserRows[i];
-                    
+
                     if (currentRow.cells[4].innerHTML !== "") {
                         var nodeId = currentRow.cells[4].innerHTML;
                         var className = this.NodeIdVsCellClassList[nodeId];
@@ -156,7 +171,7 @@ var xCheckStudio;
                             modelBrowserRows[i].cells[1].classList.add(className)
                         }
                     }
-                    
+
                     var nodeId = currentRow.cells[4].innerHTML;
                     var className = this.NodeIdVsRowClassList[nodeId];
                     if (className !== undefined) {
@@ -170,8 +185,7 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) 
-            {
+            ModelTree.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) {
                 var _this = this;
 
                 var model = this._viewer.model;
@@ -190,44 +204,46 @@ var xCheckStudio;
                     nodeData = xCheckStudioInterface2.sourceProperties[nodeId];
                 }
 
-                if (nodeData == undefined) 
-                {
+                if (nodeData == undefined) {
                     return;
                 }
 
-                tableRowContent = {};              
+                tableRowContent = {};
                 // if (nodeData != undefined) 
                 // {
-                    var checkBox = document.createElement("INPUT");
-                    checkBox.setAttribute("type", "checkbox");
-                    checkBox.checked = false;
+                var checkBox = document.createElement("INPUT");
+                checkBox.setAttribute("type", "checkbox");
 
-                    tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
+                var checked = false;
+                if (_this.NodeIdvsSelectedComponents &&
+                    (nodeId in _this.NodeIdvsSelectedComponents)) {
+                    checked = true;
+                }
+                checkBox.checked = checked;
 
-                    // select component check box state change event
-                    checkBox.onchange = function () 
-                    {
-                        _this.handleComponentCheck(this);
+                tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
+
+                // select component check box state change event
+                checkBox.onchange = function () {
+                    _this.handleComponentCheck(this);
+                }
+
+                tableRowContent[this.modelTreeColumnHeaders[1].name] = nodeData.Name;
+                var isAssemblyNodeType = this.isAssemblyNode(nodeId);
+                if (isAssemblyNodeType) {
+                    if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
+                        this.NodeIdVsCellClassList[nodeData.NodeId] = componentStyleClass;
                     }
+                }
 
-                    tableRowContent[this.modelTreeColumnHeaders[1].name] = nodeData.Name;
-                    var isAssemblyNodeType = this.isAssemblyNode(nodeId);
-                    if (isAssemblyNodeType) 
-                    {
-                        if (this.NodeGroups.indexOf(componentStyleClass) === -1)
-                         {
-                            this.NodeIdVsCellClassList[nodeData.NodeId]  = componentStyleClass;
-                        }
-                    }
-
-                    tableRowContent[this.modelTreeColumnHeaders[2].name] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-                    tableRowContent[this.modelTreeColumnHeaders[3].name] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-                    tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+                tableRowContent[this.modelTreeColumnHeaders[2].name] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+                tableRowContent[this.modelTreeColumnHeaders[3].name] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+                tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
                 // }
                 //  else 
                 //  {
                 //      return;            
-                    
+
                 //  }
 
                 this.modelTreeRowData.push(tableRowContent);
@@ -243,7 +259,7 @@ var xCheckStudio;
                     sourceBTotalItemCount = this.modelTreeRowData.length;
                 }
 
-              
+
             }
 
 
@@ -252,7 +268,7 @@ var xCheckStudio;
                     var component = this.selectedCompoents[i];
                     if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                         component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-                        component['ComponentClass'] === componentRow.cells[3].textContent.trim() ) {
+                        component['ComponentClass'] === componentRow.cells[3].textContent.trim()) {
                         if ("NodeId" in component) {
                             if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
                                 return true;
@@ -328,15 +344,13 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.getClassWiseCheckedComponents = function () 
-            {
+            ModelTree.prototype.getClassWiseCheckedComponents = function () {
                 var classwiseCheckedComponents = {};
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
                 var mainCategoryPropertyName = identifierProperties['mainCategory'];
                 for (var i = 0; i < this.selectedCompoents.length; i++) {
                     var selectedComponent = this.selectedCompoents[i];
-                    if(selectedComponent[mainCategoryPropertyName] === "")
-                    {
+                    if (selectedComponent[mainCategoryPropertyName] === "") {
                         continue;
                     }
                     if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
@@ -366,19 +380,17 @@ var xCheckStudio;
 
                 // maintain track of selected/deselected components
                 if (currentCheckBox.checked &&
-                    !this.selectedCompoentExists(currentRow)) 
-                {
+                    !this.selectedCompoentExists(currentRow)) {
 
                     var checkedComponent = {};
                     checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent['MainComponentClass'] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
-                    checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();                  
+                    checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
                     checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
                     this.selectedCompoents.push(checkedComponent);
                 }
-                else if (this.selectedCompoentExists(currentRow)) 
-                {
+                else if (this.selectedCompoentExists(currentRow)) {
                     this.removeFromselectedCompoents(currentRow);
                 }
 
@@ -389,9 +401,9 @@ var xCheckStudio;
 
                 var currentComponentCell = currentRow.cells[1];
                 //var currentRowStyle = currentComponentCell.className;              
-                
+
                 var currentClassList = currentRow.classList;
-                var styleToCheck ="";
+                var styleToCheck = "";
                 for (var i = 0; i < currentClassList.length; i++) {
                     var styleClass = currentClassList[i];
                     if (styleClass.includes("jsgrid")) {
@@ -432,7 +444,7 @@ var xCheckStudio;
                             continue;
                         }
 
-                        var rowClassList = row.classList;                       
+                        var rowClassList = row.classList;
                         var rowStyleCheck = "";
                         for (var j = 0; j < rowClassList.length; j++) {
                             var styleClass = rowClassList[j];
@@ -462,7 +474,7 @@ var xCheckStudio;
                     }
                 }
             }
-             
+
 
             ModelTree.prototype.BrowserItemClick = function (nodeId, thisRow) {
                 var nodeID = parseInt(nodeId)
@@ -488,7 +500,7 @@ var xCheckStudio;
                     cell.style.backgroundColor = "#B2BABB"
                 }
             }
-        
+
             ModelTree.prototype.RestoreBackgroundColor = function (row) {
                 for (var j = 0; j < row.cells.length; j++) {
                     cell = row.cells[j];
@@ -511,15 +523,13 @@ var xCheckStudio;
                 return componentStyleClass;
             }
 
-            ModelTree.prototype.addModelBrowser = function (nodeId, styleList) 
-            {
+            ModelTree.prototype.addModelBrowser = function (nodeId, styleList) {
                 this.addModelBrowserComponent(nodeId, styleList);
 
                 if (this.modelTreeColumnHeaders === undefined ||
                     this.modelTreeColumnHeaders.length === 0 ||
                     this.modelTreeRowData === undefined ||
-                    this.modelTreeRowData.length === 0) 
-                {
+                    this.modelTreeRowData.length === 0) {
                     return;
                 }
 
@@ -530,59 +540,50 @@ var xCheckStudio;
 
                 var modelBrowserHeaderTable = modelBrowserData.children[0];
                 modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width= "543px";
+                modelBrowserHeaderTable.style.width = "543px";
                 modelBrowserHeaderTable.style.overflowX = "hide";
                 var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
-                for(var j =0; j < modelBrowserHeaderTableRows.length; j++)
-                {
+                for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
                     var currentRow = modelBrowserHeaderTableRows[j];
-                    for(var i = 0; i < currentRow.cells.length; i++)
-                    {
-                        if(i === 4 || i === 5 || i === 6 || i === 7)
-                        {
+                    for (var i = 0; i < currentRow.cells.length; i++) {
+                        if (i === 4 || i === 5 || i === 6 || i === 7) {
                             currentRow.cells[i].style.display = "none";
                         }
-                        if( j === 1 && i === 0)
-                        {
+                        if (j === 1 && i === 0) {
                             currentRow.cells[i].innerHTML = ""
                         }
                     }
                 }
 
-    
+
                 modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width= "556px";
+                modelBrowserDataTable.style.width = "556px";
                 modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
             };
 
-            ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) 
-            {
-                
+            ModelTree.prototype.addModelBrowserComponent = function (nodeId, styleList) {
+
                 if (nodeId !== null) {
                     var model = this._viewer.model;
                     var children = model.getNodeChildren(nodeId);
 
-                    if (children.length > 0) 
-                    {
+                    if (children.length > 0) {
                         var componentName = model.getNodeName(nodeId);
 
                         var componentStyleClass = this.getComponentstyleClass(componentName);
                         componentStyleClass = componentStyleClass.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
-                        componentStyleClass = componentStyleClass.replace(/\s/g,'');
+                        componentStyleClass = componentStyleClass.replace(/\s/g, '');
 
                         this.addComponentRow(nodeId, styleList, componentStyleClass);
 
-                        for (var _i = 0, children_1 = children; _i < children_1.length; _i++)
-                         {
+                        for (var _i = 0, children_1 = children; _i < children_1.length; _i++) {
                             var child = children_1[_i];
 
                             var collapsibleCellStyle;
-                            if (styleList !== undefined) 
-                            {
+                            if (styleList !== undefined) {
                                 collapsibleCellStyle = styleList + " " + componentStyleClass;
                             }
-                            else 
-                            {
+                            else {
                                 collapsibleCellStyle = componentStyleClass;
                             }
 
@@ -611,17 +612,17 @@ var xCheckStudio;
                             let dmy = parseInt(filter.dummy, 10);
                             this.recalculateTotals = true;
                             return $.grep(tableData, row => {
-                              return (!Component || row.Component.toLowerCase().indexOf(Component) >= 0)
-                              && (!MainComponentClass || row.MainComponentClass.toLowerCase().indexOf(MainComponentClass) >= 0)
-                              && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
-                              && (isNaN(dmy) || row.dummy === dmy);
+                                return (!Component || row.Component.toLowerCase().indexOf(Component) >= 0)
+                                    && (!MainComponentClass || row.MainComponentClass.toLowerCase().indexOf(MainComponentClass) >= 0)
+                                    && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
+                                    && (isNaN(dmy) || row.dummy === dmy);
                             });
                         }
-                      };
-    
+                    };
+
                     $(viewerContainer).jsGrid({
                         width: "556px",
-                        height: "364px",  
+                        height: "364px",
                         filtering: true,
                         sorting: true,
                         autoload: true,
@@ -630,20 +631,17 @@ var xCheckStudio;
                         fields: columnHeaders,
                         margin: "0px",
                         checked: true,
-                        onRefreshed: function(config) {  
+                        onRefreshed: function (config) {
                             _this.AddTableContentCount(this._container.context.id);
                             var sorting = this.getSorting();
-                            if(sorting.field !== undefined || sorting.order !== undefined )
-                            {
-                                if(config.grid._container[0].id === "modelTree1")
-                                {
+                            if (sorting.field !== undefined || sorting.order !== undefined) {
+                                if (config.grid._container[0].id === "modelTree1") {
                                     xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
                                     for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
                                         xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
                                     }
                                 }
-                                else if(config.grid._container[0].id === "modelTree2")
-                                {
+                                else if (config.grid._container[0].id === "modelTree2") {
                                     xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
                                     for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
                                         xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
@@ -651,16 +649,14 @@ var xCheckStudio;
                                 }
                             }
                         },
-                        onDataLoaded: function(args) {
-                            if(args.grid._container[0].id === "modelTree1")
-                            {
+                        onDataLoaded: function (args) {
+                            if (args.grid._container[0].id === "modelTree1") {
                                 xCheckStudioInterface1._modelTree.addClassesToModelBrowser();
                                 for (var i = 0; i < xCheckStudioInterface1._modelTree.NodeGroups.length; i++) {
                                     xCheckStudioInterface1._modelTree.CreateGroup(xCheckStudioInterface1._modelTree.NodeGroups[i]);
                                 }
                             }
-                            else if(args.grid._container[0].id === "modelTree2")
-                            {
+                            else if (args.grid._container[0].id === "modelTree2") {
                                 xCheckStudioInterface2._modelTree.addClassesToModelBrowser();
                                 for (var i = 0; i < xCheckStudioInterface2._modelTree.NodeGroups.length; i++) {
                                     xCheckStudioInterface2._modelTree.CreateGroup(xCheckStudioInterface2._modelTree.NodeGroups[i]);
@@ -685,72 +681,70 @@ var xCheckStudio;
                                 }
 
                                 var nodeId = args.event.currentTarget.cells[modelBrowserNodeIdColumn].innerText
-                               if(nodeId !== undefined)
-                               {
+                                if (nodeId !== undefined) {
                                     _this.BrowserItemClick(nodeId, args.event.currentTarget);
-                               }
+                                }
                                 _this.SelectedComponentRow = args.event.currentTarget;
-                                _this.ChangeBackgroundColor(_this.SelectedComponentRow );
-                            }                               
+                                _this.ChangeBackgroundColor(_this.SelectedComponentRow);
+                            }
                         }
-                        
+
                     });
-    
+
                 });
-    
-    
-            var container = document.getElementById(viewerContainer.replace("#", ""));
 
-            container.style.width = "556px"
-            container.style.height = "364px"
-            container.style.margin = "0px"
-            container.style.overflowX = "hide";
-            container.style.overflowY = "scroll";
-            container.style.padding = "0";
-        };
 
-        ModelTree.prototype.AddTableContentCount = function(containerId){
-            var modelBrowserData = document.getElementById(containerId);
-            var modelBrowserDataTable = modelBrowserData.children[1];
-            var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-           
-            var countBox;
-            if (containerId === "modelTree1") {
-                countBox = document.getElementById("SourceAComponentCount");
-            }
-            if (containerId === "modelTree2") {
-                countBox = document.getElementById("SourceBComponentCount");
-            }
-            countBox.innerText = "Count: " + modelBrowserTableRows.length;
-        }
+                var container = document.getElementById(viewerContainer.replace("#", ""));
 
-        ModelTree.prototype.addselectedRowsToArray = function (viewerContainer){
-            var container = document.getElementById(viewerContainer.replace("#", ""));
-            var modelTreeContainerElement = container;
-    
-            var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
-    
-            var modelBrowserTable = modelTreeContainerElement.children[1];
-            var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
-    
-            for(var i =0; i < modelBrowserTableRows.length; i++)
-            {
-                var row = modelBrowserTableRows[i];
-    
-                 var checkedComponent = {
-                    'Name': row.cells[modelBrowserComponentColumn].textContent,
-                    'MainComponentClass': row.cells[modelBrowserMainClassColumn].textContent,
-                    'SubComponentClass': row.cells[modelBrowserSubClassColumn].textContent,
-                    'NodeId': row.cells[modelBrowserNodeIdColumn].textContent
-                    //'Source': row.cells[modelBrowserSourceColumn].textContent,
-                    //'Destination': row.cells[modelBrowserDestinationColumn].textContent,
-                    //'Owner': row.cells[modelBrowserOwnerColumn].textContent
-                };
-                this.selectedCompoents.push(checkedComponent);
+                container.style.width = "556px"
+                container.style.height = "364px"
+                container.style.margin = "0px"
+                container.style.overflowX = "hide";
+                container.style.overflowY = "scroll";
+                container.style.padding = "0";
+            };
+
+            ModelTree.prototype.AddTableContentCount = function (containerId) {
+                var modelBrowserData = document.getElementById(containerId);
+                var modelBrowserDataTable = modelBrowserData.children[1];
+                var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+
+                var countBox;
+                if (containerId === "modelTree1") {
+                    countBox = document.getElementById("SourceAComponentCount");
+                }
+                if (containerId === "modelTree2") {
+                    countBox = document.getElementById("SourceBComponentCount");
+                }
+                countBox.innerText = "Count: " + modelBrowserTableRows.length;
             }
-    
-           
-        }
+
+            ModelTree.prototype.addselectedRowsToArray = function (viewerContainer) {
+                var container = document.getElementById(viewerContainer.replace("#", ""));
+                var modelTreeContainerElement = container;
+
+                var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
+
+                var modelBrowserTable = modelTreeContainerElement.children[1];
+                var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
+
+                for (var i = 0; i < modelBrowserTableRows.length; i++) {
+                    var row = modelBrowserTableRows[i];
+
+                    var checkedComponent = {
+                        'Name': row.cells[modelBrowserComponentColumn].textContent,
+                        'MainComponentClass': row.cells[modelBrowserMainClassColumn].textContent,
+                        'SubComponentClass': row.cells[modelBrowserSubClassColumn].textContent,
+                        'NodeId': row.cells[modelBrowserNodeIdColumn].textContent
+                        //'Source': row.cells[modelBrowserSourceColumn].textContent,
+                        //'Destination': row.cells[modelBrowserDestinationColumn].textContent,
+                        //'Owner': row.cells[modelBrowserOwnerColumn].textContent
+                    };
+                    this.selectedCompoents.push(checkedComponent);
+                }
+
+
+            }
             ModelTree.prototype.isAssemblyNode = function (nodeId) {
                 var nodeType = this._viewer.model.getNodeType(nodeId);
                 if (nodeType == Communicator.NodeType.AssemblyNode) {
@@ -767,7 +761,7 @@ var xCheckStudio;
                 var _this = this;
 
                 var imageClass = group_name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
-                imageClass = imageClass.replace(/\s/g,'');
+                imageClass = imageClass.replace(/\s/g, '');
 
                 // Create Button(Image)
                 $('td.' + group_name).prepend("<img class='" + imageClass + " button_closed'> ");
@@ -822,8 +816,8 @@ var xCheckStudio;
                 }
             }
 
-            ModelTree.prototype.OpenGroup = function (group_name, 
-                                                      child_groupName) {
+            ModelTree.prototype.OpenGroup = function (group_name,
+                child_groupName) {
                 var _this = this;
                 if ($('img.' + group_name).hasClass('button_open')) {
                     // Open everything
@@ -875,37 +869,32 @@ var xCheckStudio;
             }
 
 
-            ModelTree.prototype.HighlightModelBrowserRow = function (selectedNodeId)
-            {
+            ModelTree.prototype.HighlightModelBrowserRow = function (selectedNodeId) {
                 // if (checkManager != undefined) {
                 var modelBrowser = document.getElementById(this._elementId);
-               // var modelBrowserHeader = modelBrowser.children[0];
+                // var modelBrowserHeader = modelBrowser.children[0];
                 var modelBrowserRowTable = modelBrowser.children[1].getElementsByTagName("table")[0];
                 var browserTableRows = modelBrowserRowTable.getElementsByTagName("tr");
-                for (var i = 0; i < browserTableRows.length; i++) 
-                {
+                for (var i = 0; i < browserTableRows.length; i++) {
                     var childRow = browserTableRows[i];
                     var childRowColumns = childRow.cells;
                     var nodeIdString = childRowColumns[modelBrowserNodeIdColumn].innerText;
-                    
+
                     var nodeId = parseInt(nodeIdString.trim());
-                    if (childRowColumns.length > 0) 
-                    {                                              
-                        if (selectedNodeId === nodeId) 
-                        {
-                            if (this.SelectedComponentRow) 
-                            {
+                    if (childRowColumns.length > 0) {
+                        if (selectedNodeId === nodeId) {
+                            if (this.SelectedComponentRow) {
                                 this.RestoreBackgroundColor(this.SelectedComponentRow);
                             }
 
                             this.ChangeBackgroundColor(childRow)
                             this.SelectedComponentRow = childRow;
-                            
+
                             this.OpenHighlightedRow(childRow);
 
                             // scroll to selected row
                             modelBrowserRowTable.parentElement.parentElement.focus();
-                            modelBrowserRowTable.parentElement.parentElement.scrollTop = childRow.offsetTop - childRow.offsetHeight;        
+                            modelBrowserRowTable.parentElement.parentElement.scrollTop = childRow.offsetTop - childRow.offsetHeight;
                             break;
                         }
                     }
@@ -918,22 +907,22 @@ var xCheckStudio;
                 $(currentRow).show();
 
                 var currentClassName = currentRow.className;
-               
+
                 // remove first class-name i.e. "jsgrid-row" or "jsgrid-alt-row " 
-                var secondClassNameindex = currentClassName.indexOf(" ");               
-                var inheritedStyle = currentClassName.substr(secondClassNameindex+1);
-               
+                var secondClassNameindex = currentClassName.indexOf(" ");
+                var inheritedStyle = currentClassName.substr(secondClassNameindex + 1);
+
                 var lastClassNameindex = inheritedStyle.lastIndexOf(" ");
-               
+
                 // get parent's own style name
-                var parentsStyle = inheritedStyle.substr(lastClassNameindex+1);     
-                
+                var parentsStyle = inheritedStyle.substr(lastClassNameindex + 1);
+
                 // remove last class name
                 inheritedStyle = inheritedStyle.substr(0, lastClassNameindex);
-               
-                parentsStyle = "jsgrid-cell " + parentsStyle ;
-                var rows = document.getElementsByClassName("jsgrid-row " + inheritedStyle);            
-               
+
+                parentsStyle = "jsgrid-cell " + parentsStyle;
+                var rows = document.getElementsByClassName("jsgrid-row " + inheritedStyle);
+
                 for (var i = 0; i < rows.length; i++) {
                     if (parentsStyle === rows[i].cells[modelBrowserComponentColumn].className) {
                         if (rows[i].cells[modelBrowserComponentColumn].children.length > 0 &&

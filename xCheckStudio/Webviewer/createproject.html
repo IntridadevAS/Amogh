@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+            
+        <link href="CSS/OverlayStyle.css" rel="stylesheet" type="text/css"/>
+
         <script type="text/javascript" src="Javascripts\xCheckStudio\CreateProject.js"></script>
+        <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProject.js"></script>
         <script type="text/javascript" src="Javascripts\xCheckStudio\SessionManager.js"></script>
         
         <link href="/images/UIPackage/favicon.png" rel="shortcut icon"/>
@@ -52,8 +56,12 @@
 
         </style>
     </head>
-    <body style="margin: 0;
- background: rgba(255, 255, 255, 1.0);">
+    <body style="margin: 0; background: rgba(255, 255, 255, 1.0);">
+
+        <!-- load project div -->
+        <div id="loadProjectDiv" class="overlay" onclick="closeLoadProjectDiv()">            
+        </div>
+
         <input id="anPageName" name="page" type="hidden" value="createproject"/>
         <div class="createproject">
             <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
@@ -187,29 +195,30 @@
 				
 			function OnLoadPowerPlant()
 			{
-				var projectname = "PowerPlant";
-                //setCookie("checkprojectname", projectname, 1);
-                setSessionVariable("projectname", projectname);
+                openProject();
 
-				window.location.href = "/checkModule.html";
+                // var projectname = "PowerPlant";                               
+                // setSessionVariable("projectname", projectname);
+
+				//window.location.href = "/checkModule.html";
 			}
 			function OnLoadPowerPlant2()
 			{
 				var projectname = "Project 2";
                 //setCookie("checkprojectname", projectname, 1);
-                setSessionVariable("projectname", projectname);
+                //setSessionVariable("projectname", projectname);
 				window.location.href = "/checkModule.html";
-			}
-             function OnCreateProjectClick(){
-                var modal = document.getElementById('projectselectiondialogModal');
+            }
+            
+             function OnCreateProjectClick() {
+                    var modal = document.getElementById('projectselectiondialogModal');
 
-                // When the user clicks the button, open the modal 
-                modal.style.display = "block";
-                document.getElementById("projectselectiondialog-content").innerHTML = "";
-                $('#projectselectiondialog-content').load("/newprojectcreationdialog.html")
-           
-         
-        }
+                    // When the user clicks the button, open the modal 
+                    modal.style.display = "block";
+                    document.getElementById("projectselectiondialog-content").innerHTML = "";
+                    $('#projectselectiondialog-content').load("/newprojectcreationdialog.html")
+
+                }
 
 
 
