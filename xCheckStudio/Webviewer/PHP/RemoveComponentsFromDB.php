@@ -8,9 +8,9 @@
     
     // get project name
     $projectName = NULL;
-    if(isset($_SESSION['projectname']))
+    if(isset($_SESSION['ProjectName']))
     {
-        $projectName =  $_SESSION['projectname'];              
+        $projectName =  $_SESSION['ProjectName']; 
     }
     else
     {
@@ -22,54 +22,50 @@
 
     function removeComponentsFromDB()
     {
+        global $projectName;
         $dbh;
         try{
             $dbPath = "../Projects/".$projectName."/".$projectName.".db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-
+            $source = $_POST['Source']; 
             $dbh->beginTransaction();
 
+            $command = "SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%'";
+            $stmt = $dbh->query($command);
+            $listOfTables = $stmt->fetchAll(PDO::FETCH_ASSOC);
             // drop table if exists
             if(strtolower($source) == "sourcea")
             {
-                $componentsTableName = "SourceAComponents";
-                $propertiesTableName = "SourceAProperties";
-
-                $command = 'DROP TABLE IF EXISTS '. $componentsTableName. ';';
-                $dbh->exec($command);
-
-                $command = 'DROP TABLE IF EXISTS '. $propertiesTableName. ';';
-                $dbh->exec($command);
+                foreach ($listOfTables as $tableName) 
+                {
+                    $name = $tableName["name"]; 
+                    if($name !== "SourceAComponents" && $name !== "SourceAProperties")   
+                    {
+                        $command1 = 'DROP TABLE IF EXISTS '.$name. ';';
+                        $out = $dbh->query($command1);
+                    }                
+                }
             }
             else if(strtolower($source) == "sourceb")
             {
-                $componentsTableName = "SourceBComponents";
-                $propertiesTableName = "SourceBProperties";
-
-                $command = 'DROP TABLE IF EXISTS '. $componentsTableName. ';';
-                $dbh->exec($command);
-
-                $command = 'DROP TABLE IF EXISTS '. $propertiesTableName. ';';
-                $dbh->exec($command);
+                foreach ($listOfTables as $tableName) 
+                {
+                    $name = $tableName["name"]; 
+                    if($name !== "SourceBComponents" && $name !== "SourceBProperties")       
+                    {
+                        $command1 = 'DROP TABLE IF EXISTS '.$name. ';';
+                        $out = $dbh->query($command1);
+                    } 
+                }
             }
             else if(strtolower($source) == "both")
             {
-                $componentsATableName = "SourceAComponents";
-                $propertiesATableName = "SourceAProperties";
-                $componentsBTableName = "SourceBComponents";
-                $propertiesBTableName = "SourceBProperties";
-
-                $command = 'DROP TABLE IF EXISTS '. $componentsATableName. ';';
-                $dbh->exec($command);
-
-                $command = 'DROP TABLE IF EXISTS '. $propertiesATableName. ';';
-                $dbh->exec($command);
-
-                $command = 'DROP TABLE IF EXISTS '. $componentsBTableName. ';';
-                $dbh->exec($command);
-
-                $command = 'DROP TABLE IF EXISTS '. $propertiesBTableName. ';';
-                $dbh->exec($command);
+                foreach ($listOfTables as $tableName) 
+                {
+                    $name = $tableName["name"];                   
+                    $command1 = 'DROP TABLE IF EXISTS '.$name. ';';
+                    $out = $dbh->query($command1);
+                }
             }
             $dbh->commit();
             $dbh = null;        

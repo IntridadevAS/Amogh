@@ -1877,6 +1877,24 @@ function clearData(source) {
         busySpinner.classList.remove('show')
     });
 
+    $.ajax({
+        data: {'Source' : source},
+        type: "POST",
+        url: "PHP/DeleteSourceFilesFromDirectory.php"
+       }).done(function (msg) {
+        if (msg == 'fail') 
+        {
+            console.log(msg);
+        }
+        else
+        {
+            console.log("Success");
+        }
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
 }
 function cancelreviewresults() {
     sourceAComplianceCheckManager = undefined;
