@@ -51,8 +51,8 @@
             writeComparisonResultToDB();            
 
             // write not checked components to database
-            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotCheckedComponents", $projectName);
-            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotCheckedComponents", $projectName);
+            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotSelectedComponents", $projectName);
+            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotSelectedComponents", $projectName);
 
             // write not matched components to database
             writeNotMatchedComponentsToDB($SourceANotMatchedComponents, "SourceANotMatchedComponents", $projectName);

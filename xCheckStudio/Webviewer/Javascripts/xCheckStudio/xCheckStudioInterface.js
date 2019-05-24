@@ -3,7 +3,7 @@ var xCheckStudio;
 (function (xCheckStudio) {
     var xCheckStudioInterface = /** @class */ (function () {
 
-        function xCheckStudioInterface(sourceType, checkType) {
+        function xCheckStudioInterface(sourceType, checkType, selectedComponents) {
             this.SourceType = sourceType;
             this.checkType = checkType;
 
@@ -18,6 +18,7 @@ var xCheckStudio;
             this.db_reader = undefined;
 
             this.NodeIdvsComponentIdList ={}
+            this.NodeIdvsSelectedComponents = selectedComponents;
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
@@ -85,7 +86,7 @@ var xCheckStudio;
                         _this._firstViewer = viewer;
 
                         // construct model tree
-                        _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, this.SourceType);
+                        _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, _this.SourceType, _this.NodeIdvsSelectedComponents);
 
                         // register viewer evenets
                         _this._bindEvents(viewer, isFirstViewer);

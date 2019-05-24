@@ -121,25 +121,199 @@ function onCheckButtonClick() {
     var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
     var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
     var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+    
+    // check if one of the check switch is on
     if (!comparisonCB.classList.contains("state2") &&
         !complianceSourceACB.classList.contains("state1") &&
         !complianceSourceBCB.classList.contains("state1")) {
         // hide busy spinner
         busySpinner.classList.remove('show');
-        OnShowToast('No selected check type found.</br>Please select check type.');
-        //alert("No selected check type found. Please select check type.");
+        OnShowToast('No selected check type found.</br>Please select check type.');        
         return;
     }
 
-    var checkPerformed = false;
-    var checkType = null;
-    var sourcePropsForCompliance = null;
-    var studioInterface = null;
+    //var checkPerformed = false;  
     var checkcase = new CheckCase("");
     checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
     var dataSourceOrderMaintained = checkCaseManager.OrderMaintained;
-    var checkMethod;
-    if (xCheckStudioInterface1 && xCheckStudioInterface2 && comparisonCB.classList.contains("state2")) {
+    
+    //var comparisonPerformed = false;
+    // var sourceACompliancePerformed = false;
+    // var sourceBCompliancePerformed = false;
+
+    // perform comparison check
+    var comparisonPerformed = performComparisonCheck(comparisonCB, 
+                                                     checkcase, 
+                                                     dataSourceOrderMaintained);
+    
+    // perform source a compliance check                      
+    var sourceACompliancePerformed = performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourceOrderMaintained);
+
+    // perform source b compliance check                      
+    var sourceBCompliancePerformed = performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourceOrderMaintained );
+
+
+    // if  source a compliance check is not performed, then delete the comparison result tables from project database if already exists.
+    if (!comparisonPerformed) {
+        deleteCheckResultsFromDB("Comparison").then(function (result) {
+
+        });
+    }
+
+    // if comparison check is not performed, then delete the comparison result tables from project database if already exists.
+    if (!sourceACompliancePerformed) {
+        deleteCheckResultsFromDB("SourceACompliance").then(function (result) {
+
+        });
+    }
+    // if source b compliance check is not performed, then delete the comparison result tables from project database if already exists.
+    if (!sourceBCompliancePerformed) {
+        deleteCheckResultsFromDB("SourceBCompliance").then(function (result) {
+
+        });
+    }
+
+    // if (xCheckStudioInterface1 && 
+    //     xCheckStudioInterface2 && 
+    //     comparisonCB.classList.contains("state2")) {
+
+    //     var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
+    //     var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
+    //     if (!sourceAModelBrowser || !sourceBModelBrowser) {
+    //         OnShowToast('Comparison check can not be performed.');
+    //     }
+
+    //     // check if there are no selected components
+    //     if (sourceAModelBrowser.selectedCompoents.length === 0 &&
+    //         sourceBModelBrowser.selectedCompoents.length === 0) {
+    //         //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
+    //         OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
+    //         //return;
+    //     }
+
+    //     checkType = checkcase.getCheckType("Comparison");
+
+    //     if (!comparisonCheckManager) {
+    //         comparisonCheckManager = new CheckManager();
+    //         comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
+    //             xCheckStudioInterface2.sourceProperties,
+    //             checkType,
+    //             true,
+    //             undefined,
+    //             dataSourceOrderMaintained);
+
+    //         checkPerformed = true;
+    //         comparisonPerformed = true;
+    //     }
+    // }
+
+    
+    // if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) {
+    //     if (dataSourceOrderMaintained == 'true') {
+    //         checkType = checkcase.getCheckType("ComplianceSourceA");
+    //         if (!checkType) {
+    //             checkType = checkcase.getCheckType("Compliance");
+    //         }
+    //         studioInterface = xCheckStudioInterface1;
+    //         sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+    //     }
+    //     else {
+    //         checkType = checkcase.getCheckType("ComplianceSourceB");
+    //         if (!checkType) {
+    //             checkType = checkcase.getCheckType("Compliance");
+    //         }
+    //         studioInterface = xCheckStudioInterface1;
+    //         sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+    //     }
+    //     var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
+    //     if (!sourceAModelBrowser) {
+    //         OnShowToast('Compliance check can not be performed.');
+    //     }
+
+
+    //     if (sourceAModelBrowser.selectedCompoents.length === 0) {
+    //         //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+    //         OnShowToast('Compliance check can not be performed.</br>No selected components found for data source A.');
+    //         //continue;
+    //     }
+    //     else {
+    //         if (!sourceAComplianceCheckManager) {
+    //             sourceAComplianceCheckManager = new CheckManager();
+    //             sourceAComplianceCheckManager.performCheck(sourcePropsForCompliance,
+    //                 undefined,
+    //                 checkType,
+    //                 false,
+    //                 studioInterface,
+    //                 dataSourceOrderMaintained);
+
+    //             checkPerformed = true;
+    //             sourceACompliancePerformed = true;
+    //         }
+    //     }
+    // }
+    
+    // if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) {
+    //     if (dataSourceOrderMaintained == 'true') {
+    //         checkType = checkcase.getCheckType("ComplianceSourceB");
+    //         if (!checkType) {
+    //             checkType = checkcase.getCheckType("Compliance");
+    //         }
+    //         studioInterface = xCheckStudioInterface2;
+    //         sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+    //     }
+    //     else {
+    //         checkType = checkcase.getCheckType("ComplianceSourceA");
+    //         if (!checkType) {
+    //             checkType = checkcase.getCheckType("Compliance");
+    //         }
+    //         studioInterface = xCheckStudioInterface2;
+    //         sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
+    //     }
+    //     var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
+    //     if (!sourceBModelBrowser) {
+    //         OnShowToast('Compliance check can not be performed.');
+    //     }
+
+
+    //     if (sourceBModelBrowser.selectedCompoents.length === 0) {
+    //         //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+    //         OnShowToast('Compliance check can not be performed.</br>No selected components found for data source B.');
+    //         //continue;
+    //     }
+    //     else {
+    //         if (!sourceBComplianceCheckManager) {
+    //             sourceBComplianceCheckManager = new CheckManager();
+    //             sourceBComplianceCheckManager.performCheck(sourcePropsForCompliance,
+    //                 undefined,
+    //                 checkType,
+    //                 false,
+    //                 studioInterface,
+    //                 dataSourceOrderMaintained);
+
+    //             checkPerformed = true;
+    //             sourceBCompliancePerformed = true;
+    //         }
+    //     }
+    // }
+
+    // hide busy spinner
+    busySpinner.classList.remove('show');
+    if (!comparisonPerformed &&
+        !sourceACompliancePerformed &&
+        !sourceBCompliancePerformed) {
+        return;
+    }
+
+    //window.location.href = "/module2.html";
+    document.getElementById("checkcompletealert").style.display = "block";
+}
+
+function performComparisonCheck(comparisonCB, checkcase, dataSourceOrderMaintained) {
+
+    var checkPerformed = false;
+    if (xCheckStudioInterface1 &&
+        xCheckStudioInterface2 &&
+        comparisonCB.classList.contains("state2")) {
 
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
@@ -155,7 +329,7 @@ function onCheckButtonClick() {
             //return;
         }
 
-        checkType = checkcase.getCheckType("Comparison");
+        var checkType = checkcase.getCheckType("Comparison");
 
         if (!comparisonCheckManager) {
             comparisonCheckManager = new CheckManager();
@@ -166,39 +340,60 @@ function onCheckButtonClick() {
                 undefined,
                 dataSourceOrderMaintained);
 
-            checkPerformed = true;
+            checkPerformed = true;            
         }
     }
 
-    if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) {
-        if (dataSourceOrderMaintained == 'true') {
+    return checkPerformed}
+
+function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourceOrderMaintained ) {
+    if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) 
+    {
+        var checkType = undefined;
+        var studioInterface = undefined;
+        var sourcePropsForCompliance = undefined;
+        if (dataSourceOrderMaintained == 'true') 
+        {
             checkType = checkcase.getCheckType("ComplianceSourceA");
-            if (!checkType) {
+            if (!checkType) 
+            {
                 checkType = checkcase.getCheckType("Compliance");
             }
             studioInterface = xCheckStudioInterface1;
             sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
         }
-        else {
+        else 
+        {
             checkType = checkcase.getCheckType("ComplianceSourceB");
-            if (!checkType) {
+            if (!checkType) 
+            {
                 checkType = checkcase.getCheckType("Compliance");
             }
             studioInterface = xCheckStudioInterface1;
             sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
+        }     
+
+        if (!checkType || 
+            !studioInterface ||
+            !sourcePropsForCompliance) {
+            OnShowToast('Compliance check can not be performed.');
+            return false;
         }
+
         var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
         if (!sourceAModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
+            return false;
         }
 
 
-        if (sourceAModelBrowser.selectedCompoents.length === 0) {
-            //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
+        if (sourceAModelBrowser.selectedCompoents.length === 0) 
+        {
             OnShowToast('Compliance check can not be performed.</br>No selected components found for data source A.');
-            //continue;
+            return false;
         }
-        else {
+        else 
+        {
             if (!sourceAComplianceCheckManager) {
                 sourceAComplianceCheckManager = new CheckManager();
                 sourceAComplianceCheckManager.performCheck(sourcePropsForCompliance,
@@ -208,12 +403,21 @@ function onCheckButtonClick() {
                     studioInterface,
                     dataSourceOrderMaintained);
 
-                checkPerformed = true;
+               return true;
             }
         }
     }
 
-    if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) {
+    return false;
+}
+
+function performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourceOrderMaintained ) {
+    if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) 
+    {
+        var checkType = undefined;
+        var studioInterface = undefined;
+        var sourcePropsForCompliance = undefined;
+
         if (dataSourceOrderMaintained == 'true') {
             checkType = checkcase.getCheckType("ComplianceSourceB");
             if (!checkType) {
@@ -230,16 +434,25 @@ function onCheckButtonClick() {
             studioInterface = xCheckStudioInterface2;
             sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
         }
+
+        if (!checkType || 
+            !studioInterface ||
+            !sourcePropsForCompliance) {
+            OnShowToast('Compliance check can not be performed.');
+            return false;
+        }
+
         var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
         if (!sourceBModelBrowser) {
             OnShowToast('Compliance check can not be performed.');
+            return false;
         }
 
 
         if (sourceBModelBrowser.selectedCompoents.length === 0) {
             //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
             OnShowToast('Compliance check can not be performed.</br>No selected components found for data source B.');
-            //continue;
+            return false;
         }
         else {
             if (!sourceBComplianceCheckManager) {
@@ -251,19 +464,47 @@ function onCheckButtonClick() {
                     studioInterface,
                     dataSourceOrderMaintained);
 
-                checkPerformed = true;
+                    return true;
             }
         }
     }
 
-    // hide busy spinner
-    busySpinner.classList.remove('show');
-    if (!checkPerformed) {
-        return;
-    }
+    return false;
+}
 
-    //window.location.href = "/module2.html";
-    document.getElementById("checkcompletealert").style.display = "block";
+function deleteCheckResultsFromDB(checkType) {
+    return new Promise((resolve) => {
+
+        var functionToInvoke = undefined;
+        if (checkType.toLowerCase() === "comparison") 
+        {
+            functionToInvoke = "DeleteComparisonResults";
+        }
+        else if (checkType.toLowerCase() === "sourceacompliance") 
+        {
+            functionToInvoke = "DeleteSourceAComplianceResults";
+        }
+        else if (checkType.toLowerCase() === "sourcebcompliance") 
+        {            
+            functionToInvoke = "DeleteSourceBComplianceResults";
+        }
+
+        if (functionToInvoke === undefined) {
+            return resolve(false);
+        }
+
+        $.ajax({
+            data: {
+                'InvokeFunction': functionToInvoke
+            },
+            async: false,
+            type: "POST",
+            url: "PHP/ProjectManager.php"
+        }).done(function (msg) {
+
+            return resolve(true);
+        });
+    });
 }
 
 function stopExplode() {
@@ -1267,113 +1508,7 @@ function readDbDataSource(uri, file,
 }
 
 function postData() {
-    // remove post data js files from server from earlier check results, if any
-    // $.ajax({
-    //     data: '',
-    //     url: 'postData/postDataCleaner.php',
-    //     method: 'POST', // or GET
-    //     async: false,
-    //     success: function (msg) {
-    //         //alert('Post Data files deleted');
-    //     }
-    // });
-
-    // checkCaseName = checkCaseManager.CheckCase.Name;
-
-    // var sourceAClasswiseCheckedComponents = 0;
-    // var sourceBClasswiseCheckedComponents = 0;
-
-    // var sourceAModelTree;
-    // var sourceBModelTree;
-    // if (xCheckStudioInterface1) {
-    //     sourceAModelTree = xCheckStudioInterface1.getModelBrowser();
-    //     sourceAClasswiseCheckedComponents = sourceAModelTree.getClassWiseCheckedComponents(xCheckStudioInterface1.SourceType);
-    // }
-
-    // if (xCheckStudioInterface2) {
-    //     sourceBModelTree = xCheckStudioInterface2.getModelBrowser();
-    //     sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents(xCheckStudioInterface2.SourceType);
-    // }
-
-    // var sourceAClassWiseComponets = 0;
-    // var sourceBClassWiseComponets = 0;
-
-    // if (sourceAModelTree) {
-    //     var count = sourceAModelTree.selectedCompoents.length;
-    //     sourceACheckedItemCount = count > 0 ? count : 0;
-    //     sourceAClassWiseComponets = xCheckStudioInterface1.getClassWiseComponents();
-    // }
-    // if (sourceBModelTree) {
-    //     var count = sourceBModelTree.selectedCompoents.length;
-    //     sourceBCheckedItemCount = count > 0 ? count : 0;
-    //     sourceBClassWiseComponets = xCheckStudioInterface2.getClassWiseComponents();
-    //     // sourceBClasswiseCheckedComponents = sourceBModelTree.getClassWiseCheckedComponents();
-    // }
-
-    // var analyticsDetailsData = new AnalyticsData(checkCaseName,
-    //     sourceAFileName,
-    //     sourceBFileName,
-    //     sourceATotalItemCount,
-    //     sourceACheckedItemCount,
-    //     sourceBTotalItemCount,
-    //     sourceBCheckedItemCount,
-    //     sourceAClasswiseCheckedComponents,
-    //     sourceBClasswiseCheckedComponents,
-    //     sourceAClassWiseComponets,
-    //     sourceBClassWiseComponets);
-
-
-    // $.ajax({
-    //     url: 'PHP/analyticsDetailsDataWriter.php',
-    //     type: "POST",
-    //     async: true,
-    //     data: { "AnalyticsDetailsData": JSON.stringify(analyticsDetailsData) },
-    //     success: function (data) {
-    //         // alert("success");
-    //     }
-    // });
-
-    // post comparison data
-    // if (comparisonCheckManager) {
-    //     $.ajax({
-    //         url: 'PHP/comparisonCheckpostDataWriter.php',
-    //         type: "POST",
-    //         async: false,
-    //         data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
-    //         success: function (data) {
-    //             // alert("success");
-    //             //$("#result").html(data);
-    //         }
-    //     });
-    // }
-
-    // // post source A compliance data
-    // if (sourceAComplianceCheckManager) {
-    //     $.ajax({
-    //         url: 'PHP/sourceAComplianceDataWriter.php',
-    //   		type: "POST",
-    //         async: false,
-    //         data: { "SourceAComplianceCheckManager": sourceAComplianceCheckManager.CheckComponentsGroupsData },
-    //         success: function (data) {
-    //             //alert("success");
-    //             //$("#result").html(data);
-    //         }
-    //     });
-    // }
-
-    // // post source B compliance data
-    // if (sourceBComplianceCheckManager) {
-    //     $.ajax({
-    //         url: 'PHP/sourceBComplianceDataWriter.php',
-    //         type: "POST",
-    //         async: false,
-    //         data: { "SourceBComplianceCheckManager": JSON.stringify(sourceBComplianceCheckManager) },
-    //         success: function (data) {
-    //         }
-    //     });
-    // }
-
-
+    
     var sourceANodeIdvsComponentIdList;
     var sourceASelectedComponents;
     var sourceBNodeIdvsComponentIdList;
@@ -1405,57 +1540,19 @@ function postData() {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
                     "SourceViewerOptionsTable": "SourceAViewerOptions"
                 },
-                success: function (msg) {
-                    //alert("success");
-                    //$("#result").html(data);
+                success: function (msg) {                   
                 }
             });
 
             sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
             sourceAType = xCheckStudioInterface1.SourceType;
-
-            // postnode id and component data relation
-            // if (xCheckStudioInterface1.nodeIdVsComponentData) {
-            //     $.ajax({
-            //         url: 'PHP/sourceANodeIdVsComponentDataWriter.php',
-            //         type: "POST",
-            //         async: false,
-            //         data: { "SourceANodeIdVsComponentData": JSON.stringify(xCheckStudioInterface1.nodeIdVsComponentData) },
-            //         success: function (data) {
-            //             //alert("success");
-            //             //$("#result").html(data);
-            //         }
-            //     });
-            // }
-
-            // if (xCheckStudioInterface1.componentIdVsComponentData) {
-            //     $.ajax({
-            //         url: 'PHP/sourceAComponentIdVsComponentDataWriter.php',
-            //         type: "POST",
-            //         async: false,
-            //         data: { "sourceAComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface1.componentIdVsComponentData) },
-            //         success: function (data) {
-            //             //alert("success");
-            //             //$("#result").html(data);
-            //         }
-            //     });
-            // }
+            
         }
         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls" || xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
             sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
-            sourceAType = xCheckStudioInterface1.SourceType;
-            // $.ajax({
-            //     url: 'PHP/SourceASheetDataWriter.php',
-            //     type: "POST",
-            //     async: true,
-            //     data: { "SourceASheetData": JSON.stringify(xCheckStudioInterface1.excelReader.sourceDataSheet) },
-            //     success: function (data) {
-            //         //alert("success");
-            //         //$("#result").html(data);
-            //     }
-            // });
+            sourceAType = xCheckStudioInterface1.SourceType;         
         }
 
     }
@@ -1485,9 +1582,7 @@ function postData() {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
                     "SourceViewerOptionsTable": "SourceBViewerOptions"
                 },
-                success: function (msg) {
-                    //alert("success");
-                    //$("#result").html(data);
+                success: function (msg) {                  
                 }
             });
 
@@ -1495,51 +1590,44 @@ function postData() {
             sourceBNodeIdvsComponentIdList = xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
             sourceBType = xCheckStudioInterface2.SourceType;
-
-            // // postnode id and component data relation
-            // if (xCheckStudioInterface2.nodeIdVsComponentData) {
-            //     $.ajax({
-            //         url: 'PHP/sourceBNodeIdVsComponentDataWriter.php',
-            //         type: "POST",
-            //         async: false,
-            //         data: { "SourceBNodeIdVsComponentData": JSON.stringify(xCheckStudioInterface2.nodeIdVsComponentData) },
-            //         success: function (data) {
-            //             //alert("success");
-            //             //$("#result").html(data);
-            //         }
-            //     });
-            // }
-
-            // if (xCheckStudioInterface2.componentIdVsComponentData) {
-            //     $.ajax({
-            //         url: 'PHP/sourceBComponentIdVsComponentDataWriter.php',
-            //         type: "POST",
-            //         async: false,
-            //         data: { "sourceBComponentIdVsComponentData": JSON.stringify(xCheckStudioInterface2.componentIdVsComponentData) },
-            //         success: function (data) {
-            //             //alert("success");
-            //             //$("#result").html(data);
-            //         }
-            //     });
-            // }
-
         }
         else if (xCheckStudioInterface2.SourceType.toLowerCase() === "xls" || xCheckStudioInterface2.SourceType.toLowerCase() === "json") {
 
             sourceBNodeIdvsComponentIdList = xCheckStudioInterface2.NodeIdvsComponentIdList;
             sourceBSelectedComponents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
             sourceBType = xCheckStudioInterface2.SourceType;
-            // $.ajax({
-            //     url: 'PHP/SourceBSheetDataWriter.php',
-            //     type: "POST",
-            //     async: true,
-            //     data: { "SourceBSheetData": JSON.stringify(xCheckStudioInterface2.excelReader.sourceDataSheet) },
-            //     success: function (data) {
-            //         //alert("success");
-            //         //$("#result").html(data);
-            //     }
-            // });
         }
+    }
+
+    // control states
+    var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+    var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+    var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+    var sourceACheckAllCB = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+    var sourceBCheckAllCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+
+    var comparisonSwithOn = 'false';
+    if (comparisonCB.classList.contains("state2")) {
+        comparisonSwithOn = 'true';
+    }
+
+    var sourceAComplianceSwitchOn = 'false';
+    if (complianceSourceACB.classList.contains("state1")) {
+        sourceAComplianceSwitchOn = 'true';
+    }
+
+    var sourceBComplianceSwitchOn = 'false';
+    if (complianceSourceBCB.classList.contains("state1")) {
+        sourceBComplianceSwitchOn = 'true';
+    }
+
+    var sourceACheckAllSwitchOn = 'false';
+    if (sourceACheckAllCB.classList.contains("state2")) {
+        sourceACheckAllSwitchOn = 'true';
+    }
+    var sourceBCheckAllSwitchOn = 'false';
+    if (sourceBCheckAllCB.classList.contains("state2")) {
+        sourceBCheckAllSwitchOn = 'true';
     }
 
     // write source A selected components, differet control statuses to DB        
@@ -1557,7 +1645,12 @@ function postData() {
             "SourceBFileName": sourceBFileName,
             "SourceAType": sourceAType,
             "SourceBType": sourceBType,
-            "CheckCaseManager": JSON.stringify(checkCaseManager)
+            "CheckCaseManager": JSON.stringify(checkCaseManager),
+            "comparisonSwithOn": comparisonSwithOn,
+            "sourceAComplianceSwitchOn": sourceAComplianceSwitchOn,
+            "sourceBComplianceSwitchOn": sourceBComplianceSwitchOn,
+            "sourceACheckAllSwitchOn": sourceACheckAllSwitchOn,
+            "sourceBCheckAllSwitchOn": sourceBCheckAllSwitchOn
         },
         success: function (msg) {
             //alert("success");
@@ -1773,6 +1866,80 @@ function isLoadProject() {
 
 
 function loadProjectForCheck() {
+    // restore the control state
+    $.ajax({
+        data: {
+            'InvokeFunction': 'ReadCheckModuleControlsState'
+        },
+        type: "POST",
+        url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+        if (msg !== 'fail') {
+            var checkModuleControlsState = JSON.parse(msg);
+
+            // comparison swith
+            if ("comparisonSwith" in checkModuleControlsState &&
+                checkModuleControlsState["comparisonSwith"].toLowerCase() === 'true') {
+
+                var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+                if (comparisonCB.classList.contains('state1')) {
+                    comparisonCB.classList.remove("state1");
+                    comparisonCB.classList.add("state2");
+                    comparisonCB.classList.add("state1-to-state2");
+                }
+            }
+
+            // source A compliance swith
+            if ("sourceAComplianceSwitch" in checkModuleControlsState &&
+                checkModuleControlsState["sourceAComplianceSwitch"].toLowerCase() === 'true') {
+
+                var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+                if (complianceSourceACB.classList.contains('state2')) {
+                    complianceSourceACB.classList.remove("state2");
+                    complianceSourceACB.classList.add("state1");
+                    complianceSourceACB.classList.add("state2-to-state1");
+
+                }
+            }
+
+            // source B compliance swith
+            if ("sourceBComplianceSwitch" in checkModuleControlsState &&
+                checkModuleControlsState["sourceBComplianceSwitch"].toLowerCase() === 'true') {
+
+                var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+                if (complianceSourceBCB.classList.contains('state2')) {
+                    complianceSourceBCB.classList.remove("state2");
+                    complianceSourceBCB.classList.add("state1");
+                    complianceSourceBCB.classList.add("state2-to-state1");
+                }
+            }
+
+            // source A check all swith
+            if ("sourceACheckAllSwitch" in checkModuleControlsState &&
+                checkModuleControlsState["sourceACheckAllSwitch"].toLowerCase() === 'true') {
+
+                var sourceACheckAllCB = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+                if (sourceACheckAllCB.classList.contains('state1')) {
+                    sourceACheckAllCB.classList.remove("state1");
+                    sourceACheckAllCB.classList.add("state2");
+                    sourceACheckAllCB.classList.add("state1-to-state2");
+
+                }
+            }
+
+            // source B check all swith
+            if ("sourceBCheckAllSwitch" in checkModuleControlsState &&
+                checkModuleControlsState["sourceBCheckAllSwitch"].toLowerCase() === 'true') {
+
+                var sourceBCheckAllCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+                if (sourceBCheckAllCB.classList.contains('state1')) {
+                    sourceBCheckAllCB.classList.remove("state1");
+                    sourceBCheckAllCB.classList.add("state2");
+                    sourceBCheckAllCB.classList.add("state1-to-state2");
+                }
+            }
+        }
+    });
 
     // read check case info
     $.ajax({
@@ -1838,13 +2005,25 @@ function loadSources(viewerOptions) {
             }
             getSelectedComponentsFromDB(source).then(function (selectedCompsResult) {
 
+                var selectedComponents = undefined;
+                // select source A selected components
+                if ('SourceANodeIdwiseSelectedComps' in AllSelectedComponenets) {
+                    selectedComponents = AllSelectedComponenets['SourceANodeIdwiseSelectedComps'];
+                }
+
                 // load source A
-                loadSourceA(viewerOptions, dataSourceInfo).then(function (isSourceALoaded) {
+                loadSourceA(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceALoaded) {
 
                     // load source B
                     if ('sourceBFileName' in dataSourceInfo) {
 
-                        loadSourceB(viewerOptions, dataSourceInfo).then(function (isSourceBLoaded) {
+                        selectedComponents = undefined;
+                        if ('SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
+                            // select source B selected components      
+                            selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];
+                        }
+
+                        loadSourceB(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceBLoaded) {
 
                         });
 
@@ -1856,7 +2035,7 @@ function loadSources(viewerOptions) {
     });
 }
 
-function loadSourceA(viewerParams, dataSourceInfo) {
+function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
         // var sourceAViewerOptions = undefined;
@@ -1907,7 +2086,7 @@ function loadSourceA(viewerParams, dataSourceInfo) {
             addTabHeaders("modelTree1", file);
 
             var fileExtension = dataSourceInfo['sourceAType'];
-            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
             xCheckStudioInterface1.setupViewer(viewerOptions, true).then(function (result) {
 
                 // enable source a controls
@@ -1941,7 +2120,7 @@ function loadSourceA(viewerParams, dataSourceInfo) {
     });
 }
 
-function loadSourceB(viewerParams, dataSourceInfo) {
+function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
 
@@ -1995,7 +2174,7 @@ function loadSourceB(viewerParams, dataSourceInfo) {
             addTabHeaders("modelTree2", file);
 
             var fileExtension = dataSourceInfo['sourceBType'];
-            xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+            xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
             xCheckStudioInterface2.setupViewer(viewerOptions, false).then(function (result) {
 
                 // enable source b controls        
@@ -2079,7 +2258,7 @@ function selectComponents(modelTreeContainer) {
         'SourceANodeIdwiseSelectedComps' in AllSelectedComponenets) {
         selectedComponents = AllSelectedComponenets['SourceANodeIdwiseSelectedComps'];
     }
-    else if (modelTreeContainer === 'modelTree1' &&
+    else if (modelTreeContainer === 'modelTree2' &&
         'SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
         // select source B selected components      
         selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];

@@ -314,11 +314,7 @@
     function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
                                            $tableName,
                                            $projectName)
-    {
-        // global $SourceANotCheckedComponents;
-        // global $SourceBNotCheckedComponents;
-
-        //global $projectName;
+    {        
         try
         {   
             // open database
