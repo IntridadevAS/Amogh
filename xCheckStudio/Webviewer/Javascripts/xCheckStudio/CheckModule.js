@@ -1135,10 +1135,10 @@ function loadModel(fileName,
         }
     }
     // get SCS file path and load model into viewer
-    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+    var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
 
     $.ajax({
-        data: { 'viewerContainer': viewerContainer, 'fileName': fileName, 'dataSourceType': '3D' },
+        data: { 'viewerContainer': viewerContainer, 'fileName': fileNameWithoutExt, 'dataSourceType': '3D' },
         type: "POST",
         url: "PHP/GetSourceFilePath.php"
     }).done(function (uri) {
@@ -2081,11 +2081,19 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
             if (index != -1 &&
                 file.length > (index + 1)) {
                 file = file.substring(index + 1);
-            }
+            }          
 
-            addTabHeaders("modelTree1", file);
+            index = file.lastIndexOf(".");
+            if (index != -1 &&
+                file.length > (index + 1)) {
+                file = file.substring(0, index + 1);
+            }      
 
             var fileExtension = dataSourceInfo['sourceAType'];
+            file = file + fileExtension;
+            
+            addTabHeaders("modelTree1", file);
+
             xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
             xCheckStudioInterface1.setupViewer(viewerOptions, true).then(function (result) {
 
@@ -2171,9 +2179,17 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
                 file = file.substring(index + 1);
             }
 
-            addTabHeaders("modelTree2", file);
+            index = file.lastIndexOf(".");
+            if (index != -1 &&
+                file.length > (index + 1)) {
+                file = file.substring(0, index + 1);
+            }      
 
             var fileExtension = dataSourceInfo['sourceBType'];
+            file = file + fileExtension;
+            addTabHeaders("modelTree2", file);
+
+            //var fileExtension = dataSourceInfo['sourceBType'];
             xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
             xCheckStudioInterface2.setupViewer(viewerOptions, false).then(function (result) {
 
