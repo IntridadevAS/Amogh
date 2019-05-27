@@ -210,6 +210,20 @@ div {
   -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
   transform           : rotate(0deg);
 }
+
+.newprojectcreationdialog .projectcreationdialoggroup .properties .projectscopeswitch {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 240px;
+  height              : 41px;
+  width               : 629px;
+  position            : absolute;
+  margin              : 0;
+  left                : 546px;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+}
+
 .newprojectcreationdialog .projectcreationdialoggroup .properties .function .textfieldfunction {
   background-color    : rgba(255,255,255,0.0);
   top                 : 0px;

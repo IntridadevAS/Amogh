@@ -34,14 +34,19 @@ function openProject() {
             projectDescDiv.style.width = "100%";
             projectDiv.appendChild(projectDescDiv);
 
+            var projectscopeDiv = document.createElement('div');
+            projectscopeDiv.innerText = project['projectscope'];
+            projectscopeDiv.style.width = "100%";
+            projectDiv.appendChild(projectscopeDiv);
+
             var projectidDiv = document.createElement('div');
             projectidDiv.innerText = project['projectid'];
             projectidDiv.style.display = "none";
-            projectDiv.appendChild(projectidDiv);
+            projectDiv.appendChild(projectidDiv);           
 
             projectDiv.onclick = function () {
                 var projectName = this.children[0].innerText;
-                var projectId = this.children[2].innerText;
+                var projectId = this.children[3].innerText;
 
                 loadProject(projectName, projectId);
             }

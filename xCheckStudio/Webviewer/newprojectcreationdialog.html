@@ -58,6 +58,11 @@
                             Function
                         </div>
                     </div>
+                    <!--PUblic or Private project switch -->
+                    <div class="projectscopeswitch">
+                        <input type="checkbox" id="projectScopeSwitchId"> System Project<br>
+                    </div>
+
                     <a href="/createproject.html">
                         <div class="cancelbtn" style="cursor: pointer;">
                             <img src="/images/UIPackage/new-project-creation-dialog-bg@2x.png" class="bg2" />
@@ -182,8 +187,11 @@
                     functionText = "";
                 }
 
+                // project scope value i.e. public or private
+                var projectScope = document.getElementById("projectScopeSwitchId").checked;
+
                 // create project database
-                createProject(projectname, descriptionText, functionText);
+                createProject(projectname, descriptionText, functionText, projectScope);
             });
 
         }
