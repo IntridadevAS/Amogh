@@ -512,7 +512,17 @@ function AddProjectToMainDB()
     $path = trim($_POST["path"], " ");
     $description = trim($_POST["description"], " ");
     $function = trim($_POST["function"], " ");    
-       
+    
+    $projectScope = $_POST["projectScope"];    
+    if(strtolower($projectScope) === 'true')
+    {
+        $projectScope = "public";
+    }
+    else
+    {
+        $projectScope = "private";
+    }
+
     try{
     $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
     // first get user id from userName
@@ -525,9 +535,9 @@ function AddProjectToMainDB()
         // projectname is text column
         // userid is integer column
         // path is text column
-        $query = 'INSERT INTO Projects (userid, projectname, description, function, path) VALUES (?, ?, ?, ?, ?)';
+        $query = 'INSERT INTO Projects (userid, projectname, description, function, path, projectscope) VALUES (?, ?, ?, ?, ?,?)';
         $stmt = $dbh->prepare($query);
-        $stmt->execute(array( $userid, $projectName, $description, $function, $path));     
+        $stmt->execute(array( $userid, $projectName, $description, $function, $path, $projectScope));     
       
         
         // get project id for recently added row and write it into session variable
@@ -599,7 +609,7 @@ function GetProjects()
     }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select * from Projects where userid=".$userid.";";      
+        $query =  "select * from Projects where userid=".$userid." OR projectscope='public';";      
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);

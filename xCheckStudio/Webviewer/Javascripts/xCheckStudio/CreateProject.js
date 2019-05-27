@@ -27,7 +27,7 @@ function setProjectName() {
 }
 
 
-function createProject(projectname, descriptionText, functionText) {
+function createProject(projectname, descriptionText, functionText, projectScope) {
     $.ajax({
         data: {
             'InvokeFunction': 'CreateProject',
@@ -50,7 +50,8 @@ function createProject(projectname, descriptionText, functionText) {
                     'projectName': projectname,
                     'description': descriptionText,
                     'function': functionText,
-                    'path': path
+                    'path': path,
+                    "projectScope": projectScope
                 },
                 type: "POST",
                 url: "PHP/ProjectManager.php"
