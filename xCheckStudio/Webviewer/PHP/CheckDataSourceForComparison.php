@@ -969,7 +969,6 @@
             function isComponentGroupUndefined($sourceGroupName,  $isSourceAGroup){
                 global $CheckCaseType;       
                 global $orderMaintained;
-                var_dump($isSourceAGroup);
                 if($orderMaintained == 'false')
                 {
                     if($isSourceAGroup)
@@ -980,7 +979,6 @@
                     {
                         $isSourceAGroup = true;
                     }
-                    var_dump($isSourceAGroup);
                 }
                 for($index = 0; $index < count($CheckCaseType['ComponentGroups']); $index++)
                 {

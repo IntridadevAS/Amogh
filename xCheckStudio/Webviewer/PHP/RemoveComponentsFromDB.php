@@ -39,7 +39,7 @@
                 foreach ($listOfTables as $tableName) 
                 {
                     $name = $tableName["name"]; 
-                    if($name !== "SourceAComponents" && $name !== "SourceAProperties")   
+                    if($name == "SourceAComponents" || $name == "SourceAProperties")   
                     {
                         $command1 = 'DROP TABLE IF EXISTS '.$name. ';';
                         $out = $dbh->query($command1);
@@ -51,7 +51,7 @@
                 foreach ($listOfTables as $tableName) 
                 {
                     $name = $tableName["name"]; 
-                    if($name !== "SourceBComponents" && $name !== "SourceBProperties")       
+                    if($name == "SourceBComponents" || $name == "SourceBProperties")       
                     {
                         $command1 = 'DROP TABLE IF EXISTS '.$name. ';';
                         $out = $dbh->query($command1);

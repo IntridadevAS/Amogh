@@ -474,6 +474,8 @@ function ExcelModeBrowser() {
                         _this.AddTableContentCount(this._container.context.id);
                      
                     },
+                    onDataLoaded: function (args) {
+                    },
                     rowClick: function (args) {
 
                         if (args.event.target.type === "checkbox") {

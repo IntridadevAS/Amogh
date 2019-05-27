@@ -9,7 +9,6 @@ $projectName = NULL;
 if(isset($_SESSION['ProjectName']))
 {
     $projectName =  $_SESSION['ProjectName']; 
-    var_dump($projectName);             
 }
 else
 {
@@ -19,11 +18,9 @@ else
 
 $excludeFile = "../Projects/".$projectName."/".$projectName.".db";
 $exclude[] = $excludeFile;
-var_dump($exclude);
 deleteFilesFromDirectory();
 
 function deleteAll($str) {
-    var_dump($str);
     //It it's a file.
     if (is_file($str)) {
         //Attempt to delete it.
@@ -51,6 +48,14 @@ function deleteFilesFromDirectory() {
         $folderpath = "../Projects/".$projectName."/SourceA";
         deleteAll($folderpath);
 
+        $folderpath = "../Projects/".$projectName."/SourceB";
+        deleteAll($folderpath);
+    }
+    else if(strtolower($source) == "sourcea") {
+        $folderpath = "../Projects/".$projectName."/SourceA";
+        deleteAll($folderpath);
+    }
+    else if(strtolower($source) == "sourceb") {
         $folderpath = "../Projects/".$projectName."/SourceB";
         deleteAll($folderpath);
     }
