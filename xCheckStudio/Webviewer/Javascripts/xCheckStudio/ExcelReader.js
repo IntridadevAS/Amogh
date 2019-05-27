@@ -37,7 +37,7 @@ ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
         _this.ReadSheetData(sheetName);
     });
     this.addComponentsToDB(viewerContainer);
-    checkIsOrderMaintained(_this.SourceType, _this.checkType);
+    checkIsOrderMaintained(_this.checkType);
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 };

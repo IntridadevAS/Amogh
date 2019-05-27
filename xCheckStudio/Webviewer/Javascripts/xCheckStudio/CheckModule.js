@@ -699,7 +699,7 @@ function readExcelDataSource(file,
         xCheckStudioInterface1.readExcelFileData(file, modelTreeContainer, viewerContainer);
     }
     else {
-        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface2.readExcelFileData(file, modelTreeContainer, viewerContainer);
     }
 }
@@ -966,11 +966,11 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
-function checkIsOrderMaintained(sourceAType, checkType) {
-    if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase()) {
+function checkIsOrderMaintained(checkType) {
+    if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
         checkCaseManager.OrderMaintained = 'false';
     }
-    else if (checkType) {
+    else if (checkType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
         var checkCaseType = checkType;
         outer_loop:
         for (var i = 0; i < checkCaseType.ComponentGroups.length; i++) {
@@ -1161,7 +1161,7 @@ function loadModel(fileName,
                         });
                     }
                     else if (viewerContainer === "viewerContainer2") {
-                        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+                        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
                         xCheckStudioInterface2.setupViewer(viewerOptions, false).then(function (result) {
 
                         });
@@ -1502,7 +1502,7 @@ function readDbDataSource(uri, file,
         xCheckStudioInterface1.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
     }
     else {
-        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension);
+        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, checkType);
         xCheckStudioInterface2.readDbFileData(Db_data, modelTreeContainer, viewerContainer);
     }
 }
@@ -1817,8 +1817,164 @@ function OnShowHideMenu() {
 
 }
 
-function clearData() {
-    window.location.reload();
+function resetCheckSwitchesForSource2()
+{
+    var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+    if (isCurrentState(component, 'state2')) {
+        if (component.classList.contains("disabledbutton")) {
+            return;
+        }
+        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate1tostate2EndedHandler);
+        removeAllClassesButFirst(component, 'state2-to-state1');
+        addClass(component, 'state1');
+        addClass(component, 'state2-to-state1');
+    }     
+    var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');   
+    if (isCurrentState(component, 'state1')) {
+        if (component.classList.contains("disabledbutton")) {
+            return;
+        }
+        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+        removeAllClassesButFirst(component, 'state2-to-state1');
+        addClass(component, 'state2');
+        addClass(component, 'state1-to-state2');
+    }
+}
+
+function resetCheckSwitchesForSource1()
+{
+    var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+    if (isCurrentState(component, 'state2')) {
+        if (component.classList.contains("disabledbutton")) {
+            return;
+        }
+        component.addEventListener(transitionEvent, transitiontoggleKJzrcsB8xgZstate2tostate1EndedHandler);
+        removeAllClassesButFirst(component, 'state2-to-state1');
+        addClass(component, 'state1');
+        addClass(component, 'state2-to-state1');
+    }
+
+    var component = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+    if (isCurrentState(component, 'state1')) {
+        if (component.classList.contains("disabledbutton")) {
+            return;
+        }
+        component.addEventListener(transitionEvent, transitiontoggleHm8PS0BCR4ustate2tostate1EndedHandler);
+        removeAllClassesButFirst(component, 'state2-to-state1');
+        addClass(component, 'state2');
+        addClass(component, 'state1-to-state2');
+    }
+}
+
+function clearData(source) {
+    var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+    if (isCurrentState(comparisonCB, 'state2')) {
+        if (comparisonCB.classList.contains("disabledbutton")) {
+            return;
+        }
+
+        comparisonCB.addEventListener(transitionEvent, transitiontoggle2udjlGv4xgMstate1tostate2EndedHandler);
+        removeAllClassesButFirst(comparisonCB, 'state1-to-state2');
+        addClass(comparisonCB, 'state1');
+        addClass(comparisonCB, 'state2-to-state1');
+    }
+    if(source.toLowerCase() == "both") {
+        document.getElementById("modelTree1").innerHTML = "";;
+        document.getElementById("SourceAComponentCount").innerHTML = "";
+        document.getElementById("dataSource1ModelBrowserTab").innerHTML = "Source 1";
+        document.getElementById("dataSource1ViewerContainerTab").innerHTML = "Source 1";
+        $("#viewerContainer1").empty();
+        document.getElementById("createbtnA").style.display = "block";
+        document.getElementById("loadDataA").style.display = "block";
+        if(document.getElementById("createbtnA").classList.contains("disabledbutton"))
+        {
+            document.getElementById("createbtnA").classList.remove('disabledbutton');
+        }
+        $('#checkAll1').attr('value', 'false');
+        $('#compliance1').attr('value', 'false');
+    
+        document.getElementById("modelTree2").innerHTML = "";
+        document.getElementById("SourceBComponentCount").innerHTML = "";
+        document.getElementById("dataSource2ModelBrowserTab").innerText = "Source 2";
+        document.getElementById("dataSource2ViewerContainerTab").innerHTML = "Source 2";
+        $("#viewerContainer2").empty();
+        document.getElementById("createbtnB").style.display = "block";
+        document.getElementById("loadDataB").style.display = "block";   
+        document.getElementById("checkCaseSelect").value = "None";
+        resetCheckSwitchesForSource1();
+        resetCheckSwitchesForSource2();
+        xCheckStudioInterface1 = null;
+        xCheckStudioInterface2 = null;
+    }
+    else if(source.toLowerCase() == "sourcea")
+    {
+        document.getElementById("modelTree1").innerHTML = "";;
+        document.getElementById("SourceAComponentCount").innerHTML = "";
+        document.getElementById("dataSource1ModelBrowserTab").innerHTML = "Source 1";
+        document.getElementById("dataSource1ViewerContainerTab").innerHTML = "Source 1";
+        $("#viewerContainer1").empty();
+
+        document.getElementById("createbtnA").style.display = "block";
+        if(document.getElementById("createbtnA").classList.contains("disabledbutton"))
+        {
+            document.getElementById("createbtnA").classList.remove('disabledbutton');
+        }
+        document.getElementById("loadDataA").style.display = "block";
+        if(document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1")
+        {
+            component = document.getElementById('createbtnB');
+            addClass(component, 'disabledbutton');
+        }
+        resetCheckSwitchesForSource1();
+        xCheckStudioInterface1 = null;
+    }
+    else if(source.toLowerCase() == "sourceb")
+    {
+        document.getElementById("modelTree2").innerHTML = "";
+        document.getElementById("SourceBComponentCount").innerHTML = "";
+        document.getElementById("dataSource2ModelBrowserTab").innerText = "Source 2";
+        document.getElementById("dataSource2ViewerContainerTab").innerHTML = "Source 2";
+        $("#viewerContainer2").empty();
+        document.getElementById("createbtnB").style.display = "block";
+        if(document.getElementById("createbtnB").classList.contains("disabledbutton"))
+        {
+            document.getElementById("createbtnB").classList.remove('disabledbutton');
+        }
+        document.getElementById("loadDataB").style.display = "block";
+        
+        if(document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1")
+        {
+            component = document.getElementById('createbtnB');
+            addClass(component, 'disabledbutton');
+        }
+        resetCheckSwitchesForSource2();
+        xCheckStudioInterface2 = null;
+    }
+
+    $.ajax({
+        data: {'Source' : source},
+        type: "POST",
+        url: "PHP/RemoveComponentsFromDB.php"
+       }).done(function (msg) {
+        if (msg == 'fail') {
+        }
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
+    $.ajax({
+        data: {'Source' : source},
+        type: "POST",
+        url: "PHP/DeleteSourceFilesFromDirectory.php"
+       }).done(function (msg) {
+        if (msg == 'fail') {
+        }
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
 }
 function cancelreviewresults() {
     sourceAComplianceCheckManager = undefined;

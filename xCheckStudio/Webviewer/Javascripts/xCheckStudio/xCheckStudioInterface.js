@@ -426,7 +426,7 @@ var xCheckStudio;
                             
                             // add components to database
                             _this.addComponentsToDB();
-                            checkIsOrderMaintained(_this.SourceType, _this.checkType);
+                            checkIsOrderMaintained(_this.checkType);
                         }
                     });
                 }
