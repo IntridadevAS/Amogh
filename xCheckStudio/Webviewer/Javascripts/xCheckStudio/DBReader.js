@@ -14,7 +14,7 @@ DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
     this.containerId = containerId;
     this.ProcessDbData(Db_data);
     this.addComponentsToDB(viewerContainer);
-    checkIsOrderMaintained(_this.SourceType, _this.checkType);
+    checkIsOrderMaintained(_this.checkType);
     this.dbmodelbrowser.createModelBrowserTable(this.dbdata, containerId);
 }
 

@@ -966,11 +966,11 @@ function hideLoadButton(modelTreeContainer) {
     }
 }
 
-function checkIsOrderMaintained(sourceAType, checkType) {
-    if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== sourceAType.toLowerCase()) {
+function checkIsOrderMaintained(checkType) {
+    if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
         checkCaseManager.OrderMaintained = 'false';
     }
-    else if (checkType) {
+    else if (checkType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
         var checkCaseType = checkType;
         outer_loop:
         for (var i = 0; i < checkCaseType.ComponentGroups.length; i++) {
