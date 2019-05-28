@@ -484,9 +484,6 @@
                     <div class="tab1" id="tab1">
                         <div id="dataSource1ModelBrowserTab" style="align-content: center" class="text">Source 1</div>
                     </div>
-                    <div class="createbtn">
-                        <img src="/images/deleteDataSource.png" onclick="clearData('sourcea')" class="createicon" />
-                    </div>
                 </div>
                 
                 <div class="tab" id="tab2Parent" style="left: 291px; display: none" onclick="OpenTab('tab2')"
@@ -494,16 +491,12 @@
                     <div class="tab2" id="tab2" style="display: none;">
                         <div id="dataSource2ModelBrowserTab" style="align-content: center" class="text">Source 2</div>
                     </div>
-                    <div class="createbtn">
-                        <img src="/images/deleteDataSource.png" onclick="clearData('sourceb')" class="createicon" />
-                    </div>
                 </div>
             </div>
             <div class="group1" id="dataSource1">
                 <!-- <form enctype="multipart/form-data" id="uploadFormId">
                         <input type="file" name="file" id="file">
                     </form> -->
-
                 <div id="dropZone1" class="dropBox" ondrop="onDropFiles(event,'viewerContainer1', 'modelTree1' )">
                     <!-- <input type="file" id="selectFile"> -->
                     <div id="modelTree1">
@@ -1097,6 +1090,9 @@
                     <div class="info" id="infobtn" onclick="OnInfoClick()" onMouseOver="this.style.cursor='pointer'">
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
+                    </div>
+                    <div class="createbtn" style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
+                        <img src="/images/deleteDataSource.png" onclick="clearData('sourcea')" />
                     </div>
                     <div id="loadDataA" class="loaddata">Load data</div>
                     <div id="SourceAComponentCount" class="checkall">
@@ -1696,6 +1692,9 @@
                         onMouseOver="this.style.cursor='pointer'">
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
+                    </div>
+                    <div class="createbtn" style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
+                        <img src="/images/deleteDataSource.png" onclick="clearData('sourceb')" />
                     </div>
                     <div id="loadDataB" class="loaddata">Load data</div>
                     <div id="SourceBComponentCount" class="checkall" style="display: none">
