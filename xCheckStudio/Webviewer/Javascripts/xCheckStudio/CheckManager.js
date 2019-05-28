@@ -69,9 +69,7 @@ function CheckManager(name) {
             else if(xCheckStudioInterface2._modelTree !== undefined)
             {
                 sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
-            }
-
-            // orderMaintained = this.hasDataSourceOrderMaintained(checkCaseType);
+            }          
 
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',

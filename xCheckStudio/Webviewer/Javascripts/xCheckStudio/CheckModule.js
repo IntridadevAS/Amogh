@@ -1,3 +1,4 @@
+var OrderMaintained = 'true';
 var AllSelectedComponenets;
 var loadSavedProject = false;
 var xCheckStudioInterface1;
@@ -135,22 +136,17 @@ function onCheckButtonClick() {
     //var checkPerformed = false;  
     var checkcase = new CheckCase("");
     checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
-    var dataSourceOrderMaintained = checkCaseManager.OrderMaintained;
     
-    //var comparisonPerformed = false;
-    // var sourceACompliancePerformed = false;
-    // var sourceBCompliancePerformed = false;
-
     // perform comparison check
     var comparisonPerformed = performComparisonCheck(comparisonCB, 
                                                      checkcase, 
-                                                     dataSourceOrderMaintained);
+                                                     OrderMaintained);
     
     // perform source a compliance check                      
-    var sourceACompliancePerformed = performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourceOrderMaintained);
+    var sourceACompliancePerformed = performSourceAComplianceCheck(complianceSourceACB, checkcase, OrderMaintained);
 
     // perform source b compliance check                      
-    var sourceBCompliancePerformed = performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourceOrderMaintained );
+    var sourceBCompliancePerformed = performSourceBComplianceCheck(complianceSourceBCB, checkcase, OrderMaintained );
 
 
     // if  source a compliance check is not performed, then delete the comparison result tables from project database if already exists.
@@ -171,130 +167,7 @@ function onCheckButtonClick() {
         deleteCheckResultsFromDB("SourceBCompliance").then(function (result) {
 
         });
-    }
-
-    // if (xCheckStudioInterface1 && 
-    //     xCheckStudioInterface2 && 
-    //     comparisonCB.classList.contains("state2")) {
-
-    //     var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-    //     var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-    //     if (!sourceAModelBrowser || !sourceBModelBrowser) {
-    //         OnShowToast('Comparison check can not be performed.');
-    //     }
-
-    //     // check if there are no selected components
-    //     if (sourceAModelBrowser.selectedCompoents.length === 0 &&
-    //         sourceBModelBrowser.selectedCompoents.length === 0) {
-    //         //alert("Comparison check can not be performed.\nNo selected components found for both data sources.");
-    //         OnShowToast('Comparison check can not be performed.</br>No selected components found for both data sources.');
-    //         //return;
-    //     }
-
-    //     checkType = checkcase.getCheckType("Comparison");
-
-    //     if (!comparisonCheckManager) {
-    //         comparisonCheckManager = new CheckManager();
-    //         comparisonCheckManager.performCheck(xCheckStudioInterface1.sourceProperties,
-    //             xCheckStudioInterface2.sourceProperties,
-    //             checkType,
-    //             true,
-    //             undefined,
-    //             dataSourceOrderMaintained);
-
-    //         checkPerformed = true;
-    //         comparisonPerformed = true;
-    //     }
-    // }
-
-    
-    // if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) {
-    //     if (dataSourceOrderMaintained == 'true') {
-    //         checkType = checkcase.getCheckType("ComplianceSourceA");
-    //         if (!checkType) {
-    //             checkType = checkcase.getCheckType("Compliance");
-    //         }
-    //         studioInterface = xCheckStudioInterface1;
-    //         sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
-    //     }
-    //     else {
-    //         checkType = checkcase.getCheckType("ComplianceSourceB");
-    //         if (!checkType) {
-    //             checkType = checkcase.getCheckType("Compliance");
-    //         }
-    //         studioInterface = xCheckStudioInterface1;
-    //         sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
-    //     }
-    //     var sourceAModelBrowser = xCheckStudioInterface1.getModelBrowser();
-    //     if (!sourceAModelBrowser) {
-    //         OnShowToast('Compliance check can not be performed.');
-    //     }
-
-
-    //     if (sourceAModelBrowser.selectedCompoents.length === 0) {
-    //         //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
-    //         OnShowToast('Compliance check can not be performed.</br>No selected components found for data source A.');
-    //         //continue;
-    //     }
-    //     else {
-    //         if (!sourceAComplianceCheckManager) {
-    //             sourceAComplianceCheckManager = new CheckManager();
-    //             sourceAComplianceCheckManager.performCheck(sourcePropsForCompliance,
-    //                 undefined,
-    //                 checkType,
-    //                 false,
-    //                 studioInterface,
-    //                 dataSourceOrderMaintained);
-
-    //             checkPerformed = true;
-    //             sourceACompliancePerformed = true;
-    //         }
-    //     }
-    // }
-    
-    // if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) {
-    //     if (dataSourceOrderMaintained == 'true') {
-    //         checkType = checkcase.getCheckType("ComplianceSourceB");
-    //         if (!checkType) {
-    //             checkType = checkcase.getCheckType("Compliance");
-    //         }
-    //         studioInterface = xCheckStudioInterface2;
-    //         sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
-    //     }
-    //     else {
-    //         checkType = checkcase.getCheckType("ComplianceSourceA");
-    //         if (!checkType) {
-    //             checkType = checkcase.getCheckType("Compliance");
-    //         }
-    //         studioInterface = xCheckStudioInterface2;
-    //         sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
-    //     }
-    //     var sourceBModelBrowser = xCheckStudioInterface2.getModelBrowser();
-    //     if (!sourceBModelBrowser) {
-    //         OnShowToast('Compliance check can not be performed.');
-    //     }
-
-
-    //     if (sourceBModelBrowser.selectedCompoents.length === 0) {
-    //         //alert("Compliance check on Source A can not be performed.\nNo selected components found.");
-    //         OnShowToast('Compliance check can not be performed.</br>No selected components found for data source B.');
-    //         //continue;
-    //     }
-    //     else {
-    //         if (!sourceBComplianceCheckManager) {
-    //             sourceBComplianceCheckManager = new CheckManager();
-    //             sourceBComplianceCheckManager.performCheck(sourcePropsForCompliance,
-    //                 undefined,
-    //                 checkType,
-    //                 false,
-    //                 studioInterface,
-    //                 dataSourceOrderMaintained);
-
-    //             checkPerformed = true;
-    //             sourceBCompliancePerformed = true;
-    //         }
-    //     }
-    // }
+    }  
 
     // hide busy spinner
     busySpinner.classList.remove('show');
@@ -968,7 +841,7 @@ function hideLoadButton(modelTreeContainer) {
 
 function checkIsOrderMaintained(checkType) {
     if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
-        checkCaseManager.OrderMaintained = 'false';
+        OrderMaintained = 'false';
     }
     else if (checkType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
         var checkCaseType = checkType;
@@ -988,19 +861,19 @@ function checkIsOrderMaintained(checkType) {
                                         continue;
                                     }
                                     else if (genericComponent.Name == sourceBMatchwithPropertyName) {
-                                        checkCaseManager.OrderMaintained = 'false';
+                                        OrderMaintained = 'false';
                                         break outer_loop;
                                     }
                                 }
                             }
                             else if (xCheckStudioInterface1.sourceProperties[genericObject].SubComponentClass == componentClass.SourceBName) {
-                                checkCaseManager.OrderMaintained = 'false';
+                                OrderMaintained = 'false';
                                 break outer_loop;
                             }
                         }
                         else if (xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceBName) {
-                            checkCaseManager.OrderMaintained = 'false';
-                            break outer_loop;
+                               OrderMaintained = 'false';
+                               break outer_loop;
                         }
                     }
                 }
@@ -1645,7 +1518,7 @@ function postData() {
             "SourceBFileName": sourceBFileName,
             "SourceAType": sourceAType,
             "SourceBType": sourceBType,
-            "CheckCaseManager": JSON.stringify(checkCaseManager),
+            //"CheckCaseManager": JSON.stringify(checkCaseManager),
             "comparisonSwithOn": comparisonSwithOn,
             "sourceAComplianceSwitchOn": sourceAComplianceSwitchOn,
             "sourceBComplianceSwitchOn": sourceBComplianceSwitchOn,

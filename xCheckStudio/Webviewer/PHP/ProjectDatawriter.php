@@ -151,49 +151,7 @@
             } 
        }
 
-       // write check case data(as JSON string)     
-       writeCheckCaseData($projectName);
-       function writeCheckCaseData($projectName)
-       {            
-            $checkCaseData =  $_POST['CheckCaseManager'];   
-            
-            $dbh;
-            try
-            {        
-                // open database
-                $dbPath = getProjectDatabasePath($projectName);
-                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-                
-                // begin the transaction
-                $dbh->beginTransaction();
-
-                // create selected components table
-                
-                // drop table if exists
-                $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
-                $dbh->exec($command);
-
-                $command = 'CREATE TABLE CheckCaseInfo(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                    checkCaseData TEXT)';         
-                $dbh->exec($command);    
-
-                $insertQuery = 'INSERT INTO CheckCaseInfo(checkCaseData) VALUES(?) ';
-                $values = array($checkCaseData);
-                
-                $stmt = $dbh->prepare($insertQuery);                    
-                $stmt->execute($values);   
-
-                // commit update
-                $dbh->commit();
-                $dbh = null; //This is how you close a PDO connection                 
-            }
-            catch(Exception $e) 
-            {        
-                echo "fail"; 
-                return;
-            } 
-       }
+    
        
        $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
        $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      

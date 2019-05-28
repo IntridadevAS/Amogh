@@ -35,11 +35,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "DeleteSourceBComplianceResults":
             DeleteSourceBComplianceResults();
             break;
+        case "WriteCheckCaseData":
+            WriteCheckCaseData();
+            break;
         default:
             echo "No Function Found!";
     }
 }
 
+/*
+|
+|   write check case data(as JSON string)     
+|
+*/  
+function WriteCheckCaseData()
+{         
+    if(!isset($_POST['CheckCaseManager']))
+    {
+        echo 'fail';
+        return;
+    }
+    $checkCaseData =  $_POST['CheckCaseManager'];   
+
+     // get project name
+     session_start();   
+     $projectName = NULL;
+     if(isset($_SESSION['ProjectName']))
+     {
+         $projectName =  $_SESSION['ProjectName'];              
+     }
+     else
+     {
+         echo 'fail';
+         return;
+     }	
+
+                
+    $dbh;
+    try
+    {        
+        // open database
+        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+                    
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // create CheckCaseInfo table
+                    
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE CheckCaseInfo(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    checkCaseData TEXT)';         
+        $dbh->exec($command);    
+
+        $insertQuery = 'INSERT INTO CheckCaseInfo(checkCaseData) VALUES(?) ';
+        $values = array($checkCaseData);
+                    
+        $stmt = $dbh->prepare($insertQuery);                    
+        $stmt->execute($values);   
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection                 
+    }
+    catch(Exception $e) 
+    {        
+        echo "fail"; 
+        return;
+    } 
+}
 
 /*
 |
