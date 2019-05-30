@@ -1,5 +1,16 @@
 <?php
-
+    
+    function createTempDB()
+    {
+        global $projectName;
+        $tempCheckDB = "../Projects/".$projectName."/CheckResults_temp.db";
+        if(!file_exists ($tempCheckDB ))
+        {        
+          // create temporary project database          
+          $database = new SQLite3($tempCheckDB);	
+        }
+    }
+    
 
     function writeComplianceResultToDB($checkGroupsTable, 
                                        $checkComponentsTable,
@@ -11,7 +22,8 @@
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -159,7 +171,8 @@
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -318,7 +331,8 @@
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -378,7 +392,8 @@
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction

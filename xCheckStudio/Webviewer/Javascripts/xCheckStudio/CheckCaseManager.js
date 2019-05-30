@@ -1,6 +1,6 @@
 function CheckCaseManager() {
     this.CheckCase;
-    this.OrderMaintained = 'true';
+    //this.OrderMaintained = 'true';
 
     //this.Ready = true;
     // CheckCaseManager.prototype.addCheckCase = function (checkCase) {
@@ -12,10 +12,21 @@ function CheckCaseManager() {
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/readCheckCaseXml.php", true);
-        xhr.onload = function (data) {
-            var int = 0;
+        xhr.onload = function (data) {           
             _this.CheckCase = JSON.parse(data.currentTarget.responseText);
-           // _this.postData();
+           
+            // write check case data to DB
+            $.ajax({
+                data: {
+                    'InvokeFunction': "SaveCheckCaseData",
+                    "CheckCaseManager": JSON.stringify(_this)
+                },
+                async: false,
+                type: "POST",
+                url: "PHP/ProjectManager.php"
+            }).done(function (msg) {   
+                
+            });
         };
         var formData = new FormData();
         formData.append('XMLFileName', fileName);

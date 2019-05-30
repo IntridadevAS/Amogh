@@ -569,7 +569,7 @@
                     <img src="/images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png"
                         class="iconfullscreenexitfilled1" />
                 </div>
-                <div class="icon1">
+                <div class="icon1" onclick="onSaveProject()">
                     <img src="/images/UIPackage/module1-icon-3-bg2@2x.png" class="icon1bg2" />
                     <img src="/images/UIPackage/module2-with-open-menu-icon-1-bg1@2x.png" class="icon1bg1" />
                     <img src="/images/UIPackage/module2-with-open-menu-icon-1-black@2x.png" class="icon1black" />
@@ -761,624 +761,64 @@
             }
         }
 
-        var analyticsManager;       
+        var analyticsManager;
         var comparisonReviewManager;
         var sourceAComplianceReviewManager;
         var sourceBComplianceReviewManager;
         window.onload = function () {
             var _this = this;
 
-            // var comparisonCheckManager;
-            // var sourceAComplianceCheckManager;
-            // var sourceBComplianceCheckManager;
-
-            // var ComparisonCheckData = undefined;
-            // var SourceAComplianceData = undefined;
-            // var SourceBComplianceData = undefined;
-            // var SourceAViewerData = undefined;
-            // var SourceBViewerData = undefined;
-            // var SourceAComponentIdVsComponentData = undefined;
-            // var SourceANodeIdVsComponentData = undefined;
-            // var SourceBComponentIdVsComponentData = undefined;
-            // var SourceBNodeIdVsComponentData = undefined;
-            // var SourceAProperties = undefined;
-            // var SourceBProperties = undefined;
-            // var AnalyticsData = undefined;
-
-            
             // set project name
             setProjectName();
 
             // set user name
             setUserName();
 
-            // var checkComponentGroups = undefined;
-
             // read  check data
             $.ajax({
-                    url: 'PHP/CheckDataReader.php',
-                    type: "POST",
-                    async: true,
-                    data: {},
-                    success: function (msg) 
-                    {
-                        var checkResults = JSON.parse(msg);
-                       
-                        var comparisonCheckGroups = undefined;
-                        var sourceAComplianceCheckGroups = undefined;
-                        var sourceBComplianceCheckGroups = undefined;
+                url: 'PHP/CheckResultsReader.php',
+                type: "POST",
+                async: true,
+                data: {},
+                success: function (msg) {
+                    var checkResults = JSON.parse(msg);
 
-                        for (var key in checkResults) 
-                        {
-                            if (!checkResults.hasOwnProperty(key)) 
-                            {
-                                continue;
-                            }
+                    var comparisonCheckGroups = undefined;
+                    var sourceAComplianceCheckGroups = undefined;
+                    var sourceBComplianceCheckGroups = undefined;
 
-                            
-                            if (key == 'Comparison') 
-                            {
-                                comparisonCheckGroups = new CheckGroups();
-                                comparisonCheckGroups.restore(checkResults[key], false);                                
-                            }
-                            else if(key == 'SourceACompliance')
-                            {
-                                sourceAComplianceCheckGroups = new CheckGroups();
-                                sourceAComplianceCheckGroups.restore(checkResults[key], true);   
-                            }
-                            else if(key == 'SourceBCompliance')
-                            {
-                                sourceBComplianceCheckGroups = new CheckGroups();
-                                sourceBComplianceCheckGroups.restore(checkResults[key], true);  
-                            }                           
-                        }                       
-                          
-                         // populate check results
-                         populateCheckResults(comparisonCheckGroups, 
-                                                 sourceAComplianceCheckGroups, 
-                                                 sourceBComplianceCheckGroups);
+                    for (var key in checkResults) {
+                        if (!checkResults.hasOwnProperty(key)) {
+                            continue;
+                        }
 
-                        // load analytics data
-                        document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+
+                        if (key == 'Comparison') {
+                            comparisonCheckGroups = new CheckGroups();
+                            comparisonCheckGroups.restore(checkResults[key], false);
+                        }
+                        else if (key == 'SourceACompliance') {
+                            sourceAComplianceCheckGroups = new CheckGroups();
+                            sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                        }
+                        else if (key == 'SourceBCompliance') {
+                            sourceBComplianceCheckGroups = new CheckGroups();
+                            sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                        }
                     }
-                });
 
-            // readData();
-            // this.readComparisonCheckData(_this).then(function (success) {
+                    // populate check results
+                    populateCheckResults(comparisonCheckGroups,
+                        sourceAComplianceCheckGroups,
+                        sourceBComplianceCheckGroups);
 
-            //     if (success) {
-            //         var comparisonCheckManager;
-            //         var sourceAComplianceCheckManager;
-            //         var sourceBComplianceCheckManager;
+                    // load analytics data
+                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                }
+            });
 
-            //         // set project name
-            //         setProjectName();
-
-            //         // set user name
-            //         setUserName();
-
-            //         if (typeof this.ComparisonCheckData !== 'undefined') {
-
-            //             // restore comparison check data
-            //             comparisonCheckManager = new CheckManager("");
-            //             comparisonCheckManager.restore(this.ComparisonCheckData)
-
-            //             // create comparisonreviewmanager
-            //             if (typeof this.SourceAViewerData !== 'undefined' &&
-            //                 typeof this.SourceBViewerData !== 'undefined' &&
-            //                 this.SourceAComponentIdVsComponentData !== 'undefined' &&
-            //                 this.SourceANodeIdVsComponentData !== 'undefined' &&
-            //                 this.SourceBComponentIdVsComponentData !== 'undefined' &&
-            //                 this.SourceBNodeIdVsComponentData !== 'undefined') {
-            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-            //                     this.SourceAViewerData,
-            //                     this.SourceBViewerData,
-            //                     undefined,
-            //                     undefined,
-            //                     "ComparisonMainReviewCell",
-            //                     "ComparisonDetailedReviewCell",
-            //                     this.SourceAComponentIdVsComponentData,
-            //                     this.SourceANodeIdVsComponentData,
-            //                     this.SourceBComponentIdVsComponentData,
-            //                     this.SourceBNodeIdVsComponentData);
-            //             }
-            //             else if (typeof this.SourceAProperties !== 'undefined' && 
-            //                      typeof this.SourceBProperties !== 'undefined') {
-            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-            //                     undefined,
-            //                     undefined,
-            //                     this.SourceAProperties,
-            //                     this.SourceBProperties,
-            //                     "ComparisonMainReviewCell",
-            //                     "ComparisonDetailedReviewCell",
-            //                     undefined,
-            //                     undefined,
-            //                     undefined,
-            //                     undefined);
-            //             }
-            //             else if (typeof this.SourceAProperties !== 'undefined' &&
-            //                 typeof this.SourceBViewerData !== 'undefined' &&
-            //                 this.SourceBComponentIdVsComponentData !== 'undefined' &&
-            //                 this.SourceBNodeIdVsComponentData !== 'undefined') {
-            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-            //                     undefined,
-            //                     this.SourceBViewerData,
-            //                     this.SourceAProperties,
-            //                     undefined,
-            //                     "ComparisonMainReviewCell",
-            //                     "ComparisonDetailedReviewCell",
-            //                     undefined,
-            //                     undefined,
-            //                     this.SourceBComponentIdVsComponentData,
-            //                     this.SourceBNodeIdVsComponentData);
-            //             }
-            //             else if (typeof this.SourceAViewerData !== 'undefined' &&
-            //                 typeof this.SourceBProperties !== 'undefined' &&
-            //                 this.SourceAComponentIdVsComponentData !== 'undefined' &&
-            //                 this.SourceANodeIdVsComponentData !== 'undefined') {
-            //                 comparisonReviewManager = new ComparisonReviewManager(comparisonCheckManager,
-            //                 this.SourceAViewerData,
-            //                     undefined,
-            //                     undefined,
-            //                     this.SourceBProperties,
-            //                     "ComparisonMainReviewCell",
-            //                     "ComparisonDetailedReviewCell",
-            //                     this.SourceAComponentIdVsComponentData,
-            //                     this.SourceANodeIdVsComponentData,
-            //                     undefined,
-            //                     undefined);
-            //             }
-
-            //             // populate review table
-            //             comparisonReviewManager.populateReviewTable();
-            //         }
-            //         else {
-            //             $("#tab1Parent").addClass("disable");
-            //         }
-
-            //         if (typeof this.SourceAComplianceData !== 'undefined') {
-
-            //             // restore source A compliance check data
-            //             sourceAComplianceCheckManager = new CheckManager("");
-            //             sourceAComplianceCheckManager.restore(this.SourceAComplianceData)
-
-            //             // create sourceAComplianceReviewManager
-            //             if (typeof this.SourceAProperties !== 'undefined') {
-            //                 sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-            //                     undefined,
-            //                     this.SourceAProperties,
-            //                     "SourceAComplianceMainReviewCell",
-            //                     "SourceAComplianceDetailedReviewCell",
-            //                     undefined,
-            //                     undefined,
-            //                     "SourceAComplianceDetailedReviewComment");
-            //             }
-            //             else if (typeof this.SourceAViewerData !== 'undefined') {
-            //                 sourceAComplianceReviewManager = new ComplianceReviewManager(sourceAComplianceCheckManager,
-            //                 this.SourceAViewerData,
-            //                     undefined,
-            //                     "SourceAComplianceMainReviewCell",
-            //                     "SourceAComplianceDetailedReviewCell",
-            //                     this.SourceAComponentIdVsComponentData,
-            //                     this.SourceANodeIdVsComponentData,
-            //                     "SourceAComplianceDetailedReviewComment");
-            //             }
-
-
-            //             // populate review table
-            //             sourceAComplianceReviewManager.populateReviewTable();
-            //         }
-            //         else {
-            //             $("#tab2Parent").addClass("disable");
-            //         }
-            //         if (typeof this.SourceBComplianceData !== 'undefined') {
-
-            //             // restore source A compliance check data
-            //             sourceBComplianceCheckManager = new CheckManager("");
-            //             sourceBComplianceCheckManager.restore(this.SourceBComplianceData)
-
-            //             // create sourceBComplianceReviewManager
-            //             if (typeof this.SourceBProperties !== 'undefined') {
-            //                 sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-            //                     undefined,
-            //                     this.SourceBProperties,
-            //                     "SourceBComplianceMainReviewCell",
-            //                     "SourceBComplianceDetailedReviewCell",
-            //                     undefined,
-            //                     undefined,
-            //                     "SourceBComplianceDetailedReviewComment");
-            //             }
-            //             else if (typeof this.SourceBViewerData !== 'undefined') {
-            //                 sourceBComplianceReviewManager = new ComplianceReviewManager(sourceBComplianceCheckManager,
-            //                 this.SourceBViewerData,
-            //                     undefined,
-            //                     "SourceBComplianceMainReviewCell",
-            //                     "SourceBComplianceDetailedReviewCell",
-            //                     this.SourceBComponentIdVsComponentData,
-            //                     this.SourceBNodeIdVsComponentData,
-            //                     "SourceBComplianceDetailedReviewComment");
-            //             }
-
-            //             // populate review table
-            //             sourceBComplianceReviewManager.populateReviewTable();
-            //         }
-            //         else {
-            //             $("#tab3Parent").addClass("disable");
-            //         }
-
-            //         // make buttons collapsible
-            //         setButtonsCollapsible();
-
-            //         postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData);
-            //         document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="/analyticsModule.html" style="height: 100%; width: 100%" ></object>';
-            //         // remove post data js files from server from earlier check results, if any
-            //         // $.ajax({
-            //         //     data: '',
-            //         //     url: 'PHP/postDataCleaner.php',
-            //         //     method: 'POST', // or GET
-            //         //     async: true,
-            //         //     success: function (msg) {
-            //         //     }
-            //         // });
-
-            //         // trigger comparison tab click manually
-            //         /*/var tab1 = document.getElementById("tab1Parent");
-            //         tab1.click();*/
-            //         if (typeof this.ComparisonCheckData !== 'undefined') {
-            //             openCheckResultTab('ComparisonTabPage');
-            //             //var tab = document.getElementById("tab1Parent");
-            //             //tab.click();
-            //         }
-            //         else {
-            //             // if (typeof SourceAComplianceData !== 'undefined' && typeof SourceBComplianceData !== 'undefined')
-            //             // {
-            //             // 	openCheckResultTab('SourceAComplianceTabPage');
-            //             // 	// var tab2 = document.getElementById("tab2Parent");
-            //             // 	// tab2.click();
-            //             // }
-            //             // else
-            //             // {
-            //             if (typeof this.SourceAComplianceData !== 'undefined') {
-            //                 openCheckResultTab('SourceAComplianceTabPage');
-            //                 // var tab3 = document.getElementById("tab3Parent");
-            //                 // tab3.click();
-            //             }
-            //             else if (typeof this.SourceBComplianceData !== 'undefined') {
-            //                 openCheckResultTab('SourceBComplianceTabPage');
-            //                 // var tab2 = document.getElementById("tab2Parent");
-            //                 // tab2.click();
-            //             }
-            //             //}
-            //         }
-            //     }
-            // });
         };
 
-        // function readComparisonCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         // $.ajax({
-        //         //     url: 'PHP/comparisonCheckpostDataReader.php',
-        //         //     type: "GET",
-        //         //     async: true,
-        //         //     data: {},
-        //         //     success: function (msg) {
-        //         //         var int = 0;
-        //         //         if (msg !== "not found") {
-        //         //             __this.ComparisonCheckData = JSON.parse(msg);
-        //         //         }
-        //         //         __this.readSourceAComplianceCheckData(__this).then(function (success){
-        //         //             if(success)
-        //         //             {
-        //         //                 return resolve(true);
-        //         //             }
-        //         //         });
-        //         //     },
-        //         //     error: function () {
-        //         //         return resolve(true);
-        //         //     }
-        //         // })
-        //     });
-        // }
-
-        // function readSourceAComplianceCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         // $.ajax({
-        //         //     url: 'PHP/sourceAComplianceDataReader.php',
-        //         //     type: "GET",
-        //         //     async: true,
-        //         //     data: {},
-        //         //     success: function (msg) {
-        //         //         var int = 0;
-        //         //         if (msg !== "not found") {
-        //         //             __this.SourceAComplianceData = JSON.parse(msg);
-        //         //         }
-
-        //         //         __this.readSourceBComplianceCheckData(__this).then(function (success){
-        //         //             if(success)
-        //         //             {
-        //         //                 return resolve(true);
-        //         //             }
-        //         //         });
-        //         //     },
-        //         //     error: function () {
-        //         //         return resolve(true);
-        //         //     }
-        //         // })
-        //     });
-        // }
-
-        // function readSourceBComplianceCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceBComplianceDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceBComplianceData = JSON.parse(msg);
-        //                 }
-                        
-        //                 __this.readSourceAViewerCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceAViewerCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceAViewerDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceAViewerData = JSON.parse(msg);
-        //                 }
-                        
-        //                 __this.readSourceBViewerCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceBViewerCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceBViewerDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceBViewerData = JSON.parse(msg);
-        //                 }
-
-        //                 __this.readSourceAComponentIdVsComponentCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceAComponentIdVsComponentCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceAComponentIdVsComponentDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceAComponentIdVsComponentData = JSON.parse(msg);
-        //                 }
-        //                 __this.readSourceBComponentIdVsComponentCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceBComponentIdVsComponentCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceBComponentIdVsComponentDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceBComponentIdVsComponentData = JSON.parse(msg);
-        //                 }
-
-        //                 __this.readSourceANodeIdVsComponentCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceANodeIdVsComponentCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceANodeIdVsComponentDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceANodeIdVsComponentData = JSON.parse(msg);
-        //                 }
-                        
-        //                 __this.readSourceBNodeIdVsComponentCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceBNodeIdVsComponentCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/sourceBNodeIdVsComponentDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceBNodeIdVsComponentData = JSON.parse(msg);
-        //                 }
-        //                 __this.readSourceASheetCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceASheetCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/SourceASheetDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceAProperties = JSON.parse(msg);
-        //                 }
-        //                 __this.readSourceBSheetCheckData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readSourceBSheetCheckData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/SourceBSheetDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.SourceBProperties = JSON.parse(msg);
-        //                 }
-                        
-        //                 __this.readAnalyticsData(__this).then(function (success){
-        //                     if(success)
-        //                     {
-        //                         return resolve(true);
-        //                     }
-        //                 });
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
-
-        // function readAnalyticsData(_this) {
-        //     var __this = _this;
-        //     return new Promise(function (resolve, reject) {
-        //         $.ajax({
-        //             url: 'PHP/analyticsDetailsDataReader.php',
-        //             type: "GET",
-        //             async: true,
-        //             data: {},
-        //             success: function (msg) {
-        //                 var int = 0;
-        //                 if (msg !== "not found") {
-        //                     __this.AnalyticsData = JSON.parse(msg);
-        //                 }                   
-        //                 return resolve(true);
-        //             },
-        //             error: function () {
-        //                 return resolve(true);
-        //             }
-        //         })
-        //     });
-        // }
 
         function postData(comparisonCheckManager, sourceAComplianceCheckManager, sourceBComplianceCheckManager, AnalyticsData) {
             // post comparison data
@@ -1389,7 +829,7 @@
                     async: true,
                     data: { "ComparisonCheckManager": JSON.stringify(comparisonCheckManager) },
                     success: function (data) {
-                       
+
                     }
                 });
             }
@@ -1401,7 +841,7 @@
                     type: "POST",
                     async: true,
                     data: { "SourceAComplianceCheckManager": JSON.stringify(sourceAComplianceCheckManager) },
-                    success: function (data) {                       
+                    success: function (data) {
                     }
                 });
             }
