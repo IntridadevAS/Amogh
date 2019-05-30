@@ -138,14 +138,7 @@ function populateCheckResults(comparisonCheckGroups,
 
 function loadSourceAComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceAClassWiseComponents) {
-
-    // var sourceViewerOptions = undefined;
-    // if(viewerOptions['SourceAContainerId'] !== undefined &&
-    //    viewerOptions['SourceAEndPointUri'] !== undefined)
-    // {
-    //         sourceViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
-    // }
+    sourceAClassWiseComponents) {   
 
     sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
@@ -202,4 +195,33 @@ function loadComparisonData(comparisonCheckGroups,
 
     // populate review table
     comparisonReviewManager.populateReviewTable();     
+}
+
+
+function onSaveProject(event) {
+    // var busySpinner = document.getElementById("divLoading");
+    // busySpinner.className = 'show';
+
+    try {
+
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveCheckResultsToCheckSpaceDB"
+            },
+            success: function (msg) {
+                alert("Saved check results.");
+            }
+        });
+    }
+    catch (error) {
+        console.log(error.message);
+    }
+    finally {
+        // // remove busy spinner        
+        // busySpinner.classList.remove('show')
+    }
 }

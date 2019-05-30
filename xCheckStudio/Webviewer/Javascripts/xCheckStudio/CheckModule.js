@@ -1380,7 +1380,7 @@ function readDbDataSource(uri, file,
     }
 }
 
-function postData() {
+function saveData() {
     
     var sourceANodeIdvsComponentIdList;
     var sourceASelectedComponents;
@@ -1430,7 +1430,8 @@ function postData() {
 
     }
 
-    if (xCheckStudioInterface2) {
+    if (xCheckStudioInterface2) 
+    {
         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
@@ -1473,36 +1474,8 @@ function postData() {
     }
 
     // control states
-    var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-    var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
-    var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-    var sourceACheckAllCB = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-    var sourceBCheckAllCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
-
-    var comparisonSwithOn = 'false';
-    if (comparisonCB.classList.contains("state2")) {
-        comparisonSwithOn = 'true';
-    }
-
-    var sourceAComplianceSwitchOn = 'false';
-    if (complianceSourceACB.classList.contains("state1")) {
-        sourceAComplianceSwitchOn = 'true';
-    }
-
-    var sourceBComplianceSwitchOn = 'false';
-    if (complianceSourceBCB.classList.contains("state1")) {
-        sourceBComplianceSwitchOn = 'true';
-    }
-
-    var sourceACheckAllSwitchOn = 'false';
-    if (sourceACheckAllCB.classList.contains("state2")) {
-        sourceACheckAllSwitchOn = 'true';
-    }
-    var sourceBCheckAllSwitchOn = 'false';
-    if (sourceBCheckAllCB.classList.contains("state2")) {
-        sourceBCheckAllSwitchOn = 'true';
-    }
-
+    var controlStatesArray = getControlStates();
+   
     // write source A selected components, differet control statuses to DB        
     $.ajax({
         url: 'PHP/ProjectDatawriter.php',
@@ -1518,16 +1491,14 @@ function postData() {
             "SourceBFileName": sourceBFileName,
             "SourceAType": sourceAType,
             "SourceBType": sourceBType,
-            //"CheckCaseManager": JSON.stringify(checkCaseManager),
-            "comparisonSwithOn": comparisonSwithOn,
-            "sourceAComplianceSwitchOn": sourceAComplianceSwitchOn,
-            "sourceBComplianceSwitchOn": sourceBComplianceSwitchOn,
-            "sourceACheckAllSwitchOn": sourceACheckAllSwitchOn,
-            "sourceBCheckAllSwitchOn": sourceBCheckAllSwitchOn
+            "orderMaintained": OrderMaintained,            
+            "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
+            "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
+            "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
+            "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
+            "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
         },
-        success: function (msg) {
-            //alert("success");
-            //$("#result").html(data);
+        success: function (msg) {            
         },
         error: function (error) {
             console.log(error)
@@ -1858,7 +1829,7 @@ function cancelreviewresults() {
 }
 
 function reviewresults() {
-    postData();
+    saveData();
     window.location = "/module2.html";
 }
 
@@ -2350,4 +2321,233 @@ function selectComponents(modelTreeContainer) {
             currentCheckBox.checked == true;
         }
     }
+}
+
+function onSaveProject(event)
+{
+    var busySpinner = document.getElementById("divLoading");
+    busySpinner.className = 'show';
+    try{ 
+     
+     // save control states
+     saveControlsState();
+
+     // save data source info
+     saveDataSourceInfo();
+
+     // save source viewer options
+     saveSourceViewerOptions();
+
+     // save selected components
+     saveSelectedComponents();
+
+     alert("Saved project information.");
+    }
+    catch(error)
+    {
+        console.log(error.message);
+    }
+    finally {
+        // remove busy spinner        
+        busySpinner.classList.remove('show')
+    }
+}
+
+function saveSelectedComponents() {
+   
+    // write source a selected components
+    if (xCheckStudioInterface1) {
+        var selectedCompoents = xCheckStudioInterface1.getModelBrowser().selectedCompoents
+        var nodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
+        // write source a selected components
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveSelectedComponents",
+                "selectedComponentsTableName": "SourceASelectedComponents",
+                "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
+                "selectedComponents": JSON.stringify(selectedCompoents)
+            },
+            success: function (msg) {
+            }
+        });
+    }
+
+    // write source b selected components
+    if (xCheckStudioInterface2) {
+        var selectedCompoents = xCheckStudioInterface2.getModelBrowser().selectedCompoents
+        var nodeIdvsComponentIdList = xCheckStudioInterface2.NodeIdvsComponentIdList;
+        // write source a selected components
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveSelectedComponents",
+                "selectedComponentsTableName": "SourceBSelectedComponents",
+                "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
+                "selectedComponents": JSON.stringify(selectedCompoents)
+            },
+            success: function (msg) {
+            }
+        });
+    }
+}
+function saveSourceViewerOptions() {
+    
+    // write source a viewer options
+    if (xCheckStudioInterface1 &&
+        xCheckStudioInterface1._firstViewer &&
+        xCheckStudioInterface1._firstViewer._params) {
+
+        var viewerOptions = [];
+        viewerOptions.push(xCheckStudioInterface1._firstViewer._params.containerId);
+        viewerOptions.push(xCheckStudioInterface1._firstViewer._params.endpointUri);
+
+        // write viewer options data to data base
+        $.ajax({
+            url: 'PHP/ViewerOptionsWriter.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                "SourceViewerOptions": JSON.stringify(viewerOptions),
+                "SourceViewerOptionsTable": "SourceAViewerOptions"
+            },
+            success: function (msg) {
+            }
+        });
+    }
+
+    // write source b viewer options
+    if (xCheckStudioInterface2 &&
+        xCheckStudioInterface2._firstViewer &&
+        xCheckStudioInterface2._firstViewer._params) {
+
+        var viewerOptions = [];
+        viewerOptions.push(xCheckStudioInterface2._firstViewer._params.containerId);
+        viewerOptions.push(xCheckStudioInterface2._firstViewer._params.endpointUri);
+
+        // write viewer options data to data base
+        $.ajax({
+            url: 'PHP/ViewerOptionsWriter.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                "SourceViewerOptions": JSON.stringify(viewerOptions),
+                "SourceViewerOptionsTable": "SourceBViewerOptions"
+            },
+            success: function (msg) {
+            }
+        });
+    }
+}
+
+function saveDataSourceInfo() {    
+
+    var sourceAType = undefined;
+    if (xCheckStudioInterface1) {
+        sourceAType = xCheckStudioInterface1.SourceType;
+    }
+    var sourceBType = undefined;
+    if (xCheckStudioInterface2) {
+        sourceBType = xCheckStudioInterface2.SourceType;
+    }
+
+    $.ajax
+        ({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveDatasourceInfo",
+                "SourceAFileName": sourceAFileName,
+                "SourceBFileName": sourceBFileName,
+                "SourceAType": sourceAType,
+                "SourceBType": sourceBType,
+                "orderMaintained": OrderMaintained
+            },
+            success: function (msg) {
+
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+}
+
+function saveControlsState()
+{
+    var controlStatesArray = getControlStates();
+
+    $.ajax
+    ({
+       url: 'PHP/ProjectManager.php',
+       type: "POST",
+       async: false,
+       data:
+       {
+           'InvokeFunction': "SaveCheckModuleControlsState",            
+           "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
+           "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
+           "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
+           "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
+           "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch']
+       },
+       success: function (msg) {
+          
+       },
+       error: function (error) {
+           console.log(error)
+       }
+   });
+}
+
+function getControlStates()
+{
+    // control states
+    var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
+    var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
+    var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
+    var sourceACheckAllCB = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
+    var sourceBCheckAllCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
+
+    var comparisonSwitchOn = 'false';
+    if (comparisonCB.classList.contains("state2")) {
+        comparisonSwitchOn = 'true';
+    }
+
+    var sourceAComplianceSwitchOn = 'false';
+    if (complianceSourceACB.classList.contains("state1")) {
+        sourceAComplianceSwitchOn = 'true';
+    }
+
+    var sourceBComplianceSwitchOn = 'false';
+    if (complianceSourceBCB.classList.contains("state1")) {
+        sourceBComplianceSwitchOn = 'true';
+    }
+
+    var sourceACheckAllSwitchOn = 'false';
+    if (sourceACheckAllCB.classList.contains("state2")) {
+        sourceACheckAllSwitchOn = 'true';
+    }
+    var sourceBCheckAllSwitchOn = 'false';
+    if (sourceBCheckAllCB.classList.contains("state2")) {
+        sourceBCheckAllSwitchOn = 'true';
+    }
+
+    var controlStatesArray ={};
+    controlStatesArray['ComparisonSwitch'] = comparisonSwitchOn;
+    controlStatesArray['SourceAComplianceSwitch'] = sourceAComplianceSwitchOn;
+    controlStatesArray['SourceBComplianceSwitch'] = sourceBComplianceSwitchOn;
+    controlStatesArray['SourceACheckAllSwitch'] = sourceACheckAllSwitchOn;
+    controlStatesArray['SourceBCheckAllSwitch'] = sourceBCheckAllSwitchOn;
+
+    return controlStatesArray;
 }

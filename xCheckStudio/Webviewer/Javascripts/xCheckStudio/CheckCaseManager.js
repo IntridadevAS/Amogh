@@ -18,7 +18,7 @@ function CheckCaseManager() {
             // write check case data to DB
             $.ajax({
                 data: {
-                    'InvokeFunction': "WriteCheckCaseData",
+                    'InvokeFunction': "SaveCheckCaseData",
                     "CheckCaseManager": JSON.stringify(_this)
                 },
                 async: false,

@@ -47,6 +47,9 @@
             // perform comparison check on components
             checkDataSources();
 
+            // create temporary databse to store check results, if not created already
+            createTempDB();
+
             // write check result to database
             writeComparisonResultToDB();            
 

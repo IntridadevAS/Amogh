@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -19,9 +18,12 @@
     <link href="CSS\checkinfo.css" rel="stylesheet" type="text/css" />
     <link href="CSS\ViewStyle.css" rel="stylesheet" type="text/css" />
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
-    <link rel="localization" hreflang="de" href="Javascripts/xCheckStudio/langjson/de.json" type="application/vnd.oftn.l10n+json"/>
-    <link rel="localization" hreflang="fr" href="Javascripts/xCheckStudio/langjson/fr.json" type="application/vnd.oftn.l10n+json"/>
-    <link rel="localization" hreflang="zh-Hans" href="Javascripts/xCheckStudio/langjson/zh-Hans.json" type="application/vnd.oftn.l10n+json"/>
+    <link rel="localization" hreflang="de" href="Javascripts/xCheckStudio/langjson/de.json"
+        type="application/vnd.oftn.l10n+json" />
+    <link rel="localization" hreflang="fr" href="Javascripts/xCheckStudio/langjson/fr.json"
+        type="application/vnd.oftn.l10n+json" />
+    <link rel="localization" hreflang="zh-Hans" href="Javascripts/xCheckStudio/langjson/zh-Hans.json"
+        type="application/vnd.oftn.l10n+json" />
 
 
 
@@ -32,7 +34,7 @@
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
     <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\i18n.js"></script>
-	<script type="text/javascript" src="Javascripts\xCheckStudio\languagescript.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\languagescript.js"></script>
 
     <script type="text/javascript" src="Javascripts/common/Example.js"></script>
     <script type="text/javascript" src="Javascripts/common/ModelTree.js"></script>
@@ -485,7 +487,7 @@
                         <div id="dataSource1ModelBrowserTab" style="align-content: center" class="text">Source 1</div>
                     </div>
                 </div>
-                
+
                 <div class="tab" id="tab2Parent" style="left: 291px; display: none" onclick="OpenTab('tab2')"
                     onMouseOver="this.style.cursor='pointer'">
                     <div class="tab2" id="tab2" style="display: none;">
@@ -1091,7 +1093,8 @@
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                     </div>
-                    <div class="createbtn" style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
+                    <div class="createbtn"
+                        style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
                         <img src="/images/deleteDataSource.png" onclick="clearData('sourcea')" />
                     </div>
                     <div id="loadDataA" class="loaddata">Load data</div>
@@ -1604,7 +1607,7 @@
                             }
                             var transitionEvent = whichTransitionEvent();
 
-                             // source B compliance swith event handler
+                            // source B compliance swith event handler
                             function clicktoggleHm8P2S0BCR4u1Handler(event) {
                                 var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
                                 if (isCurrentState(component, 'state2')) {
@@ -1693,7 +1696,8 @@
                         <img src="/images/UIPackage/module1-bg 6@2x.png" class="bg1" />
                         <img src="/images/UIPackage/module1-icon 2@2x.png" class="icon" />
                     </div>
-                    <div class="createbtn" style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
+                    <div class="createbtn"
+                        style="left : 400px; top : 420px; height : 51px; width : 51px; position : absolute;">
                         <img src="/images/deleteDataSource.png" onclick="clearData('sourceb')" />
                     </div>
                     <div id="loadDataB" class="loaddata">Load data</div>
@@ -2013,7 +2017,7 @@
             </div>
             <div class="infomid">
                 <div id="unitselection" class="units">
-                    UNITS:                    
+                    UNITS:
                 </div>
                 <select class="mks">
                     <option id="customunit" class="options">Custom</option>
@@ -2031,7 +2035,7 @@
                     <img src="/images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png"
                         class="iconfullscreenexitfilled1" />
                 </div>
-                <div class="icon1">
+                <div class="icon1" onclick="onSaveProject()">
                     <img src="/images/UIPackage/module1-icon-3-bg2@2x.png" class="icon1bg2" />
                     <img src="/images/UIPackage/module2-with-open-menu-icon-1-bg1@2x.png" class="icon1bg1" />
                     <img src="/images/UIPackage/module2-with-open-menu-icon-1-black@2x.png" class="icon1black" />
@@ -2141,7 +2145,7 @@
                     </div>
                     <!-- <form method="post" href="/index.html"> -->
                     <form method="post" onclick="LogoutUser()">
-                        <div class="logout"> 
+                        <div class="logout">
                             <img src="/images/UIPackage/landing-page-with-open-menu-selected-check@2x.png"
                                 class="selectedlogout" />
                             <div class="hoverlogout">
@@ -2205,7 +2209,8 @@
                 <div class="tab" id="tab2ViewerParent" style="left: 291px; display: none"
                     onclick="OpenTab('tab2Viewer')" onMouseOver="this.style.cursor='pointer'">
                     <div class="tab2" id="tab2Viewer" style="display: none;">
-                        <div id="dataSource2ViewerContainerTab" style="align-content: center" class="text">Source 2</div>
+                        <div id="dataSource2ViewerContainerTab" style="align-content: center" class="text">Source 2
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2226,7 +2231,8 @@
             </div>
         </div>
     </div>
-    <div src="Javascripts\xCheckStudio\languagescript.js" class="anima-overlay" id="overlay-loaddatadialog" style="min-height:720px; position:fixed;">
+    <div src="Javascripts\xCheckStudio\languagescript.js" class="anima-overlay" id="overlay-loaddatadialog"
+        style="min-height:720px; position:fixed;">
         <div class="loaddatadialog" id="loaddatadialog">
             <div style="width: 614px; height: 100%; position:relative; margin:auto;">
                 <div class="loaddatadialog1">
@@ -2294,8 +2300,8 @@
         }, false);
     </script>
     <!-- Scripts -->
-    <script>    
-               
+    <script>
+
 
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
@@ -2446,21 +2452,21 @@
             disableControlsOnLoad();
 
             // set project name
-            setProjectName();        
+            setProjectName();
 
             // set user name
             setUserName();
-                      
+
 
             var checkButton = document.getElementById("checkButton");
             checkButton.onclick = function () {
                 // show busy loader
                 onCheckButtonClick();
             };
-            
-            isLoadProject().then(function (result) {                
+
+            isLoadProject().then(function (result) {
                 if (result) {
-                    
+
                     loadSavedProject = true;
 
                     // the already created project is being loaded
@@ -2512,7 +2518,7 @@
                 }
             });
         };
-        
+
         window.onclick = function (event) {
             if (event.target.id == "projectselectiondialogModal") {
                 document.getElementById('projectselectiondialogModal').style.display = "none";
@@ -2760,7 +2766,7 @@
                 xCheckStudioInterface2._firstViewer) {
                 xCheckStudioInterface2._firstViewer.resizeCanvas();
             }
-          
+
         };
 
         var maximizedViewerData;
@@ -2785,7 +2791,7 @@
                     xCheckStudioInterface1._firstViewer) {
                     xCheckStudioInterface1._firstViewer.resizeCanvas();
                 }
-              
+
             }
 
             var elem2 = document.getElementById("viewerContainer2");
@@ -2805,7 +2811,7 @@
                 if (xCheckStudioInterface2 &&
                     xCheckStudioInterface2._firstViewer) {
                     xCheckStudioInterface2._firstViewer.resizeCanvas();
-                }             
+                }
             }
         }
 
@@ -2820,6 +2826,7 @@
                 document.msExitFullscreen();
             }
         }
+      
     </script>
     <!-- End of Scripts -->
 </body>

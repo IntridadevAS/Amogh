@@ -92,15 +92,18 @@
      
         performComplianceCheck();
       
+        // create temporary databse to store check results, if not created already
+        createTempDB();
+
         // write check result to database
         writeComplianceResultToDB($CheckGroupsTable, 
                                   $CheckComponentsTable,
                                   $CheckPropertiesTable);
 
-        // write not checked components to database
-        writeNotCheckedComponentsToDB($SourceNotCheckedComponents, 
-                                       $NotCheckedComponentsTable, 
-                                       $projectName);
+        // // write not checked components to database
+        // writeNotCheckedComponentsToDB($SourceNotCheckedComponents, 
+        //                                $NotCheckedComponentsTable, 
+        //                                $projectName);
 
         // // write not matched components to database
         // writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 

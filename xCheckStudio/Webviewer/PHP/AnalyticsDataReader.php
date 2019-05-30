@@ -20,7 +20,7 @@
         return;
     }	
 
-    $values =readAnalyticsData();
+    $values =readAnalyticsData();    
     if($values != 'fail')
     {
         echo json_encode($values);
@@ -90,14 +90,40 @@
         global $projectName;
         $dbh;
         try
-        {        
-            // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        {  
+            //session_start();
+            if(!isset($_SESSION['LoadProject'] ))
+            {
+               echo "fail";
+               return NULL;                
+            }
+            $loadProjectString = $_SESSION['LoadProject'];
 
+            $loadProject = false;
+            if(strtolower($loadProjectString) === 'true')
+            {
+                $loadProject = true;   
+            }           
+
+            // open database
+            $mainDbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
             // begin the transaction
-            $dbh->beginTransaction();            
-            
+            $mainDbh->beginTransaction(); 
+          
+            $dbh = NULL;
+            if(!$loadProject)
+           {
+                $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+                // begin the transaction          
+                $dbh->beginTransaction();            
+           }
+           else
+           {
+                $dbh = $mainDbh;
+           }
+
             // get ok components count
             $okCount = 0;
             $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");                
@@ -142,7 +168,7 @@
 
             if( $sourceASelectedCompTable != NULL)
             {
-                $results = $dbh->query("SELECT COUNT(*) FROM  $sourceASelectedCompTable;");     
+                $results =  $mainDbh->query("SELECT COUNT(*) FROM  $sourceASelectedCompTable;");     
                 if($results)
                 {
                     $sourceASelectedCount = $results->fetchColumn();
@@ -153,7 +179,7 @@
             $sourceBSelectedCount =  0;
             if( $sourceBSelectedCompTable != NULL)
             {
-                $results = $dbh->query("SELECT COUNT(*) FROM  $sourceBSelectedCompTable;");     
+                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceBSelectedCompTable;");     
                 if($results)
                 {
                     $sourceBSelectedCount = $results->fetchColumn();
@@ -164,7 +190,7 @@
             $sourceATotalComponentsCount =  0;
             if($sourceAComponentsTable != NULL)
             {
-                $results = $dbh->query("SELECT COUNT(*) FROM  $sourceAComponentsTable;");     
+                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAComponentsTable;");     
                 if($results)
                 {
                     $sourceATotalComponentsCount = $results->fetchColumn();
@@ -175,7 +201,7 @@
             $sourceBTotalComponentsCount =  0;
             if($sourceBComponentsTable != NULL)
             {
-                $results = $dbh->query("SELECT COUNT(*) FROM  $sourceBComponentsTable;");     
+                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceBComponentsTable;");     
                 if($results)
                 {
                     $sourceBTotalComponentsCount = $results->fetchColumn();
@@ -288,9 +314,14 @@
             }               
            
             // commit update
-            $dbh->commit();
-            $dbh = null; //This is how you close a PDO connection                 
-                
+            $mainDbh->commit();           
+            $mainDbh = null; //This is how you close a PDO connection    
+            if(!$loadProject)
+            {
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection                 
+            }
+                            
             // for comparison checks, single DB record is for 2 components ( one from Source A 
             // and another from Source B)
             if(strtolower($_POST['CheckType']) === 'comparison' )
@@ -315,8 +346,9 @@
         }
         catch(Exception $e) 
         {        
-            return "fail"; 
-            //return;
+             return "fail"; 
+            //echo 'Message: ' .$e->getMessage();             
         } 
     }
+    
 ?>

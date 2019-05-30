@@ -48,10 +48,34 @@
         {
             global $projectName;
             
+            //session_start();
+            if(!isset($_SESSION['LoadProject'] ))
+            {
+               echo "fail";
+               return NULL;                
+            }
+            $loadProject = $_SESSION['LoadProject'];
+
+            $dbPath = NULL;
+            if(strtolower($loadProject) === 'true')
+            {
+                $dbPath = getProjectDatabasePath($projectName);   
+            }
+            else if(strtolower($loadProject) === 'false')
+            {                
+                $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            }
+            else
+            {
+                echo "fail";
+                return NULL;    
+            }
+
             try
             {   
                 // open database
-                $dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+                //$dbPath = getProjectDatabasePath($projectName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction
@@ -83,10 +107,34 @@
         {
             global $projectName;
             
+            //session_start();
+            if(!isset($_SESSION['LoadProject'] ))
+            {
+               echo "fail";
+               return NULL;                
+            }
+            $loadProject = $_SESSION['LoadProject'];
+
+            $dbPath = NULL;
+            if(strtolower($loadProject) === 'true')
+            {
+                $dbPath = getProjectDatabasePath($projectName);   
+            }
+            else if(strtolower($loadProject) === 'false')
+            {                
+                $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            }
+            else
+            {
+                echo "fail";
+                return NULL;    
+            }
+
             try
             {   
                 // open database
-                $dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction

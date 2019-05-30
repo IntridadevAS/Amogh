@@ -35,8 +35,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "DeleteSourceBComplianceResults":
             DeleteSourceBComplianceResults();
             break;
-        case "WriteCheckCaseData":
-            WriteCheckCaseData();
+        case "SaveCheckCaseData":
+            SaveCheckCaseData();
+            break;
+        case "SaveCheckModuleControlsState":
+            SaveCheckModuleControlsState();
+            break;
+        case "SaveDatasourceInfo":
+            SaveDatasourceInfo();
+            break;  
+        case "SaveSelectedComponents":
+            SaveSelectedComponents();         
+            break;  
+        case "SaveCheckResultsToCheckSpaceDB":
+            SaveCheckResultsToCheckSpaceDB();         
             break;
         default:
             echo "No Function Found!";
@@ -45,10 +57,752 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 /*
 |
+|   write all check results to checkspace DB from temporary db
+|
+*/ 
+function SaveCheckResultsToCheckSpaceDB()
+{
+       // get project name
+       session_start();   
+       $projectName = NULL;
+       if(isset($_SESSION['ProjectName']))
+       {
+           $projectName =  $_SESSION['ProjectName'];              
+       }
+       else
+       {
+           echo 'fail';
+           return;
+       }	
+
+       $dbh;
+        try
+            {        
+                // open database
+                $tempDbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+                if(!file_exists ( $tempDbPath ))
+                {
+                    echo 'fail';
+                    return;
+                }
+
+                $tempDbh = new PDO("sqlite:$tempDbPath") or die("cannot open the database");
+
+                $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+
+                // begin the transaction
+                $dbh->beginTransaction();
+                $tempDbh->beginTransaction();
+
+               
+                // comparison result tables table                               
+                SaveComparisonCheckGroups( $tempDbh, $dbh);                 
+                SaveComparisonCheckComponents( $tempDbh, $dbh);
+                SaveComparisonCheckProperties( $tempDbh, $dbh);
+                SaveSourceANotSelectedComponents( $tempDbh, $dbh);
+                SaveSourceBNotSelectedComponents( $tempDbh, $dbh);
+                SaveSourceANotMatchedComponents( $tempDbh, $dbh);
+                SaveSourceBNotMatchedComponents( $tempDbh, $dbh);
+
+                // source a compliance result tables table     
+                SaveSourceAComplianceCheckGroups($tempDbh, $dbh);
+                SaveSourceAComplianceCheckComponents($tempDbh, $dbh);
+                SaveSourceAComplianceCheckProperties($tempDbh, $dbh);
+
+                // source b compliance result tables table          
+                SaveSourceBComplianceCheckGroups($tempDbh, $dbh);
+                SaveSourceBComplianceCheckComponents($tempDbh, $dbh);
+                SaveSourceBComplianceCheckProperties($tempDbh, $dbh);               
+              
+                // commit update
+                $dbh->commit();
+                $tempDbh->commit();
+                $dbh = null; //This is how you close a PDO connection                    
+                $tempDbh = null; //This is how you close a PDO connection        
+
+                // now delete the temporary CheckResults_temp.db
+                if (!unlink($tempDbPath))
+                {
+                    echo "fail"; 
+                    return;
+                }
+                
+
+                echo 'success';
+                return;
+            }
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return;
+            } 
+
+}
+
+function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckGroups");
+    if($selectResults) 
+    {
+
+        $command = 'CREATE TABLE SourceBComplianceCheckGroups(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            componentClass TEXT NOT NULL,
+            componentCount Integer)'; 
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['componentClass'], 
+                                    $row['componentCount']));
+        }   
+    }
+}
+
+function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
+{  
+    $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckComponents");
+    if($selectResults) 
+    {
+ 
+        $command = 'CREATE TABLE SourceBComplianceCheckComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,                
+            subComponentClass TEXT,
+            status TEXT,
+            nodeId TEXT,
+            ownerGroup INTEGER NOT NULL)'; 
+        $dbh->exec($command);    
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, subComponentClass, status,
+                                    nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['name'], 
+                                    $row['subComponentClass'],
+                                    $row['status'], 
+                                    $row['nodeId'], 
+                                    $row['ownerGroup']));
+        }   
+    }  
+}
+
+function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
+{   
+    $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckProperties");
+    if($selectResults) 
+    {
+  
+        $command = 'CREATE TABLE SourceBComplianceCheckProperties(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,              
+            value TEXT,
+            result TEXT,
+            severity TEXT,
+            performCheck TEXT,
+            description TEXT,
+            ownerComponent INTEGER NOT NULL)'; 
+        $dbh->exec($command);    
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
+                                    severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['name'], 
+                                    $row['value'],
+                                    $row['result'], 
+                                    $row['severity'], 
+                                    $row['performCheck'], 
+                                    $row['description'], 
+                                    $row['ownerComponent']));
+        }   
+    }
+}
+
+function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckGroups");
+    if($selectResults) 
+    {
+
+        $command = 'CREATE TABLE SourceAComplianceCheckGroups(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            componentClass TEXT NOT NULL,
+            componentCount Integer)'; 
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['componentClass'], 
+                                    $row['componentCount']));
+        }   
+    }
+}
+
+function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
+{  
+    $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckComponents");
+    if($selectResults) 
+    {
+ 
+        $command = 'CREATE TABLE SourceAComplianceCheckComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,                
+            subComponentClass TEXT,
+            status TEXT,
+            nodeId TEXT,
+            ownerGroup INTEGER NOT NULL)'; 
+        $dbh->exec($command);    
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status,
+                                    nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['name'], 
+                                    $row['subComponentClass'],
+                                    $row['status'], 
+                                    $row['nodeId'], 
+                                    $row['ownerGroup']));
+        }   
+    }  
+}
+
+function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
+{   
+    $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckProperties");
+    if($selectResults) 
+    {
+  
+        $command = 'CREATE TABLE SourceAComplianceCheckProperties(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,              
+            value TEXT,
+            result TEXT,
+            severity TEXT,
+            performCheck TEXT,
+            description TEXT,
+            ownerComponent INTEGER NOT NULL)'; 
+        $dbh->exec($command);    
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
+                                    severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+        
+        
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['name'], 
+                                    $row['value'],
+                                    $row['result'], 
+                                    $row['severity'], 
+                                    $row['performCheck'], 
+                                    $row['description'], 
+                                    $row['ownerComponent']));
+        }   
+    }
+}
+
+function SaveSourceBNotSelectedComponents( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM SourceBNotSelectedComponents");
+    if($selectResults) 
+    {
+
+        $command = 'CREATE TABLE SourceBNotSelectedComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            mainClass TEXT,
+            subClass TEXT,
+            nodeId TEXT,
+            mainTableId TEXT)'; 
+        $dbh->exec($command);  
+        
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBNotSelectedComponents(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainTableId']));
+        }   
+    }
+}
+
+function SaveSourceANotSelectedComponents( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM SourceANotSelectedComponents");
+    if($selectResults) 
+    {
+
+        $command = 'CREATE TABLE SourceANotSelectedComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            mainClass TEXT,
+            subClass TEXT,
+            nodeId TEXT,
+            mainTableId TEXT)'; 
+        $dbh->exec($command);  
+        
+        $insertStmt = $dbh->prepare("INSERT INTO SourceANotSelectedComponents(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainTableId']));
+        } 
+    }
+}
+
+function SaveSourceBNotMatchedComponents( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM SourceBNotMatchedComponents");
+    if($selectResults) 
+    {
+   
+        $command = 'CREATE TABLE SourceBNotMatchedComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            mainClass TEXT,
+            subClass TEXT,
+            nodeId TEXT,
+            mainTableId TEXT)'; 
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBNotMatchedComponents(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainTableId']));
+        } 
+    }
+}
+
+function SaveSourceANotMatchedComponents( $tempDbh, $dbh)
+{   
+    $selectResults = $tempDbh->query("SELECT * FROM SourceANotMatchedComponents");
+    if($selectResults) 
+    {
+    
+        $command = 'CREATE TABLE SourceANotMatchedComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            mainClass TEXT,
+            subClass TEXT,
+            nodeId TEXT,
+            mainTableId TEXT)'; 
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO SourceANotMatchedComponents(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainTableId']));
+        } 
+    }
+}
+
+function SaveComparisonCheckComponents( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckComponents");
+    if($selectResults) 
+    {
+        // create table
+        $command = 'CREATE TABLE ComparisonCheckComponents(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            sourceAName TEXT,
+            sourceBName TEXT,
+            subComponentClass TEXT,
+            status TEXT,
+            sourceANodeId TEXT,
+            sourceBNodeId TEXT,
+            ownerGroup INTEGER NOT NULL)'; 
+        $dbh->exec($command);    
+      
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
+                    sourceAName, sourceBName, subComponentClass, status, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                 $row['sourceAName'], 
+                                 $row['sourceBName'],
+                                 $row['subComponentClass'], 
+                                 $row['status'], 
+                                 $row['sourceANodeId'],
+                                 $row['sourceBNodeId'], 
+                                 $row['ownerGroup']));
+        }                    
+    } 
+}
+
+function SaveComparisonCheckProperties( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckProperties");
+    if($selectResults) 
+    {
+        // create table
+        $command = 'CREATE TABLE ComparisonCheckProperties(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            sourceAName TEXT,
+            sourceBName TEXT,
+            sourceAValue TEXT,
+            sourceBValue TEXT,
+            result TEXT,
+            severity TEXT,
+            performCheck TEXT,
+            description TEXT,
+            ownerComponent INTEGER NOT NULL)'; 
+        $dbh->exec($command); 
+        
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
+                      sourceAValue, sourceBValue, result, severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['sourceAName'], 
+                                       $row['sourceBName'],
+                                       $row['sourceAValue'], 
+                                       $row['sourceBValue'], 
+                                       $row['result'],
+                                       $row['severity'], 
+                                       $row['performCheck'], 
+                                       $row['description'],
+                                       $row['ownerComponent']));
+        }                    
+    }  
+}
+function SaveComparisonCheckGroups( $tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups");
+    if($selectResults) 
+    {
+        // create table
+        $command = 'CREATE TABLE ComparisonCheckGroups(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            componentClass TEXT NOT NULL,
+            componentCount Integer)'; 
+        $dbh->exec($command);    
+        
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount']));
+        }                    
+    }      
+}
+
+/*
+|
+|   write selected components
+|
+*/ 
+function SaveSelectedComponents()
+    {
+        if(!isset($_POST['selectedComponentsTableName']) ||
+           !isset($_POST['nodeIdvsComponentIdList']) ||
+           !isset($_POST['selectedComponents']))
+        {
+            echo 'fail';
+            return;
+        }
+
+        $selectedComponentsTable = $_POST['selectedComponentsTableName'];
+        $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
+        $selectedComponents = json_decode($_POST['selectedComponents'], true);
+
+         // get project name
+         session_start();   
+         $projectName = NULL;
+         if(isset($_SESSION['ProjectName']))
+         {
+             $projectName =  $_SESSION['ProjectName'];              
+         }
+         else
+         {
+             echo 'fail';
+             return;
+         }	
+
+        $dbh;
+        try
+            {        
+                // open database
+                $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+                
+                // begin the transaction
+                $dbh->beginTransaction();
+
+                // create selected components table
+
+                // drop table if exists
+                $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
+                $dbh->exec($command);
+
+                $command = 'CREATE TABLE '. $selectedComponentsTable. '(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT NOT NULL,
+                    mainClass TEXT NOT NULL,
+                    subClass TEXT NOT NULL,
+                    nodeId INTEGER,
+                    mainComponentId INTEGER
+                    )';         
+                $dbh->exec($command);    
+
+                for($index = 0; $index < count($selectedComponents); $index++)
+                {
+                    $selectedComponent = $selectedComponents[$index];     
+                   
+
+                    $name = $selectedComponent['Name'];
+                    $mainClass =  $selectedComponent['MainComponentClass'];
+                    $subClass =$selectedComponent['ComponentClass'];
+                    $nodeId = null;
+                    if(isset($selectedComponent['NodeId']))
+                    {
+                        $nodeId = (int)$selectedComponent['NodeId'];
+                    }
+
+                    $mainCompId = null;
+                    if($nodeId !== NULL && $nodeIdvsComponentIdList[$nodeId])
+                    {
+                        $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
+                    }
+
+                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
+                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
+                    
+                    $stmt = $dbh->prepare($insertQuery);                    
+                    $stmt->execute($values);   
+                }
+                
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection                    
+                              
+                return;
+            }
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return;
+            } 
+        }
+
+/*
+|
+|   write data sources info
+|
+*/ 
+function SaveDatasourceInfo()
+{
+    
+        $sourceAName  = NULL;
+        $sourceBName  = NULL;
+        $sourceAType  = NULL;
+        $sourceBType  = NULL;
+        $orderMaintained  = 'true';
+        if(isset($_POST["SourceAFileName"]))
+        {
+            $sourceAName =  $_POST['SourceAFileName'];   
+        }
+        if(isset($_POST["SourceBFileName"]))
+        {
+            $sourceBName =  $_POST['SourceBFileName'];   
+        }
+
+        if(isset($_POST["SourceAType"]))
+        {
+            $sourceAType =  $_POST['SourceAType'];   
+        }
+        if(isset($_POST["SourceBType"]))
+        {
+            $sourceBType =  $_POST['SourceBType'];   
+        }           
+        if(isset($_POST["orderMaintained"]))
+        {
+            $orderMaintained  = $_POST['orderMaintained'];   
+        } 
+
+        // get project name
+        session_start();   
+        $projectName = NULL;
+        if(isset($_SESSION['ProjectName']))
+        {
+            $projectName =  $_SESSION['ProjectName'];              
+        }
+        else
+        {
+            echo 'fail';
+            return;
+        }	
+
+     $dbh;
+     try
+     {        
+         // open database
+         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+         
+         // begin the transaction
+         $dbh->beginTransaction();
+
+         // create selected components table
+
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
+         $dbh->exec($command);
+
+         $command = 'CREATE TABLE DatasourceInfo(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             sourceAFileName TEXT,
+             sourceBFileName TEXT,
+             sourceAType TEXT,
+             sourceBType TEXT,
+             orderMaintained Text)';         
+         $dbh->exec($command);    
+
+         $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceAType, sourceBType, orderMaintained) VALUES(?,?,?,?,?) ';
+         $values = array($sourceAName,  $sourceBName,  $sourceAType,  $sourceBType, $orderMaintained);
+         
+         $stmt = $dbh->prepare($insertQuery);                    
+         $stmt->execute($values);   
+
+         // commit update
+         $dbh->commit();
+         $dbh = null; //This is how you close a PDO connection                 
+     }
+     catch(Exception $e) 
+     {        
+         echo "fail"; 
+         return;
+     } 
+}
+
+/*
+|
+|   write check module controls state
+|
+*/  
+function SaveCheckModuleControlsState()
+{
+    if(!isset($_POST["comparisonSwithOn"]) ||
+    !isset($_POST["sourceAComplianceSwitchOn"]) ||
+    !isset($_POST["sourceBComplianceSwitchOn"]) ||
+    !isset($_POST["sourceACheckAllSwitchOn"]) ||
+    !isset($_POST["sourceBCheckAllSwitchOn"]))
+    {
+         echo "fail"; 
+         return;
+    }
+
+    // get project name
+    session_start();   
+    $projectName = NULL;
+    if(isset($_SESSION['ProjectName']))
+    {
+        $projectName =  $_SESSION['ProjectName'];              
+    }
+    else
+    {
+        echo 'fail';
+        return;
+    }	
+
+    $dbh;
+     try
+     {        
+         // open database
+         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+         
+         // begin the transaction
+         $dbh->beginTransaction();
+
+         // drop table if exists
+         $command = 'DROP TABLE IF EXISTS CheckModuleControlsState;';
+         $dbh->exec($command);
+
+         $command = 'CREATE TABLE CheckModuleControlsState(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             comparisonSwith TEXT,
+             sourceAComplianceSwitch TEXT,
+             sourceBComplianceSwitch TEXT,
+             sourceACheckAllSwitch TEXT,
+             sourceBCheckAllSwitch TEXT)';         
+         $dbh->exec($command);    
+
+         $insertQuery = 'INSERT INTO CheckModuleControlsState(comparisonSwith, sourceAComplianceSwitch, sourceBComplianceSwitch, sourceACheckAllSwitch, sourceBCheckAllSwitch) VALUES(?,?,?,?,?) ';
+         $values = array($_POST["comparisonSwithOn"],  
+                         $_POST["sourceAComplianceSwitchOn"],  
+                         $_POST["sourceBComplianceSwitchOn"],  
+                         $_POST["sourceACheckAllSwitchOn"],
+                         $_POST["sourceBCheckAllSwitchOn"]);
+         
+         $stmt = $dbh->prepare($insertQuery);                    
+         $stmt->execute($values); 
+
+         // commit update
+         $dbh->commit();
+         $dbh = null; //This is how you close a PDO connection                 
+     }
+     catch(Exception $e) 
+     {        
+         echo "fail"; 
+         return;
+     } 
+}
+
+/*
+|
 |   write check case data(as JSON string)     
 |
 */  
-function WriteCheckCaseData()
+function SaveCheckCaseData()
 {         
     if(!isset($_POST['CheckCaseManager']))
     {

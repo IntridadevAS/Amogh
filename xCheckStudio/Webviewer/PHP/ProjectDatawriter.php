@@ -4,8 +4,7 @@
 
     if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||       
        !isset($_POST["SourceASelectedComponents"]) ||      
-       !isset($_POST["SourceAFileName"]) ||       
-       !isset($_POST["CheckCaseManager"]))
+       !isset($_POST["SourceAFileName"]))
        {
            echo 'fail';
            return;
@@ -92,6 +91,7 @@
             $sourceBName  = NULL;
             $sourceAType  = NULL;
             $sourceBType  = NULL;
+            $orderMaintained  = 'true';
             if(isset($_POST["SourceAFileName"]))
             {
                 $sourceAName =  $_POST['SourceAFileName'];   
@@ -109,7 +109,11 @@
             {
                 $sourceBType =  $_POST['SourceBType'];   
             }           
-          
+            if(isset($_POST["orderMaintained"]))
+            {
+                $orderMaintained  = $_POST['orderMaintained'];   
+            } 
+
             $dbh;
             try
             {        
@@ -131,11 +135,12 @@
                     sourceAFileName TEXT,
                     sourceBFileName TEXT,
                     sourceAType TEXT,
-                    sourceBType TEXT)';         
+                    sourceBType TEXT,
+                    orderMaintained Text)';         
                 $dbh->exec($command);    
-
-                $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceAType, sourceBType) VALUES(?,?,?,?) ';
-                $values = array($sourceAName,  $sourceBName,  $sourceAType,  $sourceBType);
+       
+                $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceAType, sourceBType, orderMaintained) VALUES(?,?,?,?,?) ';
+                $values = array($sourceAName,  $sourceBName,  $sourceAType,  $sourceBType, $orderMaintained);
                 
                 $stmt = $dbh->prepare($insertQuery);                    
                 $stmt->execute($values);   
