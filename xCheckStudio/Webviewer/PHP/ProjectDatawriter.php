@@ -161,13 +161,18 @@
        $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
        $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      
       
-        //var_dump( $SourceANodeIdvsComponentIdList);
-
         // write source a selected components
         writeSelectedComponents($projectName, 
                                 'SourceASelectedComponents', 
                                 $SourceASelectedComponents, 
                                 $SourceANodeIdvsComponentIdList );
+        
+        
+        // write source A not selected components
+        writeNotSelectedComponents($projectName,
+                                    $SourceASelectedComponents,
+                                    "SourceANotSelectedComponents",
+                                    "SourceAComponents" );
         
         if(isset($_POST['SourceBSelectedComponents']) &&
            isset($_POST['SourceBNodeIdvsComponentIdList']))
@@ -179,7 +184,13 @@
             writeSelectedComponents($projectName, 
                                 'SourceBSelectedComponents', 
                                 $SourceBSelectedComponents, 
-                                $SourceBNodeIdvsComponentIdList );
+                                $SourceBNodeIdvsComponentIdList);
+
+            // write source b not selected components
+            writeNotSelectedComponents($projectName,
+                                       $SourceBSelectedComponents,
+                                       "SourceBNotSelectedComponents",
+                                       "SourceBComponents");
         }
 
         function writeSelectedComponents($projectName, 
@@ -252,4 +263,172 @@
                 return;
             } 
         }
+
+
+        function writeNotSelectedComponents($projectName,
+                                            $selectedComponents,
+                                            $notSelectedComponentsTable,
+                                            $componentsTable)
+        {          
+
+            $components = getSourceComponents($projectName, $componentsTable);
+            if($components === NULL)
+            {               
+                return 'fail';
+            }
+          
+            $notCheckedComponents = array();
+            foreach ($components as $id => $component)
+            {            
+             
+               // check is component is selected or not for performing check
+                if(!isComponentSelected($component, $selectedComponents)) 
+                {
+                        
+                        //source A component not checked    
+                        $compKey = $component['id'];                            
+                        if(!array_key_exists($compKey, $notCheckedComponents))
+                        {
+                            $notCheckedComponents[$compKey] = $component;                                                   
+                        }
+    
+                    //continue;
+                }
+            }   
+           
+            writeNotCheckedComponentsToDB($notCheckedComponents, 
+                                          $notSelectedComponentsTable, 
+                                          $projectName);
+        }
+
+        
+        function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
+                                           $tableName,
+                                           $projectName)
+    {        
+        try
+        {   
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";            
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();
+
+            // SourceANotCheckedComponents table
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE '.$tableName.'(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,
+                    mainClass TEXT,
+                    subClass TEXT,
+                    nodeId TEXT,
+                    mainTableId TEXT)'; 
+            $dbh->exec($command);    
+
+            foreach($notCheckedComponents as $key =>$value)            
+            {               
+                $name = $value["name"];
+                $mainclass = $value["mainclass"];
+                $subclass =  $value["subclass"];               
+
+                $nodeId = NULL;
+                if(array_key_exists("nodeid", $value))
+                { 
+                    $nodeId = $value["nodeid"];
+                }
+
+                $mainTableId = $value["id"];
+
+                $insertQuery = 'INSERT INTO '.$tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
+                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+
+                $insertStmt = $dbh->prepare($insertQuery);
+                $insertStmt->execute($values);  
+            }
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }
+    }
+
+    // get source components
+ function getSourceComponents($projectName, $componentsTable)
+ {           
+     $components = array();        
+
+     try{   
+             // open database
+             $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+             // begin the transaction
+             $dbh->beginTransaction();
+              
+             // fetch source omponents
+             $stmt =  $dbh->query('SELECT *FROM '.$componentsTable.';');
+            
+             if($stmt)
+             {
+                 while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                        $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
+                        if (array_key_exists("nodeid",$componentRow))
+                        {
+                            $values2["nodeid"] =  $componentRow['nodeid'];                               
+                        }
+
+                        //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
+                        $components[$componentRow['id']] = $values2;   
+                    
+                }   
+            }                  
+
+            // commit update
+             $dbh->commit();
+             $dbh = null; //This is how you close a PDO connection
+         }                
+     catch(Exception $e) {        
+         echo "fail"; 
+         return NULL;
+     }   
+     
+     return $components ;
+ }   
+        
+         function isComponentSelected($component, $SelectedComponents){
+           
+            for($index = 0; $index < count($SelectedComponents); $index++)
+            {
+                $selectedComponent = $SelectedComponents[$index];              
+                if($component['name']              ==  $selectedComponent['Name'] &&
+                   $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
+                   $component['subclass']  ==  $selectedComponent['ComponentClass']){
+                       
+                         if(isset($selectedComponent['NodeId']))
+                        {                          
+                            if($selectedComponent['NodeId'] == $component['nodeid'])
+                            {                               
+                                return true;
+                            }                           
+                        }
+                        else{                           
+                            return true;
+                        }
+                }                    
+                   
+            }
+
+            return false;
+        }   
 ?>

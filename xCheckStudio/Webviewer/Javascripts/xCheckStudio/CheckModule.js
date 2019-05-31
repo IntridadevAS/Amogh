@@ -2341,6 +2341,9 @@ function onSaveProject(event)
      // save selected components
      saveSelectedComponents();
 
+    // save not selected components
+    saveNotSelectedComponents();
+
      alert("Saved project information.");
     }
     catch(error)
@@ -2350,6 +2353,50 @@ function onSaveProject(event)
     finally {
         // remove busy spinner        
         busySpinner.classList.remove('show')
+    }
+}
+
+function saveNotSelectedComponents() {
+    // write source a selected components
+    if (xCheckStudioInterface1) {
+        var selectedCompoents = xCheckStudioInterface1.getModelBrowser().selectedCompoents;
+
+        // write source a selected components
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveNotSelectedComponents",
+                "notSelectedComponentsTable": "SourceANotSelectedComponents",
+                "selectedComponents": JSON.stringify(selectedCompoents),
+                "componentsTable": "SourceAComponents"
+            },
+            success: function (msg) {
+            }
+        });
+    }
+
+    // write source Bselected components
+    if (xCheckStudioInterface2) {
+        var selectedCompoents = xCheckStudioInterface2.getModelBrowser().selectedCompoents;
+
+        // write source a selected components
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveNotSelectedComponents",
+                "notSelectedComponentsTable": "SourceBNotSelectedComponents",
+                "selectedComponents": JSON.stringify(selectedCompoents),
+                "componentsTable": "SourceBComponents"
+            },
+            success: function (msg) {
+            }
+        });
     }
 }
 
