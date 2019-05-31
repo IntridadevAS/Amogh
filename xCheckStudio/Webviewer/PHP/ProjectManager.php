@@ -450,6 +450,7 @@ function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
     if($selectResults) 
     {
 
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceBComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -474,6 +475,7 @@ function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
     if($selectResults) 
     {
  
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
         $command = 'CREATE TABLE SourceBComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,                
@@ -505,6 +507,7 @@ function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
     if($selectResults) 
     {
   
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
         $command = 'CREATE TABLE SourceBComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -540,6 +543,7 @@ function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
     if($selectResults) 
     {
 
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceAComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -564,6 +568,7 @@ function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
     if($selectResults) 
     {
  
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
         $command = 'CREATE TABLE SourceAComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,                
@@ -595,6 +600,7 @@ function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
     if($selectResults) 
     {
   
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
         $command = 'CREATE TABLE SourceAComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -630,6 +636,7 @@ function SaveSourceBNotSelectedComponents( $tempDbh, $dbh)
     if($selectResults) 
     {
 
+        $command = 'DROP TABLE IF EXISTS SourceBNotSelectedComponents;';
         $command = 'CREATE TABLE SourceBNotSelectedComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -660,6 +667,7 @@ function SaveSourceANotSelectedComponents( $tempDbh, $dbh)
     if($selectResults) 
     {
 
+        $command = 'DROP TABLE IF EXISTS SourceANotSelectedComponents;';
         $command = 'CREATE TABLE SourceANotSelectedComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -690,6 +698,7 @@ function SaveSourceBNotMatchedComponents( $tempDbh, $dbh)
     if($selectResults) 
     {
    
+        $command = 'DROP TABLE IF EXISTS SourceBNotMatchedComponents;';
         $command = 'CREATE TABLE SourceBNotMatchedComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -720,6 +729,7 @@ function SaveSourceANotMatchedComponents( $tempDbh, $dbh)
     if($selectResults) 
     {
     
+        $command = 'DROP TABLE IF EXISTS SourceANotMatchedComponents;';
         $command = 'CREATE TABLE SourceANotMatchedComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -750,6 +760,7 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
     if($selectResults) 
     {
         // create table
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
         $command = 'CREATE TABLE ComparisonCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             sourceAName TEXT,
@@ -785,6 +796,7 @@ function SaveComparisonCheckProperties( $tempDbh, $dbh)
     if($selectResults) 
     {
         // create table
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
         $command = 'CREATE TABLE ComparisonCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             sourceAName TEXT,
@@ -823,6 +835,7 @@ function SaveComparisonCheckGroups( $tempDbh, $dbh)
     if($selectResults) 
     {
         // create table
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
         $command = 'CREATE TABLE ComparisonCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
