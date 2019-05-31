@@ -100,16 +100,14 @@
                                   $CheckComponentsTable,
                                   $CheckPropertiesTable);
 
-        // // write not checked components to database
-        // writeNotCheckedComponentsToDB($SourceNotCheckedComponents, 
-        //                                $NotCheckedComponentsTable, 
-        //                                $projectName);
-
-        // // write not matched components to database
-        // writeNotMatchedComponentsToDB($SourceNotMatchedComponents, 
-        //                               $NotMatchedComponentsTable, 
-        //                               $projectName);
-                                             
+        if( $ContainerId =='viewerContainer1')
+        {
+            writeSourceAComplianceCheckStatistics();
+        }
+        else if($ContainerId == 'viewerContainer2')
+        {
+            writeSourceBComplianceCheckStatistics();
+        }                                                
 
         // get source components
         function getSourceComponents()

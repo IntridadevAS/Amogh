@@ -52,15 +52,18 @@
 
             // write check result to database
             writeComparisonResultToDB();            
-
-            // write not checked components to database
-            writeNotCheckedComponentsToDB($SourceANotCheckedComponents, "SourceANotSelectedComponents", $projectName);
-            writeNotCheckedComponentsToDB($SourceBNotCheckedComponents, "SourceBNotSelectedComponents", $projectName);
+      
 
             // write not matched components to database
-            writeNotMatchedComponentsToDB($SourceANotMatchedComponents, "SourceANotMatchedComponents", $projectName);
-            writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, "SourceBNotMatchedComponents", $projectName);
+            writeNotMatchedComponentsToDB($SourceANotMatchedComponents, 
+                                          "SourceANotMatchedComponents", 
+                                          $projectName);
+            writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, 
+                                          "SourceBNotMatchedComponents", 
+                                          $projectName);
             
+            writeComparisonCheckStatistics();
+
             // get source components
             function getSourceComponents()
             {

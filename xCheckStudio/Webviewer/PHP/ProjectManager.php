@@ -50,10 +50,212 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveCheckResultsToCheckSpaceDB":
             SaveCheckResultsToCheckSpaceDB();         
             break;
+        case "SaveNotSelectedComponents":
+            SaveNotSelectedComponents();         
+            break;
         default:
             echo "No Function Found!";
     }
 }
+
+function SaveNotSelectedComponents()
+{
+        if(!isset($_POST['notSelectedComponentsTable']) ||
+           !isset($_POST['selectedComponents']) ||
+           !isset($_POST['componentsTable'] ))
+        {
+            echo 'fail';
+            return;
+        }
+       
+        $selectedComponents = json_decode($_POST['selectedComponents'], true);
+        $componentsTable = $_POST['componentsTable'];
+        $notSelectedComponentsTable = $_POST['notSelectedComponentsTable'];
+
+        // echo "selectedComponents : ";
+        // var_dump($selectedComponents);
+        // echo "componentsTable : ".$componentsTable."     ";
+        // echo "notSelectedComponentsTable : ".$notSelectedComponentsTable."      ";
+
+         // get project name
+         session_start();   
+         $projectName = NULL;
+         if(isset($_SESSION['ProjectName']))
+         {
+             $projectName =  $_SESSION['ProjectName'];              
+         }
+         else
+         {
+             echo 'fail';
+             return;
+         }	  
+        
+        // get not selected components
+        $components = getSourceComponents($projectName, $componentsTable);
+        if($components === NULL)
+        {
+            echo 'fail';
+            return;
+        }
+        echo "components : ";
+        var_dump($components);
+
+        $notCheckedComponents = array();
+        foreach ($components as $id => $component)
+        {
+
+            echo "Inside loop 107       ;";
+            // check is component is selected or not for performing check
+            if(!isComponentSelected($component, $selectedComponents)) 
+            {
+                    
+                    //source A component not checked    
+                    $compKey = $component['id'];                            
+                    if(!array_key_exists($compKey, $notCheckedComponents))
+                    {
+                        $notCheckedComponents[$compKey] = $component;                                                   
+                    }
+
+                //continue;
+            }
+        }
+
+        writeNotCheckedComponentsToDB($notCheckedComponents, 
+                                      $notSelectedComponentsTable, 
+                                      $projectName);
+}
+
+function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
+                                        $tableName,
+                                        $projectName)
+{        
+        try
+        {   
+            // open database
+            $dbPath = "../Projects/".$projectName."/".$projectName.".db";            
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();
+
+            // SourceANotCheckedComponents table
+            
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE '.$tableName.'(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,
+                    mainClass TEXT,
+                    subClass TEXT,
+                    nodeId TEXT,
+                    mainTableId TEXT)'; 
+            $dbh->exec($command);    
+
+            foreach($notCheckedComponents as $key =>$value)            
+            {               
+                $name = $value["name"];
+                $mainclass = $value["mainclass"];
+                $subclass =  $value["subclass"];               
+
+                $nodeId = NULL;
+                if(array_key_exists("nodeid", $value))
+                { 
+                    $nodeId = $value["nodeid"];
+                }
+
+                $mainTableId = $value["id"];
+
+                $insertQuery = 'INSERT INTO '.$tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
+                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+
+                $insertStmt = $dbh->prepare($insertQuery);
+                $insertStmt->execute($values);  
+            }
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }
+}
+
+function isComponentSelected($component, $SelectedComponents){
+           
+    for($index = 0; $index < count($SelectedComponents); $index++)
+    {
+        $selectedComponent = $SelectedComponents[$index];              
+        if($component['name']              ==  $selectedComponent['Name'] &&
+           $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
+           $component['subclass']  ==  $selectedComponent['ComponentClass']){
+               
+                 if(isset($selectedComponent['NodeId']))
+                {                          
+                    if($selectedComponent['NodeId'] == $component['nodeid'])
+                    {                               
+                        return true;
+                    }                           
+                }
+                else{                           
+                    return true;
+                }
+        }                    
+           
+    }
+
+    return false;
+} 
+
+ // get source components
+ function getSourceComponents($projectName, $componentsTable)
+ {           
+     $components = array();        
+
+     try{   
+             // open database
+             $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+             // begin the transaction
+             $dbh->beginTransaction();
+              
+             // fetch source omponents
+             $stmt =  $dbh->query('SELECT *FROM '.$componentsTable.';');
+            
+             if($stmt)
+             {
+                 while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                        $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
+                        if (array_key_exists("nodeid",$componentRow))
+                        {
+                            $values2["nodeid"] =  $componentRow['nodeid'];                               
+                        }
+
+                        //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
+                        $components[$componentRow['id']] = $values2;   
+                    
+                }   
+            }                  
+
+            // commit update
+             $dbh->commit();
+             $dbh = null; //This is how you close a PDO connection
+         }                
+     catch(Exception $e) {        
+         //echo "fail"; 
+         echo 'Message: ' .$e->getMessage();
+         return NULL;
+     }   
+     
+     return $components ;
+ }   
+
 
 /*
 |
@@ -115,6 +317,9 @@ function SaveCheckResultsToCheckSpaceDB()
                 SaveSourceBComplianceCheckComponents($tempDbh, $dbh);
                 SaveSourceBComplianceCheckProperties($tempDbh, $dbh);               
               
+                // save check result statistics
+                SaveCheckStatistics($tempDbh, $dbh);
+
                 // commit update
                 $dbh->commit();
                 $tempDbh->commit();
@@ -137,6 +342,105 @@ function SaveCheckResultsToCheckSpaceDB()
                 echo "fail"; 
                 return;
             } 
+
+}
+
+function  SaveCheckStatistics($tempDbh, $dbh)
+{
+    
+    $comparisonOK =NULL;
+    $comparisonError =NULL;
+    $comparisonWarning =NULL;
+    $comparisonNoMatch =NULL;
+    $comparisonUndefined =NULL;
+    $comparisonCheckGroupsInfo =NULL;
+
+    $comparisonResults = $tempDbh->query("SELECT * FROM ComparisonCheckStatistics");
+    if($comparisonResults)
+    {
+        while ($row = $comparisonResults->fetch(\PDO::FETCH_ASSOC)) 
+        {  
+            $comparisonOK = $row['comparisonOK'];
+            $comparisonError = $row['comparisonError'];
+            $comparisonWarning = $row['comparisonWarning'];
+            $comparisonNoMatch = $row['comparisonNoMatch'];
+            $comparisonUndefined = $row['comparisonUndefined'];
+            $comparisonCheckGroupsInfo = $row['comparisonCheckGroupsInfo'];         
+            break;
+        }   
+    }
+
+    $sourceAComplianceOK  = NULL;
+    $sourceAComplianceError  = NULL;
+    $sourceAComplianceWarning  = NULL;
+    $sourceAComplianceCheckGroupsInfo  = NULL;
+    $sourceAComplianceResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckStatistics");
+    if($sourceAComplianceResults)
+    {
+        while ($row = $sourceAComplianceResults->fetch(\PDO::FETCH_ASSOC)) 
+        {  
+            $sourceAComplianceOK = $row['sourceAComplianceOK'];
+            $sourceAComplianceError = $row['sourceAComplianceError'];
+            $sourceAComplianceWarning = $row['sourceAComplianceWarning'];
+            $sourceAComplianceCheckGroupsInfo = $row['sourceAComplianceCheckGroupsInfo'];
+           
+            break;
+        }   
+    }
+
+    $sourceBComplianceOK  = NULL;
+    $sourceBComplianceError  = NULL;
+    $sourceBComplianceWarning  = NULL;
+    $sourceBComplianceCheckGroupsInfo  = NULL;
+    $sourceBComplianceResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckStatistics");
+    if($sourceBComplianceResults)
+    {
+        while ($row = $sourceBComplianceResults->fetch(\PDO::FETCH_ASSOC)) 
+        {  
+            $sourceBComplianceOK = $row['sourceBComplianceOK'];
+            $sourceBComplianceError = $row['sourceBComplianceError'];
+            $sourceBComplianceWarning = $row['sourceBComplianceWarning'];
+            $sourceBComplianceCheckGroupsInfo = $row['sourceBComplianceCheckGroupsInfo'];
+           
+            break;
+        }   
+    }
+
+    $command = 'CREATE TABLE IF NOT EXISTS CheckStatistics(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        comparisonOK TEXT ,
+        comparisonError TEXT ,
+        comparisonWarning TEXT ,
+        comparisonNoMatch TEXT ,
+        comparisonUndefined TEXT ,
+        comparisonCheckGroupsInfo TEXT ,
+        sourceAComplianceOK TEXT ,
+        sourceAComplianceError TEXT ,
+        sourceAComplianceWarning TEXT ,
+        sourceAComplianceCheckGroupsInfo TEXT ,
+        sourceBComplianceOK TEXT ,
+        sourceBComplianceError TEXT ,
+        sourceBComplianceWarning TEXT ,
+        sourceBComplianceCheckGroupsInfo TEXT )'; 
+    $dbh->exec($command);  
+
+    $insertStmt = $dbh->prepare("INSERT INTO CheckStatistics(comparisonOK, comparisonError, comparisonWarning, comparisonNoMatch,
+    comparisonUndefined,comparisonCheckGroupsInfo, sourceAComplianceOK, sourceAComplianceError, sourceAComplianceWarning, sourceAComplianceCheckGroupsInfo,
+    sourceBComplianceOK, sourceBComplianceError, sourceBComplianceWarning, sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");    
+     $insertStmt->execute(array($comparisonOK, 
+                                $$comparisonError, 
+                                $comparisonWarning,
+                                $comparisonNoMatch, 
+                                $$comparisonUndefined, 
+                                $comparisonCheckGroupsInfo,
+                                $sourceAComplianceOK, 
+                                $$sourceAComplianceError, 
+                                $sourceAComplianceWarning,
+                                $sourceAComplianceCheckGroupsInfo, 
+                                $sourceBComplianceOK, 
+                                $sourceBComplianceError,
+                                $sourceBComplianceWarning, 
+                                $sourceBComplianceCheckGroupsInfo));
 
 }
 

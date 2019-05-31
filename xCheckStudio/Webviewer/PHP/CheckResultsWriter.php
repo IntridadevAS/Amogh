@@ -5,10 +5,11 @@
         global $projectName;
         $tempCheckDB = "../Projects/".$projectName."/CheckResults_temp.db";
         if(!file_exists ($tempCheckDB ))
-        {        
-          // create temporary project database          
-          $database = new SQLite3($tempCheckDB);	
+        { 
+            // create temporary project database          
+            $database = new SQLite3($tempCheckDB);
         }
+
     }
     
 
@@ -324,10 +325,9 @@
 
     }
 
-    function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
-                                           $tableName,
-                                           $projectName)
-    {        
+    function writeComparisonCheckStatistics()
+    {
+        global $projectName;
         try
         {   
             // open database
@@ -336,43 +336,193 @@
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
-            $dbh->beginTransaction();
+            $dbh->beginTransaction();           
+          
+            $statistics = getCheckStatistics($dbh, 'ComparisonCheckComponents');
+                       
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "ComparisonCheckComponents", "ComparisonCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
 
-            // SourceANotCheckedComponents table
+            $command = 'CREATE TABLE ComparisonCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                comparisonOK INTEGER default 0,
+                comparisonError INTEGER default 0,
+                comparisonWarning INTEGER default 0,
+                comparisonNoMatch INTEGER default 0,
+                comparisonUndefined INTEGER default 0,
+                comparisonCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO ComparisonCheckStatistics(comparisonOK, comparisonError, comparisonWarning, comparisonNoMatch, 
+                   comparisonUndefined, comparisonCheckGroupsInfo) VALUES(?,?,?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                 $statistics['error'], 
+                                 $statistics['warning'], 
+                                 $statistics['nomatch'], 
+                                 $statistics['undefined'], 
+                                 $checkGroupsString ));  
             
-            // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-            $dbh->exec($command);
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+         }                
+         catch(Exception $e)
+         {        
+             echo "fail"; 
+             return;
+         }   
+    }
 
-            $command = 'CREATE TABLE '.$tableName.'(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                    name TEXT,
-                    mainClass TEXT,
-                    subClass TEXT,
-                    nodeId TEXT,
-                    mainTableId TEXT)'; 
-            $dbh->exec($command);    
+    function getCheckStatistics($dbh, $table)
+    {
+        // get ok components count
+        $okCount = 0;
+        $results = $dbh->query("SELECT COUNT(*) FROM $table where status='OK';");                
+        if($results)
+        {
+            $okCount = $results->fetchColumn();
+        }
 
-            foreach($notCheckedComponents as $key =>$value)            
-            {               
-                $name = $value["name"];
-                $mainclass = $value["mainclass"];
-                $subclass =  $value["subclass"];               
+         // get error components count
+         $errorCount = 0;
+         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Error';");     
+         if($results)
+         {
+             $errorCount = $results->fetchColumn();
+         }
+        
+         // get Warning components count
+         $warningCount = 0;
+         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Warning';");     
+         if($results)
+         {             
+             $warningCount = $results->fetchColumn();
+         }
+       
+         // get No Match components count
+         $nomatchCount = 0;
+         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='No Match';");     
+         if($results)
+         {
+             $nomatchCount = $results->fetchColumn();
+         }         
 
-                $nodeId = NULL;
-                if(array_key_exists("nodeid", $value))
-                { 
-                    $nodeId = $value["nodeid"];
-                }
+         $undefinedCount = 0;
+         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='undefined';");     
+         if($results)
+         {
+             $undefinedCount = $results->fetchColumn();
+         }
+         
+         $statistics = array();
+         $statistics['ok'] =  $okCount;
+         $statistics['error'] =  $errorCount;
+         $statistics['warning'] =  $warningCount;
+         $statistics['nomatch'] =  $nomatchCount;
+         $statistics['undefined'] =  $undefinedCount;
 
-                $mainTableId = $value["id"];
+         return  $statistics;
+    }
 
-                $insertQuery = 'INSERT INTO '.$tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
-                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+    function getCheckGroupsInfo($dbh, $componentsTable, $groupsTable)
+    {
+            $checkGroups = array();
+            $groups = $dbh->query("SELECT DISTINCT ownerGroup FROM $componentsTable;");                
+            if($groups)
+            {
+                while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $ownerGroupId = $group['ownerGroup'];
 
-                $insertStmt = $dbh->prepare($insertQuery);
-                $insertStmt->execute($values);  
+                    $groupNameResults = $dbh->query("SELECT componentClass FROM   $groupsTable where id=$ownerGroupId;");     
+                    if($groupNameResults)
+                    {
+                        $groupName= $groupNameResults->fetchColumn();
+
+                        // ok components
+                        $oks = 0;
+                        $okResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='OK';");       
+                        if( $okResults)
+                        {
+                            $oks = $okResults->fetchColumn();
+                        }
+
+                         // Error components
+                         $errors = 0;
+                         $errorResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Error';");       
+                         if( $errorResults)
+                         {
+                             $errors = $errorResults->fetchColumn();
+                         }
+
+                        // Warning components
+                        $warnings = 0;
+                        $warningResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Warning';");       
+                        if( $warningResults)
+                        {
+                            $warnings = $warningResults->fetchColumn();
+                        }
+
+                         // Warning components
+                         $noMatches = 0;
+                         $nomatchResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='No Match';");       
+                         if( $nomatchResults)
+                         {
+                             $noMatches = $nomatchResults->fetchColumn();
+                         }    
+                         
+                         $undefinedItem = 0;
+                         $results = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='undefined';");     
+                         if($results)
+                         {
+                             $undefinedItem = $results->fetchColumn();
+                         }
+                         // keep track of check groups and corresponding stastics
+                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem);
+                    }
+                }              
             }
+
+            return $checkGroups;
+    }
+
+    function writeSourceAComplianceCheckStatistics()
+    {
+        global $projectName;
+        try
+        {   
+            // open database
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceAComplianceCheckComponents");
+                      
+
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceAComplianceCheckComponents", "SourceAComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceAComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                sourceAComplianceOK INTEGER default 0,
+                sourceAComplianceError INTEGER default 0,
+                sourceAComplianceWarning INTEGER default 0,
+                sourceAComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceAComplianceCheckStatistics(sourceAComplianceOK, sourceAComplianceError, sourceAComplianceWarning, 
+                    sourceAComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                 $statistics['error'], 
+                                 $statistics['warning'],
+                                 $checkGroupsString ));  
 
             // commit update
             $dbh->commit();
@@ -382,8 +532,54 @@
         {        
             echo "fail"; 
             return;
-        }
-    }
+        }   
+   }
+
+   function writeSourceBComplianceCheckStatistics()
+    {
+        global $projectName;
+        try
+        {   
+            // open database
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceBComplianceCheckComponents");
+           
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceBComplianceCheckComponents", "SourceBComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceBComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
+                sourceBComplianceOK INTEGER default 0,
+                sourceBComplianceError INTEGER default 0,
+                sourceBComplianceWarning INTEGER default 0,
+                sourceBComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceBComplianceCheckStatistics(sourceBComplianceOK, sourceBComplianceError, sourceBComplianceWarning, 
+                    sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                 $statistics['error'], 
+                                 $statistics['warning'],                                 
+                                 $checkGroupsString ));  
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+   }    
     
     function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
                                             $tableName,
