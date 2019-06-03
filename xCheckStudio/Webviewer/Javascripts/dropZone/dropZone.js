@@ -28,10 +28,12 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
             var mainFileName = item.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(mainFileName).toLowerCase();
 
+            var files = []
+            files.push(items[0].getAsFile())
             // if data source is Excel file
             if (fileExtension.toLowerCase() === "xls") {
                 if (loadExcelDataSource(fileExtension,
-                    items[0].getAsFile(),                    
+                    files,                    
                     viewerContainer,
                     modelTreeContainer)) {
 

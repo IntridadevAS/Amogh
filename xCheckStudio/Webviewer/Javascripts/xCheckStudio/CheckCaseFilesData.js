@@ -52,7 +52,63 @@ var CheckCaseFilesData = function () {
         }
     }
 
-    CheckCaseFilesData.prototype.populateCheckCases = function () {
+    CheckCaseFilesData.prototype.readCheckCaseFiles = function (fileExtension, viewerContainer, excludeNone) {
+        this.CheckCaseFileDataList = [];
+        var _this = this;
+        var fileList = checkCaseFiles;
+        if (fileList.length == 0) {
+            return;
+        }
+
+        var filesPending = fileList.length;
+
+        for (var i = 0; i < fileList.length; i++) {
+            var checkCaseFileName = fileList[i];
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                    var fileData = _this.readCheckCaseFileData(this);
+                    
+                    if (fileData.length == 0) {
+                        return;
+                    }
+
+                    var checkCaseName = fileData[0];
+
+                    var filePathArray = this.responseURL.split("/");
+                    if (filePathArray.length == 0) {
+                        return;
+                    }
+                    
+                    var fileName = filePathArray[filePathArray.length -1];
+                    var checkName = fileName.split(".");
+
+                    if(fileExtension !== undefined && checkName[0].includes(fileExtension))
+                    {
+                            var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                            _this.addCheckCaseFileData(checkCaseFileData);                         
+                    }  
+                    else if(fileExtension == undefined)
+                    {
+                        var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                        _this.addCheckCaseFileData(checkCaseFileData);  
+                    }
+                    filesPending--;
+                    if (filesPending == 0) {
+                        _this.populateCheckCases(excludeNone);
+                    }
+                }
+            };
+
+            //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
+            xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
+            xhttp.send();
+        }
+    }
+
+    CheckCaseFilesData.prototype.populateCheckCases = function (excludeNone) {
         var checkCaseSelect = document.getElementById("checkCaseSelect");
 
         // remove old checkcase entries, if there are any
@@ -61,7 +117,9 @@ var CheckCaseFilesData = function () {
         }
              
         // add None option
-        checkCaseSelect.options.add(new Option("None", "None"));
+        if(excludeNone == undefined) {
+            checkCaseSelect.options.add(new Option("None", "None"));
+        }
 
         for (var i = 0; i < this.CheckCaseFileDataList.length; i++) {
             var checkCaseData = this.CheckCaseFileDataList[i];
