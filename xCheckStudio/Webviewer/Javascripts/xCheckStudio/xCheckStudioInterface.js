@@ -423,7 +423,7 @@ var xCheckStudio;
                          if (_this.nodeIdArray.length == 0) 
                          {
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined); 
-                            
+
                             // add components to database
                             _this.addComponentsToDB();
                             checkIsOrderMaintained(_this.checkType);

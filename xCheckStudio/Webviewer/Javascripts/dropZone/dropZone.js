@@ -36,10 +36,9 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
                     files,                    
                     viewerContainer,
                     modelTreeContainer)) {
-
-                    manageControlsOnDatasourceLoad(mainFileName,
-                        viewerContainer,
-                        modelTreeContainer);
+                        manageControlsOnDatasourceLoad(mainFileName,
+                            viewerContainer,
+                            modelTreeContainer);
                     return;
                 }
             }
@@ -112,12 +111,12 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         processData: false,
         success: function (ret) {
             //alert(ret);
-
+           
             if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
 
                 manageControlsOnDatasourceLoad(mainFileName,
                     viewerContainer, 
-                    modelTreeContainer);            
+                    modelTreeContainer);          
             }
             else {
 

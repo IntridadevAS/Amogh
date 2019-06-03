@@ -52,7 +52,7 @@ var CheckCaseFilesData = function () {
         }
     }
 
-    CheckCaseFilesData.prototype.readCheckCaseFiles = function (fileExtension, viewerContainer, excludeNone) {
+    CheckCaseFilesData.prototype.readCheckCaseFiles = function (sourceAType, sourceBType, viewerContainer, excludeNone) {
         this.CheckCaseFileDataList = [];
         var _this = this;
         var fileList = checkCaseFiles;
@@ -85,12 +85,16 @@ var CheckCaseFilesData = function () {
                     var fileName = filePathArray[filePathArray.length -1];
                     var checkName = fileName.split(".");
 
-                    if(fileExtension !== undefined && checkName[0].includes(fileExtension))
+                    if(sourceAType !== undefined && sourceBType == undefined && checkName[0].includes(sourceAType))
                     {
                             var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
                             _this.addCheckCaseFileData(checkCaseFileData);                         
-                    }  
-                    else if(fileExtension == undefined)
+                    }
+                    else if(sourceAType !== undefined && sourceBType !== undefined && checkName[0].includes(sourceAType) && checkName[0].includes(sourceBType)) {
+                        var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                        _this.addCheckCaseFileData(checkCaseFileData);
+                    }
+                    else if(sourceAType == undefined && sourceBType == undefined)
                     {
                         var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
                         _this.addCheckCaseFileData(checkCaseFileData);  
@@ -131,6 +135,11 @@ var CheckCaseFilesData = function () {
             var checkCaseOption = checkCaseSelect.options[i];
             checkCaseOption.className = "casesppidvspdm";
         }
+
+        
+        var checkCaseFileName = getCheckCase();
+        if(checkCaseFileName !== undefined)
+            checkCaseManager.readCheckCaseData(checkCaseFileName);
     }
 
     CheckCaseFilesData.prototype.readCheckCaseFileData = function (xml) {
