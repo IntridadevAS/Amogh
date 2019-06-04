@@ -889,6 +889,7 @@ function getCheckCase()
     }
     if(fileName !== undefined) {
         checkCaseManager.readCheckCaseData(fileName);
+        checkIsOrderMaintained(checkCaseManager.checkCase.CheckTypes[0]);
     }
 }
 
@@ -910,12 +911,13 @@ function loadExcelDataSource(fileExtension,
     }
     checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
         if(success) {
-            readExcelDataSource(file[0],
-                viewerContainer,
-                modelTreeContainer);
+            getCheckCase();
         }  
     });
 
+    readExcelDataSource(file[0],
+        viewerContainer,
+        modelTreeContainer);
     // var sourceAType;
     // var sourceBType;
     // for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
@@ -1045,7 +1047,11 @@ function loadModel(fileName,
                         });
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
-                    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true);
+                    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+                        if(success) {
+                            getCheckCase();
+                        }  
+                    });
                     return true;
                 }
                 else {

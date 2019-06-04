@@ -426,8 +426,6 @@ var xCheckStudio;
 
                             // add components to database
                             _this.addComponentsToDB(); 
-                            checkIsOrderMaintained(_this.checkType);
-                            getCheckCase();
                         }
                     });
                 }
