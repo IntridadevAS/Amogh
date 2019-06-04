@@ -123,9 +123,6 @@ var CheckCaseFilesData = function () {
                                 return resolve(true);
                             }
                         }
-                        else {
-                            return resolve(false);
-                        }
                     }
                 }; 
             }
