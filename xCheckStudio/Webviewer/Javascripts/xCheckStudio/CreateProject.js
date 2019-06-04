@@ -55,9 +55,11 @@ function createProject(projectname, descriptionText, functionText, projectScope)
                 },
                 type: "POST",
                 url: "PHP/ProjectManager.php"
-            }).done(function (msg) {
+            }).done(function (msg) 
+            {
 
-                if (msg === 'success') {
+                if (msg === 'success') 
+                {
                     //alert("Main.db record added.");
                     window.location.href = "/checkModule.html";
                 }

@@ -2323,37 +2323,81 @@ function selectComponents(modelTreeContainer) {
     }
 }
 
-function onSaveProject(event)
-{
+function onSaveProject(event) {
     var busySpinner = document.getElementById("divLoading");
     busySpinner.className = 'show';
-    try{ 
-     
-     // save control states
-     saveControlsState();
+    try {
 
-     // save data source info
-     saveDataSourceInfo();
+        // create project DB
+        createProjectDBonSave().then(function (result) {
+            if (result) { 
 
-     // save source viewer options
-     saveSourceViewerOptions();
+                // save components to checkspaceDB
+                saveComponentsToCheckSpaceDB();
 
-     // save selected components
-     saveSelectedComponents();
+                // save control states
+                saveControlsState();
 
-    // save not selected components
-    saveNotSelectedComponents();
+                // save data source info
+                saveDataSourceInfo();
 
-     alert("Saved project information.");
+                // save source viewer options
+                saveSourceViewerOptions();
+
+                // save selected components
+                saveSelectedComponents();
+
+                // save not selected components
+                saveNotSelectedComponents();
+
+                alert("Saved project information.");
+            }
+        });
     }
-    catch(error)
-    {
+    catch (error) {
         console.log(error.message);
     }
     finally {
         // remove busy spinner        
         busySpinner.classList.remove('show')
     }
+}
+
+function saveComponentsToCheckSpaceDB()
+{
+    $.ajax({
+        url: 'PHP/ProjectManager.php',
+        type: "POST",
+        async: false,
+        data:
+        {
+            'InvokeFunction': "SaveComponentsToCheckSpaceDB"
+        },
+        success: function (msg) {           
+        }
+    });
+}
+
+function createProjectDBonSave() {
+    return new Promise((resolve) => {
+
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "CreateProjectDBonSaveInCheckModule"
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    return resolve(true);
+                }
+
+                return resolve(false);
+            }
+        });
+    });
 }
 
 function saveNotSelectedComponents() {

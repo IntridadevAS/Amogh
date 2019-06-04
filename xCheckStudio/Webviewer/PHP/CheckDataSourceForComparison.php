@@ -47,8 +47,8 @@
             // perform comparison check on components
             checkDataSources();
 
-            // create temporary databse to store check results, if not created already
-            createTempDB();
+            // // create temporary databse to store check results, if not created already
+            // createTempDB();
 
             // write check result to database
             writeComparisonResultToDB();            
@@ -75,7 +75,7 @@
 
                 try{   
                         // open database
-                        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+                        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
                         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
  
                         // begin the transaction

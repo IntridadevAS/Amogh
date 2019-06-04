@@ -1,30 +1,31 @@
 <?php
 
-        include 'Utility.php';
-
-        session_start();
-    
-        // get project name
-        $projectName = NULL;
-        if(isset($_SESSION['ProjectName']))
-        {
-            $projectName =  $_SESSION['ProjectName'];              
-        }
-        else
-        {
-            echo 'fail';
-            return;
-        }	
+        include 'Utility.php';      
 
         // get project database path
-        $DBPath = getProjectDatabasePath($projectName);
+        //$DBPath = getProjectDatabasePath($projectName);
 
        $viewerOptions = readViwerOptions();
        echo json_encode( $viewerOptions );
 
         function readViwerOptions()
         {
-            global $DBPath ;
+            session_start();
+    
+            // get project name
+            $projectName = NULL;
+            if(isset($_SESSION['ProjectName']))
+            {
+                $projectName =  $_SESSION['ProjectName'];              
+            }
+            else
+            {
+                echo 'fail';
+                return;
+            }	
+            
+            //global $DBPath ;
+            $DBPath = "../Projects/".$projectName."/".$projectName."_temp.db";
             try
             {                   
                 //$dbPath = "../Projects/".$projectName."/".$projectName.".db";

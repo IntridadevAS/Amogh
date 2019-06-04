@@ -35,8 +35,8 @@
         try
         {   
             // open database
-            $dbPath = getProjectDatabasePath($projectName);
-            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            //$dbPath = getProjectDatabasePath($projectName);
+            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");       
  
             // begin the transaction
