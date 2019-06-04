@@ -42,7 +42,8 @@
             try
             {        
                 // open database
-                $dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = getProjectDatabasePath($projectName);
+                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -118,7 +119,8 @@
             try
             {        
                 // open database
-                $dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = getProjectDatabasePath($projectName);
+                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -202,7 +204,8 @@
             try
             {        
                 // open database
-                $dbPath = getProjectDatabasePath($projectName);
+                //$dbPath = getProjectDatabasePath($projectName);
+                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -265,11 +268,11 @@
         }
 
 
-        function writeNotSelectedComponents($projectName,
+    function writeNotSelectedComponents($projectName,
                                             $selectedComponents,
                                             $notSelectedComponentsTable,
                                             $componentsTable)
-        {          
+    {          
 
             $components = getSourceComponents($projectName, $componentsTable);
             if($components === NULL)
@@ -302,14 +305,15 @@
         }
 
         
-        function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
+    function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
                                            $tableName,
                                            $projectName)
     {        
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";            
+            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";            
+            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -369,7 +373,8 @@
 
      try{   
              // open database
-             $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+             //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+             $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
              $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
              // begin the transaction
@@ -406,29 +411,29 @@
      return $components ;
  }   
         
-         function isComponentSelected($component, $SelectedComponents){
+function isComponentSelected($component, $SelectedComponents)
+{
            
-            for($index = 0; $index < count($SelectedComponents); $index++)
-            {
-                $selectedComponent = $SelectedComponents[$index];              
-                if($component['name']              ==  $selectedComponent['Name'] &&
-                   $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
-                   $component['subclass']  ==  $selectedComponent['ComponentClass']){
-                       
-                         if(isset($selectedComponent['NodeId']))
-                        {                          
-                            if($selectedComponent['NodeId'] == $component['nodeid'])
-                            {                               
-                                return true;
-                            }                           
-                        }
-                        else{                           
-                            return true;
-                        }
-                }                    
-                   
-            }
-
-            return false;
-        }   
+    for($index = 0; $index < count($SelectedComponents); $index++)
+    {
+        $selectedComponent = $SelectedComponents[$index];              
+        if($component['name']              ==  $selectedComponent['Name'] &&
+            $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
+            $component['subclass']  ==  $selectedComponent['ComponentClass'])
+            {                     
+                if(isset($selectedComponent['NodeId']))
+                {                          
+                    if($selectedComponent['NodeId'] == $component['nodeid'])
+                    {                               
+                        return true;
+                    }                           
+                }
+                else
+                {                           
+                    return true;
+                }
+            }                                       
+    }
+    return false;
+}   
 ?>

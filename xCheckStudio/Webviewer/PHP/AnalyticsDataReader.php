@@ -88,7 +88,7 @@
         }
       
         global $projectName;
-        $dbh;
+        //$dbh;
         try
         {  
             //session_start();
@@ -106,27 +106,27 @@
             }           
 
             // open database
-            $mainDbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $mainDbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
             $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
             // begin the transaction
             $mainDbh->beginTransaction(); 
           
-            $dbh = NULL;
-            if(!$loadProject)
-           {
-                $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
-                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-                // begin the transaction          
-                $dbh->beginTransaction();            
-           }
-           else
-           {
-                $dbh = $mainDbh;
-           }
+        //    $dbh = NULL;
+        //    if(!$loadProject)
+        //    {
+        //         $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+        //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        //         // begin the transaction          
+        //         $dbh->beginTransaction();            
+        //    }
+        //    else
+        //    {
+        //         $dbh = $mainDbh;
+        //    }
 
             // get ok components count
             $okCount = 0;
-            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");                
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");                
             if($results)
             {
                 $okCount = $results->fetchColumn();
@@ -134,7 +134,7 @@
 
             // get error components count
             $errorCount = 0;
-            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error';");     
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error';");     
             if($results)
             {
                 $errorCount = $results->fetchColumn();
@@ -142,7 +142,7 @@
 
             // get Warning components count
             $warningCount = 0;
-            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning';");     
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning';");     
             if($results)
             {             
                 $warningCount = $results->fetchColumn();
@@ -150,14 +150,14 @@
            
             // get No Match components count
             $nomatchCount = 0;
-            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
             if($results)
             {
                 $nomatchCount = $results->fetchColumn();
             }
 
             $undefinedCount = 0;
-            $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
             if($results)
             {
                 $undefinedCount = $results->fetchColumn();
@@ -210,21 +210,21 @@
 
             // read class wise check results counts
             $checkGroups = array();
-            $groups = $dbh->query("SELECT DISTINCT ownerGroup FROM $checkComponentTable;");                
+            $groups = $mainDbh->query("SELECT DISTINCT ownerGroup FROM $checkComponentTable;");                
             if($groups)
             {
                 while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
                 {
                     $ownerGroupId = $group['ownerGroup'];
 
-                    $groupNameResults = $dbh->query("SELECT componentClass FROM   $checkGroupsTable where id=$ownerGroupId;");     
+                    $groupNameResults = $mainDbh->query("SELECT componentClass FROM   $checkGroupsTable where id=$ownerGroupId;");     
                     if($groupNameResults)
                     {
                         $groupName= $groupNameResults->fetchColumn();
 
                         // ok components
                         $oks = 0;
-                        $okResults = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK';");       
+                        $okResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK';");       
                         if( $okResults)
                         {
                             $oks = $okResults->fetchColumn();
@@ -232,7 +232,7 @@
 
                          // Error components
                          $errors = 0;
-                         $errorResults = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Error';");       
+                         $errorResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Error';");       
                          if( $errorResults)
                          {
                              $errors = $errorResults->fetchColumn();
@@ -240,7 +240,7 @@
 
                         // Warning components
                         $warnings = 0;
-                        $warningResults = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Warning';");       
+                        $warningResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Warning';");       
                         if( $warningResults)
                         {
                             $warnings = $warningResults->fetchColumn();
@@ -248,14 +248,14 @@
 
                          // Warning components
                          $noMatches = 0;
-                         $nomatchResults = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
+                         $nomatchResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
                          if( $nomatchResults)
                          {
                              $noMatches = $nomatchResults->fetchColumn();
                          }    
                          
                          $undefinedItem = 0;
-                         $results = $dbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");     
+                         $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");     
                          if($results)
                          {
                              $undefinedItem = $results->fetchColumn();
@@ -270,14 +270,14 @@
             $SourceAClassWiseNotSelectedComps = array();            
             if($sourceAnotSelectedCompsTable)
             {
-                $groups = $dbh->query("SELECT DISTINCT mainClass FROM $sourceAnotSelectedCompsTable;");                
+                $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceAnotSelectedCompsTable;");                
                 if($groups)
                 {
                     while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
                     {
                         $mainClass = $group['mainClass'];
                       
-                        $results = $dbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");     
+                        $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");     
                         if($results)
                         {
                             $sourceAnotSelectedCompsCount = 0;
@@ -294,14 +294,14 @@
             $SourceBClassWiseNotSelectedComps = array();
             if($sourceBnotSelectedCompsTable)
             {
-                $groups = $dbh->query("SELECT DISTINCT mainClass FROM $sourceBnotSelectedCompsTable;");                
+                $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceBnotSelectedCompsTable;");                
                 if($groups)
                 {
                     while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
                     {
                         $mainClass = $group['mainClass'];
                       
-                        $results = $dbh->query("SELECT COUNT(*) FROM  $sourceBnotSelectedCompsTable where mainClass='$mainClass';");     
+                        $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceBnotSelectedCompsTable where mainClass='$mainClass';");     
                         if($results)
                         {
                             $sourceBnotSelectedCompsCount = 0;
@@ -316,11 +316,11 @@
             // commit update
             $mainDbh->commit();           
             $mainDbh = null; //This is how you close a PDO connection    
-            if(!$loadProject)
-            {
-                $dbh->commit();
-                $dbh = null; //This is how you close a PDO connection                 
-            }
+            // if(!$loadProject)
+            // {
+            //     $dbh->commit();
+            //     $dbh = null; //This is how you close a PDO connection                 
+            // }
                             
             // for comparison checks, single DB record is for 2 components ( one from Source A 
             // and another from Source B)
