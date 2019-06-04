@@ -5,6 +5,7 @@ var xCheckStudioInterface1;
 var xCheckStudioInterface2;
 var checkCaseManager;
 var checkCaseFilesData;
+var checkCaseSelected = false;
 
 var checkCaseName;
 var sourceAFileName;
@@ -889,7 +890,6 @@ function getCheckCase()
     }
     if(fileName !== undefined) {
         checkCaseManager.readCheckCaseData(fileName);
-        checkIsOrderMaintained(checkCaseManager.checkCase.CheckTypes[0]);
     }
 }
 
@@ -901,70 +901,81 @@ function loadExcelDataSource(fileExtension,
         alert("CheckCaseManager not found.");
         return false;
     }
-    var fileExtensionA;
-    var fileExtensionB;
+    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) { 
+        var sourceAType;
+        var sourceBType;
+        for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+            var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+            if (checkType.Name.toLowerCase() === "comparison") {
+                sourceAType = checkType.SourceAType;
+                sourceBType = checkType.SourceBType;
+                break;
+            }
+            else if (checkType.Name.toLowerCase() === "compliance") {
+                sourceAType = checkType.SourceAType;
+                break;
+            }
+        }
     
-    fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-    if(sourceBFileName !== undefined)
-    {
-        fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+        if (viewerContainer === "viewerContainer1") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+    
+        }
+        else if (viewerContainer === "viewerContainer2") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+                else if(fileExtensionA == fileExtensionB) {
+                    if(sourceAType == fileExtensionA && fileExtension == fileExtensionA)
+                    {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+        }
     }
-    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
-        if(success) {
-            getCheckCase();
-        }  
-    });
+    else if(checkCaseManager && !checkCaseSelected) {
+        var fileExtensionA;
+        var fileExtensionB;
+        
+        fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+        if(sourceBFileName !== undefined)
+        {
+            fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+        }
+        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+            if(success) {
+                getCheckCase();
+            }  
+        });
+    }
+    
 
     readExcelDataSource(file[0],
         viewerContainer,
-        modelTreeContainer);
-    // var sourceAType;
-    // var sourceBType;
-    // for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-    //     var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-    //     if (checkType.Name.toLowerCase() === "comparison") {
-    //         sourceAType = checkType.SourceAType;
-    //         sourceBType = checkType.SourceBType;
-    //         break;
-    //     }
-    //     else if (checkType.Name.toLowerCase() === "compliance") {
-    //         sourceAType = checkType.SourceAType;
-    //         break;
-    //     }
-    // }
-
-    // if (viewerContainer === "viewerContainer1") {
-    //     if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-    //             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    //     else {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-
-    // }
-    // else if (viewerContainer === "viewerContainer2") {
-    //     if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-    //             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    //     else {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    // }
-    
+        modelTreeContainer);    
     return true;
 
 }
@@ -973,22 +984,10 @@ function loadModel(fileName,
     viewerContainer,
     modelTreeContainer, formId) {
 
-    if (!checkCaseManager ||
-        !checkCaseManager.CheckCase) {
+    if (!checkCaseManager) {
         alert("CheckCaseManager not found.");
         return false;
     }
-
-    if(checkCaseManager && checkCaseManager.CheckCase) {
-        
-    }
-    if (viewerContainer === "viewerContainer1") {
-        sourceAType = fileExtension;
-    }
-    else if (viewerContainer === "viewerContainer2") {
-        sourceBType = fileExtension;
-    }
-    // formId = undefined;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
     var fileExtensionA;
     var fileExtensionB;
@@ -998,6 +997,63 @@ function loadModel(fileName,
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
     }
+
+    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
+        var sourceAType;
+        var sourceBType;
+        for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+            var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+            if (checkType.Name.toLowerCase() === "comparison") {
+                sourceAType = checkType.SourceAType;
+                sourceBType = checkType.SourceBType;
+                break;
+            }
+            else if (checkType.Name.toLowerCase() === "compliance") {
+                sourceAType = checkType.SourceAType;
+                break;
+            }
+        }
+
+        if (viewerContainer === "viewerContainer1") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+
+        }
+        else if (viewerContainer === "viewerContainer2") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+                else if(fileExtensionA == fileExtensionB) {
+                    if(sourceAType == fileExtensionA && fileExtension.toUpperCase() == fileExtensionA)
+                    {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+        }
+    }
+
  
     // get SCS file path and load model into viewer
     var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -1032,11 +1088,13 @@ function loadModel(fileName,
                         });
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
-                    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
-                        if(success) {
-                            getCheckCase();
-                        }  
-                    });
+                    if(!checkCaseSelected) {
+                        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+                            if(success) {
+                                getCheckCase();
+                            }  
+                        });
+                    }
                     return true;
                 }
                 else {

@@ -26,7 +26,11 @@ function CheckCaseManager() {
                 url: "PHP/ProjectManager.php"
             }).done(function (msg) {   
                 var busySpinner = document.getElementById("divLoading");
-                busySpinner.classList.remove('show')
+                if(busySpinner.classList.contains('show'))
+                    busySpinner.classList.remove('show')
+                if(!checkCaseSelected) {
+                    checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+                }
             });
         };
         var formData = new FormData();

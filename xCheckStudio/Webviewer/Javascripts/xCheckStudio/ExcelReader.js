@@ -39,6 +39,9 @@ ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
     this.addComponentsToDB(viewerContainer);
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
+    if(checkCaseSelected) {
+        checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+    }
 };
 
 ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
@@ -61,8 +64,9 @@ ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
         {
             console.log(data);
             // remove busy spinner
-            // var busySpinner = document.getElementById("divLoading");
-            // busySpinner.classList.remove('show')
+                var busySpinner = document.getElementById("divLoading");
+                if(busySpinner.classList.contains('show'))
+                    busySpinner.classList.remove('show')
                 
         });
 
