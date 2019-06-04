@@ -973,12 +973,15 @@ function loadModel(fileName,
     viewerContainer,
     modelTreeContainer, formId) {
 
-    if (!checkCaseManager) {
+    if (!checkCaseManager ||
+        !checkCaseManager.CheckCase) {
         alert("CheckCaseManager not found.");
         return false;
     }
-    var sourceAType;
-    var sourceBType;
+
+    if(checkCaseManager && checkCaseManager.CheckCase) {
+        
+    }
     if (viewerContainer === "viewerContainer1") {
         sourceAType = fileExtension;
     }
@@ -995,24 +998,6 @@ function loadModel(fileName,
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
     }
-
-    // iterate over checkcase types and find checktype for comparion.
-    // If found, sourceATYpe and sourceBtype from comparison checktype
-    // If comparison check type doesnt exist, get compliance check type.
-
-    // for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-    //     var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-    //     if (checkType.Name.toLowerCase() === "comparison") {
-    //         sourceAType = checkType.SourceAType;
-    //         sourceBType = checkType.SourceBType;
-    //         break;
-    //     }
-    //     else if (checkType.Name.toLowerCase() === "compliance") {
-    //         sourceAType = checkType.SourceAType;
-    //         break;
-    //     }
-    // }
-
  
     // get SCS file path and load model into viewer
     var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
