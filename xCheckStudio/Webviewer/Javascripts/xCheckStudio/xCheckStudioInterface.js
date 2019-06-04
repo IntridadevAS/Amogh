@@ -425,8 +425,9 @@ var xCheckStudio;
                             _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined); 
 
                             // add components to database
-                            _this.addComponentsToDB();
+                            _this.addComponentsToDB(); 
                             checkIsOrderMaintained(_this.checkType);
+                            getCheckCase();
                         }
                     });
                 }
@@ -458,8 +459,8 @@ var xCheckStudio;
                     _this.NodeIdvsComponentIdList =  JSON.parse(msg);
                 }
                 // remove busy spinner
-                var busySpinner = document.getElementById("divLoading");
-                busySpinner.classList.remove('show')
+                // var busySpinner = document.getElementById("divLoading");
+                // busySpinner.classList.remove('show')
             });
 
         }

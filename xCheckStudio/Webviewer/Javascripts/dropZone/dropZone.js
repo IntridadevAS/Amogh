@@ -32,6 +32,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
             files.push(items[0].getAsFile())
             // if data source is Excel file
             if (fileExtension.toLowerCase() === "xls") {
+                addTabHeaders(modelTreeContainer, mainFileName);
                 if (loadExcelDataSource(fileExtension,
                     files,                    
                     viewerContainer,
@@ -111,7 +112,7 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         processData: false,
         success: function (ret) {
             //alert(ret);
-           
+            addTabHeaders(modelTreeContainer, mainFileName);
             if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
 
                 manageControlsOnDatasourceLoad(mainFileName,

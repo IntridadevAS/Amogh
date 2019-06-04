@@ -40,6 +40,7 @@ ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
     checkIsOrderMaintained(_this.checkType);
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
+    getCheckCase();
 };
 
 ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
@@ -59,13 +60,13 @@ ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
         type: "POST",
         url: "PHP/AddComponentsToDB.php"
        }).done(function (data) 
-    {
-        console.log(data);
-       
-        // remove busy spinner
-        var busySpinner = document.getElementById("divLoading");
-        busySpinner.classList.remove('show')
-    });
+        {
+            console.log(data);
+            // remove busy spinner
+            // var busySpinner = document.getElementById("divLoading");
+            // busySpinner.classList.remove('show')
+                
+        });
 
 }
 

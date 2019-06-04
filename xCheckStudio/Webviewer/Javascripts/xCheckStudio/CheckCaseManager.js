@@ -25,7 +25,8 @@ function CheckCaseManager() {
                 type: "POST",
                 url: "PHP/ProjectManager.php"
             }).done(function (msg) {   
-                
+                var busySpinner = document.getElementById("divLoading");
+                busySpinner.classList.remove('show')
             });
         };
         var formData = new FormData();

@@ -887,8 +887,9 @@ function getCheckCase()
             break;
         }
     }
-
-    return fileName;
+    if(fileName !== undefined) {
+        checkCaseManager.readCheckCaseData(fileName);
+    }
 }
 
 function loadExcelDataSource(fileExtension,
@@ -901,13 +902,19 @@ function loadExcelDataSource(fileExtension,
     }
     var fileExtensionA;
     var fileExtensionB;
+    
     fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
     if(sourceBFileName !== undefined)
     {
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-
     }
-    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true);
+    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+        if(success) {
+            readExcelDataSource(file[0],
+                viewerContainer,
+                modelTreeContainer);
+        }  
+    });
 
     // var sourceAType;
     // var sourceBType;
@@ -955,10 +962,7 @@ function loadExcelDataSource(fileExtension,
     //         }
     //     }
     // }
-    readExcelDataSource(file[0],
-        viewerContainer,
-        modelTreeContainer);
-
+    
     return true;
 
 }
@@ -989,7 +993,6 @@ function loadModel(fileName,
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
     }
-    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true);
 
     // iterate over checkcase types and find checktype for comparion.
     // If found, sourceATYpe and sourceBtype from comparison checktype
@@ -1042,6 +1045,7 @@ function loadModel(fileName,
                         });
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
+                    checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true);
                     return true;
                 }
                 else {
@@ -1057,8 +1061,6 @@ function loadModel(fileName,
         }
 
     });
-    var checkCaseSelect = document.getElementById("checkCaseSelect");
-
     return true;
 }
 
