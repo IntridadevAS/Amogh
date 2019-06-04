@@ -62,29 +62,52 @@ function openProject() {
 
 function loadProject(projectName, projectId) {
 
-    $.ajax({
-        data: {
-            'InvokeFunction': 'CreateProjectSession',
-            'projectName': projectName,
-            'projectId': projectId,
-            'loadProject': 'TRUE',
-            'sourceAPath': "Projects/" + projectName + "/SourceA",
-            'sourceBPath': "Projects/" + projectName + "/SourceB"
-        },
-        type: "POST",
-        url: "PHP/ProjectManager.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var fromCheckClick = localStorage.getItem('FromCheckClick')
-            localStorage.clear();
+    createTempCheckSpaceDB().then(function (result) {
 
-            if (fromCheckClick.toLowerCase() === 'true') {
-                window.location.href = "checkModule.html";
+        $.ajax({
+            data: {
+                'InvokeFunction': 'CreateProjectSession',
+                'projectName': projectName,
+                'projectId': projectId,
+                'loadProject': 'TRUE',
+                'sourceAPath': "Projects/" + projectName + "/SourceA",
+                'sourceBPath': "Projects/" + projectName + "/SourceB"
+            },
+            type: "POST",
+            url: "PHP/ProjectManager.php"
+        }).done(function (msg) {
+            if (msg !== 'fail') {
+                var fromCheckClick = localStorage.getItem('FromCheckClick')
+                localStorage.clear();
+
+                if (fromCheckClick.toLowerCase() === 'true') {
+                    window.location.href = "checkModule.html";
+                }
+                else if (fromCheckClick.toLowerCase() === 'false') {
+                    window.location.href = "module2.html";
+                }
             }
-            else if (fromCheckClick.toLowerCase() === 'false') {
-                window.location.href = "module2.html";
-            }
-        }
+        });
+
+    });
+}
+
+function createTempCheckSpaceDB()
+{
+    return new Promise((resolve) => {
+
+        $.ajax({
+            data: {
+                'InvokeFunction': "CreateTempCheckSpaceDB"
+            },
+            async: false,
+            type: "POST",
+            url: "PHP/ProjectLoadManager.php"
+        }).done(function (msg) {
+
+            return resolve(true);
+        });
+
     });
 }
 
