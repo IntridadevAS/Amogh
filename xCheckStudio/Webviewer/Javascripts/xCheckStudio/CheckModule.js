@@ -176,8 +176,7 @@ function onCheckButtonClick() {
         !sourceBCompliancePerformed) {
         return;
     }
-
-    //window.location.href = "/module2.html";
+    
     document.getElementById("checkcompletealert").style.display = "block";
 }
 
@@ -1830,7 +1829,7 @@ function cancelreviewresults() {
 
 function reviewresults() {
     saveData();
-    window.location = "/module2.html";
+    window.location = "module2.html";
 }
 
 function OnShowToast(text) {

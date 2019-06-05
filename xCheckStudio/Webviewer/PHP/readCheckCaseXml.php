@@ -1,12 +1,12 @@
 <?php
 $fileName = $_POST['XMLFileName'];
-$rootFilePath = $_SERVER['DOCUMENT_ROOT']; 
-$rootFilePath = str_replace('\\', '/', $rootFilePath);
+//$rootFilePath = $_SERVER['DOCUMENT_ROOT']; 
+//$rootFilePath = str_replace('\\', '/', $rootFilePath);
 
 $objDOM = new DOMDocument();
 
 //Load xml file into DOMDocument variable
-$objDOM->load( $rootFilePath. '/configurations/'. $fileName);
+$objDOM->load( '../configurations/'. $fileName);
 
 //Find Tag element "config" and return the element to variable $node
 $checkCaseElements = $objDOM->getElementsByTagName("CheckCase");

@@ -61,7 +61,7 @@ function createProject(projectname, descriptionText, functionText, projectScope)
                 if (msg === 'success') 
                 {
                     //alert("Main.db record added.");
-                    window.location.href = "/checkModule.html";
+                    window.location.href = "checkModule.html";
                 }
             });
         }
