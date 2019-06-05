@@ -5,7 +5,55 @@ var CheckCaseFilesData = function () {
         this.CheckCaseFileDataList.push(checkCaseFileData);
     }
 
-    CheckCaseFilesData.prototype.readCheckCaseFiles = function () {
+    // CheckCaseFilesData.prototype.readCheckCaseFiles = function () {
+    //     var _this = this;
+    //     var fileList = checkCaseFiles;
+    //     if (fileList.length == 0) {
+    //         return;
+    //     }
+
+    //     var filesPending = fileList.length;
+
+    //     for (var i = 0; i < fileList.length; i++) {
+    //         var checkCaseFileName = fileList[i];
+
+    //         var xhttp = new XMLHttpRequest();
+    //         xhttp.onreadystatechange = function () {
+    //             if (this.readyState == 4 && this.status == 200) {
+                    
+    //                 var fileData = _this.readCheckCaseFileData(this);
+    //                 if (fileData.length == 0) {
+    //                     return;
+    //                 }
+
+    //                 var checkCaseName = fileData[0];
+
+    //                 var filePathArray = this.responseURL.split("/");
+    //                 if (filePathArray.length == 0) {
+    //                     return;
+    //                 }
+                    
+    //                 var fileName = filePathArray[filePathArray.length -1];
+
+
+    //                 var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+    //                 _this.addCheckCaseFileData(checkCaseFileData);                                       
+
+    //                 filesPending--;
+    //                 if (filesPending == 0) {
+    //                     _this.populateCheckCases();
+    //                 }
+    //             }
+    //         };
+
+    //         //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
+    //         xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
+    //         xhttp.send();
+    //     }
+    // }
+
+     CheckCaseFilesData.prototype.readCheckCaseFiles = function (sourceAType, sourceBType, viewerContainer, excludeNone) {
+        this.CheckCaseFileDataList = [];
         var _this = this;
         var fileList = checkCaseFiles;
         if (fileList.length == 0) {
@@ -13,46 +61,80 @@ var CheckCaseFilesData = function () {
         }
 
         var filesPending = fileList.length;
+        return new Promise(function (resolve) {
+        try {
+            for (var i = 0; i < fileList.length; i++) {
+                var checkCaseFileName = fileList[i];
 
-        for (var i = 0; i < fileList.length; i++) {
-            var checkCaseFileName = fileList[i];
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
+                xhttp.send();  
 
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    
-                    var fileData = _this.readCheckCaseFileData(this);
-                    if (fileData.length == 0) {
-                        return;
+                xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                        
+                            var fileData = _this.readCheckCaseFileData(this);
+                            
+                            if (fileData.length == 0) {
+                                return;
+                            }
+        
+                            var checkCaseName = fileData[0];
+        
+                            var filePathArray = this.responseURL.split("/");
+                            if (filePathArray.length == 0) {
+                                return;
+                            }
+                            
+                            var fileName = filePathArray[filePathArray.length -1];
+                            var checkName = fileName.split(".");
+        
+                            if(sourceAType !== undefined && sourceBType == undefined && checkName[0].includes(sourceAType))
+                            {
+                                    var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                                    _this.addCheckCaseFileData(checkCaseFileData);                         
+                            }
+                            else if(sourceAType !== undefined && sourceBType !== undefined && checkName[0].includes(sourceAType) && checkName[0].includes(sourceBType)) {
+                                if(sourceAType == sourceBType)
+                                {
+                                    var rgxp = new RegExp(sourceAType, "gi");
+                                    var count = (checkName[0].match(rgxp).length);
+                                    if(count >= 2)
+                                    {
+                                        var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                                        _this.addCheckCaseFileData(checkCaseFileData);
+                                    }
+                                }
+                                else
+                                {
+                                    var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                                    _this.addCheckCaseFileData(checkCaseFileData);
+                                }
+                                
+                            }
+                            else if(sourceAType == undefined && sourceBType == undefined)
+                            {
+                                var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                                _this.addCheckCaseFileData(checkCaseFileData);  
+                            }
+                            filesPending--;
+                            if (filesPending == 0) {
+                                _this.populateCheckCases(excludeNone);
+                                return resolve(true);
+                            }
+                        }
                     }
-
-                    var checkCaseName = fileData[0];
-
-                    var filePathArray = this.responseURL.split("/");
-                    if (filePathArray.length == 0) {
-                        return;
-                    }
-                    
-                    var fileName = filePathArray[filePathArray.length -1];
-
-
-                    var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
-                    _this.addCheckCaseFileData(checkCaseFileData);                                       
-
-                    filesPending--;
-                    if (filesPending == 0) {
-                        _this.populateCheckCases();
-                    }
-                }
-            };
-
-            //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
-            xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
-            xhttp.send();
-        }
+                }; 
+            }
+            catch(err)
+            {
+                console.log(err);
+                return resolve(false);
+            }
+        });
     }
 
-    CheckCaseFilesData.prototype.populateCheckCases = function () {
+    CheckCaseFilesData.prototype.populateCheckCases = function (excludeNone) {
         var checkCaseSelect = document.getElementById("checkCaseSelect");
 
         // remove old checkcase entries, if there are any
@@ -61,7 +143,9 @@ var CheckCaseFilesData = function () {
         }
              
         // add None option
-        checkCaseSelect.options.add(new Option("None", "None"));
+        if(excludeNone == undefined) {
+            checkCaseSelect.options.add(new Option("None", "None"));
+        }
 
         for (var i = 0; i < this.CheckCaseFileDataList.length; i++) {
             var checkCaseData = this.CheckCaseFileDataList[i];
@@ -73,6 +157,11 @@ var CheckCaseFilesData = function () {
             var checkCaseOption = checkCaseSelect.options[i];
             checkCaseOption.className = "casesppidvspdm";
         }
+
+        
+        // var checkCaseFileName = getCheckCase();
+        // if(checkCaseFileName !== undefined)
+        //     checkCaseManager.readCheckCaseData(checkCaseFileName);
     }
 
     CheckCaseFilesData.prototype.readCheckCaseFileData = function (xml) {
