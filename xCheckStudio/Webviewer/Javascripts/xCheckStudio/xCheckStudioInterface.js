@@ -422,11 +422,12 @@ var xCheckStudio;
                         }
                          if (_this.nodeIdArray.length == 0) 
                          {
-                            _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined); 
-                            
+                            _this._modelTree.addModelBrowser(_this._firstViewer.model.getAbsoluteRootNode(), undefined);    
+                            if(checkCaseSelected) {
+                                checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+                            }
                             // add components to database
-                            _this.addComponentsToDB();
-                            checkIsOrderMaintained(_this.checkType);
+                            _this.addComponentsToDB(); 
                         }
                     });
                 }
@@ -458,8 +459,9 @@ var xCheckStudio;
                     _this.NodeIdvsComponentIdList =  JSON.parse(msg);
                 }
                 // remove busy spinner
-                var busySpinner = document.getElementById("divLoading");
-                busySpinner.classList.remove('show')
+                    var busySpinner = document.getElementById("divLoading");
+                    if(busySpinner.classList.contains('show'))
+                        busySpinner.classList.remove('show')               
             });
 
         }

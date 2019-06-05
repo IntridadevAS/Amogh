@@ -2451,6 +2451,8 @@
             // disable controls on load
             disableControlsOnLoad();
 
+            enableDropZone("dropZone1");
+
             // set project name
             setProjectName();
 
@@ -2486,6 +2488,7 @@
                             return;
                         }
 
+                        checkCaseSelected = true;
                         var fileName;
                         for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
                             var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
@@ -2515,6 +2518,7 @@
                     // read check cases files list
                     checkCaseFilesData = new CheckCaseFilesData();
                     checkCaseFilesData.readCheckCaseFiles();
+                    checkCaseManager = new CheckCaseManager();
                 }
             });
         };

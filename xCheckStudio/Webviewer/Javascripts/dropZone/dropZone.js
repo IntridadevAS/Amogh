@@ -28,16 +28,18 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
             var mainFileName = item.name;
             var fileExtension = xCheckStudio.Util.getFileExtension(mainFileName).toLowerCase();
 
+            var files = []
+            files.push(items[0].getAsFile())
             // if data source is Excel file
             if (fileExtension.toLowerCase() === "xls") {
+                addTabHeaders(modelTreeContainer, mainFileName);
                 if (loadExcelDataSource(fileExtension,
-                    items[0].getAsFile(),                    
+                    files,                    
                     viewerContainer,
                     modelTreeContainer)) {
-
-                    manageControlsOnDatasourceLoad(mainFileName,
-                        viewerContainer,
-                        modelTreeContainer);
+                        manageControlsOnDatasourceLoad(mainFileName,
+                            viewerContainer,
+                            modelTreeContainer);
                     return;
                 }
             }
@@ -110,12 +112,12 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         processData: false,
         success: function (ret) {
             //alert(ret);
-
+            addTabHeaders(modelTreeContainer, mainFileName);
             if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
 
                 manageControlsOnDatasourceLoad(mainFileName,
                     viewerContainer, 
-                    modelTreeContainer);            
+                    modelTreeContainer);          
             }
             else {
 

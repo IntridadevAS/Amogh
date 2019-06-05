@@ -1097,7 +1097,7 @@
 		
 	</Check>
 
-    <Check type="compliance" sourceType="XML" > 
+    <Check type="ComplianceSourceA" sourceType="XML" > 
                <ComponentGroup name="Equipment">
 				  <ComponentClass name="Vessel/Column">
 					 <Property name="Block"    rule="Should be number"    severity="Error"    comment="Should be number" />
@@ -4316,7 +4316,7 @@
       
 		 </Check> 
 
-    <Check type="compliance" sourceType="RVM" >     
+    <Check type="ComplianceSourceB" sourceType="RVM" >     
 				   <ComponentGroup name="SITE">
 					   <ComponentClass name="SITE">
 							 <Property name="Name"    rule=""    severity="Error"    comment="No Rule" />
