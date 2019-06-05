@@ -837,7 +837,7 @@ function checkIsOrderMaintained(checkType) {
     if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
         OrderMaintained = 'false';
     }
-    else if (checkType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
+    else if (checkType && checkType.SourceBType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
         var checkCaseType = checkType;
         outer_loop:
         for (var i = 0; i < checkCaseType.ComponentGroups.length; i++) {
@@ -1037,7 +1037,7 @@ function loadModel(fileName,
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if(fileExtensionA == fileExtensionB) {
+                else if(fileExtensionA == fileExtensionB && sourceAType != sourceBType) {
                     if(sourceAType == fileExtensionA && fileExtension.toUpperCase() == fileExtensionA)
                     {
                         alert("Data source type doesn't match with check case.");
