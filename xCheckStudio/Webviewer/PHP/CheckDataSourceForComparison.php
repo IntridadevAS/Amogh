@@ -501,12 +501,22 @@
                         // remove src A component from src A not checked array
                         $componentMatchFound = true;
 
+                        $sourceANodeId = NULL;
+                        if(isset( $sourceAComponent['nodeid']))
+                        {
+                            $sourceANodeId = $sourceAComponent['nodeid'];
+                        }
+                        $sourceBNodeId = NULL;
+                        if(isset( $sourceBComponent['nodeid']))
+                        {
+                            $sourceBNodeId = $sourceBComponent['nodeid'];
+                        }
                         // create checkcomponent object
                         $checkComponent = new CheckComponent($sourceAComponent['name'],
                                                             $sourceBComponent['name'],
                                                             $sourceAComponent['subclass'],
-                                                            $sourceAComponent['nodeid'],
-                                                            $sourceBComponent['nodeid']);
+                                                            $sourceANodeId,
+                                                            $sourceBNodeId);
                         $checkComponentGroup->AddCheckComponent($checkComponent);
 
                         for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) {

@@ -834,6 +834,7 @@ function hideLoadButton(modelTreeContainer) {
 }
 
 function checkIsOrderMaintained(checkType) {
+    OrderMaintained = 'true';
     if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
         OrderMaintained = 'false';
     }
