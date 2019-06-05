@@ -52,7 +52,7 @@ var CheckCaseFilesData = function () {
     //     }
     // }
 
-     CheckCaseFilesData.prototype.readCheckCaseFiles = function (sourceAType, sourceBType, viewerContainer, excludeNone) {
+     CheckCaseFilesData.prototype.readCheckCaseFiles = function (sourceAType, sourceBType, excludeNone) {
         this.CheckCaseFileDataList = [];
         var _this = this;
         var fileList = checkCaseFiles;
@@ -90,6 +90,11 @@ var CheckCaseFilesData = function () {
                             var checkName = fileName.split(".");
         
                             if(sourceAType !== undefined && sourceBType == undefined && checkName[0].includes(sourceAType))
+                            {
+                                    var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+                                    _this.addCheckCaseFileData(checkCaseFileData);                         
+                            }
+                            else if(sourceAType == undefined && sourceBType !== undefined && checkName[0].includes(sourceBType))
                             {
                                     var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
                                     _this.addCheckCaseFileData(checkCaseFileData);                         
@@ -143,7 +148,7 @@ var CheckCaseFilesData = function () {
         }
              
         // add None option
-        if(excludeNone == undefined) {
+        if(excludeNone == undefined || excludeNone == false) {
             checkCaseSelect.options.add(new Option("None", "None"));
         }
 
