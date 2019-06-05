@@ -5,52 +5,52 @@ var CheckCaseFilesData = function () {
         this.CheckCaseFileDataList.push(checkCaseFileData);
     }
 
-    CheckCaseFilesData.prototype.readCheckCaseFiles = function () {
-        var _this = this;
-        var fileList = checkCaseFiles;
-        if (fileList.length == 0) {
-            return;
-        }
+    // CheckCaseFilesData.prototype.readCheckCaseFiles = function () {
+    //     var _this = this;
+    //     var fileList = checkCaseFiles;
+    //     if (fileList.length == 0) {
+    //         return;
+    //     }
 
-        var filesPending = fileList.length;
+    //     var filesPending = fileList.length;
 
-        for (var i = 0; i < fileList.length; i++) {
-            var checkCaseFileName = fileList[i];
+    //     for (var i = 0; i < fileList.length; i++) {
+    //         var checkCaseFileName = fileList[i];
 
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
+    //         var xhttp = new XMLHttpRequest();
+    //         xhttp.onreadystatechange = function () {
+    //             if (this.readyState == 4 && this.status == 200) {
                     
-                    var fileData = _this.readCheckCaseFileData(this);
-                    if (fileData.length == 0) {
-                        return;
-                    }
+    //                 var fileData = _this.readCheckCaseFileData(this);
+    //                 if (fileData.length == 0) {
+    //                     return;
+    //                 }
 
-                    var checkCaseName = fileData[0];
+    //                 var checkCaseName = fileData[0];
 
-                    var filePathArray = this.responseURL.split("/");
-                    if (filePathArray.length == 0) {
-                        return;
-                    }
+    //                 var filePathArray = this.responseURL.split("/");
+    //                 if (filePathArray.length == 0) {
+    //                     return;
+    //                 }
                     
-                    var fileName = filePathArray[filePathArray.length -1];
+    //                 var fileName = filePathArray[filePathArray.length -1];
 
 
-                    var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
-                    _this.addCheckCaseFileData(checkCaseFileData);                                       
+    //                 var checkCaseFileData = new CheckCaseFileData(fileName, checkCaseName);
+    //                 _this.addCheckCaseFileData(checkCaseFileData);                                       
 
-                    filesPending--;
-                    if (filesPending == 0) {
-                        _this.populateCheckCases();
-                    }
-                }
-            };
+    //                 filesPending--;
+    //                 if (filesPending == 0) {
+    //                     _this.populateCheckCases();
+    //                 }
+    //             }
+    //         };
 
-            //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
-            xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
-            xhttp.send();
-        }
-    }
+    //         //xhttp.open("GET", "configurations/XML_2_XML_Datamapping.xml", true);
+    //         xhttp.open("GET", "configurations/" + checkCaseFileName + ".xml", true);
+    //         xhttp.send();
+    //     }
+    // }
 
      CheckCaseFilesData.prototype.readCheckCaseFiles = function (sourceAType, sourceBType, viewerContainer, excludeNone) {
         this.CheckCaseFileDataList = [];
