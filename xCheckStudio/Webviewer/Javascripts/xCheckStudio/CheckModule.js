@@ -1332,50 +1332,71 @@ function loadDbDataSource(fileExtension,
 
     var sourceAType;
     var sourceBType;
-    // for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-    //     var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-    //     if (checkType.Name.toLowerCase() === "comparison") {
-    //         sourceAType = checkType.SourceAType;
-    //         sourceBType = checkType.SourceBType;
-    //         break;
-    //     }
-    //     else if (checkType.Name.toLowerCase() === "compliance") {
-    //         sourceAType = checkType.SourceAType;
-    //         break;
-    //     }
-    // }
 
-    // if (viewerContainer === "viewerContainer1") {
-    //     if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-    //             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    //     else {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
+    var fileExtensionA;
+    var fileExtensionB;
+    fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+    if(sourceBFileName !== undefined)
+    {
+        fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
-    // }
-    // else if (viewerContainer === "viewerContainer2") {
-    //     if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-    //             sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    //     else {
-    //         if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-    //             alert("Data source type doesn't match with check case.");
-    //             return false;
-    //         }
-    //     }
-    // }
+    }
+
+    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) { 
+        var sourceAType;
+        var sourceBType;
+        for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+            var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+            if (checkType.Name.toLowerCase() === "comparison") {
+                sourceAType = checkType.SourceAType;
+                sourceBType = checkType.SourceBType;
+                break;
+            }
+            else if (checkType.Name.toLowerCase() === "compliance") {
+                sourceAType = checkType.SourceAType;
+                break;
+            }
+        }
+    
+        if (viewerContainer === "viewerContainer1") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+    
+        }
+        else if (viewerContainer === "viewerContainer2") {
+            if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+                else if(fileExtensionA == fileExtensionB) {
+                    if(sourceAType == fileExtensionA && fileExtension == fileExtensionA)
+                    {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
+                }
+            }
+        }
+    }
     var fileName = file[0].name.substring(0, file[0].name.lastIndexOf('.'));
     $.ajax({
         data: { 'viewerContainer': viewerContainer, 'fileName': fileName, 'dataSourceType': '1D' },
@@ -1413,6 +1434,14 @@ function readDbDataSource(uri, file,
     let fileName = file.name;
     var uri = "../" + uri;
     var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+    var fileExtensionA;
+    var fileExtensionB;
+    fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+    if(sourceBFileName !== undefined)
+    {
+        fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+
+    }
 
     Db_data = new Array();
     $.ajax({
@@ -1423,6 +1452,13 @@ function readDbDataSource(uri, file,
         async: false,
         success: function (data) {
             Db_data = data;
+            if(!checkCaseSelected) {
+                checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
+                    if(success) {
+                        getCheckCase();
+                    }  
+                });
+           }
         },
         error: function (xhr, status, error) {
         },

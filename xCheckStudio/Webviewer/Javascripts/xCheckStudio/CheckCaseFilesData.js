@@ -85,7 +85,11 @@ var CheckCaseFilesData = function () {
                             if (filePathArray.length == 0) {
                                 return;
                             }
-                            
+                            if(sourceAType !== undefined && sourceAType.toLowerCase() == 'json')
+                                sourceAType = 'DB';
+                            if(sourceBType !== undefined && sourceBType.toLowerCase() == 'json')
+                                sourceBType = 'DB';
+                                                
                             var fileName = filePathArray[filePathArray.length -1];
                             var checkName = fileName.split(".");
         

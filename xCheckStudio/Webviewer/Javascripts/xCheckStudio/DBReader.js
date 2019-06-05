@@ -14,8 +14,11 @@ DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
     this.containerId = containerId;
     this.ProcessDbData(Db_data);
     this.addComponentsToDB(viewerContainer);
-    checkIsOrderMaintained(_this.checkType);
+    
     this.dbmodelbrowser.createModelBrowserTable(this.dbdata, containerId);
+    if(checkCaseSelected) {
+        checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+    }
 }
 
 DBReader.prototype.addComponentsToDB = function (viewerContainer) {
@@ -38,7 +41,8 @@ DBReader.prototype.addComponentsToDB = function (viewerContainer) {
         console.log(data);
         // remove busy spinner
         var busySpinner = document.getElementById("divLoading");
-        busySpinner.classList.remove('show')
+        if(busySpinner.classList.contains('show'))
+            busySpinner.classList.remove('show')
     });
 
 }
