@@ -834,10 +834,10 @@ function hideLoadButton(modelTreeContainer) {
 
 function checkIsOrderMaintained(checkType) {
     OrderMaintained = 'true';
-    if (checkType && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
+    if (checkType && xCheckStudioInterface1 && xCheckStudioInterface1.SourceType.toLowerCase() !== checkType.SourceAType.toLowerCase()) {
         OrderMaintained = 'false';
     }
-    else if (checkType && checkType.SourceBType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
+    else if (checkType && xCheckStudioInterface1 && checkType.SourceBType && checkType.SourceAType.toLowerCase() == checkType.SourceBType.toLowerCase()) {
         var checkCaseType = checkType;
         outer_loop:
         for (var i = 0; i < checkCaseType.ComponentGroups.length; i++) {
@@ -880,6 +880,10 @@ function getCheckCase()
 {
     var fileName;
     var checkCaseSelect = document.getElementById("checkCaseSelect");
+
+    if(checkCaseSelect.value == "None") {
+        return;
+    }
 
     for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
         var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
@@ -965,7 +969,7 @@ function loadExcelDataSource(fileExtension,
         {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
         }
-        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
             if(success) {
                 getCheckCase();
             }  
@@ -1089,7 +1093,7 @@ function loadModel(fileName,
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
                     if(!checkCaseSelected) {
-                        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, viewerContainer, true).then(function (success) {
+                        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
                             if(success) {
                                 getCheckCase();
                             }  
@@ -1763,6 +1767,32 @@ function resetCheckSwitchesForSource1()
     }
 }
 
+function clearDBEntriesOnClearModule(source) {
+    $.ajax({
+        data: {'Source' : source},
+        type: "POST",
+        url: "PHP/RemoveComponentsFromDB.php"
+       }).done(function (msg) {
+        if (msg == 'fail') {
+        }
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+
+    $.ajax({
+        data: {'Source' : source},
+        type: "POST",
+        url: "PHP/DeleteSourceFilesFromDirectory.php"
+       }).done(function (msg) {
+        if (msg == 'fail') {
+        }
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        busySpinner.classList.remove('show')
+    });
+}
+
 function clearData(source) {
     var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
     if (isCurrentState(comparisonCB, 'state2')) {
@@ -1802,6 +1832,13 @@ function clearData(source) {
         resetCheckSwitchesForSource2();
         xCheckStudioInterface1 = null;
         xCheckStudioInterface2 = null;
+        enableDropZone("dropZone1");
+        checkCaseFilesData.readCheckCaseFiles().then(function (success) {
+            if(success) {
+                getCheckCase();
+                clearDBEntriesOnClearModule(source);
+            }  
+        });;
     }
     else if(source.toLowerCase() == "sourcea")
     {
@@ -1823,7 +1860,27 @@ function clearData(source) {
             addClass(component, 'disabledbutton');
         }
         resetCheckSwitchesForSource1();
+        enableDropZone("dropZone1");
+        excludeNone = true;
+        sourceAFileName = undefined;
+        var fileExtensionA;
+        var fileExtensionB;
+        if(sourceBFileName !== undefined)
+        {
+            fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+
+        }
+
+        if(sourceAFileName == undefined && sourceBFileName == undefined) {
+            excludeNone = false;
+        }
         xCheckStudioInterface1 = null;
+        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
+            if(success) {
+                getCheckCase();
+                clearDBEntriesOnClearModule(source);
+            }  
+        });
     }
     else if(source.toLowerCase() == "sourceb")
     {
@@ -1845,33 +1902,26 @@ function clearData(source) {
             addClass(component, 'disabledbutton');
         }
         resetCheckSwitchesForSource2();
+        enableDropZone("dropZone2");
+        sourceBFileName = undefined;
+        excludeNone = true;
+        var fileExtensionA;
+        var fileExtensionB;
+        if(sourceAFileName !== undefined) {
+            fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+        }
+        
         xCheckStudioInterface2 = null;
+        if(sourceAFileName == undefined && sourceBFileName == undefined) {
+            excludeNone = false;
+        }
+        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
+            if(success) {
+                getCheckCase();
+                clearDBEntriesOnClearModule(source);
+            }  
+        });
     }
-
-    $.ajax({
-        data: {'Source' : source},
-        type: "POST",
-        url: "PHP/RemoveComponentsFromDB.php"
-       }).done(function (msg) {
-        if (msg == 'fail') {
-        }
-        // remove busy spinner
-        var busySpinner = document.getElementById("divLoading");
-        busySpinner.classList.remove('show')
-    });
-
-    $.ajax({
-        data: {'Source' : source},
-        type: "POST",
-        url: "PHP/DeleteSourceFilesFromDirectory.php"
-       }).done(function (msg) {
-        if (msg == 'fail') {
-        }
-        // remove busy spinner
-        var busySpinner = document.getElementById("divLoading");
-        busySpinner.classList.remove('show')
-    });
-
 }
 function cancelreviewresults() {
     sourceAComplianceCheckManager = undefined;
