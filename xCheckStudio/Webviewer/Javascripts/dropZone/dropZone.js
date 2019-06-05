@@ -25,11 +25,15 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
 
        
         if (item.isFile) {
-            var mainFileName = item.name;
+            var mainFileName;
+            if("att" != xCheckStudio.Util.getFileExtension(item.name).toLowerCase())
+            {
+                mainFileName = item.name;
+            }
             var fileExtension = xCheckStudio.Util.getFileExtension(mainFileName).toLowerCase();
 
             var files = []
-            files.push(items[0].getAsFile())
+            files.push(items[i].getAsFile())
             // if data source is Excel file
             if (fileExtension.toLowerCase() === "xls") {
                 addTabHeaders(modelTreeContainer, mainFileName);
@@ -45,7 +49,7 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
             }
 
             var uploadFormData = new FormData();
-            uploadFormData.append('files[]', items[0].getAsFile());
+            uploadFormData.append('files[]', items[i].getAsFile());
             uploadFormData.append('viewerContainer', viewerContainer);
             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
         }
