@@ -160,8 +160,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     //}
                     
                     _this.menu(event.clientX, event.clientY);
-                }
-
+                },
         });
     };
 
