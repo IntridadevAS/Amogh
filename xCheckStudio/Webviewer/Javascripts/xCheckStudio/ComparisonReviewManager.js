@@ -849,7 +849,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var item = $(this).data("JSGridItem");
                     if (key === "accept") {
                         this[0].cells[2].innerHTML = "ACCEPTED";
-                        this[0].style.backgroundColor = 'red';
+                        var cell = 0;
+                        for(cell = 0; cell < this[0].cells.length; cell++) {
+                            this[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                        }
                     }
                     else if (key === "transpose") {
                     }
