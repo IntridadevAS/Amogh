@@ -843,6 +843,32 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });
 
+            $.contextMenu({
+                selector: '.jsgrid-row, .jsgrid-alt-row',
+                callback: function (key, options) {
+                    var item = $(this).data("JSGridItem");
+                    if (key === "accept") {
+                        this[0].cells[2].innerHTML = "ACCEPTED";
+                        this[0].style.backgroundColor = 'red';
+                    }
+                    else if (key === "transpose") {
+                    }
+                    else if (key === "freeze") {
+                    }
+                },
+                items: {
+                    "accept": {
+                        name: "Accept",
+                    },
+                    "transpose": {
+                        name: "Transpose",
+                    },
+                    "freeze": {
+                        name: "Freeze",
+                    }
+                }
+            });
+
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
@@ -998,32 +1024,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });
 
-        });
-
-        $.contextMenu({
-            selector: '.jsgrid-row, .jsgrid-alt-row',
-            callback: function (key, options) {
-                var item = $(this).data("JSGridItem");
-                if (key === "accept") {
-                    // _this.changeStatusToAcceptofComponent(this[0]);
-                    this[0].cells[4].innerHTML = "ACCEPTED";
-                }
-                else if (key === "transpose") {
-                }
-                else if (key === "freeze") {
-                }
-            },
-            items: {
-                "accept": {
-                    name: "Accept",
-                },
-                "transpose": {
-                    name: "Transpose",
-                },
-                "freeze": {
-                    name: "Freeze",
-                }
-            }
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
