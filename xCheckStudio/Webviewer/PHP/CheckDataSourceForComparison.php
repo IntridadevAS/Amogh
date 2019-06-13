@@ -315,7 +315,7 @@
                             for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) {
                                 // get check case mapping property object
                                 $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$k];
-        
+
                                 $checkProperty = checkProperties($checkCaseMappingProperty, $sourceAComponent, $sourceBComponent);
                                 if ($checkProperty == NULL) {
                                     continue;
@@ -522,7 +522,6 @@
                         for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) {
                             // get check case mapping property object
                             $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$k];
-
                             $checkProperty = checkProperties($checkCaseMappingProperty, $sourceAComponent, $sourceBComponent);
                             if ($checkProperty == NULL) {
                                 continue;
@@ -612,7 +611,12 @@
                         }
                         else 
                         {
-                            $severity = $checkCaseMappingProperty['Severity'];
+                            if($property1Value == $property2Value) {
+                                $severity = "OK";
+                            }
+                            else {
+                                $severity = $checkCaseMappingProperty['Severity'];
+                            }
                             $performCheck = true;                  
                         }
                     }

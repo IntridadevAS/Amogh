@@ -4,6 +4,8 @@ var HoopsViewerErrorColor = "#FF0000";
 var WarningColor = "#f9ffc7";//"#ffff99";
 var NoMatchColor = "#dddbff"//"#ccccff";
 var NoValueColor = "#f2f2f2";
+var AcceptedColor = "#cbf287";
+var PropertyAcceptedColor = "#ffff99";
 
 function HighlightManager(viewer,
     componentIdVsComponentData,

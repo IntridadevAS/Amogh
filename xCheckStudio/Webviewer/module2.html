@@ -5,6 +5,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModule.js"></script>
 
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
+    <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
 
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
     <link href="images/UIPackage/favicon.png" rel="shortcut icon" />
@@ -13,7 +14,11 @@
     <link href="CSS/module2.css" rel="stylesheet" type="text/css" />
     <meta content="Launchpad by Anima" name="author">
     </meta>
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script>
+    <!-- <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script> -->
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
+
+
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
@@ -597,8 +602,8 @@
             e.preventDefault();
         }, false);
 
-        var hiidenEntities = [];
 
+        var hiidenEntities = [];
         function hide() {
             if (currentViewer) {
 
@@ -909,6 +914,11 @@
                     }
                 });
             }
+        }
+
+        function acceptValue() {
+           var element = comparisonReviewManager.getSelectedRow();
+
         }
 
         function openCheckResultTab(tabName) {
