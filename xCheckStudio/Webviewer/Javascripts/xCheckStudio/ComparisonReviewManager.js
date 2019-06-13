@@ -950,10 +950,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
+                            var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
                             if(!originalstatus.includes("*")) {
                                 var changedStatus = originalstatus + "*";
-                                var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                                // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
@@ -965,15 +966,35 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 if(sourceAName == selectedRow[0].cells[0].innerHTML && sourceBName == selectedRow[0].cells[3].innerHTML) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                 }
+                               
                             }
                             // $("#ComparisonMainReviewCell").empty();
-                            _this.populateReviewTable();
+                            // _this.populateReviewTable();
                             // setButtonsCollapsible();
+                            _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
                         }
                     });   
                 }
                 catch(error) {
                     console.log(error);}  
+            }
+        }
+    }
+
+    ComparisonReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
+        var ComparisonMainReviewCell = document.getElementById("ComparisonMainReviewCell");
+        var children = ComparisonMainReviewCell.children;
+        outer_loop:
+        for(var child in children) {
+            if(children[child].className == "collapsible active") {
+                 var elementCategorydiv = document.getElementById(children[child].innerHTML);
+                 var tableData = $('#' + children[child].innerHTML).find('.jsgrid-grid-body');
+                 for(var i = 0; i < tableData[0].children[0].children[0].children.length; i++) {
+                    if(this.SelectedComponentRow == tableData[0].children[0].children[0].children[i]) {
+                        tableData[0].children[0].children[0].children[i].cells[2].innerHTML = changedStatus;
+                        break outer_loop;
+                    }
+                 }
             }
         }
     }
