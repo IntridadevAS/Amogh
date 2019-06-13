@@ -131,8 +131,10 @@ function updateCategoryComparisonStatusInReview() {
     {            
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
-            $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
-            $command->execute(array($status, $comp['id'], $dontChangeOk));
+            if($comp['status'] !== $dontChangeOk) {
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+                $command->execute(array($status, $comp['id'], $dontChangeOk));
+            }
         }
     }
 
