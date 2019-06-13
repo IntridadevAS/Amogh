@@ -948,10 +948,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
                         success: function (msg) {
-                            var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML
+                            var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
                             var changedStatus = originalstatus + "*";
                             var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
+
+                            for(var i = 0; i < propertiesLen; i++) {
+                                if(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"] == selectedRow[0].cells[0].innerHTML &&
+                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"] == selectedRow[0].cells[3].innerHTML) {
+                                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
+                                }
+                            }
                             _this.populateReviewTable();
                         }
                     });   
