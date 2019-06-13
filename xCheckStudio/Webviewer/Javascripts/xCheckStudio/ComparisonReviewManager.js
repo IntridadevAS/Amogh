@@ -876,27 +876,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });
 
-            // $.contextMenu({
-            //     selector: ".jsgrid-row, .jsgrid-alt-row",
-            //     build: function($trigger) {
-            //       var options = {
-            //         callback: function(key, options) {
-            //           var m = "clicked: " + key;
-            //           window.console && console.log(m) || alert(m);
-            //         },
-            //         items: {}
-            //       };
-              
-            //       if ($trigger.hasClass('something')) {
-            //         options.items.foo = {name: "bar"};
-            //       } else {
-            //         options.items.bar = {name: "foo"};
-            //       }
-              
-            //       return options;
-            //     }
-            //   });
-
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
