@@ -1,6 +1,5 @@
 <?php
-if(!isset($_POST['componentid']) ||
-!isset($_POST['tabletoupdate']))
+if(!isset($_POST['tabletoupdate']))
 {
  echo 'fail';
  return;
@@ -20,10 +19,8 @@ else
  return;
 }	
 
-$componentid = $_POST['componentid']; 
 $tabletoupdate = $_POST['tabletoupdate'];
-$sourceAPropertyName = $_POST['sourceAPropertyName'];
-$sourceBPropertyName = $_POST['sourceBPropertyName'];
+
 
 if($tabletoupdate == "comparison") {
     updateComponentComparisonStatusInReview();
@@ -31,12 +28,14 @@ if($tabletoupdate == "comparison") {
 else if($tabletoupdate == "comparisonDetailed") {
     updatePropertyComparisonStatusInReview();
 }
-
+else if($tabletoupdate == "category") {
+    updateCategoryComparisonStatusInReview();
+}
 
 function updateComponentComparisonStatusInReview() {
     global $projectName;
-    global $componentid;
-    //global $SourceDataSheets;
+    $componentid = $_POST['componentid']; 
+ //global $SourceDataSheets;
 
     $dbh;
     try{
@@ -45,16 +44,15 @@ function updateComponentComparisonStatusInReview() {
         $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'ACCEPTED';
+        $dontChangeOk = 'OK';
         $dbh->beginTransaction();
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-        $command->execute(array($status, $componentid));
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=? AND status!=?');
+        $command->execute(array($status, $componentid, $dontChangeOk));
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=?');
-        $command->execute(array($status, $componentid));
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+        $command->execute(array($status, $componentid, $dontChangeOk));
 
-        var_dump($componentid);
-        var_dump($status);
 
         $dbh->commit();
         $dbh = null; 
@@ -70,19 +68,17 @@ function updatePropertyComparisonStatusInReview() {
     if(!isset($_POST['sourceAPropertyName']) ||
     !isset($_POST['sourceBPropertyName']))
     {
-    echo 'fail';
-    return;
+        echo 'fail';
+        return;
     }
 
     global $projectName;
-    global $componentid;
-    global $sourceAPropertyName;
-    global $sourceBPropertyName;
+    $componentid = $_POST['componentid']; 
+    $sourceAPropertyName = $_POST['sourceAPropertyName'];
+    $sourceBPropertyName = $_POST['sourceBPropertyName'];
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    var_dump($sourceAPropertyName);
-    var_dump($sourceBPropertyName);
     $status = 'ACCEPTED';
     $dbh->beginTransaction();
 
@@ -95,12 +91,53 @@ function updatePropertyComparisonStatusInReview() {
         $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND sourceBName=?');
         $command->execute(array($status, $componentid, $sourceBPropertyName));
     }
-        
-
+      
+    // $sth = $dbh->prepare('SELECT status from ComparisonCheckComponents WHERE ownerComponent= :componentid');
+    // $sth->bindValue(':componentid', $componentid, PDO::PARAM_STR);
+    // $sth->execute();
+    $value = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
+    $originalStatusOfComponent = $value->fetch();
+    $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+    $command->execute(array($changedStatusOfComponents, $componentid));
     
 
     $dbh->commit();
     $dbh = null; 
+}
+
+function updateCategoryComparisonStatusInReview() {
+    if(!isset($_POST['groupid'])) {
+        echo 'fail';
+        return;
+    }
+
+    global $projectName;
+    $groupid = $_POST['groupid'];
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE ownerGroup=? AND status!=?');
+    $command->execute(array($status, $groupid, $dontChangeOk));
+
+    $components = $dbh->query("SELECT * FROM ComparisonCheckComponents WHERE ownerGroup= $groupid;");
+    if($components) 
+    {            
+        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+            $command->execute(array($status, $comp['id'], $dontChangeOk));
+        }
+    }
+
+    $dbh->commit();
+    $dbh = null;
 }
 
 

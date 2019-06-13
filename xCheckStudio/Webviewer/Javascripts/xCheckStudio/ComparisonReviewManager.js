@@ -52,7 +52,7 @@ function ComparisonReviewManager(comparisonCheckManager,
     ComparisonReviewManager.prototype.populateReviewTable = function () 
     {
 
-        var parentTable = document.getElementById(this.MainReviewTableContainer);
+        // var parentTable = document.getElementById(this.MainReviewTableContainer);
 
 
         for (var key in this.ComparisonCheckManager) {
@@ -77,12 +77,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 btn.className = "collapsible";
                 var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
                 btn.appendChild(t);
-                parentTable.appendChild(btn);
+                document.getElementById(this.MainReviewTableContainer).appendChild(btn);
 
                 var div = document.createElement("DIV");
                 div.className = "content scrollable";
                 div.id = componentsGroup.ComponentClass.replace(/\s/g, '');
-                parentTable.appendChild(div);
+                document.getElementById(this.MainReviewTableContainer).appendChild(div);
 
                 var div2 = document.createElement("DIV");
                 div2.id = componentsGroup.ComponentClass + "_child";
@@ -244,6 +244,32 @@ function ComparisonReviewManager(comparisonCheckManager,
                 div.appendChild(div2);
             }
         }
+
+        // $.contextMenu({
+        //     selector: 'BUTTON',
+        //     callback: function (key, options) {
+        //         var item = this;
+        //         if (key === "accept") {
+        //             // var selectedRow = this;
+        //             // _this.updateStatus(selectedRow);
+        //         }
+        //         else if (key === "transpose") {
+        //         }
+        //         else if (key === "freeze") {
+        //         }
+        //     },
+        //     items: {
+        //         "accept": {
+        //             name: "Accept",
+        //         },
+        //         "transpose": {
+        //             name: "Transpose",
+        //         },
+        //         "freeze": {
+        //             name: "Freeze",
+        //         }
+        //     }
+        // });
 
     }
 
@@ -845,12 +871,19 @@ function ComparisonReviewManager(comparisonCheckManager,
             });
 
             $.contextMenu({
-                selector: '.jsgrid-row, .jsgrid-alt-row',
+                selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
                 callback: function (key, options) {
-                    var item = $(this).data("JSGridItem");
+                    // var item = $(this).data("JSGridItem");
                     if (key === "accept") {
-                        var selectedRow = this;
-                        _this.updateStatus(selectedRow);
+                        if(this[0].nodeName == "BUTTON") {
+                            var selectedRow = this;
+                            _this.updateStatusOfCategory(this[0].innerHTML, _this);
+                        }
+                        else {
+                            var selectedRow = this;
+                            _this.updateStatus(selectedRow, _this);
+                        }
+                        
                     }
                     else if (key === "transpose") {
                     }
@@ -870,6 +903,27 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });
 
+            // $.contextMenu({
+            //     selector: ".jsgrid-row, .jsgrid-alt-row",
+            //     build: function($trigger) {
+            //       var options = {
+            //         callback: function(key, options) {
+            //           var m = "clicked: " + key;
+            //           window.console && console.log(m) || alert(m);
+            //         },
+            //         items: {}
+            //       };
+              
+            //       if ($trigger.hasClass('something')) {
+            //         options.items.foo = {name: "bar"};
+            //       } else {
+            //         options.items.bar = {name: "foo"};
+            //       }
+              
+            //       return options;
+            //     }
+            //   });
+
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
@@ -882,29 +936,34 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     };
 
-    ComparisonReviewManager.prototype.updateStatus = function(selectedRow) {
+    ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
-            selectedRow[0].cells[2].innerHTML = "ACCEPTED";
-            var cell = 0;
-            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+            if(selectedRow[0].cells[2].innerHTML !== "OK") {
+                selectedRow[0].cells[2].innerHTML = "ACCEPTED";
+                var cell = 0;
+                for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                    selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                }
+                var componentId = this.findComponentId(selectedRow[0], "comparison");
+                var groupId = _this.findGroupId(selectedRow[0], "comparison");
+                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]  = "ACCEPTED";
+                try{
+                    $.ajax({
+                        url: 'PHP/updateComparisonResults.php',
+                        type: "POST",
+                        async: true,
+                        data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
+                        success: function (msg) {
+                            console.log(msg);
+                        }
+                    });   
+                }
+                catch(error) {}        
+                // $("#ComparisonDetailedReviewCell").empty();
+                this.statusChangedToAccept =  true; 
+                this.populateDetailedReviewTable(selectedRow[0]);
+                this.statusChangedToAccept =  false; 
             }
-            var componentId = this.findComponentId(selectedRow[0], "comparison");
-            try{
-                $.ajax({
-                    url: 'PHP/updateComparisonResults.php',
-                    type: "POST",
-                    async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
-                    success: function (msg) {
-                        console.log(msg);
-                    }
-                });   
-            }
-            catch(error) {}        
-            this.statusChangedToAccept =  true; 
-            this.populateDetailedReviewTable(selectedRow[0]);
-            this.statusChangedToAccept =  false; 
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
             selectedRow[0].cells[1].innerHTML = "ACCEPTED";
@@ -912,10 +971,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
                 selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
             }
-            // this.findComponentId(selectedRow[0], "complianceA");
-            // this.statusChangedToAccept =  true; 
-            // this.populateDetailedReviewTable(selectedRow[0]);
-            // this.statusChangedToAccept =  false; 
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
             selectedRow[0].cells[1].innerHTML = "ACCEPTED";
@@ -923,36 +978,95 @@ function ComparisonReviewManager(comparisonCheckManager,
             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
                 selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
             }
-            // this.findComponentId(selectedRow[0], "complianceB");
-            // this.statusChangedToAccept =  true; 
-            // this.populateDetailedReviewTable(selectedRow[0]);
-            // this.statusChangedToAccept =  false; 
+
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            selectedRow[0].cells[4].innerHTML = "ACCEPTED";
-            var cell = 0;
-            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+            if(selectedRow[0].cells[4].innerHTML !== "OK") {
+                selectedRow[0].cells[4].innerHTML = "ACCEPTED";
+                var cell = 0;
+                for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                    selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                }
+    
+                var componentId = this.findComponentId(this.SelectedComponentRow, "comparisonDetailed");
+                try{
+                    $.ajax({
+                        url: 'PHP/updateComparisonResults.php',
+                        type: "POST",
+                        async: true,
+                        data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
+                        success: function (msg) {
+                            var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML
+                            var changedStatus = originalstatus + "*";
+                            var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            _this.populateReviewTable();
+                        }
+                    });   
+                }
+                catch(error) {
+                    console.log(error);}  
             }
-
-            var componentId = this.findComponentId(this.SelectedComponentRow, "comparisonDetailed");
-            try{
-                $.ajax({
-                    url: 'PHP/updateComparisonResults.php',
-                    type: "POST",
-                    async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
-                    success: function (msg) {
-                        console.log(msg);
-                    }
-                });   
-            }
-            catch(error) {
-                console.log(error);}  
-            // this.statusChangedToAccept =  true; 
-            // this.populateDetailedReviewTable(selectedRow[0]);
-            // this.statusChangedToAccept =  false; 
         }
+    }
+
+    ComparisonReviewManager.prototype.updateStatusOfCategory = function(groupName, _this) {
+        outer_loop:
+        for (var componentsGroupID in _this.ComparisonCheckManager) {
+
+            // get the componentgroupd corresponding to selected component 
+            var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
+            var componentsGroup = undefined;
+            for(var groupId in  componentsGroupList)
+            {               
+                if ( componentsGroupList[groupId].ComponentClass != groupName) {
+                    continue;
+                }
+                else {
+                    componentsGroup = componentsGroupList[groupId];
+                    break outer_loop;
+                }
+            }
+        }
+
+        var categorydiv = document.getElementById(groupName);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+
+        // for(var i = 0; i < noOfComponents; i++) {
+        //     if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK")
+        //         categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "ACCEPTED";
+        //     for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+        //         categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+        //     }
+        //     selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+        //     this.statusChangedToAccept =  true; 
+        //     this.populateDetailedReviewTable(selectedRow);
+        //     this.statusChangedToAccept =  false; 
+        // }
+
+        try{
+            $.ajax({
+                url: 'PHP/updateComparisonResults.php',
+                type: "POST",
+                async: true,
+                data: {'groupid' : groupId, 'tabletoupdate': "category"},
+                success: function (msg) {
+                    for(var i = 0; i < noOfComponents; i++) {
+                        if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK")
+                            categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "ACCEPTED";
+                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                        }
+                        selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                        _this.statusChangedToAccept =  true; 
+                        _this.populateDetailedReviewTable(selectedRow);
+                        _this.statusChangedToAccept =  false; 
+                    }
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}  
     }
 
     ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {
@@ -1271,7 +1385,33 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     }
 
+    ComparisonReviewManager.prototype.findGroupId = function(row, tabletoupdate) {
+        var reviewTableId = this.getReviewTableId(row);
 
+        for (var componentsGroupID in this.ComparisonCheckManager) {
+
+            // get the componentgroupd corresponding to selected component 
+            var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
+            var componentsGroup = undefined;
+            for(var groupId in  componentsGroupList)
+            {               
+                if ( componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
+                    continue;
+                }
+                else {
+                    componentsGroup = componentsGroupList[groupId];
+                    break;
+                }
+
+            }
+            if (!componentsGroup) {
+                continue;
+            }
+            else{
+                return groupId;         
+            }
+        }
+    }
 
     ComparisonReviewManager.prototype.unhighlightSelectedSheetRow = function (checkStatusArray, currentRow) {
         var rowIndex = currentRow.rowIndex;
@@ -1482,7 +1622,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
                     if(this.statusChangedToAccept == true) {
-                        property.Severity = 'ACCEPTED';
+                        if(property.Severity !== "OK") {
+                            property.Severity = 'ACCEPTED';
+                        }
                     }
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
 
@@ -1560,13 +1702,13 @@ function ComparisonReviewManager(comparisonCheckManager,
         tableRowContent[columnHeaders[1].name] = property.SourceAValue;
         tableRowContent[columnHeaders[2].name] = property.SourceBValue;
         tableRowContent[columnHeaders[3].name] = property.SourceBName;
-        if (property.PerformCheck &&
-            property.Result) {
-            tableRowContent[columnHeaders[4].name] = "OK";
-        }
-        else {
+        // if (property.PerformCheck &&
+        //     property.Result) {
+        //     tableRowContent[columnHeaders[4].name] = "OK";
+        // }
+        // else {
             tableRowContent[columnHeaders[4].name] = property.Severity;
-        }
+        // }
         return tableRowContent;
     }
 
@@ -1604,6 +1746,10 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
         else if (status.toLowerCase() === ("Accepted").toLowerCase()) {
             return AcceptedColor;
+        }
+        else if (status.toLowerCase() === ("Error*").toLowerCase() || status.toLowerCase() === ("Warning*").toLowerCase() 
+        || status.toLowerCase() === ("No Match*").toLowerCase() || status.toLowerCase() === ("No Value*").toLowerCase()) {
+            return PropertyAcceptedColor;
         }
         else {
             return "#ffffff";
