@@ -97,9 +97,11 @@ function updatePropertyComparisonStatusInReview() {
     // $sth->execute();
     $value = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
     $originalStatusOfComponent = $value->fetch();
-    $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-    $command->execute(array($changedStatusOfComponents, $componentid));
+    if(strpos($originalStatusOfComponent['status'], '*') == false) {
+        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+        $command->execute(array($changedStatusOfComponents, $componentid));
+    }
     
 
     $dbh->commit();
