@@ -52,7 +52,7 @@ function ComparisonReviewManager(comparisonCheckManager,
     ComparisonReviewManager.prototype.populateReviewTable = function () 
     {
 
-        // var parentTable = document.getElementById(this.MainReviewTableContainer);
+         var parentTable = document.getElementById(this.MainReviewTableContainer);
 
 
         for (var key in this.ComparisonCheckManager) {
@@ -77,17 +77,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                 btn.className = "collapsible";
                 var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
                 btn.appendChild(t);
-                document.getElementById(this.MainReviewTableContainer).appendChild(btn);
+                parentTable.appendChild(btn);
 
                 var div = document.createElement("DIV");
                 div.className = "content scrollable";
                 div.id = componentsGroup.ComponentClass.replace(/\s/g, '');
-                document.getElementById(this.MainReviewTableContainer).appendChild(div);
+                parentTable.appendChild(div);
 
-                var div2 = document.createElement("DIV");
-                div2.id = componentsGroup.ComponentClass + "_child";
-                div2.style.fontSize = "10px";
-                div.appendChild(div2);
+                // var div2 = document.createElement("DIV");
+                // div2.id = componentsGroup.ComponentClass + "_child";
+                // div2.style.fontSize = "10px";
+                // div.appendChild(div2);
 
                 // create column headers
                 var columnHeaders = [];
@@ -237,11 +237,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                 modelBrowserDataTable.style.width = "578px";
                 modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
+                var jsgriddiv = $('#' + componentsGroup.ComponentClass.replace(/\s/g, '')).find('.jsgrid-grid-body');
                 var div2 = document.createElement("DIV");
                 div2.id = componentsGroup.ComponentClass + "_child";
                 div2.innerText = "Count :" + modelBrowserTableRows.length;
                 div2.style.fontSize = "10px";
-                div.appendChild(div2);
+                jsgriddiv[0].appendChild(div2);
             }
         }
     }
@@ -949,18 +950,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
-                            var changedStatus = originalstatus + "*";
-                            var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
-                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            if(!originalstatus.includes("*")) {
+                                var changedStatus = originalstatus + "*";
+                                var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
+                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            }
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
-
                             for(var i = 0; i < propertiesLen; i++) {
-                                if(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"] == selectedRow[0].cells[0].innerHTML &&
-                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"] == selectedRow[0].cells[3].innerHTML) {
+                                var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
+                                if(sourceAName == null) { sourceAName = ""; }
+                                var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
+                                if(sourceBName == null) { sourceBName = ""; }
+
+                                if(sourceAName == selectedRow[0].cells[0].innerHTML && sourceBName == selectedRow[0].cells[3].innerHTML) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                 }
                             }
+                            // $("#ComparisonMainReviewCell").empty();
                             _this.populateReviewTable();
+                            // setButtonsCollapsible();
                         }
                     });   
                 }

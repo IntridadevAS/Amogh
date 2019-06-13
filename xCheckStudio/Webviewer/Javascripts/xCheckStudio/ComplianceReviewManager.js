@@ -229,11 +229,12 @@ function ComplianceReviewManager(complianceCheckManager,
                 modelBrowserDataTable.style.width = "578px";
                 modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
 
+                var jsgriddiv = $('#' + componentsGroup.ComponentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer).find('.jsgrid-grid-body');
                 var div2 = document.createElement("DIV");
                 div2.id = componentsGroup.ComponentClass + "_child";
                 div2.innerText = "Count :" + modelBrowserTableRows.length;
                 div2.style.fontSize = "10px";
-                div.appendChild(div2);
+                jsgriddiv[0].appendChild(div2);
             }
         }
     }
