@@ -244,33 +244,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 div.appendChild(div2);
             }
         }
-
-        // $.contextMenu({
-        //     selector: 'BUTTON',
-        //     callback: function (key, options) {
-        //         var item = this;
-        //         if (key === "accept") {
-        //             // var selectedRow = this;
-        //             // _this.updateStatus(selectedRow);
-        //         }
-        //         else if (key === "transpose") {
-        //         }
-        //         else if (key === "freeze") {
-        //         }
-        //     },
-        //     items: {
-        //         "accept": {
-        //             name: "Accept",
-        //         },
-        //         "transpose": {
-        //             name: "Transpose",
-        //         },
-        //         "freeze": {
-        //             name: "Freeze",
-        //         }
-        //     }
-        // });
-
     }
 
     ComparisonReviewManager.prototype.loadDatasources = function () {
