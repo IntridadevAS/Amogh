@@ -149,6 +149,7 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
+    comparisonReviewManager.complianceA = sourceAComplianceReviewManager;
 
 }
 
@@ -170,8 +171,11 @@ function loadSourceBComplianceData(complianceCheckGroups,
         'SourceBComplianceDetailedReviewCell',
         'SourceBComplianceDetailedReviewComment');
 
+
     // populate review table
     sourceBComplianceReviewManager.populateReviewTable();
+    comparisonReviewManager.complianceB = sourceBComplianceReviewManager;
+
 }
 
 function loadComparisonData(comparisonCheckGroups, 

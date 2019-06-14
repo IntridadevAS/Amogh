@@ -36,6 +36,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SelectedComponentRowFromSheetB;
     this.SelectedComponentRow;
 
+    this.complianceA;
+    this.complianceB;
     this.checkStatusArrayA = {};
     this.checkStatusArrayB = {};
 
@@ -848,14 +850,31 @@ function ComparisonReviewManager(comparisonCheckManager,
                 selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
                 callback: function (key, options) {
                     // var item = $(this).data("JSGridItem");
+                    var selectedRow = this;
+                    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
                     if (key === "accept") {
                         if(this[0].nodeName == "BUTTON") {
-                            var selectedRow = this;
-                            _this.updateStatusOfCategory(this[0].innerHTML, _this);
+                            typeOfRow = selectedRow[0].offsetParent.id;
+                            if(typeOfRow == "ComparisonMainReviewTbody") {
+                                _this.updateStatusOfCategory(this[0].innerHTML, _this);
+                            }
+                            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+                                _this.complianceA.updateStatusOfCategory(this[0].innerHTML);
+                             }
+                             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+                                _this.complianceB.updateStatusOfCategory(this[0].innerHTML);
+                             }  
                         }
                         else {
-                            var selectedRow = this;
-                            _this.updateStatus(selectedRow, _this);
+                             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                                _this.updateStatus(selectedRow, _this);
+                             }
+                             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
+                                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
+                             }
+                             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
+                             }                             
                         }
                         
                     }
@@ -902,7 +921,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]  = "ACCEPTED";
                 try{
                     $.ajax({
-                        url: 'PHP/updateComparisonResults.php',
+                        url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
@@ -918,21 +937,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.statusChangedToAccept =  false; 
             }
         }
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
-            selectedRow[0].cells[1].innerHTML = "ACCEPTED";
-            var cell = 0;
-            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-            }
-        }
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
-            selectedRow[0].cells[1].innerHTML = "ACCEPTED";
-            var cell = 0;
-            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-            }
-
-        }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
             if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED") {
                 selectedRow[0].cells[4].innerHTML = "ACCEPTED";
@@ -944,7 +948,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var componentId = this.findComponentId(this.SelectedComponentRow, "comparisonDetailed");
                 try{
                     $.ajax({
-                        url: 'PHP/updateComparisonResults.php',
+                        url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
@@ -1021,21 +1025,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         var categorydiv = document.getElementById(groupName);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
 
-        // for(var i = 0; i < noOfComponents; i++) {
-        //     if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK")
-        //         categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "ACCEPTED";
-        //     for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-        //         categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-        //     }
-        //     selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-        //     this.statusChangedToAccept =  true; 
-        //     this.populateDetailedReviewTable(selectedRow);
-        //     this.statusChangedToAccept =  false; 
-        // }
-
         try{
             $.ajax({
-                url: 'PHP/updateComparisonResults.php',
+                url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
                 data: {'groupid' : groupId, 'tabletoupdate': "category"},
