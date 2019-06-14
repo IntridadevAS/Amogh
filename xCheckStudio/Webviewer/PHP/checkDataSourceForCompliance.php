@@ -642,13 +642,21 @@
                             $propertyName = $property['name'];
                             $propertyValue = $property["value"];
                             $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
+                            $severity;
+                            if($result == true) {
+                                $severity = "OK";
+                            }
+                            else {
+                                $severity = $checkCaseMappingProperty['Severity'];
+                            }
+
                             $performCheck = true;
             
                             $checkProperty = new CheckProperty($propertyName,
                                                                 $propertyValue,
                                                                 "",
                                                                 "",
-                                                                $checkCaseMappingProperty['Severity'],
+                                                                $severity,
                                                                 $performCheck,
                                                                 $checkCaseMappingProperty['Comment']);
                             $checkProperty->Result = $result;

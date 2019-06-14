@@ -400,7 +400,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
-                        data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerHTML},
+                        data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[1].innerHTML;
                             var groupId = _this.findGroupId(_this.SelectedComponentRow);
@@ -414,7 +414,7 @@ function ComplianceReviewManager(complianceCheckManager,
                                 var sourceAName = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
                                 if(sourceAName == null) { sourceAName = ""}; 
 
-                                if(sourceAName == selectedRow[0].cells[0].innerHTML) {
+                                if(sourceAName == selectedRow[0].cells[0].innerText) {
                                     _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                     break;
                                 }
