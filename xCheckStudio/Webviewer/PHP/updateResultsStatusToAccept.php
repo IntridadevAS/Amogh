@@ -212,35 +212,26 @@ function updatePropertyComplianceStatusInReview() {
     $status = 'ACCEPTED';
     $dbh->beginTransaction();
 
-    if($tabletoupdate == "ComplianceADetailedReview" && $sourcePropertyName !== '') {
-        $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND name=?');
-        $command->execute(array($status, $componentid, $sourcePropertyName));
-        $value = $dbh->query("SELECT status FROM SourceAComplianceCheckComponents WHERE id= $componentid;");
-        $originalStatusOfComponent = $value->fetch();
-        if(strpos($originalStatusOfComponent['status'], '*') == false) {
-            $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
-            $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
-            $command->execute(array($changedStatusOfComponents, $componentid));
-        }
+    if($tabletoupdate == "ComplianceADetailedReview") {
+        $componentTableName = 'SourceAComplianceCheckComponents';
+        $propertiesTableName = 'SourceAComplianceCheckProperties';  
     }
-       
-    else if($tabletoupdate == "ComplianceBDetailedReview" && $sourcePropertyName !== '') {
-        $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND name=?');
-        $command->execute(array($status, $componentid, $sourcePropertyName));
-        $value = $dbh->query("SELECT status FROM SourceBComplianceCheckComponents WHERE id= $componentid;");
-        $originalStatusOfComponent = $value->fetch();
-        if(strpos($originalStatusOfComponent['status'], '*') == false) {
-            $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
-            $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
-            $command->execute(array($changedStatusOfComponents, $componentid));
-        }
+    else if($tabletoupdate == "ComplianceBDetailedReview") {
+        $componentTableName = 'SourceBComplianceCheckComponents';
+        $propertiesTableName = 'SourceBComplianceCheckProperties'; 
     }
-      
-    // $sth = $dbh->prepare('SELECT status from ComparisonCheckComponents WHERE ownerComponent= :componentid');
-    // $sth->bindValue(':componentid', $componentid, PDO::PARAM_STR);
-    // $sth->execute();
     
-    
+    $sql = "UPDATE ". $propertiesTableName ." SET severity=? WHERE ownerComponent=? AND name=?";
+    $sql1 = "UPDATE ". $componentTableName ." SET status=? WHERE id=?";
+    $command = $dbh->prepare($sql);
+    $command->execute(array($status, $componentid, $sourcePropertyName));
+    $value = $dbh->query("SELECT status FROM $componentTableName WHERE id= $componentid;");
+    $originalStatusOfComponent = $value->fetch();
+    if(strpos($originalStatusOfComponent['status'], '*') == false) {
+        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
+        $command = $dbh->prepare($sql1);
+        $command->execute(array($changedStatusOfComponents, $componentid));
+    }
 
     $dbh->commit();
     $dbh = null; 
@@ -266,39 +257,30 @@ function updateCategoryComplianceStatusInReview() {
     $dbh->beginTransaction();
 
     if($tabletoupdate == "categoryComplianceA") {
-        $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents  SET status=? WHERE ownerGroup=? AND status!=?');
-        $command->execute(array($status, $groupid, $dontChangeOk));
-
-        $components = $dbh->query("SELECT * FROM SourceAComplianceCheckComponents  WHERE ownerGroup= $groupid;");
-        if($components) 
-        {            
-            while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
-            {
-                if($comp['status'] !== $dontChangeOk) {
-                    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
-                    $command->execute(array($status, $comp['id'], $dontChangeOk));
-                }
-            }
-        }
+        $componentTableName = 'SourceAComplianceCheckComponents';
+        $propertiesTableName = 'SourceAComplianceCheckProperties';  
     }
     else if($tabletoupdate == "categoryComplianceB") {
-        $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents  SET status=? WHERE ownerGroup=? AND status!=?');
+        $componentTableName = 'SourceBComplianceCheckComponents';
+        $propertiesTableName = 'SourceBComplianceCheckProperties'; 
+    }
+
+        $sql = "UPDATE ".$componentTableName." SET status=? WHERE ownerGroup=? AND status!=?";
+        $sql1 = "UPDATE ".$propertiesTableName." SET severity=? WHERE ownerComponent=? AND severity!=?";
+        $command = $dbh->prepare($sql);
         $command->execute(array($status, $groupid, $dontChangeOk));
 
-        $components = $dbh->query("SELECT * FROM SourceBComplianceCheckComponents  WHERE ownerGroup= $groupid;");
+        $components = $dbh->query("SELECT * FROM $componentTableName  WHERE ownerGroup= $groupid;");
         if($components) 
         {            
             while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
             {
                 if($comp['status'] !== $dontChangeOk) {
-                    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+                    $command = $dbh->prepare($sql1);
                     $command->execute(array($status, $comp['id'], $dontChangeOk));
                 }
             }
         }
-    }
-
-    
 
     $dbh->commit();
     $dbh = null;
