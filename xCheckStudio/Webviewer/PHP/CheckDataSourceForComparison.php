@@ -237,7 +237,7 @@
                                     $sourceAGroupName,
                                     NULL)) 
                                     {                                                          
-                                        $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                                         $componentGroupMapped = true;
                                     } 
                                 else if ($orderMaintained == 'false' && componentClassExists(NULL, 
@@ -246,7 +246,7 @@
                                     NULL,
                                     $sourceBGroupName)) 
                                 {
-                                    $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                    $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                                     $componentGroupMapped = true;
                                 }                                         
 
@@ -264,7 +264,7 @@
                             $componentGroupMapped = true;
 
                             // create or get check component group
-                            $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                            $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                             if ($checkComponentGroup == NULL) {
                                 continue;
                             }     
@@ -445,7 +445,7 @@
                                                     NULL,
                                                     $sourceBGroupName)) 
                             {
-                                $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                                 $componentGroupMapped = true;
                             }
                             else if ($orderMaintained == 'false' && componentClassExists($sourceAClassName, 
@@ -454,7 +454,7 @@
                                                     $sourceAGroupName,
                                                     NULL)) 
                             {
-                                $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                                $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                                 $componentGroupMapped = true;
                             }
                             continue;
@@ -469,7 +469,7 @@
 
                         $componentGroupMapped  =  true;
                         // create or get check component group
-                        $checkComponentGroup = getCheckComponentGroup($sourceAGroupName . "-" . $sourceBGroupName);
+                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                         if ($checkComponentGroup == NULL) 
                         {
                             continue;
