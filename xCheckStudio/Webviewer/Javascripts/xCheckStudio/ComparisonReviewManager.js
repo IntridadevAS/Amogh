@@ -934,7 +934,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML !== "OK") {
+            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED") {
                 selectedRow[0].cells[4].innerHTML = "ACCEPTED";
                 var cell = 0;
                 for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
@@ -1046,10 +1046,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                             for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                                 categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                             }
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.statusChangedToAccept =  true; 
-                            _this.populateDetailedReviewTable(selectedRow);
-                            _this.statusChangedToAccept =  false; 
+                            for(var j = 0; j < categorydiv.children[1].children[0].children[0].children.length; j++) {
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[j];
+                                _this.statusChangedToAccept =  true; 
+                                _this.populateDetailedReviewTable(selectedRow);
+                                _this.statusChangedToAccept =  false; 
+                            }
                         }
                     }
                 }
