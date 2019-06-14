@@ -493,7 +493,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate},
                 success: function (msg) {
                     for(var i = 0; i < noOfComponents; i++) {
-                        if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
+                        if(categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML !== "OK") {
                             categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = "ACCEPTED";
                             for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                                 categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
