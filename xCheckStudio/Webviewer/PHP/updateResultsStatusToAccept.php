@@ -40,6 +40,9 @@ else if($tabletoupdate == "ComplianceADetailedReview" || $tabletoupdate == "Comp
 else if($tabletoupdate == "categoryComplianceA" || $tabletoupdate == "categoryComplianceB") {
     updateCategoryComplianceStatusInReview();
 }
+else if($tabletoupdate == "acceptAllCategoriesFromTab") {
+    updateStatusOfAllComparisonCategories();
+}
 
 function updateComponentComparisonStatusInReview() {
     global $projectName;
@@ -281,6 +284,27 @@ function updateCategoryComplianceStatusInReview() {
                 }
             }
         }
+
+    $dbh->commit();
+    $dbh = null;
+}
+
+function updateStatusOfAllComparisonCategories() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
 
     $dbh->commit();
     $dbh = null;

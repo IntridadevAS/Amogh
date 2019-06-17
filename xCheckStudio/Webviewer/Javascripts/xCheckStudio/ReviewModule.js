@@ -26,6 +26,32 @@ function setProjectName() {
     });
 }
 
+function acceptAllCategories() {
+    var tab = this.currentlyOpenedTab;
+    if(this.currentlyOpenedTab == "ComparisonTabPage") {
+        comparisonReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromTab');
+    }
+    else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
+
+    }
+    else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
+
+    }
+}
+
+function resetAllCategories() {
+    var tab = this.currentlyOpenedTab;
+    if(this.currentlyOpenedTab == "ComparisonTabPage") {
+        comparisonReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromTab');
+    }
+    else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
+
+    }
+    else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
+
+    }
+}
+
 function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
     sourceBComplianceCheckGroups) 

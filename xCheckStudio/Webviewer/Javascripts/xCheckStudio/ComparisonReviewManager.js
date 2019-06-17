@@ -387,46 +387,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             return;
         }
 
-        //var classWiseComponents = this.SourceAProperties[currentSheetName];
-        //var properties = [];
-
-        // if (Object.keys(classWiseComponents).length > 0 &&
-        //     viewerContainerData.childElementCount > 1) {
-        //    // if (viewerContainerData.childElementCount > 1) //{
-            
-        //         for (var componentId in classWiseComponents) 
-        //         {
-        //             if (viewerContainerData.children[jsGridTbodyTableIndex].getElementsByTagName("td")[0].innerText === subComponentClass) 
-        //             {
-                    
-        //                 if (CurrentReviewTableRow.cells[2].innerText === "No Match") 
-        //                 {
-        //                     if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") 
-        //                     {
-        //                         if(this.SelectedComponentRowFromSheetA)
-        //                         {
-        //                             this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
-        //                         }
-        //                         return;
-        //                     }
-        //                     else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") 
-        //                     {
-        //                         if(this.SelectedComponentRowFromSheetB)
-        //                         {
-        //                             this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-        //                         }
-
-        //                         return;
-        //                     }
-        //                 }
-                        
-        //                 this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
-        //                 return;
-        //             }
-        //         }
-        //     //}
-        // }
-
         if (classWiseComponents !== {}) 
         {           
             var componentProperties;
@@ -984,6 +944,70 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
     }
+
+    ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
+        var tabletoupdate = tabletoupdate;
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                data: {'tabletoupdate': tabletoupdate},
+                success: function (msg) {
+                    $.ajax({
+                        url: 'PHP/CheckResultsReader.php',
+                        type: "POST",
+                        async: true,
+                        data: {},
+                        success: function (msg) {
+                            $("#ComparisonMainReviewCell").empty();
+                            var checkResults = JSON.parse(msg);
+        
+                            var comparisonCheckGroups = undefined;
+                            var sourceAComplianceCheckGroups = undefined;
+                            var sourceBComplianceCheckGroups = undefined;
+        
+                            for (var key in checkResults) {
+                                if (!checkResults.hasOwnProperty(key)) {
+                                    continue;
+                                }
+        
+        
+                                if (key == 'Comparison') {
+                                    comparisonCheckGroups = new CheckGroups();
+                                    comparisonCheckGroups.restore(checkResults[key], false);
+                                }
+                                else if (key == 'SourceACompliance') {
+                                    sourceAComplianceCheckGroups = new CheckGroups();
+                                    sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                                else if (key == 'SourceBCompliance') {
+                                    sourceBComplianceCheckGroups = new CheckGroups();
+                                    sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                            }
+        
+                            // populate check results
+                            populateCheckResults(comparisonCheckGroups,
+                                sourceAComplianceCheckGroups,
+                                sourceBComplianceCheckGroups);
+        
+                            // load analytics data
+                            document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                        }
+                    });        
+                }
+            });
+        }
+        catch(error) {
+
+        }   
+        
+        // this.populateReviewTable();
+        // setButtonsCollapsible();
+    }
+
+    
 
     ComparisonReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
         var ComparisonMainReviewCell = document.getElementById("ComparisonMainReviewCell");
