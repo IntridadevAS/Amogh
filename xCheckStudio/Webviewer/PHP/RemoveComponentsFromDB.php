@@ -25,7 +25,7 @@
         global $projectName;
         $dbh;
         try{
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             $source = $_POST['Source']; 
             $dbh->beginTransaction();
