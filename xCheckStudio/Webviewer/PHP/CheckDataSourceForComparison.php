@@ -1,6 +1,7 @@
 <?php
             include 'CheckComponents.php';
             include 'CheckResultsWriter.php';
+            include 'CheckResultsWriterToReadOnlyDB.php';
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SourceASelectedCompoents'] )||
@@ -51,7 +52,8 @@
             // createTempDB();
 
             // write check result to database
-            writeComparisonResultToDB();            
+            writeComparisonResultToDB();   
+            writeComparisonResultToOriginalDB();         
       
 
             // write not matched components to database
@@ -61,8 +63,16 @@
             writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, 
                                           "SourceBNotMatchedComponents", 
                                           $projectName);
+
+            writeNotMatchedComponentsToOriginalDB($SourceANotMatchedComponents, 
+                                          "SourceANotMatchedComponents", 
+                                          $projectName);
+            writeNotMatchedComponentsToOriginalDB($SourceBNotMatchedComponents, 
+                                          "SourceBNotMatchedComponents", 
+                                          $projectName);
             
             writeComparisonCheckStatistics();
+            writeComparisonCheckStatisticsToOriginalDB();
 
             // get source components
             function getSourceComponents()
@@ -567,27 +577,39 @@
                 // var checkCaseMappingProperty = checkCaseComponentClass.MappingProperties[k];
                 global $SourceAProperties;
                 global $SourceBProperties;
+                global $orderMaintained;
 
                 $property1Name = NULL;
                 $property2Name= NULL;
                 $property1Value= NULL;
                 $property2Value= NULL;
+                $checkCasePropSourceA = null;
+                $checkCasePropSourceB = null;
                 $severity= NULL;
                 $performCheck;
                 $description ="";
-               
+                var_dump($checkCaseMappingProperty);
+                if($orderMaintained == 'true') {
+                    $checkCasePropSourceA = $checkCaseMappingProperty['SourceAName'];
+                    $checkCasePropSourceB = $checkCaseMappingProperty['SourceBName'];
+                }
+                else {
+                    $checkCasePropSourceA = $checkCaseMappingProperty['SourceBName'];
+                    $checkCasePropSourceB = $checkCaseMappingProperty['SourceAName'];
+                }
+
                 $sourceAComponentProperties =  $SourceAProperties[$sourceAComponent['id']];
                 $sourceBComponentProperties =  $SourceBProperties[$sourceBComponent['id']];               
 
-                if (array_key_exists($checkCaseMappingProperty['SourceAName'], $sourceAComponentProperties)) 
+                if (array_key_exists($checkCasePropSourceA, $sourceAComponentProperties)) 
                 {                    
-                    if (array_key_exists($checkCaseMappingProperty['SourceBName'], $sourceBComponentProperties)) 
+                    if (array_key_exists($checkCasePropSourceB, $sourceBComponentProperties)) 
                     {
-                        $property1 =$sourceAComponentProperties[$checkCaseMappingProperty['SourceAName']];
-                        $property2 =$sourceBComponentProperties[$checkCaseMappingProperty['SourceBName']];
+                        $property1 =$sourceAComponentProperties[$checkCasePropSourceA];
+                        $property2 =$sourceBComponentProperties[$checkCasePropSourceB];
 
-                        // $property1 = $sourceAComponent->getProperty($checkCaseMappingProperty['SourceAName']);
-                        // $property2 = $sourceBComponent->getProperty($checkCaseMappingProperty['SourceBName']);
+                        // $property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
+                        // $property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
 
                         $property1Name = $property1['name'];
                         $property2Name = $property2['name'];
@@ -622,8 +644,8 @@
                     }
                     else 
                     {
-                        $property1 =$sourceAComponentProperties[$checkCaseMappingProperty['SourceAName']];
-                        //$property1 = $sourceAComponent->getProperty($checkCaseMappingProperty['SourceAName']);
+                        $property1 =$sourceAComponentProperties[$checkCasePropSourceA];
+                        //$property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
 
                         $property1Name = $property1["name"];
                         $property2Name = "";
@@ -633,10 +655,10 @@
                         $performCheck = false;               
                     }
                 }
-                else if (array_key_exists($checkCaseMappingProperty['SourceBName'], $sourceBComponentProperties)) 
+                else if (array_key_exists($checkCasePropSourceB, $sourceBComponentProperties)) 
                 {
-                    $property2 =$sourceBComponentProperties[$checkCaseMappingProperty['SourceBName']];
-                    //$property2 = $sourceBComponent->getProperty($checkCaseMappingProperty['SourceBName']);
+                    $property2 =$sourceBComponentProperties[$checkCasePropSourceB];
+                    //$property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
 
                     $property1Name = "";
                     $property2Name = $property2["name"];

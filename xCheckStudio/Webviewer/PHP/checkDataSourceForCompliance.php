@@ -1,6 +1,7 @@
 <?php
             include 'CheckComponents.php';
             include 'CheckResultsWriter.php';
+            include 'CheckResultsWriterToReadOnlyDB.php';
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SelectedCompoents'] ) ||
@@ -99,14 +100,19 @@
         writeComplianceResultToDB($CheckGroupsTable, 
                                   $CheckComponentsTable,
                                   $CheckPropertiesTable);
+        writeComplianceResultToOriginalDB($CheckGroupsTable, 
+                                  $CheckComponentsTable,
+                                  $CheckPropertiesTable);
 
         if( $ContainerId =='viewerContainer1')
         {
             writeSourceAComplianceCheckStatistics();
+            writeSourceAComplianceCheckStatisticsToOriginalDB();
         }
         else if($ContainerId == 'viewerContainer2')
         {
             writeSourceBComplianceCheckStatistics();
+            writeSourceBComplianceCheckStatisticsToOriginalDB();
         }                                                
 
         // get source components

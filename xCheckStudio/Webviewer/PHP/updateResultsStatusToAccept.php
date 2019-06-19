@@ -43,6 +43,9 @@ else if($tabletoupdate == "categoryComplianceA" || $tabletoupdate == "categoryCo
 else if($tabletoupdate == "acceptAllCategoriesFromTab") {
     updateStatusOfAllComparisonCategories();
 }
+else if($tabletoupdate == "rejectAllCategoriesFromTab") {
+    updateStatusOfAllComparisonCategoriesToOriginal();
+}
 
 function updateComponentComparisonStatusInReview() {
     global $projectName;
@@ -308,6 +311,64 @@ function updateStatusOfAllComparisonCategories() {
 
     $dbh->commit();
     $dbh = null;
+}
+
+function updateStatusOfAllComparisonCategoriesToOriginal() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
+    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+    $dbh1->beginTransaction();
+
+    $components = $dbh->query("SELECT * FROM ComparisonCheckComponents");
+    $originalComp = $dbh1->query("SELECT * FROM ComparisonCheckComponents");
+    $allComp = $originalComp->fetchAll();
+    $compCount = 0;
+    if($components) 
+    {            
+        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
+        {
+                if($compCount < count($allComp)) {
+                    $orgcomp = $allComp[$compCount]['status'];
+                    if($allComp[$compCount]['id'] == $comp['id']) {
+                        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+                        $command->execute(array($orgcomp, $comp['id']));
+                    }
+                }
+                $compCount++;
+        }
+    }
+
+    $componentsprops = $dbh->query("SELECT * FROM ComparisonCheckProperties");
+    $originalCompprops = $dbh1->query("SELECT * FROM ComparisonCheckProperties");
+    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
+    var_dump(count($allProps));
+    $propCount = 0;
+    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
+    { 
+        if($propCount < count($allProps)) {
+            $orgSeverity = $allProps[$propCount]['severity']; 
+            var_dump($allProps[$propCount]['id'].'_'.$comp1['id']);
+            if($allProps[$propCount]['id'] == $comp1['id']) {
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE id=?');
+                $command->execute(array($orgSeverity, $comp1['id']));
+            }
+        }
+        $propCount++;
+    }
+
+    $dbh->commit();
+    $dbh1->commit();
+    $dbh = null;
+    $dbh1 = null;
 }
 
 ?>

@@ -835,8 +835,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                              else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
                                 _this.complianceB.updateStatusOfComplianceElement(selectedRow);
                              }                             
-                        }
-                        
+                        }         
+
                     }
                     else if (key === "transpose") {
                     }
@@ -961,6 +961,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {},
                         success: function (msg) {
                             $("#ComparisonMainReviewCell").empty();
+                            $("#ComparisonDetailedReviewCell").empty();
                             var checkResults = JSON.parse(msg);
         
                             var comparisonCheckGroups = undefined;
@@ -1000,11 +1001,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             });
         }
         catch(error) {
-
+            console.log(error);
         }   
-        
-        // this.populateReviewTable();
-        // setButtonsCollapsible();
     }
 
     
