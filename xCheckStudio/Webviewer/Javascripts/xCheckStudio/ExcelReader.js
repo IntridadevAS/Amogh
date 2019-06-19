@@ -70,6 +70,18 @@ ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
                 
         });
 
+    $.ajax({
+        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'DataSourceType' : '1D'},
+        type: "POST",
+        url: "PHP/CreateReadOnlyResultsDB.php"
+        }).done(function (data) {
+        console.log(data);
+        // remove busy spinner
+        var busySpinner = document.getElementById("divLoading");
+        if(busySpinner.classList.contains('show'))
+            busySpinner.classList.remove('show')
+    });
+
 }
 
 ExcelReader.prototype.ChangeBackgroundColor = function (row) {

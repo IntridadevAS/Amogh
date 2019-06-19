@@ -562,6 +562,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <button type="button" class = "buttonset" onclick="acceptAllCategories()" style="text-align: center; background-color: lightgray">Accept All</button>
+                    <button type="button" class = "buttonreset" onclick="resetAllCategories()" style="text-align: center; background-color: lightgray">Reset</button>
                 </div>
 
             </div>
@@ -767,6 +770,7 @@
         }
 
         var analyticsManager;
+        var currentlyOpenedTab;
         var comparisonReviewManager;
         var sourceAComplianceReviewManager;
         var sourceBComplianceReviewManager;
@@ -916,11 +920,6 @@
             }
         }
 
-        function acceptValue() {
-           var element = comparisonReviewManager.getSelectedRow();
-
-        }
-
         function openCheckResultTab(tabName) {
             var tabs = document.getElementsByClassName("checkResultsContainerTab");
             for (var i = 0; i < tabs.length; i++) {
@@ -961,7 +960,7 @@
             }
 
             if (tabName === "ComparisonTabPage") {
-
+                currentlyOpenedTab = "ComparisonTabPage";
                 var sourceAComplianceTab = document.getElementById("dataSource2ModelBrowserTab");
                 sourceAComplianceTab.style.backgroundColor = "lightgray";
                 var sourceBComplianceTab = document.getElementById("dataSource3ModelBrowserTab");
@@ -1005,7 +1004,7 @@
                 }
             }
             else if (tabName === "SourceAComplianceTabPage") {
-
+                currentlyOpenedTab = "SourceAComplianceTabPage";
                 var sourceAComplianceTab = document.getElementById("dataSource2ModelBrowserTab");
                 sourceAComplianceTab.style.backgroundColor = "#F3F0F4";
                 var sourceBComplianceTab = document.getElementById("dataSource3ModelBrowserTab");
@@ -1041,6 +1040,7 @@
                 }
             }
             else if (tabName === "SourceBComplianceTabPage") {
+                currentlyOpenedTab = "SourceBComplianceTabPage";
                 var sourceAComplianceTab = document.getElementById("dataSource2ModelBrowserTab");
                 sourceAComplianceTab.style.backgroundColor = "lightgray";
                 var sourceBComplianceTab = document.getElementById("dataSource3ModelBrowserTab");

@@ -1,6 +1,5 @@
 <?php
-
-    function writeComplianceResultToDB($checkGroupsTable, 
+    function writeComplianceResultToOriginalDB($checkGroupsTable, 
                                        $checkComponentsTable,
                                        $checkPropertiesTable)
     {
@@ -10,7 +9,7 @@
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
@@ -152,14 +151,14 @@
 
     }
     
-    function writeComparisonResultToDB()
+    function writeComparisonResultToOriginalDB()
     {
         global $CheckComponentsGroups;
         global $projectName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
@@ -312,13 +311,13 @@
 
     }
 
-    function writeComparisonCheckStatistics()
+    function writeComparisonCheckStatisticsToOriginalDB()
     {
         global $projectName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
@@ -362,126 +361,126 @@
          }   
     }
 
-    function getCheckStatistics($dbh, $table)
-    {
-        // get ok components count
-        $okCount = 0;
-        $results = $dbh->query("SELECT COUNT(*) FROM $table where status='OK';");                
-        if($results)
-        {
-            $okCount = $results->fetchColumn();
-        }
+    // function getCheckStatistics($dbh, $table)
+    // {
+    //     // get ok components count
+    //     $okCount = 0;
+    //     $results = $dbh->query("SELECT COUNT(*) FROM $table where status='OK';");                
+    //     if($results)
+    //     {
+    //         $okCount = $results->fetchColumn();
+    //     }
 
-         // get error components count
-         $errorCount = 0;
-         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Error';");     
-         if($results)
-         {
-             $errorCount = $results->fetchColumn();
-         }
+    //      // get error components count
+    //      $errorCount = 0;
+    //      $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Error';");     
+    //      if($results)
+    //      {
+    //          $errorCount = $results->fetchColumn();
+    //      }
         
-         // get Warning components count
-         $warningCount = 0;
-         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Warning';");     
-         if($results)
-         {             
-             $warningCount = $results->fetchColumn();
-         }
+    //      // get Warning components count
+    //      $warningCount = 0;
+    //      $results = $dbh->query("SELECT COUNT(*) FROM $table where status='Warning';");     
+    //      if($results)
+    //      {             
+    //          $warningCount = $results->fetchColumn();
+    //      }
        
-         // get No Match components count
-         $nomatchCount = 0;
-         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='No Match';");     
-         if($results)
-         {
-             $nomatchCount = $results->fetchColumn();
-         }         
+    //      // get No Match components count
+    //      $nomatchCount = 0;
+    //      $results = $dbh->query("SELECT COUNT(*) FROM $table where status='No Match';");     
+    //      if($results)
+    //      {
+    //          $nomatchCount = $results->fetchColumn();
+    //      }         
 
-         $undefinedCount = 0;
-         $results = $dbh->query("SELECT COUNT(*) FROM $table where status='undefined';");     
-         if($results)
-         {
-             $undefinedCount = $results->fetchColumn();
-         }
+    //      $undefinedCount = 0;
+    //      $results = $dbh->query("SELECT COUNT(*) FROM $table where status='undefined';");     
+    //      if($results)
+    //      {
+    //          $undefinedCount = $results->fetchColumn();
+    //      }
          
-         $statistics = array();
-         $statistics['ok'] =  $okCount;
-         $statistics['error'] =  $errorCount;
-         $statistics['warning'] =  $warningCount;
-         $statistics['nomatch'] =  $nomatchCount;
-         $statistics['undefined'] =  $undefinedCount;
+    //      $statistics = array();
+    //      $statistics['ok'] =  $okCount;
+    //      $statistics['error'] =  $errorCount;
+    //      $statistics['warning'] =  $warningCount;
+    //      $statistics['nomatch'] =  $nomatchCount;
+    //      $statistics['undefined'] =  $undefinedCount;
 
-         return  $statistics;
-    }
+    //      return  $statistics;
+    // }
 
-    function getCheckGroupsInfo($dbh, $componentsTable, $groupsTable)
-    {
-            $checkGroups = array();
-            $groups = $dbh->query("SELECT DISTINCT ownerGroup FROM $componentsTable;");                
-            if($groups)
-            {
-                while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
-                {
-                    $ownerGroupId = $group['ownerGroup'];
+    // function getCheckGroupsInfo($dbh, $componentsTable, $groupsTable)
+    // {
+    //         $checkGroups = array();
+    //         $groups = $dbh->query("SELECT DISTINCT ownerGroup FROM $componentsTable;");                
+    //         if($groups)
+    //         {
+    //             while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
+    //             {
+    //                 $ownerGroupId = $group['ownerGroup'];
 
-                    $groupNameResults = $dbh->query("SELECT componentClass FROM   $groupsTable where id=$ownerGroupId;");     
-                    if($groupNameResults)
-                    {
-                        $groupName= $groupNameResults->fetchColumn();
+    //                 $groupNameResults = $dbh->query("SELECT componentClass FROM   $groupsTable where id=$ownerGroupId;");     
+    //                 if($groupNameResults)
+    //                 {
+    //                     $groupName= $groupNameResults->fetchColumn();
 
-                        // ok components
-                        $oks = 0;
-                        $okResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='OK';");       
-                        if( $okResults)
-                        {
-                            $oks = $okResults->fetchColumn();
-                        }
+    //                     // ok components
+    //                     $oks = 0;
+    //                     $okResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='OK';");       
+    //                     if( $okResults)
+    //                     {
+    //                         $oks = $okResults->fetchColumn();
+    //                     }
 
-                         // Error components
-                         $errors = 0;
-                         $errorResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Error';");       
-                         if( $errorResults)
-                         {
-                             $errors = $errorResults->fetchColumn();
-                         }
+    //                      // Error components
+    //                      $errors = 0;
+    //                      $errorResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Error';");       
+    //                      if( $errorResults)
+    //                      {
+    //                          $errors = $errorResults->fetchColumn();
+    //                      }
 
-                        // Warning components
-                        $warnings = 0;
-                        $warningResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Warning';");       
-                        if( $warningResults)
-                        {
-                            $warnings = $warningResults->fetchColumn();
-                        }
+    //                     // Warning components
+    //                     $warnings = 0;
+    //                     $warningResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='Warning';");       
+    //                     if( $warningResults)
+    //                     {
+    //                         $warnings = $warningResults->fetchColumn();
+    //                     }
 
-                         // Warning components
-                         $noMatches = 0;
-                         $nomatchResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='No Match';");       
-                         if( $nomatchResults)
-                         {
-                             $noMatches = $nomatchResults->fetchColumn();
-                         }    
+    //                      // Warning components
+    //                      $noMatches = 0;
+    //                      $nomatchResults = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='No Match';");       
+    //                      if( $nomatchResults)
+    //                      {
+    //                          $noMatches = $nomatchResults->fetchColumn();
+    //                      }    
                          
-                         $undefinedItem = 0;
-                         $results = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='undefined';");     
-                         if($results)
-                         {
-                             $undefinedItem = $results->fetchColumn();
-                         }
-                         // keep track of check groups and corresponding stastics
-                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem);
-                    }
-                }              
-            }
+    //                      $undefinedItem = 0;
+    //                      $results = $dbh->query("SELECT COUNT(*) FROM $componentsTable where ownerGroup= $ownerGroupId AND status='undefined';");     
+    //                      if($results)
+    //                      {
+    //                          $undefinedItem = $results->fetchColumn();
+    //                      }
+    //                      // keep track of check groups and corresponding stastics
+    //                      $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem);
+    //                 }
+    //             }              
+    //         }
 
-            return $checkGroups;
-    }
+    //         return $checkGroups;
+    // }
 
-    function writeSourceAComplianceCheckStatistics()
+    function writeSourceAComplianceCheckStatisticsToOriginalDB()
     {
         global $projectName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
@@ -522,13 +521,13 @@
         }   
    }
 
-   function writeSourceBComplianceCheckStatistics()
+   function writeSourceBComplianceCheckStatisticsToOriginalDB()
     {
         global $projectName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
@@ -568,14 +567,14 @@
         }   
    }    
     
-    function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
+    function writeNotMatchedComponentsToOriginalDB($notMatchedComponents,                                              
                                             $tableName,
                                             $projectName)
     {        
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = "../Projects/".$projectName."/".$projectName."_original.db";
             //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 

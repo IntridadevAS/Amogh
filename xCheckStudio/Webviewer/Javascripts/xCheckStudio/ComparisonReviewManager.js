@@ -387,46 +387,6 @@ function ComparisonReviewManager(comparisonCheckManager,
             return;
         }
 
-        //var classWiseComponents = this.SourceAProperties[currentSheetName];
-        //var properties = [];
-
-        // if (Object.keys(classWiseComponents).length > 0 &&
-        //     viewerContainerData.childElementCount > 1) {
-        //    // if (viewerContainerData.childElementCount > 1) //{
-            
-        //         for (var componentId in classWiseComponents) 
-        //         {
-        //             if (viewerContainerData.children[jsGridTbodyTableIndex].getElementsByTagName("td")[0].innerText === subComponentClass) 
-        //             {
-                    
-        //                 if (CurrentReviewTableRow.cells[2].innerText === "No Match") 
-        //                 {
-        //                     if (viewerContainer === "viewerContainer1" && CurrentReviewTableRow.cells[0].innerText === "") 
-        //                     {
-        //                         if(this.SelectedComponentRowFromSheetA)
-        //                         {
-        //                             this.unhighlightSelectedSheetRow(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
-        //                         }
-        //                         return;
-        //                     }
-        //                     else if (viewerContainer === "viewerContainer2" && CurrentReviewTableRow.cells[1].innerText === "") 
-        //                     {
-        //                         if(this.SelectedComponentRowFromSheetB)
-        //                         {
-        //                             this.unhighlightSelectedSheetRow(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-        //                         }
-
-        //                         return;
-        //                     }
-        //                 }
-                        
-        //                 this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
-        //                 return;
-        //             }
-        //         }
-        //     //}
-        // }
-
         if (classWiseComponents !== {}) 
         {           
             var componentProperties;
@@ -849,34 +809,9 @@ function ComparisonReviewManager(comparisonCheckManager,
             $.contextMenu({
                 selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
                 callback: function (key, options) {
-                    // var item = $(this).data("JSGridItem");
-                    var selectedRow = this;
-                    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+                    // var item = $(this).data("JSGridItem")
                     if (key === "accept") {
-                        if(this[0].nodeName == "BUTTON") {
-                            typeOfRow = selectedRow[0].offsetParent.id;
-                            if(typeOfRow == "ComparisonMainReviewTbody") {
-                                _this.updateStatusOfCategory(this[0].innerHTML, _this);
-                            }
-                            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-                                _this.complianceA.updateStatusOfCategory(this[0].innerHTML);
-                             }
-                             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-                                _this.complianceB.updateStatusOfCategory(this[0].innerHTML);
-                             }  
-                        }
-                        else {
-                             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                _this.updateStatus(selectedRow, _this);
-                             }
-                             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
-                                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
-                             }
-                             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
-                             }                             
-                        }
-                        
+                        _this.onAcceptClick(this, _this);
                     }
                     else if (key === "transpose") {
                     }
@@ -886,6 +821,24 @@ function ComparisonReviewManager(comparisonCheckManager,
                 items: {
                     "accept": {
                         name: "Accept",
+                        disabled: function()
+                        {
+                            var selectedRow = this;
+                            var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+                            if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
+                                selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+                                    return true;
+                                }
+                            }
+                            else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
+                            typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
+                                selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+                                    return true;
+                                }
+                            }                           
+                        },
                     },
                     "transpose": {
                         name: "Transpose",
@@ -907,6 +860,35 @@ function ComparisonReviewManager(comparisonCheckManager,
         container.style.padding = "0";
 
     };
+
+
+    ComparisonReviewManager.prototype.onAcceptClick = function(rowClicked, _this) {
+        var selectedRow = rowClicked;
+        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        if(rowClicked[0].nodeName == "BUTTON") {
+            typeOfRow = selectedRow[0].offsetParent.id;
+            if(typeOfRow == "ComparisonMainReviewTbody") {
+                _this.updateStatusOfCategory(rowClicked[0].innerHTML, _this);
+            }
+            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+                _this.complianceA.updateStatusOfCategory(rowClicked[0].innerHTML);
+             }
+             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+                _this.complianceB.updateStatusOfCategory(rowClicked[0].innerHTML);
+             }  
+        }
+        else {
+             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                _this.updateStatus(selectedRow, _this);
+             }
+             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
+                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
+             }
+             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
+             }                             
+        }      
+    }
 
     ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
@@ -938,7 +920,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED") {
+            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED" &&  _this.SelectedComponentRow.cells[2].innerHTML !== 'OK') {
                 selectedRow[0].cells[4].innerHTML = "ACCEPTED";
                 var cell = 0;
                 for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
@@ -984,6 +966,68 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
     }
+
+    ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
+        var tabletoupdate = tabletoupdate;
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                data: {'tabletoupdate': tabletoupdate},
+                success: function (msg) {
+                    $.ajax({
+                        url: 'PHP/CheckResultsReader.php',
+                        type: "POST",
+                        async: true,
+                        data: {},
+                        success: function (msg) {
+                            $("#ComparisonMainReviewCell").empty();
+                            $("#ComparisonDetailedReviewCell").empty();
+                            var checkResults = JSON.parse(msg);
+        
+                            var comparisonCheckGroups = undefined;
+                            var sourceAComplianceCheckGroups = undefined;
+                            var sourceBComplianceCheckGroups = undefined;
+        
+                            for (var key in checkResults) {
+                                if (!checkResults.hasOwnProperty(key)) {
+                                    continue;
+                                }
+        
+        
+                                if (key == 'Comparison') {
+                                    comparisonCheckGroups = new CheckGroups();
+                                    comparisonCheckGroups.restore(checkResults[key], false);
+                                }
+                                else if (key == 'SourceACompliance') {
+                                    sourceAComplianceCheckGroups = new CheckGroups();
+                                    sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                                else if (key == 'SourceBCompliance') {
+                                    sourceBComplianceCheckGroups = new CheckGroups();
+                                    sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                            }
+        
+                            // populate check results
+                            populateCheckResults(comparisonCheckGroups,
+                                sourceAComplianceCheckGroups,
+                                sourceBComplianceCheckGroups);
+        
+                            // load analytics data
+                            document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                        }
+                    });        
+                }
+            });
+        }
+        catch(error) {
+            console.log(error);
+        }   
+    }
+
+    
 
     ComparisonReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
         var ComparisonMainReviewCell = document.getElementById("ComparisonMainReviewCell");

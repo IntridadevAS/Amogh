@@ -3731,6 +3731,35 @@ div {
   line-height: 2;
 }
 
+.module2 .group3 .white .buttonset {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 80px;
+  position            : absolute;
+  left                : 450px; 
+  margin              : 0;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  text-align: center;
+  line-height: 2;
+}
+.module2 .group3 .white .buttonreset {
+  background-color    : rgba(255,255,255,0.0);
+  top                 : 0px;
+  height              : 30px;
+  width               : 80px;
+  position            : absolute;
+  left                : 535px; 
+  margin              : 0;
+  -ms-transform       : rotate(0deg); /* IE 9 */
+  -webkit-transform   : rotate(0deg); /* Chrome, Safari, Opera */
+  transform           : rotate(0deg);
+  text-align: center;
+  line-height: 2;
+}
+
 .module2 .group3 {
   background-color    : rgba(255,255,255,0.0);
   top                 : 112px;
