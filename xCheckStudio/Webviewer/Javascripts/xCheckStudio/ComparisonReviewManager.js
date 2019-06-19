@@ -984,6 +984,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                         success: function (msg) {
                             $("#ComparisonMainReviewCell").empty();
                             $("#ComparisonDetailedReviewCell").empty();
+                            $("#SourceBComplianceMainReviewCell").empty();
+                            $("#SourceBComplianceDetailedReviewCell").empty();
+                            $("#SourceAComplianceMainReviewCell").empty();
+                            $("#SourceAComplianceDetailedReviewCell").empty();
                             var checkResults = JSON.parse(msg);
         
                             var comparisonCheckGroups = undefined;

@@ -575,6 +575,71 @@ function ComplianceReviewManager(complianceCheckManager,
         }
     }
 
+    ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
+        var tabletoupdate = tabletoupdate;
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                data: {'tabletoupdate': tabletoupdate},
+                success: function (msg) {
+                    $.ajax({
+                        url: 'PHP/CheckResultsReader.php',
+                        type: "POST",
+                        async: true,
+                        data: {},
+                        success: function (msg) {
+                                $("#SourceAComplianceMainReviewCell").empty();
+                                $("#SourceAComplianceDetailedReviewCell").empty();
+                                $("#SourceBComplianceMainReviewCell").empty();
+                                $("#SourceBComplianceDetailedReviewCell").empty();
+                                $("#ComparisonMainReviewCell").empty();
+                                $("#ComparisonDetailedReviewCell").empty();
+
+                            var checkResults = JSON.parse(msg);
+        
+                            var comparisonCheckGroups = undefined;
+                            var sourceAComplianceCheckGroups = undefined;
+                            var sourceBComplianceCheckGroups = undefined;
+        
+                            for (var key in checkResults) {
+                                if (!checkResults.hasOwnProperty(key)) {
+                                    continue;
+                                }
+        
+        
+                                if (key == 'Comparison') {
+                                    comparisonCheckGroups = new CheckGroups();
+                                    comparisonCheckGroups.restore(checkResults[key], false);
+                                }
+                                else if (key == 'SourceACompliance') {
+                                    sourceAComplianceCheckGroups = new CheckGroups();
+                                    sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                                else if (key == 'SourceBCompliance') {
+                                    sourceBComplianceCheckGroups = new CheckGroups();
+                                    sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                                }
+                            }
+        
+                            // populate check results
+                            populateCheckResults(comparisonCheckGroups,
+                                sourceAComplianceCheckGroups,
+                                sourceBComplianceCheckGroups);
+        
+                            // load analytics data
+                            document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                        }
+                    });        
+                }
+            });
+        }
+        catch(error) {
+            console.log(error);
+        }   
+    }
+
     ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {
         if (this.SelectedComponentRow === currentReviewTableRow) {
             return;
