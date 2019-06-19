@@ -826,13 +826,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                             var selectedRow = this;
                             var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
                             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK") {
+                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
+                                selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
                                     return true;
                                 }
                             }
                             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
                             typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK") {
+                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
+                                selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
                                     return true;
                                 }
                             }                           
