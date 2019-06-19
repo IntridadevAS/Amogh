@@ -40,11 +40,23 @@ else if($tabletoupdate == "ComplianceADetailedReview" || $tabletoupdate == "Comp
 else if($tabletoupdate == "categoryComplianceA" || $tabletoupdate == "categoryComplianceB") {
     updateCategoryComplianceStatusInReview();
 }
-else if($tabletoupdate == "acceptAllCategoriesFromTab") {
+else if($tabletoupdate == "acceptAllCategoriesFromComparisonTab") {
     updateStatusOfAllComparisonCategories();
 }
-else if($tabletoupdate == "rejectAllCategoriesFromTab") {
+else if($tabletoupdate == "rejectAllCategoriesFromComparisonTab") {
     updateStatusOfAllComparisonCategoriesToOriginal();
+}
+else if($tabletoupdate == "acceptAllCategoriesFromComplianceATab") {
+    updateStatusOfAllComplianceACategories();
+}
+else if($tabletoupdate == "acceptAllCategoriesFromComplianceBTab") {
+    updateStatusOfAllComplianceBCategories();
+}
+else if($tabletoupdate == "rejectAllCategoriesFromComplianceATab") {
+    updateStatusOfAllComplianceACategoriesToOriginal();
+}
+else if($tabletoupdate == "rejectAllCategoriesFromComplianceBTab") {
+    updateStatusOfAllComplianceBCategoriesToOriginal();
 }
 
 function updateComponentComparisonStatusInReview() {
@@ -313,6 +325,48 @@ function updateStatusOfAllComparisonCategories() {
     $dbh = null;
 }
 
+function updateStatusOfAllComplianceACategories() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $dbh->commit();
+    $dbh = null;
+}
+
+function updateStatusOfAllComplianceBCategories() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $dbh->commit();
+    $dbh = null;
+}
+
 function updateStatusOfAllComparisonCategoriesToOriginal() {
     global $projectName;
 
@@ -359,6 +413,126 @@ function updateStatusOfAllComparisonCategoriesToOriginal() {
             var_dump($allProps[$propCount]['id'].'_'.$comp1['id']);
             if($allProps[$propCount]['id'] == $comp1['id']) {
                 $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE id=?');
+                $command->execute(array($orgSeverity, $comp1['id']));
+            }
+        }
+        $propCount++;
+    }
+
+    $dbh->commit();
+    $dbh1->commit();
+    $dbh = null;
+    $dbh1 = null;
+}
+
+function updateStatusOfAllComplianceACategoriesToOriginal() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
+    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+    $dbh1->beginTransaction();
+
+    $components = $dbh->query("SELECT * FROM SourceAComplianceCheckComponents");
+    $originalComp = $dbh1->query("SELECT * FROM SourceAComplianceCheckComponents");
+    $allComp = $originalComp->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($allComp);
+    $compCount = 0;
+    if($components) 
+    {            
+        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
+        {
+                if($compCount < count($allComp)) {
+                    $orgcomp = $allComp[$compCount]['status'];
+                    var_dump($orgcomp);
+                    if($allComp[$compCount]['id'] == $comp['id']) {
+                        $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
+                        $command->execute(array($orgcomp, $comp['id']));
+                    }
+                }
+                $compCount++;
+        }
+    }
+
+    $componentsprops = $dbh->query("SELECT * FROM SourceAComplianceCheckProperties");
+    $originalCompprops = $dbh1->query("SELECT * FROM SourceAComplianceCheckProperties");
+    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
+    var_dump(count($allProps));
+    $propCount = 0;
+    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
+    { 
+        if($propCount < count($allProps)) {
+            $orgSeverity = $allProps[$propCount]['severity']; 
+            var_dump($allProps[$propCount]['id'].'_'.$comp1['id']);
+            if($allProps[$propCount]['id'] == $comp1['id']) {
+                $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE id=?');
+                $command->execute(array($orgSeverity, $comp1['id']));
+            }
+        }
+        $propCount++;
+    }
+
+    $dbh->commit();
+    $dbh1->commit();
+    $dbh = null;
+    $dbh1 = null;
+}
+
+function updateStatusOfAllComplianceBCategoriesToOriginal() {
+    global $projectName;
+
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
+    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
+
+    $status = 'ACCEPTED';
+    $dontChangeOk = 'OK';
+
+    $dbh->beginTransaction();
+    $dbh1->beginTransaction();
+
+    $components = $dbh->query("SELECT * FROM SourceBComplianceCheckComponents");
+    $originalComp = $dbh1->query("SELECT * FROM SourceBComplianceCheckComponents");
+    $allComp = $originalComp->fetchAll(PDO::FETCH_ASSOC);
+    var_dump($allComp);
+    $compCount = 0;
+    if($components) 
+    {            
+        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
+        {
+                if($compCount < count($allComp)) {
+                    $orgcomp = $allComp[$compCount]['status'];
+                    var_dump($orgcomp);
+                    if($allComp[$compCount]['id'] == $comp['id']) {
+                        $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
+                        $command->execute(array($orgcomp, $comp['id']));
+                    }
+                }
+                $compCount++;
+        }
+    }
+
+    $componentsprops = $dbh->query("SELECT * FROM SourceBComplianceCheckProperties");
+    $originalCompprops = $dbh1->query("SELECT * FROM SourceBComplianceCheckProperties");
+    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
+    var_dump(count($allProps));
+    $propCount = 0;
+    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
+    { 
+        if($propCount < count($allProps)) {
+            $orgSeverity = $allProps[$propCount]['severity']; 
+            var_dump($allProps[$propCount]['id'].'_'.$comp1['id']);
+            if($allProps[$propCount]['id'] == $comp1['id']) {
+                $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE id=?');
                 $command->execute(array($orgSeverity, $comp1['id']));
             }
         }

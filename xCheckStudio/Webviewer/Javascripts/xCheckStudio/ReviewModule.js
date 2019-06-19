@@ -29,26 +29,26 @@ function setProjectName() {
 function acceptAllCategories() {
     var tab = this.currentlyOpenedTab;
     if(this.currentlyOpenedTab == "ComparisonTabPage") {
-        comparisonReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromTab');
+        comparisonReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComparisonTab');
     }
     else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
-
+        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceATab');
     }
     else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
-
+        sourceBComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceBTab');
     }
 }
 
 function resetAllCategories() {
     var tab = this.currentlyOpenedTab;
     if(this.currentlyOpenedTab == "ComparisonTabPage") {
-        comparisonReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromTab');
+        comparisonReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComparisonTab');
     }
     else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
-
+        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceATab');
     }
     else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
-
+        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceBTab');
     }
 }
 
