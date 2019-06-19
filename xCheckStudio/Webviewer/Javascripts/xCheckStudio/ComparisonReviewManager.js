@@ -809,34 +809,9 @@ function ComparisonReviewManager(comparisonCheckManager,
             $.contextMenu({
                 selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
                 callback: function (key, options) {
-                    // var item = $(this).data("JSGridItem");
-                    var selectedRow = this;
-                    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+                    // var item = $(this).data("JSGridItem")
                     if (key === "accept") {
-                        if(this[0].nodeName == "BUTTON") {
-                            typeOfRow = selectedRow[0].offsetParent.id;
-                            if(typeOfRow == "ComparisonMainReviewTbody") {
-                                _this.updateStatusOfCategory(this[0].innerHTML, _this);
-                            }
-                            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-                                _this.complianceA.updateStatusOfCategory(this[0].innerHTML);
-                             }
-                             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-                                _this.complianceB.updateStatusOfCategory(this[0].innerHTML);
-                             }  
-                        }
-                        else {
-                             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                _this.updateStatus(selectedRow, _this);
-                             }
-                             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
-                                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
-                             }
-                             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
-                             }                             
-                        }         
-
+                        _this.onAcceptClick(this, _this);
                     }
                     else if (key === "transpose") {
                     }
@@ -846,6 +821,22 @@ function ComparisonReviewManager(comparisonCheckManager,
                 items: {
                     "accept": {
                         name: "Accept",
+                        disabled: function()
+                        {
+                            var selectedRow = this;
+                            var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+                            if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK") {
+                                    return true;
+                                }
+                            }
+                            else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
+                            typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK") {
+                                    return true;
+                                }
+                            }                           
+                        },
                     },
                     "transpose": {
                         name: "Transpose",
@@ -867,6 +858,35 @@ function ComparisonReviewManager(comparisonCheckManager,
         container.style.padding = "0";
 
     };
+
+
+    ComparisonReviewManager.prototype.onAcceptClick = function(rowClicked, _this) {
+        var selectedRow = rowClicked;
+        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        if(rowClicked[0].nodeName == "BUTTON") {
+            typeOfRow = selectedRow[0].offsetParent.id;
+            if(typeOfRow == "ComparisonMainReviewTbody") {
+                _this.updateStatusOfCategory(rowClicked[0].innerHTML, _this);
+            }
+            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+                _this.complianceA.updateStatusOfCategory(rowClicked[0].innerHTML);
+             }
+             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+                _this.complianceB.updateStatusOfCategory(rowClicked[0].innerHTML);
+             }  
+        }
+        else {
+             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                _this.updateStatus(selectedRow, _this);
+             }
+             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
+                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
+             }
+             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
+             }                             
+        }      
+    }
 
     ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
@@ -898,7 +918,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED") {
+            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED" &&  _this.SelectedComponentRow.cells[2].innerHTML !== 'OK') {
                 selectedRow[0].cells[4].innerHTML = "ACCEPTED";
                 var cell = 0;
                 for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
