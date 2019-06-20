@@ -26,7 +26,8 @@
             $command = 'CREATE TABLE '.$checkGroupsTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 componentClass TEXT NOT NULL,
-                componentCount Integer)'; 
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
             $dbh->exec($command);  
 
             // CheckComponents table
@@ -68,9 +69,18 @@
 
                 $componentClass = $checkComponentGroup->ComponentClass;
                 $componentCount =  count(  $checkComponentGroup->Components );
+                $categoryStatus = 'OK';
 
-                $insertGroupQuery = 'INSERT INTO '.$checkGroupsTable.'(componentClass, componentCount) VALUES(?,?) ';                                        
-                $groupValues = array($componentClass,  $componentCount);
+                foreach($checkComponentGroup->Components as $key => $checkComponent)
+                { 
+                    if($checkComponent->Status !== 'OK') {
+                        $categoryStatus = 'UNACCEPTED';
+                        break;
+                    }
+                }
+
+                $insertGroupQuery = 'INSERT INTO '.$checkGroupsTable.'(componentClass, componentCount, categoryStatus) VALUES(?,?,?) ';                                        
+                $groupValues = array($componentClass,  $componentCount, $categoryStatus);
 
                 $insertGroupStmt = $dbh->prepare($insertGroupQuery);
                 $insertGroupStmt->execute($groupValues);  
@@ -175,7 +185,8 @@
             $command = 'CREATE TABLE ComparisonCheckGroups(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         componentClass TEXT NOT NULL,
-                        componentCount Integer)'; 
+                        componentCount Integer, 
+                        categoryStatus TEXT NOT NULL)'; 
             $dbh->exec($command);    
 
             // ComparisonCheckComponents table
@@ -220,9 +231,24 @@
 
                 $componentClass = $checkComponentGroup->ComponentClass;
                 $componentCount =  count(  $checkComponentGroup->Components );
+                $categoryStatus = 'OK';
+                // for($component = 0; $component < $checkComponentGroup->Components; $component++) {
+                //     if($checkComponentGroup->Components[$component]->$s !== 'OK') {
+                //         checkGroup.categoryStatus = "UNACCEPTED";
+                //         break;
+                //     }
+                // }
 
-                $insertGroupQuery = 'INSERT INTO ComparisonCheckGroups(componentClass, componentCount) VALUES(?,?) ';                                        
-                $groupValues = array($componentClass,  $componentCount);
+                foreach($checkComponentGroup->Components as $key => $checkComponent)
+                { 
+                    if($checkComponent->Status !== 'OK') {
+                        $categoryStatus = 'UNACCEPTED';
+                        break;
+                    }
+                }
+
+                $insertGroupQuery = 'INSERT INTO ComparisonCheckGroups(componentClass, componentCount, categoryStatus) VALUES(?,?,?) ';                                        
+                $groupValues = array($componentClass,  $componentCount, $categoryStatus);
 
                 $insertGroupStmt = $dbh->prepare($insertGroupQuery);
                 $insertGroupStmt->execute($groupValues);  

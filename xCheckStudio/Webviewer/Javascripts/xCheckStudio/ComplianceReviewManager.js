@@ -15,7 +15,6 @@ function ComplianceReviewManager(complianceCheckManager,
     this.ViewerData = viewerData;
 
     this.SourceComponents = sourceComponents;
-    this.statusChangedToAccept;
 
     this.ReviewModuleViewerInterface;
 
@@ -101,7 +100,10 @@ function ComplianceReviewManager(complianceCheckManager,
                     continue;
                 }
 
-                var btn = document.createElement("BUTTON");       // Create a <button> element
+                var btn = document.createElement("BUTTON");  
+                var att = document.createAttribute("groupId");
+                att.value = groupId;
+                btn.setAttributeNode(att);     // Create a <button> element
                 btn.className = "collapsible";
                 var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
                 btn.appendChild(t);
@@ -113,7 +115,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 parentTable.appendChild(div);
 
                 var columnHeaders = [];
-                for (var i = 0; i < 4; i++) {
+                for (var i = 0; i < 5; i++) {
                     columnHeader = {};
                     var title;
                     if (i === 0) {
@@ -141,6 +143,11 @@ function ComplianceReviewManager(complianceCheckManager,
                         name = "ID"
                         width = "10";
                     }
+                    else if (i === 4) {
+                        title = "groupId";
+                        name = "groupId"
+                        width = "10";
+                    }
 
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
@@ -164,6 +171,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     tableRowContent[columnHeaders[1].name] = component.Status;
                     tableRowContent[columnHeaders[2].name] = component.SourceANodeId;
                     tableRowContent[columnHeaders[3].name] = component.ID;
+                    tableRowContent[columnHeaders[4].name] = groupId;
 
                     tableData.push(tableRowContent);
 
@@ -350,7 +358,7 @@ function ComplianceReviewManager(complianceCheckManager,
         { 
             var tableToUpdate;
             var componentId =  Number(selectedRow[0].cells[3].innerText)
-            var groupId = _this.findGroupId(selectedRow[0]);
+            var groupId = Number(selectedRow[0].cells[4].innerText)
             if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
                 tableToUpdate = "complianceSourceA";
             }
@@ -371,9 +379,13 @@ function ComplianceReviewManager(complianceCheckManager,
                             selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                         }
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
-                        _this.statusChangedToAccept =  true; 
+                        var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                        component.status = "ACCEPTED";
+                        for (var propertyId in component.properties) {
+                            property = component.properties[propertyId];
+                            property.Severity = 'ACCEPTED';
+                        }
                         _this.populateDetailedReviewTable(selectedRow[0]);
-                        _this.statusChangedToAccept =  false; 
                     }
                 });   
             }
@@ -394,7 +406,8 @@ function ComplianceReviewManager(complianceCheckManager,
                     tableToUpdate = "ComplianceBDetailedReview";
                 }
                 else { return; }
-                var componentId = this.findComponentId(this.SelectedComponentRow);
+                var componentId = this.SelectedComponentRow.cells[3].innerHTML;
+                var groupId = this.SelectedComponentRow.cells[4].innerHTML;
                 try{
                     $.ajax({
                         url: 'PHP/updateResultsStatusToAccept.php',
@@ -403,7 +416,6 @@ function ComplianceReviewManager(complianceCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[1].innerHTML;
-                            var groupId = _this.findGroupId(_this.SelectedComponentRow);
                             if(!originalstatus.includes("*")) {
                                 var changedStatus = originalstatus + "*";
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
@@ -456,27 +468,28 @@ function ComplianceReviewManager(complianceCheckManager,
         }
     }
 
-    ComplianceReviewManager.prototype.updateStatusOfCategory = function(groupName) {
+    ComplianceReviewManager.prototype.updateStatusOfCategory = function(button) {
         _this = this;
-        outer_loop:
-        for (var componentsGroupID in _this.ComplianceCheckManager) {
+        // outer_loop:
+        // for (var componentsGroupID in _this.ComplianceCheckManager) {
 
-            // get the componentgroupd corresponding to selected component 
-            var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-            var componentsGroup = undefined;
-            for(var groupId in  componentsGroupList)
-            {               
-                if ( componentsGroupList[groupId].ComponentClass != groupName) {
-                    continue;
-                }
-                else {
-                    componentsGroup = componentsGroupList[groupId];
-                    break outer_loop;
-                }
-            }
-        }
+        //     // get the componentgroupd corresponding to selected component 
+        //     var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
+        //     var componentsGroup = undefined;
+        //     for(var groupId in  componentsGroupList)
+        //     {               
+        //         if ( componentsGroupList[groupId].ComponentClass != groupName) {
+        //             continue;
+        //         }
+        //         else {
+        //             componentsGroup = componentsGroupList[groupId];
+        //             break outer_loop;
+        //         }
+        //     }
+        // }
+        var groupId = button.attributes[0].value;
 
-        var categorydiv = document.getElementById(groupName + "_" + this.MainReviewTableContainer);
+        var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
         var tableToUpdate;
         if(this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
@@ -498,12 +511,18 @@ function ComplianceReviewManager(complianceCheckManager,
                             for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                                 categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                             }
-                            for(var j = 0; j < categorydiv.children[1].children[0].children[0].children.length; j++) {
-                                selectedRow = categorydiv.children[1].children[0].children[0].children[j];
-                                _this.statusChangedToAccept =  true; 
+                                var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                                compgroup.categoryStatus = "ACCEPTED";
+                                for(var compId in compgroup["CheckComponents"]) {
+                                    var component = compgroup["CheckComponents"][compId];
+                                    component.status = "ACCEPTED";
+                                    for (var propertyId in component.properties) {
+                                        property = component.properties[propertyId];
+                                        property.Severity = 'ACCEPTED';
+                                    }
+                                }
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
                                 _this.populateDetailedReviewTable(selectedRow);
-                                _this.statusChangedToAccept =  false; 
-                            }
                         }
                     }
                 }
@@ -511,68 +530,6 @@ function ComplianceReviewManager(complianceCheckManager,
         }
         catch(error) {
             console.log(error);}  
-    }
-
-    ComplianceReviewManager.prototype.findComponentId = function(row) {
-        var reviewTableId = this.getReviewTableId(row);
-        var tempString = "_" + this.MainReviewTableContainer;
-        reviewTableId = reviewTableId.replace(tempString, "");
-
-        var componentId =  Number(row.cells[3].innerText)
-        for (var componentsGroupID in this.ComplianceCheckManager) {
-
-            // get the componentgroupd corresponding to selected component 
-            var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-            var componentsGroup = undefined;
-            for(var groupId in  componentsGroupList)
-            {               
-                if ( componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
-                    continue;
-                }
-
-                componentsGroup = componentsGroupList[groupId];
-            }
-            if (!componentsGroup) {
-                continue;
-            }
-
-            if (!(componentId in componentsGroup.CheckComponents)) {
-                continue;
-            }
-            else{
-                return componentId;         
-            }
-        }
-    }
-
-    ComplianceReviewManager.prototype.findGroupId = function(row) {
-        var reviewTableId = this.getReviewTableId(row);
-        var tempString = "_" + this.MainReviewTableContainer;
-        reviewTableId = reviewTableId.replace(tempString, "");
-
-        for (var componentsGroupID in this.ComplianceCheckManager) {
-
-            // get the componentgroupd corresponding to selected component 
-            var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-            var componentsGroup = undefined;
-            for(var groupId in  componentsGroupList)
-            {               
-                if ( componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
-                    continue;
-                }
-                else {
-                    componentsGroup = componentsGroupList[groupId];
-                    break;
-                }
-
-            }
-            if (!componentsGroup) {
-                continue;
-            }
-            else{
-                return groupId;         
-            }
-        }
     }
 
     ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
@@ -1252,12 +1209,6 @@ function ComplianceReviewManager(complianceCheckManager,
                     property = component.properties[propertyId];
                 // for (var j = 0; j < component.CheckProperties.length; j++) {
                 //     property = component.CheckProperties[j];
-
-                    if(this.statusChangedToAccept == true) {
-                        if(property.Severity !== "OK") {
-                            property.Severity = 'ACCEPTED';
-                        }
-                    }
                     this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
 
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);

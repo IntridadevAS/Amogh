@@ -10,19 +10,20 @@ function CheckGroups()
             {
               var checkGroupData = checkResult[id];
 
-              var checkGroup = new CheckGroup(checkGroupData.id, checkGroupData.componentClass);
+              var checkGroup = new CheckGroup(checkGroupData.id, checkGroupData.componentClass, checkGroupData.categoryStatus);
               checkGroup.restore(checkGroupData.components, isCompliance);
 
               this.CheckGroups[id] = checkGroup;
             }
-          }       
+        }       
     }
 }
 
-function CheckGroup(id, componentClass) 
+function CheckGroup(id, componentClass, categoryStatus) 
 {
     this.ID = id;
     this.ComponentClass = componentClass;
+    this.categoryStatus = categoryStatus;
 
     this.CheckComponents = {};
 

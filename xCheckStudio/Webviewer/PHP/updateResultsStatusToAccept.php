@@ -21,42 +21,63 @@ else
 
 $tabletoupdate = $_POST['tabletoupdate'];
 
-
-if($tabletoupdate == "comparison") {
-    updateComponentComparisonStatusInReview();
-}
-else if($tabletoupdate == "comparisonDetailed") {
-    updatePropertyComparisonStatusInReview();
-}
-else if($tabletoupdate == "category") {
-    updateCategoryComparisonStatusInReview();
-}
-else if($tabletoupdate == "complianceSourceA" || $tabletoupdate == "complianceSourceB") {
-    updateComponentComplianceStatusInReview();
-}
-else if($tabletoupdate == "ComplianceADetailedReview" || $tabletoupdate == "ComplianceBDetailedReview") {
-    updatePropertyComplianceStatusInReview();
-}
-else if($tabletoupdate == "categoryComplianceA" || $tabletoupdate == "categoryComplianceB") {
-    updateCategoryComplianceStatusInReview();
-}
-else if($tabletoupdate == "acceptAllCategoriesFromComparisonTab") {
-    updateStatusOfAllComparisonCategories();
-}
-else if($tabletoupdate == "rejectAllCategoriesFromComparisonTab") {
-    updateStatusOfAllComparisonCategoriesToOriginal();
-}
-else if($tabletoupdate == "acceptAllCategoriesFromComplianceATab") {
-    updateStatusOfAllComplianceACategories();
-}
-else if($tabletoupdate == "acceptAllCategoriesFromComplianceBTab") {
-    updateStatusOfAllComplianceBCategories();
-}
-else if($tabletoupdate == "rejectAllCategoriesFromComplianceATab") {
-    updateStatusOfAllComplianceACategoriesToOriginal();
-}
-else if($tabletoupdate == "rejectAllCategoriesFromComplianceBTab") {
-    updateStatusOfAllComplianceBCategoriesToOriginal();
+switch ($tabletoupdate) {
+    case "comparison":
+        updateComponentComparisonStatusInReview();
+        break;
+    case "comparisonDetailed":
+        updatePropertyComparisonStatusInReview();
+        break;
+    case "category":
+        updateCategoryComparisonStatusInReview();
+        break;
+    case "complianceSourceA":
+        updateComponentComplianceStatusInReview()();
+        break;
+    case "complianceSourceB":
+        updateComponentComplianceStatusInReview()();
+        break;
+    case "ComplianceADetailedReview":
+        updatePropertyComplianceStatusInReview();
+        break;
+    case "ComplianceBDetailedReview":
+        updatePropertyComplianceStatusInReview();
+        break;
+    case "categoryComplianceA":
+        updateCategoryComplianceStatusInReview();
+        break;
+    case "categoryComplianceB":
+        updateCategoryComplianceStatusInReview();
+        break;
+    case "acceptAllCategoriesFromComparisonTab":
+        updateStatusOfAllComparisonCategories();
+        break;
+    case "acceptAllCategoriesFromComplianceATab":
+        updateStatusOfAllComplianceACategories();
+        break;
+    case "acceptAllCategoriesFromComplianceBTab":
+        updateStatusOfAllComplianceBCategories();
+        break;
+    case "rejectAllCategoriesFromComparisonTab":
+        updateStatusOfAllComparisonCategoriesToOriginal();
+        break;
+    case "rejectAllCategoriesFromComplianceATab":
+        updateStatusOfAllComplianceACategoriesToOriginal();
+        break;
+    case "rejectAllCategoriesFromComplianceBTab":
+        updateStatusOfAllComplianceBCategoriesToOriginal();
+        break;
+    case "rejectComponentFromComparisonTab":
+        rejectAcceptStatusComparisonComponent();
+        break;
+    case "rejectPropertyFromComparisonTab":
+        rejectAcceptStatusComparisonProperty();
+        break;
+    case "rejectCategoryFromComparisonTab":
+        rejectAcceptStatusComparisonCategory();
+        break;
+    default:
+        break;
 }
 
 function updateComponentComparisonStatusInReview() {
@@ -151,6 +172,10 @@ function updateCategoryComparisonStatusInReview() {
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
+    $command->execute(array($status, $groupid, $dontChangeOk));
+
 
     $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE ownerGroup=? AND status!=?');
     $command->execute(array($status, $groupid, $dontChangeOk));
@@ -276,11 +301,15 @@ function updateCategoryComplianceStatusInReview() {
 
     if($tabletoupdate == "categoryComplianceA") {
         $componentTableName = 'SourceAComplianceCheckComponents';
-        $propertiesTableName = 'SourceAComplianceCheckProperties';  
+        $propertiesTableName = 'SourceAComplianceCheckProperties'; 
+        $command = $dbh->prepare('UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
+        $command->execute(array($status, $groupid, $dontChangeOk)); 
     }
     else if($tabletoupdate == "categoryComplianceB") {
         $componentTableName = 'SourceBComplianceCheckComponents';
-        $propertiesTableName = 'SourceBComplianceCheckProperties'; 
+        $propertiesTableName = 'SourceBComplianceCheckProperties';
+        $command = $dbh->prepare('UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
+        $command->execute(array($status, $groupid, $dontChangeOk)); 
     }
 
         $sql = "UPDATE ".$componentTableName." SET status=? WHERE ownerGroup=? AND status!=?";
@@ -543,6 +572,18 @@ function updateStatusOfAllComplianceBCategoriesToOriginal() {
     $dbh1->commit();
     $dbh = null;
     $dbh1 = null;
+}
+
+function rejectAcceptStatusComparisonComponent() {
+
+}
+
+function rejectAcceptStatusComparisonProperty() {
+    
+}
+
+function rejectAcceptStatusComparisonCategory() {
+    
 }
 
 ?>

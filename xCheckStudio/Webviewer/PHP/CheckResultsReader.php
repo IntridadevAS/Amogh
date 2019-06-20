@@ -177,7 +177,8 @@
                     
                     $complianceComponentGroups[$groupRow['id']] = array('id'=>$groupRow['id'], 
                                                                   'componentClass'=>$groupRow['componentClass'],  
-                                                                  'componentCount'=>$groupRow['componentCount']); 
+                                                                  'componentCount'=>$groupRow['componentCount'],
+                                                                  'categoryStatus' => $groupRow['categoryStatus']); 
                     
                     $groupId = $groupRow['id'];
                     // read components                                                                  
@@ -268,7 +269,8 @@
                     
                     $comparisonComponentGroups[$groupRow['id']] = array('id'=>$groupRow['id'], 
                                                                   'componentClass'=>$groupRow['componentClass'],  
-                                                                  'componentCount'=>$groupRow['componentCount']); 
+                                                                  'componentCount'=>$groupRow['componentCount'],
+                                                                  'categoryStatus' => $groupRow['categoryStatus']); 
                     
                     $groupId = $groupRow['id'];
                     // read components                                                                  
