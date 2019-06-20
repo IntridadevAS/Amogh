@@ -175,7 +175,8 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
-    comparisonReviewManager.complianceA = sourceAComplianceReviewManager;
+    if(comparisonReviewManager !== undefined)
+        comparisonReviewManager.complianceA = sourceAComplianceReviewManager;
 
 }
 
@@ -200,7 +201,8 @@ function loadSourceBComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceBComplianceReviewManager.populateReviewTable();
-    comparisonReviewManager.complianceB = sourceBComplianceReviewManager;
+    if(comparisonReviewManager !== undefined)
+        comparisonReviewManager.complianceB = sourceBComplianceReviewManager;
 
 }
 
