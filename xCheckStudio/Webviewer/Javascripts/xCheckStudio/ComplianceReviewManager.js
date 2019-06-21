@@ -383,7 +383,8 @@ function ComplianceReviewManager(complianceCheckManager,
                         component.status = "ACCEPTED";
                         for (var propertyId in component.properties) {
                             property = component.properties[propertyId];
-                            property.Severity = 'ACCEPTED';
+                            if(property.Severity !== "OK")
+                                property.Severity = 'ACCEPTED';
                         }
                         _this.populateDetailedReviewTable(selectedRow[0]);
                     }
@@ -595,6 +596,154 @@ function ComplianceReviewManager(complianceCheckManager,
         catch(error) {
             console.log(error);
         }   
+    }
+
+    ComplianceReviewManager.prototype.unAcceptStatus = function(selectedRow, _this) {
+        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") { 
+            var componentId = selectedRow[0].cells[3].innerHTML;
+            var groupId = selectedRow[0].cells[4].innerHTML;
+            var tableToUpdate;
+            if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
+                tableToUpdate = "rejectComponentFromComplianceATab";
+            }
+            else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
+                tableToUpdate = "rejectComponentFromComplianceBTab";
+            }
+            else { return; }
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    dataType: 'JSON',
+                    async: true,
+                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var properties = status[1];
+                        selectedRow[0].cells[1].innerHTML = status[0];
+                        var cell = 0;
+                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                        }
+                        var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                        component.status = status[0];
+                        var index = 0;
+                        for(var propertyId in properties) {
+                            component.properties[index].Severity = properties[propertyId]["severity"];
+                            index++;
+                        }
+                        _this.populateDetailedReviewTable(selectedRow[0]);
+                    }
+                });   
+            }
+            catch(error) {}        
+        }
+        else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+            var componentId = this.SelectedComponentRow.cells[3].innerHTML;
+            var groupId = this.SelectedComponentRow.cells[4].innerHTML;
+            var tableToUpdate;
+            if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody") {
+                tableToUpdate = "rejectPropertyFromComplianceATab";
+            }
+            else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+                tableToUpdate = "rejectPropertyFromComplianceBTab";
+            }
+            else { return; }
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    async: true,
+                    dataType: 'JSON',
+                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var changedStatus = status[0];
+                        if(status[0] !== _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
+                            _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            _this.changeReviewTableStatus(_this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                        }
+
+                        var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
+                        for(var i = 0; i < propertiesLen; i++) {
+                            var sourceAName = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
+                            if(sourceAName == null) { sourceAName = ""}; 
+
+                            if(sourceAName == selectedRow[0].cells[0].innerText) {
+                                _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
+                            }
+                           
+                        }
+                        _this.populateDetailedReviewTable(_this.SelectedComponentRow);
+                        
+                    }
+                });   
+            }
+            catch(error) {
+                console.log(error);}  
+        }
+    }
+
+    ComplianceReviewManager.prototype.unAcceptCategory = function(button, _this) {
+        var groupId = Number(button.attributes[0].value);
+
+        var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+        var tableToUpdate;
+        if(this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
+            tableToUpdate = "rejectCategoryFromComplianceATab";
+        }
+        else if(this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
+            tableToUpdate = "rejectCategoryFromComplianceBTab";
+        }
+
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                dataType: 'JSON',
+                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate},
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var componentStatus = status[0];
+                    var propsStatus = status[1];
+                    var index = 0
+                    for(var i = 0; i < noOfComponents; i++) {
+                        categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = componentStatus[index]['status'];
+                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
+                        }
+                        var j = 0;
+                        var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                        compgroup.categoryStatus = "UNACCEPTED";
+                        for(var compId in compgroup["CheckComponents"]) {
+                            var component = compgroup["CheckComponents"][compId];
+                            component.status = componentStatus[index]['status'];
+                            var propindex = 0;
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                property.Severity = propsStatus[j][propindex]['severity'];
+                                propindex++;
+                            }
+                            j++;
+                        }
+
+                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                            _this.populateDetailedReviewTable(selectedRow);
+                            index++;    
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                    console.log("A");
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}  
     }
 
     ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {

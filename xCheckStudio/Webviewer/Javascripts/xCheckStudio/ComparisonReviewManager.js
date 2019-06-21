@@ -850,7 +850,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                             component.status = "ACCEPTED";
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
-                                property.Severity = 'ACCEPTED';
+                                if(property.Severity !== "OK")
+                                    property.Severity = 'ACCEPTED';
                             }
                             _this.populateDetailedReviewTable(selectedRow[0]);
                         }
@@ -890,7 +891,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
                                 if(sourceBName == null) { sourceBName = ""; }
 
-                                if(sourceAName == selectedRow[0].cells[0].innerHTML && sourceBName == selectedRow[0].cells[3].innerHTML) {
+                                if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                 }
                                
@@ -993,24 +994,6 @@ function ComparisonReviewManager(comparisonCheckManager,
     }
 
     ComparisonReviewManager.prototype.updateStatusOfCategory = function(button, _this) {
-        // outer_loop:
-        // for (var componentsGroupID in _this.ComparisonCheckManager) {
-
-        //     // get the componentgroupd corresponding to selected component 
-        //     var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
-        //     var componentsGroup = undefined;
-        //     for(var groupId in  componentsGroupList)
-        //     {               
-        //         if ( componentsGroupList[groupId].ComponentClass != groupName) {
-        //             continue;
-        //         }
-        //         else {
-        //             componentsGroup = componentsGroupList[groupId];
-        //             break outer_loop;
-        //         }
-        //     }
-        // }
-
         var groupId = button.attributes[0].value;
         var categorydiv = document.getElementById(button.innerHTML);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
@@ -1042,6 +1025,129 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 selectedRow = categorydiv.children[1].children[0].children[0].children[0];
                                 _this.populateDetailedReviewTable(selectedRow);                          
                         }
+                    }
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}  
+    }
+
+    ComparisonReviewManager.prototype.unAcceptStatus = function(selectedRow, _this) {
+        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") { 
+            var componentId = selectedRow[0].cells[5].innerHTML;
+            var groupId = selectedRow[0].cells[6].innerHTML;
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    dataType: 'JSON',
+                    async: true,
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab" },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var properties = status[1];
+                        selectedRow[0].cells[2].innerHTML = status[0];
+                        var cell = 0;
+                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                        }
+                        var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                        component.status = status[0];
+                        var index = 0;
+                        for(var propertyId in properties) {
+                            component.properties[index].Severity = properties[propertyId]["severity"];
+                            index++;
+                        }
+                        _this.populateDetailedReviewTable(selectedRow[0]);
+                    }
+                });   
+            }
+            catch(error) {}        
+        }
+        else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
+            var componentId = this.SelectedComponentRow.cells[5].innerHTML;
+            var groupId = this.SelectedComponentRow.cells[6].innerHTML;
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    async: true,
+                    dataType: 'JSON',
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectPropertyFromComparisonTab", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var changedStatus = status[0];
+                        if(status[0] !== _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                        }
+
+                        var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
+                        for(var i = 0; i < propertiesLen; i++) {
+                            var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
+                            if(sourceAName == null) { sourceAName = ""; }
+                            var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
+                            if(sourceBName == null) { sourceBName = ""; }
+
+                            if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
+                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
+                            }
+                           
+                        }
+                        _this.populateDetailedReviewTable(_this.SelectedComponentRow);
+                        
+                    }
+                });   
+            }
+            catch(error) {
+                console.log(error);}  
+        }
+    }
+
+    ComparisonReviewManager.prototype.unAcceptCategory = function(button, _this) {
+        var groupId = button.attributes[0].value;
+        var categorydiv = document.getElementById(button.innerHTML);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                dataType: 'JSON',
+                data: {'groupid' : groupId, 'tabletoupdate': "rejectCategoryFromComparisonTab"},
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var componentStatus = status[0];
+                    var propsStatus = status[1];
+                    var index = 0
+                    for(var i = 0; i < noOfComponents; i++) {
+                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = componentStatus[index]['status'];
+                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
+                        }
+                        var j = 0;
+                        var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                        compgroup.categoryStatus = "UNACCEPTED";
+                        for(var compId in compgroup["CheckComponents"]) {
+                            var component = compgroup["CheckComponents"][compId];
+                            component.status = componentStatus[index]['status'];
+                            var propindex = 0;
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                property.Severity = propsStatus[j][propindex]['severity'];
+                                propindex++;
+                            }
+                            j++;
+                        }
+
+                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                            _this.populateDetailedReviewTable(selectedRow);
+                            index++;    
                     }
                 }
             });   
@@ -1555,14 +1661,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         title = "Status";
                         name = "Status";
                     }
-                    // else if (i === 5) {
-                    //     title = "componentId";
-                    //     name = "componentId";
-                    // }
-                    // else if (i === 6) {
-                    //     title = "groupId";
-                    //     name = "groupId";
-                    // }
+
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
                     columnHeader["type"] = "textarea";
@@ -1611,8 +1710,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-                    // tableRowContent[columnHeaders[5].name] = componentId;
-                    // tableRowContent[columnHeaders[6].name]
 
                     this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
 

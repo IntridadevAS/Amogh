@@ -847,10 +847,9 @@
                         disabled: function()
                         {
                             var selectedRow = this;
-                            var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
                             
                             if(selectedRow[0].nodeName == "BUTTON") { 
-                                typeOfRow = selectedRow[0].offsetParent.id;
+                                var typeOfRow = selectedRow[0].offsetParent.id;
                                 var groupId = selectedRow[0].attributes[0].value;
                                 if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
                                     if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' || 
@@ -872,19 +871,20 @@
                                 }
                             }
                             else {
+                                var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
                                 if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
-                                selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
-                                    return true;
+                                    if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
+                                    selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+                                        return true;
+                                    }
                                 }
-                            }
-                            else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-                            typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
-                                selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
-                                    return true;
-                                }
-                            }   
+                                else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
+                                typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                    if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
+                                    selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+                                        return true;
+                                    }
+                                }   
                             }                        
                         },
                     },
@@ -892,26 +892,49 @@
                         name : "UnAccept",
                         disabled : function() {
                             var selectedRow = this;
-                            var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-                            if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
-                                selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
-                                    return false;
+                            
+                            if(selectedRow[0].nodeName == "BUTTON") { 
+                                var typeOfRow = selectedRow[0].offsetParent.id;
+                                var groupId = selectedRow[0].attributes[0].value;
+                                if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
+                                    if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+                                        return false;
+                                    }
+                                    else {return true;}
                                 }
-                                else {
-                                    return true;
+                                else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") { 
+                                    if(sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+                                        return false;
+                                    }
+                                    else {return true;}
+                                }
+                                else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                    if(sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+                                        return false;
+                                    }
+                                    else {return true;}
                                 }
                             }
-                            else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-                            typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
-                                selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
-                                    return false;
+                            else {
+                                var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+                                if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                                    if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+                                        return false;
+                                    }
+                                    else {
+                                        return true;
+                                    }
                                 }
-                                else {
-                                    return true;
-                                }
-                            }   
+                                else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
+                                typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                                    if(selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+                                        return false;
+                                    }
+                                    else {
+                                        return true;
+                                    }
+                                }   
+                            }
                         },
                     },
                     "transpose": {
@@ -960,18 +983,25 @@
             if(rowClicked[0].nodeName == "BUTTON") {
                 typeOfRow = selectedRow[0].offsetParent.id;
                 if(typeOfRow == "ComparisonMainReviewTbody") {
+                   comparisonReviewManager.unAcceptCategory(rowClicked[0], comparisonReviewManager);
                 }
                 else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+                    sourceAComplianceReviewManager.unAcceptCategory(rowClicked[0], sourceAComplianceReviewManager);
                 }
                 else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+                    sourceBComplianceReviewManager.unAcceptCategory(rowClicked[0], sourceBComplianceReviewManager);
                 }  
             }
             else {
                 if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+                    comparisonReviewManager.unAcceptStatus(selectedRow, comparisonReviewManager);
                 }
+                
                 else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
+                    sourceAComplianceReviewManager.unAcceptStatus(selectedRow, sourceAComplianceReviewManager);
                 }
                 else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+                    sourceBComplianceReviewManager.unAcceptStatus(selectedRow, sourceBComplianceReviewManager);
                 }                             
             }      
         }
