@@ -13,7 +13,6 @@ function ComparisonReviewManager(comparisonCheckManager,
         
     this.MainReviewTableColumns = 6;   
     this.MainReviewTableIdColumn = 5; 
-    this.statusChangedToAccept =  false;   
 
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
@@ -75,7 +74,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                     continue;
                 }
 
-                var btn = document.createElement("BUTTON");       // Create a <button> element
+                var btn = document.createElement("BUTTON");
+                var att = document.createAttribute("groupId");
+                att.value = groupId;
+                btn.setAttributeNode(att);       // Create a <button> element
                 btn.className = "collapsible";
                 var t = document.createTextNode(componentsGroup.ComponentClass);       // Create a text node
                 btn.appendChild(t);
@@ -93,7 +95,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 // create column headers
                 var columnHeaders = [];
-                for (var i = 0; i < 6; i++) {
+                for (var i = 0; i < 7; i++) {
                     columnHeader = {};
                     var title;
                     if (i === 0) {
@@ -129,6 +131,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                         name = "ID"
                         width = "10";
                     }
+                    else if (i === 6) 
+                    {
+                        title = "groupId";
+                        name = "groupId"
+                        width = "10";
+                    }
 
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
@@ -154,6 +162,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     tableRowContent[columnHeaders[3].name] = component.SourceANodeId;
                     tableRowContent[columnHeaders[4].name] = component.SourceBNodeId;
                     tableRowContent[columnHeaders[5].name] = component.ID;
+                    tableRowContent[columnHeaders[6].name] = groupId;
 
                     tableData.push(tableRowContent);
 
@@ -806,49 +815,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });
 
-            $.contextMenu({
-                selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
-                callback: function (key, options) {
-                    // var item = $(this).data("JSGridItem")
-                    if (key === "accept") {
-                        _this.onAcceptClick(this, _this);
-                    }
-                    else if (key === "transpose") {
-                    }
-                    else if (key === "freeze") {
-                    }
-                },
-                items: {
-                    "accept": {
-                        name: "Accept",
-                        disabled: function()
-                        {
-                            var selectedRow = this;
-                            var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-                            if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                                if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
-                                selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
-                                    return true;
-                                }
-                            }
-                            else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-                            typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                                if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
-                                selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
-                                    return true;
-                                }
-                            }                           
-                        },
-                    },
-                    "transpose": {
-                        name: "Transpose",
-                    },
-                    "freeze": {
-                        name: "Freeze",
-                    }
-                }
-            });
-
         });
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
@@ -862,45 +828,12 @@ function ComparisonReviewManager(comparisonCheckManager,
     };
 
 
-    ComparisonReviewManager.prototype.onAcceptClick = function(rowClicked, _this) {
-        var selectedRow = rowClicked;
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(rowClicked[0].nodeName == "BUTTON") {
-            typeOfRow = selectedRow[0].offsetParent.id;
-            if(typeOfRow == "ComparisonMainReviewTbody") {
-                _this.updateStatusOfCategory(rowClicked[0].innerHTML, _this);
-            }
-            else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-                _this.complianceA.updateStatusOfCategory(rowClicked[0].innerHTML);
-             }
-             else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-                _this.complianceB.updateStatusOfCategory(rowClicked[0].innerHTML);
-             }  
-        }
-        else {
-             if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-                _this.updateStatus(selectedRow, _this);
-             }
-             else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
-                _this.complianceA.updateStatusOfComplianceElement(selectedRow);
-             }
-             else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-                _this.complianceB.updateStatusOfComplianceElement(selectedRow);
-             }                             
-        }      
-    }
-
     ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
             if(selectedRow[0].cells[2].innerHTML !== "OK") {
-                selectedRow[0].cells[2].innerHTML = "ACCEPTED";
-                var cell = 0;
-                for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                    selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-                }
-                var componentId = this.findComponentId(selectedRow[0], "comparison");
-                var groupId = _this.findGroupId(selectedRow[0], "comparison");
-                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]  = "ACCEPTED";
+                var componentId = selectedRow[0].cells[5].innerHTML;
+                var groupId = selectedRow[0].cells[6].innerHTML;
+               
                 try{
                     $.ajax({
                         url: 'PHP/updateResultsStatusToAccept.php',
@@ -908,15 +841,24 @@ function ComparisonReviewManager(comparisonCheckManager,
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
                         success: function (msg) {
-                            console.log(msg);
+                            selectedRow[0].cells[2].innerHTML = "ACCEPTED";
+                            var cell = 0;
+                            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                            }
+                            var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                            component.status = "ACCEPTED";
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                if(property.Severity !== "OK")
+                                    property.Severity = 'ACCEPTED';
+                            }
+                            _this.populateDetailedReviewTable(selectedRow[0]);
                         }
                     });   
                 }
                 catch(error) {}        
                 // $("#ComparisonDetailedReviewCell").empty();
-                this.statusChangedToAccept =  true; 
-                this.populateDetailedReviewTable(selectedRow[0]);
-                this.statusChangedToAccept =  false; 
             }
         }
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
@@ -927,7 +869,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                     selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                 }
     
-                var componentId = this.findComponentId(this.SelectedComponentRow, "comparisonDetailed");
+                var componentId = this.SelectedComponentRow.cells[5].innerHTML;
+                var groupId = this.SelectedComponentRow.cells[6].innerHTML;
                 try{
                     $.ajax({
                         url: 'PHP/updateResultsStatusToAccept.php',
@@ -936,7 +879,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
-                            var groupId = _this.findGroupId(_this.SelectedComponentRow, "comparisonDetailed");
                             if(!originalstatus.includes("*")) {
                                 var changedStatus = originalstatus + "*";
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
@@ -949,7 +891,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
                                 if(sourceBName == null) { sourceBName = ""; }
 
-                                if(sourceAName == selectedRow[0].cells[0].innerHTML && sourceBName == selectedRow[0].cells[3].innerHTML) {
+                                if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                 }
                                
@@ -1051,26 +993,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     }
 
-    ComparisonReviewManager.prototype.updateStatusOfCategory = function(groupName, _this) {
-        outer_loop:
-        for (var componentsGroupID in _this.ComparisonCheckManager) {
-
-            // get the componentgroupd corresponding to selected component 
-            var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
-            var componentsGroup = undefined;
-            for(var groupId in  componentsGroupList)
-            {               
-                if ( componentsGroupList[groupId].ComponentClass != groupName) {
-                    continue;
-                }
-                else {
-                    componentsGroup = componentsGroupList[groupId];
-                    break outer_loop;
-                }
-            }
-        }
-
-        var categorydiv = document.getElementById(groupName);
+    ComparisonReviewManager.prototype.updateStatusOfCategory = function(button, _this) {
+        var groupId = button.attributes[0].value;
+        var categorydiv = document.getElementById(button.innerHTML);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
 
         try{
@@ -1086,13 +1011,143 @@ function ComparisonReviewManager(comparisonCheckManager,
                             for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                                 categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                             }
-                            for(var j = 0; j < categorydiv.children[1].children[0].children[0].children.length; j++) {
-                                selectedRow = categorydiv.children[1].children[0].children[0].children[j];
-                                _this.statusChangedToAccept =  true; 
-                                _this.populateDetailedReviewTable(selectedRow);
-                                _this.statusChangedToAccept =  false; 
+                            var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                            compgroup.categoryStatus = "ACCEPTED";
+                            for(var compId in compgroup["CheckComponents"]) {
+                                var component = compgroup["CheckComponents"][compId];
+                                component.status = "ACCEPTED";
+                                for (var propertyId in component.properties) {
+                                    property = component.properties[propertyId];
+                                    property.Severity = 'ACCEPTED';
+                                }
                             }
+
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                _this.populateDetailedReviewTable(selectedRow);                          
                         }
+                    }
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}  
+    }
+
+    ComparisonReviewManager.prototype.unAcceptStatus = function(selectedRow, _this) {
+        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") { 
+            var componentId = selectedRow[0].cells[5].innerHTML;
+            var groupId = selectedRow[0].cells[6].innerHTML;
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    dataType: 'JSON',
+                    async: true,
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab" },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var properties = status[1];
+                        selectedRow[0].cells[2].innerHTML = status[0];
+                        var cell = 0;
+                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                        }
+                        var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                        component.status = status[0];
+                        var index = 0;
+                        for(var propertyId in properties) {
+                            component.properties[index].Severity = properties[propertyId]["severity"];
+                            index++;
+                        }
+                        _this.populateDetailedReviewTable(selectedRow[0]);
+                    }
+                });   
+            }
+            catch(error) {}        
+        }
+        else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
+            var componentId = this.SelectedComponentRow.cells[5].innerHTML;
+            var groupId = this.SelectedComponentRow.cells[6].innerHTML;
+            try{
+                $.ajax({
+                    url: 'PHP/updateResultsStatusToAccept.php',
+                    type: "POST",
+                    async: true,
+                    dataType: 'JSON',
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectPropertyFromComparisonTab", 'sourceAPropertyName': selectedRow[0].cells[0].innerHTML, 'sourceBPropertyName': selectedRow[0].cells[3].innerHTML },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var changedStatus = status[0];
+                        if(status[0] !== _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                        }
+
+                        var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
+                        for(var i = 0; i < propertiesLen; i++) {
+                            var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
+                            if(sourceAName == null) { sourceAName = ""; }
+                            var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
+                            if(sourceBName == null) { sourceBName = ""; }
+
+                            if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
+                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
+                            }
+                           
+                        }
+                        _this.populateDetailedReviewTable(_this.SelectedComponentRow);
+                        
+                    }
+                });   
+            }
+            catch(error) {
+                console.log(error);}  
+        }
+    }
+
+    ComparisonReviewManager.prototype.unAcceptCategory = function(button, _this) {
+        var groupId = button.attributes[0].value;
+        var categorydiv = document.getElementById(button.innerHTML);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                dataType: 'JSON',
+                data: {'groupid' : groupId, 'tabletoupdate': "rejectCategoryFromComparisonTab"},
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var componentStatus = status[0];
+                    var propsStatus = status[1];
+                    var index = 0
+                    for(var i = 0; i < noOfComponents; i++) {
+                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = componentStatus[index]['status'];
+                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
+                        }
+                        var j = 0;
+                        var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                        compgroup.categoryStatus = "UNACCEPTED";
+                        for(var compId in compgroup["CheckComponents"]) {
+                            var component = compgroup["CheckComponents"][compId];
+                            component.status = componentStatus[index]['status'];
+                            var propindex = 0;
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                property.Severity = propsStatus[j][propindex]['severity'];
+                                propindex++;
+                            }
+                            j++;
+                        }
+
+                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                            _this.populateDetailedReviewTable(selectedRow);
+                            index++;    
                     }
                 }
             });   
@@ -1606,6 +1661,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         title = "Status";
                         name = "Status";
                     }
+
                     columnHeader["title"] = title;
                     columnHeader["name"] = name;
                     columnHeader["type"] = "textarea";
@@ -1653,11 +1709,6 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
-                    if(this.statusChangedToAccept == true) {
-                        if(property.Severity !== "OK") {
-                            property.Severity = 'ACCEPTED';
-                        }
-                    }
                     tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
 
                     this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
