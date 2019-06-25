@@ -465,7 +465,7 @@
 					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
             </ComponentClass>
 
-		    <ComponentClass sourceAComponentClass="LevelIndicatorController" sourceBComponentClass="INST">
+		    <ComponentClass sourceAComponentClass="LevelIndicatorControler" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>

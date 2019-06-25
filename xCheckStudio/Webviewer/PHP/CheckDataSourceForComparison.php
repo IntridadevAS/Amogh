@@ -170,7 +170,7 @@
                 global $SourceBNotMatchedComponents;
                 global $orderMaintained;
 
-                foreach ($SourceAComponents as $id => $sourceAComponent)
+                foreach ($SourceAComponents as $sourceAId => $sourceAComponent)
                 {
 
                     // check is component is selected or not for performing check
@@ -194,7 +194,7 @@
                     $componentGroupMapped = false;
                     $hasComponentGroupMatched =  true;
                     $sourceBcomponentsChecked = 0;
-                    foreach ($SourceBComponents as $id =>$sourceBComponent) 
+                    foreach ($SourceBComponents as $sourceBId =>$sourceBComponent) 
                     {
                         $sourceAGroupName = NULL;
                         $sourceBGroupName = NULL;
@@ -216,6 +216,7 @@
                         {
                             continue;
                         }
+
                         // check if component class exists in checkcase for Source A
                         if (!isComponentGroupExists($sourceAGroupName, $sourceBGroupName)) 
                         {
@@ -228,7 +229,7 @@
                             }
                             continue;
                         }
-                    
+
                         // get check case group
                         $checkCaseGroup = getComponentGroup($sourceAGroupName, $sourceBGroupName);
 
@@ -259,8 +260,8 @@
                                     $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
                                     $componentGroupMapped = true;
                                 }                                         
-
-                                    continue;
+                              
+                                continue;                                  
                             }
 
                             // get check case component
@@ -274,12 +275,17 @@
                             $componentGroupMapped = true;
 
                             // create or get check component group
-                            $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                            // Create a checkComponentGroup for first group mapping in config file
+                            // Do not overwrite checkComponentGroup, when single main category ib sourceA is mapped with multiple main categories in sourceB                            
+                            if ($checkComponentGroup == NULL) {
+                                $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                            }
+
                             if ($checkComponentGroup == NULL) {
                                 continue;
-                            }     
-
+                            }   
                         
+
                             if (!isComponentMatch($sourceAComponent, 
                                                   $sourceBComponent,
                                                   $checkCaseComponentClass['MatchwithProperties']))
@@ -294,6 +300,13 @@
                                 continue;
                             }
 
+                            // Ensure that we have correct checkComponentGroup as we are preventing checkComponentGroup from being 
+                            // overwritten when there is single main category mapped with multiple main categories 
+                            $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                            if ($checkComponentGroup == NULL) {
+                                continue;
+                            }   
+                        
                             // mark this source B proerty compoent as matched
                             //array_push( $comparedSourceBComponents, $sourceBComponent);
                             $comparedSourceBComponents[$sourceBComponent['id']] =  $sourceBComponent;
@@ -479,7 +492,11 @@
 
                         $componentGroupMapped  =  true;
                         // create or get check component group
-                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                        // Create a checkComponentGroup for first group mapping in config file
+                        // Do not overwrite checkComponentGroup, when single main category ib sourceA is mapped with multiple main categories in sourceB                            
+                        if ($checkComponentGroup == NULL) {
+                            $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                        }
                         if ($checkComponentGroup == NULL) 
                         {
                             continue;
@@ -499,7 +516,14 @@
                             }
                             continue;
                         }
-                                            
+                        
+                        // Ensure that we have correct checkComponentGroup as we are preventing checkComponentGroup from being 
+                        // overwritten when there is single main category mapped with multiple main categories 
+                        $checkComponentGroup = getCheckComponentGroup($sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass']);
+                        if ($checkComponentGroup == NULL) {
+                            continue;
+                        }   
+
                         $compKey1 = $sourceAComponent['id'];     
                         if(isset($SourceANotCheckedComponents[$compKey1]))
                         {
