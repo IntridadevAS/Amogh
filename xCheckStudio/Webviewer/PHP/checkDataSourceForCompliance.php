@@ -643,7 +643,6 @@
                             $mappingPropertyName = $checkCaseMappingProperty['SourceAName'];
                             if (!array_key_exists(strtolower($mappingPropertyName), $sourceComponentProperties))
                             {
-                                echo "Property did not found";
                                 continue;
                             }
                             

@@ -229,11 +229,6 @@
                             }
                             continue;
                         }
-                        echo "      ";
-                        echo "sourceAComponent['name'] :  " . $sourceAComponent['name'] . " ";
-                        echo "sourceBComponent['name'] :  " . $sourceBComponent['name'] . " ";
-                        echo "sourceAGroupName :  " . $sourceAGroupName . " ";
-                        echo "sourceBGroupName :  " . $sourceBGroupName. " ";
 
                         // get check case group
                         $checkCaseGroup = getComponentGroup($sourceAGroupName, $sourceBGroupName);
@@ -266,15 +261,8 @@
                                     $componentGroupMapped = true;
                                 }                                         
                               
-                                echo "      ";
-                                echo "Componentclass match failed      ";
-
                                 continue;                                  
                             }
-
-                            echo "      ";
-                            echo "sourceAClassName :  " . $sourceAClassName . " ";
-                            echo "sourceBClassName :  " . $sourceBClassName . " ";
 
                             // get check case component
                             $checkCaseComponentClass = getComponentClass($sourceAClassName, 
@@ -297,6 +285,7 @@
                                 continue;
                             }   
                         
+
                             if (!isComponentMatch($sourceAComponent, 
                                                   $sourceBComponent,
                                                   $checkCaseComponentClass['MatchwithProperties']))
@@ -308,10 +297,6 @@
                                 {
                                     $SourceANotMatchedComponents[$compKey] = $sourceAComponent;                                                      
                                 }
-
-                                echo "      ";
-                                echo "Component not matched      ";
-
                                 continue;
                             }
 
