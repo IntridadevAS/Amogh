@@ -630,20 +630,24 @@
                 if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent['mainclass']))
                 {
                     $sourceComponentProperties =  $SourceProperties[$sourceComponent['id']];
+                    $sourceComponentProperties = array_change_key_case($sourceComponentProperties); 
+
                     if(is_array ($checkCaseComponentClass['MappingProperties']) || 
                        is_object ($checkCaseComponentClass['MappingProperties'])) 
                        {
+
                         for($propertiesIndex = 0; $propertiesIndex < count($checkCaseComponentClass['MappingProperties']); $propertiesIndex++)
                         {                       
                             // get check case mapping property object
                             $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$propertiesIndex];
                             $mappingPropertyName = $checkCaseMappingProperty['SourceAName'];
-                            if (!array_key_exists($mappingPropertyName, $sourceComponentProperties))
+                            if (!array_key_exists(strtolower($mappingPropertyName), $sourceComponentProperties))
                             {
-                            continue;
+                                echo "Property did not found";
+                                continue;
                             }
                             
-                            $property = $sourceComponentProperties[$mappingPropertyName];
+                            $property = $sourceComponentProperties[strtolower($mappingPropertyName)];
                                 
                             $propertyName = $property['name'];
                             $propertyValue = $property["value"];
