@@ -1815,6 +1815,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (status.toLowerCase() === ("OK").toLowerCase()) {
             return SuccessColor;
         }
+        else if(status.toLowerCase() === ("MATCHED").toLowerCase()) {
+            return MatchedColor;
+        }
         else if (status.toLowerCase() === ("Error").toLowerCase()) {
             return ErrorColor;
         }
