@@ -378,7 +378,6 @@
                         if(count($checkGroupsForNoMatchComponents) > 0) {
                             $checkComponent = getNoMatchComponent($sourceAComponent, $checkCaseComponentClass, true);
                             foreach($checkGroupsForNoMatchComponents as $key => $value) {
-                                var_dump($key);
                                 $checkComponentGroup = getCheckComponentGroup($key);
                                 $checkComponentGroup->AddCheckComponent($checkComponent);
                             }
