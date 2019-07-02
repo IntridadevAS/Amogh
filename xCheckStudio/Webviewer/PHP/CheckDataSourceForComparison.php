@@ -196,6 +196,7 @@
                     $componentGroupMapped = false;
                     $hasComponentGroupMatched =  true;
                     $sourceBcomponentsChecked = 0;
+                    $checkGroupsForNoMatchComponents = array();
                     foreach ($SourceBComponents as $sourceBId =>$sourceBComponent) 
                     {
                         $sourceAGroupName = NULL;
@@ -274,7 +275,7 @@
                                                                         $sourceBGroupName);
 
                             
-                          if(count($checkCaseComponentClass['MatchwithProperties']) == 0)
+                          if(count($checkCaseComponentClass['MatchwithProperties']) == 0 && count($checkGroupsForNoMatchComponents) == 0)
                           {
                                 $hasMatchWithDefined = false;
                                 $componentGroupMapped = false;
@@ -299,7 +300,13 @@
                                                   $sourceBComponent,
                                                   $checkCaseComponentClass['MatchwithProperties']))
                             {
-                                $compKey = $sourceAComponent['id'];  
+                                $compKey = $sourceAComponent['id'];
+                                $groupName = $sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass'];
+                                if(!array_key_exists($groupName, $checkGroupsForNoMatchComponents)) {
+                        
+                                    $group = new CheckComponentGroup($groupName);
+                                    $checkGroupsForNoMatchComponents[$groupName] = $group;
+                                }
 
                                 //source A not matched
                                 if(!isset($SourceANotMatchedComponents[$compKey]))
@@ -368,16 +375,26 @@
                     // if component match not found 
 
                     if (!$componentMatchFound && $componentGroupMapped) {
-                        $checkComponent = getNoMatchComponent($sourceAComponent, $checkCaseComponentClass, true);
+                        if(count($checkGroupsForNoMatchComponents) > 0) {
+                            $checkComponent = getNoMatchComponent($sourceAComponent, $checkCaseComponentClass, true);
+                            foreach($checkGroupsForNoMatchComponents as $key => $value) {
+                                var_dump($key);
+                                $checkComponentGroup = getCheckComponentGroup($key);
+                                $checkComponentGroup->AddCheckComponent($checkComponent);
+                            }
+                        }
+                        else {
+                            $checkComponent = getNoMatchComponent($sourceAComponent, $checkCaseComponentClass, true);
 
-                        if($checkComponentGroup == NULL)
-                        {
-                            $checkComponentGroup =  getCheckComponentGroup($sourceAGroupName);
+                            if($checkComponentGroup == NULL)
+                            {
+                                $checkComponentGroup =  getCheckComponentGroup($sourceAGroupName);
+                            }
+                            if ($checkComponentGroup == NULL) {
+                                continue;
+                            }
+                            $checkComponentGroup->AddCheckComponent($checkComponent);
                         }
-                        if ($checkComponentGroup == NULL) {
-                            continue;
-                        }
-                        $checkComponentGroup->AddCheckComponent($checkComponent);
                         $hasMatchWithDefined = true;
                     }
                     if(!$hasComponentGroupMatched || !$componentGroupMapped || !$hasMatchWithDefined)
@@ -431,6 +448,7 @@
                     $componentGroupMapped = false;
                     $hasComponentGroupMatched =  true;
                     $sourceAcomponentsChecked = 0;
+                    $checkGroupsForNoMatchComponents = array();
                     foreach ($SourceAComponents as $id => $sourceAComponent)
                     {
                         $sourceAGroupName = NULL;
@@ -453,7 +471,6 @@
                         {
                             continue;
                         }
-                       // $sourceAComponent = $SourceAComponents[$j];
 
                         // check if component class exists in checkcase for Source B
                         if (!isComponentGroupExists($sourceAGroupName, $sourceBGroupName)) 
@@ -504,7 +521,7 @@
                                                                      $sourceAGroupName,
                                                                      $sourceBGroupName);
 
-                        if(count($checkCaseComponentClass['MatchwithProperties']) == 0)
+                        if(count($checkCaseComponentClass['MatchwithProperties']) == 0 && count($checkGroupsForNoMatchComponents) == 0)
                         {
                             $hasMatchWithDefined = false;
                             $componentGroupMapped = false;
@@ -532,7 +549,13 @@
                             // source A componenet is not checked and source b component is checked
                             // both components are not match
                             // push source b component to src B not matched array
-                            
+                            $groupName = $sourceAComponent['mainclass'] . "-" . $sourceBComponent['mainclass'];
+                            if(!array_key_exists($groupName, $checkGroupsForNoMatchComponents)) {
+                    
+                                $group = new CheckComponentGroup($groupName);
+                                $checkGroupsForNoMatchComponents[$groupName] = $group;
+                            }
+
                             if(!isset($SourceBNotMatchedComponents[$compKey]))
                             {
                                 $SourceBNotMatchedComponents[$compKey] = $sourceBComponent;   
@@ -591,14 +614,23 @@
 
                     // if component match not found 
                     if (!$componentMatchFound && $componentGroupMapped) {
-                        $checkComponent = getNoMatchComponent($sourceBComponent, $checkCaseComponentClass, false);
-                        if ($checkComponentGroup === NULL) {
-                            $checkComponentGroup = getCheckComponentGroup($sourceBGroupName);
+                        if(count($checkGroupsForNoMatchComponents) > 0) {
+                            $checkComponent = getNoMatchComponent($sourceBComponent, $checkCaseComponentClass, false);
+                            foreach($checkGroupsForNoMatchComponents as $key => $value) {
+                                $checkComponentGroup = getCheckComponentGroup($key);
+                                $checkComponentGroup->AddCheckComponent($checkComponent);
+                            }
                         }
-                        if ($checkComponentGroup == NULL) {
-                            continue;
+                        else {
+                            $checkComponent = getNoMatchComponent($sourceBComponent, $checkCaseComponentClass, false);
+                            if ($checkComponentGroup === NULL) {
+                                $checkComponentGroup = getCheckComponentGroup($sourceBGroupName);
+                            }
+                            if ($checkComponentGroup == NULL) {
+                                continue;
+                            }
+                            $checkComponentGroup->AddCheckComponent($checkComponent);
                         }
-                        $checkComponentGroup->AddCheckComponent($checkComponent);
                         $hasMatchWithDefined = true;
                     }
                     if(!$hasComponentGroupMatched || !$componentGroupMapped || !$hasMatchWithDefined)
