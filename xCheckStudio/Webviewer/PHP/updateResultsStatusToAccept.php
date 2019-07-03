@@ -109,14 +109,14 @@ function updateComponentComparisonStatusInReview() {
         // open database
         $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        $status = 'ACCEPTED';
+        $status = 'true';
         $dontChangeOk = 'OK';
         $dbh->beginTransaction();
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=? AND status!=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=? AND status!=?');
         $command->execute(array($status, $componentid, $dontChangeOk));
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
         $command->execute(array($status, $componentid, $dontChangeOk));
 
 
@@ -145,16 +145,16 @@ function updatePropertyComparisonStatusInReview() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $status = 'true';
     $dbh->beginTransaction();
 
     if($sourceAPropertyName !== '') {
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND sourceAName=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND sourceAName=?');
         $command->execute(array($status, $componentid, $sourceAPropertyName));
     }
        
     else if($sourceBPropertyName !== '') {
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND sourceBName=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND sourceBName=?');
         $command->execute(array($status, $componentid, $sourceBPropertyName));
     }
       
@@ -186,16 +186,17 @@ function updateCategoryComparisonStatusInReview() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $categoryStatus = 'ACCEPTED';
+    $status = 'true';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
 
     $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    $command->execute(array($status, $groupid, $dontChangeOk));
+    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
 
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE ownerGroup=? AND status!=?');
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE ownerGroup=? AND status!=?');
     $command->execute(array($status, $groupid, $dontChangeOk));
 
     $components = $dbh->query("SELECT * FROM ComparisonCheckComponents WHERE ownerGroup= $groupid;");
@@ -204,7 +205,7 @@ function updateCategoryComparisonStatusInReview() {
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
             if($comp['status'] !== $dontChangeOk) {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
                 $command->execute(array($status, $comp['id'], $dontChangeOk));
             }
         }
@@ -226,22 +227,22 @@ function updateComponentComplianceStatusInReview() {
         // open database
         $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        $status = 'ACCEPTED';
+        $status = 'true';
         $dontChangeOk = 'OK';
         $dbh->beginTransaction();
 
         if($tabletoupdate == "complianceSourceA") {
-            $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=? AND status!=?');
+            $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE id=? AND status!=?');
             $command->execute(array($status, $componentid, $dontChangeOk));
     
-            $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+            $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
             $command->execute(array($status, $componentid, $dontChangeOk));
         }
         else if($tabletoupdate == "complianceSourceB") {
-            $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=? AND status!=?');
+            $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE id=? AND status!=?');
             $command->execute(array($status, $componentid, $dontChangeOk));
     
-            $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND severity!=?');
+            $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
             $command->execute(array($status, $componentid, $dontChangeOk));
         }
 
@@ -270,7 +271,7 @@ function updatePropertyComplianceStatusInReview() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $status = 'true';
     $dbh->beginTransaction();
 
     if($tabletoupdate == "ComplianceADetailedReview") {
@@ -282,7 +283,7 @@ function updatePropertyComplianceStatusInReview() {
         $propertiesTableName = 'SourceBComplianceCheckProperties'; 
     }
     
-    $sql = "UPDATE ". $propertiesTableName ." SET severity=? WHERE ownerComponent=? AND name=?";
+    $sql = "UPDATE ". $propertiesTableName ." SET accepted=? WHERE ownerComponent=? AND name=?";
     $sql1 = "UPDATE ". $componentTableName ." SET status=? WHERE id=?";
     $command = $dbh->prepare($sql);
     $command->execute(array($status, $componentid, $sourcePropertyName));
@@ -311,7 +312,8 @@ function updateCategoryComplianceStatusInReview() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $categoryStatus = 'ACCEPTED';
+    $status = 'true';
     $dontChangeOk = 'OK';
     $componentTableName;
     $propertiesTableName;
@@ -321,17 +323,17 @@ function updateCategoryComplianceStatusInReview() {
         $componentTableName = 'SourceAComplianceCheckComponents';
         $propertiesTableName = 'SourceAComplianceCheckProperties'; 
         $command = $dbh->prepare('UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-        $command->execute(array($status, $groupid, $dontChangeOk)); 
+        $command->execute(array($categoryStatus, $groupid, $dontChangeOk)); 
     }
     else if($tabletoupdate == "categoryComplianceB") {
         $componentTableName = 'SourceBComplianceCheckComponents';
         $propertiesTableName = 'SourceBComplianceCheckProperties';
         $command = $dbh->prepare('UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-        $command->execute(array($status, $groupid, $dontChangeOk)); 
+        $command->execute(array($categoryStatus, $groupid, $dontChangeOk)); 
     }
 
-        $sql = "UPDATE ".$componentTableName." SET status=? WHERE ownerGroup=? AND status!=?";
-        $sql1 = "UPDATE ".$propertiesTableName." SET severity=? WHERE ownerComponent=? AND severity!=?";
+        $sql = "UPDATE ".$componentTableName." SET accepted=? WHERE ownerGroup=? AND status!=?";
+        $sql1 = "UPDATE ".$propertiesTableName." SET accepted=? WHERE ownerComponent=? AND severity!=?";
         $command = $dbh->prepare($sql);
         $command->execute(array($status, $groupid, $dontChangeOk));
 
@@ -357,15 +359,16 @@ function updateStatusOfAllComparisonCategories() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $categoryStatus = 'ACCEPTED';
+    $status = 'true';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE status!=?');
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE status!=?');
     $command->execute(array($status, $dontChangeOk));
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE severity!=?');
+    $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE severity!=?');
     $command->execute(array($status, $dontChangeOk));
 
     $dbh->commit();
@@ -378,15 +381,15 @@ function updateStatusOfAllComplianceACategories() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $status = 'true';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE status!=?');
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE status!=?');
     $command->execute(array($status, $dontChangeOk));
 
-    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE severity!=?');
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE severity!=?');
     $command->execute(array($status, $dontChangeOk));
 
     $dbh->commit();
@@ -399,15 +402,15 @@ function updateStatusOfAllComplianceBCategories() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $status = 'ACCEPTED';
+    $status = 'true';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE status!=?');
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE status!=?');
     $command->execute(array($status, $dontChangeOk));
 
-    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE severity!=?');
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE severity!=?');
     $command->execute(array($status, $dontChangeOk));
 
     $dbh->commit();
@@ -420,54 +423,33 @@ function updateStatusOfAllComparisonCategoriesToOriginal() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
-    $status = 'ACCEPTED';
+    $status = 'false';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $components = $dbh->query("SELECT * FROM ComparisonCheckComponents");
-    $originalComp = $dbh1->query("SELECT * FROM ComparisonCheckComponents");
-    $allComp = $originalComp->fetchAll();
-    $compCount = 0;
-    if($components) 
-    {            
-        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
-        {
-                if($compCount < count($allComp)) {
-                    $orgcomp = $allComp[$compCount]['status'];
-                    if($allComp[$compCount]['id'] == $comp['id']) {
-                        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-                        $command->execute(array($orgcomp, $comp['id']));
-                    }
-                }
-                $compCount++;
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+                 
+    $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $command = $dbh->query('SELECT * FROM ComparisonCheckComponents');
+    $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $index = 0;
+    while($index < count($statusChanged)) {
+        if(strpos($statusChanged[$index]['status'], '*') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+            $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+            $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
+        $index++;
     }
-
-    $componentsprops = $dbh->query("SELECT * FROM ComparisonCheckProperties");
-    $originalCompprops = $dbh1->query("SELECT * FROM ComparisonCheckProperties");
-    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
-    $propCount = 0;
-    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
-    { 
-        if($propCount < count($allProps)) {
-            $orgSeverity = $allProps[$propCount]['severity']; 
-            if($allProps[$propCount]['id'] == $comp1['id']) {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $comp1['id']));
-            }
-        }
-        $propCount++;
-    }
-
+           
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 }
 
 function updateStatusOfAllComplianceACategoriesToOriginal() {
@@ -476,54 +458,33 @@ function updateStatusOfAllComplianceACategoriesToOriginal() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
-    $status = 'ACCEPTED';
+    $status = 'false';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $components = $dbh->query("SELECT * FROM SourceAComplianceCheckComponents");
-    $originalComp = $dbh1->query("SELECT * FROM SourceAComplianceCheckComponents");
-    $allComp = $originalComp->fetchAll(PDO::FETCH_ASSOC);
-    $compCount = 0;
-    if($components) 
-    {            
-        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
-        {
-                if($compCount < count($allComp)) {
-                    $orgcomp = $allComp[$compCount]['status'];
-                    if($allComp[$compCount]['id'] == $comp['id']) {
-                        $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
-                        $command->execute(array($orgcomp, $comp['id']));
-                    }
-                }
-                $compCount++;
+
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+                 
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
+
+    $command = $dbh->query('SELECT * FROM SourceAComplianceCheckComponents');
+    $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $index = 0;
+    while($index < count($statusChanged)) {
+        if(strpos($statusChanged[$index]['status'], '*') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+            $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
+            $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
+        $index++;
     }
-
-    $componentsprops = $dbh->query("SELECT * FROM SourceAComplianceCheckProperties");
-    $originalCompprops = $dbh1->query("SELECT * FROM SourceAComplianceCheckProperties");
-    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
-    $propCount = 0;
-    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
-    { 
-        if($propCount < count($allProps)) {
-            $orgSeverity = $allProps[$propCount]['severity']; 
-            if($allProps[$propCount]['id'] == $comp1['id']) {
-                $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $comp1['id']));
-            }
-        }
-        $propCount++;
-    }
-
+           
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 }
 
 function updateStatusOfAllComplianceBCategoriesToOriginal() {
@@ -532,54 +493,34 @@ function updateStatusOfAllComplianceBCategoriesToOriginal() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
-    $status = 'ACCEPTED';
+    $status = 'false';
     $dontChangeOk = 'OK';
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $components = $dbh->query("SELECT * FROM SourceBComplianceCheckComponents");
-    $originalComp = $dbh1->query("SELECT * FROM SourceBComplianceCheckComponents");
-    $allComp = $originalComp->fetchAll(PDO::FETCH_ASSOC);
-    $compCount = 0;
-    if($components) 
-    {            
-        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
-        {
-                if($compCount < count($allComp)) {
-                    $orgcomp = $allComp[$compCount]['status'];
-                    if($allComp[$compCount]['id'] == $comp['id']) {
-                        $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
-                        $command->execute(array($orgcomp, $comp['id']));
-                    }
-                }
-                $compCount++;
-        }
-    }
 
-    $componentsprops = $dbh->query("SELECT * FROM SourceBComplianceCheckProperties");
-    $originalCompprops = $dbh1->query("SELECT * FROM SourceBComplianceCheckProperties");
-    $allProps = $originalCompprops->fetchAll(PDO::FETCH_ASSOC);
-    $propCount = 0;
-    while ($comp1 = $componentsprops->fetch(\PDO::FETCH_ASSOC)) 
-    { 
-        if($propCount < count($allProps)) {
-            $orgSeverity = $allProps[$propCount]['severity']; 
-            if($allProps[$propCount]['id'] == $comp1['id']) {
-                $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $comp1['id']));
-            }
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE status!=?');
+    $command->execute(array($status, $dontChangeOk));
+                 
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE severity!=?');
+    $command->execute(array($status, $dontChangeOk));
+           
+
+    $command = $dbh->query('SELECT * FROM SourceBComplianceCheckComponents');
+    $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $index = 0;
+    while($index < count($statusChanged)) {
+        if(strpos($statusChanged[$index]['status'], '*') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+            $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
+            $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
-        $propCount++;
+        $index++;
     }
 
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 }
 
 function rejectAcceptStatusComparisonComponent() {
@@ -591,46 +532,44 @@ function rejectAcceptStatusComparisonComponent() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
+
+    $acceptedStatus = 'false';
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
 
     $components = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
-    $originalComp = $dbh1->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
-    $originalstatus = $originalComp->fetch();
-    $changedstatus = $components->fetch();
+    $originalStatus = $components->fetch();
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-    $command->execute(array($originalstatus['status'], $componentid));
-    $statusArray[0] = $originalstatus['status'];
+    if(strpos($originalStatus['status'], '*') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+        $command->execute(array($originalStatus['status'], $componentid));
+    }
 
-    // $componentsProps = $dbh->query("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent= $componentid;");
+    $statusArray[0] = $originalStatus['status'];
+
     $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
-    $originalCompProps = $dbh1->query("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent= $componentid;");
-    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
-    $allPropsChanged = $command->fetchAll(\PDO::FETCH_ASSOC);
+    $allProps = $command->fetchAll(\PDO::FETCH_ASSOC);
     $propCount = 0;
-    $changedPropCount = 0;
-    while ($changedPropCount < count($allPropsChanged)) 
-    { 
-        if($propCount < count($allPropsOrg)) {
-            $orgSeverity = $allPropsOrg[$propCount]['severity']; 
-            if($allPropsOrg[$propCount]['id'] == $allPropsChanged[$changedPropCount]['id']) {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $allPropsChanged[$changedPropCount]['id']));
-            }
+    while ($propCount < count($allProps)) 
+    {
+        if($allProps[$propCount]['accepted'] == 'true') {
+            $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE id=?');
+            $command->execute(array($acceptedStatus, $allProps[$propCount]['id']));
         }
         $propCount++;
-        $changedPropCount++;
     }
+
+    $originalCompProps = $dbh->query("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent= $componentid;");
+    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
+
     $statusArray[1] = $allPropsOrg;
+
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 
     echo json_encode($statusArray);
 }
@@ -643,66 +582,66 @@ function rejectAcceptStatusComparisonProperty() {
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
     $toBecompstatus = " ";
     $originalstatus;
-
+    $acceptedStatus = 'false';
 
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
     if($sourceAPropertyName !== '') {    
-        $command = $dbh1->prepare('SELECT severity FROM ComparisonCheckProperties WHERE ownerComponent=? AND sourceAName=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND sourceAName=?');
+        $command->execute(array($acceptedStatus, $componentid, $sourceAPropertyName));
+
+        $command = $dbh->prepare('SELECT severity FROM ComparisonCheckProperties WHERE ownerComponent=? AND sourceAName=?');
         $command->execute(array($componentid, $sourceAPropertyName));
         $originalstatus = $command->fetch();
-
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND sourceAName=?');
-        $command->execute(array($originalstatus['severity'], $componentid, $sourceAPropertyName));
     }
        
     else if($sourceBPropertyName !== '') {
-        $command = $dbh1->prepare('SELECT severity FROM ComparisonCheckProperties WHERE ownerComponent=? AND sourceBName=?');
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND sourceBName=?');
+        $command->execute(array($acceptedStatus, $componentid, $sourceBPropertyName));
+
+        $command = $dbh->prepare('SELECT severity FROM ComparisonCheckProperties WHERE ownerComponent=? AND sourceBName=?');
         $command->execute(array($componentid, $sourceBPropertyName));
         $originalstatus = $command->fetch();
-
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE ownerComponent=? AND sourceBName=?');
-        $command->execute(array($originalstatus['severity'], $componentid, $sourceBPropertyName));
     }
 
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $command = $dbh->prepare('SELECT severity FROM ComparisonCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT accepted FROM ComparisonCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
-    $command = $dbh->prepare('SELECT status FROM ComparisonCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT accepted FROM ComparisonCheckComponents WHERE id=?');
     $command->execute(array($componentid));
     $componentstatus = $command->fetch();
 
-    $command = $dbh1->prepare('SELECT status FROM ComparisonCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT status FROM ComparisonCheckComponents WHERE id=?');
     $command->execute(array($componentid));
-    $componentstatusOrg = $command->fetch();
+    $componentstatus1 = $command->fetch();
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if($statusChanged[$index]['severity'] == "ACCEPTED" && $componentstatus['status'] !== "ACCEPTED") {
-            $toBecompstatus = $componentstatus['status'];
+        if($statusChanged[$index]['accepted'] == "true" && $componentstatus['accepted'] !== "true") {
+            $toBecompstatus = $componentstatus1['status'];
             break;
         } 
         else {
-            if($componentstatus['status'] == "ACCEPTED") {
-                $toBecompstatus = $componentstatusOrg['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "*";
             }
             else 
             {
-                $toBecompstatus = $componentstatusOrg['status'];
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                }
+                else {
+                    $toBecompstatus = $componentstatus1['status'];
+                }               
             }
         }
         $index++;
@@ -711,11 +650,12 @@ function rejectAcceptStatusComparisonProperty() {
     $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
     $command->execute(array($toBecompstatus, $componentid));
 
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
+
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh = null;
-    $dbh1 = null;
 
     $statusArray[0] = $toBecompstatus;
     $statusArray[1] = $originalstatus['severity'];
@@ -730,73 +670,86 @@ function rejectAcceptStatusComparisonCategory() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
-
-    $status = 'UNACCEPTED';
+    $categoryStatus = 'UNACCEPTED';
+    $status = 'false';
     $dontChangeOk = 'OK';
     $compProps;
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
-
+   
     $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    $command->execute(array($status, $groupid, $dontChangeOk));
+    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
 
-    $command = $dbh1->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
+    $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
     $command->execute(array($groupid));
     $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
     $index = 0;
     while ($index < count($allCom)) 
     {
-        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-        $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($status, $allCom[$index]['id']));
+
+        if(strpos($allCom[$index]['status'], '*') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
+            $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+            $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
+        }
+        
         $index++;
     }
+
+    $dbh->commit();
+
+    $dbh->beginTransaction();
 
     $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
     $command->execute(array($groupid));
     $components = $command->fetchAll(PDO::FETCH_ASSOC);
     $indexcomp = 0;
     
-    $statusArray[0] = $allCom;
     while ($indexcomp < count($components)) 
     {
         if($components[$indexcomp]['status'] !== $dontChangeOk) {
-            $command = $dbh1->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+            $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
             $command->execute(array($components[$indexcomp]['id']));
             $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
             $indexcompProp = 0;
             while ($indexcompProp < count($compProps)) 
             {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($compProps[$indexcompProp]['severity'], $compProps[$indexcompProp]['id']));
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE id=?');
+                $command->execute(array($status, $compProps[$indexcompProp]['id']));
                 $indexcompProp++;
             }  
             $indexcomp++;      
         }
-        
     }
-
-    $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    $command->execute(array($groupid));
-    $components1 = $command->fetchAll(PDO::FETCH_ASSOC);
-    $noOfComp = 0;
-    $propertiesArray = array();
-    while($noOfComp < count($components1)) {
-        $command = $dbh1->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-        $command->execute(array($components1[$noOfComp]['id']));
-        $properties = $command->fetchAll(PDO::FETCH_ASSOC);
-        $propertiesArray[$noOfComp] = $properties;
-        $noOfComp++;
-    }
-
-    $statusArray[1] = $propertiesArray;
 
     $dbh->commit();
-    $dbh1->commit();
-    $dbh1 = null;
+
+
+    $dbh->beginTransaction();
+
+        $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
+        $command->execute(array($groupid));
+        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
+        $statusArray[0] = $allCom;
+
+        $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
+        $command->execute(array($groupid));
+        $components1 = $command->fetchAll(PDO::FETCH_ASSOC);
+        $noOfComp = 0;
+        $propertiesArray = array();
+        while($noOfComp < count($components1)) {
+            $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+            $command->execute(array($components1[$noOfComp]['id']));
+            $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+            $propertiesArray[$noOfComp] = $properties;
+            $noOfComp++;
+        }
+
+        $statusArray[1] = $propertiesArray;
+    $dbh->commit();
+        
     $dbh = null;
     echo json_encode($statusArray);
 }
@@ -810,46 +763,44 @@ function rejectAcceptStatusComplianceAComponent() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
+
+    $acceptedStatus = 'false';
+
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
 
     $components = $dbh->query("SELECT status FROM SourceAComplianceCheckComponents WHERE id= $componentid;");
-    $originalComp = $dbh1->query("SELECT status FROM SourceAComplianceCheckComponents WHERE id= $componentid;");
-    $originalstatus = $originalComp->fetch();
-    $changedstatus = $components->fetch();
+    $originalStatus = $components->fetch();
 
-    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
-    $command->execute(array($originalstatus['status'], $componentid));
-    $statusArray[0] = $originalstatus['status'];
+    if(strpos($originalStatus['status'], '*') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+        $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
+        $command->execute(array($originalStatus['status'], $componentid));
+    }
 
-    // $componentsProps = $dbh->query("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent= $componentid;");
+    $statusArray[0] = $originalStatus['status'];
+
     $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
-    $originalCompProps = $dbh1->query("SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent= $componentid;");
-    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
-    $allPropsChanged = $command->fetchAll(\PDO::FETCH_ASSOC);
+    $allProps = $command->fetchAll(\PDO::FETCH_ASSOC);
     $propCount = 0;
-    $changedPropCount = 0;
-    while ($changedPropCount < count($allPropsChanged)) 
-    { 
-        if($propCount < count($allPropsOrg)) {
-            $orgSeverity = $allPropsOrg[$propCount]['severity']; 
-            if($allPropsOrg[$propCount]['id'] == $allPropsChanged[$changedPropCount]['id']) {
-                $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $allPropsChanged[$changedPropCount]['id']));
-            }
+    while ($propCount < count($allProps)) 
+    {
+        if($allProps[$propCount]['accepted'] == 'true') {
+            $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE id=?');
+            $command->execute(array($acceptedStatus, $allProps[$propCount]['id']));
         }
         $propCount++;
-        $changedPropCount++;
     }
+
+    $originalCompProps = $dbh->query("SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent= $componentid;");
+    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
+
     $statusArray[1] = $allPropsOrg;
+
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 
     echo json_encode($statusArray);
 
@@ -862,56 +813,55 @@ function rejectAcceptStatusComplianceAProperty() {
     $sourcePropertyName = $_POST['sourcePropertyName'];
     $toBecompstatus = " ";
     $originalstatus;
-
+    $acceptedStatus = 'false';
 
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
- 
-        $command = $dbh1->prepare('SELECT severity FROM SourceAComplianceCheckProperties WHERE ownerComponent=? AND name=?');
+
+        $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE ownerComponent=? AND name=?');
+        $command->execute(array($acceptedStatus, $componentid, $sourcePropertyName));
+
+        $command = $dbh->prepare('SELECT severity FROM SourceAComplianceCheckProperties WHERE ownerComponent=? AND name=?');
         $command->execute(array($componentid, $sourcePropertyName));
         $originalstatus = $command->fetch();
 
-        $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND name=?');
-        $command->execute(array($originalstatus['severity'], $componentid, $sourcePropertyName));
-    
-
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $command = $dbh->prepare('SELECT severity FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT accepted FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
-    $command = $dbh->prepare('SELECT status FROM SourceAComplianceCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT accepted FROM SourceAComplianceCheckComponents WHERE id=?');
     $command->execute(array($componentid));
     $componentstatus = $command->fetch();
 
-    $command = $dbh1->prepare('SELECT status FROM SourceAComplianceCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT status FROM SourceAComplianceCheckComponents WHERE id=?');
     $command->execute(array($componentid));
-    $componentstatusOrg = $command->fetch();
+    $componentstatus1 = $command->fetch();
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if($statusChanged[$index]['severity'] == "ACCEPTED" && $componentstatus['status'] !== "ACCEPTED") {
-            $toBecompstatus = $componentstatus['status'];
+        if($statusChanged[$index]['accepted'] == "true" && $componentstatus['accepted'] !== "true") {
+            $toBecompstatus = $componentstatus1['status'];
             break;
         } 
         else {
-            if($componentstatus['status'] == "ACCEPTED") {
-                $toBecompstatus = $componentstatusOrg['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "*";
             }
             else 
             {
-                $toBecompstatus = $componentstatusOrg['status'];
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                }
+                else {
+                    $toBecompstatus = $componentstatus1['status'];
+                }               
             }
         }
         $index++;
@@ -920,15 +870,17 @@ function rejectAcceptStatusComplianceAProperty() {
     $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
     $command->execute(array($toBecompstatus, $componentid));
 
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
+
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh = null;
-    $dbh1 = null;
 
     $statusArray[0] = $toBecompstatus;
     $statusArray[1] = $originalstatus['severity'];
     echo json_encode($statusArray);
+
 }
 
 function rejectAcceptStatusComplianceACategory() {
@@ -936,57 +888,72 @@ function rejectAcceptStatusComplianceACategory() {
     global $projectName;
     $groupid = $_POST['groupid'];
 
-    try{
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-        $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-        $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
+    $categoryStatus = 'UNACCEPTED';
+    $status = 'false';
+    $dontChangeOk = 'OK';
+    $compProps;
 
-        $status = 'UNACCEPTED';
-        $dontChangeOk = 'OK';
-        $compProps;
+    $dbh->beginTransaction();
+   
+    $command = $dbh->prepare('UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
+    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
 
-        $dbh->beginTransaction();
-        $dbh1->beginTransaction();
+    $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckComponents WHERE ownerGroup=?');
+    $command->execute(array($groupid));
+    $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
+    $index = 0;
+    while ($index < count($allCom)) 
+    {
+        $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($status, $allCom[$index]['id']));
 
-        $command = $dbh->prepare('UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-        $command->execute(array($status, $groupid, $dontChangeOk));
-
-        $command = $dbh1->prepare('SELECT * FROM SourceAComplianceCheckComponents WHERE ownerGroup=?');
-        $command->execute(array($groupid));
-        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-        $index = 0;
-        while ($index < count($allCom)) 
-        {
+        if(strpos($allCom[$index]['status'], '*') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
             $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
-            $index++;
         }
+        
+        $index++;
+    }
+
+    $dbh->commit();
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckComponents WHERE ownerGroup=?');
+    $command->execute(array($groupid));
+    $components = $command->fetchAll(PDO::FETCH_ASSOC);
+    $indexcomp = 0;
+    
+    while ($indexcomp < count($components)) 
+    {
+        if($components[$indexcomp]['status'] !== $dontChangeOk) {
+            $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
+            $command->execute(array($components[$indexcomp]['id']));
+            $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
+            $indexcompProp = 0;
+            while ($indexcompProp < count($compProps)) 
+            {
+                $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET accepted=? WHERE id=?');
+                $command->execute(array($status, $compProps[$indexcompProp]['id']));
+                $indexcompProp++;
+            }  
+            $indexcomp++;      
+        }
+    }
+
+    $dbh->commit();
+
+
+    $dbh->beginTransaction();
 
         $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckComponents WHERE ownerGroup=?');
         $command->execute(array($groupid));
-        $components = $command->fetchAll(PDO::FETCH_ASSOC);
-        $indexcomp = 0;
-        
+        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
         $statusArray[0] = $allCom;
-        while ($indexcomp < count($components)) 
-        {
-            if($components[$indexcomp]['status'] !== $dontChangeOk) {
-                $command = $dbh1->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
-                $command->execute(array($components[$indexcomp]['id']));
-                $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
-                $indexcompProp = 0;
-                while ($indexcompProp < count($compProps)) 
-                {
-                    $command = $dbh->prepare('UPDATE SourceAComplianceCheckProperties SET severity=? WHERE id=?');
-                    $command->execute(array($compProps[$indexcompProp]['severity'], $compProps[$indexcompProp]['id']));
-                    $indexcompProp++;
-                }  
-                $indexcomp++;      
-            }
-            
-        }
 
         $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckComponents WHERE ownerGroup=?');
         $command->execute(array($groupid));
@@ -994,7 +961,7 @@ function rejectAcceptStatusComplianceACategory() {
         $noOfComp = 0;
         $propertiesArray = array();
         while($noOfComp < count($components1)) {
-            $command = $dbh1->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
+            $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
             $command->execute(array($components1[$noOfComp]['id']));
             $properties = $command->fetchAll(PDO::FETCH_ASSOC);
             $propertiesArray[$noOfComp] = $properties;
@@ -1002,17 +969,10 @@ function rejectAcceptStatusComplianceACategory() {
         }
 
         $statusArray[1] = $propertiesArray;
-
-        $dbh->commit();
-        $dbh1->commit();
-        $dbh = null;
-        $dbh1 = null;
-        echo json_encode($statusArray);
-    }
-    catch(Exception $e) {
-        var_dump($e); 
-        return;
-    }
+    $dbh->commit();
+        
+    $dbh = null;
+    echo json_encode($statusArray);
 }
 
 
@@ -1025,46 +985,44 @@ function rejectAcceptStatusComplianceBComponent() {
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
-
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
+
+    $acceptedStatus = 'false';
+
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
 
     $components = $dbh->query("SELECT status FROM SourceBComplianceCheckComponents WHERE id= $componentid;");
-    $originalComp = $dbh1->query("SELECT status FROM SourceBComplianceCheckComponents WHERE id= $componentid;");
-    $originalstatus = $originalComp->fetch();
-    $changedstatus = $components->fetch();
+    $originalStatus = $components->fetch();
 
-    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
-    $command->execute(array($originalstatus['status'], $componentid));
-    $statusArray[0] = $originalstatus['status'];
+    if(strpos($originalStatus['status'], '*') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+        $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
+        $command->execute(array($originalStatus['status'], $componentid));
+    }
 
-    // $componentsProps = $dbh->query("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent= $componentid;");
+    $statusArray[0] = $originalStatus['status'];
+
     $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
-    $originalCompProps = $dbh1->query("SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent= $componentid;");
-    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
-    $allPropsChanged = $command->fetchAll(\PDO::FETCH_ASSOC);
+    $allProps = $command->fetchAll(\PDO::FETCH_ASSOC);
     $propCount = 0;
-    $changedPropCount = 0;
-    while ($changedPropCount < count($allPropsChanged)) 
-    { 
-        if($propCount < count($allPropsOrg)) {
-            $orgSeverity = $allPropsOrg[$propCount]['severity']; 
-            if($allPropsOrg[$propCount]['id'] == $allPropsChanged[$changedPropCount]['id']) {
-                $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE id=?');
-                $command->execute(array($orgSeverity, $allPropsChanged[$changedPropCount]['id']));
-            }
+    while ($propCount < count($allProps)) 
+    {
+        if($allProps[$propCount]['accepted'] == 'true') {
+            $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE id=?');
+            $command->execute(array($acceptedStatus, $allProps[$propCount]['id']));
         }
         $propCount++;
-        $changedPropCount++;
     }
+
+    $originalCompProps = $dbh->query("SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent= $componentid;");
+    $allPropsOrg = $originalCompProps->fetchAll(PDO::FETCH_ASSOC);
+
     $statusArray[1] = $allPropsOrg;
+
     $dbh->commit();
-    $dbh1->commit();
     $dbh = null;
-    $dbh1 = null;
 
     echo json_encode($statusArray);
 
@@ -1077,56 +1035,55 @@ function rejectAcceptStatusComplianceBProperty() {
     $sourcePropertyName = $_POST['sourcePropertyName'];
     $toBecompstatus = " ";
     $originalstatus;
-
+    $acceptedStatus = 'false';
 
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-    $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
- 
-        $command = $dbh1->prepare('SELECT severity FROM SourceBComplianceCheckProperties WHERE ownerComponent=? AND name=?');
+
+        $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE ownerComponent=? AND name=?');
+        $command->execute(array($acceptedStatus, $componentid, $sourcePropertyName));
+
+        $command = $dbh->prepare('SELECT severity FROM SourceBComplianceCheckProperties WHERE ownerComponent=? AND name=?');
         $command->execute(array($componentid, $sourcePropertyName));
         $originalstatus = $command->fetch();
 
-        $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE ownerComponent=? AND name=?');
-        $command->execute(array($originalstatus['severity'], $componentid, $sourcePropertyName));
-    
-
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh->beginTransaction();
-    $dbh1->beginTransaction();
 
-    $command = $dbh->prepare('SELECT severity FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT accepted FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
-    $command = $dbh->prepare('SELECT status FROM SourceBComplianceCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT accepted FROM SourceBComplianceCheckComponents WHERE id=?');
     $command->execute(array($componentid));
     $componentstatus = $command->fetch();
 
-    $command = $dbh1->prepare('SELECT status FROM SourceBComplianceCheckComponents WHERE id=?');
+    $command = $dbh->prepare('SELECT status FROM SourceBComplianceCheckComponents WHERE id=?');
     $command->execute(array($componentid));
-    $componentstatusOrg = $command->fetch();
+    $componentstatus1 = $command->fetch();
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if($statusChanged[$index]['severity'] == "ACCEPTED" && $componentstatus['status'] !== "ACCEPTED") {
-            $toBecompstatus = $componentstatus['status'];
+        if($statusChanged[$index]['accepted'] == "true" && $componentstatus['accepted'] !== "true") {
+            $toBecompstatus = $componentstatus1['status'];
             break;
         } 
         else {
-            if($componentstatus['status'] == "ACCEPTED") {
-                $toBecompstatus = $componentstatusOrg['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "*";
             }
             else 
             {
-                $toBecompstatus = $componentstatusOrg['status'];
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                }
+                else {
+                    $toBecompstatus = $componentstatus1['status'];
+                }               
             }
         }
         $index++;
@@ -1135,11 +1092,12 @@ function rejectAcceptStatusComplianceBProperty() {
     $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
     $command->execute(array($toBecompstatus, $componentid));
 
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
+
     $dbh->commit();
-    $dbh1->commit();
 
     $dbh = null;
-    $dbh1 = null;
 
     $statusArray[0] = $toBecompstatus;
     $statusArray[1] = $originalstatus['severity'];
@@ -1151,57 +1109,72 @@ function rejectAcceptStatusComplianceBCategory() {
     global $projectName;
     $groupid = $_POST['groupid'];
 
-    try{
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-        $dbPath1 = "../Projects/".$projectName."/".$projectName."_original.db";
-        $dbh1 = new PDO("sqlite:$dbPath1") or die("cannot open the database"); 
+    $categoryStatus = 'UNACCEPTED';
+    $status = 'false';
+    $dontChangeOk = 'OK';
+    $compProps;
 
-        $status = 'UNACCEPTED';
-        $dontChangeOk = 'OK';
-        $compProps;
+    $dbh->beginTransaction();
+   
+    $command = $dbh->prepare('UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
+    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
 
-        $dbh->beginTransaction();
-        $dbh1->beginTransaction();
+    $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckComponents WHERE ownerGroup=?');
+    $command->execute(array($groupid));
+    $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
+    $index = 0;
+    while ($index < count($allCom)) 
+    {
+        $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($status, $allCom[$index]['id']));
 
-        $command = $dbh->prepare('UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-        $command->execute(array($status, $groupid, $dontChangeOk));
-
-        $command = $dbh1->prepare('SELECT * FROM SourceBComplianceCheckComponents WHERE ownerGroup=?');
-        $command->execute(array($groupid));
-        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-        $index = 0;
-        while ($index < count($allCom)) 
-        {
+        if(strpos($allCom[$index]['status'], '*') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
             $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
-            $index++;
         }
+        
+        $index++;
+    }
+
+    $dbh->commit();
+
+    $dbh->beginTransaction();
+
+    $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckComponents WHERE ownerGroup=?');
+    $command->execute(array($groupid));
+    $components = $command->fetchAll(PDO::FETCH_ASSOC);
+    $indexcomp = 0;
+    
+    while ($indexcomp < count($components)) 
+    {
+        if($components[$indexcomp]['status'] !== $dontChangeOk) {
+            $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
+            $command->execute(array($components[$indexcomp]['id']));
+            $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
+            $indexcompProp = 0;
+            while ($indexcompProp < count($compProps)) 
+            {
+                $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET accepted=? WHERE id=?');
+                $command->execute(array($status, $compProps[$indexcompProp]['id']));
+                $indexcompProp++;
+            }  
+            $indexcomp++;      
+        }
+    }
+
+    $dbh->commit();
+
+
+    $dbh->beginTransaction();
 
         $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckComponents WHERE ownerGroup=?');
         $command->execute(array($groupid));
-        $components = $command->fetchAll(PDO::FETCH_ASSOC);
-        $indexcomp = 0;
-        
+        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
         $statusArray[0] = $allCom;
-        while ($indexcomp < count($components)) 
-        {
-            if($components[$indexcomp]['status'] !== $dontChangeOk) {
-                $command = $dbh1->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
-                $command->execute(array($components[$indexcomp]['id']));
-                $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
-                $indexcompProp = 0;
-                while ($indexcompProp < count($compProps)) 
-                {
-                    $command = $dbh->prepare('UPDATE SourceBComplianceCheckProperties SET severity=? WHERE id=?');
-                    $command->execute(array($compProps[$indexcompProp]['severity'], $compProps[$indexcompProp]['id']));
-                    $indexcompProp++;
-                }  
-                $indexcomp++;      
-            }
-            
-        }
 
         $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckComponents WHERE ownerGroup=?');
         $command->execute(array($groupid));
@@ -1209,7 +1182,7 @@ function rejectAcceptStatusComplianceBCategory() {
         $noOfComp = 0;
         $propertiesArray = array();
         while($noOfComp < count($components1)) {
-            $command = $dbh1->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
+            $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
             $command->execute(array($components1[$noOfComp]['id']));
             $properties = $command->fetchAll(PDO::FETCH_ASSOC);
             $propertiesArray[$noOfComp] = $properties;
@@ -1217,17 +1190,10 @@ function rejectAcceptStatusComplianceBCategory() {
         }
 
         $statusArray[1] = $propertiesArray;
-
-        $dbh->commit();
-        $dbh1->commit();
-        $dbh = null;
-        $dbh1 = null;
-        echo json_encode($statusArray);
-    }
-    catch(Exception $e) {
-        var_dump($e); 
-        return;
-    }
+    $dbh->commit();
+        
+    $dbh = null;
+    echo json_encode($statusArray);
 }
 ?>
 

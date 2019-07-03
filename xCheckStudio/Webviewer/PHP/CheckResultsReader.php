@@ -185,13 +185,19 @@
                     $checkComponentsResults = $dbh->query("SELECT *FROM $CheckComponentsTable where ownerGroup= $groupId;");
                     if($checkComponentsResults) 
                     {
+                        $changedStatus;
                         $components =array();
                         while ($componentRow = $checkComponentsResults->fetch(\PDO::FETCH_ASSOC)) 
                         {
+                            if($componentRow['accepted'] == 'true')
+                                $changedStatus = 'ACCEPTED';
+                            else 
+                                $changedStatus = $componentRow['status'];
+
                             $componentValues = array('id'=>$componentRow['id'], 
                                             'name'=>$componentRow['name'],                                              
                                             'subComponentClass'=>$componentRow['subComponentClass'],
-                                            'status'=>$componentRow['status'],
+                                            'status'=>$changedStatus,
                                             'nodeId'=>$componentRow['nodeId'],
                                             'ownerGroup'=>$componentRow['ownerGroup']);                                                         
 
@@ -200,15 +206,20 @@
                             $checkPropertiesResults = $dbh->query("SELECT *FROM $CheckPropertiesTable where ownerComponent=$componentId;");
                             if($checkPropertiesResults) 
                             {
+                                $changedStatus;
                                 $properties =array();
                                 while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                                 {
+                                    if($propertyRow['accepted'] == 'true')
+                                        $changedStatus = 'ACCEPTED';
+                                    else 
+                                        $changedStatus = $propertyRow['severity'];
 
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'name'=>$propertyRow['name'],  
                                                             'value'=>$propertyRow['value'],                                                            
                                                             'result'=>$propertyRow['result'],
-                                                            'severity'=>$propertyRow['severity'],
+                                                            'severity'=>$changedStatus,
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
                                                             'ownerComponent'=>$propertyRow['ownerComponent']); 
@@ -277,14 +288,20 @@
                     $checkComponentsResults = $dbh->query("SELECT *FROM ComparisonCheckComponents where ownerGroup= $groupId;");
                     if($checkComponentsResults) 
                     {
+                        $changedStatus;
                         $components =array();
                         while ($componentRow = $checkComponentsResults->fetch(\PDO::FETCH_ASSOC)) 
                         {
+                            if($componentRow['accepted'] == 'true')
+                                $changedStatus = 'ACCEPTED';
+                            else 
+                                $changedStatus = $componentRow['status'];
+
                             $componentValues = array('id'=>$componentRow['id'], 
                                             'sourceAName'=>$componentRow['sourceAName'],  
                                             'sourceBName'=>$componentRow['sourceBName'],
                                             'subComponentClass'=>$componentRow['subComponentClass'],
-                                            'status'=>$componentRow['status'],
+                                            'status'=>$changedStatus,
                                             'sourceANodeId'=>$componentRow['sourceANodeId'],
                                             'sourceBNodeId'=>$componentRow['sourceBNodeId'],
                                             'ownerGroup'=>$componentRow['ownerGroup']);                                                         
@@ -294,9 +311,14 @@
                             $checkPropertiesResults = $dbh->query("SELECT *FROM ComparisonCheckProperties where ownerComponent=$componentId;");
                             if($checkPropertiesResults) 
                             {
+                                $changedStatus;
                                 $properties =array();
                                 while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                                 {
+                                    if($propertyRow['accepted'] == 'true')
+                                        $changedStatus = 'ACCEPTED';
+                                    else 
+                                        $changedStatus = $propertyRow['severity'];
 
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'sourceAName'=>$propertyRow['sourceAName'],  
@@ -304,7 +326,7 @@
                                                             'sourceAValue'=>$propertyRow['sourceAValue'],
                                                             'sourceBValue'=>$propertyRow['sourceBValue'],
                                                             'result'=>$propertyRow['result'],
-                                                            'severity'=>$propertyRow['severity'],
+                                                            'severity'=>$changedStatus,
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
                                                             'ownerComponent'=>$propertyRow['ownerComponent']); 

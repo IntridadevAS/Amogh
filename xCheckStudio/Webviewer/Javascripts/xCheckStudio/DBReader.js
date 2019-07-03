@@ -45,18 +45,6 @@ DBReader.prototype.addComponentsToDB = function (viewerContainer) {
             busySpinner.classList.remove('show')
     });
 
-    $.ajax({
-        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'DataSourceType' : '1D'},
-        type: "POST",
-        url: "PHP/CreateReadOnlyResultsDB.php"
-       }).done(function (data) {
-        console.log(data);
-        // remove busy spinner
-        var busySpinner = document.getElementById("divLoading");
-        if(busySpinner.classList.contains('show'))
-            busySpinner.classList.remove('show')
-    });
-
 }
 
 DBReader.prototype.ProcessDbData = function (Db_data) {

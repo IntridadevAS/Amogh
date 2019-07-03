@@ -661,10 +661,10 @@ function ComplianceReviewManager(complianceCheckManager,
                         var status = new Array();
                         status = msg;
                         var changedStatus = status[0];
-                        if(status[0] !== _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
+                        // if(status[0] !== _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
                             _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             _this.changeReviewTableStatus(_this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-                        }
+                        // }
 
                         var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                         for(var i = 0; i < propertiesLen; i++) {
