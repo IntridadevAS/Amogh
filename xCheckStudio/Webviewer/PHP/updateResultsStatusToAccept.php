@@ -168,7 +168,37 @@ function updatePropertyComparisonStatusInReview() {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
         $command->execute(array($changedStatusOfComponents, $componentid));
     }
-    
+
+    $dbh->commit();
+
+    $dbh->beginTransaction(); 
+
+    $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+    $command->execute(array($componentid));
+    $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $index = 0;
+    $toBecompstatus = 'true';
+    while($index < count($statusChanged)) {
+        if($statusChanged[$index]['accepted'] == 'true') {
+            $index++;
+            continue;
+        }
+        else if($statusChanged[$index]['severity'] == 'OK' && $statusChanged[$index]['accepted'] == 'false') {
+            $index++;
+            continue;
+        }
+        else {
+            $toBecompstatus = 'false';
+            break;
+        }
+    }
+
+    if($toBecompstatus == 'true') {
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($toBecompstatus, $componentid));
+        echo 'ACCEPTED';
+    }
 
     $dbh->commit();
     $dbh = null; 
@@ -293,6 +323,38 @@ function updatePropertyComplianceStatusInReview() {
         $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
         $command = $dbh->prepare($sql1);
         $command->execute(array($changedStatusOfComponents, $componentid));
+    }
+
+    $dbh->commit();
+
+    $dbh->beginTransaction(); 
+    $sql = 'SELECT * FROM ' . $propertiesTableName . ' WHERE ownerComponent=?';
+    $command = $dbh->prepare($sql);
+    $command->execute(array($componentid));
+    $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $index = 0;
+    $toBecompstatus = 'true';
+    while($index < count($statusChanged)) {
+        if($statusChanged[$index]['accepted'] == 'true') {
+            $index++;
+            continue;
+        }
+        else if($statusChanged[$index]['severity'] == 'OK' && $statusChanged[$index]['accepted'] == 'false') {
+            $index++;
+            continue;
+        }
+        else {
+            $toBecompstatus = 'false';
+            break;
+        }
+    }
+
+    if($toBecompstatus == 'true') {
+        $sql = 'UPDATE ' .  $componentTableName . ' SET accepted=? WHERE id=?';
+        $command = $dbh->prepare($sql);
+        $command->execute(array($toBecompstatus, $componentid));
+        echo 'ACCEPTED';
     }
 
     $dbh->commit();

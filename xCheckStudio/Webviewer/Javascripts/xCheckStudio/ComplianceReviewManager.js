@@ -422,6 +422,11 @@ function ComplianceReviewManager(complianceCheckManager,
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
+                            else if(msg.trim() == "ACCEPTED") {
+                                var changedStatus = msg.trim();
+                                _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                                _this.getRowHighlightColor(changedStatus);
+                            }
                             var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];

@@ -882,7 +882,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                             if(!originalstatus.includes("*")) {
                                 var changedStatus = originalstatus + "*";
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                                // _this.SelectedComponentRow.cells[2] = changedStatus;
+                            }
+                            else if(msg.trim() == "ACCEPTED") {
+                                var changedStatus = msg.trim();
+                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                                _this.getRowHighlightColor(changedStatus);
                             }
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
