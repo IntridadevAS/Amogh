@@ -41,6 +41,7 @@
                 name TEXT,                
                 subComponentClass TEXT,
                 status TEXT,
+                accepted TEXT,
                 nodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
             $dbh->exec($command);    
@@ -57,6 +58,7 @@
                 value TEXT,
                 result TEXT,
                 severity TEXT,
+                accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
                 ownerComponent INTEGER NOT NULL)'; 
@@ -103,11 +105,13 @@
                         name, 
                         subComponentClass, 
                         status, 
+                        accepted,
                         nodeId,
-                        ownerGroup) VALUES(?,?,?,?,?) ';                                        
+                        ownerGroup) VALUES(?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName, 
                                              $checkComponent->SubComponentClass,
                                              $checkComponent->Status,
+                                             'false',
                                              $checkComponent->SourceANodeId,
                                              $groupId);
 
@@ -133,13 +137,15 @@
                                                 value, 
                                                 result, 
                                                 severity,
+                                                accepted,
                                                 performCheck,
                                                 description,
-                                                ownerComponent) VALUES(?,?,?,?,?,?,?) ';                                        
+                                                ownerComponent) VALUES(?,?,?,?,?,?,?,?) ';                                        
                         $propertyValues = array($checkProperty->SourceAName,
                                                 $checkProperty->SourceAValue,
                                                 $checkProperty->Result,
                                                 $checkProperty->Severity,
+                                                'false',
                                                 $checkProperty->PerformCheck,
                                                 $checkProperty->Description,
                                                 $componentId);
@@ -201,6 +207,7 @@
                 sourceBName TEXT,
                 subComponentClass TEXT,
                 status TEXT,
+                accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
@@ -220,6 +227,7 @@
                 sourceBValue TEXT,
                 result TEXT,
                 severity TEXT,
+                accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
                 ownerComponent INTEGER NOT NULL)'; 
@@ -271,14 +279,16 @@
                         sourceAName, 
                         sourceBName, 
                         subComponentClass, 
-                        status, 
+                        status,
+                        accepted, 
                         sourceANodeId, 
                         sourceBNodeId,
-                        ownerGroup) VALUES(?,?,?,?,?,?,?) ';                                        
+                        ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
                                              $checkComponent->SubComponentClass,
                                              $checkComponent->Status,
+                                             'false',
                                              $checkComponent->SourceANodeId,
                                              $checkComponent->SourceBNodeId,
                                              $groupId);
@@ -307,15 +317,17 @@
                             sourceBValue, 
                             result, 
                             severity,
+                            accepted,
                             performCheck,
                             description,
-                            ownerComponent) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
+                            ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?) ';                                        
                         $propertyValues = array($checkProperty->SourceAName,  
                                                  $checkProperty->SourceBName,
                                                  $checkProperty->SourceAValue,
                                                  $checkProperty->SourceBValue,
                                                  $checkProperty->Result,
                                                  $checkProperty->Severity,
+                                                 'false',
                                                  $checkProperty->PerformCheck,
                                                  $checkProperty->Description,
                                                  $componentId);

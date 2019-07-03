@@ -463,23 +463,6 @@ var xCheckStudio;
                     if(busySpinner.classList.contains('show'))
                         busySpinner.classList.remove('show')               
             });
-
-            $.ajax({
-                data: { 'Components': JSON.stringify( this.sourceProperties), 'Source' : source, 'DataSourceType' : '3D' },
-                type: "POST",
-                url: "PHP/CreateReadOnlyResultsDB.php"
-               }).done(function (msg) {
-                if (msg !== 'fail') 
-                {
-                    _this.NodeIdvsComponentIdList =  JSON.parse(msg);
-                }
-                // remove busy spinner
-                    var busySpinner = document.getElementById("divLoading");
-                    if(busySpinner.classList.contains('show'))
-                        busySpinner.classList.remove('show')               
-            });
-
-
         }
 
         xCheckStudioInterface.prototype.getModelBrowser = function () {

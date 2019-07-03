@@ -1,7 +1,7 @@
 <?php
             include 'CheckComponents.php';
             include 'CheckResultsWriter.php';
-            include 'CheckResultsWriterToReadOnlyDB.php';
+    
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SourceASelectedCompoents'] )||
@@ -53,7 +53,6 @@
 
             // write check result to database
             writeComparisonResultToDB();   
-            writeComparisonResultToOriginalDB();         
       
 
             // write not matched components to database
@@ -63,16 +62,8 @@
             writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, 
                                           "SourceBNotMatchedComponents", 
                                           $projectName);
-
-            writeNotMatchedComponentsToOriginalDB($SourceANotMatchedComponents, 
-                                          "SourceANotMatchedComponents", 
-                                          $projectName);
-            writeNotMatchedComponentsToOriginalDB($SourceBNotMatchedComponents, 
-                                          "SourceBNotMatchedComponents", 
-                                          $projectName);
             
             writeComparisonCheckStatistics();
-            writeComparisonCheckStatisticsToOriginalDB();
 
             // get source components
             function getSourceComponents()
