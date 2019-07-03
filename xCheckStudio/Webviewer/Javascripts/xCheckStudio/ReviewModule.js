@@ -257,3 +257,20 @@ function onSaveProject(event) {
         // busySpinner.classList.remove('show')
     }
 }
+
+function onReferenceClick(selectedRow)
+{
+    var referenceManager = new ReferenceManager(selectedRow);
+    referenceManager.ShowReferenceDiv();    
+}
+
+ function sadsajkdhjlsak() 
+{
+    var webAddressString = document.getElementById("webAddressInput").value;
+    alert(webAddressString);
+}
+
+function toggleDropdown() 
+{
+    document.getElementById("newReferenceDropdown").classList.toggle("show");
+}
