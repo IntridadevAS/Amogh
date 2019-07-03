@@ -538,9 +538,12 @@ function SaveCheckResultsToCheckSpaceDB()
                 SaveSourceBComplianceCheckGroups($tempDbh, $dbh);
                 SaveSourceBComplianceCheckComponents($tempDbh, $dbh);
                 SaveSourceBComplianceCheckProperties($tempDbh, $dbh);               
-              
+                              
                 // save check result statistics
                 SaveCheckStatistics($tempDbh, $dbh);
+
+                // save comparison check references
+                SaveComparisonCheckReferences($tempDbh, $dbh);
 
                 // commit update
                 $dbh->commit();
@@ -565,6 +568,42 @@ function SaveCheckResultsToCheckSpaceDB()
                 return;
             } 
 
+}
+
+function  SaveComparisonCheckReferences($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckReferences;");
+    if($selectResults) 
+    {
+        // create table
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
+        $dbh->exec($command);  
+        
+        $command = 'CREATE TABLE ComparisonCheckReferences(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            webAddress TEXT,
+            document TEXT,
+            pic TEXT,
+            users TEXT,
+            parentComponent INTEGER NOT NULL    
+          )';         
+        $dbh->exec($command); 
+
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckReferences(id, webAddress, document, pic, 
+                      users, parentComponent) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['webAddress'], 
+                                       $row['document'],
+                                       $row['pic'], 
+                                       $row['users'], 
+                                       $row['parentComponent']));
+        }                    
+    }
 }
 
 function SaveSelectedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
@@ -867,17 +906,19 @@ function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
         $command = 'CREATE TABLE SourceBComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);  
 
-        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
             $insertStmt->execute(array($row['id'], 
                                     $row['componentClass'], 
-                                    $row['componentCount']));
+                                    $row['componentCount'],
+                                    $row['categoryStatus']));
         }   
     }
 }
@@ -960,17 +1001,19 @@ function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
         $command = 'CREATE TABLE SourceAComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);  
 
-        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?, ?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
             $insertStmt->execute(array($row['id'], 
                                     $row['componentClass'], 
-                                    $row['componentCount']));
+                                    $row['componentCount'],
+                                    $row['categoryStatus']));
         }   
     }
 }
@@ -1253,15 +1296,16 @@ function SaveComparisonCheckGroups( $tempDbh, $dbh)
         $command = 'CREATE TABLE ComparisonCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);    
         
-        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
-            $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount']));
+            $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount'], $row['categoryStatus']));
         }                    
     }      
 }

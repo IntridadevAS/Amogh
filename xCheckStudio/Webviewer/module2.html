@@ -273,27 +273,41 @@
                              
                 <!-- Enter web address overlay -->
                 <div id="addAddressOverlay" class="overlay"></div>
-                <div id="addAddressPopup" class="popup" style="height: 80px;">           
+                <div id="addAddressPopup" class="popup" style="height: 80px;">
                     <div class="popupcontent" style="padding: 10px; ">
                         <textarea id="webAddressInput" style="resize: none; width:100%;"></textarea>
                         <button id="addAddress">Add</button>
                         <button id="CancelAddAddress">Cancel</button>
                     </div>
                 </div>
-
-                 <!-- Add Document overlay -->
-                 <div id="addDocumentOverlay" class="overlay"></div>
-                 <div id="addDocumentPopup" class="popup" style="height: 100px;">           
-                     <div class="popupcontent" style="padding: 10px; ">
-                            <form id="UploadReferenceDocForm" action="UploadReferenceDoc.php" method="post" enctype="multipart/form-data">
-                                Select Document to upload:
-                                <input type="file" name="fileToUpload" id="fileToUpload">                                                         
-                            </form>
-                            <br>
-                            <button id="UploadRefernceDocumentBtn">Upload</button>
-                            <button id="CancelAddDocument">Cancel</button>
-                     </div>
-                 </div>
+                
+                <!-- Add Document overlay -->
+                <div id="addDocumentOverlay" class="overlay"></div>
+                <div id="addDocumentPopup" class="popup" style="height: 100px;">
+                    <div class="popupcontent" style="padding: 10px; ">
+                        <form id="UploadReferenceDocForm" action="UploadReferenceDoc.php" method="post" enctype="multipart/form-data">
+                            Select Document to upload:
+                            <input type="file" name="fileToUpload" id="fileToUpload" accept=".xml, .XML, .pdf, .PDF, .txt, .TXT">
+                        </form>
+                        <br>
+                        <button id="UploadRefernceDocumentBtn">Add</button>
+                        <button id="CancelAddDocument">Cancel</button>
+                    </div>
+                </div>
+                
+                <!-- Add Picture overlay -->
+                <div id="addPictureOverlay" class="overlay"></div>
+                <div id="addPicturePopup" class="popup" style="height: 100px;">
+                    <div class="popupcontent" style="padding: 10px; ">
+                        <form id="UploadReferencePicForm" action="UploadReferenceDoc.php" method="post" enctype="multipart/form-data">
+                            Select Document to upload:
+                            <input type="file" name="fileToUpload" id="picToUpload" accept=".jpg, .jpeg, .jpe, .bmp, .gif, .tif, .png">
+                        </form>
+                        <br>
+                        <button id="UploadReferncePicBtn">Add</button>
+                        <button id="CancelAddPic">Cancel</button>
+                    </div>
+                </div>
 
             </div>
         </div>

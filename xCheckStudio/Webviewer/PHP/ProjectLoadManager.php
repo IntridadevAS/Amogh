@@ -96,6 +96,9 @@
             // save check result statistics
             CopyCheckStatistics($dbh, $tempDbh);
 
+            // save check result statistics
+            CopyComparisonCheckReferences($dbh, $tempDbh);
+
             // commit update
             $dbh->commit();
             $tempDbh->commit();
@@ -110,6 +113,41 @@
 
         echo "success"; 
         return;
+    }
+
+    function  CopyComparisonCheckReferences($fromDbh, $toDbh)
+    {     
+        $results = $fromDbh->query("SELECT * FROM ComparisonCheckReferences");
+        if($results)
+        {
+
+            $command = 'DROP TABLE IF EXISTS ComparisonCheckReferences;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE ComparisonCheckReferences(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                webAddress TEXT,
+                document TEXT,
+                pic TEXT,
+                users TEXT,
+                parentComponent INTEGER NOT NULL    
+              )';         
+            $toDbh->exec($command);  
+    
+            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckReferences(id, webAddress, document, pic, users,
+                parentComponent) VALUES(?,?,?,?,?,?)"); 
+
+           
+
+            while ($row = $results->fetch(\PDO::FETCH_ASSOC)) 
+            {  
+                $insertStmt->execute(array($row['id'], 
+                                    $row['webAddress'], 
+                                    $row['document'],
+                                    $row['pic'], 
+                                    $$row['users'], 
+                                    $row['parentComponent']));
+            }   
+        }     
     }
 
     function  CopyCheckStatistics($fromDbh, $toDbh)
@@ -176,17 +214,19 @@
             $command = 'CREATE TABLE SourceBComplianceCheckGroups(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 componentClass TEXT NOT NULL,
-                componentCount Integer)'; 
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
             $toDbh->exec($command);  
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['componentClass'], 
-                                        $row['componentCount']));
+                                        $row['componentCount'], 
+                                        $row['categoryStatus']));
             }   
         }
     }
@@ -272,17 +312,19 @@
             $command = 'CREATE TABLE SourceAComplianceCheckGroups(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 componentClass TEXT NOT NULL,
-                componentCount Integer)'; 
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
             $toDbh->exec($command);  
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['componentClass'], 
-                                        $row['componentCount']));
+                                        $row['componentCount'],
+                                        $row['categoryStatus']));
             }   
         }
     }
@@ -479,15 +521,16 @@
             $command = 'CREATE TABLE ComparisonCheckGroups(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 componentClass TEXT NOT NULL,
-                componentCount Integer)'; 
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
             $toDbh->exec($command);    
             
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
-                $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount']));
+                $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount'], $row['categoryStatus']));
             }                    
         }      
     }

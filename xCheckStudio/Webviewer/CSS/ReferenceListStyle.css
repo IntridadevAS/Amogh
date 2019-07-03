@@ -11,25 +11,30 @@
   } */
 
   ol {
-    background: #ff9999;
+    /* background: #ff9999; */
     padding: 5px;
     font-size: 12px;
+    font-weight: bold;
+    background-color: white;
   }
   
   ul {
-    background: #3399ff;
+    /* background: #ff9999; */
     padding: 5px;
     font-size: 12px;
+    background-color: white;
   }
   
   ol li {
-    background: #ffe5e5;
+    /* background: #ffe5e5; */
     padding: 5px;
     margin-left: 20px;
+    background-color: white;
   }
   
   ul li {
-    background: #cce5ff;
-    margin: 5px;
+    /* background: #cce5ff; */
+    /* margin: 5px; */
     margin-left: 20px;
+    background-color: white;
   }
