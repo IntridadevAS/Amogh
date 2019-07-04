@@ -8,10 +8,9 @@ var xCheckStudio;
             this.checkType = checkType;
 
             this._selectedNodeId = null;
-            //this._selectedComponentId = null;
+         
             this.nodeIdArray = [];
-            // this.componentIdVsComponentData = {};
-            // this.nodeIdVsComponentData = {};
+         
             this.sourceProperties = {};
 
             this.excelReader = undefined;
@@ -316,8 +315,7 @@ var xCheckStudio;
             if (nodeId !== null &&
                 (_this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
                     _this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.Part ||
-                    _this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.PartInstance)
-                /*&& xCheckStudioInterface != null*/) {
+                    _this._firstViewer.model.getNodeType(nodeId) === Communicator.NodeType.PartInstance)) {
 
                 if (_this._firstViewer.model.isNodeLoaded(nodeId)) {
 
@@ -330,14 +328,17 @@ var xCheckStudio;
                                 name = _this._firstViewer.model.getNodeName(nodeId)
                             }
                             var mainComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.mainCategory);
-                            if(mainComponentClass == undefined)
-                            {
+                            if (_this.SourceType.toLowerCase() == "rvt" &&
+                                mainComponentClass == undefined) {
                                 mainComponentClass = _this._firstViewer.model.getNodeName(parentNodeId);
                             }
 
                             var subComponentClass = _this.getPropertyValue(nodeProperties, identifierProperties.subClass);
-                            if(subComponentClass == undefined)
+                            if (_this.SourceType.toLowerCase() == "rvt" &&
+                                subComponentClass == undefined) {
                                 subComponentClass = mainComponentClass
+                            }
+
                             if (mainComponentClass !== undefined &&
                                 name !== undefined &&
                                 subComponentClass !== undefined) {                            
@@ -373,31 +374,8 @@ var xCheckStudio;
                                 }
 
                                 // add genericProperties object to sourceproperties collection
-                                _this.sourceProperties[nodeId] = (genericPropertiesObject);
-
-                                // // keep track of component vs node id
-                                // var componentIdentifier = name
-
-                                // var componentNodeData = new ComponentNodeData(name,
-                                //     mainComponentClass,
-                                //     subComponentClass,                                    
-                                //     nodeId);                               
-                    
-                                // _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                                // _this.nodeIdVsComponentData[nodeId] = componentNodeData;
-                             }
-                            // else if (name !== undefined) {
-
-                            //     var componentNodeData = new ComponentNodeData(name,
-                            //         "",
-                            //         "",                                   
-                            //         nodeId);
-
-                            //     // keep track of component vs node id
-                            //     var componentIdentifier = name
-                            //     _this.componentIdVsComponentData[componentIdentifier] = componentNodeData;
-                            //     _this.nodeIdVsComponentData[nodeId] = componentNodeData;
-                            // }
+                                _this.sourceProperties[nodeId] = (genericPropertiesObject);                                
+                             }                            
                         }
 
                         var children = _this._firstViewer.model.getNodeChildren(nodeId);
