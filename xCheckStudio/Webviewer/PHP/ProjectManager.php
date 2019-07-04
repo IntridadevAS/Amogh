@@ -538,10 +538,15 @@ function SaveCheckResultsToCheckSpaceDB()
                 SaveSourceBComplianceCheckGroups($tempDbh, $dbh);
                 SaveSourceBComplianceCheckComponents($tempDbh, $dbh);
                 SaveSourceBComplianceCheckProperties($tempDbh, $dbh);               
-              
+                              
                 // save check result statistics
                 SaveCheckStatistics($tempDbh, $dbh);
 
+                // save comparison check references
+                SaveCheckReferences($tempDbh, $dbh, "ComparisonCheckReferences");
+                SaveCheckReferences($tempDbh, $dbh, "SourceAComplianceCheckReferences");
+                SaveCheckReferences($tempDbh, $dbh, "SourceBComplianceCheckReferences");
+               
                 // commit update
                 $dbh->commit();
                 $tempDbh->commit();
@@ -565,6 +570,42 @@ function SaveCheckResultsToCheckSpaceDB()
                 return;
             } 
 
+}
+
+function  SaveCheckReferences($tempDbh, $dbh, $tableName)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
+    if($selectResults) 
+    {
+        // create table
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+        $dbh->exec($command);  
+        
+        $command = 'CREATE TABLE '.$tableName.'(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            webAddress TEXT,
+            document TEXT,
+            pic TEXT,
+            users TEXT,
+            parentComponent INTEGER NOT NULL    
+          )';         
+        $dbh->exec($command); 
+
+        $insertStmt = $dbh->prepare("INSERT INTO ".$tableName."(id, webAddress, document, pic, 
+                      users, parentComponent) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['webAddress'], 
+                                       $row['document'],
+                                       $row['pic'], 
+                                       $row['users'], 
+                                       $row['parentComponent']));
+        }                    
+    }
 }
 
 function SaveSelectedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
@@ -867,17 +908,19 @@ function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
         $command = 'CREATE TABLE SourceBComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);  
 
-        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
             $insertStmt->execute(array($row['id'], 
                                     $row['componentClass'], 
-                                    $row['componentCount']));
+                                    $row['componentCount'],
+                                    $row['categoryStatus']));
         }   
     }
 }
@@ -894,12 +937,13 @@ function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
             name TEXT,                
             subComponentClass TEXT,
             status TEXT,
+            accepted TEXT,
             nodeId TEXT,
             ownerGroup INTEGER NOT NULL)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, subComponentClass, status,
-                                    nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+                                    accepted, nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -908,6 +952,7 @@ function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
                                     $row['name'], 
                                     $row['subComponentClass'],
                                     $row['status'], 
+                                    $row['accepted'], 
                                     $row['nodeId'], 
                                     $row['ownerGroup']));
         }   
@@ -927,13 +972,14 @@ function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
             value TEXT,
             result TEXT,
             severity TEXT,
+            accepted TEXT,
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
-                                    severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+                                    severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -943,6 +989,7 @@ function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
                                     $row['value'],
                                     $row['result'], 
                                     $row['severity'], 
+                                    $row['accepted'], 
                                     $row['performCheck'], 
                                     $row['description'], 
                                     $row['ownerComponent']));
@@ -960,17 +1007,19 @@ function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
         $command = 'CREATE TABLE SourceAComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);  
 
-        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?, ?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
             $insertStmt->execute(array($row['id'], 
                                     $row['componentClass'], 
-                                    $row['componentCount']));
+                                    $row['componentCount'],
+                                    $row['categoryStatus']));
         }   
     }
 }
@@ -987,12 +1036,13 @@ function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
             name TEXT,                
             subComponentClass TEXT,
             status TEXT,
+            accepted TEXT,
             nodeId TEXT,
             ownerGroup INTEGER NOT NULL)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status,
-                                    nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+                                    accepted, nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1001,6 +1051,7 @@ function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
                                     $row['name'], 
                                     $row['subComponentClass'],
                                     $row['status'], 
+                                    $row['accepted'], 
                                     $row['nodeId'], 
                                     $row['ownerGroup']));
         }   
@@ -1020,13 +1071,14 @@ function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
             value TEXT,
             result TEXT,
             severity TEXT,
+            accepted TEXT,
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
-                                    severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+                                    severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1036,6 +1088,7 @@ function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
                                     $row['value'],
                                     $row['result'], 
                                     $row['severity'], 
+                                    $row['accepted'], 
                                     $row['performCheck'], 
                                     $row['description'], 
                                     $row['ownerComponent']));
@@ -1180,13 +1233,14 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
             sourceBName TEXT,
             subComponentClass TEXT,
             status TEXT,
+            accepted TEXT,
             sourceANodeId TEXT,
             sourceBNodeId TEXT,
             ownerGroup INTEGER NOT NULL)'; 
         $dbh->exec($command);    
       
         $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                    sourceAName, sourceBName, subComponentClass, status, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+                    sourceAName, sourceBName, subComponentClass, status, accepted, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1196,6 +1250,7 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
                                  $row['sourceBName'],
                                  $row['subComponentClass'], 
                                  $row['status'], 
+                                 $row['accepted'], 
                                  $row['sourceANodeId'],
                                  $row['sourceBNodeId'], 
                                  $row['ownerGroup']));
@@ -1218,13 +1273,14 @@ function SaveComparisonCheckProperties( $tempDbh, $dbh)
             sourceBValue TEXT,
             result TEXT,
             severity TEXT,
+            accepted TEXT,
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL)'; 
         $dbh->exec($command); 
         
         $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                      sourceAValue, sourceBValue, result, severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?)");
+                      sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1236,6 +1292,7 @@ function SaveComparisonCheckProperties( $tempDbh, $dbh)
                                        $row['sourceBValue'], 
                                        $row['result'],
                                        $row['severity'], 
+                                       $row['accepted'], 
                                        $row['performCheck'], 
                                        $row['description'],
                                        $row['ownerComponent']));
@@ -1253,15 +1310,16 @@ function SaveComparisonCheckGroups( $tempDbh, $dbh)
         $command = 'CREATE TABLE ComparisonCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
-            componentCount Integer)'; 
+            componentCount Integer,
+            categoryStatus TEXT NOT NULL)'; 
         $dbh->exec($command);    
         
-        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount) VALUES(?,?,?)");
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
-            $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount']));
+            $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount'], $row['categoryStatus']));
         }                    
     }      
 }

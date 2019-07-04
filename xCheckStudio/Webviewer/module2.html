@@ -2,6 +2,10 @@
 <html>
 
 <head>
+    <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css"/>
+    <link href="CSS/Dropdown.css" rel="stylesheet" type="text/css"/>
+    <link href="CSS/ReferenceListStyle.css" rel="stylesheet" type="text/css"/>
+   
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModule.js"></script>
 
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
@@ -17,8 +21,6 @@
     <!-- <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script> -->
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
-
-
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
@@ -45,6 +47,7 @@
     <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\PDFExporter.js"></script> -->
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReferenceManager.js"></script>
 
     <script type="text/javascript">
         // Load the Visualization API and the corechart package.
@@ -214,12 +217,102 @@
         .disable textarea {
             overflow: hidden;
         }
+        
     </style>
 </head>
 
 <body style="margin: 0;
  background: rgba(255, 255, 255, 1.0);">
 
+    <!-- reference overlay div -->
+    <div id="referenceOverlay" class="overlay"></div>
+    <div id="referebcePopup" class="popup">
+        <div class="popupcontrols" style="height: 5%; width: 100%;">
+            <span id="referencePopupclose" class="popupclose">X</span>
+        </div>
+        <div class="popupcontent" style="height: 90%; width: 100%;">                 
+              
+            <table width="100%" height="100%">
+                <tr>
+                    <td width="10%" height="100%" style="vertical-align:top">
+                        <div class="dropdown">
+                            <button onclick="toggleDropdown()" class="dropbtn">New Reference</button>
+                            <div id="newReferenceDropdown" class="dropdown-content">
+                                <a href="#webAddress" id="addWebAddressBtn">Web Address</a>
+                                <a href="#document"   id="addDocumentBtn">Document</a>
+                                <a href="#picture" id="addPictureBtn">Picture</a>
+                                <a href="#predefinedUser"  id="addUserBtn">Predefined User</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="90%" height="100%" style="vertical-align:top">
+                          
+                        <div id="referenceContents"  style="width:100%; height:100%; overflow-x: scroll; overflow-y:scroll">
+                            <ol id="referenceList">
+                                <li>Web Address
+                                    <ul id="webAddressList">
+                                    </ul>
+                                </li>
+                                <li>Document
+                                    <ul id="documentList">
+                                    </ul>                                
+                                </li>
+                                <li>Picture
+                                    <ul id="pictureList">
+                                    </ul>    
+                                </li>
+                                <li>User
+                                    <ul id="userList">
+                                    </ul> 
+                                </li>
+                            </ol>
+                        </div>                     
+                    </td>
+                </tr>
+            </table>
+                             
+                <!-- Enter web address overlay -->
+                <div id="addAddressOverlay" class="overlay"></div>
+                <div id="addAddressPopup" class="popup" style="height: 80px;">
+                    <div class="popupcontent" style="padding: 10px; ">
+                        <textarea id="webAddressInput" style="resize: none; width:100%;"></textarea>
+                        <button id="addAddress">Add</button>
+                        <button id="CancelAddAddress">Cancel</button>
+                    </div>
+                </div>
+                
+                <!-- Add Document overlay -->
+                <div id="addDocumentOverlay" class="overlay"></div>
+                <div id="addDocumentPopup" class="popup" style="height: 100px;">
+                    <div class="popupcontent" style="padding: 10px; ">
+                        <form id="UploadReferenceDocForm" action="UploadReferenceDoc.php" method="post" enctype="multipart/form-data">
+                            Select Document to upload:
+                            <input type="file" name="fileToUpload" id="fileToUpload" accept=".xml, .XML, .pdf, .PDF, .txt, .TXT">
+                        </form>
+                        <br>
+                        <button id="UploadRefernceDocumentBtn">Add</button>
+                        <button id="CancelAddDocument">Cancel</button>
+                    </div>
+                </div>
+                
+                <!-- Add Picture overlay -->
+                <div id="addPictureOverlay" class="overlay"></div>
+                <div id="addPicturePopup" class="popup" style="height: 100px;">
+                    <div class="popupcontent" style="padding: 10px; ">
+                        <form id="UploadReferencePicForm" action="UploadReferenceDoc.php" method="post" enctype="multipart/form-data">
+                            Select Document to upload:
+                            <input type="file" name="fileToUpload" id="picToUpload" accept=".jpg, .jpeg, .jpe, .bmp, .gif, .tif, .png">
+                        </form>
+                        <br>
+                        <button id="UploadReferncePicBtn">Add</button>
+                        <button id="CancelAddPic">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+        
     <div id="menu">
         <a href="#" onclick="hide()">
             <img src="images/hide.png" />Hide
@@ -801,7 +894,6 @@
                             continue;
                         }
 
-
                         if (key == 'Comparison') {
                             comparisonCheckGroups = new CheckGroups();
                             comparisonCheckGroups.restore(checkResults[key], false);
@@ -823,6 +915,9 @@
 
                     // load analytics data
                     document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                },
+                error: function (error) {
+                    //alert('error; ' + eval(error));
                 }
             });
 
@@ -844,6 +939,9 @@
                             else if (key === "transpose") {
                             }
                             else if (key === "freeze") {
+                            }
+                            else if (key === "reference") {
+                                onReferenceClick(this);
                             }
                         },
                         items: {
@@ -894,6 +992,9 @@
                             },
                             "freeze": {
                                 name: "Freeze",
+                            },
+                            "reference": {
+                                name: "Reference",
                             }
                         }
                     };
