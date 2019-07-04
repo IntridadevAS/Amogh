@@ -1,228 +1,86 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <link href="images/UIPackage/favicon.png" rel="shortcut icon" />
-    <meta charset="utf-8" />
-    <meta content="width=1280, maximum-scale=1.0" name="viewport" />
-
-    <!-- <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script> -->
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
-
-
-    <link href="CSS\indexPage.css" rel="stylesheet" type="text/css" />
-    <meta content="Launchpad by Anima" name="author">
-    <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
-    </meta>
-
-    <!--test-->
-    
-    <style>
-        #divLoading {
-            display: none;
-        }
-
-        #divLoading.show {
-            display: block;
-            position: fixed;
-            z-index: 100;
-            background-image: url('images/busySpinner.gif');
-            opacity: 0.9;
-            background-repeat: no-repeat;
-            background-position: center;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            top: 0;
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</head>
-
-<body style="margin: 0; background: rgba(255, 255, 255, 1.0);">
-    <div id="divLoading"> </div>
-    <input id="anPageName" name="page" type="hidden" value="loginpage" />
-    <div class="loginpage">
-        <div style="width: 1280px; height: 100%; position:relative; margin:auto;">
-            <div class="bg">
-                <img src="images/UIPackage/login-page-bg.png" class="bg1" />
-                <img src="images/UIPackage/login-page-symbol.png" class="symbol" />
-            </div>
-            <div class="header">
-                <div class="bg1">
-                </div>
-                <a href="https://www.intrida.com/" target="_blank">
-                    <div class="helpbtn">
-                        <img src="images/UIPackage/module2-bg 2@2x.png" class="bg2" />
-                        <img src="images/UIPackage/prep-home-page-icon@2x.png" class="icon" />
-                    </div>
-                </a>
-                <div class="logo">
-                    <img src="images/UIPackage/module2-with-open-menu-check@2x.png" class="check" />
-                    <img src="images/UIPackage/landing-page-studio@2x.png" class="studio" />
-                    <img src="images/UIPackage/module1-symbol 1@2x.png" class="symbol" />
-                </div>
-            </div>
-            <div class="footer">
-                <div class="bg1">
-                </div>
-            </div>
-            <form method="post" class="form">
-                <div class="username">
-                    <div class="username1">
-                        <input id="usernametext" type="text" size="35" style="height:30px;font-size:14pt; width: 350px"
-                            placeholder="User Name" autofocus required>
-                    </div>
-
-                </div>
-                <div class="password">
-                    <div class="password1">
-                        <input id="passwordtext" type="password" size="35" align="right"
-                            style="height:30px;width: 350px; font-size:14pt;" placeholder="Password">
-                    </div>
-                </div>
-                <div class="loader" id="myDIV" style="position:absolute; left:120px; top:10px; visibility: hidden;">
-                </div>
-                <!--<a href="landingpage.html">-->
-                <!-- <div type="submit" class="loginbtn" onclick="loginButtonClicked()" style="cursor: pointer;" value="Submit">
-                            <img src="/images/UIPackage/login-page-bg 2.png" class="bg1"/>
-                            <div class="login">
-                                Log in
-                            </div>
-                        </div> -->
-                <div type="submit" class="loginbtn" style="cursor: pointer;" value="Submit" id="loginButton">
-                    <img src="images/UIPackage/login-page-bg 2.png" class="bg1" style="cursor: pointer;" />
-                    <div class="login" style="cursor: pointer;">
-                        Log in
-                    </div>
-                </div>
-                <!--</a>-->
-                <div class="forgottenpassword" style="cursor: pointer;">
-                    Forgotten password?
-                </div>
-                <div class="lang">
-                    <div class="language">
-                        Language
-                    </div>
-                    <div class="english">
-                        English
-                    </div>
-                    <img src="images/UIPackage/module1-triangle@2x.png" class="triangle" />
-                </div>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check Studio</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="src/css/launchPage.css">
+    <link rel="stylesheet" href="src/css/fonts.css">
+  </head>
+  <body>
+    <header>
+      <div id="dropDownBtn" class="dropDownMenu" >
+              <img src="public/symbols/MenuRound.svg" alt="">
+      </div>
+      <!--Drop Down "Hamburger" Menu   -->
+      <div id="menu" class="menu">
+        <div class="menuContainer">
+          <a href="">Version Info</a>
         </div>
+        <div class="menuContainer">
+          <a href="">Help</a>
+          <a href="">FAQ's</a>
+          <a href="">What's New</a>
+        </div>
+        <div class="menuContainer">
+          <a href="">Quit Session</a>
+        </div>
+      </div>
+      <!--Drop Down "Hamburger" Menu   -->
+      <form class="" action="index.html" method="post">
+
+      </form>
+      <a class="homeLink" id="homeButton" href="landingPage.html"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+      </div>
+    </header>
+    <div id="background" class="background">
+      <form class="langSelect" action="index.html" method="post">
+        <label for="language">Language:</label>
+        <!-- All languages to be present in options. "Selected" value for language picked when installed -->
+        <!-- Will self-post after being changed -->
+        <select name="language" onchange="this.form.submit();">
+          <option value="english" selected>{{English}}</option>
+          <option value="chinese">{{Chinese}}</option>
+          <option value="german">{{German}}</option>
+        </select>
+      </form>
+      <div id="loginInfo" class="loginInfo">
+        <form class="loginForm" action="index.html" method="post">
+          <input type="text" name="userName" value="" placeholder="USERNAME" id="usernametext">
+          <input type="password" name="password" value="" placeholder="PASSWORD" id="passwordtext">
+          <!-- Error message - only display when returned with an error -->
+          <div class="errorMsgContainer" id="errorMsgContainer">
+            <!--Error Type  -->
+            <p>Incorrect Username or password</p><hr>
+            <!--Error further information  -->
+            <p>For assistance with user name or password reset contact your administrator</p>
+          </div>
+          <button type="button" class="submitBtn" name="login" id="submitBtn" onclick="OnSubmitButtonClicked()">ENTER</button>
         </form>
+      </div>
     </div>
-    <!-- Scripts -->
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="src/scripts/launchPage.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
     <script>
-
-
-        anima_isHidden = function (e) {
-            if (!(e instanceof HTMLElement)) return !1;
-            if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;
-            return !1;
-        };
-        anima_loadAsyncSrcForTag = function (tag) {
-            var elements = document.getElementsByTagName(tag);
-            var toLoad = [];
-            for (var i = 0; i < elements.length; i++) {
-                var e = elements[i];
-                var src = e.getAttribute("src");
-                var loaded = (src != undefined && src.length > 0 && src != 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
-                if (loaded) continue;
-                var asyncSrc = e.getAttribute("src");
-                if (asyncSrc == undefined || asyncSrc.length == 0) continue;
-                if (anima_isHidden(e)) continue;
-                toLoad.push(e);
-            }
-            toLoad.sort(function (a, b) {
-                return anima_getTop(a) - anima_getTop(b);
-            });
-            for (var i = 0; i < toLoad.length; i++) {
-                var e = toLoad[i];
-                var asyncSrc = e.getAttribute("src");
-                e.setAttribute("src", asyncSrc);
-            }
-        };
-        anima_pauseHiddenVideos = function (tag) {
-            var elements = document.getElementsByTagName("video");
-            for (var i = 0; i < elements.length; i++) {
-                var e = elements[i];
-                var isPlaying = !!(e.currentTime > 0 && !e.paused && !e.ended && e.readyState > 2);
-                var isHidden = anima_isHidden(e);
-                if (!isPlaying && !isHidden && e.getAttribute("autoplay") == "autoplay") {
-                    e.play();
-                } else if (isPlaying && isHidden) {
-                    e.pause();
-                }
-            }
-        };
-        anima_loadAsyncSrc = function (tag) {
-            anima_loadAsyncSrcForTag("img");
-            anima_loadAsyncSrcForTag("iframe");
-            anima_loadAsyncSrcForTag("video");
-            anima_pauseHiddenVideos();
-        };
-        var anima_getTop = function (e) {
-            var top = 0;
-            do {
-                top += e.offsetTop || 0;
-                e = e.offsetParent;
-            } while (e);
-            return top;
-        };
-        anima_loadAsyncSrc();
-        anima_old_onResize = window.onresize;
-        anima_new_onResize = undefined;
-       
-        anima_updateOnResize = function () {
-            if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
-                anima_new_onResize = function (x) {
-                    if (anima_old_onResize != undefined) anima_old_onResize(x);
-                    anima_loadAsyncSrc();
-                };
-                window.onresize = anima_new_onResize;
-                setTimeout(function () {
-                    anima_updateOnResize();
-                }, 3000);
-            }
-        };
-        anima_updateOnResize();
-      
-        setTimeout(function () {
-            anima_loadAsyncSrc();
-        }, 200);
-
-    </script>
-    <script>
-            
-        window.onload = function () {
-            var loginButton = document.getElementById("loginButton");
-            loginButton.onclick = function () {
-                validateLogindetails();
-            }
+      function OnSubmitButtonClicked(){;
+        validateLogindetails("LoginStatus"); //call the aysnchronous function with callback function name as argument -- Rahul K
+      }
+      function LoginStatus(value)
+      {
+        if(value === 1)
+        {
+          document.getElementById("errorMsgContainer").style.display="block";
         }
-
-    </script>
-    <!-- End of Scripts -->
-</body>
-
+        else{
+          window.location.href = "home.html";
+        }
+      }
+  </script>
+  </body>
 </html>

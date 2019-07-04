@@ -1,0 +1,191 @@
+:root {
+  --intridaBlue: #15b9f9;
+  --intridaGreen: #51e0dc;
+  --xCheckWhite: #f2f3f4;
+  --xCheckMedGrey: #696969;
+  --xCheckDarkGrey: #474747;
+  --xCheckBlack: #323132;
+  --xCheckOrange: #f05a28;
+  --xCheckRed: #ed1c24;
+  --xCheckGradient: linear-gradient(to right, #f05a28, #ed1c24);
+  --xCheckHeaderGradient: linear-gradient(to right, #f2f3f480, #f05a2880, #ee2e2580, #32313280);
+  --borderRadiusVal: 5px;
+  --borderWidth: 2px;
+  --borderWidthHilite: 3px;
+  }
+
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: Montserrat;
+}
+
+h1, h2, h3, p, input {
+  color: var(--xCheckWhite);
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 2px;
+}
+
+p, input, select, option {
+  font-size: 15px;
+  margin: 2px;
+}
+
+.symbol {
+  width: 18px;
+  height: 18px;
+}
+
+.horizContainer {
+  display: flex;
+  align-items: center;
+}
+
+/*  header CSS */
+header {
+  background-color: var(--xCheckBlack);
+  background-image: var(--xCheckHeaderGradient);
+  position: fixed;
+  top: 0px;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.dropDownMenu {
+  height: 49px;
+  width: 49px;
+  color: var(--xCheckWhite);
+  margin-left: 10px;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.menu {
+  background-color: var(--xCheckBlack);
+  width: 200px;
+  height: 0;
+  border-radius: 0 0 var(--borderRadiusVal) var(--borderRadiusVal);
+  border: 1px solid var(--xCheckWhite);
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 0;
+  color: var(--xCheckWhite);
+  list-style-type: none;
+  padding: 0 5px;
+  text-indent: 15px;
+  display: none;
+  flex-direction: column;
+  z-index: 2;
+  transition: top 2s, height 2s;
+}
+
+.menu a {
+  margin: 7px 0;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  z-index: 3;
+}
+
+.menu a:hover {
+  color: var(--intridaBlue);
+}
+
+.menuContainer + .menuContainer {
+  border-top: 1px solid var(--xCheckWhite);
+}
+
+.menuOpen {
+  top: 0;
+  padding-top: 50px;
+  display: flex;
+  height: auto;
+}
+
+.homeLink {
+  position: absolute;
+  margin-left: auto;
+  left: 50%;
+  margin-left: -28px;
+  margin-top: 1px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.userInfo {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.userName {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: var(--xCheckWhite);
+}
+
+#userImg {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  border: 1px var(--xCheckWhite);
+  color: var(--xCheckWhite);
+  margin-left: 5px;
+}
+
+.searchForm {
+  border: 2px solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  height: 30px;
+  width: 400px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.searchBox {
+  background: none;
+  border-style: none;
+  font-family: inherit;
+  margin-left: 5px;
+}
+
+.searchBox::placeholder {
+  color: var(--xCheckWhite);
+  color: var(--xCheckWhite);
+  font-family: inherit;
+}
+
+.programCntrls{
+  padding-right: 10px;
+}
+
+.programCntrls button {
+  background: none;
+  border: none;
+
+}
+/* End header css */
+/*Page content container  */
+.content {
+  background-color: var(--xCheckBlack);
+  color: var(--xCheckWhite);
+  margin-top: 50px;
+  height: 100%;
+}
