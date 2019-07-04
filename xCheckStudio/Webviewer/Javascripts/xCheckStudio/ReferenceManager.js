@@ -45,108 +45,126 @@ var ReferenceManager = function (selectedComponentRow) {
 
     ReferenceManager.prototype.RestoreReferences = function () {
         var _this = this;
+
+        var checkComponentId = undefined;
+        var referenceTable = undefined;
+       
         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
         if (typeOfRow == "ComparisonMainReviewTbody") {
             // get component id
             var checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+            var referenceTable = "ComparisonCheckReferences";         
+        }
+        else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
+            referenceTable = "SourceAComplianceCheckReferences";
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
+        else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
+            referenceTable = "SourceBComplianceCheckReferences";
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
 
-            // get already existing referemce data
-            $.ajax({
-                url: 'PHP/GetReference.php',
-                type: "POST",
-                async: true,
-                data: {
-                    'ReferenceTable': "ComparisonCheckReferences",
-                    'Component': checkComponentId
-                },
-                success: function (msg) {
-                    if (msg != 'fail') {
-                        var referenceData = JSON.parse(msg);
+        if (checkComponentId === undefined ||
+            referenceTable === undefined) {
+            return;
+        }
 
-                        for (var key in referenceData) {
-                            var reference = referenceData[key];
+        // get already existing referemce data
+        $.ajax({
+            url: 'PHP/GetReference.php',
+            type: "POST",
+            async: true,
+            data: {
+                'ReferenceTable': referenceTable,
+                'Component': checkComponentId
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var referenceData = JSON.parse(msg);
 
-                            if ('webAddress' in reference) {
-                                var referenceList = document.getElementById("webAddressList");
-                                var listItem = document.createElement('li');
-                                listItem.innerText = reference["webAddress"];
+                    for (var key in referenceData) {
+                        var reference = referenceData[key];
 
-                                referenceList.appendChild(listItem);
+                        if ('webAddress' in reference) {
+                            var referenceList = document.getElementById("webAddressList");
+                            var listItem = document.createElement('li');
+                            listItem.innerText = reference["webAddress"];
 
-                                listItem.onclick = function () {
-                                    window.open(this.innerText);
-                                }
+                            referenceList.appendChild(listItem);
 
-                                listItem.onmouseover = function () {
-                                    _this.Highlight(this);
-                                }
-                                
-                                listItem.onmouseout = function () {
-                                    _this.UnHighlight(this);
-                                }
+                            listItem.onclick = function () {
+                                window.open(this.innerText);
                             }
-                            else if ('document' in reference) {
-                                var referenceList = document.getElementById("documentList");
-                                var listItem = document.createElement('li');
-                                listItem.innerText = reference["document"];
 
-                                referenceList.appendChild(listItem);
-
-                                listItem.onclick = function () {
-                                    _this.OnDocumentReferenceSelected(this);
-                                }
-
-                                listItem.onmouseover = function () {
-                                    _this.Highlight(this);
-                                }
-                                
-                                listItem.onmouseout = function () {
-                                    _this.UnHighlight(this);
-                                }
+                            listItem.onmouseover = function () {
+                                _this.Highlight(this);
                             }
-                            else if ('pic' in reference) {
-                                var referenceList = document.getElementById("pictureList");
-                                var listItem = document.createElement('li');
-                                listItem.innerText = reference["pic"];
-
-                                referenceList.appendChild(listItem);
-
-                                listItem.onclick = function () {
-                                    _this.OnPictureReferenceSelected(this);
-                                }
-
-                                listItem.onmouseover = function () {
-                                    _this.Highlight(this);
-                                }
-                                
-                                listItem.onmouseout = function () {
-                                    _this.UnHighlight(this);
-                                }
+                            
+                            listItem.onmouseout = function () {
+                                _this.UnHighlight(this);
                             }
-                            else if ('users' in reference) {
-                                var referenceList = document.getElementById("userList");
-                                var listItem = document.createElement('li');
-                                listItem.innerText = reference["users"];
+                        }
+                        else if ('document' in reference) {
+                            var referenceList = document.getElementById("documentList");
+                            var listItem = document.createElement('li');
+                            listItem.innerText = reference["document"];
 
-                                referenceList.appendChild(listItem);
+                            referenceList.appendChild(listItem);
 
-                                listItem.onclick = function () {
-                                    alert(this.innerText);
-                                }
+                            listItem.onclick = function () {
+                                _this.OnDocumentReferenceSelected(this);
+                            }
 
-                                listItem.onmouseover = function () {
-                                    _this.Highlight(this);
-                                }
-                                
-                                listItem.onmouseout = function () {
-                                    _this.UnHighlight(this);
-                                }
+                            listItem.onmouseover = function () {
+                                _this.Highlight(this);
+                            }
+                            
+                            listItem.onmouseout = function () {
+                                _this.UnHighlight(this);
+                            }
+                        }
+                        else if ('pic' in reference) {
+                            var referenceList = document.getElementById("pictureList");
+                            var listItem = document.createElement('li');
+                            listItem.innerText = reference["pic"];
+
+                            referenceList.appendChild(listItem);
+
+                            listItem.onclick = function () {
+                                _this.OnPictureReferenceSelected(this);
+                            }
+
+                            listItem.onmouseover = function () {
+                                _this.Highlight(this);
+                            }
+                            
+                            listItem.onmouseout = function () {
+                                _this.UnHighlight(this);
+                            }
+                        }
+                        else if ('users' in reference) {
+                            var referenceList = document.getElementById("userList");
+                            var listItem = document.createElement('li');
+                            listItem.innerText = reference["users"];
+
+                            referenceList.appendChild(listItem);
+
+                            listItem.onclick = function () {
+                                alert(this.innerText);
+                            }
+
+                            listItem.onmouseover = function () {
+                                _this.Highlight(this);
+                            }
+                            
+                            listItem.onmouseout = function () {
+                                _this.UnHighlight(this);
                             }
                         }
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     ReferenceManager.prototype.CloseReferenceDiv = function () {
@@ -162,46 +180,66 @@ var ReferenceManager = function (selectedComponentRow) {
     }
 
     ReferenceManager.prototype.ProcessWebAddress = function () {
+        var _this = this;
+
         var webAddressString = document.getElementById("webAddressInput").value;
+
+        // get component id
+        var checkComponentId = undefined;
+        var referenceTable = undefined;
 
         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
         if (typeOfRow == "ComparisonMainReviewTbody") {
-            // get component id
-            var checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+            referenceTable = "ComparisonCheckReferences";
+            checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+        }
+        else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
+            referenceTable = "SourceAComplianceCheckReferences";
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
+        else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
+            referenceTable = "SourceBComplianceCheckReferences";
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
 
-            $.ajax({
-                url: 'PHP/AddReference.php',
-                type: "POST",
-                async: true,
-                data: {
-                    'ReferenceTable': "ComparisonCheckReferences",
-                    'TypeofReference': "WebAddress",
-                    'Component': checkComponentId,
-                    'referenceData': webAddressString
-                },
-                success: function (msg) {
-                    if (msg != 'fail') {
-                        var referenceList = document.getElementById("webAddressList");
-                        var listItem = document.createElement('li');
-                        listItem.innerText = msg;
+        if (checkComponentId === undefined ||
+            referenceTable === undefined) {
+            return;
+        }
 
-                        referenceList.appendChild(listItem);
+        // add reference
+        $.ajax({
+            url: 'PHP/AddReference.php',
+            type: "POST",
+            async: true,
+            data: {
+                'ReferenceTable': referenceTable,
+                'TypeofReference': "WebAddress",
+                'Component': checkComponentId,
+                'referenceData': webAddressString
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var referenceList = document.getElementById("webAddressList");
+                    var listItem = document.createElement('li');
+                    listItem.innerText = msg;
 
-                        listItem.onclick = function () {
-                            window.open(this.innerText);
-                        }
+                    referenceList.appendChild(listItem);
 
-                        listItem.onmouseover = function () {
-                            _this.Highlight(this);
-                        }
-                        
-                        listItem.onmouseout = function () {
-                            _this.UnHighlight(this);
-                        }
+                    listItem.onclick = function () {
+                        window.open(this.innerText);
+                    }
+
+                    listItem.onmouseover = function () {
+                        _this.Highlight(this);
+                    }
+                    
+                    listItem.onmouseout = function () {
+                        _this.UnHighlight(this);
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     ReferenceManager.prototype.AddWebAddress = function () {
@@ -266,18 +304,35 @@ var ReferenceManager = function (selectedComponentRow) {
 
         var referenceDataDir = undefined;
         var referenceTable = undefined;
+        var checkComponentId = undefined;
         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
         if (typeOfRow == "ComparisonMainReviewTbody") {
             referenceDataDir = "ComparisonCheckReferenceData";
             referenceTable = "ComparisonCheckReferences";
+           
+            // get component id
+           checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
         }
-        if (referenceDataDir === undefined ||
-            referenceTable === undefined) {
-            return;
-        }
+        else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
+            referenceDataDir = "SourceAComplianceCheckReferenceData";
+            referenceTable = "SourceAComplianceCheckReferences";
 
-        // get component id
-        var checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+            // get component id
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
+        else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
+            referenceDataDir = "SourceBComplianceCheckReferenceData";
+            referenceTable = "SourceBComplianceCheckReferences";
+            
+            // get component id
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
+        
+        if (referenceDataDir === undefined ||
+            referenceTable === undefined ||
+            checkComponentId === undefined) {
+            return;
+        }     
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
@@ -339,19 +394,35 @@ var ReferenceManager = function (selectedComponentRow) {
 
         var referenceDataDir = undefined;
         var referenceTable = undefined;
-       
+        var checkComponentId = undefined;
         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
         if (typeOfRow == "ComparisonMainReviewTbody") {
             referenceDataDir = "ComparisonCheckReferenceData";
             referenceTable = "ComparisonCheckReferences";
+
+            // get component id
+            checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
         }
-        if (referenceDataDir === undefined ||
-            referenceTable === undefined) {
-            return;
+        else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
+            referenceDataDir = "SourceAComplianceCheckReferenceData";
+            referenceTable = "SourceAComplianceCheckReferences";
+
+            // get component id
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        }
+        else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
+            referenceDataDir = "SourceBComplianceCheckReferenceData";
+            referenceTable = "SourceBComplianceCheckReferences";
+            
+            // get component id
+            checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
         }
 
-        // get component id
-        var checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+        if (referenceDataDir === undefined ||
+            referenceTable === undefined ||
+            checkComponentId === undefined) {
+            return;
+        }
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/UploadReferenceDoc.php", true);

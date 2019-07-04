@@ -96,9 +96,11 @@
             // save check result statistics
             CopyCheckStatistics($dbh, $tempDbh);
 
-            // save check result statistics
-            CopyComparisonCheckReferences($dbh, $tempDbh);
-
+            // save refrences
+            CopyCheckReferences($dbh, $tempDbh, "ComparisonCheckReferences");
+            CopyCheckReferences($dbh, $tempDbh, "SourceAComplianceCheckReferences");
+            CopyCheckReferences($dbh, $tempDbh, "SourceBComplianceCheckReferences");
+            
             // commit update
             $dbh->commit();
             $tempDbh->commit();
@@ -113,17 +115,17 @@
 
         echo "success"; 
         return;
-    }
+    }    
 
-    function  CopyComparisonCheckReferences($fromDbh, $toDbh)
+    function  CopyCheckReferences($fromDbh, $toDbh, $tableName)
     {     
-        $results = $fromDbh->query("SELECT * FROM ComparisonCheckReferences");
+        $results = $fromDbh->query("SELECT * FROM ".$tableName.";");
         if($results)
         {
 
-            $command = 'DROP TABLE IF EXISTS ComparisonCheckReferences;';
+            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
             $toDbh->exec($command);  
-            $command = 'CREATE TABLE ComparisonCheckReferences(
+            $command = 'CREATE TABLE '.$tableName.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 webAddress TEXT,
                 document TEXT,
@@ -133,7 +135,7 @@
               )';         
             $toDbh->exec($command);  
     
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckReferences(id, webAddress, document, pic, users,
+            $insertStmt = $toDbh->prepare("INSERT INTO ".$tableName."(id, webAddress, document, pic, users,
                 parentComponent) VALUES(?,?,?,?,?,?)"); 
 
            
@@ -244,12 +246,13 @@
                 name TEXT,                
                 subComponentClass TEXT,
                 status TEXT,
+                accepted TEXT,
                 nodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, subComponentClass, status,
-                                        nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+                                        accepted, nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -258,6 +261,7 @@
                                         $row['name'], 
                                         $row['subComponentClass'],
                                         $row['status'], 
+                                        $row['accepted'], 
                                         $row['nodeId'], 
                                         $row['ownerGroup']));
             }   
@@ -278,13 +282,14 @@
                 value TEXT,
                 result TEXT,
                 severity TEXT,
+                accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
                 ownerComponent INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
-                                        severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+                                        severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -294,6 +299,7 @@
                                         $row['value'],
                                         $row['result'], 
                                         $row['severity'], 
+                                        $row['accepted'], 
                                         $row['performCheck'], 
                                         $row['description'], 
                                         $row['ownerComponent']));
@@ -342,12 +348,13 @@
                 name TEXT,                
                 subComponentClass TEXT,
                 status TEXT,
+                accepted TEXT,
                 nodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status,
-                                        nodeId, ownerGroup) VALUES(?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status, accepted,
+                                        nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -356,6 +363,7 @@
                                         $row['name'], 
                                         $row['subComponentClass'],
                                         $row['status'], 
+                                        $row['accepted'], 
                                         $row['nodeId'], 
                                         $row['ownerGroup']));
             }   
@@ -376,13 +384,14 @@
                 value TEXT,
                 result TEXT,
                 severity TEXT,
+                accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
                 ownerComponent INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
-                                        severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?)");
+                                        severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -392,6 +401,7 @@
                                         $row['value'],
                                         $row['result'], 
                                         $row['severity'], 
+                                        $row['accepted'],
                                         $row['performCheck'], 
                                         $row['description'], 
                                         $row['ownerComponent']));
@@ -446,13 +456,14 @@
                 sourceBName TEXT,
                 subComponentClass TEXT,
                 status TEXT,
+                accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
         
             $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                        sourceAName, sourceBName, subComponentClass, status, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+                        sourceAName, sourceBName, subComponentClass, status, accepted, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -462,6 +473,7 @@
                                     $row['sourceBName'],
                                     $row['subComponentClass'], 
                                     $row['status'], 
+                                    $row['accepted'], 
                                     $row['sourceANodeId'],
                                     $row['sourceBNodeId'], 
                                     $row['ownerGroup']));
@@ -485,13 +497,14 @@
                 sourceBValue TEXT,
                 result TEXT,
                 severity TEXT,
+                accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
                 ownerComponent INTEGER NOT NULL)'; 
             $toDbh->exec($command); 
             
             $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                        sourceAValue, sourceBValue, result, severity, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?)");
+                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -503,6 +516,7 @@
                                         $row['sourceBValue'], 
                                         $row['result'],
                                         $row['severity'], 
+                                        $row['accepted'], 
                                         $row['performCheck'], 
                                         $row['description'],
                                         $row['ownerComponent']));
