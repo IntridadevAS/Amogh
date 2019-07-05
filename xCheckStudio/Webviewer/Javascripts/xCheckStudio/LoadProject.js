@@ -62,7 +62,7 @@ function openProject() {
 
 function loadProject(projectName, projectId) {
 
-    createTempCheckSpaceDB().then(function (result) {
+    createTempCheckSpaceDB(projectName).then(function (result) {
 
         $.ajax({
             data: {
@@ -92,13 +92,14 @@ function loadProject(projectName, projectId) {
     });
 }
 
-function createTempCheckSpaceDB()
+function createTempCheckSpaceDB(projectName)
 {
     return new Promise((resolve) => {
 
         $.ajax({
             data: {
-                'InvokeFunction': "CreateTempCheckSpaceDB"
+                'InvokeFunction': "CreateTempCheckSpaceDB",
+                'ProjectName': projectName
             },
             async: false,
             type: "POST",

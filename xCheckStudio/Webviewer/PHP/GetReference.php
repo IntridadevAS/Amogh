@@ -42,40 +42,39 @@
 
             // fetch source A components
             $stmt =  $dbh->query('SELECT *FROM  '.$tableName.' where parentComponent='.$parentComponent.';');
-            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+            if($stmt)
             {
-                $reference = array();
-                $reference['id'] = $row['id'];
-                if($row['webAddress'] !== NULL)
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
                 {
-                    $reference['webAddress'] = $row['webAddress'];
+                    $reference = array();
+                    $reference['id'] = $row['id'];
+                    if($row['webAddress'] !== NULL)
+                    {
+                        $reference['webAddress'] = $row['webAddress'];
+                    }
+                    if($row['document'] !== NULL)
+                    {
+                        $reference['document'] = $row['document'];
+                    }
+                    if($row['pic'] !== NULL)
+                    {
+                        $reference['pic'] = $row['pic'];
+                    }
+                    if($row['users'] !== NULL)
+                    {
+                        $reference['users'] = $row['users'];
+                    }
+                    
+                    array_push($referenceData, $reference);
+
                 }
-                if($row['document'] !== NULL)
-                {
-                    $reference['document'] = $row['document'];
-                }
-                if($row['pic'] !== NULL)
-                {
-                    $reference['pic'] = $row['pic'];
-                }
-                if($row['users'] !== NULL)
-                {
-                    $reference['users'] = $row['users'];
-                }
-                // $reference = array('id'=>$row['id'], 
-                //                    'webAddress'=>$row['webAddress'],  
-                //                    'document'=>$row['document'],                                   
-                //                    'pic'=>$row['pic'],
-                //                    'users'=>$row['users']);
-                
-                array_push($referenceData, $reference);
             }
 
             // commit update
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection             
            
-            echo json_encode( $referenceData );
+            echo json_encode( $referenceData );            
         }
         catch(Exception $e) 
         {        

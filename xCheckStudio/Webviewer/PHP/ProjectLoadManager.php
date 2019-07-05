@@ -1,5 +1,11 @@
 <?php
 
+    if(!isset($_POST["ProjectName"]))
+    {
+        echo 'fail';
+        return;
+    }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
         $InvokeFunction = trim($_POST["InvokeFunction"], " ");
@@ -15,18 +21,9 @@
 
     function CreateTempCheckSpaceDB()
     {
-        // get project name
-        session_start();   
-        $projectName = NULL;
-        if(isset($_SESSION['ProjectName']))
-        {
-            $projectName =  $_SESSION['ProjectName'];              
-        }
-        else
-        {
-            echo 'fail';
-            return;
-        }	
+        // get project name       
+        $projectName = $_POST["ProjectName"];
+       
 
         try
         {
