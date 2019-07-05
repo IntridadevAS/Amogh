@@ -58,7 +58,7 @@
         * {
             box-sizing: border-box;
         }
-
+   
         body {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
@@ -81,6 +81,9 @@
             overflow: auto;
         }
 
+        .contextMenu_style {
+            overflow: visible !important;
+        }
         .viewContainerTab {
             color: white;
         }
@@ -589,7 +592,7 @@
                 <div class="group1">
                     <div id="ComparisonTabPage" class="checkResultsContainerTab" style="display:block;">
                         <div id="ComparisonMainReviewTbody" class="table1"
-                            style='top:10px; height:275px; width: 592px; display:block;overflow-y:scroll;overflow-x: hidden'>
+                            style='top:10px; height:275px; width: 592px; display:block;overflow-y:scroll;overflow-x: visible'>
                             <div id="ComparisonMainReviewCell"
                                 style="text-align:left; vertical-align:top;width: 575px; height: 275px; border:none">
                             </div>
@@ -922,6 +925,7 @@
             });
 
             $.contextMenu({
+                className : 'contextMenu_style',
                 selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
                 build : function($triggerElement, e){ 
                     var selectedRow = $triggerElement;
@@ -950,6 +954,10 @@
                                     var disable = false;
                                     disable = disableContextMenuTranspose(this);
                                     return disable;
+                                },
+                                items : {
+                                    "lefttoright" : {name : "Left To Right"},
+                                    "righttoleft" : {name : "Right To Left"}
                                 }
                             },
                             "freeze": {

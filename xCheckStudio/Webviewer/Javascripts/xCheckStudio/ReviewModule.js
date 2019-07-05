@@ -37,6 +37,9 @@ function executeContextMenuClicked(key, options, _this) {
     }
     else if (key === "freeze") {
     }
+    else if (key === "reference") {
+        onReferenceClick(_this);
+    }
 }
 
 function chooseAction(selectedRow) {
