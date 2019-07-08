@@ -417,8 +417,8 @@ function ComplianceReviewManager(complianceCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[1].innerHTML;
-                            if(!originalstatus.includes("*")) {
-                                var changedStatus = originalstatus + "*";
+                            if(!originalstatus.includes("(A)")) {
+                                var changedStatus = originalstatus + "(A)";
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
@@ -524,7 +524,9 @@ function ComplianceReviewManager(complianceCheckManager,
                                     component.status = "ACCEPTED";
                                     for (var propertyId in component.properties) {
                                         property = component.properties[propertyId];
-                                        property.Severity = 'ACCEPTED';
+                                        if(property.Severity !== 'OK') {
+                                            property.Severity = 'ACCEPTED';
+                                        }
                                     }
                                 }
                                 selectedRow = categorydiv.children[1].children[0].children[0].children[0];
@@ -1556,8 +1558,8 @@ function ComplianceReviewManager(complianceCheckManager,
         else if (status.toLowerCase() === ("Accepted").toLowerCase()) {
             return AcceptedColor;
         }
-        else if (status.toLowerCase() === ("Error*").toLowerCase() || status.toLowerCase() === ("Warning*").toLowerCase() 
-        || status.toLowerCase() === ("No Match*").toLowerCase() || status.toLowerCase() === ("No Value*").toLowerCase()) {
+        else if (status.toLowerCase() === ("Error(A)").toLowerCase() || status.toLowerCase() === ("Warning(A)").toLowerCase() 
+        || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
             return PropertyAcceptedColor;
         }
         else {

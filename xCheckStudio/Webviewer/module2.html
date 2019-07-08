@@ -34,6 +34,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ContextMenuReviewModule.js"></script>
     <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <!-- <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> -->
@@ -918,56 +919,12 @@
 
                     // load analytics data
                     document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                    contextMenuComponentLevel();
+            contextMenuPropertyLevel();
+            contextMenuButtonLevel();
                 },
                 error: function (error) {
                     //alert('error; ' + eval(error));
-                }
-            });
-
-            $.contextMenu({
-                className : 'contextMenu_style',
-                selector: '.jsgrid-row, .jsgrid-alt-row, BUTTON',
-                build : function($triggerElement, e){ 
-                    var selectedRow = $triggerElement;
-                    var accept = true;
-                    accept = chooseAction(selectedRow);
-                    var conditionalName = (accept) ? 'Accept' : 'Unaccept';
-                    return {
-                        callback: function(key, options){
-                            executeContextMenuClicked(key, options, this);
-                        },
-                        items: {
-                            menuItem: 
-                            {
-                                name: conditionalName,
-                                disabled: function()
-                                {
-                                    var disable = false;
-                                    disable = disableContextMenuAccept(this);
-                                    return disable;
-                                }
-                            },
-                            "transpose": {
-                                name: "Transpose",
-                                disabled: function()
-                                {
-                                    var disable = false;
-                                    disable = disableContextMenuTranspose(this);
-                                    return disable;
-                                },
-                                items : {
-                                    "lefttoright" : {name : "Left To Right"},
-                                    "righttoleft" : {name : "Right To Left"}
-                                }
-                            },
-                            "freeze": {
-                                name: "Freeze",
-                            },
-                            "reference": {
-                                name: "Reference",
-                            }
-                        }
-                    };
                 }
             });
 
