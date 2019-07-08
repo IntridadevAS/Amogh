@@ -4,15 +4,15 @@ if(typeof(require) !=='undefined')
     XLSX = require('xlsx');
 }
 
-function ExcelReader(sourceType, checkType) {
+function ExcelReader(sourceType, checkType, selectedComponents) {
     this.SourceType = sourceType;
     this.checkType = checkType;
     this.global_wb = "";
     this.containerId = "";
     this.sourceProperties = [];
     this.sourceDataSheet = {};
-
-    this.excelModelBrowser = new ExcelModeBrowser();
+    this.SelectedComponents = selectedComponents;
+    this.excelModelBrowser = new ExcelModeBrowser(this.SelectedComponents);
 }
 
 ExcelReader.prototype.ReadFileData = function (file, containerId, viewerContainer) {
@@ -29,6 +29,65 @@ ExcelReader.prototype.ReadFileData = function (file, containerId, viewerContaine
     }
 }
 
+ExcelReader.prototype.LoadFileData = function (classWiseComponents, 
+                                               containerId, 
+                                               viewerContainer) {
+   
+    for(var mainClass in classWiseComponents)
+    {
+        var sourcePropertiesTemp = {};
+
+        var components = classWiseComponents[mainClass];
+
+        for(var compId in components)
+        {
+            var component = components[compId];
+
+            var genericPropertiesObject = new GenericComponent();
+            genericPropertiesObject.ID = compId;
+
+            for(var propId in component)
+            {
+                var property = component[propId];
+               
+                var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
+                genericPropertiesObject.addProperty(genericPropertyObject);
+
+                if((property.name === "Name")||
+                  (genericPropertiesObject.Name === undefined &&
+                    property.name === "Tagnumber"))
+                {
+                    genericPropertiesObject.Name = property.value;
+                }
+                else if (property.name === "ComponentClass") {
+                    genericPropertiesObject.MainComponentClass = property.value;                    
+                }
+                else if(property.name.toLowerCase() === "component class" ||
+                        property.name.toLowerCase() === "class")
+                {
+                    genericPropertiesObject.SubComponentClass =  property.value;                   
+                }               
+            }
+
+            // add genericProperties object to sourceproperties collection
+            if (genericPropertiesObject.SubComponentClass in sourcePropertiesTemp) {
+                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass].push(genericPropertiesObject);
+            }
+            else {
+                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
+            }
+
+            this.sourceProperties.push(genericPropertiesObject)
+        }
+
+        this.sourceDataSheet[mainClass] = sourcePropertiesTemp;
+    }
+
+    //add model Browser Table
+    this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
+}
+
+
 ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
     var _this = this;
     this.global_wb = wb;
@@ -37,6 +96,7 @@ ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
         _this.ReadSheetData(sheetName);
     });
     this.addComponentsToDB(viewerContainer);
+    
     //add model Browser Table
     this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
     if(checkCaseSelected) {
@@ -162,7 +222,10 @@ ExcelReader.prototype.ReadSheetData = function (sheetName) {
 
         this.sourceProperties.push(genericPropertiesObject)
     }
-    this.sourceDataSheet[sheetName] = sourcePropertiesTemp;
+    if(Object.entries(sourcePropertiesTemp).length > 0 && sourcePropertiesTemp.constructor === Object)
+    {
+        this.sourceDataSheet[sheetName] = sourcePropertiesTemp;
+    }
 }
 
 ExcelReader.prototype.getSheetData = function (sheetName) {

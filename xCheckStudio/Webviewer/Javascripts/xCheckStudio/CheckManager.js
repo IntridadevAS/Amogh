@@ -47,28 +47,28 @@ function CheckManager(name) {
 
            var sourceASelectedCompoents;           
             if (xCheckStudioInterface1.excelReader !== undefined) {
-                sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.selectedCompoents;
+                sourceASelectedCompoents = xCheckStudioInterface1.excelReader.excelModelBrowser.GetSelectedComponents();
             }
             else if(xCheckStudioInterface1.db_reader !== undefined)
             {
-                sourceASelectedCompoents = xCheckStudioInterface1.db_reader.dbmodelbrowser.selectedCompoents;
+                sourceASelectedCompoents = xCheckStudioInterface1.db_reader.dbmodelbrowser.GetSelectedComponents();
             }
             else if(xCheckStudioInterface1._modelTree !== undefined)
             {
-                sourceASelectedCompoents = xCheckStudioInterface1._modelTree.selectedCompoents;
+                sourceASelectedCompoents = xCheckStudioInterface1._modelTree.GetSelectedComponents();
             }
 
             var sourceBSelectedCompoents;
             if (xCheckStudioInterface2.excelReader !== undefined) {
-                sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.selectedCompoents;
+                sourceBSelectedCompoents = xCheckStudioInterface2.excelReader.excelModelBrowser.GetSelectedComponents();
             }
             else if(xCheckStudioInterface2.db_reader !== undefined)
             {
-                sourceBSelectedCompoents = xCheckStudioInterface2.db_reader.dbmodelbrowser.selectedCompoents;
+                sourceBSelectedCompoents = xCheckStudioInterface2.db_reader.dbmodelbrowser.GetSelectedComponents();
             }
             else if(xCheckStudioInterface2._modelTree !== undefined)
             {
-                sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.selectedCompoents;
+                sourceBSelectedCompoents = xCheckStudioInterface2._modelTree.GetSelectedComponents();
             }          
 
             $.ajax({
@@ -96,12 +96,12 @@ function CheckManager(name) {
             var containerID;
             if(interfaceObject._modelTree !== undefined)
             {
-                SelectedCompoents = interfaceObject._modelTree.selectedCompoents;
+                SelectedCompoents = interfaceObject._modelTree.GetSelectedComponents();
                 containerID = interfaceObject._firstViewer._params.containerId;
             }
             else if(interfaceObject.excelReader !== undefined)
             {
-                SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.selectedCompoents;
+                SelectedCompoents = interfaceObject.excelReader.excelModelBrowser.GetSelectedComponents();
                 if(interfaceObject.excelReader.excelModelBrowser.conatinerId.toLowerCase() == "modeltree1")
                 {
                     containerID = "viewerContainer1"
@@ -114,7 +114,7 @@ function CheckManager(name) {
             }
             else if(interfaceObject.db_reader !== undefined)
             {
-                SelectedCompoents = interfaceObject.db_reader.dbmodelbrowser.selectedCompoents;
+                SelectedCompoents = interfaceObject.db_reader.dbmodelbrowser.GetSelectedComponents();
                 if(interfaceObject.db_reader.dbmodelbrowser.conatinerId.toLowerCase() == "modeltree1")
                 {
                     containerID = "viewerContainer1"

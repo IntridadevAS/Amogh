@@ -46,7 +46,8 @@
                 $data = array('sourceAFileName' => $record['sourceAFileName'], 
                              'sourceBFileName'=> $record['sourceBFileName'], 
                              'sourceAType'=>$record['sourceAType'], 
-                             'sourceBType'=>$record['sourceBType']);                                 
+                             'sourceBType'=>$record['sourceBType'], 
+                             'orderMaintained'=>$record['orderMaintained']);                                 
             }
 
             // commit update
