@@ -843,22 +843,7 @@ function uploadAndLoadModel(fileExtension, fileName, viewerContainer, modelTreeC
         formData.append('ConvertToSCS', convertToSCS);
         xhr.send(formData);
 
-    }
-    // else if (fileExtension.toLowerCase() === "xls") {
-    //     {
-    //         if (loadExcelDataSource(fileExtension,
-    //             files,
-    //             viewerContainer,
-    //             modelTreeContainer)) {
-    //             hideLoadButton(modelTreeContainer);
-    //         }
-    //     }
-    // }
-    // else if (fileExtension.toLowerCase() === "json") {
-    //     {
-
-    //     }
-    // }
+    }   
 }
 
 function hideLoadButton(modelTreeContainer) {
@@ -2180,6 +2165,16 @@ function loadSources(viewerOptions) {
             var source = 'SourceA';
             if ('sourceBFileName' in dataSourceInfo) {
                 source = 'Both';
+
+                if('orderMaintained' in dataSourceInfo &&
+                   dataSourceInfo['orderMaintained'].toLowerCase === 'false')
+                {
+                    OrderMaintained = 'false';
+                }
+                else
+                {
+                    OrderMaintained = 'true';
+                }
             }
             getSelectedComponentsFromDB(source).then(function (selectedCompsResult) {
 
