@@ -498,11 +498,12 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                transpose TEXT)'; 
             $toDbh->exec($command); 
             
             $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 

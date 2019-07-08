@@ -28,12 +28,15 @@ function setProjectName() {
 
 function executeContextMenuClicked(key, options, _this) {
     if (key === "menuItem") {
-        if(options.items[key].name == "Accept")
-            onAcceptClick(_this);
-        else
-            onUnAcceptClick(_this);
+        if(options.items[key].name == "Accept") {
+            onAcceptClick(_this); 
+        }
+        else {
+            onUnAcceptClick(_this); 
+        }
     }
-    else if (key === "transpose") {
+    else if (key === "lefttoright" || key === "righttoleft") {
+        comparisonReviewManager.transposePropertyValue(key, _this, comparisonReviewManager);
     }
     else if (key === "freeze") {
     }
@@ -180,12 +183,23 @@ function disableContextMenuAccept(_this) {
 
 function disableContextMenuTranspose(_this) {
     var selectedRow = _this;
-    if(selectedRow[0].nodeName == "BUTTON") { 
-        return true;
+    var groupId = selectedRow[0].attributes[0].value;
+    if(selectedRow[0].nodeName == "BUTTON") {
+        if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
+        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
+        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') { 
+            return true;
+        }
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
+            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+                return true;
+            }
+        }
+        else if(selectedRow[0].cells[4].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "No Value" || selectedRow[0].cells[4].innerHTML == "undefined"
+        || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
             return true;
         }
     }

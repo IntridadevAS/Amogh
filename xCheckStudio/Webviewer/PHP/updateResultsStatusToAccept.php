@@ -163,8 +163,8 @@ function updatePropertyComparisonStatusInReview() {
     // $sth->execute();
     $value = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
     $originalStatusOfComponent = $value->fetch();
-    if(strpos($originalStatusOfComponent['status'], '*') == false) {
-        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
+    if(strpos($originalStatusOfComponent['status'], '(A)') == false) {
+        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "(A)";
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
         $command->execute(array($changedStatusOfComponents, $componentid));
     }
@@ -319,8 +319,8 @@ function updatePropertyComplianceStatusInReview() {
     $command->execute(array($status, $componentid, $sourcePropertyName));
     $value = $dbh->query("SELECT status FROM $componentTableName WHERE id= $componentid;");
     $originalStatusOfComponent = $value->fetch();
-    if(strpos($originalStatusOfComponent['status'], '*') == false) {
-        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "*";
+    if(strpos($originalStatusOfComponent['status'], '(A)') == false) {
+        $changedStatusOfComponents = $originalStatusOfComponent['status'] . "(A)";
         $command = $dbh->prepare($sql1);
         $command->execute(array($changedStatusOfComponents, $componentid));
     }
@@ -502,8 +502,8 @@ function updateStatusOfAllComparisonCategoriesToOriginal() {
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if(strpos($statusChanged[$index]['status'], '*') == true) {
-            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+        if(strpos($statusChanged[$index]['status'], '(A)') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
             $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
@@ -537,8 +537,8 @@ function updateStatusOfAllComplianceACategoriesToOriginal() {
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if(strpos($statusChanged[$index]['status'], '*') == true) {
-            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+        if(strpos($statusChanged[$index]['status'], '(A)') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
@@ -573,8 +573,8 @@ function updateStatusOfAllComplianceBCategoriesToOriginal() {
 
     $index = 0;
     while($index < count($statusChanged)) {
-        if(strpos($statusChanged[$index]['status'], '*') == true) {
-            $toBecompstatus = rtrim($statusChanged[$index]['status'],"*");
+        if(strpos($statusChanged[$index]['status'], '(A)') == true) {
+            $toBecompstatus = rtrim($statusChanged[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($toBecompstatus, $statusChanged[$index]['id']));
         }
@@ -604,8 +604,8 @@ function rejectAcceptStatusComparisonComponent() {
     $components = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
     $originalStatus = $components->fetch();
 
-    if(strpos($originalStatus['status'], '*') == true) {
-        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+    if(strpos($originalStatus['status'], '(A)') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"(A)");
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
         $command->execute(array($originalStatus['status'], $componentid));
     }
@@ -693,13 +693,13 @@ function rejectAcceptStatusComparisonProperty() {
             break;
         } 
         else {
-            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
-                $toBecompstatus = $componentstatus1['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '(A)') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "(A)";
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
-                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"(A)");
                 }
                 else {
                     $toBecompstatus = $componentstatus1['status'];
@@ -751,8 +751,8 @@ function rejectAcceptStatusComparisonCategory() {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
         $command->execute(array($status, $allCom[$index]['id']));
 
-        if(strpos($allCom[$index]['status'], '*') == true) {
-            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
+        if(strpos($allCom[$index]['status'], '(A)') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
         }
@@ -835,8 +835,8 @@ function rejectAcceptStatusComplianceAComponent() {
     $components = $dbh->query("SELECT status FROM SourceAComplianceCheckComponents WHERE id= $componentid;");
     $originalStatus = $components->fetch();
 
-    if(strpos($originalStatus['status'], '*') == true) {
-        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+    if(strpos($originalStatus['status'], '(A)') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"(A)");
         $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
         $command->execute(array($originalStatus['status'], $componentid));
     }
@@ -913,13 +913,13 @@ function rejectAcceptStatusComplianceAProperty() {
             break;
         } 
         else {
-            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
-                $toBecompstatus = $componentstatus1['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '(A)') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "(A)";
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
-                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"(A)");
                 }
                 else {
                     $toBecompstatus = $componentstatus1['status'];
@@ -972,8 +972,8 @@ function rejectAcceptStatusComplianceACategory() {
         $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET accepted=? WHERE id=?');
         $command->execute(array($status, $allCom[$index]['id']));
 
-        if(strpos($allCom[$index]['status'], '*') == true) {
-            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
+        if(strpos($allCom[$index]['status'], '(A)') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE SourceAComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
         }
@@ -1057,8 +1057,8 @@ function rejectAcceptStatusComplianceBComponent() {
     $components = $dbh->query("SELECT status FROM SourceBComplianceCheckComponents WHERE id= $componentid;");
     $originalStatus = $components->fetch();
 
-    if(strpos($originalStatus['status'], '*') == true) {
-        $originalStatus['status'] = rtrim($originalStatus['status'],"*");
+    if(strpos($originalStatus['status'], '(A)') == true) {
+        $originalStatus['status'] = rtrim($originalStatus['status'],"(A)");
         $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
         $command->execute(array($originalStatus['status'], $componentid));
     }
@@ -1135,13 +1135,13 @@ function rejectAcceptStatusComplianceBProperty() {
             break;
         } 
         else {
-            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '*') == false) {
-                $toBecompstatus = $componentstatus1['status'] . "*";
+            if($componentstatus['accepted'] == "true" && strpos($componentstatus1['status'], '(A)') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "(A)";
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '*') == true) {
-                    $toBecompstatus = rtrim($componentstatus1['status'],"*");
+                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                    $toBecompstatus = rtrim($componentstatus1['status'],"(A)");
                 }
                 else {
                     $toBecompstatus = $componentstatus1['status'];
@@ -1193,8 +1193,8 @@ function rejectAcceptStatusComplianceBCategory() {
         $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET accepted=? WHERE id=?');
         $command->execute(array($status, $allCom[$index]['id']));
 
-        if(strpos($allCom[$index]['status'], '*') == true) {
-            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"*");
+        if(strpos($allCom[$index]['status'], '(A)') == true) {
+            $allCom[$index]['status'] = rtrim($allCom[$index]['status'],"(A)");
             $command = $dbh->prepare('UPDATE SourceBComplianceCheckComponents SET status=? WHERE id=?');
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
         }

@@ -315,21 +315,31 @@
                                 $properties =array();
                                 while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                                 {
+                                    $sourceAValue = $propertyRow['sourceAValue'];
+                                    $sourceBValue = $propertyRow['sourceBValue'];
                                     if($propertyRow['accepted'] == 'true')
                                         $changedStatus = 'ACCEPTED';
                                     else 
                                         $changedStatus = $propertyRow['severity'];
 
+                                    if($propertyRow['transpose'] == 'lefttoright') {
+                                        $sourceBValue = $sourceAValue;
+                                    }
+                                    else if($propertyRow['transpose'] == 'righttoleft') {
+                                        $sourceAValue = $$sourceBValue;
+                                    }
+                                    
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'sourceAName'=>$propertyRow['sourceAName'],  
                                                             'sourceBName'=>$propertyRow['sourceBName'],
-                                                            'sourceAValue'=>$propertyRow['sourceAValue'],
-                                                            'sourceBValue'=>$propertyRow['sourceBValue'],
+                                                            'sourceAValue'=>$sourceAValue,
+                                                            'sourceBValue'=>$sourceBValue,
                                                             'result'=>$propertyRow['result'],
                                                             'severity'=>$changedStatus,
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
-                                                            'ownerComponent'=>$propertyRow['ownerComponent']); 
+                                                            'ownerComponent'=>$propertyRow['ownerComponent'],
+                                                            'transpose' => $propertyRow['transpose']); 
                     
                                     array_push($properties, $propertyValues);
 
