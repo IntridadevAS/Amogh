@@ -107,6 +107,7 @@
         catch(Exception $e) 
         {        
             echo "fail"; 
+            echo 'Message: ' .$e->getMessage();
             return;
         } 
 
@@ -143,7 +144,7 @@
                                     $row['webAddress'], 
                                     $row['document'],
                                     $row['pic'], 
-                                    $$row['users'], 
+                                    $row['users'], 
                                     $row['parentComponent']));
             }   
         }     
@@ -184,13 +185,13 @@
             while ($row = $results->fetch(\PDO::FETCH_ASSOC)) 
             {  
                 $insertStmt->execute(array($row['id'], 
-                                    $$row['comparisonOK'], 
+                                    $row['comparisonOK'], 
                                     $row['comparisonError'],
                                     $row['comparisonWarning'], 
-                                    $$row['comparisonNoMatch'], 
+                                    $row['comparisonNoMatch'], 
                                     $row['comparisonUndefined'],
                                     $row['comparisonCheckGroupsInfo'], 
-                                    $$row['sourceAComplianceOK'], 
+                                    $row['sourceAComplianceOK'], 
                                     $row['sourceAComplianceError'],
                                     $row['sourceAComplianceWarning'], 
                                     $row['sourceAComplianceCheckGroupsInfo'], 

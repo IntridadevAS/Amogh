@@ -4,8 +4,20 @@ function DBModelBrowser() {
     this.NodeGroups = [];
     this.SelectedComponentRow;
     this.SelectedComponentRowFromSheet;
-    this.selectedCompoents = [];
+    this.SelectedCompoents = [];
     this.databasetabledata = [];
+
+    DBModelBrowser.prototype.GetSelectedComponents = function () {
+        return this.SelectedCompoents;
+    }
+
+    DBModelBrowser.prototype.AddSelectedComponent = function (checkedComponent) {
+        this.SelectedCompoents.push(checkedComponent);
+    }
+
+    DBModelBrowser.prototype.ClearSelectedComponent = function (checkedComponent) {
+        this.SelectedCompoents = [];
+    }
 
     DBModelBrowser.prototype.createModelBrowserTable = function (Db_data, containerId) {
         this.conatinerId = containerId;
@@ -217,7 +229,7 @@ function DBModelBrowser() {
             'ComponentClass': row.cells[3].textContent,
             'Description': row.cells[4].textContent
         };
-        this.selectedCompoents.push(checkedComponent);
+        this.SelectedCompoents.push(checkedComponent);
 
         if (componentStyleClass != "") {
             if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
@@ -266,8 +278,8 @@ function DBModelBrowser() {
         var classwiseCheckedComponents = {};
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
         var mainCategoryPropertyName = identifierProperties['mainCategory'];
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var selectedComponent = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var selectedComponent = this.SelectedCompoents[i];
             if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
                 // increment count of checked components for this main category
                 classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
@@ -301,15 +313,15 @@ function DBModelBrowser() {
                 'ComponentClass': row.cells[3].textContent,
                 'Description': row.cells[4].textContent
             };
-            this.selectedCompoents.push(checkedComponent);
+            this.SelectedCompoents.push(checkedComponent);
         }
 
        
     }
 
     DBModelBrowser.prototype.selectedCompoentExists = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
@@ -322,8 +334,8 @@ function DBModelBrowser() {
     }
 
     DBModelBrowser.prototype.isComponentSelected = function (componentProperties) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentProperties.Name &&
                 component['MainComponentClass'] === componentProperties.MainComponentClass &&
                 component['ComponentClass'] === componentProperties.SubComponentClass)
@@ -342,14 +354,14 @@ function DBModelBrowser() {
     }
 
     DBModelBrowser.prototype.removeFromselectedCompoents = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
                 component['Description'] === componentRow.cells[4].textContent.trim()) {
 
-                this.selectedCompoents.splice(i, 1);
+                this.SelectedCompoents.splice(i, 1);
                 break;
             }
         }
@@ -379,7 +391,7 @@ function DBModelBrowser() {
                 'Description': currentRow.cells[4].textContent.trim()
             };
 
-            this.selectedCompoents.push(checkedComponent);
+            this.SelectedCompoents.push(checkedComponent);
         }
         else if (this.selectedCompoentExists(currentRow)) {
             this.removeFromselectedCompoents(currentRow);
@@ -440,8 +452,8 @@ function DBModelBrowser() {
         var classwiseCheckedComponents = {};
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
         var mainCategoryPropertyName = identifierProperties['mainCategory'];
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var selectedComponent = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var selectedComponent = this.SelectedCompoents[i];
             if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
                 // increment count of checked components for this main category
                 classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
@@ -457,8 +469,8 @@ function DBModelBrowser() {
     }
 
     DBModelBrowser.prototype.selectedCompoentExists = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
@@ -471,8 +483,8 @@ function DBModelBrowser() {
     }
 
     DBModelBrowser.prototype.isComponentSelected = function (componentProperties) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentProperties.Name &&
                 component['MainComponentClass'] === componentProperties.MainComponentClass &&
                 component['ComponentClass'] === componentProperties.SubComponentClass)
@@ -491,14 +503,14 @@ function DBModelBrowser() {
     }
 
     DBModelBrowser.prototype.removeFromselectedCompoents = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
                 component['Description'] === componentRow.cells[4].textContent.trim()) {
 
-                this.selectedCompoents.splice(i, 1);
+                this.SelectedCompoents.splice(i, 1);
                 break;
             }
         }
@@ -528,7 +540,7 @@ function DBModelBrowser() {
                 'Description': currentRow.cells[4].textContent.trim()
             };
 
-            this.selectedCompoents.push(checkedComponent);
+            this.SelectedCompoents.push(checkedComponent);
         }
         else if (this.selectedCompoentExists(currentRow)) {
             this.removeFromselectedCompoents(currentRow);

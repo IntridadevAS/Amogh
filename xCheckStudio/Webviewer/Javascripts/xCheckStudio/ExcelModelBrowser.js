@@ -1,11 +1,11 @@
-function ExcelModeBrowser() {
+function ExcelModeBrowser(selectedComponents) {
 
     this.sourceDataSheets = {};
     this.containerId;
     this.NodeGroups = [];
     this.SelectedComponentRow;
     this.SelectedComponentRowFromSheet;
-    this.selectedCompoents = [];
+    this.SelectedCompoents = selectedComponents !== undefined? selectedComponents : [];
 
     ExcelModeBrowser.prototype.createModelBrowserTable = function (sheetsData, containerId) {
         this.conatinerId = containerId;
@@ -57,8 +57,8 @@ function ExcelModeBrowser() {
                 columnHeader["width"] = width;
                 columnHeaders.push(columnHeader);
             }
+            
             tableData = [];
-
 
             //add each sheet to model browser 
             // iterate over sheets from excel file
@@ -68,11 +68,11 @@ function ExcelModeBrowser() {
                 var styleList = undefined;
                 var componentStyleClass = this.getComponentstyleClass(mainComponentStyleClass);
                 //set  row data 
-                var rowData = [];
-                rowData.push(mainComponentClass);
-                rowData.push("");
-                rowData.push("");
-                rowData.push("");
+                // var rowData = [];
+                // rowData.push(mainComponentClass);
+                // rowData.push("");
+                // rowData.push("");
+                // rowData.push("");
 
                 //add sheet names as 1st parent(collapsible row)
                 // this.addComponentRow(styleList, componentStyleClass, rowData);
@@ -98,7 +98,7 @@ function ExcelModeBrowser() {
                         }
                         var child = children[i];
                         var name = child.Name;
-                        var rowData = [];
+                        //var rowData = [];
 
                         //if component name or main component class is undefined then only add compoment row to model browser
                         if (name !== undefined && mainComponentClass !== undefined) {
@@ -106,7 +106,8 @@ function ExcelModeBrowser() {
                             tableRowContent = {};
                             var checkBox = document.createElement("INPUT");
                             checkBox.setAttribute("type", "checkbox");
-                            checkBox.checked = false;
+                            // checkBox.checked = false;  
+                            checkBox.checked = _this.IsComponentChecked(name, mainComponentClass, subComponentClass );
 
                             tableRowContent[columnHeaders[0].name] = checkBox;
                             tableRowContent[columnHeaders[1].name] = name;
@@ -125,16 +126,13 @@ function ExcelModeBrowser() {
                             tableRowContent[columnHeaders[4].name] = description;
                             tableData.push(tableRowContent);
                         }
-                    }
-
-                   
+                    }                   
                 }
             }
 
             var viewerContainer = "#"+this.conatinerId;
 
             this.LoadModelBrowserTable(this, columnHeaders, tableData, viewerContainer);
-
 
             // select first component in model browser
             var modelBrowserData = document.getElementById(containerId);
@@ -167,6 +165,25 @@ function ExcelModeBrowser() {
 
     };
 
+    ExcelModeBrowser.prototype.IsComponentChecked = function (componentName,
+        mainClass,
+        subClass) {
+        if (this.SelectedCompoents &&
+            (mainClass in this.SelectedCompoents)) {
+            var classWiseSelectedComps = this.SelectedCompoents[mainClass];
+
+            for (var key in classWiseSelectedComps) {
+                var comp = classWiseSelectedComps[key];
+                if (componentName === comp["name"] &&
+                    subClass === comp["subClass"]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     ExcelModeBrowser.prototype.getComponentstyleClass = function (componentName) {
         var componentStyleClass = componentName.replace(" ", "");
         componentStyleClass = componentStyleClass.replace(":", "");
@@ -181,110 +198,25 @@ function ExcelModeBrowser() {
     ExcelModeBrowser.prototype.revisedRandId = function () {
         return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
     }
+   
+    ExcelModeBrowser.prototype.GetSelectedComponents = function () {
+        return this.SelectedCompoents;
+    }
 
-    ExcelModeBrowser.prototype.addComponentRow = function (styleList, componentStyleClass, rowData) {
-        var row = document.createElement("tr");
-        row.style.backgroundColor = "#ffffff";
-        if (styleList !== undefined) {
-            row.classList = styleList;
-        }
+    ExcelModeBrowser.prototype.AddSelectedComponent = function (checkedComponent) {
+        this.SelectedCompoents.push(checkedComponent);
+    }
 
-        var td = document.createElement("td");
-        var checkBox = document.createElement("INPUT");
-        checkBox.setAttribute("type", "checkbox");
-        checkBox.checked = false;
-        td.appendChild(checkBox);
-        row.appendChild(td);
-
-        // select component check box state change event
-        checkBox.onchange = function () {
-            _this.handleComponentCheck(this);
-        }
-
-
-        var td = document.createElement("td");
-        td.innerHTML = rowData[0];
-        if (componentStyleClass != "") {
-            td.className = componentStyleClass;
-        }
-        td.style.fontSize = "13px";
-        row.appendChild(td);
-
-        var td = document.createElement("td");
-        td.innerHTML = rowData[1];
-        td.style.fontSize = "13px";
-        row.appendChild(td);
-
-        var td = document.createElement("td");
-        td.innerHTML = rowData[2];
-        td.style.fontSize = "13px";
-        row.appendChild(td);
-
-        var td = document.createElement("td");
-        td.innerHTML = rowData[3];
-        td.style.fontSize = "13px";
-        row.appendChild(td);
-
-        this.ModelBrowserTable.appendChild(row);
-
-        // maintain track of selected components
-        var checkedComponent = {
-            'Name': row.cells[1].textContent,
-            'MainComponentClass': row.cells[2].textContent,
-            'ComponentClass': row.cells[3].textContent,
-            'Description': row.cells[4].textContent
-        };
-        this.selectedCompoents.push(checkedComponent);
-
-        if (componentStyleClass != "") {
-            if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
-                this.NodeGroups.push(componentStyleClass);
-            }
-        }
-
-        // click event for each row
-        var _this = this;
-        row.onclick = function () {
-
-            if (_this.SelectedComponentRow === this) {
-                return;
-            }
-
-            if (_this.SelectedComponentRow) {
-                _this.RestoreBackgroundColor(_this.SelectedComponentRow);
-            }
-
-            _this.BrowserItemClick(this);
-            _this.SelectedComponentRow = this;
-
-
-        };
-
-        // row mouse hover event
-        var createMouseHoverHandler = function (currentRow) {
-            return function () {
-                _this.ChangeBackgroundColor(currentRow);
-            };
-        };
-        row.onmouseover = createMouseHoverHandler(row);
-
-        // row mouse out event
-        var createMouseOutHandler = function (currentRow) {
-            return function () {
-                if (_this.SelectedComponentRow !== currentRow) {
-                    _this.RestoreBackgroundColor(currentRow);
-                }
-            };
-        };
-        row.onmouseout = createMouseOutHandler(row);
+    ExcelModeBrowser.prototype.ClearSelectedComponent = function (checkedComponent) {
+        this.SelectedCompoents = [];
     }
 
     ExcelModeBrowser.prototype.getClassWiseCheckedComponents = function (sourceType) {
         var classwiseCheckedComponents = {};
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
         var mainCategoryPropertyName = identifierProperties['mainCategory'];
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var selectedComponent = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var selectedComponent = this.SelectedCompoents[i];
             if (selectedComponent[mainCategoryPropertyName] in classwiseCheckedComponents) {
                 // increment count of checked components for this main category
                 classwiseCheckedComponents[selectedComponent[mainCategoryPropertyName]] += 1;
@@ -300,8 +232,8 @@ function ExcelModeBrowser() {
     }
 
     ExcelModeBrowser.prototype.selectedCompoentExists = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
@@ -314,8 +246,8 @@ function ExcelModeBrowser() {
     }
 
     ExcelModeBrowser.prototype.isComponentSelected = function (componentProperties) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentProperties.Name &&
                 component['MainComponentClass'] === componentProperties.MainComponentClass &&
                 component['ComponentClass'] === componentProperties.SubComponentClass)
@@ -334,14 +266,14 @@ function ExcelModeBrowser() {
     }
 
     ExcelModeBrowser.prototype.removeFromselectedCompoents = function (componentRow) {
-        for (var i = 0; i < this.selectedCompoents.length; i++) {
-            var component = this.selectedCompoents[i];
+        for (var i = 0; i < this.SelectedCompoents.length; i++) {
+            var component = this.SelectedCompoents[i];
             if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                 component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                 component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
                 component['Description'] === componentRow.cells[4].textContent.trim()) {
 
-                this.selectedCompoents.splice(i, 1);
+                this.SelectedCompoents.splice(i, 1);
                 break;
             }
         }
@@ -371,7 +303,7 @@ function ExcelModeBrowser() {
                 'Description': currentRow.cells[4].textContent.trim()
             };
 
-            this.selectedCompoents.push(checkedComponent);
+            this.SelectedCompoents.push(checkedComponent);
         }
         else if (this.selectedCompoentExists(currentRow)) {
             this.removeFromselectedCompoents(currentRow);
@@ -497,18 +429,11 @@ function ExcelModeBrowser() {
                             _this.ShowSelectedSheetData(args.event.currentTarget)
                             _this.ChangeBackgroundColor(args.event.currentTarget)
                             _this.SelectedComponentRow = args.event.currentTarget;
-                        }
-
-                    
-                    }
-                    
+                        }                    
+                    }                    
                 });
 
             });
-
-            //add all rows to this.selectedComponents array
-            // this.addselectedRowsToArray(viewerContainer)
-
 
         var container = document.getElementById(viewerContainer.replace("#", ""));
         container.style.width = "556px"
@@ -525,10 +450,12 @@ function ExcelModeBrowser() {
         var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
        
         var countBox;
-        if (containerId === "modelTree1") {
+        if (containerId === "modelTree1") 
+        {
             countBox = document.getElementById("SourceAComponentCount");
         }
-        if (containerId === "modelTree2") {
+        if (containerId === "modelTree2") 
+        {
             countBox = document.getElementById("SourceBComponentCount");
         }
         countBox.innerText = "Count: " + modelBrowserTableRows.length;
@@ -593,7 +520,7 @@ function ExcelModeBrowser() {
                 'ComponentClass': row.cells[3].textContent,
                 'Description': row.cells[4].textContent
             };
-            this.selectedCompoents.push(checkedComponent);
+            this.SelectedCompoents.push(checkedComponent);
         }
 
        

@@ -17,12 +17,20 @@ var xCheckStudio;
             this.db_reader = undefined;
 
             this.NodeIdvsComponentIdList ={}
-            this.NodeIdvsSelectedComponents = selectedComponents;
+            this.SelectedComponents = selectedComponents;
         }
 
         xCheckStudioInterface.prototype.readExcelFileData = function (file, containerId, viewerContainer) {
             this.excelReader = new ExcelReader(this.SourceType, this.checkType);
             this.excelReader.ReadFileData(file, containerId, viewerContainer);
+            this.sourceProperties = this.excelReader.sourceProperties;
+        }
+
+        xCheckStudioInterface.prototype.LoadExcelFileData = function (classWiseComponents, containerId, viewerContainer) {
+            
+            this.excelReader = new ExcelReader(this.SourceType, this.checkType, this.SelectedComponents);            
+            this.excelReader.LoadFileData(classWiseComponents, containerId, viewerContainer);
+
             this.sourceProperties = this.excelReader.sourceProperties;
         }
 
@@ -85,7 +93,7 @@ var xCheckStudio;
                         _this._firstViewer = viewer;
 
                         // construct model tree
-                        _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, _this.SourceType, _this.NodeIdvsSelectedComponents);
+                        _this._modelTree = new xCheckStudio.Ui.ModelTree(viewerOptions.modelTree, viewer, _this.SourceType, _this.SelectedComponents);
 
                         // register viewer evenets
                         _this._bindEvents(viewer, isFirstViewer);

@@ -29,7 +29,7 @@ var xCheckStudio;
                 this._initEvents();
 
                 this.NodeIdvsSelectedComponents = nodeIdvsSelectedComponents;
-                this.selectedCompoents = [];
+                this.SelectedCompoents = [];
                 if(nodeIdvsSelectedComponents)
                 {
                     for(var nodeId in this.NodeIdvsSelectedComponents)
@@ -41,7 +41,7 @@ var xCheckStudio;
                         checkedComponent['ComponentClass'] =  selectedComponent['subClass'];
                         checkedComponent["NodeId"] =  selectedComponent['nodeId'];
     
-                        this.selectedCompoents.push(checkedComponent);
+                        this.SelectedCompoents.push(checkedComponent);
                     }
                 }
             }
@@ -91,34 +91,7 @@ var xCheckStudio;
                 columnHeader["name"] = "SubComponentClass";
                 columnHeader["type"] = "text";
                 columnHeader["width"] = "100";
-                _this.modelTreeColumnHeaders.push(columnHeader);
-
-                // columnHeader = {};
-                // columnHeader["title"] = "Source";
-                // columnHeader["name"] = "Source";
-                // columnHeader["type"] = "text";
-                // columnHeader["width"] = "0";
-                // columnHeader["filtering"] = "false";
-                // columnHeader["sorting"] = "false";
-                // _this.modelTreeColumnHeaders.push(columnHeader);
-
-                // columnHeader = {};
-                // columnHeader["title"] = "Destination";
-                // columnHeader["name"] = "Destination";
-                // columnHeader["type"] = "text";
-                // columnHeader["width"] = "0";
-                // columnHeader["filtering"] = "false";
-                // columnHeader["sorting"] = "false";
-                // _this.modelTreeColumnHeaders.push(columnHeader);
-
-                // columnHeader = {};
-                // columnHeader["title"] = "OwnerId";
-                // columnHeader["name"] = "OwnerId";
-                // columnHeader["type"] = "text";
-                // columnHeader["width"] = "0";
-                // columnHeader["filtering"] = "false";
-                // columnHeader["sorting"] = "false";
-                // _this.modelTreeColumnHeaders.push(columnHeader);
+                _this.modelTreeColumnHeaders.push(columnHeader);               
 
                 columnHeader = {};
                 columnHeader["title"] = "NodeId";
@@ -264,8 +237,8 @@ var xCheckStudio;
 
 
             ModelTree.prototype.selectedCompoentExists = function (componentRow) {
-                for (var i = 0; i < this.selectedCompoents.length; i++) {
-                    var component = this.selectedCompoents[i];
+                for (var i = 0; i < this.SelectedCompoents.length; i++) {
+                    var component = this.SelectedCompoents[i];
                     if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                         component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                         component['ComponentClass'] === componentRow.cells[3].textContent.trim()) {
@@ -284,8 +257,8 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.isComponentSelected = function (componentProperties) {
-                for (var i = 0; i < this.selectedCompoents.length; i++) {
-                    var component = this.selectedCompoents[i];
+                for (var i = 0; i < this.SelectedCompoents.length; i++) {
+                    var component = this.SelectedCompoents[i];
                     if (component['Name'] === componentProperties.Name &&
                         component['MainComponentClass'] === componentProperties.MainComponentClass &&
                         component['ComponentClass'] === componentProperties.SubComponentClass) {
@@ -320,8 +293,8 @@ var xCheckStudio;
             }
 
             ModelTree.prototype.removeFromselectedCompoents = function (componentRow) {
-                for (var i = 0; i < this.selectedCompoents.length; i++) {
-                    var component = this.selectedCompoents[i];
+                for (var i = 0; i < this.SelectedCompoents.length; i++) {
+                    var component = this.SelectedCompoents[i];
                     if (component['Name'] === componentRow.cells[1].textContent.trim() &&
                         component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
                         component['ComponentClass'] === componentRow.cells[3].textContent.trim() /*&&
@@ -331,11 +304,11 @@ var xCheckStudio;
 
                         if ("NodeId" in component) {
                             if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
-                                this.selectedCompoents.splice(i, 1);
+                                this.SelectedCompoents.splice(i, 1);
                             }
                         }
                         else {
-                            this.selectedCompoents.splice(i, 1);
+                            this.SelectedCompoents.splice(i, 1);
                         }
 
                         // this.selectedCompoents.splice(i, 1);
@@ -348,8 +321,8 @@ var xCheckStudio;
                 var classwiseCheckedComponents = {};
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(this.SourceType);
                 var mainCategoryPropertyName = identifierProperties['mainCategory'];
-                for (var i = 0; i < this.selectedCompoents.length; i++) {
-                    var selectedComponent = this.selectedCompoents[i];
+                for (var i = 0; i < this.SelectedCompoents.length; i++) {
+                    var selectedComponent = this.SelectedCompoents[i];
                     if (selectedComponent[mainCategoryPropertyName] === "") {
                         continue;
                     }
@@ -388,7 +361,7 @@ var xCheckStudio;
                     checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
                     checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
-                    this.selectedCompoents.push(checkedComponent);
+                    this.SelectedCompoents.push(checkedComponent);
                 }
                 else if (this.selectedCompoentExists(currentRow)) {
                     this.removeFromselectedCompoents(currentRow);
@@ -740,7 +713,7 @@ var xCheckStudio;
                         //'Destination': row.cells[modelBrowserDestinationColumn].textContent,
                         //'Owner': row.cells[modelBrowserOwnerColumn].textContent
                     };
-                    this.selectedCompoents.push(checkedComponent);
+                    this.SelectedCompoents.push(checkedComponent);
                 }
 
 
@@ -901,6 +874,17 @@ var xCheckStudio;
 
                 }
                 // }
+            }
+
+            ModelTree.prototype.GetSelectedComponents = function () {
+                return this.SelectedCompoents;
+            }
+            
+            ModelTree.prototype.AddSelectedComponent = function (checkedComponent) {
+                this.SelectedCompoents.push(checkedComponent);
+            }
+            ModelTree.prototype.ClearSelectedComponent = function (checkedComponent) {
+                this.SelectedCompoents = [];
             }
 
             ModelTree.prototype.OpenHighlightedRow = function (currentRow) {
