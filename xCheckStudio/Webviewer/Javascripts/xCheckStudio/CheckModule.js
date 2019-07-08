@@ -123,31 +123,31 @@ function onCheckButtonClick() {
     var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
     var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
     var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-    
+
     // check if one of the check switch is on
     if (!comparisonCB.classList.contains("state2") &&
         !complianceSourceACB.classList.contains("state1") &&
         !complianceSourceBCB.classList.contains("state1")) {
         // hide busy spinner
         busySpinner.classList.remove('show');
-        OnShowToast('No selected check type found.</br>Please select check type.');        
+        OnShowToast('No selected check type found.</br>Please select check type.');
         return;
     }
 
     //var checkPerformed = false;  
     var checkcase = new CheckCase("");
     checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
-    
+
     // perform comparison check
-    var comparisonPerformed = performComparisonCheck(comparisonCB, 
-                                                     checkcase, 
-                                                     OrderMaintained);
-    
+    var comparisonPerformed = performComparisonCheck(comparisonCB,
+        checkcase,
+        OrderMaintained);
+
     // perform source a compliance check                      
     var sourceACompliancePerformed = performSourceAComplianceCheck(complianceSourceACB, checkcase, OrderMaintained);
 
     // perform source b compliance check                      
-    var sourceBCompliancePerformed = performSourceBComplianceCheck(complianceSourceBCB, checkcase, OrderMaintained );
+    var sourceBCompliancePerformed = performSourceBComplianceCheck(complianceSourceBCB, checkcase, OrderMaintained);
 
 
     // if  source a compliance check is not performed, then delete the comparison result tables from project database if already exists.
@@ -168,7 +168,7 @@ function onCheckButtonClick() {
         deleteCheckResultsFromDB("SourceBCompliance").then(function (result) {
 
         });
-    }  
+    }
 
     // hide busy spinner
     busySpinner.classList.remove('show');
@@ -177,7 +177,7 @@ function onCheckButtonClick() {
         !sourceBCompliancePerformed) {
         return;
     }
-    
+
     document.getElementById("checkcompletealert").style.display = "block";
 }
 
@@ -213,40 +213,36 @@ function performComparisonCheck(comparisonCB, checkcase, dataSourceOrderMaintain
                 undefined,
                 dataSourceOrderMaintained);
 
-            checkPerformed = true;            
+            checkPerformed = true;
         }
     }
 
-    return checkPerformed}
+    return checkPerformed
+}
 
-function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourceOrderMaintained ) {
-    if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) 
-    {
+function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourceOrderMaintained) {
+    if (xCheckStudioInterface1 && complianceSourceACB.classList.contains("state1")) {
         var checkType = undefined;
         var studioInterface = undefined;
         var sourcePropsForCompliance = undefined;
-        if (dataSourceOrderMaintained == 'true') 
-        {
+        if (dataSourceOrderMaintained == 'true') {
             checkType = checkcase.getCheckType("ComplianceSourceA");
-            if (!checkType) 
-            {
+            if (!checkType) {
                 checkType = checkcase.getCheckType("Compliance");
             }
             studioInterface = xCheckStudioInterface1;
             sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
         }
-        else 
-        {
+        else {
             checkType = checkcase.getCheckType("ComplianceSourceB");
-            if (!checkType) 
-            {
+            if (!checkType) {
                 checkType = checkcase.getCheckType("Compliance");
             }
             studioInterface = xCheckStudioInterface1;
             sourcePropsForCompliance = xCheckStudioInterface1.sourceProperties;
-        }     
+        }
 
-        if (!checkType || 
+        if (!checkType ||
             !studioInterface ||
             !sourcePropsForCompliance) {
             OnShowToast('Compliance check can not be performed.');
@@ -260,13 +256,11 @@ function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourc
         }
 
 
-        if (sourceAModelBrowser.GetSelectedComponents().length === 0) 
-        {
+        if (sourceAModelBrowser.GetSelectedComponents().length === 0) {
             OnShowToast('Compliance check can not be performed.</br>No selected components found for data source A.');
             return false;
         }
-        else 
-        {
+        else {
             if (!sourceAComplianceCheckManager) {
                 sourceAComplianceCheckManager = new CheckManager();
                 sourceAComplianceCheckManager.performCheck(sourcePropsForCompliance,
@@ -276,7 +270,7 @@ function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourc
                     studioInterface,
                     dataSourceOrderMaintained);
 
-               return true;
+                return true;
             }
         }
     }
@@ -284,9 +278,8 @@ function performSourceAComplianceCheck(complianceSourceACB, checkcase, dataSourc
     return false;
 }
 
-function performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourceOrderMaintained ) {
-    if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) 
-    {
+function performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourceOrderMaintained) {
+    if (xCheckStudioInterface2 && complianceSourceBCB.classList.contains("state1")) {
         var checkType = undefined;
         var studioInterface = undefined;
         var sourcePropsForCompliance = undefined;
@@ -308,7 +301,7 @@ function performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourc
             sourcePropsForCompliance = xCheckStudioInterface2.sourceProperties;
         }
 
-        if (!checkType || 
+        if (!checkType ||
             !studioInterface ||
             !sourcePropsForCompliance) {
             OnShowToast('Compliance check can not be performed.');
@@ -337,7 +330,7 @@ function performSourceBComplianceCheck(complianceSourceBCB, checkcase, dataSourc
                     studioInterface,
                     dataSourceOrderMaintained);
 
-                    return true;
+                return true;
             }
         }
     }
@@ -349,16 +342,13 @@ function deleteCheckResultsFromDB(checkType) {
     return new Promise((resolve) => {
 
         var functionToInvoke = undefined;
-        if (checkType.toLowerCase() === "comparison") 
-        {
+        if (checkType.toLowerCase() === "comparison") {
             functionToInvoke = "DeleteComparisonResults";
         }
-        else if (checkType.toLowerCase() === "sourceacompliance") 
-        {
+        else if (checkType.toLowerCase() === "sourceacompliance") {
             functionToInvoke = "DeleteSourceAComplianceResults";
         }
-        else if (checkType.toLowerCase() === "sourcebcompliance") 
-        {            
+        else if (checkType.toLowerCase() === "sourcebcompliance") {
             functionToInvoke = "DeleteSourceBComplianceResults";
         }
 
@@ -588,12 +578,12 @@ function restoreExcelDataSource(classWiseComponents,
 
     if (!xCheckStudioInterface1) {
         xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
-        
+
         xCheckStudioInterface1.LoadExcelFileData(classWiseComponents, modelTreeContainer, viewerContainer);
     }
     else {
         xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
-        
+
         xCheckStudioInterface2.LoadExcelFileData(classWiseComponents, modelTreeContainer, viewerContainer);
     }
 }
@@ -749,7 +739,7 @@ function loadDataSource(event,
         else {
             addTabHeaders(modelTreeContainer, data.target.response);
             var fileExtension = xCheckStudio.Util.getFileExtension(data.target.response).toLowerCase();
-           
+
             uploadAndLoadModel(fileExtension,
                 data.target.response,
                 viewerContainer,
@@ -801,28 +791,24 @@ function uploadAndLoadModel(fileExtension, fileName, viewerContainer, modelTreeC
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "uploads/uploadfiles.php", true);
         xhr.onload = function (event) {
-            if (fileExtension.toLowerCase() === "json") 
-            {
+            if (fileExtension.toLowerCase() === "json") {
                 if (loadDbDataSource(fileExtension,
                     files,
                     viewerContainer,
-                    modelTreeContainer)) 
-                {
+                    modelTreeContainer)) {
 
                     hideLoadButton(modelTreeContainer);
                 }
             }
-            if(fileExtension.toLowerCase() === "xls")
-            {
+            if (fileExtension.toLowerCase() === "xls") {
                 if (loadExcelDataSource(fileExtension,
-                                        files,
-                                        viewerContainer,
-                                        modelTreeContainer)) {
+                    files,
+                    viewerContainer,
+                    modelTreeContainer)) {
                     hideLoadButton(modelTreeContainer);
                 }
             }
-            else 
-            {
+            else {
                 loadModel(fileName,
                     viewerContainer,
                     modelTreeContainer, formId);
@@ -839,11 +825,11 @@ function uploadAndLoadModel(fileExtension, fileName, viewerContainer, modelTreeC
             fileExtension.toLowerCase() === "xls") {
             convertToSCS = 'false';
         }
-       
+
         formData.append('ConvertToSCS', convertToSCS);
         xhr.send(formData);
 
-    }   
+    }
 }
 
 function hideLoadButton(modelTreeContainer) {
@@ -891,8 +877,8 @@ function checkIsOrderMaintained(checkType) {
                             }
                         }
                         else if (xCheckStudioInterface1.sourceProperties[genericObject].MainComponentClass == ComponentGroup.SourceBName) {
-                               OrderMaintained = 'false';
-                               break outer_loop;
+                            OrderMaintained = 'false';
+                            break outer_loop;
                         }
                     }
                 }
@@ -901,12 +887,11 @@ function checkIsOrderMaintained(checkType) {
     }
 }
 
-function getCheckCase()
-{
+function getCheckCase() {
     var fileName;
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
-    if(checkCaseSelect.value == "None") {
+    if (checkCaseSelect.value == "None") {
         return;
     }
 
@@ -917,7 +902,7 @@ function getCheckCase()
             break;
         }
     }
-    if(fileName !== undefined) {
+    if (fileName !== undefined) {
         checkCaseManager.readCheckCaseData(fileName);
     }
 }
@@ -930,7 +915,7 @@ function loadExcelDataSource(fileExtension,
     //     alert("CheckCaseManager not found.");
     //     return false;
     // }
-    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) { 
+    if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
         var sourceAType;
         var sourceBType;
         for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
@@ -945,7 +930,7 @@ function loadExcelDataSource(fileExtension,
                 break;
             }
         }
-    
+
         if (viewerContainer === "viewerContainer1") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
                 if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
@@ -960,7 +945,7 @@ function loadExcelDataSource(fileExtension,
                     return false;
                 }
             }
-    
+
         }
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
@@ -969,9 +954,8 @@ function loadExcelDataSource(fileExtension,
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if(fileExtensionA == fileExtensionB) {
-                    if(sourceAType == fileExtensionA && fileExtension == fileExtensionA)
-                    {
+                else if (fileExtensionA == fileExtensionB) {
+                    if (sourceAType == fileExtensionA && fileExtension == fileExtensionA) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
@@ -985,26 +969,25 @@ function loadExcelDataSource(fileExtension,
             }
         }
     }
-    else if(checkCaseManager && !checkCaseSelected) {
+    else if (checkCaseManager && !checkCaseSelected) {
         var fileExtensionA;
         var fileExtensionB;
-        
+
         fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-        if(sourceBFileName !== undefined)
-        {
+        if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
         }
         checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-            if(success) {
+            if (success) {
                 getCheckCase();
-            }  
+            }
         });
     }
-    
+
 
     readExcelDataSource(file[0],
         viewerContainer,
-        modelTreeContainer);    
+        modelTreeContainer);
     return true;
 
 }
@@ -1021,13 +1004,12 @@ function loadModel(fileName,
     var fileExtensionA;
     var fileExtensionB;
     fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-    if(sourceBFileName !== undefined)
-    {
+    if (sourceBFileName !== undefined) {
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
     }
 
-    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
+    if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
         var sourceAType;
         var sourceBType;
         for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
@@ -1066,9 +1048,8 @@ function loadModel(fileName,
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if(fileExtensionA == fileExtensionB && sourceAType != sourceBType) {
-                    if(sourceAType == fileExtensionA && fileExtension.toUpperCase() == fileExtensionA)
-                    {
+                else if (fileExtensionA == fileExtensionB && sourceAType != sourceBType) {
+                    if (sourceAType == fileExtensionA && fileExtension.toUpperCase() == fileExtensionA) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
@@ -1083,7 +1064,7 @@ function loadModel(fileName,
         }
     }
 
- 
+
     // get SCS file path and load model into viewer
     var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
 
@@ -1117,11 +1098,11 @@ function loadModel(fileName,
                         });
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
-                    if(!checkCaseSelected) {
+                    if (!checkCaseSelected) {
                         checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-                            if(success) {
+                            if (success) {
                                 getCheckCase();
-                            }  
+                            }
                         });
                     }
                     return true;
@@ -1361,12 +1342,11 @@ function loadDbDataSource(fileExtension,
     var fileExtensionA;
     var fileExtensionB;
     fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-    if(sourceBFileName !== undefined)
-    {
+    if (sourceBFileName !== undefined) {
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
     }
 
-    if(checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) { 
+    if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
         var sourceAType;
         var sourceBType;
         for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
@@ -1381,7 +1361,7 @@ function loadDbDataSource(fileExtension,
                 break;
             }
         }
-    
+
         if (viewerContainer === "viewerContainer1") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
                 if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
@@ -1396,7 +1376,7 @@ function loadDbDataSource(fileExtension,
                     return false;
                 }
             }
-    
+
         }
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
@@ -1405,9 +1385,8 @@ function loadDbDataSource(fileExtension,
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if(fileExtensionA == fileExtensionB) {
-                    if(sourceAType == fileExtensionA && fileExtension == fileExtensionA)
-                    {
+                else if (fileExtensionA == fileExtensionB) {
+                    if (sourceAType == fileExtensionA && fileExtension == fileExtensionA) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
@@ -1461,8 +1440,7 @@ function readDbDataSource(uri, file,
     var fileExtensionA;
     var fileExtensionB;
     fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-    if(sourceBFileName !== undefined)
-    {
+    if (sourceBFileName !== undefined) {
         fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
     }
@@ -1476,13 +1454,13 @@ function readDbDataSource(uri, file,
         async: false,
         success: function (data) {
             Db_data = data;
-            if(!checkCaseSelected) {
+            if (!checkCaseSelected) {
                 checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-                    if(success) {
+                    if (success) {
                         getCheckCase();
-                    }  
+                    }
                 });
-           }
+            }
         },
         error: function (xhr, status, error) {
         },
@@ -1498,7 +1476,7 @@ function readDbDataSource(uri, file,
 }
 
 function saveData() {
-    
+
     var sourceANodeIdvsComponentIdList;
     var sourceASelectedComponents;
     var sourceBNodeIdvsComponentIdList;
@@ -1530,25 +1508,24 @@ function saveData() {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
                     "SourceViewerOptionsTable": "SourceAViewerOptions"
                 },
-                success: function (msg) {                   
+                success: function (msg) {
                 }
             });
 
             sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().GetSelectedComponents();
             sourceAType = xCheckStudioInterface1.SourceType;
-            
+
         }
         else if (xCheckStudioInterface1.SourceType.toLowerCase() === "xls" || xCheckStudioInterface1.SourceType.toLowerCase() === "json") {
             sourceANodeIdvsComponentIdList = xCheckStudioInterface1.NodeIdvsComponentIdList;
             sourceASelectedComponents = xCheckStudioInterface1.getModelBrowser().GetSelectedComponents();
-            sourceAType = xCheckStudioInterface1.SourceType;         
+            sourceAType = xCheckStudioInterface1.SourceType;
         }
 
     }
 
-    if (xCheckStudioInterface2) 
-    {
+    if (xCheckStudioInterface2) {
         if (xCheckStudioInterface2.SourceType.toLowerCase() === "xml" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "rvm" ||
             xCheckStudioInterface2.SourceType.toLowerCase() === "sldasm" ||
@@ -1573,7 +1550,7 @@ function saveData() {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
                     "SourceViewerOptionsTable": "SourceBViewerOptions"
                 },
-                success: function (msg) {                  
+                success: function (msg) {
                 }
             });
 
@@ -1592,7 +1569,7 @@ function saveData() {
 
     // control states
     var controlStatesArray = getControlStates();
-   
+
     // write source A selected components, differet control statuses to DB        
     $.ajax({
         url: 'PHP/ProjectDatawriter.php',
@@ -1608,14 +1585,14 @@ function saveData() {
             "SourceBFileName": sourceBFileName,
             "SourceAType": sourceAType,
             "SourceBType": sourceBType,
-            "orderMaintained": OrderMaintained,            
+            "orderMaintained": OrderMaintained,
             "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
             "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
             "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
             "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
             "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
         },
-        success: function (msg) {            
+        success: function (msg) {
         },
         error: function (error) {
             console.log(error)
@@ -1778,8 +1755,7 @@ function OnShowHideMenu() {
 
 }
 
-function resetCheckSwitchesForSource2()
-{
+function resetCheckSwitchesForSource2() {
     var component = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
     if (isCurrentState(component, 'state2')) {
         if (component.classList.contains("disabledbutton")) {
@@ -1789,8 +1765,8 @@ function resetCheckSwitchesForSource2()
         removeAllClassesButFirst(component, 'state2-to-state1');
         addClass(component, 'state1');
         addClass(component, 'state2-to-state1');
-    }     
-    var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');   
+    }
+    var component = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
     if (isCurrentState(component, 'state1')) {
         if (component.classList.contains("disabledbutton")) {
             return;
@@ -1802,8 +1778,7 @@ function resetCheckSwitchesForSource2()
     }
 }
 
-function resetCheckSwitchesForSource1()
-{
+function resetCheckSwitchesForSource1() {
     var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
     if (isCurrentState(component, 'state2')) {
         if (component.classList.contains("disabledbutton")) {
@@ -1829,10 +1804,10 @@ function resetCheckSwitchesForSource1()
 
 function clearDBEntriesOnClearModule(source) {
     $.ajax({
-        data: {'Source' : source},
+        data: { 'Source': source },
         type: "POST",
         url: "PHP/RemoveComponentsFromDB.php"
-       }).done(function (msg) {
+    }).done(function (msg) {
         if (msg == 'fail') {
         }
         // remove busy spinner
@@ -1841,10 +1816,10 @@ function clearDBEntriesOnClearModule(source) {
     });
 
     $.ajax({
-        data: {'Source' : source},
+        data: { 'Source': source },
         type: "POST",
         url: "PHP/DeleteSourceFilesFromDirectory.php"
-       }).done(function (msg) {
+    }).done(function (msg) {
         if (msg == 'fail') {
         }
         // remove busy spinner
@@ -1865,7 +1840,7 @@ function clearData(source) {
         addClass(comparisonCB, 'state1');
         addClass(comparisonCB, 'state2-to-state1');
     }
-    if(source.toLowerCase() == "both") {
+    if (source.toLowerCase() == "both") {
         document.getElementById("modelTree1").innerHTML = "";;
         document.getElementById("SourceAComponentCount").innerHTML = "";
         document.getElementById("dataSource1ModelBrowserTab").innerHTML = "Source 1";
@@ -1873,20 +1848,19 @@ function clearData(source) {
         $("#viewerContainer1").empty();
         document.getElementById("createbtnA").style.display = "block";
         document.getElementById("loadDataA").style.display = "block";
-        if(document.getElementById("createbtnA").classList.contains("disabledbutton"))
-        {
+        if (document.getElementById("createbtnA").classList.contains("disabledbutton")) {
             document.getElementById("createbtnA").classList.remove('disabledbutton');
         }
         $('#checkAll1').attr('value', 'false');
         $('#compliance1').attr('value', 'false');
-    
+
         document.getElementById("modelTree2").innerHTML = "";
         document.getElementById("SourceBComponentCount").innerHTML = "";
         document.getElementById("dataSource2ModelBrowserTab").innerText = "Source 2";
         document.getElementById("dataSource2ViewerContainerTab").innerHTML = "Source 2";
         $("#viewerContainer2").empty();
         document.getElementById("createbtnB").style.display = "block";
-        document.getElementById("loadDataB").style.display = "block";   
+        document.getElementById("loadDataB").style.display = "block";
         document.getElementById("checkCaseSelect").value = "None";
         resetCheckSwitchesForSource1();
         resetCheckSwitchesForSource2();
@@ -1894,14 +1868,13 @@ function clearData(source) {
         xCheckStudioInterface2 = null;
         enableDropZone("dropZone1");
         checkCaseFilesData.readCheckCaseFiles().then(function (success) {
-            if(success) {
+            if (success) {
                 getCheckCase();
                 clearDBEntriesOnClearModule(source);
-            }  
+            }
         });;
     }
-    else if(source.toLowerCase() == "sourcea")
-    {
+    else if (source.toLowerCase() == "sourcea") {
         document.getElementById("modelTree1").innerHTML = "";;
         document.getElementById("SourceAComponentCount").innerHTML = "";
         document.getElementById("dataSource1ModelBrowserTab").innerHTML = "Source 1";
@@ -1909,13 +1882,11 @@ function clearData(source) {
         $("#viewerContainer1").empty();
 
         document.getElementById("createbtnA").style.display = "block";
-        if(document.getElementById("createbtnA").classList.contains("disabledbutton"))
-        {
+        if (document.getElementById("createbtnA").classList.contains("disabledbutton")) {
             document.getElementById("createbtnA").classList.remove('disabledbutton');
         }
         document.getElementById("loadDataA").style.display = "block";
-        if(document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1")
-        {
+        if (document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1") {
             component = document.getElementById('createbtnB');
             addClass(component, 'disabledbutton');
         }
@@ -1925,39 +1896,35 @@ function clearData(source) {
         sourceAFileName = undefined;
         var fileExtensionA;
         var fileExtensionB;
-        if(sourceBFileName !== undefined)
-        {
+        if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
 
         }
 
-        if(sourceAFileName == undefined && sourceBFileName == undefined) {
+        if (sourceAFileName == undefined && sourceBFileName == undefined) {
             excludeNone = false;
         }
         xCheckStudioInterface1 = null;
         checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
-            if(success) {
+            if (success) {
                 getCheckCase();
                 clearDBEntriesOnClearModule(source);
-            }  
+            }
         });
     }
-    else if(source.toLowerCase() == "sourceb")
-    {
+    else if (source.toLowerCase() == "sourceb") {
         document.getElementById("modelTree2").innerHTML = "";
         document.getElementById("SourceBComponentCount").innerHTML = "";
         document.getElementById("dataSource2ModelBrowserTab").innerText = "Source 2";
         document.getElementById("dataSource2ViewerContainerTab").innerHTML = "Source 2";
         $("#viewerContainer2").empty();
         document.getElementById("createbtnB").style.display = "block";
-        if(document.getElementById("createbtnB").classList.contains("disabledbutton"))
-        {
+        if (document.getElementById("createbtnB").classList.contains("disabledbutton")) {
             document.getElementById("createbtnB").classList.remove('disabledbutton');
         }
         document.getElementById("loadDataB").style.display = "block";
-        
-        if(document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1")
-        {
+
+        if (document.getElementById("dataSource1ModelBrowserTab").innerHTML == "Source 1") {
             component = document.getElementById('createbtnB');
             addClass(component, 'disabledbutton');
         }
@@ -1967,19 +1934,19 @@ function clearData(source) {
         excludeNone = true;
         var fileExtensionA;
         var fileExtensionB;
-        if(sourceAFileName !== undefined) {
+        if (sourceAFileName !== undefined) {
             fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
         }
-        
+
         xCheckStudioInterface2 = null;
-        if(sourceAFileName == undefined && sourceBFileName == undefined) {
+        if (sourceAFileName == undefined && sourceBFileName == undefined) {
             excludeNone = false;
         }
         checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
-            if(success) {
+            if (success) {
                 getCheckCase();
                 clearDBEntriesOnClearModule(source);
-            }  
+            }
         });
     }
 }
@@ -2166,13 +2133,11 @@ function loadSources(viewerOptions) {
             if ('sourceBFileName' in dataSourceInfo) {
                 source = 'Both';
 
-                if('orderMaintained' in dataSourceInfo &&
-                   dataSourceInfo['orderMaintained'].toLowerCase === 'false')
-                {
+                if ('orderMaintained' in dataSourceInfo &&
+                    dataSourceInfo['orderMaintained'].toLowerCase === 'false') {
                     OrderMaintained = 'false';
                 }
-                else
-                {
+                else {
                     OrderMaintained = 'true';
                 }
             }
@@ -2219,21 +2184,19 @@ function loadSources(viewerOptions) {
 function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectName) {
 
     return new Promise((resolve) => {
-        
-        if(dataSourceInfo.sourceAType.toLowerCase() === "xls" ||
-           dataSourceInfo.sourceAType.toLowerCase() === "json")
-        {
 
-              // get class wise properties for excel and other 1D datasources
-              $.ajax({
+        if (dataSourceInfo.sourceAType.toLowerCase() === "xls" ||
+            dataSourceInfo.sourceAType.toLowerCase() === "json") {
+
+            // get class wise properties for excel and other 1D datasources
+            $.ajax({
                 url: 'PHP/ClasswiseComponentsReader.php',
                 type: "POST",
                 async: false,
                 data: { 'Source': "SourceA" },
                 success: function (msg) {
                     if (msg != 'fail' &&
-                        msg != "") 
-                    {
+                        msg != "") {
                         var sourceAClassWiseComponents = JSON.parse(msg);
 
                         // open tab 
@@ -2243,21 +2206,21 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
                             "viewerContainer1",
                             "modelTree1",
                             selectedComponents,
-                            dataSourceInfo["sourceAFileName"]); 
-                        
+                            dataSourceInfo["sourceAFileName"]);
+
                         // hide load data source a button
                         hideLoadButton("modelTree1");
                     }
 
                     return resolve(true);
                 }
-            });           
-        }      
+            });
+        }
         else {
 
             if (viewerParams['SourceAContainerId'] === undefined ||
                 viewerParams['SourceAEndPointUri'] === undefined) {
-                    return;
+                return;
             }
 
             // open tab to avoid issue of viewer not getting updated with model, 
@@ -2279,17 +2242,17 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
             if (index != -1 &&
                 file.length > (index + 1)) {
                 file = file.substring(index + 1);
-            }          
+            }
 
             index = file.lastIndexOf(".");
             if (index != -1 &&
                 file.length > (index + 1)) {
                 file = file.substring(0, index + 1);
-            }      
+            }
 
             var fileExtension = dataSourceInfo['sourceAType'];
             file = file + fileExtension;
-            
+
             addTabHeaders("modelTree1", file);
 
             xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
@@ -2369,7 +2332,7 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
             if (viewerParams['SourceBContainerId'] === undefined ||
                 viewerParams['SourceBEndPointUri'] === undefined) {
                 return;
-            }           
+            }
 
             // open tab to avoid issue of viewer not getting updated with model, 
             // when tab is hidden and model is loaded on it
@@ -2397,7 +2360,7 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
             if (index != -1 &&
                 file.length > (index + 1)) {
                 file = file.substring(0, index + 1);
-            }      
+            }
 
             var fileExtension = dataSourceInfo['sourceBType'];
             file = file + fileExtension;
@@ -2537,6 +2500,12 @@ function selectComponents(modelTreeContainer) {
     }
 }
 
+function onHomeClick() {
+    if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+        window.location = "home.html";
+      }
+}
+
 function onSaveProject(event) {
     var busySpinner = document.getElementById("divLoading");
     busySpinner.className = 'show';
@@ -2544,7 +2513,7 @@ function onSaveProject(event) {
 
         // create project DB
         createProjectDBonSave().then(function (result) {
-            if (result) { 
+            if (result) {
 
                 // save components to checkspaceDB
                 saveComponentsToCheckSpaceDB();
@@ -2577,8 +2546,7 @@ function onSaveProject(event) {
     }
 }
 
-function saveComponentsToCheckSpaceDB()
-{
+function saveComponentsToCheckSpaceDB() {
     $.ajax({
         url: 'PHP/ProjectManager.php',
         type: "POST",
@@ -2587,7 +2555,7 @@ function saveComponentsToCheckSpaceDB()
         {
             'InvokeFunction': "SaveComponentsToCheckSpaceDB"
         },
-        success: function (msg) {           
+        success: function (msg) {
         }
     });
 }
@@ -2659,7 +2627,7 @@ function saveNotSelectedComponents() {
 }
 
 function saveSelectedComponents() {
-   
+
     // write source a selected components
     if (xCheckStudioInterface1) {
         var selectedCompoents = xCheckStudioInterface1.getModelBrowser().GetSelectedComponents();
@@ -2703,7 +2671,7 @@ function saveSelectedComponents() {
     }
 }
 function saveSourceViewerOptions() {
-    
+
     // write source a viewer options
     if (xCheckStudioInterface1 &&
         xCheckStudioInterface1._firstViewer &&
@@ -2753,7 +2721,7 @@ function saveSourceViewerOptions() {
     }
 }
 
-function saveDataSourceInfo() {    
+function saveDataSourceInfo() {
 
     var sourceAType = undefined;
     if (xCheckStudioInterface1) {
@@ -2787,35 +2755,33 @@ function saveDataSourceInfo() {
         });
 }
 
-function saveControlsState()
-{
+function saveControlsState() {
     var controlStatesArray = getControlStates();
 
     $.ajax
-    ({
-       url: 'PHP/ProjectManager.php',
-       type: "POST",
-       async: false,
-       data:
-       {
-           'InvokeFunction': "SaveCheckModuleControlsState",            
-           "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
-           "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
-           "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
-           "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
-           "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch']
-       },
-       success: function (msg) {
-          
-       },
-       error: function (error) {
-           console.log(error)
-       }
-   });
+        ({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveCheckModuleControlsState",
+                "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
+                "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
+                "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
+                "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
+                "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch']
+            },
+            success: function (msg) {
+
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
 }
 
-function getControlStates()
-{
+function getControlStates() {
     // control states
     var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
     var complianceSourceACB = document.querySelector('.module1 .group1 .complianceswitch .toggle-Hm8P');
@@ -2847,7 +2813,7 @@ function getControlStates()
         sourceBCheckAllSwitchOn = 'true';
     }
 
-    var controlStatesArray ={};
+    var controlStatesArray = {};
     controlStatesArray['ComparisonSwitch'] = comparisonSwitchOn;
     controlStatesArray['SourceAComplianceSwitch'] = sourceAComplianceSwitchOn;
     controlStatesArray['SourceBComplianceSwitch'] = sourceBComplianceSwitchOn;

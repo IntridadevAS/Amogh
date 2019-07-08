@@ -28,41 +28,39 @@ function setProjectName() {
 
 function acceptAllCategories() {
     var tab = this.currentlyOpenedTab;
-    if(this.currentlyOpenedTab == "ComparisonTabPage") {
+    if (this.currentlyOpenedTab == "ComparisonTabPage") {
         comparisonReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComparisonTab');
     }
-    else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
+    else if (this.currentlyOpenedTab == "SourceAComplianceTabPage") {
         sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceATab');
     }
-    else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
+    else if (this.currentlyOpenedTab == "SourceBComplianceTabPage") {
         sourceBComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceBTab');
     }
 }
 
 function resetAllCategories() {
     var tab = this.currentlyOpenedTab;
-    if(this.currentlyOpenedTab == "ComparisonTabPage") {
+    if (this.currentlyOpenedTab == "ComparisonTabPage") {
         comparisonReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComparisonTab');
     }
-    else if(this.currentlyOpenedTab == "SourceAComplianceTabPage") {
+    else if (this.currentlyOpenedTab == "SourceAComplianceTabPage") {
         sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceATab');
     }
-    else if(this.currentlyOpenedTab == "SourceBComplianceTabPage") {
+    else if (this.currentlyOpenedTab == "SourceBComplianceTabPage") {
         sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceBTab');
     }
 }
 
 function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
-    sourceBComplianceCheckGroups) 
-{
-    if(!comparisonCheckGroups &&
-      !sourceAComplianceCheckGroups &&
-      !sourceBComplianceCheckGroups)
-    {
+    sourceBComplianceCheckGroups) {
+    if (!comparisonCheckGroups &&
+        !sourceAComplianceCheckGroups &&
+        !sourceBComplianceCheckGroups) {
         return;
     }
-   
+
     $.ajax({
         url: 'PHP/SourceViewerOptionsReader.php',
         type: "POST",
@@ -73,34 +71,8 @@ function populateCheckResults(comparisonCheckGroups,
 
             var sourceAViewerOptions = undefined;
             var sourceAClassWiseComponents = undefined;
-            if(viewerOptions['SourceAContainerId'] === undefined ||
-               viewerOptions['SourceAEndPointUri'] === undefined)
-            {
-                 // this ajax call is synchronous
-
-                 // get class wise properties for excel and other 1D datasources
-                 $.ajax({
-                    url: 'PHP/ClasswiseComponentsReader.php',
-                    type: "POST",
-                    async: false,
-                    data: {'Source' : "SourceA"},
-                     success: function (msg) {
-                         if (msg != 'fail') {
-                             sourceAClassWiseComponents = JSON.parse(msg);
-                         }
-                     }
-                 });
-            }
-            else
-            {
-                sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
-            }
-
-            var sourceBViewerOptions = undefined;
-            var sourceBClassWiseComponents = undefined;
-            if(viewerOptions['SourceBContainerId'] === undefined ||
-               viewerOptions['SourceBEndPointUri'] === undefined)
-            {
+            if (viewerOptions['SourceAContainerId'] === undefined ||
+                viewerOptions['SourceAEndPointUri'] === undefined) {
                 // this ajax call is synchronous
 
                 // get class wise properties for excel and other 1D datasources
@@ -108,42 +80,60 @@ function populateCheckResults(comparisonCheckGroups,
                     url: 'PHP/ClasswiseComponentsReader.php',
                     type: "POST",
                     async: false,
-                    data: {'Source' : "SourceB"},
-                    success: function (msg) 
-                    {
+                    data: { 'Source': "SourceA" },
+                    success: function (msg) {
+                        if (msg != 'fail') {
+                            sourceAClassWiseComponents = JSON.parse(msg);
+                        }
+                    }
+                });
+            }
+            else {
+                sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
+            }
+
+            var sourceBViewerOptions = undefined;
+            var sourceBClassWiseComponents = undefined;
+            if (viewerOptions['SourceBContainerId'] === undefined ||
+                viewerOptions['SourceBEndPointUri'] === undefined) {
+                // this ajax call is synchronous
+
+                // get class wise properties for excel and other 1D datasources
+                $.ajax({
+                    url: 'PHP/ClasswiseComponentsReader.php',
+                    type: "POST",
+                    async: false,
+                    data: { 'Source': "SourceB" },
+                    success: function (msg) {
                         if (msg != 'fail' && msg != "") {
                             sourceBClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
             }
-            else
-            {
+            else {
                 sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
             }
 
 
-            if (comparisonCheckGroups) 
-            {
-                loadComparisonData(comparisonCheckGroups, 
-                                   sourceAViewerOptions, 
-                                   sourceBViewerOptions,
-                                   sourceAClassWiseComponents,
-                                   sourceBClassWiseComponents);
+            if (comparisonCheckGroups) {
+                loadComparisonData(comparisonCheckGroups,
+                    sourceAViewerOptions,
+                    sourceBViewerOptions,
+                    sourceAClassWiseComponents,
+                    sourceBClassWiseComponents);
             }
 
-            if (sourceAComplianceCheckGroups) 
-            {
+            if (sourceAComplianceCheckGroups) {
                 loadSourceAComplianceData(sourceAComplianceCheckGroups,
-                                          sourceAViewerOptions,
-                                          sourceAClassWiseComponents);
+                    sourceAViewerOptions,
+                    sourceAClassWiseComponents);
             }
 
-            if (sourceBComplianceCheckGroups) 
-            {
-                loadSourceBComplianceData(sourceBComplianceCheckGroups, 
-                                          sourceBViewerOptions,
-                                          sourceBClassWiseComponents);
+            if (sourceBComplianceCheckGroups) {
+                loadSourceBComplianceData(sourceBComplianceCheckGroups,
+                    sourceBViewerOptions,
+                    sourceBClassWiseComponents);
             }
 
             // make buttons collapsible
@@ -159,12 +149,12 @@ function populateCheckResults(comparisonCheckGroups,
                 openCheckResultTab('SourceBComplianceTabPage');
             }
         }
-    });  
+    });
 }
 
 function loadSourceAComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceAClassWiseComponents) {   
+    sourceAClassWiseComponents) {
 
     sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
@@ -175,14 +165,14 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
-    if(comparisonReviewManager !== undefined)
+    if (comparisonReviewManager !== undefined)
         comparisonReviewManager.complianceA = sourceAComplianceReviewManager;
 
 }
 
 function loadSourceBComplianceData(complianceCheckGroups,
-                                   sourceViewerOptions,
-                                   sourceBClassWiseComponents) {
+    sourceViewerOptions,
+    sourceBClassWiseComponents) {
 
     // var sourceViewerOptions = undefined;
     // if(viewerOptions['SourceBContainerId'] !== undefined &&
@@ -191,7 +181,7 @@ function loadSourceBComplianceData(complianceCheckGroups,
     //     sourceViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
     // }
 
-    sourceBComplianceReviewManager = new  ComplianceReviewManager(complianceCheckGroups,
+    sourceBComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
         sourceBClassWiseComponents,
         'SourceBComplianceMainReviewCell',
@@ -201,34 +191,38 @@ function loadSourceBComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceBComplianceReviewManager.populateReviewTable();
-    if(comparisonReviewManager !== undefined)
+    if (comparisonReviewManager !== undefined)
         comparisonReviewManager.complianceB = sourceBComplianceReviewManager;
 
 }
 
-function loadComparisonData(comparisonCheckGroups, 
-                            sourceAViewerOptions, 
-                            sourceBViewerOptions,
-                            sourceAClassWiseComponents,
-                            sourceBClassWiseComponents)
-{      
+function loadComparisonData(comparisonCheckGroups,
+    sourceAViewerOptions,
+    sourceBViewerOptions,
+    sourceAClassWiseComponents,
+    sourceBClassWiseComponents) {
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
-                                                          sourceAViewerOptions,
-                                                          sourceBViewerOptions,
-                                                          sourceAClassWiseComponents,
-                                                          sourceBClassWiseComponents,
-                                                          "ComparisonMainReviewCell",
-                                                          "ComparisonDetailedReviewCell"/*,
+        sourceAViewerOptions,
+        sourceBViewerOptions,
+        sourceAClassWiseComponents,
+        sourceBClassWiseComponents,
+        "ComparisonMainReviewCell",
+        "ComparisonDetailedReviewCell"/*,
                                                             undefined,
                                                             undefined,
                                                             undefined,
                                                             undefined*/);
 
     // populate review table
-    comparisonReviewManager.populateReviewTable();     
+    comparisonReviewManager.populateReviewTable();
 }
 
+function onHomeClick() {
+    if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+        window.location = "home.html";
+      }
+}
 
 function onSaveProject(event) {
     // var busySpinner = document.getElementById("divLoading");
@@ -258,19 +252,16 @@ function onSaveProject(event) {
     }
 }
 
-function onReferenceClick(selectedRow)
-{
+function onReferenceClick(selectedRow) {
     var referenceManager = new ReferenceManager(selectedRow);
-    referenceManager.ShowReferenceDiv();    
+    referenceManager.ShowReferenceDiv();
 }
 
- function sadsajkdhjlsak() 
-{
+function sadsajkdhjlsak() {
     var webAddressString = document.getElementById("webAddressInput").value;
     alert(webAddressString);
 }
 
-function toggleDropdown() 
-{
+function toggleDropdown() {
     document.getElementById("newReferenceDropdown").classList.toggle("show");
 }
