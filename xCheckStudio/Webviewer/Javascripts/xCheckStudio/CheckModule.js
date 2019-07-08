@@ -588,6 +588,27 @@ function restoreExcelDataSource(classWiseComponents,
     }
 }
 
+function restoreDBDataSource(classWiseComponents,
+    viewerContainer,
+    modelTreeContainer,
+    selectedComponents,
+    fileName) {
+
+    //let fileName = file.name;
+    var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+
+    if (!xCheckStudioInterface1) {
+        xCheckStudioInterface1 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
+
+        xCheckStudioInterface1.LoadExcelFileData(classWiseComponents, modelTreeContainer, viewerContainer);
+    }
+    else {
+        xCheckStudioInterface2 = new xCheckStudio.xCheckStudioInterface(fileExtension, undefined, selectedComponents);
+
+        xCheckStudioInterface2.LoadExcelFileData(classWiseComponents, modelTreeContainer, viewerContainer);
+    }
+}
+
 //open windows file selector dialog
 function OnLoadClick(isFirstDataSource) {
     var modal;
@@ -800,7 +821,7 @@ function uploadAndLoadModel(fileExtension, fileName, viewerContainer, modelTreeC
                     hideLoadButton(modelTreeContainer);
                 }
             }
-            if (fileExtension.toLowerCase() === "xls") {
+            else if (fileExtension.toLowerCase() === "xls") {
                 if (loadExcelDataSource(fileExtension,
                     files,
                     viewerContainer,
@@ -2202,11 +2223,20 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
                         // open tab 
                         OpenTab('tab1');
 
-                        restoreExcelDataSource(sourceAClassWiseComponents,
-                            "viewerContainer1",
-                            "modelTree1",
-                            selectedComponents,
-                            dataSourceInfo["sourceAFileName"]);
+                        if (dataSourceInfo.sourceAType.toLowerCase() === "xls") {
+                            restoreExcelDataSource(sourceAClassWiseComponents,
+                                "viewerContainer1",
+                                "modelTree1",
+                                selectedComponents,
+                                dataSourceInfo["sourceAFileName"]);
+                        }
+                        else if (dataSourceInfo.sourceAType.toLowerCase() === "json") {
+                            restoreDBDataSource(sourceAClassWiseComponents,
+                                "viewerContainer1",
+                                "modelTree1",
+                                selectedComponents,
+                                dataSourceInfo["sourceAFileName"]);
+                        }
 
                         // hide load data source a button
                         hideLoadButton("modelTree1");
@@ -2293,8 +2323,8 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
 
     return new Promise((resolve) => {
 
-        if (dataSourceInfo.sourceAType.toLowerCase() === "xls" ||
-            dataSourceInfo.sourceAType.toLowerCase() === "json") {
+        if (dataSourceInfo.sourceBType.toLowerCase() === "xls" ||
+            dataSourceInfo.sourceBType.toLowerCase() === "json") {
 
             // get class wise properties for excel and other 1D datasources
             $.ajax({
@@ -2312,12 +2342,20 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
                         CreateNewTab();
                         OpenTab('tab2');
 
-                        restoreExcelDataSource(sourceBClassWiseComponents,
-                            "viewerContainer2",
-                            "modelTree2",
-                            selectedComponents,
-                            dataSourceInfo["sourceBFileName"]);
-
+                        if (dataSourceInfo.sourceAType.toLowerCase() === "xls") {
+                            restoreExcelDataSource(sourceBClassWiseComponents,
+                                "viewerContainer2",
+                                "modelTree2",
+                                selectedComponents,
+                                dataSourceInfo["sourceBFileName"]);
+                        }
+                        else if (dataSourceInfo.sourceAType.toLowerCase() === "json") {
+                            restoreDBDataSource(sourceBClassWiseComponents,
+                                "viewerContainer2",
+                                "modelTree2",
+                                selectedComponents,
+                                dataSourceInfo["sourceBFileName"]);
+                        }
 
                         // hide load data source b button
                         hideLoadButton("modelTree2");
@@ -2503,7 +2541,7 @@ function selectComponents(modelTreeContainer) {
 function onHomeClick() {
     if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
         window.location = "home.html";
-      }
+    }
 }
 
 function onSaveProject(event) {

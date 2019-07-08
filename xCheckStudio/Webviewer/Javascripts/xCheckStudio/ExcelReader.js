@@ -11,8 +11,8 @@ function ExcelReader(sourceType, checkType, selectedComponents) {
     this.containerId = "";
     this.sourceProperties = [];
     this.sourceDataSheet = {};
-    this.SelectedComponents = selectedComponents;
-    this.excelModelBrowser = new ExcelModeBrowser(this.SelectedComponents);
+    // this.SelectedComponents = selectedComponents;
+    this.excelModelBrowser = new ExcelModeBrowser(selectedComponents);
 }
 
 ExcelReader.prototype.ReadFileData = function (file, containerId, viewerContainer) {

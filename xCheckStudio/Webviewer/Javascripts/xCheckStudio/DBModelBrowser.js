@@ -1,4 +1,4 @@
-function DBModelBrowser() {
+function DBModelBrowser(selectedComponents) {
 
     this.containerId;
     this.NodeGroups = [];
@@ -6,6 +6,7 @@ function DBModelBrowser() {
     this.SelectedComponentRowFromSheet;
     this.SelectedCompoents = [];
     this.databasetabledata = [];
+    this.SelectedCompoents = selectedComponents !== undefined? selectedComponents : [];
 
     DBModelBrowser.prototype.GetSelectedComponents = function () {
         return this.SelectedCompoents;
@@ -118,7 +119,8 @@ function DBModelBrowser() {
                             tableRowContent = {};
                             var checkBox = document.createElement("INPUT");
                             checkBox.setAttribute("type", "checkbox");
-                            checkBox.checked = false;
+                            //checkBox.checked = false;
+                            checkBox.checked = _this.IsComponentChecked(name, mainComponentClass, subComponentClass );
 
                             tableRowContent[columnHeaders[0].name] = checkBox;
                             tableRowContent[columnHeaders[1].name] = name;
@@ -176,6 +178,25 @@ function DBModelBrowser() {
         }
 
     };
+
+    DBModelBrowser.prototype.IsComponentChecked = function (componentName,
+        mainClass,
+        subClass) {
+        if (this.SelectedCompoents &&
+            (mainClass in this.SelectedCompoents)) {
+            var classWiseSelectedComps = this.SelectedCompoents[mainClass];
+
+            for (var key in classWiseSelectedComps) {
+                var comp = classWiseSelectedComps[key];
+                if (componentName === comp["name"] &&
+                    subClass === comp["subClass"]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     DBModelBrowser.prototype.addComponentRow = function (styleList, componentStyleClass, rowData) {
         var row = document.createElement("tr");

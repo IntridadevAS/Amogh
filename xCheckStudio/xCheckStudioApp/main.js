@@ -16,7 +16,7 @@ function createWindow()
     var serverDetailsPageUrl = path.join(__dirname, 'index.html');
     win.loadURL(serverDetailsPageUrl);
 
-    //win.setMenu(null);    
+    win.setMenu(null);    
    
     win.on('closed', ()=>{
         win = null;

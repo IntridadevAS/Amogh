@@ -1,4 +1,4 @@
-function DBReader(sourceType, checkType)
+function DBReader(sourceType, checkType, selectedComponents)
 {
     this.SourceType = sourceType;
     this.checkType = checkType;
@@ -6,7 +6,8 @@ function DBReader(sourceType, checkType)
     this.containerId = "";
     this.sourceProperties = [];
     this.dbdata = {}
-    this.dbmodelbrowser = new DBModelBrowser();
+    
+    this.dbmodelbrowser = new DBModelBrowser(selectedComponents);
 }
 
 DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
@@ -19,6 +20,59 @@ DBReader.prototype.ReadDBData = function(Db_data, containerId, viewerContainer)
     if(checkCaseSelected) {
         checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
     }
+}
+
+DBReader.prototype.LoadFileData = function (classWiseComponents,
+    containerId,
+    viewerContainer) {
+
+    for (var mainClass in classWiseComponents) {
+        var sourcePropertiesTemp = {};
+
+        var components = classWiseComponents[mainClass];
+
+        for (var compId in components) {
+            var component = components[compId];
+
+            var genericPropertiesObject = new GenericComponent();
+            genericPropertiesObject.ID = compId;
+
+            for (var propId in component) {
+                var property = component[propId];
+
+                var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
+                genericPropertiesObject.addProperty(genericPropertyObject);
+
+                if ((property.name === "Name") ||
+                    (genericPropertiesObject.Name === undefined &&
+                        property.name === "Tagnumber")) {
+                    genericPropertiesObject.Name = property.value;
+                }
+                else if (property.name === "ComponentClass") {
+                    genericPropertiesObject.MainComponentClass = property.value;
+                }
+                else if (property.name.toLowerCase() === "component class" ||
+                    property.name.toLowerCase() === "class") {
+                    genericPropertiesObject.SubComponentClass = property.value;
+                }
+            }
+
+            // add genericProperties object to sourceproperties collection
+            if (genericPropertiesObject.SubComponentClass in sourcePropertiesTemp) {
+                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass].push(genericPropertiesObject);
+            }
+            else {
+                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
+            }
+
+            this.sourceProperties.push(genericPropertiesObject)
+        }
+
+        this.sourceDataSheet[mainClass] = sourcePropertiesTemp;
+    }
+
+    //add model Browser Table
+    this.dbmodelbrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
 }
 
 DBReader.prototype.addComponentsToDB = function (viewerContainer) {

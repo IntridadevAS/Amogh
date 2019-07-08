@@ -41,6 +41,14 @@ var xCheckStudio;
             this.sourceProperties = this.db_reader.sourceProperties;
         }
 
+        xCheckStudioInterface.prototype.LoadDBFileData = function (classWiseComponents, containerId, viewerContainer) {
+            
+            this.db_reader = new DBReader(this.SourceType, this.checkType, this.SelectedComponents);            
+            this.db_reader.LoadFileData(classWiseComponents, containerId, viewerContainer);
+
+            this.sourceProperties = this.db_reader.sourceProperties;
+        }
+
         xCheckStudioInterface.prototype.getClassWiseComponents = function () {
             var classwiseComponents = {};
             var mainCategoryPropertyName = "MainComponentClass";
