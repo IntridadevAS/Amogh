@@ -1038,7 +1038,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 for (var propertyId in component.properties) {
                                     property = component.properties[propertyId];
                                     if(property.Severity !== 'OK') {
-<<<<<<< HEAD
                                         if(transposeType == 'lefttoright' && property.Severity !== 'No Value') {
                                             property.Severity = 'OK(T)';
                                             property.SourceBValue = property.SourceAValue;
@@ -1050,9 +1049,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                                         else {
                                             property.Severity = 'ACCEPTED';
                                         }
-=======
-                                        property.Severity = 'ACCEPTED';
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                                     }
                                 }
                             }
@@ -1276,7 +1272,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                     url: 'PHP/TransposeProperties.php',
                     type: "POST",
                     async: true,
-<<<<<<< HEAD
                     data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel' },
                     success: function (msg) {
                         var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
@@ -1285,19 +1280,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         }
 
-=======
-                    data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText },
-                    success: function (msg) {
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                         var SourceAValue = selectedRow[0].cells[1].innerHTML;
                         var SourceBValue = selectedRow[0].cells[2].innerHTML;
 
                         if(transposeType == "lefttoright") {
                             selectedRow[0].cells[2].innerHTML = SourceAValue;
-<<<<<<< HEAD
                             selectedRow[0].cells[4].innerHTML = 'OK(T)';
-=======
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1307,20 +1295,14 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
-<<<<<<< HEAD
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
-=======
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                                 }   
                             }
         
                         }
                         else if(transposeType == "righttoleft") {
                             selectedRow[0].cells[1].innerHTML  = SourceBValue;
-<<<<<<< HEAD
                             selectedRow[0].cells[4].innerHTML = 'OK(T)';
-=======
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1330,24 +1312,17 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
-<<<<<<< HEAD
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
                                 }  
                             }
                         }
                         _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-=======
-                                }  
-                            }
-                        }
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                     }
                 });   
             }
             catch(error) {}        
         }
      }
-<<<<<<< HEAD
 
     ComparisonReviewManager.prototype.transposePropertyValueComponentLevel = function(key, selectedRow, comparisonReviewManager) {
         _this = comparisonReviewManager;
@@ -1398,8 +1373,6 @@ function ComparisonReviewManager(comparisonCheckManager,
         var categorydiv = document.getElementById(button.innerHTML);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
         var transposeType = key;
-=======
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
 
         try{
             $.ajax({

@@ -202,11 +202,7 @@ function contextMenuPropertyLevel() {
     });
 }
 
-<<<<<<< HEAD
 function contextMenuCategoryLevel() {
-=======
-function contextMenuButtonLevel() {
->>>>>>> 191178ed4cf0c320a9e665256149433f24587002
     $("#SourceBComplianceMainReviewTbody").contextMenu({
         className : 'contextMenu_style',
         selector: 'BUTTON',
