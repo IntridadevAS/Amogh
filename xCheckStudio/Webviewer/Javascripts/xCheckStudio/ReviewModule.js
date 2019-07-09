@@ -36,8 +36,12 @@ function executeContextMenuClicked(key, options, _this) {
         }
     }
     else if (key === "lefttoright" || key === "righttoleft") {
+<<<<<<< HEAD
         onTransposeClick(key, _this);
         
+=======
+        comparisonReviewManager.transposePropertyValue(key, _this, comparisonReviewManager);
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
     }
     else if (key === "freeze") {
     }
@@ -46,6 +50,7 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
+<<<<<<< HEAD
 function onTransposeClick(key, selectedRow) {
     if(selectedRow[0].nodeName == "BUTTON") {
         var typeOfRow = selectedRow[0].offsetParent.id;
@@ -62,13 +67,19 @@ function onTransposeClick(key, selectedRow) {
     }
 }
 
+=======
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
 function chooseAction(selectedRow) {
     if(selectedRow[0].nodeName == "BUTTON") { 
         var typeOfRow = selectedRow[0].offsetParent.id;
         var groupId = selectedRow[0].attributes[0].value;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
+<<<<<<< HEAD
             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
             comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
+=======
+            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                 return false;
             } else { return true; }
         }
@@ -86,8 +97,12 @@ function chooseAction(selectedRow) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+<<<<<<< HEAD
             if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
             selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
+=======
+            if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
                 return false;
             }else { return true; }
         }
@@ -205,7 +220,10 @@ function disableContextMenuTranspose(_this) {
     var groupId = selectedRow[0].attributes[0].value;
     if(selectedRow[0].nodeName == "BUTTON") {
         if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
+<<<<<<< HEAD
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
+=======
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') { 
             return true;
@@ -219,10 +237,18 @@ function disableContextMenuTranspose(_this) {
             }
         }
         else if(selectedRow[0].cells[4].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "No Value" || selectedRow[0].cells[4].innerHTML == "undefined"
+<<<<<<< HEAD
         || selectedRow[0].cells[4].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "OK(T)") {
             return true;
         }
     }
+=======
+        || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+            return true;
+        }
+    }
+    
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
 }
 
 function acceptAllCategories() {

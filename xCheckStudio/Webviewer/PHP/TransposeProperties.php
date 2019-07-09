@@ -14,6 +14,7 @@ else
  return;
 }
 
+<<<<<<< HEAD
 $transposeType = $_POST['transposeType'];
 $transposeLevel = $_POST['transposeLevel'];
 
@@ -33,6 +34,20 @@ function TransposeProperty() {
 
     $sourceAPropertyName = $_POST['sourceAPropertyName'];
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
+=======
+$componentid = $_POST['componentid']; 
+$transposeType = $_POST['transposeType'];
+$sourceAPropertyName = $_POST['sourceAPropertyName'];
+$sourceBPropertyName = $_POST['sourceBPropertyName'];
+Transpose();
+
+function Transpose() {
+    global $componentid;
+    global $projectName;
+    global $transposeType;
+    global $sourceAPropertyName;
+    global $sourceBPropertyName;
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
 
     $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
@@ -48,6 +63,7 @@ function TransposeProperty() {
         $command->execute(array($transposeType, $componentid, $sourceBPropertyName));
     }
 
+<<<<<<< HEAD
     $value = $dbh->query("SELECT status FROM ComparisonCheckComponents WHERE id= $componentid;");
     $originalStatusOfComponent = $value->fetch();
     if(strpos($originalStatusOfComponent['status'], '(T)') == false) {
@@ -56,10 +72,13 @@ function TransposeProperty() {
         $command->execute(array($changedStatusOfComponents, $componentid));
     }
 
+=======
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
     $dbh->commit();
 }
 
 
+<<<<<<< HEAD
 function TransposeComponentProperties() {
     global $projectName;
     $componentid = $_POST['componentid']; 
@@ -149,4 +168,6 @@ function transposePropertiesCategoryLevel() {
     $dbh = null;
 }
 
+=======
+>>>>>>> 191178ed4cf0c320a9e665256149433f24587002
 ?>
