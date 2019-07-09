@@ -79,7 +79,7 @@ function TransposeComponentProperties() {
         $properties = $command->fetchAll(PDO::FETCH_ASSOC);
         $index = 0;
         while($index < count($properties)) {
-            if($properties[$index]['severity'] !== "No Value") {
+            if($properties[$index]['severity'] !== "No Value" && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
                 $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity!=?');
                 $command->execute(array($transposeType, $properties[$index]['id'], $dontChangeOk));
             }
@@ -136,7 +136,7 @@ function transposePropertiesCategoryLevel() {
             $properties = $command->fetchAll(PDO::FETCH_ASSOC);
             $index = 0;
             while($index < count($properties)) {
-                if($properties[$index]['severity'] !== "No Value") {
+                if($properties[$index]['severity'] !== "No Value" && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
                     $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity!=?');
                     $command->execute(array($transposeType, $properties[$index]['id'], $dontChangeOk));
                 }

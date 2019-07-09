@@ -852,19 +852,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 property = component.properties[propertyId];
                                 if(property.Severity !== "OK") {
                                     if(property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
-                                        property.Severity = 'ACCEPTED';
+                                        component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "ACCEPTED(T)";
                                         selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
-                                        property.SourceBValue = property.SourceAValue;
+                                        component.properties[propertyId].SourceBValue = property.SourceAValue;
                                     }
                                     else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
-                                        property.Severity = 'ACCEPTED';
+                                        component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "ACCEPTED(T)";
                                         selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
-                                        property.SourceAValue = property.SourceBValue;
+                                        component.properties[propertyId].SourceAValue = property.SourceBValue;
                                     }
                                     else {
-                                        property.Severity = 'ACCEPTED';
+                                        component.properties[propertyId].Severity = 'ACCEPTED';
                                     }
                                 }
                             }
@@ -1037,19 +1037,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 component.status = "ACCEPTED";
                                 for (var propertyId in component.properties) {
                                     property = component.properties[propertyId];
-                                    if(property.Severity !== 'OK') {
-                                        if(transposeType == 'lefttoright' && property.Severity !== 'No Value') {
-                                            property.Severity = 'OK(T)';
-                                            property.SourceBValue = property.SourceAValue;
-                                        }
-                                        else if(transposeType == 'righttoleft' && property.Severity !== 'No Value') {
-                                            property.Severity = 'OK(T)';
-                                            property.SourceAValue = property.SourceBValue;
-                                        }
-                                        else {
                                             property.Severity = 'ACCEPTED';
-                                        }
-                                    }
+
                                 }
                             }
 
@@ -1091,11 +1080,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                             property = properties[propertyId];
                             if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                property.SourceBValue = property.SourceAValue;
+                                component.properties[index].SourceBValue = property.sourceAValue;
                             }
                             else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                property.SourceAValue = property.SourceBValue;
+                                component.properties[index].SourceAValue = property.sourceBValue;
                             }
                             else {
                                 component.properties[index].Severity = property.severity;
@@ -1296,6 +1285,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
+                                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]['transpose'] = transposeType;
                                 }   
                             }
         
@@ -1313,6 +1303,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
+                                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]['transpose'] = transposeType;
                                 }  
                             }
                         }
@@ -1331,7 +1322,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var componentId = selectedRow[0].cells[5].innerHTML;
                 var groupId = selectedRow[0].cells[6].innerHTML;
                 var transposeType = key;
-
+ 
                 try{
                     $.ajax({
                         url: 'PHP/TransposeProperties.php',
@@ -1346,11 +1337,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 property = component.properties[propertyId];
                                 if(property.Severity !== "OK" &&  property.Severity !== "No Value") {
                                    
-                                    if(transposeType == 'lefttoright') {
+                                    if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
                                         property.Severity = 'OK(T)';
                                         property.SourceBValue = property.SourceAValue;
                                     }
-                                    else if(transposeType == 'righttoleft') {
+                                    else if(transposeType == 'righttoleft'&& (property.SourceAName !== "" && property.SourceBName !== "")) {
                                         property.Severity = 'OK(T)';
                                         property.SourceAValue = property.SourceBValue;
                                     }
@@ -1394,12 +1385,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 component.status = "OK(T)";
                                 for (var propertyId in component.properties) {
                                     property = component.properties[propertyId];
-                                    if(property.Severity !== 'OK' && property.Severity !== 'No Value') {
-                                        if(transposeType == 'lefttoright') {
+                                    if(property.Severity !== 'OK' && property.Severity !== 'No Value' ) {
+                                        if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
                                             property.Severity = 'OK(T)';
                                             property.SourceBValue = property.SourceAValue;
                                         }
-                                        else if(transposeType == 'righttoleft') {
+                                        else if(transposeType == 'righttoleft' && (property.SourceAName !== "" && property.SourceBName !== "")) {
                                             property.Severity = 'OK(T)';
                                             property.SourceAValue = property.SourceBValue;
                                         }
@@ -1926,12 +1917,22 @@ function ComparisonReviewManager(comparisonCheckManager,
         tableRowContent[columnHeaders[1].name] = property.SourceAValue;
         tableRowContent[columnHeaders[2].name] = property.SourceBValue;
         tableRowContent[columnHeaders[3].name] = property.SourceBName;
+        tableRowContent[columnHeaders[4].name] = property.Severity;
+
+        if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
+            tableRowContent[columnHeaders[4].name]= 'OK(T)';
+            tableRowContent[columnHeaders[2].name] = property.SourceAValue;
+        }
+        else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
+            tableRowContent[columnHeaders[4].name] = 'OK(T)';
+            tableRowContent[columnHeaders[1].name] = property.SourceBValue;
+        }
         // if (property.PerformCheck &&
         //     property.Result) {
         //     tableRowContent[columnHeaders[4].name] = "OK";
         // }
         // else {
-            tableRowContent[columnHeaders[4].name] = property.Severity;
+            
         // }
         return tableRowContent;
     }

@@ -308,7 +308,8 @@
                                             'status'=>$changedStatus,
                                             'sourceANodeId'=>$componentRow['sourceANodeId'],
                                             'sourceBNodeId'=>$componentRow['sourceBNodeId'],
-                                            'ownerGroup'=>$componentRow['ownerGroup']);                                                         
+                                            'ownerGroup'=>$componentRow['ownerGroup'],                                                        
+                                            'transpose' => $componentRow['transpose']); 
 
                             $componentId = $componentRow['id'];
                              // read properties                                                                  

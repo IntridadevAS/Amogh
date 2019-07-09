@@ -222,6 +222,9 @@ function disableContextMenuTranspose(_this) {
         || selectedRow[0].cells[4].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "OK(T)") {
             return true;
         }
+        else if(selectedRow[0].cells[0].innerHTML == "" || selectedRow[0].cells[3].innerHTML == "") {
+            return true;
+        }
     }
 }
 

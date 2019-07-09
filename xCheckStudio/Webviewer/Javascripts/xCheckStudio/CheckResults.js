@@ -98,6 +98,7 @@ function Component(id,
             var sourceBName = undefined;
             var sourceAValue = undefined;
             var sourceBValue = undefined;
+            var transpose = undefined;
             if (isCompliance) 
             {
                 sourceAName = propertyData.name;
@@ -109,6 +110,7 @@ function Component(id,
                 sourceBName = propertyData.sourceBName;
                 sourceAValue = propertyData.sourceAValue;
                 sourceBValue = propertyData.sourceBValue;
+                transpose = propertyData.transpose;
             }
 
             // parse bool values
@@ -132,7 +134,8 @@ function Component(id,
                                         result,
                                         propertyData.severity,
                                         performCheck,
-                                        propertyData.description) ;
+                                        propertyData.description,
+                                        transpose) ;
 
             this.properties.push(property);
         }
@@ -147,7 +150,8 @@ function Property(id,
                   result,
                   severity,
                   performCheck,
-                  description) 
+                  description,
+                  transpose) 
 {
     this.ID = id;
     this.SourceAName = sourceAName;
@@ -158,4 +162,5 @@ function Property(id,
     this.Severity = severity;
     this.PerformCheck = performCheck;
     this.Description = description;
+    this.transpose = transpose;
 }
