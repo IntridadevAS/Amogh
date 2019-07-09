@@ -202,7 +202,7 @@ function contextMenuPropertyLevel() {
     });
 }
 
-function contextMenuButtonLevel() {
+function contextMenuCategoryLevel() {
     $("#SourceBComplianceMainReviewTbody").contextMenu({
         className : 'contextMenu_style',
         selector: 'BUTTON',

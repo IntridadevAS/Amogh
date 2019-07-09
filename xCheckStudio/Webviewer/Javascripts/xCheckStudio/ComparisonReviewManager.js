@@ -850,8 +850,23 @@ function ComparisonReviewManager(comparisonCheckManager,
                             component.status = "ACCEPTED";
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
-                                if(property.Severity !== "OK")
-                                    property.Severity = 'ACCEPTED';
+                                if(property.Severity !== "OK") {
+                                    if(property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
+                                        property.Severity = 'ACCEPTED';
+                                        component.status = "ACCEPTED(T)";
+                                        selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
+                                        property.SourceBValue = property.SourceAValue;
+                                    }
+                                    else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
+                                        property.Severity = 'ACCEPTED';
+                                        component.status = "ACCEPTED(T)";
+                                        selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
+                                        property.SourceAValue = property.SourceBValue;
+                                    }
+                                    else {
+                                        property.Severity = 'ACCEPTED';
+                                    }
+                                }
                             }
                             _this.populateDetailedReviewTable(selectedRow[0]);
                         }
@@ -1023,7 +1038,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 for (var propertyId in component.properties) {
                                     property = component.properties[propertyId];
                                     if(property.Severity !== 'OK') {
-                                        property.Severity = 'ACCEPTED';
+                                        if(transposeType == 'lefttoright' && property.Severity !== 'No Value') {
+                                            property.Severity = 'OK(T)';
+                                            property.SourceBValue = property.SourceAValue;
+                                        }
+                                        else if(transposeType == 'righttoleft' && property.Severity !== 'No Value') {
+                                            property.Severity = 'OK(T)';
+                                            property.SourceAValue = property.SourceBValue;
+                                        }
+                                        else {
+                                            property.Severity = 'ACCEPTED';
+                                        }
                                     }
                                 }
                             }
@@ -1063,7 +1088,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                         component.status = status[0];
                         var index = 0;
                         for(var propertyId in properties) {
-                            component.properties[index].Severity = properties[propertyId]["severity"];
+                            property = properties[propertyId];
+                            if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
+                                component.properties[index].Severity = 'OK(T)';
+                                property.SourceBValue = property.SourceAValue;
+                            }
+                            else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
+                                component.properties[index].Severity = 'OK(T)';
+                                property.SourceAValue = property.SourceBValue;
+                            }
+                            else {
+                                component.properties[index].Severity = property.severity;
+                            }
+                            // component.properties[index].Severity = properties[propertyId]["severity"];
                             index++;
                         }
                         _this.populateDetailedReviewTable(selectedRow[0]);
@@ -1235,13 +1272,20 @@ function ComparisonReviewManager(comparisonCheckManager,
                     url: 'PHP/TransposeProperties.php',
                     type: "POST",
                     async: true,
-                    data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText },
+                    data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel' },
                     success: function (msg) {
+                        var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
+                        if(!originalstatus.includes("(T)")) {
+                            var changedStatus = originalstatus + "(T)";
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                        }
+
                         var SourceAValue = selectedRow[0].cells[1].innerHTML;
                         var SourceBValue = selectedRow[0].cells[2].innerHTML;
 
                         if(transposeType == "lefttoright") {
                             selectedRow[0].cells[2].innerHTML = SourceAValue;
+                            selectedRow[0].cells[4].innerHTML = 'OK(T)';
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1251,12 +1295,14 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
+                                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
                                 }   
                             }
         
                         }
                         else if(transposeType == "righttoleft") {
                             selectedRow[0].cells[1].innerHTML  = SourceBValue;
+                            selectedRow[0].cells[4].innerHTML = 'OK(T)';
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1266,9 +1312,11 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
+                                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
                                 }  
                             }
                         }
+                        _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
                     }
                 });   
             }
@@ -1276,6 +1324,100 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
      }
 
+    ComparisonReviewManager.prototype.transposePropertyValueComponentLevel = function(key, selectedRow, comparisonReviewManager) {
+        _this = comparisonReviewManager;
+        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
+            if(selectedRow[0].cells[2].innerHTML !== "OK") {
+                var componentId = selectedRow[0].cells[5].innerHTML;
+                var groupId = selectedRow[0].cells[6].innerHTML;
+                var transposeType = key;
+
+                try{
+                    $.ajax({
+                        url: 'PHP/TransposeProperties.php',
+                        type: "POST",
+                        async: true,
+                        data: {'componentid' : componentId, 'transposeType' : transposeType, 'transposeLevel' : 'componentLevel' },
+                        success: function (msg) {
+                            selectedRow[0].cells[2].innerHTML = "OK(T)";
+                            var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                            component.Status = "OK(T)";
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                if(property.Severity !== "OK" &&  property.Severity !== "No Value") {
+                                   
+                                    if(transposeType == 'lefttoright') {
+                                        property.Severity = 'OK(T)';
+                                        property.SourceBValue = property.SourceAValue;
+                                    }
+                                    else if(transposeType == 'righttoleft') {
+                                        property.Severity = 'OK(T)';
+                                        property.SourceAValue = property.SourceBValue;
+                                    }
+                                }
+                                    
+                            }
+                            _this.populateDetailedReviewTable(selectedRow[0]);
+                        }
+                    });   
+                }
+                catch(error) {}        
+                // $("#ComparisonDetailedReviewCell").empty();
+            }
+        }
+    }
+
+    ComparisonReviewManager.prototype.transposePropertyValueCategoryLevel =  function(key, button, comparisonReviewManager) {
+        _this = comparisonReviewManager;
+        var groupId = button.attributes[0].value;
+        var categorydiv = document.getElementById(button.innerHTML);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+        var transposeType = key;
+
+        try{
+            $.ajax({
+                url: 'PHP/TransposeProperties.php',
+                type: "POST",
+                async: true,
+                data: {'groupid' : groupId, 'transposeType' : transposeType, 'transposeLevel' : 'categorylevel'},
+                success: function (msg) {
+                    for(var i = 0; i < noOfComponents; i++) {
+                        if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
+                            categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "OK(T)";
+                            for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                                categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(255, 255, 255)";
+                            }
+                            var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                            compgroup.categoryStatus = "OK(T)";
+                            for(var compId in compgroup["CheckComponents"]) {
+                                var component = compgroup["CheckComponents"][compId];
+                                component.status = "OK(T)";
+                                for (var propertyId in component.properties) {
+                                    property = component.properties[propertyId];
+                                    if(property.Severity !== 'OK' && property.Severity !== 'No Value') {
+                                        if(transposeType == 'lefttoright') {
+                                            property.Severity = 'OK(T)';
+                                            property.SourceBValue = property.SourceAValue;
+                                        }
+                                        else if(transposeType == 'righttoleft') {
+                                            property.Severity = 'OK(T)';
+                                            property.SourceAValue = property.SourceBValue;
+                                        }
+                                    }
+                                }
+                            }
+
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                _this.populateDetailedReviewTable(selectedRow);                          
+                        }
+                    }
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}  
+    }
+    
     ComparisonReviewManager.prototype.LoadDetailedReviewTableData = function (_this, columnHeaders, tableData, viewerContainer) {
         //var _this = this;
 

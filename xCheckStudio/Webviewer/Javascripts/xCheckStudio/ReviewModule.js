@@ -36,7 +36,8 @@ function executeContextMenuClicked(key, options, _this) {
         }
     }
     else if (key === "lefttoright" || key === "righttoleft") {
-        comparisonReviewManager.transposePropertyValue(key, _this, comparisonReviewManager);
+        onTransposeClick(key, _this);
+        
     }
     else if (key === "freeze") {
     }
@@ -45,12 +46,29 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
+function onTransposeClick(key, selectedRow) {
+    if(selectedRow[0].nodeName == "BUTTON") {
+        var typeOfRow = selectedRow[0].offsetParent.id;
+        comparisonReviewManager.transposePropertyValueCategoryLevel(key, selectedRow[0], comparisonReviewManager);
+    }
+    else {
+        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        if(typeOfRow == "ComparisonMainReviewTbody") {
+            comparisonReviewManager.transposePropertyValueComponentLevel(key, selectedRow, comparisonReviewManager);
+        }
+        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
+            comparisonReviewManager.transposePropertyValue(key, selectedRow, comparisonReviewManager);
+        }
+    }
+}
+
 function chooseAction(selectedRow) {
     if(selectedRow[0].nodeName == "BUTTON") { 
         var typeOfRow = selectedRow[0].offsetParent.id;
         var groupId = selectedRow[0].attributes[0].value;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
+            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
                 return false;
             } else { return true; }
         }
@@ -68,7 +86,8 @@ function chooseAction(selectedRow) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+            if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
+            selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return false;
             }else { return true; }
         }
@@ -186,6 +205,7 @@ function disableContextMenuTranspose(_this) {
     var groupId = selectedRow[0].attributes[0].value;
     if(selectedRow[0].nodeName == "BUTTON") {
         if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
+        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') { 
             return true;
@@ -199,11 +219,10 @@ function disableContextMenuTranspose(_this) {
             }
         }
         else if(selectedRow[0].cells[4].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "No Value" || selectedRow[0].cells[4].innerHTML == "undefined"
-        || selectedRow[0].cells[4].innerHTML == "ACCEPTED") {
+        || selectedRow[0].cells[4].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "OK(T)") {
             return true;
         }
     }
-    
 }
 
 function acceptAllCategories() {

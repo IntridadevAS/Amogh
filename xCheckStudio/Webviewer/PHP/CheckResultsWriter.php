@@ -210,7 +210,8 @@
                 accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
-                ownerGroup INTEGER NOT NULL)'; 
+                ownerGroup INTEGER NOT NULL,
+                transpose TEXT)'; 
             $dbh->exec($command);    
 
             // ComparisonCheckProperties table
@@ -284,7 +285,8 @@
                         accepted, 
                         sourceANodeId, 
                         sourceBNodeId,
-                        ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';                                        
+                        ownerGroup,
+                        transpose) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
                                              $checkComponent->SubComponentClass,
@@ -292,7 +294,8 @@
                                              'false',
                                              $checkComponent->SourceANodeId,
                                              $checkComponent->SourceBNodeId,
-                                             $groupId);
+                                             $groupId,
+                                            null);
 
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);
