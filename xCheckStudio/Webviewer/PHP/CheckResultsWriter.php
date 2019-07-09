@@ -210,7 +210,8 @@
                 accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
-                ownerGroup INTEGER NOT NULL)'; 
+                ownerGroup INTEGER NOT NULL,
+                transpose TEXT)'; 
             $dbh->exec($command);    
 
             // ComparisonCheckProperties table
@@ -230,7 +231,8 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                transpose TEXT)'; 
             $dbh->exec($command);    
 
             foreach($CheckComponentsGroups as $mainClass => $checkComponentGroup)
@@ -283,7 +285,8 @@
                         accepted, 
                         sourceANodeId, 
                         sourceBNodeId,
-                        ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';                                        
+                        ownerGroup,
+                        transpose) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
                                              $checkComponent->SubComponentClass,
@@ -291,7 +294,8 @@
                                              'false',
                                              $checkComponent->SourceANodeId,
                                              $checkComponent->SourceBNodeId,
-                                             $groupId);
+                                             $groupId,
+                                            null);
 
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);
@@ -320,7 +324,8 @@
                             accepted,
                             performCheck,
                             description,
-                            ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?) ';                                        
+                            ownerComponent,
+                            transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?) ';                                        
                         $propertyValues = array($checkProperty->SourceAName,  
                                                  $checkProperty->SourceBName,
                                                  $checkProperty->SourceAValue,
@@ -330,7 +335,8 @@
                                                  'false',
                                                  $checkProperty->PerformCheck,
                                                  $checkProperty->Description,
-                                                 $componentId);
+                                                 $componentId,
+                                                 null);
     
                         $insertPropertyStmt = $dbh->prepare($insertPropertyQuery);
                         $insertPropertyStmt->execute($propertyValues);

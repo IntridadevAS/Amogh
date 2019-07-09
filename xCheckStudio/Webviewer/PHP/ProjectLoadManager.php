@@ -457,11 +457,12 @@
                 accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
-                ownerGroup INTEGER NOT NULL)'; 
+                ownerGroup INTEGER NOT NULL,
+                transpose TEXT)'; 
             $toDbh->exec($command);    
         
             $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                        sourceAName, sourceBName, subComponentClass, status, accepted, sourceANodeId, sourceBNodeId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
+                        sourceAName, sourceBName, subComponentClass, status, accepted, sourceANodeId, sourceBNodeId, ownerGroup, transpose) VALUES(?,?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -498,11 +499,12 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                transpose TEXT)'; 
             $toDbh->exec($command); 
             
             $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 

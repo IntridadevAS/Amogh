@@ -297,6 +297,10 @@
                             else 
                                 $changedStatus = $componentRow['status'];
 
+                            if($componentRow['transpose'] == 'lefttoright' || $componentRow['transpose'] == 'righttoleft') {
+                                $changedStatus = 'OK(T)';
+                            }
+
                             $componentValues = array('id'=>$componentRow['id'], 
                                             'sourceAName'=>$componentRow['sourceAName'],  
                                             'sourceBName'=>$componentRow['sourceBName'],
@@ -304,7 +308,8 @@
                                             'status'=>$changedStatus,
                                             'sourceANodeId'=>$componentRow['sourceANodeId'],
                                             'sourceBNodeId'=>$componentRow['sourceBNodeId'],
-                                            'ownerGroup'=>$componentRow['ownerGroup']);                                                         
+                                            'ownerGroup'=>$componentRow['ownerGroup'],                                                        
+                                            'transpose' => $componentRow['transpose']); 
 
                             $componentId = $componentRow['id'];
                              // read properties                                                                  
@@ -315,21 +320,37 @@
                                 $properties =array();
                                 while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                                 {
+                                    $sourceAValue = $propertyRow['sourceAValue'];
+                                    $sourceBValue = $propertyRow['sourceBValue'];
                                     if($propertyRow['accepted'] == 'true')
                                         $changedStatus = 'ACCEPTED';
                                     else 
                                         $changedStatus = $propertyRow['severity'];
 
+                                    if($propertyRow['transpose'] == 'lefttoright') {
+                                        $sourceBValue = $sourceAValue;
+                                        $changedStatus = 'OK(T)';
+                                        if($componentValues['status'] == 'ACCEPTED')
+                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                    }
+                                    else if($propertyRow['transpose'] == 'righttoleft') {
+                                        $sourceAValue = $sourceBValue;
+                                        $changedStatus = 'OK(T)';
+                                        if($componentValues['status'] == 'ACCEPTED')
+                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                    }
+                                    
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'sourceAName'=>$propertyRow['sourceAName'],  
                                                             'sourceBName'=>$propertyRow['sourceBName'],
-                                                            'sourceAValue'=>$propertyRow['sourceAValue'],
-                                                            'sourceBValue'=>$propertyRow['sourceBValue'],
+                                                            'sourceAValue'=>$sourceAValue,
+                                                            'sourceBValue'=>$sourceBValue,
                                                             'result'=>$propertyRow['result'],
                                                             'severity'=>$changedStatus,
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
-                                                            'ownerComponent'=>$propertyRow['ownerComponent']); 
+                                                            'ownerComponent'=>$propertyRow['ownerComponent'],
+                                                            'transpose' => $propertyRow['transpose']); 
                     
                                     array_push($properties, $propertyValues);
 
