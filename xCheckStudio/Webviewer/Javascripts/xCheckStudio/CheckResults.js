@@ -37,7 +37,7 @@ function CheckGroup(id, componentClass, categoryStatus)
                 var compId = componentData.id;
                 var subComponentClass =  componentData.subComponentClass;
                 var status =  componentData.status;
-
+                var transpose = componentData.transpose;
                 var sourceAName = undefined;
                 var sourceBName = undefined;
                 var sourceANodeId = undefined;
@@ -60,7 +60,8 @@ function CheckGroup(id, componentClass, categoryStatus)
                                             subComponentClass, 
                                             status, 
                                             sourceANodeId, 
-                                            sourceBNodeId) ;
+                                            sourceBNodeId,
+                                            transpose) ;
 
                 component.restore(componentData.properties, isCompliance);
 
@@ -76,7 +77,8 @@ function Component(id,
                    subComponentClass, 
                    status, 
                    sourceANodeId, 
-                   sourceBNodeId) 
+                   sourceBNodeId,
+                   transpose) 
 {
     this.ID = id;
     this.SourceAName = sourceAName;
@@ -85,11 +87,13 @@ function Component(id,
     this.Status = status;
     this.SourceANodeId = sourceANodeId;
     this.SourceBNodeId = sourceBNodeId;
+    this.transpose = transpose;
 
     this.properties = [];  
     
     Component.prototype.restore = function (propertiesData, isCompliance) 
     {
+        var propertieslen = 0;
         for (var i = 0; i < propertiesData.length; i++) 
         {
             var propertyData = propertiesData[i];
@@ -113,6 +117,14 @@ function Component(id,
                 transpose = propertyData.transpose;
             }
 
+            if(propertyData.severity !== 'OK' && propertyData.severity !== 'No Match') {
+                if(propertyData.transpose !== null) {
+                    propertieslen++;
+                    if(propertieslen == propertiesData.length-1) {
+                        this.Status = 'OK(T)';
+                    }
+                }
+            }
             // parse bool values
             var performCheck = false;            
             if(propertyData.performCheck =="1")

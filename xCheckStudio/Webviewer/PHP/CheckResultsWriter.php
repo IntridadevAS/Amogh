@@ -249,9 +249,22 @@
                 //     }
                 // }
 
+                $groupcomponentcount = count($checkComponentGroup->Components);
+                $compcount = 0;
                 foreach($checkComponentGroup->Components as $key => $checkComponent)
                 { 
-                    if($checkComponent->Status !== 'OK') {
+                    if($checkComponentGroup->ComponentClass == 'undefined') {
+                        $categoryStatus = 'UNACCEPTED';
+                        break;
+                    }
+                    else if($checkComponent->Status == 'No Match') {
+                        $compcount++;
+                        if($compcount == $groupcomponentcount) {
+                            $categoryStatus = 'No Match';
+                        }
+                        continue;
+                    }
+                    else if($checkComponent->Status !== 'OK') {
                         $categoryStatus = 'UNACCEPTED';
                         break;
                     }
