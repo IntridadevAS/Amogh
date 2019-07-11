@@ -1373,6 +1373,43 @@ function ComparisonReviewManager(comparisonCheckManager,
         catch(error) {}
     }
 
+    ComparisonReviewManager.prototype.restoreTransposeComponentLevel = function(selectedRow, comparisonReviewManager) {
+            _this = comparisonReviewManager;
+            var componentId = selectedRow[0].cells[5].innerHTML;
+            var groupId = selectedRow[0].cells[6].innerHTML;
+            try{
+                $.ajax({
+                    url: 'PHP/TransposeProperties.php',
+                    type: "POST",
+                    dataType: 'JSON',
+                    async: true,
+                    data: {'componentid' : componentId, 'transposeType' : 'restoreComponent', 'transposeLevel' : 'componentLevel'  },
+                    success: function (msg) {
+                        var status = new Array();
+                        status = msg;
+                        var properties = status[1];
+                        selectedRow[0].cells[2].innerHTML = status[0];
+                        var cell = 0;
+                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                        }
+                        var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                        component.status = status[0];
+                        component.transpose = null;
+                        var index = 0;
+                        for(var propertyId in properties) {
+                            property = properties[propertyId];     
+                            component.properties[index].Severity = property.severity;
+                            component.properties[index].transpose = null;
+                            index++;
+                        }
+                        _this.populateDetailedReviewTable(selectedRow[0]);
+                    }
+                });   
+            }
+            catch(error) {}        
+    }
+
     ComparisonReviewManager.prototype.transposePropertyValueComponentLevel = function(key, selectedRow, comparisonReviewManager) {
         _this = comparisonReviewManager;
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
@@ -1419,6 +1456,58 @@ function ComparisonReviewManager(comparisonCheckManager,
                 // $("#ComparisonDetailedReviewCell").empty();
             }
         }
+    }
+
+    ComparisonReviewManager.prototype.restoreTransposeCategoryLevel = function(button, comparisonReviewManager) {
+        _this = comparisonReviewManager;
+        var groupId = button.attributes[0].value;
+        var categorydiv = document.getElementById(button.innerHTML);
+        var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+
+        try{
+            $.ajax({
+                url: 'PHP/TransposeProperties.php',
+                type: "POST",
+                async: true,
+                dataType: 'JSON',
+                data: {'groupid' : groupId, 'transposeType' : 'restoreCategory', 'transposeLevel' : 'categorylevel'},
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var componentStatus = status[0];
+                    var propsStatus = status[1];
+                    var index = 0
+                    for(var i = 0; i < noOfComponents; i++) {
+                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = componentStatus[index]['status'];
+                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
+                        }
+                        var j = 0;
+                        var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                        compgroup.categoryStatus = "UNACCEPTED";
+                        for(var compId in compgroup["CheckComponents"]) {
+                            var component = compgroup["CheckComponents"][compId];
+                            component.status = componentStatus[index]['status'];
+                            component.transpose = null;
+                            var propindex = 0;
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                property.Severity = propsStatus[j][propindex]['severity'];
+                                property.transpose = null;
+                                propindex++;
+                            }
+                            j++;
+                        }
+
+                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                            _this.populateDetailedReviewTable(selectedRow);
+                            index++;    
+                    }
+                }
+            });   
+        }
+        catch(error) {
+            console.log(error);}
     }
 
     ComparisonReviewManager.prototype.transposePropertyValueCategoryLevel =  function(key, button, comparisonReviewManager) {
