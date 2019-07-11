@@ -334,13 +334,13 @@
                                         $sourceBValue = $sourceAValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                            $componentValues['status'] = 'ACCEPTED(T)';
                                     }
                                     else if($propertyRow['transpose'] == 'righttoleft') {
                                         $sourceAValue = $sourceBValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                            $componentValues['status'] = 'ACCEPTED(T)';
                                     }
                                     
                                     $propertyValues = array('id'=>$propertyRow['id'], 

@@ -855,13 +855,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                                         component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "ACCEPTED(T)";
                                         selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
-                                        component.properties[propertyId].SourceBValue = property.SourceAValue;
+                                        // component.properties[propertyId].SourceBValue = property.SourceAValue;
+                                        component.properties[propertyId].transpose = property.transpose;
                                     }
                                     else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "ACCEPTED(T)";
                                         selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
-                                        component.properties[propertyId].SourceAValue = property.SourceBValue;
+                                        component.properties[propertyId].transpose = property.transpose;
+                                        // component.properties[propertyId].SourceAValue = property.SourceBValue;
                                     }
                                     else {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
@@ -1080,11 +1082,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                             property = properties[propertyId];
                             if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                component.properties[index].SourceBValue = property.sourceAValue;
+                                // component.properties[index].SourceBValue = property.sourceAValue;
+                                component.properties[index].transpose = property.transpose;
                             }
                             else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                component.properties[index].SourceAValue = property.sourceBValue;
+                                // component.properties[index].SourceAValue = property.sourceBValue;
+                                component.properties[index].transpose = property.transpose;
                             }
                             else {
                                 component.properties[index].Severity = property.severity;
