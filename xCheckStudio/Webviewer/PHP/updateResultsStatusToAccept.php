@@ -757,23 +757,9 @@ function rejectAcceptStatusComparisonCategory() {
             $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
         }
         
-        $index++;
-    }
-
-    $dbh->commit();
-
-    $dbh->beginTransaction();
-
-    $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    $command->execute(array($groupid));
-    $components = $command->fetchAll(PDO::FETCH_ASSOC);
-    $indexcomp = 0;
-    
-    while ($indexcomp < count($components)) 
-    {
-        if($components[$indexcomp]['status'] !== $dontChangeOk) {
+        if($allCom[$index]['status'] !== $dontChangeOk) {
             $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-            $command->execute(array($components[$indexcomp]['id']));
+            $command->execute(array($allCom[$index]['id']));
             $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
             $indexcompProp = 0;
             while ($indexcompProp < count($compProps)) 
@@ -782,12 +768,12 @@ function rejectAcceptStatusComparisonCategory() {
                 $command->execute(array($status, $compProps[$indexcompProp]['id']));
                 $indexcompProp++;
             }  
-            $indexcomp++;      
         }
+
+        $index++;
     }
 
     $dbh->commit();
-
 
     $dbh->beginTransaction();
 

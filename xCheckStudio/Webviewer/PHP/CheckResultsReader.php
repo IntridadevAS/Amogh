@@ -298,7 +298,10 @@
                                 $changedStatus = $componentRow['status'];
 
                             if($componentRow['transpose'] == 'lefttoright' || $componentRow['transpose'] == 'righttoleft') {
-                                $changedStatus = 'OK(T)';
+                                $changedStatus = $componentRow['status'];
+                                if(!strpos($changedStatus, '(T)')) {
+                                    $changedStatus = $changedStatus . '(T)';
+                                }
                             }
 
                             $componentValues = array('id'=>$componentRow['id'], 
@@ -331,13 +334,13 @@
                                         $sourceBValue = $sourceAValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                            $componentValues['status'] = 'ACCEPTED(T)';
                                     }
                                     else if($propertyRow['transpose'] == 'righttoleft') {
                                         $sourceAValue = $sourceBValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED (T)';
+                                            $componentValues['status'] = 'ACCEPTED(T)';
                                     }
                                     
                                     $propertyValues = array('id'=>$propertyRow['id'], 

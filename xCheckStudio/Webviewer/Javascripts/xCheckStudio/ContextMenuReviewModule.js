@@ -67,8 +67,11 @@ function contextMenuComponentLevel() {
         build : function($triggerElement, e){ 
             var selectedRow = $triggerElement;
             var accept = true;
+            var transpose = true;
+            transpose = chooseRestoreTranspose(selectedRow);
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
+            var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);
@@ -84,18 +87,30 @@ function contextMenuComponentLevel() {
                             return disable;
                         }
                     },
-                    "transpose": {
-                        name: "Transpose",
+                    menuItem1: {
+                        name: transposeconditionalName,
                         disabled: function()
                         {
                             var disable = false;
                             disable = disableContextMenuTranspose(this);
                             return disable;
                         },
+                        visible : function(){
+                            if(transposeconditionalName == 'Restore') 
+                            {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        },
                         items : {
                             "lefttoright" : {name : "Left To Right"},
                             "righttoleft" : {name : "Right To Left"}
                         }
+                    },
+                    menuItem2 : {
+                        name: transposeconditionalName,
+                        visible : function(){if(transposeconditionalName == 'Restore') {return true;} else {return false;}},
                     }
                 }
             };
@@ -110,8 +125,11 @@ function contextMenuPropertyLevel() {
         build : function($triggerElement, e){ 
             var selectedRow = $triggerElement;
             var accept = true;
+            var transpose = true;
+            transpose = chooseRestoreTranspose(selectedRow);
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
+            var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);
@@ -127,19 +145,31 @@ function contextMenuPropertyLevel() {
                             return disable;
                         }
                     },
-                    "transpose": {
-                        name: "Transpose",
+                    menuItem1: {
+                        name: transposeconditionalName,
                         disabled: function()
                         {
                             var disable = false;
                             disable = disableContextMenuTranspose(this);
                             return disable;
                         },
+                        visible : function(){
+                            if(transposeconditionalName == 'Restore') 
+                            {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        },
                         items : {
                             "lefttoright" : {name : "Left To Right"},
                             "righttoleft" : {name : "Right To Left"}
                         }
                     },
+                    menuItem2 : {
+                        name: transposeconditionalName,
+                        visible : function(){if(transposeconditionalName == 'Restore') {return true;} else {return false;}},
+                    }
                 }
             };
         }
@@ -265,8 +295,11 @@ function contextMenuCategoryLevel() {
         build : function($triggerElement, e){ 
             var selectedRow = $triggerElement;
             var accept = true;
+            var transpose = true;
+            transpose = chooseRestoreTranspose(selectedRow);
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
+            var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);
@@ -282,19 +315,31 @@ function contextMenuCategoryLevel() {
                             return disable;
                         }
                     },
-                    "transpose": {
-                        name: "Transpose",
+                    menuItem1: {
+                        name: transposeconditionalName,
                         disabled: function()
                         {
                             var disable = false;
                             disable = disableContextMenuTranspose(this);
                             return disable;
                         },
+                        visible : function(){
+                            if(transposeconditionalName == 'Restore') 
+                            {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        },
                         items : {
                             "lefttoright" : {name : "Left To Right"},
                             "righttoleft" : {name : "Right To Left"}
                         }
                     },
+                    menuItem2 : {
+                        name: transposeconditionalName,
+                        visible : function(){if(transposeconditionalName == 'Restore') {return true;} else {return false;}},
+                    }
                 }
             };
         }
