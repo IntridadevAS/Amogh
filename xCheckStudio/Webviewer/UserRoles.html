@@ -1,0 +1,143 @@
+<html>
+
+<head>
+    <title>User Roles</title>
+    <link rel="stylesheet" href="css/VerticalTabs.css">
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\UserRoles.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
+    <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
+    <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
+
+    <link href="CSS/Overlay.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .addUserButton {
+            float: left;
+            width: 100px;
+            height: 20px;
+            margin-right: 10px
+        }
+
+        .inputTextCell {
+            /* position: absolute; */
+            display: block;
+            top: 0;
+            left: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            border: none;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .jsgrid-grid-header,
+        .jsgrid-grid-body {
+            overflow: scroll;            
+        }       
+    </style>
+</head>
+
+<body>
+
+    <center>
+        <img src="images\Header.png" align="BOTTOM">
+    </center>
+
+    <hr>
+
+    <div style="height:600px; width:100%;">
+        <table style="height:100%; width:100%;">
+            <tr>
+                <td style="width: 150px">
+                    <!-- vertical tabs -->
+                    <div class="tab" style="height:100%; width: 100%">
+                        <button class="tablinks" id="userRolesTab">User Roles</button>
+                    </div>
+                </td>
+                <td >
+                    <!-- Tab contents -->
+
+                    <!-- User roles tab -->
+                    <div id="userRolesContent" class="tabcontent" style="height:600px ;display: none">
+                        <h3>User Credentials</h3>
+                        <input id="addUserButton" class="addUserButton" type="button" value="New" />
+                        <div id="usersInfoDiv">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Add Document overlay -->
+    <div id="newUserOverlay" class="overlay"></div>
+    <div id="newUserPopup" class="popup" style="width: 300px; height: 200px;">
+        <div class="popupcontent" style="padding: 10px; ">
+
+            <table>
+                <tr>
+                    <td>
+                        User Name
+                    </td>
+                    <td>
+                        <input id="userNameInput" type="text" name="userNameInput">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Password
+                    </td>
+                    <td>
+                        <input id="passwordInput" type="password" name="passwordInput">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Alias
+                    </td>
+                    <td>
+                        <input id="aliasInput" type="text" name="aliasInput">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Type
+                    </td>
+                    <td>
+                        <select id="newUserTypeSelect">
+                            <option>User</option>
+                            <option>Admin</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Permission
+                    </td>
+                    <td>
+                        <select id="newUserPermissionSelect">
+                            <option>Reviewer</option>
+                            <option>Checker</option>
+                            <option>Admin</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Enable
+                    </td>
+                    <td>
+                        <input type="checkbox" id="newUserEnableCheck" checked />
+                    </td>
+                </tr>
+            </table>
+            <button id="addNewUserButton">Add</button>
+            <button id="cancelAddNewUser">Cancel</button>
+        </div>
+    </div>    
+</body>
+
+</html>

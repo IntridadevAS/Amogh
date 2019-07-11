@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="Javascripts\xCheckStudio\PreHomePage.js"></script>
+        <script type="text/javascript" src="Javascripts\xCheckStudio\PREPModule.js"></script>
 
+        <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
         <link href=".\images\UIPackage/favicon.png" rel="shortcut icon"/>
         <meta charset="utf-8"/>
         <meta content="width=1280, maximum-scale=1.0" name="viewport"/>
@@ -97,7 +98,7 @@
                         <img anima-src=".\images\UIPackage/prep-home-page-manage-icon@2x.png" class="manageicon" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                     </div>
                 </a>
-                <div class="manageroles">
+                <div id="manageRolesButton" class="manageroles">
                     <img anima-src=".\images\UIPackage/prep-home-page-bg 3@2x.png" class="bg1" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                     <img anima-src=".\images\UIPackage/prep-home-page-roles-icon@2x.png" class="rolesicon" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
                     <div class="manageroles1">
@@ -184,7 +185,9 @@
         </script>
 		<script>
 		window.onload = function () {
-            setUserName();		
+            //setUserName();		
+            var prepManager = new PREPManager();
+            prepManager.Init();
         }
         	
 		</script>
