@@ -35,6 +35,11 @@ function executeContextMenuClicked(key, options, _this) {
             onUnAcceptClick(_this); 
         }
     }
+    if (key === "menuItem2") {
+        if(options.items[key].name == "Restore") {
+            onRestoreTranspose(_this);
+        }
+    }
     else if (key === "lefttoright" || key === "righttoleft") {
         onTransposeClick(key, _this);
         
@@ -58,6 +63,22 @@ function onTransposeClick(key, selectedRow) {
         }
         else if(typeOfRow == "ComparisonDetailedReviewTbody") {
             comparisonReviewManager.transposePropertyValue(key, selectedRow, comparisonReviewManager);
+        }
+    }
+}
+
+function onRestoreTranspose(selectedRow) {
+    if(selectedRow[0].nodeName == "BUTTON") {
+        var typeOfRow = selectedRow[0].offsetParent.id;
+        comparisonReviewManager.restoreTransposeCategoryLevel(selectedRow[0], comparisonReviewManager);
+    }
+    else {
+        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        if(typeOfRow == "ComparisonMainReviewTbody") {
+            comparisonReviewManager.restoreTransposeComponentLevel(selectedRow, comparisonReviewManager);
+        }
+        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
+            comparisonReviewManager.restoreTransposePropertyValue(selectedRow, comparisonReviewManager);
         }
     }
 }
@@ -98,6 +119,28 @@ function chooseAction(selectedRow) {
             } else { return true; }
         }   
     }                       
+}
+
+function chooseRestoreTranspose(selectedRow) {
+    if(selectedRow[0].nodeName == "BUTTON") { 
+        var typeOfRow = selectedRow[0].offsetParent.id;
+        var groupId = selectedRow[0].attributes[0].value;
+        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
+            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
+            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
+                return false;
+            } else { return true; }
+        }
+    }
+    else {
+        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+            if((selectedRow[0].cells[2].innerHTML).includes("(T)") || (selectedRow[0].cells[4].innerHTML).includes("(T)") ||
+            (selectedRow[0].cells[2].innerHTML).includes("(T)")) {
+                return false;
+            }else { return true; }
+        }
+    }
 }
 
 function onAcceptClick(rowClicked) {
@@ -205,6 +248,7 @@ function disableContextMenuTranspose(_this) {
     var groupId = selectedRow[0].attributes[0].value;
     if(selectedRow[0].nodeName == "BUTTON") {
         if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
+        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'No Match' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
         comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') { 
@@ -214,7 +258,8 @@ function disableContextMenuTranspose(_this) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED" ||
+            selectedRow[0].cells[2].innerHTML == "No Match") {
                 return true;
             }
         }

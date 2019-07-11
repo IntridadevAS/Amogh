@@ -298,7 +298,10 @@
                                 $changedStatus = $componentRow['status'];
 
                             if($componentRow['transpose'] == 'lefttoright' || $componentRow['transpose'] == 'righttoleft') {
-                                $changedStatus = 'OK(T)';
+                                $changedStatus = $componentRow['status'];
+                                if(!strpos($changedStatus, '(T)')) {
+                                    $changedStatus = $changedStatus . '(T)';
+                                }
                             }
 
                             $componentValues = array('id'=>$componentRow['id'], 
