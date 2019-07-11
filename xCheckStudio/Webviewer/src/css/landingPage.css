@@ -1,0 +1,47 @@
+.container {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: url(../../public/mainBackground);
+  background-repeat: no-repeat;
+  background-color: var(--xCheckDarkGrey);
+}
+
+.module {
+  display: flex;
+  box-sizing: border-box;
+  width: 280px;
+  height: 280px;
+  border: 10px solid;
+  border-radius: 50px;
+  margin-left: 62px;
+  margin-right: 62px;
+  background-color: var(--xCheckBlack);
+  color: var(--xCheckWhite);
+  justify-content: center;
+  align-items: center;
+  font-size: 245px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+
+
+.check {
+  border-color: var(--xCheckOrange);
+}
+
+.review {
+  border-color: var(--xCheckRed);
+}
+
+.prep {
+  border-color: var(--intridaBlue);
+}
