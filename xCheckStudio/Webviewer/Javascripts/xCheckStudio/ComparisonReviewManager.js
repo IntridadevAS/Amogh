@@ -1430,7 +1430,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'transposeType' : transposeType, 'transposeLevel' : 'componentLevel' },
                         success: function (msg) {
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+<<<<<<< HEAD
                             component.transpose = transposeType;
+=======
+>>>>>>> 26dad000b90d4ad6a4c71960ef4c2baadaf99d3d
                             var originalstatus = component.Status;
                             if(!originalstatus.includes("(T)")) {
                                 var changedStatus = originalstatus + "(T)";
