@@ -135,7 +135,6 @@ function chooseRestoreTranspose(selectedRow) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody") {
-<<<<<<< HEAD
             var componentId = selectedRow[0].cells[5].innerHTML;
             var groupId = selectedRow[0].cells[6].innerHTML;
             var component = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId]["CheckComponents"][componentId]
@@ -143,21 +142,11 @@ function chooseRestoreTranspose(selectedRow) {
                 return true;
             }
             else if(component.transpose !== null) {
-=======
-            if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
-                return true;
-            }
-            else if(selectedRow[0].cells[2].innerHTML == 'OK(T)') {
->>>>>>> 26dad000b90d4ad6a4c71960ef4c2baadaf99d3d
                 return false;
             }else { return true; }
         }
         else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-<<<<<<< HEAD
             if(selectedRow[0].cells[4].innerHTML.includes('(T)')) {
-=======
-            if(selectedRow[0].cells[4].innerHTML == 'OK(T)') {
->>>>>>> 26dad000b90d4ad6a4c71960ef4c2baadaf99d3d
                 return false;
             }
             else {
