@@ -127,18 +127,28 @@ function chooseRestoreTranspose(selectedRow) {
         var groupId = selectedRow[0].attributes[0].value;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
-            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
+            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK') {
                 return false;
             } else { return true; }
         }
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            if((selectedRow[0].cells[2].innerHTML).includes("(T)") || (selectedRow[0].cells[4].innerHTML).includes("(T)") ||
-            (selectedRow[0].cells[2].innerHTML).includes("(T)")) {
+        if(typeOfRow == "ComparisonMainReviewTbody") {
+            if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
+                return true;
+            }
+            else if(selectedRow[0].cells[2].innerHTML == 'OK(T)') {
                 return false;
             }else { return true; }
+        }
+        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
+            if(selectedRow[0].cells[4].innerHTML == 'OK(T)') {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
     }
 }
@@ -259,7 +269,7 @@ function disableContextMenuTranspose(_this) {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
             if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED" ||
-            selectedRow[0].cells[2].innerHTML == "No Match") {
+            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "ACCEPTED(T)") {
                 return true;
             }
         }
