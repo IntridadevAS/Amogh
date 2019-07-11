@@ -135,15 +135,18 @@ function chooseRestoreTranspose(selectedRow) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody") {
+            var componentId = selectedRow[0].cells[5].innerHTML;
+            var groupId = selectedRow[0].cells[6].innerHTML;
+            var component = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId]["CheckComponents"][componentId]
             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return true;
             }
-            else if(selectedRow[0].cells[2].innerHTML == 'OK(T)') {
+            else if(component.transpose !== null) {
                 return false;
             }else { return true; }
         }
         else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML == 'OK(T)') {
+            if(selectedRow[0].cells[4].innerHTML.includes('(T)')) {
                 return false;
             }
             else {
@@ -477,7 +480,7 @@ function loadComparisonData(comparisonCheckGroups,
 
 function onHomeClick() {
     if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-        window.location = "home.html";
+        window.location = "landingPage.html";
       }
 }
 

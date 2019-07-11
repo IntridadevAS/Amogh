@@ -1430,6 +1430,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'transposeType' : transposeType, 'transposeLevel' : 'componentLevel' },
                         success: function (msg) {
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                            component.transpose = transposeType;
                             var originalstatus = component.Status;
                             if(!originalstatus.includes("(T)")) {
                                 var changedStatus = originalstatus + "(T)";

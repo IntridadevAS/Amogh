@@ -2540,7 +2540,7 @@ function selectComponents(modelTreeContainer) {
 
 function onHomeClick() {
     if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-        window.location = "home.html";
+        window.location = "landingPage.html";
     }
 }
 

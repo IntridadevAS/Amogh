@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Check Studio</title>
-    <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/landingPage.css">
-    <link rel="stylesheet" href="src/css/fonts.css">
-  </head>
-  <body>
-    <header>
-      <button type="button" class="dropDownMenu" >
-        <img src="public/symbols/infomenu.svg" alt="">
-      </button>
-      <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
-      <div class="userInfo">
-        <p class="userName"> User Name </p>
-        <img id="userImg" src="public/notAUserImg.jpg" alt="">
-        <div class="programCntrls">
-          <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
-          <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
-          <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
-        </div>
-      </div>
-    </header>
-    <div class="container">
-      <a href="checkModule.html" class="module check">
-        C.
-      </a>
-      <a href="createproject.html" class="module review">
-        R.
-      </a>
-      <a href="prephomepage.html" class="module prep">
-        P.
-      </a>
-    </div>
 
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check Studio</title>
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/landingPage.css">
+  <link rel="stylesheet" href="src/css/fonts.css">
+  <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <button type="button" class="dropDownMenu">
+      <img src="public/symbols/infomenu.svg" alt="">
+    </button>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
+    <div class="userInfo">
+      <p class="userName"> User Name </p>
+      <img id="userImg" src="public/notAUserImg.jpg" alt="">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <a href="#" onclick="OnCheckClick()" class="module check">
+      C.
+    </a>
+    <a href="#" onclick="OnReviewClicked()" class="module review">
+      R.
+    </a>
+    <a href="prephomepage.html" class="module prep">
+      P.
+    </a>
+  </div>
+
+  <script>
+    function OnCheckClick() {
+      // set local storage variable to know where did it come from to
+      // createProject.html i.e. Check tile click or Review tile click
+      localStorage.setItem("FromCheckClick", true);
+      window.location.assign("createproject.html");
+    }
+
+    function OnReviewClicked() {
+      // set local storage variable to know where did it come from to
+      // createProject.html i.e. Check tile click or Review tile click
+      localStorage.setItem("FromCheckClick", false);
+      window.location.assign("createproject.html");
+    }
+
+  </script>
+</body>
+
 </html>
