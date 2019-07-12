@@ -1268,11 +1268,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                     data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel' },
                     success: function (msg) {
                         var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
+                        var changedStatus = originalstatus;
                         if(!originalstatus.includes("(T)")) {
-                            var changedStatus = originalstatus + "(T)";
+                             changedStatus = originalstatus + "(T)";
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         }
 
+                        _this.getRowHighlightColor(changedStatus);
                         var SourceAValue = selectedRow[0].cells[1].innerHTML;
                         var SourceBValue = selectedRow[0].cells[2].innerHTML;
 
@@ -2133,12 +2135,21 @@ function ComparisonReviewManager(comparisonCheckManager,
         else if (status.toLowerCase() === ("No Value").toLowerCase()) {
             return NoValueColor;
         }
-        else if (status.toLowerCase() === ("Accepted").toLowerCase()) {
+        else if (status.toLowerCase() === ("Accepted").toLowerCase() || status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
             return AcceptedColor;
         }
         else if (status.toLowerCase() === ("Error(A)").toLowerCase() || status.toLowerCase() === ("Warning(A)").toLowerCase() 
         || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
             return PropertyAcceptedColor;
+        }
+        else if(status.toLowerCase() === ("Error(T)").toLowerCase() || status.toLowerCase() === ("Warning(T)").toLowerCase()) {
+            return PropertyAcceptedColor;
+        }
+        else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
+            return PropertyAcceptedColor;
+        }
+        else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
+            return TransposedColor;
         }
         else {
             return "#ffffff";
