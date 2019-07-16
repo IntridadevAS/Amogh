@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>Create Configuration</title>    
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>    
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CreateConfiguration.js"></script>    
+
+    <link href="css/Dropdown.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+    <center>
+        <img src="images\Header.png" align="BOTTOM">
+    </center>
+
+    <div class="dropdown">
+        <button onclick="toggleDropdown()" class="dropbtn">Home</button>
+        <div id="homeDropdown" class="dropdown-content">
+            <a href="#configuration" id="configurationBtn">Configuration</a>
+            <a href="#dbSettings"   id="dbSettingsBtn">DB Settings</a>
+            <a href="#summary" id="summaryBtn">Summary</a>
+            <a href="#output"  id="outputBtn">Output</a>
+            <a href="#exit"  id="exitBtn">Exit</a>
+        </div>
+    </div>
+
+    <div id="contentSpace" style="width: 100%">
+    </div>
+
+</body>
+
+</html>

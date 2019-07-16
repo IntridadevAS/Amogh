@@ -10,6 +10,28 @@ function PREPManager() {
         {
             _this.OnManageRolesClicked();
         }
+
+        // create configuration button click
+        var createConfigurationButton = document.getElementById("createConfigurationButton");
+        createConfigurationButton.onclick = function()
+        {
+            _this.OnCreateConfigurationClicked();
+        }
+
+         // manage configuration button click
+         var manageConfigurationButton = document.getElementById("manageConfigurationButton");
+         manageConfigurationButton.onclick = function()
+         {
+            _this.OnManageConfigurationClicked();
+         }       
+    }
+
+    PREPManager.prototype.OnCreateConfigurationClicked = function () {               
+        window.open("createConfiguration.html");        
+    }
+
+    PREPManager.prototype.OnManageConfigurationClicked = function () {               
+        alert("Manage configuration clicked.")
     }
 
     PREPManager.prototype.OnManageRolesClicked = function () {               
