@@ -392,6 +392,9 @@
                                             'transpose' => $componentRow['transpose']); 
 
                             $componentId = $componentRow['id'];
+
+                            $componentStatus = 'OK(T)';
+                            $isPropertyStatusOk = true;
                              // read properties                                                                  
                             $checkPropertiesResults = $dbh->query("SELECT *FROM ComparisonCheckProperties where ownerComponent=$componentId;");
                             if($checkPropertiesResults) 
@@ -420,6 +423,9 @@
                                             $componentValues['status'] = 'ACCEPTED(T)';
                                     }
                                     
+                                    if($changedStatus !== 'OK(T)' && $changedStatus !== 'OK') {
+                                        $isPropertyStatusOk = false;
+                                    }
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'sourceAName'=>$propertyRow['sourceAName'],  
                                                             'sourceBName'=>$propertyRow['sourceBName'],
@@ -435,7 +441,10 @@
                                     array_push($properties, $propertyValues);
 
                                 }
-
+                                if($isPropertyStatusOk == false) {
+                                    $componentStatus = $componentValues['status'];
+                                }
+                                $componentValues['status'] = $componentStatus;
                                 $componentValues["properties"] = $properties;
                             }
                             else

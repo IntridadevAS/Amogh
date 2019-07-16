@@ -124,7 +124,7 @@ var xCheckStudio;
                 return PropertyAcceptedColor;
             }
             else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
-                return TransposedColor;
+                return AcceptedColor;
             }
             else {
                 return "#ffffff";

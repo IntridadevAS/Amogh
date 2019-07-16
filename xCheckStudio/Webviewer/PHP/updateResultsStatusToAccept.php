@@ -674,7 +674,7 @@ function rejectAcceptStatusComparisonProperty() {
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('SELECT accepted FROM ComparisonCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
@@ -687,6 +687,7 @@ function rejectAcceptStatusComparisonProperty() {
     $componentstatus1 = $command->fetch();
 
     $index = 0;
+    $toBecompstatus = $componentstatus1['status'];
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['accepted'] == "true" && $componentstatus['accepted'] !== "true") {
             $toBecompstatus = $componentstatus1['status'];
@@ -698,12 +699,15 @@ function rejectAcceptStatusComparisonProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
-                    $toBecompstatus = str_replace("(A)", "", $componentstatus1['status']);
-                }
-                else {
-                    $toBecompstatus = $componentstatus1['status'];
-                }               
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                    if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                        $toBecompstatus = str_replace("(A)", "", $componentstatus1['status']);
+                    }
+                    else {
+                        $toBecompstatus = $componentstatus1['status'];
+                        break;
+                    }  
+                }             
             }
         }
         $index++;
@@ -880,7 +884,7 @@ function rejectAcceptStatusComplianceAProperty() {
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('SELECT accepted FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT * FROM SourceAComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
@@ -904,12 +908,15 @@ function rejectAcceptStatusComplianceAProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
-                    $toBecompstatus =  str_replace("(A)", "", $componentstatus1['status']);
-                }
-                else {
-                    $toBecompstatus = $componentstatus1['status'];
-                }               
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                    if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                        $toBecompstatus =  str_replace("(A)", "", $componentstatus1['status']);
+                    }
+                    else {
+                        $toBecompstatus = $componentstatus1['status'];
+                        break;
+                    } 
+                }              
             }
         }
         $index++;
@@ -1102,7 +1109,7 @@ function rejectAcceptStatusComplianceBProperty() {
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('SELECT accepted FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT * FROM SourceBComplianceCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
@@ -1126,12 +1133,15 @@ function rejectAcceptStatusComplianceBProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
-                    $toBecompstatus =  str_replace("(A)", "", $componentstatus1['status']);
-                }
-                else {
-                    $toBecompstatus = $componentstatus1['status'];
-                }               
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                    if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
+                        $toBecompstatus =  str_replace("(A)", "", $componentstatus1['status']);
+                    }
+                    else {
+                        $toBecompstatus = $componentstatus1['status'];
+                        break;
+                    }   
+                }            
             }
         }
         $index++;

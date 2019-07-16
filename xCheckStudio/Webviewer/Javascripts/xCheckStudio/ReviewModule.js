@@ -241,7 +241,8 @@ function disableContextMenuAccept(_this) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" ||
+            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" || 
+            selectedRow[0].cells[2].innerHTML == "OK(T)" || selectedRow[0].cells[4].innerHTML == "OK(T)" ||
             selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[4].innerHTML == "undefined") {
                 return true;
             }
@@ -272,7 +273,7 @@ function disableContextMenuTranspose(_this) {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
             if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED" ||
-            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "ACCEPTED(T)") {
+            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "ACCEPTED(T)" || selectedRow[0].cells[2].innerHTML == "No Match(A)") {
                 return true;
             }
         }

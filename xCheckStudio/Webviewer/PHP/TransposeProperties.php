@@ -94,7 +94,7 @@ function TransposeProperty() {
     if($toBecompstatus !== null ) {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
         $command->execute(array($toBecompstatus, $componentid));
-        echo 'ACCEPTED';
+        echo 'OK(T)';
     }
 
     $dbh->commit();
@@ -137,7 +137,7 @@ function RestoreProperty() {
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('SELECT transpose FROM ComparisonCheckProperties WHERE ownerComponent=?');
+    $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
     $command->execute(array($componentid));
     $statusChanged = $command->fetchAll(PDO::FETCH_ASSOC);
 
@@ -150,6 +150,7 @@ function RestoreProperty() {
     $componentstatus1 = $command->fetch();
 
     $index = 0;
+    $toBecompstatus = $componentstatus1['status'];
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['transpose'] !== null && $componentstatus['transpose'] == null) {
             $toBecompstatus = $componentstatus1['status'];
@@ -161,11 +162,14 @@ function RestoreProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['transpose'] == null && strpos($componentstatus1['status'], '(T)') == true) {
-                    $toBecompstatus = str_replace("(T)", "", $componentstatus1['status']);
-                }
-                else {
-                    $toBecompstatus = $componentstatus1['status'];
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                    if($statusChanged[$index]['transpose'] == null && strpos($componentstatus1['status'], '(T)') == true) {
+                        $toBecompstatus = str_replace("(T)", "", $componentstatus1['status']);
+                    }
+                    else {
+                        $toBecompstatus = $componentstatus1['status'];
+                        break;
+                    }
                 }               
             }
         }
