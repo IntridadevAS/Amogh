@@ -892,6 +892,8 @@
                     var comparisonCheckGroups = undefined;
                     var sourceAComplianceCheckGroups = undefined;
                     var sourceBComplianceCheckGroups = undefined;
+                    var sourceAComponentsHierarchy = undefined;
+                    var sourceBComponentsHierarchy = undefined;
 
                     for (var key in checkResults) {
                         if (!checkResults.hasOwnProperty(key)) {
@@ -910,12 +912,21 @@
                             sourceBComplianceCheckGroups = new CheckGroups();
                             sourceBComplianceCheckGroups.restore(checkResults[key], true);
                         }
+                        else if(key == 'sourceAComponentsHierarchy') {
+                            sourceAComponentsHierarchy = checkResults[key];
+                        }
+                        else if(key == 'sourceBComponentsHierarchy') {
+                            sourceBComponentsHierarchy = checkResults[key];
+                        }
                     }
 
                     // populate check results
                     populateCheckResults(comparisonCheckGroups,
                         sourceAComplianceCheckGroups,
-                        sourceBComplianceCheckGroups);
+                        sourceBComplianceCheckGroups,
+                        sourceAComponentsHierarchy,
+                        sourceBComponentsHierarchy);
+                        
 
                     // load analytics data
                     document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
