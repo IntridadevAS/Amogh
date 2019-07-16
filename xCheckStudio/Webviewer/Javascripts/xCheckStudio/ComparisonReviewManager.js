@@ -4,7 +4,9 @@ function ComparisonReviewManager(comparisonCheckManager,
     sourceAComponents,
     sourceBComponents,
     mainReviewTableContainer,
-    detailedReviewTableContainer/*,
+    detailedReviewTableContainer,
+    sourceAComponentsHierarchy,
+    sourceBComponentsHierarchy/*,
     sourceAComponentIdVsComponentData,
     sourceANodeIdVsComponentData,
     sourceBComponentIdVsComponentData,
@@ -26,8 +28,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
   
-   this.SourceANodeIdVsStatus = {};
-   this.SourceBNodeIdVsStatus = {};
+   this.SourceANodeIdVsStatus = sourceAComponentsHierarchy;
+   this.SourceBNodeIdVsStatus = sourceBComponentsHierarchy;
 
     this.ComparisonCheckManager = comparisonCheckManager;    
 
@@ -221,18 +223,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var currentRow = modelBrowserDataRows[j];
 
                     var status = currentRow.cells[2].innerText;
-                    if (currentRow.cells.length === 5) {
+                    if (currentRow.cells.length === 7) {
                         if (currentRow.cells[3].innerText !== undefined &&
                             currentRow.cells[3].innerText !== "") {
 
                             var sourceANodeId = currentRow.cells[3].innerText;
-                            this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
+                            // this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
                         }
                         if (currentRow.cells[4].innerText !== undefined &&
                             currentRow.cells[4].innerText !== "") {
 
                             var sourceBNodeId = currentRow.cells[4].innerText;
-                            this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
+                            // this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
                         }
                     }
 

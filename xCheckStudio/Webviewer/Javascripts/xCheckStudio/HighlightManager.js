@@ -17,30 +17,11 @@ function HighlightManager(viewer,
 
     this.ComponentIdVsComponentData = componentIdVsComponentData
     this.NodeIdVsComponentData = nodeIdVsComponentData;
-
-    // HighlightManager.prototype.getNodeIdFromComponentIdentifier = function (componentIdentifier) {
-
-    //     // if (componentIdentifier === this._selectedComponentId) {
-    //     //     return undefined;
-    //     // }
-
-    //     if (!(componentIdentifier in this.ComponentIdVsComponentData)) {
-    //         return undefined;
-    //     }
-
-    //     this._selectedComponentId = componentIdentifier;
-
-    //     var component_data = this.ComponentIdVsComponentData[componentIdentifier];
-    //     var nodeId = component_data.NodeId;
-
-    //     return nodeId;
-    // }
-
-
-    HighlightManager.prototype.changeComponentColorInViewer = function (nodeIdString,      
-                                                                        status) {    
-                                                                            
-        var hexColor = xCheckStudio.Util.getComponentHexColor(status);
+    
+    HighlightManager.prototype.changeComponentColorInViewer = function (component) {    
+        
+        nodeIdString = component.NodeId;
+        var hexColor = xCheckStudio.Util.getComponentHexColor(component);
         if (hexColor === undefined) {
             return;
         }

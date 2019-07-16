@@ -15,14 +15,27 @@
             return;              
         }	
 
+        $sourceAComponents = array();
+        $sourceBComponents = array();
+        $sourceAComponentsHierarchy = array();
+        $sourceBComponentsHierarchy = array();
         $comparisonResult = readComparisonCheckData();
 
         $sourceAComplianceResult = readComplianceCheckData('SourceAComplianceCheckGroups',
                                                             'SourceAComplianceCheckComponents',
                                                             'SourceAComplianceCheckProperties');
+
         $sourceBComplianceResult = readComplianceCheckData('SourceBComplianceCheckGroups',
                                                            'SourceBComplianceCheckComponents',
                                                            'SourceBComplianceCheckProperties');
+
+        $data = readDataSourceInfo();
+
+        
+        getSourceComponents();
+
+        // var_dump($sourceBComponents);
+        createHierarchyStructureForComponents();
 
         $results = array();
         if($comparisonResult != NULL)
@@ -40,7 +53,71 @@
             $results['SourceBCompliance'] = $sourceBComplianceResult;
         }
 
+        if($sourceAComponentsHierarchy !== null) {
+            $results['sourceAComponentsHierarchy'] = $sourceAComponentsHierarchy;
+        }
+        if($sourceBComponentsHierarchy !== null) {
+            $results['sourceBComponentsHierarchy'] = $sourceBComponentsHierarchy;
+        }
+
         echo json_encode($results);
+
+
+        function getSourceComponents()
+        {
+            global $projectName;
+            global $sourceAComponents;
+            global $sourceBComponents;
+            global $data;
+            try{   
+                    // open database
+                    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+                    // begin the transaction
+                    $dbh->beginTransaction();
+                    if(strtolower($data['sourceAType']) !== 'xls' || strtolower($data['sourceAType']) !== 'json') {
+                        // fetch source A components
+                        $stmt =  $dbh->query('SELECT *FROM SourceAComponents');
+                                            
+                        while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                        {
+                                $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
+                                if (array_key_exists("nodeid",$componentRow))
+                                {
+                                    $values2["nodeid"] =  $componentRow['nodeid'];                               
+                                }
+
+                                //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
+                                $sourceAComponents[$componentRow['id']] = $values2;    
+                            
+                        }   
+                    } 
+                                        
+                    if(strtolower($data['sourceBType']) !== 'xls' || strtolower($data['sourceBType']) !== 'json') {
+                        // fetch source B components
+                        $stmt =  $dbh->query('SELECT *FROM SourceBComponents');
+                        while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+
+                                $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
+                                if (array_key_exists("nodeid",$componentRow))
+                                {
+                                    $values2["nodeid"] =  $componentRow['nodeid'];                               
+                                }
+
+                                $sourceBComponents[$componentRow['id']] =  $values2; 
+                        }  
+                    }
+                    
+                    // commit update
+                    $dbh->commit();
+                    $dbh = null; //This is how you close a PDO connection
+                }                
+            catch(Exception $e) {        
+                echo "fail"; 
+                return;
+            }                
+        } 
         
         function readComplianceCheckData($checkGroupTable,
                                          $CheckComponentsTable,
@@ -394,5 +471,145 @@
 
             return NULL;
             //return false;
+        }
+
+        function readDataSourceInfo() {      
+            global $projectName;
+
+            $dbh;
+            try
+            {        
+                // open database
+                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+                // begin the transaction
+                $dbh->beginTransaction();
+                
+                $results = $dbh->query("SELECT *FROM  DatasourceInfo;");     
+
+                $data = array();
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $data = array('sourceAFileName' => $record['sourceAFileName'], 
+                                'sourceBFileName'=> $record['sourceBFileName'], 
+                                'sourceAType'=>$record['sourceAType'], 
+                                'sourceBType'=>$record['sourceBType'], 
+                                'orderMaintained'=>$record['orderMaintained']);                                 
+                }
+
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection                 
+                                
+                return  $data;
+            }
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return;
+            } 
+        }
+
+        function createHierarchyStructureForComponents() {
+            global $sourceAComponents;
+            global $sourceBComponents;
+            global $sourceAComponentsHierarchy;
+            global $sourceBComponentsHierarchy;
+            global $comparisonResult;
+            global $projectName;
+            
+            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+            // $sourceACompsWithHie=[];
+            if($sourceAComponents != null && $comparisonResult != NULL) {
+               
+                $traversedNodes = [];
+                for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                    $group = $comparisonResult[$index];
+        
+                    foreach($group['components'] as $key =>  $value) {
+                        $compIndex = $value['id'];
+                        $status = $value['status'];
+                        $comp = $group['components'][$compIndex];
+                        $sourceANodeId = $comp['sourceANodeId'];
+                        $comp = traverseRecursively($dbh, $sourceANodeId, $traversedNodes, true);
+                        if($comp && !array_key_exists($comp['NodeId'], $sourceAComponentsHierarchy)) {
+                            array_push($sourceAComponentsHierarchy, $comp);
+                        }
+                    }
+                }
+            }
+
+            $sourceBCompsWithHie=[];
+            if($sourceBComponents !== null) {
+
+                $traversedNodes = [];
+                for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                    $group = $comparisonResult[$index];
+        
+                    foreach($group['components'] as $key =>  $value) {
+                        $compIndex = $value['id'];
+                        $status = $value['status'];
+                        $comp = $group['components'][$compIndex];
+                        $sourceBNodeId = $comp['sourceBNodeId'];
+                        $dbh->beginTransaction();
+                        $comp = traverseRecursively($dbh, $sourceBNodeId, $traversedNodes, false);
+                        $dbh->commit();
+                        // echo json_encode($comp);
+                        if($comp && !array_key_exists($comp['NodeId'], $sourceBComponentsHierarchy)) {
+                            array_push($sourceBComponentsHierarchy, $comp);
+                        }
+                    }
+                }
+            }
+        }
+
+        function traverseRecursively($dbh, $nodeId, $traversedNodes, $isSourceA)
+        {
+            global $projectName;
+
+            if($nodeId != null) {
+                if($traversedNodes != null) {
+                    if(in_array($nodeId, $traversedNodes))
+                    {
+                        return;
+                    }        
+                }
+               
+                array_push($traversedNodes, $nodeId);
+    
+                $component = [];
+                $component["NodeId"] = $nodeId;
+                $component["accepted"] = '';
+                $component["transpose"] = '';
+                $component["Children"] = [];
+                $component["Status"] = '';
+                if($isSourceA) {
+                    $children = $dbh->query("SELECT * FROM  SourceAComponents where parentid =$nodeId"); 
+                    $comparisonComponent1 = $dbh->query("SELECT * FROM  ComparisonCheckComponents where sourceANodeId =$nodeId");
+                    $comparisonComponent = $comparisonComponent1->fetch(\PDO::FETCH_ASSOC);
+                    $component["accepted"] = $comparisonComponent['accepted'];
+                    $component["transpose"] = $comparisonComponent['transpose'];
+                    $component["Status"] = $comparisonComponent['status'];
+                }
+                else {
+                    $children = $dbh->query("SELECT * FROM  SourceBComponents where parentid =$nodeId"); 
+                    $comparisonComponent1 = $dbh->query("SELECT * FROM  ComparisonCheckComponents where sourceBNodeId =$nodeId");
+                    $comparisonComponent = $comparisonComponent1->fetch(\PDO::FETCH_ASSOC);
+                    $component["accepted"] = $comparisonComponent['accepted'];
+                    $component["transpose"] = $comparisonComponent['transpose'];
+                    $component["Status"] =  $comparisonComponent['status'];
+                }
+                
+                while ($child = $children->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $childComponent = traverseRecursively($dbh, $child['nodeid'], $traversedNodes, $isSourceA);
+                    array_push($component["Children"], $childComponent);
+                }
+
+                return $component;                   
+            }    
         }
 ?>

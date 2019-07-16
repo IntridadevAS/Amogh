@@ -41,25 +41,93 @@ var xCheckStudio;
         Util.fileExists = fileExists;
 
 
-        function getComponentHexColor  (status) {
+        function getComponentHexColor  (component) {
+            status = component.Status;
             // var color;
             if (status.toLowerCase() === ("OK").toLowerCase()) {
                 return SuccessColor;
             }
             else if (status.toLowerCase() === ("Error").toLowerCase()) {
-                return HoopsViewerErrorColor;
+                if(component.accepted == 'true') {
+                    return AcceptedColor;
+                }
+                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                    return PropertyAcceptedColor;
+                }
+                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
+                component.accepted == 'true') {
+                    return PropertyAcceptedColor;
+                }
+                else {
+                    return HoopsViewerErrorColor;
+                }           
             }
             else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-                return WarningColor;
+                if(component.accepted == 'true') {
+                    return AcceptedColor;
+                }
+                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                    return PropertyAcceptedColor;
+                }
+                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
+                component.accepted == 'true') {
+                    return PropertyAcceptedColor;
+                }
+                else {
+                    return WarningColor;
+                }          
             }
             else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-                return NoMatchColor;
+                if(component.accepted == 'true') {
+                    return AcceptedColor;
+                }
+                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                    return PropertyAcceptedColor;
+                }
+                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
+                component.accepted == 'true') {
+                    return PropertyAcceptedColor;
+                }
+                else {
+                    return NoMatchColor;
+                }
             }
             else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-                return NoValueColor;
+                if(component.accepted == 'true') {
+                    return AcceptedColor;
+                }
+                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                    return PropertyAcceptedColor;
+                }
+                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
+                component.accepted == 'true') {
+                    return PropertyAcceptedColor;
+                }
+                else {
+                    return NoValueColor;
+                }
+            }
+            else if (status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
+                return AcceptedColor;
+            }
+            else if (status.toLowerCase() === ("Error(A)").toLowerCase() || 
+                     status.toLowerCase() === ("Warning(A)").toLowerCase() || 
+                     status.toLowerCase() === ("No Match(A)").toLowerCase() || 
+                     status.toLowerCase() === ("No Value(A)").toLowerCase()) {
+                return PropertyAcceptedColor;
+            }
+            else if(status.toLowerCase() === ("Error(T)").toLowerCase() || 
+                    status.toLowerCase() === ("Warning(T)").toLowerCase()) {
+                return PropertyAcceptedColor;
+            }
+            else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
+                return PropertyAcceptedColor;
+            }
+            else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
+                return TransposedColor;
             }
             else {
-                return undefined;
+                return "#ffffff";
             }
         }
         Util.getComponentHexColor = getComponentHexColor;

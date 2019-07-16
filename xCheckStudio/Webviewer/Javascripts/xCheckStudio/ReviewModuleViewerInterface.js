@@ -35,19 +35,22 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     }
 
     ReviewModuleViewerInterface.prototype.highlightComponentsfromResult = function () {
-        for (var nodeId in this.NodeIdStatusData) {
-            if (this.NodeIdStatusData.hasOwnProperty(nodeId)) {
 
-                var status = this.NodeIdStatusData[nodeId][1];
+        for(var id in this.NodeIdStatusData) {
+            var component = this.NodeIdStatusData[id];
+            this.ChangeComponentColor(component);
+        }
+    }
 
-                // set the component row color in main review table     
-                var hexColor = xCheckStudio.Util.getComponentHexColor(status);
-                if (hexColor === undefined) {
-                    continue;
-                }
-
-                this.highlightManager.changeComponentColorInViewer(nodeId, status);
-            }
+    ReviewModuleViewerInterface.prototype.ChangeComponentColor = function(component) {
+        var status = component.Status;
+        var nodeId = component.NodeId;
+        if(status !== null) {
+            this.highlightManager.changeComponentColorInViewer(component);
+        }
+        var children = component.Children;
+        for(var child in children) {
+            this.ChangeComponentColor(children[child]);
         }
     }
 

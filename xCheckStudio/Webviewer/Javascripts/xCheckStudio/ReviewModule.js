@@ -314,7 +314,9 @@ function resetAllCategories() {
 
 function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
-    sourceBComplianceCheckGroups) {
+    sourceBComplianceCheckGroups,
+    sourceAComponentsHierarchy,
+    sourceBComponentsHierarchy) {
     if (!comparisonCheckGroups &&
         !sourceAComplianceCheckGroups &&
         !sourceBComplianceCheckGroups) {
@@ -381,7 +383,9 @@ function populateCheckResults(comparisonCheckGroups,
                     sourceAViewerOptions,
                     sourceBViewerOptions,
                     sourceAClassWiseComponents,
-                    sourceBClassWiseComponents);
+                    sourceBClassWiseComponents,
+                    sourceAComponentsHierarchy,
+                    sourceBComponentsHierarchy);
             }
 
             if (sourceAComplianceCheckGroups) {
@@ -460,7 +464,9 @@ function loadComparisonData(comparisonCheckGroups,
     sourceAViewerOptions,
     sourceBViewerOptions,
     sourceAClassWiseComponents,
-    sourceBClassWiseComponents) {
+    sourceBClassWiseComponents,
+    sourceAComponentsHierarchy,
+    sourceBComponentsHierarchy) {
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
@@ -468,7 +474,9 @@ function loadComparisonData(comparisonCheckGroups,
         sourceAClassWiseComponents,
         sourceBClassWiseComponents,
         "ComparisonMainReviewCell",
-        "ComparisonDetailedReviewCell"/*,
+        "ComparisonDetailedReviewCell",
+        sourceAComponentsHierarchy,
+        sourceBComponentsHierarchy/*,
                                                             undefined,
                                                             undefined,
                                                             undefined,
