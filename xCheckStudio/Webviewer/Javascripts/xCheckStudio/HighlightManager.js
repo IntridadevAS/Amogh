@@ -7,7 +7,7 @@ var NoMatchColor = "#dddbff"//"#ccccff";
 var NoValueColor = "#f2f2f2";
 var AcceptedColor = "#cbf287";
 var PropertyAcceptedColor = "#ffff99";
-var TransposedColor = "#ace396";
+// var TransposedColor = "#ace396";
 
 function HighlightManager(viewer,
     componentIdVsComponentData,

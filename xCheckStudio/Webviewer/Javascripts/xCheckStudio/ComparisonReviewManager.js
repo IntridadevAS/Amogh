@@ -1275,10 +1275,22 @@ function ComparisonReviewManager(comparisonCheckManager,
                              changedStatus = originalstatus + "(T)";
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         }
+                        else if(msg.trim() == "OK(T)") {
+                            var changedStatus = msg.trim();
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = transposeType;
+                            // _this.getRowHighlightColor(changedStatus);
+                        }
 
                         _this.getRowHighlightColor(changedStatus);
                         var SourceAValue = selectedRow[0].cells[1].innerHTML;
                         var SourceBValue = selectedRow[0].cells[2].innerHTML;
+
+                        var color = _this.getRowHighlightColor('OK(T)');
+                        for (var j = 0; j < selectedRow[0].cells.length; j++) {
+                            cell = selectedRow[0].cells[j];
+                            cell.style.backgroundColor = color;
+                        }
 
                         if(transposeType == "lefttoright") {
                             selectedRow[0].cells[2].innerHTML = SourceAValue;
@@ -1358,6 +1370,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     status = msg;
                     var changedStatus = status[0];
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = null;
                     _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
 
                     var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
@@ -2151,7 +2164,7 @@ function ComparisonReviewManager(comparisonCheckManager,
             return PropertyAcceptedColor;
         }
         else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
-            return TransposedColor;
+            return AcceptedColor;
         }
         else {
             return "#ffffff";
