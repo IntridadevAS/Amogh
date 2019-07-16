@@ -525,11 +525,6 @@ function onReferenceClick(selectedRow) {
     referenceManager.ShowReferenceDiv();
 }
 
-function sadsajkdhjlsak() {
-    var webAddressString = document.getElementById("webAddressInput").value;
-    alert(webAddressString);
-}
-
 function toggleDropdown() {
-    document.getElementById("newReferenceDropdown").classList.toggle("show");
+    document.getElementById("homeDropdown").classList.toggle("show");
 }
