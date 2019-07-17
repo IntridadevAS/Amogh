@@ -418,7 +418,7 @@ function getValidSourceTypes() {
     return validSourceTypes;
 }
 
-function uploadDataSet(event) {
+function uploadDataSet() {
 
     // get valid source types
     var validSourceTypes = getValidSourceTypes();
