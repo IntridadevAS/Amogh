@@ -333,7 +333,9 @@ function getSourceSelectElement() {
     var sourceSelect = document.createElement("select");
 
     var sourceTypes = ["", ".XML", ".RVM", ".XLS",
-        ".SLDASM", ".DWG", ".SLDPRT", ".RVT", ".RFA", ".IFC", ".STEP", ".JSON", ".IGS"];
+                       ".SLDASM", ".DWG", ".SLDPRT", 
+                       ".RVT", ".RFA", ".IFC", ".STEP", 
+                       ".JSON", ".IGS", "STE", "STP"];
 
     for (var i = 0; i < sourceTypes.length; i++) {
         var option = document.createElement("option");
@@ -372,11 +374,81 @@ function openTabContentPage(inputElement, contentPage) {
     inputElement.className += " active";
 }
 
-function uploadDataSet() {
+function getValidSourceTypes() {
+    var validSourceTypes = [];
+    var linkSourceTypesDiv = document.getElementById("linkSourceTypesDiv");
+    for (var i = 0; i < linkSourceTypesDiv.children.length; i++) {
+
+        var child = linkSourceTypesDiv.children[i];
+        if (child.tagName.toLowerCase() != "select") {
+            continue;
+        }
+
+        if (child.value === undefined ||
+            child.value === "") {
+            continue;
+        }
+
+        var sourceMappingName = child.value;
+        for(var key in sourceMappings)
+        {
+            var sourceMapping = sourceMappings[key];
+            if(sourceMapping.Name != sourceMappingName)
+            {
+                continue;
+            }
+
+            for (var type in sourceMapping.Sources) {
+                
+                var sourceType = sourceMapping.Sources[type];
+                var result = sourceType.replace(".", "");
+                if(!validSourceTypes.includes(result.toLowerCase()))
+                {                    
+                    validSourceTypes.push(result.toLowerCase());
+                }
+
+                if(!validSourceTypes.includes(result.toUpperCase()))
+                {                    
+                    validSourceTypes.push(result.toUpperCase());
+                }
+            }
+        }
+    }
+
+    return validSourceTypes;
+}
+
+function uploadDataSet(event) {
+
+    // get valid source types
+    var validSourceTypes = getValidSourceTypes();
+    if (!validSourceTypes ||
+        validSourceTypes.length === 0) {
+        alert("Please select data source mapping with valid source types.");
+        document.getElementById("uploadDataSetForm").reset();
+        return;
+    }
+
+    var path = document.getElementById("loadSourceInput").value;
+    var inputSourceType = path.split('.').pop();
+    if (!validSourceTypes.includes(inputSourceType.toLowerCase())) {
+        alert("Please select data source mapping with valid source types.");
+        document.getElementById("uploadDataSetForm").reset();
+        return;
+    }
+
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "PHP/UploadAndProcessDataSet.php", true);
-    xhr.onload = function (event) {
-        var attributes = JSON.parse(event.target.response);
+    xhr.onload = function (result) {
+        document.getElementById("uploadDataSetForm").reset();
+
+        if(result.target.response === "fail")
+        {            
+            alert("Failed to upload data source.");
+            return;
+        }
+
+        var attributes = JSON.parse(result.target.response);
      
         for (var fileName in attributes) {
             dataSetAttributes[fileName] = JSON.parse(attributes[fileName]);
@@ -387,14 +459,12 @@ function uploadDataSet() {
             option.innerText = fileName;
             loadedDataSetSelect.appendChild(option);
             break;
-        }
-
-        document.getElementById("uploadDataSetForm").reset();
+        }        
     };
 
-    var formData = new FormData(document.getElementById("uploadDataSetForm"));
-    //formData.append('Operation', "ConvertToSCS");
+    var formData = new FormData(document.getElementById("uploadDataSetForm"));  
     formData.append('Operation', "ExportAttributes");
+    formData.append('ValidSourceTypes', JSON.stringify(validSourceTypes));
     xhr.send(formData);
 }
 

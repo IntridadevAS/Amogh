@@ -1,6 +1,7 @@
 <?php
 
-    if(!isset( $_POST["Operation"]))
+    if(!isset( $_POST["Operation"]) ||
+       !isset( $_POST["ValidSourceTypes"]))
     {
         echo "fail";
         return;
@@ -8,8 +9,9 @@
     
     $operation = $_POST["Operation"];
 
-    $validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "sldprt", 
-    "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs");
+    $validSources = json_decode($_POST['ValidSourceTypes'],true);    
+    // $validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "sldprt", 
+    // "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs");
     $counter = 0;
     $uploadedFiles = array();
 
@@ -20,6 +22,12 @@
         $temp = $_FILES["dataSoures"]["tmp_name"][$key];
         $name = $_FILES["dataSoures"]["name"][$key];
     
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+        if(in_array($ext, $validSources) == false)
+        {
+            continue;
+        }
+
         $UploadFolder= $webViewerDirectory."/configurations/temp";
 
         if (!file_exists( $UploadFolder)) {
