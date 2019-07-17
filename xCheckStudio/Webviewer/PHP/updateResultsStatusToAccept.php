@@ -111,13 +111,14 @@ function updateComponentComparisonStatusInReview() {
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'true';
         $dontChangeOk = 'OK';
+        $dontChangeNoValue = 'No Value';
         $dbh->beginTransaction();
 
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=? AND status!=?');
         $command->execute(array($status, $componentid, $dontChangeOk));
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
-        $command->execute(array($status, $componentid, $dontChangeOk));
+        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=? AND severity!=?');
+        $command->execute(array($status, $componentid, $dontChangeOk, $dontChangeNoValue));
 
 
         $dbh->commit();
@@ -179,25 +180,38 @@ function updatePropertyComparisonStatusInReview() {
 
     $index = 0;
     $toBecompstatus = 'true';
+    $propertyTransposed = false;
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['accepted'] == 'true') {
             $index++;
             continue;
         }
-        else if($statusChanged[$index]['severity'] == 'OK' && $statusChanged[$index]['accepted'] == 'false') {
+        else if(($statusChanged[$index]['severity'] == 'OK' || $statusChanged[$index]['severity'] == 'No Value') && $statusChanged[$index]['accepted'] == 'false') {
             $index++;
             continue;
         }
         else {
-            $toBecompstatus = 'false';
-            break;
+            if($statusChanged[$index]['transpose'] != null) {
+                $toBecompstatus = 'true';
+                $propertyTransposed = true;
+            }
+            else {
+                $toBecompstatus = 'false';
+                $propertyTransposed = false;
+            }
+            $index++;
         }
     }
 
-    if($toBecompstatus == 'true') {
+    if($toBecompstatus == 'true' && $propertyTransposed == true) {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
         $command->execute(array($toBecompstatus, $componentid));
-        echo 'ACCEPTED';
+        echo 'OK(A)(T)';
+    }
+    else if($toBecompstatus == 'true') {
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($toBecompstatus, $componentid));
+        echo 'OK(A)';
     }
 
     $dbh->commit();
@@ -219,6 +233,7 @@ function updateCategoryComparisonStatusInReview() {
     $categoryStatus = 'ACCEPTED';
     $status = 'true';
     $dontChangeOk = 'OK';
+    $dontChangeNoValue = 'No Value';
 
     $dbh->beginTransaction();
 
@@ -235,8 +250,8 @@ function updateCategoryComparisonStatusInReview() {
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
             if($comp['status'] !== $dontChangeOk) {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
-                $command->execute(array($status, $comp['id'], $dontChangeOk));
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=? AND severity!=?');
+                $command->execute(array($status, $comp['id'], $dontChangeOk, $dontChangeNoValue));
             }
         }
     }

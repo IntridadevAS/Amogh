@@ -107,8 +107,8 @@ function chooseAction(selectedRow) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
-            selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
+            if(selectedRow[0].cells[2].innerHTML == "OK(A)" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
+            selectedRow[0].cells[2].innerHTML == 'OK(A)(T)') {
                 return false;
             }else { return true; }
         }
@@ -272,8 +272,8 @@ function disableContextMenuTranspose(_this) {
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "ACCEPTED" ||
-            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "ACCEPTED(T)" || selectedRow[0].cells[2].innerHTML == "No Match(A)") {
+            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "OK(A)" ||
+            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "OK(A)(T)" || selectedRow[0].cells[2].innerHTML == "No Match(A)") {
                 return true;
             }
         }
