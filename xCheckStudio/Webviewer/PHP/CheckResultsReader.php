@@ -370,15 +370,15 @@
                         while ($componentRow = $checkComponentsResults->fetch(\PDO::FETCH_ASSOC)) 
                         {
                             if($componentRow['accepted'] == 'true')
-                                $changedStatus = 'ACCEPTED';
+                                $changedStatus = 'OK(A)';
                             else 
                                 $changedStatus = $componentRow['status'];
 
                             if($componentRow['transpose'] == 'lefttoright' || $componentRow['transpose'] == 'righttoleft') {
-                                $changedStatus = $componentRow['status'];
-                                if(!strpos($changedStatus, '(T)')) {
-                                    $changedStatus = $changedStatus . '(T)';
-                                }
+                                $changedStatus = 'OK(T)';
+                                // if(!strpos($changedStatus, '(T)')) {
+                                //     $changedStatus = $changedStatus . '(T)';
+                                // }
                             }
 
                             $componentValues = array('id'=>$componentRow['id'], 
@@ -413,14 +413,22 @@
                                     if($propertyRow['transpose'] == 'lefttoright') {
                                         $sourceBValue = $sourceAValue;
                                         $changedStatus = 'OK(T)';
-                                        if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED(T)';
+                                        if($componentValues['status'] == 'OK(A)')
+                                            $componentValues['status'] = 'OK(A)(T)';
                                     }
                                     else if($propertyRow['transpose'] == 'righttoleft') {
                                         $sourceAValue = $sourceBValue;
                                         $changedStatus = 'OK(T)';
-                                        if($componentValues['status'] == 'ACCEPTED')
-                                            $componentValues['status'] = 'ACCEPTED(T)';
+                                        if($componentValues['status'] == 'OK(A)')
+                                            $componentValues['status'] = 'OK(A)(T)';
+                                    }
+                                    else {
+                                        if(($propertyRow['severity'] == 'Error' || $propertyRow['severity'] == 'No Match') && 
+                                        $componentValues['status'] == 'OK(T)') {
+                                             if(!strpos($componentRow['status'], '(T)')) {
+                                                $componentValues['status'] = $componentRow['status'] . "(T)";
+                                             }                                     
+                                        }
                                     }
                                     
                                     if($changedStatus !== 'OK(T)' && $changedStatus !== 'OK') {

@@ -81,7 +81,7 @@ function TransposeProperty() {
             $index++;
             continue;
         }
-        else if($statusChanged[$index]['severity'] == 'OK' && $statusChanged[$index]['transpose'] == null) {
+        else if(($statusChanged[$index]['severity'] == 'OK' || $statusChanged[$index]['severity'] == 'No Value') && $statusChanged[$index]['transpose'] == null) {
             $index++;
             continue;
         }
@@ -162,7 +162,7 @@ function RestoreProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)' && $statusChanged[$index]['severity'] != 'No Value') {
                     if($statusChanged[$index]['transpose'] == null && strpos($componentstatus1['status'], '(T)') == true) {
                         $toBecompstatus = str_replace("(T)", "", $componentstatus1['status']);
                     }

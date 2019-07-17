@@ -843,27 +843,27 @@ function ComparisonReviewManager(comparisonCheckManager,
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
                         success: function (msg) {
-                            selectedRow[0].cells[2].innerHTML = "ACCEPTED";
+                            selectedRow[0].cells[2].innerHTML = "OK(A)";
                             var cell = 0;
                             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
                                 selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                             }
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
-                            component.status = "ACCEPTED";
+                            component.status = "OK(A)";
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
-                                if(property.Severity !== "OK") {
+                                if(property.Severity !== "OK" && property.Severity !== "No Value") {
                                     if(property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
-                                        component.status = "ACCEPTED(T)";
-                                        selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
+                                        component.status = "OK(A)(T)";
+                                        selectedRow[0].cells[2].innerHTML = "OK(A)(T)";
                                         // component.properties[propertyId].SourceBValue = property.SourceAValue;
                                         component.properties[propertyId].transpose = property.transpose;
                                     }
                                     else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
-                                        component.status = "ACCEPTED(T)";
-                                        selectedRow[0].cells[2].innerHTML = "ACCEPTED(T)";
+                                        component.status = "OK(A)(T)";
+                                        selectedRow[0].cells[2].innerHTML = "OK(A)(T)";
                                         component.properties[propertyId].transpose = property.transpose;
                                         // component.properties[propertyId].SourceAValue = property.SourceBValue;
                                     }
@@ -902,7 +902,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 var changedStatus = originalstatus + "(A)";
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             }
-                            else if(msg.trim() == "ACCEPTED") {
+                            else if(msg.trim() == "OK(A)") {
                                 var changedStatus = msg.trim();
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 _this.getRowHighlightColor(changedStatus);
@@ -1372,7 +1372,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = null;
                     _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-
+                    for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                        selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(changedStatus);
+                    }
                     var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                     for(var i = 0; i < propertiesLen; i++) {
                         var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1448,13 +1450,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                         success: function (msg) {
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                             component.transpose = transposeType;
-                            var originalstatus = component.Status;
-                            if(!originalstatus.includes("(T)")) {
-                                var changedStatus = originalstatus + "(T)";
-                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                            }
-    
-                            selectedRow[0].cells[2].innerHTML = component.Status;
+                            // var originalstatus = component.Status;
+                            // if(!originalstatus.includes("(T)")) {
+                            //     var changedStatus = originalstatus + "(T)";
+                            //     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                            // }
+                            component.Status = 'OK(T)';
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
                                 if(property.Severity !== "OK" &&  property.Severity !== "No Value") {
@@ -1467,8 +1468,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                                         property.Severity = 'OK(T)';
                                         property.transpose = transposeType;
                                     }
+                                    else {
+                                        if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
+                                        component.Status == 'OK(T)') {
+                                        component.Status = component.status + "(T)";                                   
+                                        }
+                                    }
                                 }
                                     
+                            }
+                            selectedRow[0].cells[2].innerHTML = component.Status;
+                            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                                selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.Status);
                             }
                             _this.populateDetailedReviewTable(selectedRow[0]);
                         }
@@ -2163,7 +2174,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
             return PropertyAcceptedColor;
         }
-        else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
+        else if(status.toLowerCase() === ("OK(T)").toLowerCase() || status.toLowerCase() === ("OK(A)").toLowerCase()) {
             return AcceptedColor;
         }
         else {
