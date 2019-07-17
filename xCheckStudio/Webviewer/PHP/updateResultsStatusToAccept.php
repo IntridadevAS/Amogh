@@ -220,6 +220,7 @@ function updateCategoryComparisonStatusInReview() {
     $categoryStatus = 'ACCEPTED';
     $status = 'true';
     $dontChangeOk = 'OK';
+    $dontChangeNoValue = 'No Value';
 
     $dbh->beginTransaction();
 
@@ -236,8 +237,8 @@ function updateCategoryComparisonStatusInReview() {
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
             if($comp['status'] !== $dontChangeOk) {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=?');
-                $command->execute(array($status, $comp['id'], $dontChangeOk));
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=? AND severity!=?');
+                $command->execute(array($status, $comp['id'], $dontChangeOk, $dontChangeNoValue));
             }
         }
     }

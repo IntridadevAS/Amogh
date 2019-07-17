@@ -905,7 +905,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                             else if(msg.trim() == "OK(A)") {
                                 var changedStatus = msg.trim();
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                                _this.getRowHighlightColor(changedStatus);
+                            }
+                            var compcolor = _this.getRowHighlightColor(changedStatus);
+                            for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
+                                cell =  _this.SelectedComponentRow.cells[j];
+                                cell.style.backgroundColor = compcolor;
                             }
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
@@ -1030,7 +1034,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 success: function (msg) {
                     for(var i = 0; i < noOfComponents; i++) {
                         if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
-                            categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "ACCEPTED";
+                            categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "OK(A)";
                             for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                                 categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                             }
@@ -1038,10 +1042,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                             compgroup.categoryStatus = "ACCEPTED";
                             for(var compId in compgroup["CheckComponents"]) {
                                 var component = compgroup["CheckComponents"][compId];
-                                component.status = "ACCEPTED";
+                                component.status = "OK(A)";
                                 for (var propertyId in component.properties) {
                                     property = component.properties[propertyId];
-                                            property.Severity = 'ACCEPTED';
+                                    if(property.Severity !== 'No Value' && property.Severity !== 'OK')
+                                        property.Severity = 'ACCEPTED';
 
                                 }
                             }
@@ -1121,6 +1126,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                         _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
 
+                        var compcolor = _this.getRowHighlightColor(changedStatus);
+                        for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
+                            cell =  _this.SelectedComponentRow.cells[j];
+                            cell.style.backgroundColor = compcolor;
+                        }
                         var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                         for(var i = 0; i < propertiesLen; i++) {
                             var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1282,7 +1292,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                             // _this.getRowHighlightColor(changedStatus);
                         }
 
-                        _this.getRowHighlightColor(changedStatus);
+                        var compcolor = _this.getRowHighlightColor(changedStatus);
+                        for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
+                            cell =  _this.SelectedComponentRow.cells[j];
+                            cell.style.backgroundColor = compcolor;
+                        }
+
                         var SourceAValue = selectedRow[0].cells[1].innerHTML;
                         var SourceBValue = selectedRow[0].cells[2].innerHTML;
 
@@ -1372,9 +1387,9 @@ function ComparisonReviewManager(comparisonCheckManager,
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = null;
                     _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-                    for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                        selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(changedStatus);
-                    }
+                    // for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                    //     selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(changedStatus);
+                    // }
                     var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                     for(var i = 0; i < propertiesLen; i++) {
                         var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1388,6 +1403,12 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         
                     }
+                    var compcolor = _this.getRowHighlightColor(changedStatus);
+                    for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
+                        cell =  _this.SelectedComponentRow.cells[j];
+                        cell.style.backgroundColor = compcolor;
+                    }
+
                     _this.populateDetailedReviewTable(_this.SelectedComponentRow);
                 }
                     
@@ -1455,7 +1476,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             //     var changedStatus = originalstatus + "(T)";
                             //     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             // }
-                            component.Status = 'OK(T)';
+                            component.status = 'OK(T)';
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
                                 if(property.Severity !== "OK" &&  property.Severity !== "No Value") {
@@ -1470,16 +1491,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                                     }
                                     else {
                                         if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
-                                        component.Status == 'OK(T)') {
-                                        component.Status = component.status + "(T)";                                   
+                                        component.status == 'OK(T)') {
+                                            if(!(component.Status).includes('(T)'))
+                                                component.status = component.Status + "(T)";                                   
                                         }
                                     }
                                 }
                                     
                             }
-                            selectedRow[0].cells[2].innerHTML = component.Status;
+                            selectedRow[0].cells[2].innerHTML = component.status;
                             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                                selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.Status);
+                                selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.status);
                             }
                             _this.populateDetailedReviewTable(selectedRow[0]);
                         }
@@ -1565,12 +1587,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             for(var compId in compgroup["CheckComponents"]) {
                                 var component = compgroup["CheckComponents"][compId];
                                 if(component.Status !== 'No Match') {
-                                    if(!component.Status.includes("(T)"))
-                                    component.Status = component.Status + "(T)";
-                                    categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = component.Status;
-                                    for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-                                        categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(255, 255, 255)";
-                                    }
+                                    component.status = "OK(T)";
                                     for (var propertyId in component.properties) {
                                         property = component.properties[propertyId];
                                         if(property.Severity !== 'OK' && property.Severity !== 'No Value' ) {
@@ -1582,7 +1599,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                                                 property.Severity = 'OK(T)';
                                                 property.transpose = transposeType;
                                             }
+                                            else {
+                                                if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
+                                                component.status == 'OK(T)') {
+                                                    if(!(component.Status).includes('(T)'))
+                                                        component.status = component.Status + "(T)";                                   
+                                                }
+                                            }
                                         }
+                                    }
+                                    categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = component.status;
+                                    for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                                        categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.status);
                                     }
                                 }
                             }
