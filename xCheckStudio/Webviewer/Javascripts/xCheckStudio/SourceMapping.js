@@ -1,3 +1,8 @@
+var XLSX;
+if (typeof (require) !== 'undefined') {
+    XLSX = require('xlsx');
+}
+
 class SourceMapping {
     constructor() {
         this.Name;
@@ -277,25 +282,21 @@ function getValidSourceTypes() {
         }
 
         var sourceMappingName = child.value;
-        for(var key in sourceMappings)
-        {
+        for (var key in sourceMappings) {
             var sourceMapping = sourceMappings[key];
-            if(sourceMapping.Name != sourceMappingName)
-            {
+            if (sourceMapping.Name != sourceMappingName) {
                 continue;
             }
 
             for (var type in sourceMapping.Sources) {
-                
+
                 var sourceType = sourceMapping.Sources[type];
                 var result = sourceType.replace(".", "");
-                if(!validSourceTypes.includes(result.toLowerCase()))
-                {                    
+                if (!validSourceTypes.includes(result.toLowerCase())) {
                     validSourceTypes.push(result.toLowerCase());
                 }
 
-                if(!validSourceTypes.includes(result.toUpperCase()))
-                {                    
+                if (!validSourceTypes.includes(result.toUpperCase())) {
                     validSourceTypes.push(result.toUpperCase());
                 }
             }
@@ -305,7 +306,7 @@ function getValidSourceTypes() {
     return validSourceTypes;
 }
 
-function uploadDataSet() {
+function uploadDataSet(event) {
 
     // get valid source types
     var validSourceTypes = getValidSourceTypes();
@@ -324,35 +325,52 @@ function uploadDataSet() {
         return;
     }
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "PHP/UploadAndProcessDataSet.php", true);
-    xhr.onload = function (result) {
-        document.getElementById("uploadDataSetForm").reset();
+    if (inputSourceType.toLowerCase() === 'xls') {
+        var file = event.target.files[0];      
+        readXLSAttributeData(file).then(function(attributes){
 
-        if(result.target.response === "fail")
-        {            
-            alert("Failed to upload data source.");
-            return;
-        }
-
-        var attributes = JSON.parse(result.target.response);
-     
-        for (var fileName in attributes) {
-            dataSetAttributes[fileName] = JSON.parse(attributes[fileName]);
+            dataSetAttributes[file.name] = attributes;
 
             // add data source name to loadedDataSetSelect
             var loadedDataSetSelect = document.getElementById("loadedDataSetSelect");
             var option = document.createElement("option");
-            option.innerText = fileName;
+            option.innerText = file.name;
             loadedDataSetSelect.appendChild(option);
-            break;
-        }        
-    };
+    
+            document.getElementById("uploadDataSetForm").reset();
+        });      
+    }
+    else {
 
-    var formData = new FormData(document.getElementById("uploadDataSetForm"));  
-    formData.append('Operation', "ExportAttributes");
-    formData.append('ValidSourceTypes', JSON.stringify(validSourceTypes));
-    xhr.send(formData);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "PHP/UploadAndProcessDataSet.php", true);
+        xhr.onload = function (result) {
+            document.getElementById("uploadDataSetForm").reset();
+
+            if (result.target.response === "fail") {
+                alert("Failed to upload data source.");
+                return;
+            }
+
+            var attributes = JSON.parse(result.target.response);
+
+            for (var fileName in attributes) {
+                dataSetAttributes[fileName] = JSON.parse(attributes[fileName]);
+
+                // add data source name to loadedDataSetSelect
+                var loadedDataSetSelect = document.getElementById("loadedDataSetSelect");
+                var option = document.createElement("option");
+                option.innerText = fileName;
+                loadedDataSetSelect.appendChild(option);
+                break;
+            }
+        };
+
+        var formData = new FormData(document.getElementById("uploadDataSetForm"));
+        formData.append('Operation', "ExportAttributes");
+        formData.append('ValidSourceTypes', JSON.stringify(validSourceTypes));
+        xhr.send(formData);
+    }
 }
 
 function onUpdateSourceLibrary() {
@@ -363,49 +381,63 @@ function onUpdateSourceLibrary() {
     }
 
     var inputSourceType = dataSetName.split('.').pop();
+    inputSourceType = inputSourceType.toLowerCase();
+    // get attributes
+    var attributes = undefined;
+    if (inputSourceType === "xls") {
+        attributeCollection = Object.values(dataSetAttributes[dataSetName]);
+        var index = 0;
+        attributes = {};
+        for(var key in attributeCollection)
+        {
+            for(var componentKey in attributeCollection[key])
+            {
+                var componentValue = attributeCollection[key][componentKey];
+                attributes[index] = componentValue;
+                index++;
+            }
+        }
+    }
+    else {
+        attributes = dataSetAttributes[dataSetName];
+    }
+    if (!attributes) {
+        return;
+    }
 
-    var attributes = dataSetAttributes[dataSetName];
-   
     var linkSourceTypesDiv = document.getElementById("linkSourceTypesDiv");
     for (var i = 0; i < linkSourceTypesDiv.children.length; i++) {
 
         var child = linkSourceTypesDiv.children[i];
-        if(child.tagName.toLowerCase() != "select")
-        {
+        if (child.tagName.toLowerCase() != "select") {
             continue;
         }
 
         var sourceMappingName = child.value;
-        for(var key in sourceMappings)
-        {
+        for (var key in sourceMappings) {
             var sourceMapping = sourceMappings[key];
-            if(sourceMapping.Name != sourceMappingName)
-            {
+            if (sourceMapping.Name != sourceMappingName) {
                 continue;
             }
 
             // check if source type exists in sourceMapping
             var typeExists = false;
             for (var type in sourceMapping.Sources) {
-                var sourceType = sourceMapping.Sources[type];                
-                if(sourceType.toLowerCase() === "."+inputSourceType.toLowerCase())
-                {
+                var sourceType = sourceMapping.Sources[type];
+                if (sourceType.toLowerCase() === "." + inputSourceType) {
                     typeExists = true;
                     break;
                 }
             }
-            if(!typeExists)
-            {
+            if (!typeExists) {
                 continue;
             }
 
             var sourceAttributeLibrary = {};
-            if (inputSourceType in sourceMapping.AttributeLibrary) 
-            {
+            if (inputSourceType in sourceMapping.AttributeLibrary) {
                 sourceAttributeLibrary = sourceMapping.AttributeLibrary[inputSourceType]
             }
-            else
-            {
+            else {
                 sourceMapping.AttributeLibrary[inputSourceType] = {};
             }
 
@@ -416,27 +448,112 @@ function onUpdateSourceLibrary() {
 
                     var attributeValue = attributeList[attributeName];
 
-                    if (attributeName in sourceAttributeLibrary) 
-                    {
-                        if(!sourceAttributeLibrary[attributeName].includes(attributeValue))
-                        {
+                    if (attributeName in sourceAttributeLibrary) {
+                        if (!sourceAttributeLibrary[attributeName].includes(attributeValue)) {
                             sourceAttributeLibrary[attributeName].push(attributeValue);
                         }
                     }
-                    else 
-                    {
+                    else {
                         sourceAttributeLibrary[attributeName] = [attributeValue];
                     }
                 }
-            }  
-        
+            }
+
             sourceMapping.AttributeLibrary[inputSourceType] = sourceAttributeLibrary;
-            
-            alert('"'+ sourceMapping.Name +'" : "' + inputSourceType +' source library updated.' )
+
+            alert('"' + sourceMapping.Name + '" : "' + inputSourceType + ' source library updated.')
         }
     }
 }
 
+function readXLSAttributeData(file) {
+    return new Promise((resolve) => {
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (readerEvt) {
+                var data = readerEvt.target.result;
+                data = new Uint8Array(data);
+                var result = processWorkBook(XLSX.read(data, { type: 'array' }));
+                return resolve(result);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    });
+}
 
+function processWorkBook(wb) {
+    this.WB = wb;
+    this.attributes = {};
 
+    wb.SheetNames.forEach(function (sheetName) {
+        var sheetData = readSheetData(WB.Sheets[sheetName], sheetName);
+        if (sheetData) {
+            attributes[sheetName] = sheetData;
+        }
+    });
 
+    return this.attributes;
+};
+
+function readSheetData(sheet, sheetName) {
+
+    var excelData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    if (excelData.length === 0) {
+        return undefined;
+    }
+
+    var formattedData = formatData(excelData);
+    var sheetData = [];   
+
+    // data rows
+    for (var i = 0; i < formattedData.length; i++) {
+        var row = formattedData[i];
+
+        var rowData = {};    
+        for (var key in row) {
+            if (key === undefined ||
+                key === "" ||
+                key === "undefined") {
+                continue;
+            }
+
+            var value = row[key];
+            if (value === undefined) {
+                value = "";
+            }
+            rowData[key] = value;
+        }
+        rowData["MainComponentClass"] = sheetName;
+        sheetData.push(rowData);
+    }
+
+    return sheetData;
+}
+
+function formatData(exceldata) {
+    var excelDataArray = [];
+    var key;
+    var obj;
+    for (var i = 0; i < exceldata.length; i++) {
+        let len = exceldata[i].length;
+        if (exceldata[i][0] != null && key == null && obj == undefined) {
+            key = exceldata[i];
+            obj = new Object(key);
+            var id = 0;
+        }
+        else if (exceldata[i][0] == null) {
+            exceldata.splice(i, 1);
+            i--;
+        }
+    }
+    var i;
+    for (i = 1; i < exceldata.length; i++) {
+        var a = {};
+        for (let j = 0; j < obj.length; j++) {
+            a[obj[j]] = exceldata[i][j];
+        }
+        excelDataArray.push(a);
+    }
+    return excelDataArray;
+
+}
