@@ -76,6 +76,7 @@ function TransposeProperty() {
 
     $index = 0;
     $toBecompstatus = $transposeType;
+    $propertyAccepted = false;
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['transpose'] !== null) {
             $index++;
@@ -86,12 +87,24 @@ function TransposeProperty() {
             continue;
         }
         else {
-            $toBecompstatus = null;
-            break;
+            if($statusChanged[$index]['accepted'] != 'false') {
+                $toBecompstatus = $transposeType;
+                $propertyAccepted = true;
+            }
+            else {
+                $toBecompstatus = null;
+                $propertyAccepted = false;
+            }
+            $index++;
         }
     }
 
-    if($toBecompstatus !== null ) {
+    if($toBecompstatus !== null  && $propertyAccepted == true) {
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
+        $command->execute(array($toBecompstatus, $componentid));
+        echo 'OK(A)(T)';
+    }
+    else if($toBecompstatus !== null) {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
         $command->execute(array($toBecompstatus, $componentid));
         echo 'OK(T)';

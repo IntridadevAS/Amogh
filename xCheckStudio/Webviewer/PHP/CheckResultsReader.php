@@ -376,9 +376,6 @@
 
                             if($componentRow['transpose'] == 'lefttoright' || $componentRow['transpose'] == 'righttoleft') {
                                 $changedStatus = 'OK(T)';
-                                // if(!strpos($changedStatus, '(T)')) {
-                                //     $changedStatus = $changedStatus . '(T)';
-                                // }
                             }
 
                             $componentValues = array('id'=>$componentRow['id'], 
@@ -425,7 +422,10 @@
                                     else {
                                         if(($propertyRow['severity'] == 'Error' || $propertyRow['severity'] == 'No Match') && 
                                         $componentValues['status'] == 'OK(T)') {
-                                             if(!strpos($componentRow['status'], '(T)')) {
+                                            if($propertyRow['accepted'] == 'true') {
+                                                $componentValues['status'] = 'OK(A)(T)';
+                                            }
+                                            else if(!strpos($componentRow['status'], '(T)')) {
                                                 $componentValues['status'] = $componentRow['status'] . "(T)";
                                              }                                     
                                         }

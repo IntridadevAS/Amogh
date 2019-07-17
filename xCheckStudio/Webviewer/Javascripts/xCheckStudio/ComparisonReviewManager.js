@@ -898,12 +898,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
+                            var changedStatus = originalstatus;
                             if(!originalstatus.includes("(A)")) {
-                                var changedStatus = originalstatus + "(A)";
+                                changedStatus = originalstatus + "(A)";
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             }
-                            else if(msg.trim() == "OK(A)") {
-                                var changedStatus = msg.trim();
+                            if(msg.trim() == "OK(A)" || msg.trim() == "OK(A)(T)") {
+                                changedStatus = msg.trim();
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             }
                             var compcolor = _this.getRowHighlightColor(changedStatus);
@@ -1285,8 +1286,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                              changedStatus = originalstatus + "(T)";
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         }
-                        else if(msg.trim() == "OK(T)") {
-                            var changedStatus = msg.trim();
+                        if(msg.trim() == "OK(T)" || msg.trim() == "OK(A)(T)") {
+                             changedStatus = msg.trim();
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = transposeType;
                             // _this.getRowHighlightColor(changedStatus);
@@ -1443,8 +1444,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                         var index = 0;
                         for(var propertyId in properties) {
                             property = properties[propertyId];     
-                            component.properties[index].Severity = property.severity;
-                            component.properties[index].transpose = null;
+                            if(property.accepted == 'false') {
+                                component.properties[index].Severity = property.severity;
+                                component.properties[index].transpose = null;
+                            }                
                             index++;
                         }
                         _this.populateDetailedReviewTable(selectedRow[0]);
@@ -2198,6 +2201,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
         else if(status.toLowerCase() === ("Error(T)").toLowerCase() || status.toLowerCase() === ("Warning(T)").toLowerCase()) {
             return PropertyAcceptedColor;
+        }
+        else if(status.toLowerCase() === ("OK(A)(T)").toLowerCase() || status.toLowerCase() === ("OK(T)(A)").toLowerCase()) {
+            return AcceptedColor;
         }
         else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
             return PropertyAcceptedColor;

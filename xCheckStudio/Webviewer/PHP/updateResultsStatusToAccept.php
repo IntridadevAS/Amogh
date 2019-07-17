@@ -180,6 +180,7 @@ function updatePropertyComparisonStatusInReview() {
 
     $index = 0;
     $toBecompstatus = 'true';
+    $propertyTransposed = false;
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['accepted'] == 'true') {
             $index++;
@@ -190,12 +191,24 @@ function updatePropertyComparisonStatusInReview() {
             continue;
         }
         else {
-            $toBecompstatus = 'false';
-            break;
+            if($statusChanged[$index]['transpose'] != null) {
+                $toBecompstatus = 'true';
+                $propertyTransposed = true;
+            }
+            else {
+                $toBecompstatus = 'false';
+                $propertyTransposed = false;
+            }
+            $index++;
         }
     }
 
-    if($toBecompstatus == 'true') {
+    if($toBecompstatus == 'true' && $propertyTransposed == true) {
+        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+        $command->execute(array($toBecompstatus, $componentid));
+        echo 'OK(A)(T)';
+    }
+    else if($toBecompstatus == 'true') {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
         $command->execute(array($toBecompstatus, $componentid));
         echo 'OK(A)';
