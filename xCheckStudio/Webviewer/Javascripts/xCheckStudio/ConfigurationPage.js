@@ -89,6 +89,9 @@ function onDataSourceTypeTabClicked() {
             }
         }
     }
+
+    // enable drop zone
+    enableDropZone("dropZone");
 }
 
 function onMarkupColorsTabClicked() {

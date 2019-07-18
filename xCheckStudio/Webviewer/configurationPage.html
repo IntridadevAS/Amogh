@@ -5,15 +5,18 @@
     <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
 
     <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
-    
+   
     <script type="text/javascript" src="Javascripts\xCheckStudio\ConfigurationPage.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\SourceMapping.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DropZoneForUpdateSourceLibraries.js"></script>
 
     <link rel="stylesheet" href="css/VerticalTabs.css">
 
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
     <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />   
+
+    <script type="text/javascript" src="Javascripts\dropZone\dropZone.js"></script>
 
     <style>
         .inputTextCell {
@@ -103,14 +106,16 @@
                             <table style="height:370px; width:600px;">
                                 <tr>
                                     <td style="width:50%; height:300px;text-align:center;">
-                                        Load Data Source
-                                        <form id="uploadDataSetForm" enctype="multipart/form-data">
-                                            <label for="loadSourceInput" class="custom-file-upload">
-                                                Upload
-                                            </label>
-                                            <input id="loadSourceInput" name="dataSoures[]" multiple="multiple" 
-                                            type="file" onchange="uploadDataSet(event)"/>
-                                        </form>
+                                        <div id="dropZone" class="dropBox" ondrop="onDropFiles(event)">
+                                            Load Data Source
+                                            <form id="uploadDataSetForm" enctype="multipart/form-data">
+                                                <label for="loadSourceInput" class="custom-file-upload">
+                                                    Upload
+                                                </label>
+                                                <input id="loadSourceInput" name="dataSoures[]" multiple="multiple" type="file"
+                                                    onchange="uploadDataSet(event)" />
+                                            </form>
+                                        </div>
                                     </td>
                                     <td style="width:50%; height:300px;">
                                         Link Source Type <br>
