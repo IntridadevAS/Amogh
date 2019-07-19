@@ -1520,6 +1520,9 @@ function ComplianceReviewManager(complianceCheckManager,
         || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
             return PropertyAcceptedColor;
         }
+        else if(status.toLowerCase() === ("OK(A)").toLowerCase()) {
+            return AcceptedColor;
+        }
         else {
             return "#ffffff";
         }
