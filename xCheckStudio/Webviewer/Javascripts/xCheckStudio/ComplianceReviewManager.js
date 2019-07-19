@@ -387,7 +387,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     success: function (msg) {
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
-                        component.status = "ACCEPTED";
+                        component.status = "OK(A)";
                         for (var propertyId in component.properties) {
                             property = component.properties[propertyId];
                             if(property.Severity !== "OK")

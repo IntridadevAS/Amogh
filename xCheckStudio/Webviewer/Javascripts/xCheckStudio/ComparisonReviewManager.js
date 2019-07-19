@@ -926,6 +926,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                
                             }
                             _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
+                            _this.SelectedComponentRow.cells[2].innerText = changedStatus;
                         }
                     });   
                 }
@@ -1143,6 +1144,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                            
                         }
                         _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
+                        _this.SelectedComponentRow.cells[2].innerText = changedStatus;
                     }
                 });   
             }
@@ -1368,6 +1370,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                         }
                         _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
+                        _this.SelectedComponentRow.cells[2].innerText = changedStatus;
                     }
                 });   
             }
@@ -1407,6 +1410,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         
                     }
                     _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
+                    _this.SelectedComponentRow.cells[2].innerText = changedStatus;
                 }
                     
             });   
