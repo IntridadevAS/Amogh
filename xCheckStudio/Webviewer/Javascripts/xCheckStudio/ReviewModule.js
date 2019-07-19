@@ -114,7 +114,7 @@ function chooseAction(selectedRow) {
         }
         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
         typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            if(selectedRow[0].cells[1].innerHTML == "ACCEPTED" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+            if(selectedRow[0].cells[1].innerHTML == "OK(A)" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
                 return false;
             } else { return true; }
         }   

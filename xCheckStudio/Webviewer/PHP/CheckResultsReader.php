@@ -35,12 +35,12 @@
         getSourceComponents();
 
         // var_dump($sourceBComponents);
-        createHierarchyStructureForComponents();
 
         $results = array();
         if($comparisonResult != NULL)
         {
             $results['Comparison'] = $comparisonResult;
+            createHierarchyStructureForComponents();
         }
         
         if($sourceAComplianceResult != NULL)
@@ -69,14 +69,17 @@
             global $sourceAComponents;
             global $sourceBComponents;
             global $data;
-            try{   
-                    // open database
-                    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-                    $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
+            try{  
+                
+                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+ 
+                    $sourceAext = strtolower($data['sourceAType']);
+                    $sourceBext = strtolower($data['sourceBType']); 
                     // begin the transaction
                     $dbh->beginTransaction();
-                    if(strtolower($data['sourceAType']) !== 'xls' || strtolower($data['sourceAType']) !== 'json') {
+                    if(isDataSource3D($sourceAext)) {
                         // fetch source A components
                         $stmt =  $dbh->query('SELECT *FROM SourceAComponents');
                                             
@@ -94,7 +97,7 @@
                         }   
                     } 
                                         
-                    if(strtolower($data['sourceBType']) !== 'xls' || strtolower($data['sourceBType']) !== 'json') {
+                    if(isDataSource3D($sourceBext)) {
                         // fetch source B components
                         $stmt =  $dbh->query('SELECT *FROM SourceBComponents');
                         while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -119,6 +122,18 @@
             }                
         } 
         
+        function isDataSource3D($sourceExt) {
+            $is3D = true;
+
+            $validSources = array("xml","XML","rvm","RVM", "sldasm", "SLDASM","DWG", "dwg", "sldprt", 
+            "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "IGS", "igs");
+               // open database
+               if(in_array($sourceExt, $validSources) == false) {
+                    $is3D = false;
+               }
+               return $is3D;
+        }
+
         function readComplianceCheckData($checkGroupTable,
                                          $CheckComponentsTable,
                                          $CheckPropertiesTable)
@@ -267,7 +282,7 @@
                         while ($componentRow = $checkComponentsResults->fetch(\PDO::FETCH_ASSOC)) 
                         {
                             if($componentRow['accepted'] == 'true')
-                                $changedStatus = 'ACCEPTED';
+                                $changedStatus = 'OK(A)';
                             else 
                                 $changedStatus = $componentRow['status'];
 

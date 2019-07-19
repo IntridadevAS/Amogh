@@ -117,7 +117,7 @@ function Component(id,
                 transpose = propertyData.transpose;
             }
 
-            if(propertyData.severity !== 'OK' && propertyData.severity !== 'No Match') {
+            if(!isCompliance && (propertyData.severity !== 'OK' && propertyData.severity !== 'No Match')) {
                 if(propertyData.transpose !== null) {
                     propertieslen++;
                     if(propertieslen == propertiesData.length-1) {

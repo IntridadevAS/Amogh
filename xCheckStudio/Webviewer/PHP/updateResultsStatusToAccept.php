@@ -369,7 +369,7 @@ function updatePropertyComplianceStatusInReview() {
         $sql = 'UPDATE ' .  $componentTableName . ' SET accepted=? WHERE id=?';
         $command = $dbh->prepare($sql);
         $command->execute(array($toBecompstatus, $componentid));
-        echo 'ACCEPTED';
+        echo 'OK(A)';
     }
 
     $dbh->commit();
