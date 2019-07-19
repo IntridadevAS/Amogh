@@ -733,6 +733,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                 data: tableData,
                 fields: columnHeaders,
                 margin: "0px",
+                onItemUpdated: function(args) {
+                    for(var index = 0; index < args.grid.data.length; index++) {
+                        if(args.grid.data[index].ID == args.row[0].cells[5].innerHTML)
+                        {
+                            if(args.grid.data[index].Status !== args.row[0].cells[2].innerHTML)
+                            {
+                                args.grid.data[index].Status = args.row[0].cells[2].innerHTML;
+                                break;
+                            }
+                        }
+                    }
+                },
                 onRefreshed: function (config) {
                     var id = viewerContainer.replace("#", "");
                     // _this.AddTableContentCount(this._container.context.id);
@@ -829,7 +841,6 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     };
 
-
     ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
         if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
             if(selectedRow[0].cells[2].innerHTML !== "OK") {
@@ -843,7 +854,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparison" },
                         success: function (msg) {
-                            selectedRow[0].cells[2].innerHTML = "OK(A)";
                             var cell = 0;
                             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
                                 selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
@@ -856,23 +866,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                                     if(property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "OK(A)(T)";
-                                        selectedRow[0].cells[2].innerHTML = "OK(A)(T)";
-                                        // component.properties[propertyId].SourceBValue = property.SourceAValue;
                                         component.properties[propertyId].transpose = property.transpose;
                                     }
                                     else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
                                         component.status = "OK(A)(T)";
-                                        selectedRow[0].cells[2].innerHTML = "OK(A)(T)";
                                         component.properties[propertyId].transpose = property.transpose;
-                                        // component.properties[propertyId].SourceAValue = property.SourceBValue;
                                     }
                                     else {
                                         component.properties[propertyId].Severity = 'ACCEPTED';
                                     }
                                 }
                             }
-                            _this.populateDetailedReviewTable(selectedRow[0]);
+                            _this.updateReviewComponentGridData(selectedRow["context"], groupId, component.status);
                         }
                     });   
                 }
@@ -907,11 +913,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 changedStatus = msg.trim();
                                 _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             }
-                            var compcolor = _this.getRowHighlightColor(changedStatus);
-                            for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
-                                cell =  _this.SelectedComponentRow.cells[j];
-                                cell.style.backgroundColor = compcolor;
-                            }
                             var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                             for(var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -924,10 +925,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                                
                             }
-                            // $("#ComparisonMainReviewCell").empty();
-                            // _this.populateReviewTable();
-                            // setButtonsCollapsible();
-                            _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                            _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                         }
                     });   
                 }
@@ -936,6 +934,25 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
         }
     }
+
+    ComparisonReviewManager.prototype.updateReviewComponentGridData = function(selectedRow, groupId, changedStatus) {
+        var row = selectedRow;
+        var gridId = '#' + this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
+        _this = this;
+
+        var editedItem = {"SourceA" : selectedRow.cells[0].innerText, 
+        "SourceB" : selectedRow.cells[1].innerText,
+        "Status" : changedStatus, 
+        "SourceANodeId" : selectedRow.cells[3].innerText, 
+        "SourceBNodeId" : selectedRow.cells[4].innerText,
+        "ID" : selectedRow.cells[5].innerText, 
+        "groupId" : selectedRow.cells[6].innerText};
+
+        $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function() {
+            _this.populateDetailedReviewTable(selectedRow);
+            $(gridId).jsGrid("refresh");
+        });
+    } 
 
     ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
         var tabletoupdate = tabletoupdate;
@@ -1001,26 +1018,6 @@ function ComparisonReviewManager(comparisonCheckManager,
         }   
     }
 
-    
-
-    ComparisonReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
-        var ComparisonMainReviewCell = document.getElementById("ComparisonMainReviewCell");
-        var children = ComparisonMainReviewCell.children;
-        outer_loop:
-        for(var child in children) {
-            if(children[child].className == "collapsible active") {
-                 var elementCategorydiv = document.getElementById(children[child].innerHTML);
-                 var tableData = $('#' + children[child].innerHTML).find('.jsgrid-grid-body');
-                 for(var i = 0; i < tableData[0].children[0].children[0].children.length; i++) {
-                    if(this.SelectedComponentRow == tableData[0].children[0].children[0].children[i]) {
-                        tableData[0].children[0].children[0].children[i].cells[2].innerHTML = changedStatus;
-                        break outer_loop;
-                    }
-                 }
-            }
-        }
-    }
-
     ComparisonReviewManager.prototype.updateStatusOfCategory = function(button, _this) {
         var groupId = button.attributes[0].value;
         var categorydiv = document.getElementById(button.innerHTML);
@@ -1035,10 +1032,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 success: function (msg) {
                     for(var i = 0; i < noOfComponents; i++) {
                         if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
-                            categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = "OK(A)";
-                            for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-                                categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-                            }
                             var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
                             compgroup.categoryStatus = "ACCEPTED";
                             for(var compId in compgroup["CheckComponents"]) {
@@ -1050,10 +1043,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                                         property.Severity = 'ACCEPTED';
 
                                 }
-                            }
+                            }                            
+                            var row = categorydiv.children[1].children[0].children[0].children[i];
+                            var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
 
-                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                                _this.populateDetailedReviewTable(selectedRow);                          
+                            var editedItem = {"SourceA" : row.cells[0].innerText, 
+                            "SourceB" : row.cells[1].innerText,
+                            "Status" : component.status, 
+                            "SourceANodeId" : row.cells[3].innerText, 
+                            "SourceBNodeId" : row.cells[4].innerText,
+                            "ID" : row.cells[5].innerText, 
+                            "groupId" : row.cells[6].innerText};
+
+                            $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
+                                if(i == noOfComponents-1) {
+                                    selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                    _this.populateDetailedReviewTable(selectedRow);    
+                                    $(gridId).jsGrid("refresh");
+                                }
+                            });
                         }
                     }
                 }
@@ -1078,7 +1086,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         var status = new Array();
                         status = msg;
                         var properties = status[1];
-                        selectedRow[0].cells[2].innerHTML = status[0];
                         var cell = 0;
                         for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
                             selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
@@ -1090,21 +1097,18 @@ function ComparisonReviewManager(comparisonCheckManager,
                             property = properties[propertyId];
                             if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                // component.properties[index].SourceBValue = property.sourceAValue;
                                 component.properties[index].transpose = property.transpose;
                             }
                             else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
                                 component.properties[index].Severity = 'OK(T)';
-                                // component.properties[index].SourceAValue = property.sourceBValue;
                                 component.properties[index].transpose = property.transpose;
                             }
                             else {
                                 component.properties[index].Severity = property.severity;
                             }
-                            // component.properties[index].Severity = properties[propertyId]["severity"];
                             index++;
                         }
-                        _this.populateDetailedReviewTable(selectedRow[0]);
+                        _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
                 });   
             }
@@ -1125,13 +1129,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         status = msg;
                         var changedStatus = status[0];
                         _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                        _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-
-                        var compcolor = _this.getRowHighlightColor(changedStatus);
-                        for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
-                            cell =  _this.SelectedComponentRow.cells[j];
-                            cell.style.backgroundColor = compcolor;
-                        }
+                                      
                         var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                         for(var i = 0; i < propertiesLen; i++) {
                             var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1144,8 +1142,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                            
                         }
-                        _this.populateDetailedReviewTable(_this.SelectedComponentRow);
-                        
+                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                     }
                 });   
             }
@@ -1173,10 +1170,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var propsStatus = status[1];
                     var index = 0
                     for(var i = 0; i < noOfComponents; i++) {
-                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = componentStatus[index]['status'];
-                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
-                        }
                         var j = 0;
                         var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
                         compgroup.categoryStatus = "UNACCEPTED";
@@ -1192,9 +1185,25 @@ function ComparisonReviewManager(comparisonCheckManager,
                             j++;
                         }
 
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            index++;    
+                        var row = categorydiv.children[1].children[0].children[0].children[i];
+                        var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
+
+                        var editedItem = {"SourceA" : row.cells[0].innerText, 
+                        "SourceB" : row.cells[1].innerText,
+                        "Status" : component.status, 
+                        "SourceANodeId" : row.cells[3].innerText, 
+                        "SourceBNodeId" : row.cells[4].innerText,
+                        "ID" : row.cells[5].innerText, 
+                        "groupId" : row.cells[6].innerText};
+
+                        $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
+                            if(i == noOfComponents-1) {
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                _this.populateDetailedReviewTable(selectedRow);    
+                                $(gridId).jsGrid("refresh");
+                            }
+                        });
+                        index++;    
                     }
                 }
             });   
@@ -1290,7 +1299,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                              changedStatus = msg.trim();
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                             _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = transposeType;
-                            // _this.getRowHighlightColor(changedStatus);
                         }
 
                         var compcolor = _this.getRowHighlightColor(changedStatus);
@@ -1318,7 +1326,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
                                 if(sourceBName == null) { sourceBName = ""; }
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
-                                    // _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]['transpose'] = transposeType;
                                 } 
@@ -1345,7 +1352,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 if(sourceBName == null) { sourceBName = ""; }
 
                                 if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
-                                    // _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Value"] = SourceAValue;
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = 'OK(T)';
                                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]['transpose'] = transposeType;
                                 }  
@@ -1361,7 +1367,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                             }
                         }
-                        _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                     }
                 });   
             }
@@ -1387,10 +1393,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var changedStatus = status[0];
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["transpose"] = null;
-                    _this.changeReviewTableStatus(_this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
-                    // for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                    //     selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(changedStatus);
-                    // }
                     var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                     for(var i = 0; i < propertiesLen; i++) {
                         var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
@@ -1404,13 +1406,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         
                     }
-                    var compcolor = _this.getRowHighlightColor(changedStatus);
-                    for (var j = 0; j <  _this.SelectedComponentRow.cells.length; j++) {
-                        cell =  _this.SelectedComponentRow.cells[j];
-                        cell.style.backgroundColor = compcolor;
-                    }
-
-                    _this.populateDetailedReviewTable(_this.SelectedComponentRow);
+                    _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                 }
                     
             });   
@@ -1433,11 +1429,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         var status = new Array();
                         status = msg;
                         var properties = status[1];
-                        selectedRow[0].cells[2].innerHTML = status[0];
-                        var cell = 0;
-                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
-                        }
                         var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = status[0];
                         component.transpose = null;
@@ -1450,7 +1441,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }                
                             index++;
                         }
-                        _this.populateDetailedReviewTable(selectedRow[0]);
+                        _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
                 });   
             }
@@ -1474,11 +1465,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         success: function (msg) {
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                             component.transpose = transposeType;
-                            // var originalstatus = component.Status;
-                            // if(!originalstatus.includes("(T)")) {
-                            //     var changedStatus = originalstatus + "(T)";
-                            //     _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                            // }
                             component.status = 'OK(T)';
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
@@ -1502,16 +1488,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                                     
                             }
-                            selectedRow[0].cells[2].innerHTML = component.status;
-                            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                                selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.status);
-                            }
-                            _this.populateDetailedReviewTable(selectedRow[0]);
+                            _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                         }
                     });   
                 }
                 catch(error) {}        
-                // $("#ComparisonDetailedReviewCell").empty();
             }
         }
     }
@@ -1536,10 +1517,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var propsStatus = status[1];
                     var index = 0
                     for(var i = 0; i < noOfComponents; i++) {
-                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = componentStatus[index]['status'];
-                        for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
-                        }
                         var j = 0;
                         var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
                         compgroup.categoryStatus = "UNACCEPTED";
@@ -1556,9 +1533,24 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                             j++;
                         }
+                            var row = categorydiv.children[1].children[0].children[0].children[i];
+                            var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
 
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
+                            var editedItem = {"SourceA" : row.cells[0].innerText, 
+                            "SourceB" : row.cells[1].innerText,
+                            "Status" : component.status, 
+                            "SourceANodeId" : row.cells[3].innerText, 
+                            "SourceBNodeId" : row.cells[4].innerText,
+                            "ID" : row.cells[5].innerText, 
+                            "groupId" : row.cells[6].innerText};
+
+                            $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
+                                if(i == noOfComponents-1) {
+                                    selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                    _this.populateDetailedReviewTable(selectedRow);    
+                                    $(gridId).jsGrid("refresh");
+                                }
+                            });
                             index++;    
                     }
                 }
@@ -1582,46 +1574,56 @@ function ComparisonReviewManager(comparisonCheckManager,
                 async: true,
                 data: {'groupid' : groupId, 'transposeType' : transposeType, 'transposeLevel' : 'categorylevel'},
                 success: function (msg) {
-                    for(var i = 0; i < noOfComponents; i++) {
-                        if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK" && 
-                        categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "No Match") {
-                            var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
-                            compgroup.categoryStatus = "OK(T)";
-                            for(var compId in compgroup["CheckComponents"]) {
-                                var component = compgroup["CheckComponents"][compId];
-                                if(component.Status !== 'No Match') {
-                                    component.status = "OK(T)";
-                                    for (var propertyId in component.properties) {
-                                        property = component.properties[propertyId];
-                                        if(property.Severity !== 'OK' && property.Severity !== 'No Value' ) {
-                                            if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
-                                                property.Severity = 'OK(T)';
-                                                property.transpose = transposeType;
-                                            }
-                                            else if(transposeType == 'righttoleft' && (property.SourceAName !== "" && property.SourceBName !== "")) {
-                                                property.Severity = 'OK(T)';
-                                                property.transpose = transposeType;
-                                            }
-                                            else {
-                                                if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
-                                                component.status == 'OK(T)') {
-                                                    if(!(component.Status).includes('(T)'))
-                                                        component.status = component.Status + "(T)";                                   
-                                                }
-                                            }
+                    var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                    compgroup.categoryStatus = "OK(T)";
+                    var index = 0;
+                    for(var compId in compgroup["CheckComponents"]) {
+                        var component = compgroup["CheckComponents"][compId];
+                        component.status = component.Status;
+                        if(component.Status !== 'No Match' && component.Status !== 'OK') {
+                            for (var propertyId in component.properties) {
+                                property = component.properties[propertyId];
+                                if(property.Severity !== 'OK' && property.Severity !== 'No Value' ) {
+                                    if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
+                                        property.Severity = 'OK(T)';
+                                        property.transpose = transposeType;
+                                        component.status = "OK(T)";
+                                    }
+                                    else if(transposeType == 'righttoleft' && (property.SourceAName !== "" && property.SourceBName !== "")) {
+                                        property.Severity = 'OK(T)';
+                                        property.transpose = transposeType;
+                                        component.status = "OK(T)";
+                                    }
+                                    else {
+                                        if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
+                                        component.status == 'OK(T)') {
+                                            if(!(component.Status).includes('(T)'))
+                                                component.status = component.Status + "(T)";                                   
                                         }
                                     }
-                                    categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML = component.status;
-                                    for(cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
-                                        categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(component.status);
-                                    }
                                 }
-                            }
-
-                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                                _this.populateDetailedReviewTable(selectedRow);                          
+                            }  
                         }
-                    }
+                        var row = categorydiv.children[1].children[0].children[0].children[index];
+                        var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
+
+                        var editedItem = {"SourceA" : row.cells[0].innerText, 
+                        "SourceB" : row.cells[1].innerText,
+                        "Status" : component.status, 
+                        "SourceANodeId" : row.cells[3].innerText, 
+                        "SourceBNodeId" : row.cells[4].innerText,
+                        "ID" : row.cells[5].innerText, 
+                        "groupId" : row.cells[6].innerText};
+
+                        $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
+                            if(index == noOfComponents -1 ) {
+                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                                _this.populateDetailedReviewTable(selectedRow);    
+                                $(gridId).jsGrid("refresh");
+                            }
+                        });         
+                        index++;
+                    }        
                 }
             });   
         }
@@ -1877,111 +1879,20 @@ function ComparisonReviewManager(comparisonCheckManager,
         var parentTable = document.getElementById("ComparisonDetailedReviewCell");
         parentTable.innerHTML = '';
 
-        // if (row.cells[2].innerHTML.toLowerCase() === "no match") {
-
-        //     return;
-        // }
-
         var reviewTableId = this.getReviewTableId(row);
 
         var tableData = [];
         var columnHeaders = [];
 
         var componentId =  Number(row.cells[5].innerText)
+        var groupId =  Number(row.cells[6].innerText)
         for (var componentsGroupID in this.ComparisonCheckManager) {
 
             // get the componentgroupd corresponding to selected component 
             var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
-            var componentsGroup = undefined;
-            for(var groupId in  componentsGroupList)
-            {               
-                if ( componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
-                    continue;
-                }
-
-                componentsGroup = componentsGroupList[groupId];
-            }
-            if (!componentsGroup) {
-                continue;
-            }
-
-            if (!(componentId in componentsGroup.CheckComponents)) {
-                continue;
-            }
-            var component = componentsGroup.CheckComponents[componentId];
-
-            // for (var componentId in componentsGroup.CheckComponents) {
-            //     var component = componentsGroup.Components[i];
-              
-                // var source1NodeIdCell = row.getElementsByTagName("td")[3];
-                // var source2NodeIdCell = row.getElementsByTagName("td")[4];
-
-                // if (row.cells[2].innerText.toLowerCase() === 'no match') {
-
-                //     if (this.SourceAViewerData !== undefined && 
-                //         row.getElementsByTagName("td")[0].innerText !="") {
-                //         var source1NodeIdCell = row.getElementsByTagName("td")[3];
-                //         if (component.SourceANodeId !== Number(source1NodeIdCell.innerText)) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceBViewerData !== undefined&& 
-                //         row.getElementsByTagName("td")[1].innerText !="") {
-                //         var source2NodeIdCell = row.getElementsByTagName("td")[4];
-                //         if (component.SourceBNodeId !== Number(source2NodeIdCell.innerText)) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceAProperties !== undefined) {
-                //         var source1NameCell = row.getElementsByTagName("td")[0];
-                //         if (component.SourceAName !== source1NameCell.innerText) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceBProperties !== undefined) {
-                //         var source2NameCell = row.getElementsByTagName("td")[1];
-                //         if (component.SourceBName !== source2NameCell.innerText) {
-                //             continue;
-                //         }
-                //     }
-                //     else {
-                //         continue;
-                //     }
-                // }
-                // else {
-
-                //     if (this.SourceAViewerData !== undefined &&
-                //         this.SourceBViewerData !== undefined) {
-                //         if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
-                //             component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceAViewerData !== undefined &&
-                //         this.SourceBProperties !== undefined) {
-                //         if (component.SourceANodeId !== Number(row.getElementsByTagName("td")[3].innerText) ||
-                //             component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceAProperties !== undefined &&
-                //         this.SourceBViewerData !== undefined) {
-                //         if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
-                //             component.SourceBNodeId !== Number(row.getElementsByTagName("td")[4].innerText)) {
-                //             continue;
-                //         }
-                //     }
-                //     else if (this.SourceAProperties !== undefined &&
-                //         this.SourceBProperties !== undefined) {
-                //         if (component.SourceAName !== row.getElementsByTagName("td")[0].innerText ||
-                //             component.SourceBName !== row.getElementsByTagName("td")[1].innerText) {
-                //             continue;
-                //         }
-                //     }
-                //     else {
-                //         continue;
-                //     }
-                // }
+        
+            if(componentsGroupList && componentsGroupID != "restore") {
+            var component = componentsGroupList[groupId].CheckComponents[componentId];
 
                 var div = document.createElement("DIV");
                 parentTable.appendChild(div);
@@ -2025,39 +1936,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                 // show component class name as property in detailed review table    
 
                 var property;
-                // if (component.Status.toLowerCase() === "no match") {
-                //     if (component.SourceAName !== "") {
-                //         property = new CheckProperty("ComponentClass",
-                //             component.SubComponentClass,
-                //             "",
-                //             "",
-                //             "No Match",
-                //             true,
-                //             "No Match");
-                //     }
-                //     else if (component.SourceBName !== "") {
-                //         property = new CheckProperty("",
-                //             "",
-                //             "ComponentClass",
-                //             component.SubComponentClass,
-                //             "No Match",
-                //             true,
-                //             "No Match");
-                //     }
-                // }
-                // else {
-                //     property = new CheckProperty("ComponentClass",
-                //         component.SubComponentClass,
-                //         "ComponentClass",
-                //         component.SubComponentClass,
-                //         "",
-                //         true,
-                //         "Match");
-                // }
-                // this.detailedReviewRowComments[0] = property.Description;
-
-                // tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-                // tableData.push(tableRowContent);
 
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
@@ -2073,8 +1951,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 this.highlightDetailedReviewTableFromCheckStatus("ComparisonDetailedReviewCell")
 
                 var modelBrowserData = document.getElementById("ComparisonDetailedReviewCell");
-                // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
+
                 var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
                 modelBrowserHeaderTable.style.position = "fixed"
                 modelBrowserHeaderTable.style.width = "565px";
@@ -2097,9 +1974,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 modelBrowserDataTable.style.position = "static"
                 modelBrowserDataTable.style.width = "579px";
                 modelBrowserDataTable.style.margin = "52px 0px 0px 0px"
-
-            //     break;
-            // }
+            }
         }
     }
 

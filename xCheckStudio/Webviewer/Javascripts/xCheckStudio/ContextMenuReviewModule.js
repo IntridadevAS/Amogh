@@ -111,6 +111,9 @@ function contextMenuComponentLevel() {
                     menuItem2 : {
                         name: transposeconditionalName,
                         visible : function(){if(transposeconditionalName == 'Restore') {return true;} else {return false;}},
+                    },
+                    "reference": {
+                        name: "Reference",
                     }
                 }
             };

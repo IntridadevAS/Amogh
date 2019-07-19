@@ -267,7 +267,7 @@
                         while ($componentRow = $checkComponentsResults->fetch(\PDO::FETCH_ASSOC)) 
                         {
                             if($componentRow['accepted'] == 'true')
-                                $changedStatus = 'ACCEPTED';
+                                $changedStatus = 'OK(A)';
                             else 
                                 $changedStatus = $componentRow['status'];
 
