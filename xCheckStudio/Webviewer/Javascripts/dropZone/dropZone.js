@@ -1,7 +1,7 @@
 
 function onDropFiles(event, viewerContainer, modelTreeContainer) {
     event.currentTarget.classList.remove('dropzone');
-    
+
     let items = event.dataTransfer.items;
 
     if (event.currentTarget.id === "dropZone1") {
@@ -16,60 +16,136 @@ function onDropFiles(event, viewerContainer, modelTreeContainer) {
     }
     else {
         return;
-    }    
+    }
 
 
     event.preventDefault();
-    for (let i = 0; i < items.length; i++) {
-        let item = items[i].webkitGetAsEntry();
+    if( items.length === 0)
+    {
+        return;
+    }
+    if(items[0].webkitGetAsEntry().isDirectory)
+    {
+        let item = items[0].webkitGetAsEntry();
+        traverse_directory(item).then(function (fileEntries) {
+            //alert('traverse done');
+            var uploadFormData = new FormData();
 
-       
-        if (item.isFile) {
-            var mainFileName;
-            if("att" != xCheckStudio.Util.getFileExtension(item.name).toLowerCase())
-            {
-                mainFileName = item.name;
+            for (var j = 0; j < fileEntries.length; j++) {
+                uploadFormData.append('files[]', fileEntries[j]);
             }
-            var fileExtension = xCheckStudio.Util.getFileExtension(mainFileName).toLowerCase();
 
-            var files = []
-            files.push(items[i].getAsFile())
-            // if data source is Excel file
-            if (fileExtension.toLowerCase() === "xls") {
-                addTabHeaders(modelTreeContainer, mainFileName);
-                if (loadExcelDataSource(fileExtension,
-                    files,                    
-                    viewerContainer,
-                    modelTreeContainer)) {
-                        manageControlsOnDatasourceLoad(mainFileName,
+            uploadFormData.append('viewerContainer', viewerContainer);
+
+            var mainFileName = getMainFileName(item, dropZoneId);
+            uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
+        });
+    }
+    else {
+        var uploadFormData = new FormData();
+        var mainFileName = undefined;
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i].webkitGetAsEntry();
+            if (item.isFile) {
+
+                var fileName = item.name;
+                var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
+
+                var files = []
+                files.push(items[i].getAsFile())
+
+                // if data source is Excel file
+                if (fileExtension.toLowerCase() === "xls") {
+                    addTabHeaders(modelTreeContainer, fileName);
+                    if (loadExcelDataSource(fileExtension,
+                        files,
+                        viewerContainer,
+                        modelTreeContainer)) {
+
+                        manageControlsOnDatasourceLoad(fileName,
                             viewerContainer,
                             modelTreeContainer);
-                    return;
+                    }
+
+                    uploadFormData = undefined;
+                    mainFileName = undefined;
+                    break;
+                }
+                else if (fileExtension.toLowerCase() === "json") {
+                    alert("No drag and drop implementation for DB source");
+                    uploadFormData = undefined;
+                    mainFileName = undefined;
+                    break;
+                }
+                else {
+                    // for other data sources                   
+                    uploadFormData.append('files[]', items[i].getAsFile());                                        
+                    mainFileName =  item.name;
                 }
             }
+        }
 
-            var uploadFormData = new FormData();
-            uploadFormData.append('files[]', items[i].getAsFile());
+        if (uploadFormData && mainFileName) {
+
+            // remove extension from file name
+            mainFileName = mainFileName.replace(/\.[^/.]+$/, "");
+
             uploadFormData.append('viewerContainer', viewerContainer);
             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
         }
-        else if (item.isDirectory) {
+    }
 
-            traverse_directory(item).then(function (fileEntries) {
-                //alert('traverse done');
-                var uploadFormData = new FormData();
+    // for (let i = 0; i < items.length; i++) {
+    //     let item = items[i].webkitGetAsEntry();
 
-                for (var j = 0; j < fileEntries.length; j++) {
-                    uploadFormData.append('files[]', fileEntries[j]);
-                }
 
-                uploadFormData.append('viewerContainer', viewerContainer);
+    //     if (item.isFile) {
+    //         var fileName = item.name;
+    //         // if ("att" != xCheckStudio.Util.getFileExtension(item.name).toLowerCase()) {
+    //         //     mainFileName = item.name;
+    //         // }
+    //         var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
-                var mainFileName = getMainFileName(item, dropZoneId);                
-                uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
-            });
-        }
-    }   
+    //         var files = []
+    //         files.push(items[i].getAsFile())
+    //         // if data source is Excel file
+    //         if (fileExtension.toLowerCase() === "xls") {
+    //             addTabHeaders(modelTreeContainer, fileName);
+    //             if (loadExcelDataSource(fileExtension,
+    //                 files,
+    //                 viewerContainer,
+    //                 modelTreeContainer)) {
+    //                 manageControlsOnDatasourceLoad(fileName,
+    //                     viewerContainer,
+    //                     modelTreeContainer);
+    //                 return;
+    //             }
+    //         }
+
+    //         var uploadFormData = new FormData();
+    //         uploadFormData.append('files[]', items[i].getAsFile());
+    //         uploadFormData.append('viewerContainer', viewerContainer);
+    //         uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
+    //     }
+    //     else if (item.isDirectory) {
+
+    //         traverse_directory(item).then(function (fileEntries) {
+    //             //alert('traverse done');
+    //             var uploadFormData = new FormData();
+
+    //             for (var j = 0; j < fileEntries.length; j++) {
+    //                 uploadFormData.append('files[]', fileEntries[j]);
+    //             }
+
+    //             uploadFormData.append('viewerContainer', viewerContainer);
+
+    //             var mainFileName = getMainFileName(item, dropZoneId);
+    //             uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer);
+    //         });
+
+           
+    //     }
+    // }
 }
 
 function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeContainer) {
@@ -90,7 +166,7 @@ function uploadFiles(uploadFormData, mainFileName, viewerContainer, modelTreeCon
         success: function (ret) {
             //alert(ret);
             convertDataSource(mainFileName, viewerContainer, modelTreeContainer);
-        
+
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             // hide busy spinner
@@ -115,13 +191,18 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
         contentType: false,
         processData: false,
         success: function (ret) {
+            if(ret === 'fail')
+            {
+                return;
+            }
+            var datasourceName = ret;
             //alert(ret);
-            addTabHeaders(modelTreeContainer, mainFileName);
-            if (loadModel(mainFileName, viewerContainer, modelTreeContainer)) {
+            addTabHeaders(modelTreeContainer, datasourceName);
+            if (loadModel(datasourceName, viewerContainer, modelTreeContainer)) {
 
-                manageControlsOnDatasourceLoad(mainFileName,
-                    viewerContainer, 
-                    modelTreeContainer);          
+                manageControlsOnDatasourceLoad(datasourceName,
+                    viewerContainer,
+                    modelTreeContainer);
             }
             else {
 
@@ -143,15 +224,15 @@ function convertDataSource(mainFileName, viewerContainer, modelTreeContainer) {
 }
 
 function manageControlsOnDatasourceLoad(mainFileName,
-                                        viewerContainer, 
-                                        modelTreeContainer) {
+    viewerContainer,
+    modelTreeContainer) {
     hideLoadButton(modelTreeContainer);
 
     if (viewerContainer === "viewerContainer1") {
         sourceAFileName = mainFileName;
 
         // Add Source file names in modelbrowser tab header and viewer tab header
-        document.getElementById("dataSource1ModelBrowserTab").innerText = mainFileName;      
+        document.getElementById("dataSource1ModelBrowserTab").innerText = mainFileName;
         document.getElementById("dataSource1ViewerContainerTab").innerText = mainFileName;
 
         // enable source a controls
@@ -199,7 +280,7 @@ function manageControlsOnDatasourceLoad(mainFileName,
         sourceBFileName = mainFileName;
 
         // Add Source file names in modelbrowser tab header and viewer tab header
-        document.getElementById("dataSource2ModelBrowserTab").innerText = mainFileName;  
+        document.getElementById("dataSource2ModelBrowserTab").innerText = mainFileName;
         document.getElementById("dataSource2ViewerContainerTab").innerText = mainFileName;
 
         // enable source b controls        
@@ -241,31 +322,30 @@ function getMainFileName(item, dropZoneId) {
     var mainFileName = item.name;
     //var dropZoneId = dropzone.id;
 
-    // get source extensiom
-    if (checkCaseManager !== undefined &&
-        checkCaseManager.CheckCase !== undefined &&
-        checkCaseManager.CheckCase.CheckTypes !== undefined &&
-        checkCaseManager.CheckCase.CheckTypes.length > 0) {
+    // // get source extensiom
+    // var sourceType;
+    // if (checkCaseManager !== undefined &&
+    //     checkCaseManager.CheckCase !== undefined &&
+    //     checkCaseManager.CheckCase.CheckTypes !== undefined &&
+    //     checkCaseManager.CheckCase.CheckTypes.length > 0) {      
+    //     if (dropZoneId === "dropZone1") {
+    //         sourceType = checkCaseManager.CheckCase.CheckTypes[0].SourceAType;
+    //     }
+    //     else if (dropZoneId === "dropZone2") {
+    //         for (var j = 0; j < checkCaseManager.CheckCase.CheckTypes.length; j++) {
+    //             if (checkCaseManager.CheckCase.CheckTypes[j].SourceBType !== undefined &&
+    //                 checkCaseManager.CheckCase.CheckTypes[j].SourceBType !== "") {
+    //                 sourceType = checkCaseManager.CheckCase.CheckTypes[0].SourceBType;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+    // if (sourceType === undefined) {
+    //     return mainFileName;
+    // }
 
-        var sourceType;
-        if (dropZoneId === "dropZone1") {
-            sourceType = checkCaseManager.CheckCase.CheckTypes[0].SourceAType;
-        }
-        else if (dropZoneId === "dropZone2") {
-            for (var j = 0; j < checkCaseManager.CheckCase.CheckTypes.length; j++) {
-                if (checkCaseManager.CheckCase.CheckTypes[j].SourceBType !== undefined &&
-                    checkCaseManager.CheckCase.CheckTypes[j].SourceBType !== "") {
-                    sourceType = checkCaseManager.CheckCase.CheckTypes[0].SourceBType;
-                    break;
-                }
-            }
-        }
-    }
-    if (sourceType === undefined) {
-        return undefined;
-    }
-    mainFileName = mainFileName + "." + sourceType;
-
+    // mainFileName = mainFileName + "." + sourceType;
     return mainFileName;
 }
 
@@ -326,8 +406,8 @@ function enableDropZone(dropZoneId) {
 
     dropzone.addEventListener("dragover", onDragOver, false);
 
-    dropzone.addEventListener('dragleave',  onDragLeave, false);      
-       
+    dropzone.addEventListener('dragleave', onDragLeave, false);
+
 }
 
 function disbleDropZone(dropZoneId) {
@@ -335,16 +415,14 @@ function disbleDropZone(dropZoneId) {
 
     dropzone.removeEventListener("dragover", onDragOver);
 
-    dropzone.removeEventListener('dragleave',  onDragLeave);      
-       
+    dropzone.removeEventListener('dragleave', onDragLeave);
+
 }
 
-function onDragOver(event)
-{
+function onDragOver(event) {
     event.preventDefault();
     event.target.classList.add('dropzone');
 }
-function onDragLeave(event)
-{
+function onDragLeave(event) {
     event.target.classList.remove('dropzone');
 }

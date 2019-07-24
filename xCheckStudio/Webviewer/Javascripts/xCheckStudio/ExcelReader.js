@@ -1,269 +1,204 @@
-var XLSX ;
-if(typeof(require) !=='undefined')
-{ 
+var XLSX;
+if (typeof (require) !== 'undefined') {
     XLSX = require('xlsx');
 }
 
-function ExcelReader(sourceType, checkType, selectedComponents) {
-    this.SourceType = sourceType;
-    this.checkType = checkType;
-    this.global_wb = "";
-    this.containerId = "";
-    this.sourceProperties = [];
-    this.sourceDataSheet = {};
-    // this.SelectedComponents = selectedComponents;
-    this.excelModelBrowser = new ExcelModeBrowser(selectedComponents);
-}
+function ExcelReader() {
 
-ExcelReader.prototype.ReadFileData = function (file, containerId, viewerContainer) {
-    this.containerId = containerId;
-    if (file) {
-        var reader = new FileReader();
-        var _this = this;
-        reader.onload = function (readerEvt) {
-            var data = readerEvt.target.result;
-            data = new Uint8Array(data);
-            _this.process_wb(XLSX.read(data, { type: 'array' }), containerId, viewerContainer);
-        };
-        reader.readAsArrayBuffer(file);
+    this.SheetData = {};
+
+    ExcelReader.prototype.ReadFileData = function (file) {
+        return new Promise((resolve) => {
+            if (file) {
+                var reader = new FileReader();
+                var _this = this;
+                reader.onload = function (readerEvt) {
+                    var data = readerEvt.target.result;
+                    data = new Uint8Array(data);
+                    var sourceProperties = _this.ProcessWorkbook(XLSX.read(data, { type: 'array' }));
+                    return resolve(sourceProperties);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
     }
-}
 
-ExcelReader.prototype.LoadFileData = function (classWiseComponents, 
-                                               containerId, 
-                                               viewerContainer) {
-   
-    for(var mainClass in classWiseComponents)
-    {
-        var sourcePropertiesTemp = {};
-
-        var components = classWiseComponents[mainClass];
-
-        for(var compId in components)
-        {
-            var component = components[compId];
-
-            var genericPropertiesObject = new GenericComponent();
-            genericPropertiesObject.ID = compId;
-
-            for(var propId in component)
+    ExcelReader.prototype.ProcessWorkbook = function (workbook) {
+        var _this = this;
+        //this.global_wb = wb;
+        var wb = workbook;
+        var sourceProperties = {};
+        workbook.SheetNames.forEach(function (sheetName) {
+            var properties = _this.ReadSheetData(sheetName, wb.Sheets[sheetName]);
+            if(properties.length > 0)
             {
-                var property = component[propId];
-               
-                var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
-                genericPropertiesObject.addProperty(genericPropertyObject);
+                for(var i = 0; i < properties.length; i++)
+                {
+                    sourceProperties[ Object.keys(sourceProperties).length] = properties[i];                   
+                }                
+            }
+        });
 
-                if((property.name === "Name")||
-                  (genericPropertiesObject.Name === undefined &&
-                    property.name === "Tagnumber"))
-                {
-                    genericPropertiesObject.Name = property.value;
+        return sourceProperties;
+    }
+
+    ExcelReader.prototype.ReadSheetData = function (sheetName, sheetData) {
+        // if (this.containerId === "modelTree1") {         
+        var formattedExcelData = this.GetSheetData(sheetData);
+        //}
+        // else if (this.containerId === "modelTree2") {
+        //     formattedExcelData = this.getSheetData(sheetName);
+        // }
+        var sourceProperties = [];
+        var sourcePropertiesTemp = {};
+        for (var i = 0; i < formattedExcelData.length; i++) {
+            var row = formattedExcelData[i];
+            var name;
+            if (row.Name !== undefined) {
+                name = row.Name;
+            }
+            else if (row.Tagnumber !== undefined) {
+                name = row.Tagnumber;
+            }
+
+            if (name === undefined) {
+                continue;
+            }
+
+            var mainComponentClass = sheetName;
+            var subComponentClass;
+            if (row["Component Class"]) {
+                subComponentClass = row["Component Class"];
+            }
+            else if (row["Component class"]) {
+                subComponentClass = row["Component class"];
+            }
+            else if (row.Class) {
+                subComponentClass = row.Class;
+            }
+
+            if (subComponentClass === undefined) {
+                continue;
+            }
+
+            // create generic properties object
+            var genericPropertiesObject = new GenericComponent(name,
+                mainComponentClass,
+                subComponentClass);
+
+            // add component class as generic property
+            var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
+            genericPropertiesObject.addProperty(componentClassPropertyObject);
+
+            // iterate node properties and add to generic properties object
+            for (var key in row) {
+                var value = row[key];
+                if (value === undefined) {
+                    value = "";
                 }
-                else if (property.name === "ComponentClass") {
-                    genericPropertiesObject.MainComponentClass = property.value;                    
-                }
-                else if(property.name.toLowerCase() === "component class" ||
-                        property.name.toLowerCase() === "class")
-                {
-                    genericPropertiesObject.SubComponentClass =  property.value;                   
-                }               
+                var genericPropertyObject = new GenericProperty(key, "String", value);
+                genericPropertiesObject.addProperty(genericPropertyObject);
             }
 
             // add genericProperties object to sourceproperties collection
-            if (genericPropertiesObject.SubComponentClass in sourcePropertiesTemp) {
-                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass].push(genericPropertiesObject);
+            if (subComponentClass in sourcePropertiesTemp) {
+                sourcePropertiesTemp[subComponentClass].push(genericPropertiesObject);
             }
             else {
-                sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
+                sourcePropertiesTemp[subComponentClass] = [genericPropertiesObject];
             }
 
-            this.sourceProperties.push(genericPropertiesObject)
+            sourceProperties.push(genericPropertiesObject)
+        }
+        if (Object.entries(sourcePropertiesTemp).length > 0 && sourcePropertiesTemp.constructor === Object) {
+            this.SheetData[sheetName] = sourcePropertiesTemp;
         }
 
-        this.sourceDataSheet[mainClass] = sourcePropertiesTemp;
+        return sourceProperties;
     }
 
-    //add model Browser Table
-    this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
-}
-
-
-ExcelReader.prototype.process_wb = function (wb, containerId, viewerContainer) {
-    var _this = this;
-    this.global_wb = wb;
-
-    wb.SheetNames.forEach(function (sheetName) {
-        _this.ReadSheetData(sheetName);
-    });
-    this.addComponentsToDB(viewerContainer);
-    
-    //add model Browser Table
-    this.excelModelBrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
-    if(checkCaseSelected) {
-        checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+    ExcelReader.prototype.GetSheetData = function (sheetData) {   
+        var data = XLSX.utils.sheet_to_json(sheetData, { header: 1 });
+        return this.FormatData(data);
     }
-};
 
-ExcelReader.prototype.addComponentsToDB = function (viewerContainer) {
-
-    var source = undefined;
-    if( viewerContainer.toLowerCase() == "viewercontainer1")
-    {
-        source = "SourceA"
-    }
-    else if(viewerContainer.toLowerCase()== "viewercontainer2")
-    {
-        source = "SourceB"
-    }         
-
-    $.ajax({
-        data: { 'Components': JSON.stringify(this.sourceProperties), 'Source' : source , 'DataSourceType' : '1D'},
-        type: "POST",
-        url: "PHP/AddComponentsToDB.php"
-       }).done(function (data) 
-        {
-            console.log(data);
-            // remove busy spinner
-                var busySpinner = document.getElementById("divLoading");
-                if(busySpinner.classList.contains('show'))
-                    busySpinner.classList.remove('show')
-                
-        });
-}
-
-ExcelReader.prototype.ChangeBackgroundColor = function (row) {
-    row.style.backgroundColor = "#9999ff";
-}
-
-ExcelReader.prototype.RestoreBackgroundColor = function (row) {
-    row.style.backgroundColor = "#ffffff";
-}
-
-ExcelReader.prototype.ReadSheetData = function (sheetName) {
-    if (this.containerId === "modelTree1") {
-        formattedExcelData = this.getSheetData(sheetName);
-    }
-    else if (this.containerId === "modelTree2") {
-        formattedExcelData = this.getSheetData(sheetName);
-    }
-    var sourcePropertiesTemp = {};
-    for (var i = 0; i < formattedExcelData.length; i++) {
-        var row = formattedExcelData[i];
-        var name ;
-        if(row.Name !== undefined)
-        {
-            name = row.Name;
-        }
-        else if(row.Tagnumber !== undefined)
-        {
-            name = row.Tagnumber;
-        }
-
-        if(name === undefined)
-        {
-            continue;
-        }     
-
-        var mainComponentClass = sheetName;
-        var subComponentClass ;
-        if(row["Component Class"])
-        {
-            subComponentClass = row["Component Class"];
-        }
-        else if(row["Component class"])
-        {
-            subComponentClass = row["Component class"];
-        }
-        else if(row.Class)
-        {
-            subComponentClass = row.Class;
-        }
-       
-        if(subComponentClass === undefined)
-        {
-            continue;
-        }        
-        // var source = "";
-        // var destination = "";
-        // var ownerId = "";
-        // var nodeId = "";
-
-        // create generic properties object
-        var genericPropertiesObject = new GenericComponent(name,
-            mainComponentClass,
-            subComponentClass/*,
-            source,
-            destination,
-            ownerId,
-            nodeId*/);
-
-        // add component class as generic property
-        var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
-        genericPropertiesObject.addProperty(componentClassPropertyObject);
-
-        // iterate node properties and add to generic properties object
-        for (var key in row) {
-            var value = row[key];
-            if(value === undefined)
-            {
-                value = "";
+    ExcelReader.prototype.FormatData = function (exceldata) {
+        var excelDataArray = [];
+        var key;
+        var obj;
+        for (var i = 0; i < exceldata.length; i++) {
+            let len = exceldata[i].length;
+            if (exceldata[i][0] != null && key == null && obj == undefined) {
+                key = exceldata[i];
+                obj = new Object(key);
+                var id = 0;
             }
-            var genericPropertyObject = new GenericProperty(key, "String",value);
-            genericPropertiesObject.addProperty(genericPropertyObject);
+            else if (exceldata[i][0] == null) {
+                exceldata.splice(i, 1);
+                i--;
+            }
         }
+        var i;
+        for (i = 1; i < exceldata.length; i++) {
+            var a = {};
+            for (let j = 0; j < obj.length; j++) {
+                a[obj[j]] = exceldata[i][j];
+            }
+            excelDataArray.push(a);
+        }
+        return excelDataArray;
 
-        // add genericProperties object to sourceproperties collection
-        if (subComponentClass in sourcePropertiesTemp) {
-            sourcePropertiesTemp[subComponentClass].push(genericPropertiesObject);
-        }
-        else {
-            sourcePropertiesTemp[subComponentClass] = [genericPropertiesObject];
-        }
-
-        this.sourceProperties.push(genericPropertiesObject)
     }
-    if(Object.entries(sourcePropertiesTemp).length > 0 && sourcePropertiesTemp.constructor === Object)
-    {
-        this.sourceDataSheet[sheetName] = sourcePropertiesTemp;
+
+    ExcelReader.prototype.RestoreSheetData = function (classWiseComponents) {
+
+        var sourceProperties = [];
+        for (var mainClass in classWiseComponents) {
+            var sourcePropertiesTemp = {};
+
+            var components = classWiseComponents[mainClass];
+
+            for (var compId in components) {
+                var component = components[compId];
+
+                var genericPropertiesObject = new GenericComponent();
+                genericPropertiesObject.ID = compId;
+
+                for (var propId in component) {
+                    var property = component[propId];
+
+                    var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
+                    genericPropertiesObject.addProperty(genericPropertyObject);
+
+                    if ((property.name === "Name") ||
+                        (genericPropertiesObject.Name === undefined &&
+                            property.name === "Tagnumber")) {
+                        genericPropertiesObject.Name = property.value;
+                    }
+                    else if (property.name === "ComponentClass") {
+                        genericPropertiesObject.MainComponentClass = property.value;
+                    }
+                    else if (property.name.toLowerCase() === "component class" ||
+                        property.name.toLowerCase() === "class") {
+                        genericPropertiesObject.SubComponentClass = property.value;
+                    }
+                }
+
+                // add genericProperties object to sourceproperties collection
+                if (genericPropertiesObject.SubComponentClass in sourcePropertiesTemp) {
+                    sourcePropertiesTemp[genericPropertiesObject.SubComponentClass].push(genericPropertiesObject);
+                }
+                else {
+                    sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
+                }
+
+                sourceProperties.push(genericPropertiesObject)
+            }
+
+            this.SheetData[mainClass] = sourcePropertiesTemp;
+        }
+
+        return sourceProperties;
     }
 }
 
-ExcelReader.prototype.getSheetData = function (sheetName) {
-    var result = {};
-    var roa = XLSX.utils.sheet_to_json(this.global_wb.Sheets[sheetName], { header: 1 });
-    if (roa.length) result[sheetName] = roa;
-    exceldata = roa;
-    window.datatbl = exceldata;
-    Object.keys(exceldata);
-    arrayExcelData = exceldata;
-    formattedExcelData = this.formatData(exceldata);
-    return formattedExcelData;
-}
-
-ExcelReader.prototype.formatData = function (exceldata) {
-    var excelDataArray = [];
-    var key;
-    var obj;
-    for (var i = 0; i < exceldata.length; i++) {
-        let len = exceldata[i].length;
-        if (exceldata[i][0] != null && key == null && obj == undefined) {
-            key = exceldata[i];
-            obj = new Object(key);
-            var id = 0;
-        }
-        else if (exceldata[i][0] == null) {
-            exceldata.splice(i, 1);
-            i--;
-        }
-    }
-    var i;
-    for (i = 1; i < exceldata.length; i++) {
-        var a = {};
-        for (let j = 0; j < obj.length; j++) {
-            a[obj[j]] = exceldata[i][j];
-        }
-        excelDataArray.push(a);
-    }
-    return excelDataArray;
-
-}

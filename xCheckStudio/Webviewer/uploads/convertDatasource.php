@@ -15,113 +15,121 @@ if(!isset( $_SESSION["SourceAPath"]) ||
 
    $scriptParentDirectory = dirname ( __DIR__ );
 
-$array = explode("\\", __DIR__);
-unset($array[sizeof($array)-1]);
-unset($array[sizeof($array)-1]);
-$studioPath = implode("/", $array);
-$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    $array = explode("\\", __DIR__);
+    unset($array[sizeof($array)-1]);
+    unset($array[sizeof($array)-1]);
+    $studioPath = implode("/", $array);
+    $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
-$mainFileName = $_POST['MainFile'];
+    $mainFileName = $_POST['MainFile'];
 
-echo $studioPath;
-echo $launch_converter;
 
-if($_POST['viewerContainer'] == "viewerContainer1")
-{
-    $filename=  $scriptParentDirectory."/".$sourceADirectory."/".$mainFileName;               
-}
-if($_POST['viewerContainer'] == "viewerContainer2")
-{
-    $filename= $scriptParentDirectory."/".$sourceBDirectory."/".$mainFileName;               
-}
+    if($_POST['viewerContainer'] == "viewerContainer1")
+    {
+        $filename=  $scriptParentDirectory."/".$sourceADirectory."/".$mainFileName;               
+    }
+    if($_POST['viewerContainer'] == "viewerContainer2")
+    {
+        $filename= $scriptParentDirectory."/".$sourceBDirectory."/".$mainFileName;               
+    }
 
-//$filename = __DIR__."/scs/".$mainFileName;
-echo $filename;
+    $file = fileExists($filename, false);
+    if ($file) {
+        //echo "The file $file exists";    
+    } 
+    else 
+    {
+    //   echo "The file $file does not exist";
+        echo "fail";
+        return;
+    }
 
-$file = fileExists($filename, false);
-if ($file) {
-    echo "The file $file exists";    
-} 
-else 
-{
-    echo "The file $file does not exist";
-    return;
-}
+    $file = basename($file);     
 
-$file = basename($file); 
+    if($_POST['viewerContainer'] == "viewerContainer1")
+    {
+        $inputFileName=  $scriptParentDirectory."/".$sourceADirectory."/".$file;               
+    }
+    if($_POST['viewerContainer'] == "viewerContainer2")
+    {
+        $inputFileName= $scriptParentDirectory."/".$sourceBDirectory."/".$file;               
+    }
+   
+    $output_name=explode(".",$file);
+    if($_POST['viewerContainer'] == "viewerContainer1")
+    {
+        $output_file_path=  $scriptParentDirectory."/".$sourceADirectory."/".$output_name[0];               
+    }
+    if($_POST['viewerContainer'] == "viewerContainer2")
+    {
+        $output_file_path= $scriptParentDirectory."/".$sourceBDirectory."/".$output_name[0];              
+    }   
 
-if($_POST['viewerContainer'] == "viewerContainer1")
-{
-    $inputFileName=  $scriptParentDirectory."/".$sourceADirectory."/".$file;               
-}
-if($_POST['viewerContainer'] == "viewerContainer2")
-{
-    $inputFileName= $scriptParentDirectory."/".$sourceBDirectory."/".$file;               
-}
+    $command = '"'.$launch_converter. '" "'. $inputFileName. '" "'.$output_file_path.'"';
+    exec($command, $output);
 
-//$inputFileName = __DIR__."/scs/".$file;
-echo "inputFileName : ".$inputFileName;
-
-$output_name=explode(".",$file);
-if($_POST['viewerContainer'] == "viewerContainer1")
-{
-    $output_file_path=  $scriptParentDirectory."/".$sourceADirectory."/".$output_name[0];               
-}
-if($_POST['viewerContainer'] == "viewerContainer2")
-{
-    $output_file_path= $scriptParentDirectory."/".$sourceBDirectory."/".$output_name[0];              
-}
-
-//$output_file_path=__DIR__."/scs/"."$output_name[0]";
-echo "output_file_path : ".$output_file_path;
-
-$command = '"'.$launch_converter. '" "'. $inputFileName. '" "'.$output_file_path.'"';
-			echo "Command : ".$command;
-			//print_r($command);
-			//'$command';
-			
-			exec($command, $output);
-			//print_r($output);
-			
-			//`$launch_converter $dest $output_file_path`;
-			echo "<br>";
-			echo 'File Conversion Complete..You can load the model..';
-
+    echo  trim($file);
 
 function fileExists($fileName, $caseSensitive = true) {
 
-    // if(file_exists($fileName)) {
-    //     return $fileName;
-    // }
-    // if($caseSensitive) return false;
+
+    $hasExtension = true;
+    $file_parts = pathinfo($fileName);
+    if(!isset($file_parts['extension']))
+    {
+        $hasExtension = false;
+    }
+    else
+    {
+        switch($file_parts['extension'])
+        {   
+            case "":
+            case NULL: // Handle no file extension
+            $hasExtension = false;
+            break;
+        }
+    }
     
     // Handle case insensitive requests            
-    $directoryName = dirname($fileName);
-    echo "<br>";
-    echo "dir name : ".$directoryName ;
-    echo "<br>";
-
+    $directoryName = dirname($fileName);   
     $fileArray = glob($directoryName . '/*', GLOB_NOSORT);
     $fileNameLowerCase = strtolower($fileName);
-    echo "<br>";
-    echo "fileNameLowerCase : ".$fileNameLowerCase ;
-    echo "<br>";
-    
+      
     foreach($fileArray as $file) {
-        echo "<br>";
-    echo "file : ".$file ;
-    echo "<br>";
-
-        if(strtolower($file) == $fileNameLowerCase) {
-            return $file;
+ 
+        if($hasExtension)
+        {
+            if(strtolower($file) == $fileNameLowerCase) {
+                return $file;
+            }
+        }
+        else
+        {
+            $filePathParts = pathinfo($file); 
+            switch(strtolower($filePathParts['extension']))
+            {
+                case "step":               
+                case "xml":
+                case "rvm":               
+                case "xls":
+                case "sldasm":               
+                case "dwg":
+                case "sldprt":               
+                case "rvt":
+                case "rfa":               
+                case "ifc":
+                case "step":
+                case "stp":
+                case "ste":               
+                case "igs":
+                if($filePathParts['filename'] ===  $file_parts['filename'])
+                {                    
+                    return $file;
+                }
+                break;             
+            }
         }
     }
     return false;
     }
-
 ?>
-
-
-
-
-
