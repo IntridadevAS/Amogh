@@ -383,14 +383,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     async: true,
                     data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate },
                     success: function (msg) {
-<<<<<<< HEAD
-=======
                         selectedRow[0].cells[1].innerHTML = "ACCEPTED";
                         var cell = 0;
                         for (cell = 0; cell < selectedRow[0].cells.length; cell++) {
                             selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                         }
->>>>>>> Refactored the code.
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = "OK(A)";
@@ -462,28 +459,7 @@ function ComplianceReviewManager(complianceCheckManager,
         }
     }
 
-<<<<<<< HEAD
-    ComplianceReviewManager.prototype.updateReviewComponentGridData = function(selectedRow, groupId, changedStatus) {
-        var row = selectedRow;
-        var gridId = '#' + this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + this.MainReviewTableContainer;
-        _this = this;
-
-        var editedItem = {"SourceA" : selectedRow.cells[0].innerText, 
-        "Status" : changedStatus, 
-        "NodeId" : selectedRow.cells[2].innerText, 
-        "ID" : selectedRow.cells[3].innerText, 
-        "groupId" : selectedRow.cells[4].innerText};
-
-        $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function() {
-            _this.populateDetailedReviewTable(selectedRow);
-            $(gridId).jsGrid("refresh");
-        });
-    } 
-
-    ComplianceReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
-=======
     ComplianceReviewManager.prototype.changeReviewTableStatus = function (changedStatus) {
->>>>>>> Refactored the code.
         var children;
         if (this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
             var SourceAComplianceMainReviewCell = document.getElementById("SourceAComplianceMainReviewTbody");
@@ -529,22 +505,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 async: true,
                 data: { 'groupid': groupId, 'tabletoupdate': tableToUpdate },
                 success: function (msg) {
-<<<<<<< HEAD
-                var index = 0;
-                    var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                    compgroup.categoryStatus = "ACCEPTED";
-                    for(var compId in compgroup["CheckComponents"]) {
-                        var component = compgroup["CheckComponents"][compId];
-                        component.status = component.Status;
-                        if(component.Status !== 'OK') {
-                            component.status = "OK(A)";
-                            for (var propertyId in component.properties) {
-                                property = component.properties[propertyId];
-                                if(property.Severity !== 'OK') {
-                                    property.Severity = 'ACCEPTED';
-                                }
-                            }
-=======
                     for (var i = 0; i < noOfComponents; i++) {
                         if (categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML !== "OK") {
                             categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = "ACCEPTED";
@@ -565,7 +525,6 @@ function ComplianceReviewManager(complianceCheckManager,
                             }
                             selectedRow = categorydiv.children[1].children[0].children[0].children[0];
                             _this.populateDetailedReviewTable(selectedRow);
->>>>>>> Refactored the code.
                         }
                         var row = categorydiv.children[1].children[0].children[0].children[index];
                         var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
@@ -681,14 +640,11 @@ function ComplianceReviewManager(complianceCheckManager,
                         var status = new Array();
                         status = msg;
                         var properties = status[1];
-<<<<<<< HEAD
-=======
                         selectedRow[0].cells[1].innerHTML = status[0];
                         var cell = 0;
                         for (cell = 0; cell < selectedRow[0].cells.length; cell++) {
                             selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
                         }
->>>>>>> Refactored the code.
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = status[0];
                         var index = 0;
@@ -724,14 +680,10 @@ function ComplianceReviewManager(complianceCheckManager,
                         var status = new Array();
                         status = msg;
                         var changedStatus = status[0];
-<<<<<<< HEAD
-                        _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-=======
                         // if(status[0] !== _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                         _this.changeReviewTableStatus(_this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
                         // }
->>>>>>> Refactored the code.
 
                         var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
                         for (var i = 0; i < propertiesLen; i++) {
@@ -743,13 +695,8 @@ function ComplianceReviewManager(complianceCheckManager,
                             }
 
                         }
-<<<<<<< HEAD
-                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
-                        
-=======
                         _this.populateDetailedReviewTable(_this.SelectedComponentRow);
 
->>>>>>> Refactored the code.
                     }
                 });
             }
@@ -785,14 +732,11 @@ function ComplianceReviewManager(complianceCheckManager,
                     var componentStatus = status[0];
                     var propsStatus = status[1];
                     var index = 0
-<<<<<<< HEAD
-=======
                     for (var i = 0; i < noOfComponents; i++) {
                         categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = componentStatus[index]['status'];
                         for (cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
                             categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
                         }
->>>>>>> Refactored the code.
                         var j = 0;
                         var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
                         compgroup.categoryStatus = "UNACCEPTED";
@@ -806,33 +750,12 @@ function ComplianceReviewManager(complianceCheckManager,
                                 propindex++;
                             }
                             j++;
-<<<<<<< HEAD
-                            var row = categorydiv.children[1].children[0].children[0].children[index];
-                            var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
-    
-                            var editedItem = {"SourceA" : row.cells[0].innerText, 
-                                            "Status" : component.status, 
-                                            "NodeId" : row.cells[2].innerText, 
-                                            "ID" : row.cells[3].innerText, 
-                                            "groupId" : row.cells[4].innerText};
-    
-                            $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
-                                if(index == noOfComponents-1) {
-                                    selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                                    _this.populateDetailedReviewTable(selectedRow);    
-                                    $(gridId).jsGrid("refresh");
-                                }
-                            });
-                            index++;  
-                        }  
-=======
                         }
 
                         selectedRow = categorydiv.children[1].children[0].children[0].children[0];
                         _this.populateDetailedReviewTable(selectedRow);
                         index++;
                     }
->>>>>>> Refactored the code.
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("A");
@@ -1339,18 +1262,6 @@ function ComplianceReviewManager(complianceCheckManager,
         var tableData = [];
         var columnHeaders = [];
 
-<<<<<<< HEAD
-        var componentId =  Number(row.cells[3].innerText);
-        var groupId = Number(row.cells[4].innerText);
-        for (var componentsGroupID in this.ComplianceCheckManager) {
-
-            // get the componentgroupd corresponding to selected component 
-            var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-            if(componentsGroupList && componentsGroupID != "restore") {
-          
-            var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-=======
         var componentId = Number(row.cells[3].innerText)
         for (var componentsGroupID in this.ComplianceCheckManager) {
             // for (var componentsGroupName in this.ComplianceCheckManager.CheckComponentsGroups) {
@@ -1373,7 +1284,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 continue;
             }
             var component = componentsGroup.CheckComponents[componentId];
->>>>>>> Refactored the code.
 
             var div = document.createElement("DIV");
             parentTable.appendChild(div);
@@ -1398,14 +1308,6 @@ function ComplianceReviewManager(complianceCheckManager,
                     name = "Status";
                 }
 
-<<<<<<< HEAD
-                // // show component class name as property in detailed review table               
-            
-                for (var propertyId in component.properties) {
-                    property = component.properties[propertyId];
-            
-                    this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
-=======
                 columnHeader["name"] = name;
                 columnHeader["title"] = title;
                 columnHeader["type"] = "textarea";
@@ -1433,7 +1335,6 @@ function ComplianceReviewManager(complianceCheckManager,
                 // for (var j = 0; j < component.CheckProperties.length; j++) {
                 //     property = component.CheckProperties[j];
                 this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
->>>>>>> Refactored the code.
 
                 tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
                 tableData.push(tableRowContent);
@@ -1649,4 +1550,4 @@ function ComplianceReviewManager(complianceCheckManager,
 
         return tableElement.parentElement.parentElement.id;
     }
-}
+//}
