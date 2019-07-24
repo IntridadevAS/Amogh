@@ -38,8 +38,11 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\i18n.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\languagescript.js"></script>
 
-    <script type="text/javascript" src="Javascripts/common/Example.js"></script>
-    <script type="text/javascript" src="Javascripts/common/ModelTree.js"></script>
+    <!-- <script type="text/javascript" src="Javascripts/common/Example.js"></script> -->
+    <script type="text/javascript" src="Javascripts/xCheckStudio/ModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts/xCheckStudio/SCModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts/xCheckStudio/ExcelModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts/xCheckStudio/DBModelBrowser.js"></script>
     <!-- <script type="text/javascript" src="Javascripts/common/require.js"></script> -->
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\xCheckStudioInterface.js"></script>
@@ -51,9 +54,12 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckRules.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\SourceManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSourceManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBSourceManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\SCManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\DBModelBrowser.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script> 
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleStringCollection.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
@@ -2030,8 +2036,7 @@
             </div>
             <div class="group">
                 <div class="iconfullscreenfilled" onclick="OnFullScreen()" onMouseOver="this.style.cursor='pointer'">
-                    <img src="images/UIPackage/module1-icon--fullscreen--filled@2x.png"
-                        class="iconfullscreenfilled1" />
+                    <img src="images/UIPackage/module1-icon--fullscreen--filled@2x.png" class="iconfullscreenfilled1" />
                 </div>
                 <div class="iconfullscreenexitfilled" onclick="OnExitFullScreen()">
                     <img src="images/UIPackage/module2-icon--fullscreen-exit--filled@2x.png"
@@ -2142,8 +2147,7 @@
                                 Label
                             </div>
                         </div>
-                        <img src="images/UIPackage/landing-page-with-open-menu-icon-export@2x.png"
-                            class="iconexport" />
+                        <img src="images/UIPackage/landing-page-with-open-menu-icon-export@2x.png" class="iconexport" />
                     </div>
                     <!-- <form method="post" href="/index.html"> -->
                     <form method="post" onclick="LogoutUser()">
@@ -2520,7 +2524,7 @@
                     // read check cases files list
                     checkCaseFilesData = new CheckCaseFilesData();
                     checkCaseFilesData.readCheckCaseFiles();
-                    
+
                     checkCaseManager = new CheckCaseManager();
                 }
             });
@@ -2764,14 +2768,14 @@
             viewerContainer[0].appendChild(viewerdata);
 
             if (viewerdata.id === "viewerContainer1" &&
-                xCheckStudioInterface1 &&
-                xCheckStudioInterface1._firstViewer) {
-                xCheckStudioInterface1._firstViewer.resizeCanvas();
+                sourceManager1 &&
+                sourceManager1.Webviewer) {
+                sourceManager1.Webviewer.resizeCanvas();
             }
             else if (viewerdata.id === "viewerContainer2" &&
-                xCheckStudioInterface2 &&
-                xCheckStudioInterface2._firstViewer) {
-                xCheckStudioInterface2._firstViewer.resizeCanvas();
+                sourceManager2 &&
+                sourceManager2.Webviewer) {
+                sourceManager2.Webviewer.resizeCanvas();
             }
 
         };
@@ -2794,9 +2798,9 @@
                 modalViewerContainer.style.margin = "auto";
 
 
-                if (xCheckStudioInterface1 &&
-                    xCheckStudioInterface1._firstViewer) {
-                    xCheckStudioInterface1._firstViewer.resizeCanvas();
+                if (sourceManager1 &&
+                    sourceManager1.Webviewer) {
+                    sourceManager1.Webviewer.resizeCanvas();
                 }
 
             }
@@ -2815,9 +2819,9 @@
                 modalViewerContainer.style.height = "100%";
                 modalViewerContainer.style.margin = "auto";
 
-                if (xCheckStudioInterface2 &&
-                    xCheckStudioInterface2._firstViewer) {
-                    xCheckStudioInterface2._firstViewer.resizeCanvas();
+                if (sourceManager2 &&
+                    sourceManager2.Webviewer) {
+                    sourceManager2.Webviewer.resizeCanvas();
                 }
             }
         }
@@ -2833,7 +2837,7 @@
                 document.msExitFullscreen();
             }
         }
-      
+
     </script>
     <!-- End of Scripts -->
 </body>

@@ -2,13 +2,13 @@
 
     include 'Utility.php';       
 
-    if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||       
-       !isset($_POST["SourceASelectedComponents"]) ||      
-       !isset($_POST["SourceAFileName"]))
-       {
-           echo 'fail';
-           return;
-       }
+    // if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||       
+    //    !isset($_POST["SourceASelectedComponents"]) ||      
+    //    !isset($_POST["SourceAFileName"]))
+    //    {
+    //        echo 'fail at 9';
+    //        return;
+    //    }
 
        session_start();
     
@@ -159,23 +159,28 @@
        }
 
     
-       
-       $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
-       $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      
-      
-        // write source a selected components
-        writeSelectedComponents($projectName, 
-                                'SourceASelectedComponents', 
-                                $SourceASelectedComponents, 
-                                $SourceANodeIdvsComponentIdList );
+         
+       if(isset($_POST['SourceASelectedComponents']) &&
+          isset($_POST['SourceANodeIdvsComponentIdList']))
+        {
         
+        $SourceASelectedComponents =   json_decode($_POST['SourceASelectedComponents'],true);      
+        $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      
         
-        // write source A not selected components
-        writeNotSelectedComponents($projectName,
-                                    $SourceASelectedComponents,
-                                    "SourceANotSelectedComponents",
-                                    "SourceAComponents" );
-        
+            // write source a selected components
+            writeSelectedComponents($projectName, 
+                                    'SourceASelectedComponents', 
+                                    $SourceASelectedComponents, 
+                                    $SourceANodeIdvsComponentIdList );
+            
+            
+            // write source A not selected components
+            writeNotSelectedComponents($projectName,
+                                        $SourceASelectedComponents,
+                                        "SourceANotSelectedComponents",
+                                        "SourceAComponents" );
+        }
+
         if(isset($_POST['SourceBSelectedComponents']) &&
            isset($_POST['SourceBNodeIdvsComponentIdList']))
         {

@@ -40,10 +40,7 @@ function CheckCaseManager() {
     }
 
     CheckCaseManager.prototype.onCheckCaseDataReadComplete = function () {
-
-        // // perform property check
-        // checkManager = new CheckManager(complianceCheck);
-        // checkManager.performCheck();
+     
     }
 
     CheckCaseManager.prototype.readCheckCaseXml = function (xml) {

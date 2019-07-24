@@ -6,11 +6,10 @@ function ComplianceReviewManager(complianceCheckManager,
     detailedReviewTableContainer,
     //componentIdVsComponentData,
     //nodeIdVsComponentData,
-    detailedReviewRowCommentDiv) 
-{
+    detailedReviewRowCommentDiv) {
 
-    this.MainReviewTableColumns = 4;    
-    this.MainReviewTableIdColumn = 3;    
+    this.MainReviewTableColumns = 4;
+    this.MainReviewTableIdColumn = 3;
 
     this.ViewerData = viewerData;
 
@@ -38,9 +37,9 @@ function ComplianceReviewManager(complianceCheckManager,
     this.DetailedReviewRowCommentDiv = detailedReviewRowCommentDiv;
 
     this.SourceNodeIdvsCheckComponent = {};
-    this.SourceComponentIdvsNodeId = {};        
+    this.SourceComponentIdvsNodeId = {};
 
-    this.SourceViewerCurrentSheetLoaded  = undefined;
+    this.SourceViewerCurrentSheetLoaded = undefined;
 
     ComplianceReviewManager.prototype.loadDatasource = function () {
         if (this.ViewerData !== undefined) {
@@ -100,7 +99,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     continue;
                 }
 
-                var btn = document.createElement("BUTTON");  
+                var btn = document.createElement("BUTTON");
                 var att = document.createAttribute("groupId");
                 att.value = groupId;
                 btn.setAttributeNode(att);     // Create a <button> element
@@ -175,15 +174,16 @@ function ComplianceReviewManager(complianceCheckManager,
 
                     tableData.push(tableRowContent);
 
-                     // maintain track of check components
-                     if (component.SourceANodeId ) 
-                    {                      
-                        this.SourceNodeIdvsCheckComponent[component.SourceANodeId] = { "Id" :component.ID, 
-                                                                                    "SourceAName": component.SourceAName,                                                                                    
-                                                                                    "MainClass": componentsGroup.ComponentClass,
-                                                                                    "SourceANodeId": component.SourceANodeId};
+                    // maintain track of check components
+                    if (component.SourceANodeId) {
+                        this.SourceNodeIdvsCheckComponent[component.SourceANodeId] = {
+                            "Id": component.ID,
+                            "SourceAName": component.SourceAName,
+                            "MainClass": componentsGroup.ComponentClass,
+                            "SourceANodeId": component.SourceANodeId
+                        };
 
-                        this.SourceComponentIdvsNodeId[component.ID] = component.SourceANodeId;                       
+                        this.SourceComponentIdvsNodeId[component.ID] = component.SourceANodeId;
                     }
                 }
 
@@ -312,16 +312,16 @@ function ComplianceReviewManager(complianceCheckManager,
                     document.getElementById(id).style.width = "578px";
                     _this.highlightMainReviewTableFromCheckStatus(id);
 
-                      // hide additional column cells
-                      var tableRows = this._container.context.getElementsByTagName("tr");
-                      for (var j = 0; j < tableRows.length; j++) {
-                          var currentRow = tableRows[j];
-                          for (var i = 0; i < currentRow.cells.length; i++) {
-                              if (i > 1) {
-                                  currentRow.cells[i].style.display = "none";
-                              }
-                          }
-                      }
+                    // hide additional column cells
+                    var tableRows = this._container.context.getElementsByTagName("tr");
+                    for (var j = 0; j < tableRows.length; j++) {
+                        var currentRow = tableRows[j];
+                        for (var i = 0; i < currentRow.cells.length; i++) {
+                            if (i > 1) {
+                                currentRow.cells[i].style.display = "none";
+                            }
+                        }
+                    }
                 },
                 rowClick: function (args) {
                     var commentDiv = document.getElementById(_this.DetailedReviewRowCommentDiv);
@@ -345,8 +345,7 @@ function ComplianceReviewManager(complianceCheckManager,
                             _this.showSelectedSheetData("viewerContainer2", sheetName, args.event.currentTarget);
                         }
                     }
-                    else if (_this.ViewerData !== undefined) 
-                    {
+                    else if (_this.ViewerData !== undefined) {
                         _this.HighlightComponentInGraphicsViewer(args.event.currentTarget)
                     }
                 }
@@ -365,173 +364,167 @@ function ComplianceReviewManager(complianceCheckManager,
 
     ComplianceReviewManager.prototype.updateStatusOfComplianceElement = function (selectedRow) {
         _this = this;
-        if((selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") 
-        && selectedRow[0].cells[1].innerHTML !== "OK") 
-        { 
+        if ((selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody")
+            && selectedRow[0].cells[1].innerHTML !== "OK") {
             var tableToUpdate;
-            var componentId =  Number(selectedRow[0].cells[3].innerText)
+            var componentId = Number(selectedRow[0].cells[3].innerText)
             var groupId = Number(selectedRow[0].cells[4].innerText)
-            if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
+            if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
                 tableToUpdate = "complianceSourceA";
             }
-            else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
+            else if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
                 tableToUpdate = "complianceSourceB";
             }
             else { return; }
-            try{
+            try {
                 $.ajax({
                     url: 'PHP/updateResultsStatusToAccept.php',
                     type: "POST",
                     async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate },
+                    data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate },
                     success: function (msg) {
+                        selectedRow[0].cells[1].innerHTML = "ACCEPTED";
+                        var cell = 0;
+                        for (cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                        }
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = "OK(A)";
                         for (var propertyId in component.properties) {
                             property = component.properties[propertyId];
-                            if(property.Severity !== "OK")
+                            if (property.Severity !== "OK")
                                 property.Severity = 'ACCEPTED';
                         }
                         _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
-                });   
+                });
             }
-            catch(error) {}        
+            catch (error) { }
         }
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML !== "OK" && selectedRow[0].cells[2].innerHTML !== "ACCEPTED") {
+        if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+            if (selectedRow[0].cells[2].innerHTML !== "OK" && selectedRow[0].cells[2].innerHTML !== "ACCEPTED") {
                 selectedRow[0].cells[2].innerHTML = "ACCEPTED";
                 var cell = 0;
-                for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                for (cell = 0; cell < selectedRow[0].cells.length; cell++) {
                     selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
                 }
                 var tableToUpdate;
-                if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody") {
+                if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody") {
                     tableToUpdate = "ComplianceADetailedReview";
                 }
-                else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+                else if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
                     tableToUpdate = "ComplianceBDetailedReview";
                 }
                 else { return; }
                 var componentId = this.SelectedComponentRow.cells[3].innerHTML;
                 var groupId = this.SelectedComponentRow.cells[4].innerHTML;
-                try{
+                try {
                     $.ajax({
                         url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
-                        data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
+                        data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[1].innerHTML;
-                            if(!originalstatus.includes("(A)")) {
+                            if (!originalstatus.includes("(A)")) {
                                 var changedStatus = originalstatus + "(A)";
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
-                            else if(msg.trim() == "ACCEPTED") {
+                            else if (msg.trim() == "ACCEPTED") {
                                 var changedStatus = msg.trim();
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 _this.getRowHighlightColor(changedStatus);
                             }
                             var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
-                            for(var i = 0; i < propertiesLen; i++) {
+                            for (var i = 0; i < propertiesLen; i++) {
                                 var sourceAName = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
-                                if(sourceAName == null) { sourceAName = ""}; 
+                                if (sourceAName == null) { sourceAName = "" };
 
-                                if(sourceAName == selectedRow[0].cells[0].innerText) {
+                                if (sourceAName == selectedRow[0].cells[0].innerText) {
                                     _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = "ACCEPTED";
                                     break;
                                 }
-                               
+
                             }
                             _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                         }
-                    });   
+                    });
                 }
-                catch(error) {
-                    console.log(error);}  
+                catch (error) {
+                    console.log(error);
+                }
             }
         }
     }
 
-    ComplianceReviewManager.prototype.updateReviewComponentGridData = function(selectedRow, groupId, changedStatus) {
-        var row = selectedRow;
-        var gridId = '#' + this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + this.MainReviewTableContainer;
-        _this = this;
-
-        var editedItem = {"SourceA" : selectedRow.cells[0].innerText, 
-        "Status" : changedStatus, 
-        "NodeId" : selectedRow.cells[2].innerText, 
-        "ID" : selectedRow.cells[3].innerText, 
-        "groupId" : selectedRow.cells[4].innerText};
-
-        $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function() {
-            _this.populateDetailedReviewTable(selectedRow);
-            $(gridId).jsGrid("refresh");
-        });
-    } 
-
-    ComplianceReviewManager.prototype.changeReviewTableStatus = function(changedStatus) {
+    ComplianceReviewManager.prototype.changeReviewTableStatus = function (changedStatus) {
         var children;
-        if(this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
+        if (this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
             var SourceAComplianceMainReviewCell = document.getElementById("SourceAComplianceMainReviewTbody");
             children = SourceAComplianceMainReviewCell.children[0].children;
         }
-        else if(this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
+        else if (this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
             var SourceBComplianceMainReviewCell = document.getElementById("SourceBComplianceMainReviewTbody");
             children = SourceBComplianceMainReviewCell.children[0].children;
         }
 
         outer_loop:
-        for(var child in children) {
-            if(children[child].className == "collapsible active") {
-                 var elementCategorydiv = document.getElementById(children[child].innerHTML);
-                 var tableData = $('#' + children[child].innerHTML + '_' + this.MainReviewTableContainer).find('.jsgrid-grid-body');
-                 for(var i = 0; i < tableData[0].children[0].children[0].children.length; i++) {
-                    if(this.SelectedComponentRow == tableData[0].children[0].children[0].children[i]) {
+        for (var child in children) {
+            if (children[child].className == "collapsible active") {
+                var elementCategorydiv = document.getElementById(children[child].innerHTML);
+                var tableData = $('#' + children[child].innerHTML + '_' + this.MainReviewTableContainer).find('.jsgrid-grid-body');
+                for (var i = 0; i < tableData[0].children[0].children[0].children.length; i++) {
+                    if (this.SelectedComponentRow == tableData[0].children[0].children[0].children[i]) {
                         tableData[0].children[0].children[0].children[i].cells[1].innerHTML = changedStatus;
                         break outer_loop;
                     }
-                 }
+                }
             }
         }
     }
 
-    ComplianceReviewManager.prototype.updateStatusOfCategory = function(button) {
+    ComplianceReviewManager.prototype.updateStatusOfCategory = function (button) {
         _this = this;
         var groupId = button.attributes[0].value;
 
         var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
         var tableToUpdate;
-        if(this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
+        if (this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
             tableToUpdate = "categoryComplianceA";
         }
-        else if(this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
+        else if (this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
             tableToUpdate = "categoryComplianceB";
         }
-        try{
+        try {
             $.ajax({
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate},
+                data: { 'groupid': groupId, 'tabletoupdate': tableToUpdate },
                 success: function (msg) {
-                var index = 0;
-                    var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                    compgroup.categoryStatus = "ACCEPTED";
-                    for(var compId in compgroup["CheckComponents"]) {
-                        var component = compgroup["CheckComponents"][compId];
-                        component.status = component.Status;
-                        if(component.Status !== 'OK') {
-                            component.status = "OK(A)";
-                            for (var propertyId in component.properties) {
-                                property = component.properties[propertyId];
-                                if(property.Severity !== 'OK') {
-                                    property.Severity = 'ACCEPTED';
+                    for (var i = 0; i < noOfComponents; i++) {
+                        if (categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML !== "OK") {
+                            categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = "ACCEPTED";
+                            for (cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                                categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
+                            }
+                            var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                            compgroup.categoryStatus = "ACCEPTED";
+                            for (var compId in compgroup["CheckComponents"]) {
+                                var component = compgroup["CheckComponents"][compId];
+                                component.status = "ACCEPTED";
+                                for (var propertyId in component.properties) {
+                                    property = component.properties[propertyId];
+                                    if (property.Severity !== 'OK') {
+                                        property.Severity = 'ACCEPTED';
+                                    }
                                 }
                             }
+                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                            _this.populateDetailedReviewTable(selectedRow);
                         }
                         var row = categorydiv.children[1].children[0].children[0].children[index];
                         var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
@@ -552,20 +545,21 @@ function ComplianceReviewManager(complianceCheckManager,
                         index++;
                     }
                 }
-            });   
+            });
         }
-        catch(error) {
-            console.log(error);}  
+        catch (error) {
+            console.log(error);
+        }
     }
 
-    ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function(tabletoupdate) {
+    ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function (tabletoupdate) {
         var tabletoupdate = tabletoupdate;
-        try{
+        try {
             $.ajax({
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'tabletoupdate': tabletoupdate},
+                data: { 'tabletoupdate': tabletoupdate },
                 success: function (msg) {
                     $.ajax({
                         url: 'PHP/CheckResultsReader.php',
@@ -573,25 +567,25 @@ function ComplianceReviewManager(complianceCheckManager,
                         async: true,
                         data: {},
                         success: function (msg) {
-                                $("#SourceAComplianceMainReviewCell").empty();
-                                $("#SourceAComplianceDetailedReviewCell").empty();
-                                $("#SourceBComplianceMainReviewCell").empty();
-                                $("#SourceBComplianceDetailedReviewCell").empty();
-                                $("#ComparisonMainReviewCell").empty();
-                                $("#ComparisonDetailedReviewCell").empty();
+                            $("#SourceAComplianceMainReviewCell").empty();
+                            $("#SourceAComplianceDetailedReviewCell").empty();
+                            $("#SourceBComplianceMainReviewCell").empty();
+                            $("#SourceBComplianceDetailedReviewCell").empty();
+                            $("#ComparisonMainReviewCell").empty();
+                            $("#ComparisonDetailedReviewCell").empty();
 
                             var checkResults = JSON.parse(msg);
-        
+
                             var comparisonCheckGroups = undefined;
                             var sourceAComplianceCheckGroups = undefined;
                             var sourceBComplianceCheckGroups = undefined;
-        
+
                             for (var key in checkResults) {
                                 if (!checkResults.hasOwnProperty(key)) {
                                     continue;
                                 }
-        
-        
+
+
                                 if (key == 'Comparison') {
                                     comparisonCheckGroups = new CheckGroups();
                                     comparisonCheckGroups.restore(checkResults[key], false);
@@ -605,134 +599,148 @@ function ComplianceReviewManager(complianceCheckManager,
                                     sourceBComplianceCheckGroups.restore(checkResults[key], true);
                                 }
                             }
-        
+
                             // populate check results
                             populateCheckResults(comparisonCheckGroups,
                                 sourceAComplianceCheckGroups,
                                 sourceBComplianceCheckGroups);
-        
+
                             // load analytics data
                             document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
                         }
-                    });        
+                    });
                 }
             });
         }
-        catch(error) {
+        catch (error) {
             console.log(error);
-        }   
+        }
     }
 
-    ComplianceReviewManager.prototype.unAcceptStatus = function(selectedRow, _this) {
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") { 
+    ComplianceReviewManager.prototype.unAcceptStatus = function (selectedRow, _this) {
+        if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
             var componentId = selectedRow[0].cells[3].innerHTML;
             var groupId = selectedRow[0].cells[4].innerHTML;
             var tableToUpdate;
-            if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
+            if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceAComplianceMainReviewTbody") {
                 tableToUpdate = "rejectComponentFromComplianceATab";
             }
-            else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
+            else if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "SourceBComplianceMainReviewTbody") {
                 tableToUpdate = "rejectComponentFromComplianceBTab";
             }
             else { return; }
-            try{
+            try {
                 $.ajax({
                     url: 'PHP/updateResultsStatusToAccept.php',
                     type: "POST",
                     dataType: 'JSON',
                     async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate },
+                    data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
                         var properties = status[1];
+                        selectedRow[0].cells[1].innerHTML = status[0];
+                        var cell = 0;
+                        for (cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                        }
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = status[0];
                         var index = 0;
-                        for(var propertyId in properties) {
+                        for (var propertyId in properties) {
                             component.properties[index].Severity = properties[propertyId]["severity"];
                             index++;
                         }
                         _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
-                });   
+                });
             }
-            catch(error) {}        
+            catch (error) { }
         }
-        else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+        else if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody" || selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
             var componentId = this.SelectedComponentRow.cells[3].innerHTML;
             var groupId = this.SelectedComponentRow.cells[4].innerHTML;
             var tableToUpdate;
-            if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody") {
+            if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceADetailedReviewTbody") {
                 tableToUpdate = "rejectPropertyFromComplianceATab";
             }
-            else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
+            else if (selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComplianceBDetailedReviewTbody") {
                 tableToUpdate = "rejectPropertyFromComplianceBTab";
             }
             else { return; }
-            try{
+            try {
                 $.ajax({
                     url: 'PHP/updateResultsStatusToAccept.php',
                     type: "POST",
                     async: true,
                     dataType: 'JSON',
-                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText},
+                    data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
                         var changedStatus = status[0];
+                        // if(status[0] !== _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]) {
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                        _this.changeReviewTableStatus(_this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"]);
+                        // }
 
                         var propertiesLen = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
-                        for(var i = 0; i < propertiesLen; i++) {
+                        for (var i = 0; i < propertiesLen; i++) {
                             var sourceAName = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
-                            if(sourceAName == null) { sourceAName = ""}; 
+                            if (sourceAName == null) { sourceAName = "" };
 
-                            if(sourceAName == selectedRow[0].cells[0].innerText) {
+                            if (sourceAName == selectedRow[0].cells[0].innerText) {
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
                             }
-                           
+
                         }
-                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
-                        
+                        _this.populateDetailedReviewTable(_this.SelectedComponentRow);
+
                     }
-                });   
+                });
             }
-            catch(error) {
-                console.log(error);}  
+            catch (error) {
+                console.log(error);
+            }
         }
     }
 
-    ComplianceReviewManager.prototype.unAcceptCategory = function(button, _this) {
+    ComplianceReviewManager.prototype.unAcceptCategory = function (button, _this) {
         var groupId = Number(button.attributes[0].value);
 
         var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
         var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
         var tableToUpdate;
-        if(this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
+        if (this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
             tableToUpdate = "rejectCategoryFromComplianceATab";
         }
-        else if(this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
+        else if (this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
             tableToUpdate = "rejectCategoryFromComplianceBTab";
         }
 
-        try{
+        try {
             $.ajax({
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
                 dataType: 'JSON',
-                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate},
+                data: { 'groupid': groupId, 'tabletoupdate': tableToUpdate },
                 success: function (msg) {
                     var status = new Array();
                     status = msg;
                     var componentStatus = status[0];
                     var propsStatus = status[1];
                     var index = 0
+                    for (var i = 0; i < noOfComponents; i++) {
+                        categorydiv.children[1].children[0].children[0].children[i].children[1].innerHTML = componentStatus[index]['status'];
+                        for (cell = 0; cell < categorydiv.children[1].children[0].children[0].children[i].cells.length; cell++) {
+                            categorydiv.children[1].children[0].children[0].children[i].cells[cell].style.backgroundColor = _this.getRowHighlightColor(componentStatus[index]['status']);
+                        }
                         var j = 0;
                         var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
                         compgroup.categoryStatus = "UNACCEPTED";
-                        for(var compId in compgroup["CheckComponents"]) {
+                        for (var compId in compgroup["CheckComponents"]) {
                             var component = compgroup["CheckComponents"][compId];
                             component.status = componentStatus[index]['status'];
                             var propindex = 0;
@@ -742,32 +750,21 @@ function ComplianceReviewManager(complianceCheckManager,
                                 propindex++;
                             }
                             j++;
-                            var row = categorydiv.children[1].children[0].children[0].children[index];
-                            var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
-    
-                            var editedItem = {"SourceA" : row.cells[0].innerText, 
-                                            "Status" : component.status, 
-                                            "NodeId" : row.cells[2].innerText, 
-                                            "ID" : row.cells[3].innerText, 
-                                            "groupId" : row.cells[4].innerText};
-    
-                            $(gridId).jsGrid("updateItem", row, editedItem).done(function() {
-                                if(index == noOfComponents-1) {
-                                    selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                                    _this.populateDetailedReviewTable(selectedRow);    
-                                    $(gridId).jsGrid("refresh");
-                                }
-                            });
-                            index++;  
-                        }  
+                        }
+
+                        selectedRow = categorydiv.children[1].children[0].children[0].children[0];
+                        _this.populateDetailedReviewTable(selectedRow);
+                        index++;
+                    }
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("A");
                 }
-            });   
+            });
         }
-        catch(error) {
-            console.log(error);}  
+        catch (error) {
+            console.log(error);
+        }
     }
 
     ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRow) {
@@ -805,39 +802,34 @@ function ComplianceReviewManager(complianceCheckManager,
 
     ComplianceReviewManager.prototype.showSelectedSheetData = function (viewerContainer, sheetName, thisRow) {
         //var currentSheetName = sheetName;//thisRow.cells[0].innerText.trim();
-        
+
         var viewerContainerData = document.getElementById(viewerContainer);
         var classWiseComponents = this.SourceComponents[sheetName];
 
-        if (viewerContainerData === null) 
-        {
+        if (viewerContainerData === null) {
             return;
         }
         // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
+        // jsGridTbodyTableIndex = 1
         if (viewerContainerData.childElementCount > 1 &&
-            this.SourceViewerCurrentSheetLoaded  === sheetName) 
-        {
-            if (_this.SelectedComponentRowFromSheetA) 
-            {
+            this.SourceViewerCurrentSheetLoaded === sheetName) {
+            if (_this.SelectedComponentRowFromSheetA) {
                 _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
             }
-            
-            if (_this.SelectedComponentRowFromSheetB) 
-            {
+
+            if (_this.SelectedComponentRowFromSheetB) {
                 _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
             }
-           
-            if (_this.SelectedComponentRow) 
-            {
+
+            if (_this.SelectedComponentRow) {
                 _this.RestoreBackgroundColor(_this.SelectedComponentRow);
             }
-            
+
             this.HighlightRowInSheetData(thisRow, viewerContainer);
             return;
         }
 
-       // var properties = [];
+        // var properties = [];
 
         // if (Object.keys(mainComponentClasseData).length > 0) {
         //     if (viewerContainerData.childElementCount > 1) {
@@ -861,11 +853,9 @@ function ComplianceReviewManager(complianceCheckManager,
         //     }
         // }
 
-        if (classWiseComponents !== {}) 
-        {
+        if (classWiseComponents !== {}) {
             var componentProperties;
-            for (var componentId in classWiseComponents) 
-            {
+            for (var componentId in classWiseComponents) {
                 componentProperties = classWiseComponents[componentId];
                 break;
                 // for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) 
@@ -877,8 +867,8 @@ function ComplianceReviewManager(complianceCheckManager,
                 return;
             }
 
-           
-           // var sheetProperties = properties[0].properties;
+
+            // var sheetProperties = properties[0].properties;
 
             // if (mainComponentClasseData[currentSheetName] !== undefined) {
             //     sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
@@ -893,45 +883,41 @@ function ComplianceReviewManager(complianceCheckManager,
             var column = {};
             columnHeaders = [];
             //if (sheetProperties !== undefined) {
-                for (var i = 0; i < componentProperties.length; i++) 
-                {
-                    var compProperty = componentProperties[i];
-                    
-                    columnHeader = {};
-                    columnHeader["name"] = compProperty['name'];
-                    var type;
-                    if (compProperty['format'].toLowerCase() === "string") {
-                        type = "textarea";
-                    }
-                    else if (compProperty['format'].toLowerCase() === "number") {
-                        type = "number";
-                    }
+            for (var i = 0; i < componentProperties.length; i++) {
+                var compProperty = componentProperties[i];
 
-                    columnHeader["type"] = type;
-                    columnHeader["width"] = "80";
-                    columnHeaders.push(columnHeader);
+                columnHeader = {};
+                columnHeader["name"] = compProperty['name'];
+                var type;
+                if (compProperty['format'].toLowerCase() === "string") {
+                    type = "textarea";
+                }
+                else if (compProperty['format'].toLowerCase() === "number") {
+                    type = "number";
+                }
 
-                    //tagnumber is for instruments XLS data sheet
-                    if (Object.keys(column).length <= 3) {
-                        if (compProperty['name'] === "ComponentClass" ||
-                            compProperty['name'] === "Name" ||
-                            compProperty['name'] === "Description" ||
-                            compProperty['name'] === "Tagnumber") 
-                        {
-                            column[compProperty['name']] = i;
-                        }
+                columnHeader["type"] = type;
+                columnHeader["width"] = "80";
+                columnHeaders.push(columnHeader);
+
+                //tagnumber is for instruments XLS data sheet
+                if (Object.keys(column).length <= 3) {
+                    if (compProperty['name'] === "ComponentClass" ||
+                        compProperty['name'] === "Name" ||
+                        compProperty['name'] === "Description" ||
+                        compProperty['name'] === "Tagnumber") {
+                        column[compProperty['name']] = i;
                     }
                 }
+            }
             //}
 
             tableData = [];
-            for (var componentId in classWiseComponents) 
-            {
+            for (var componentId in classWiseComponents) {
                 var component = classWiseComponents[componentId];
 
                 tableRowContent = {};
-                for (var i = 0; i < component.length; i++) 
-                {
+                for (var i = 0; i < component.length; i++) {
                     var compProperty = component[i];
 
                     // get property value
@@ -959,8 +945,8 @@ function ComplianceReviewManager(complianceCheckManager,
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer1", thisRow, column, sheetName);
                 _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
 
-                   // keep track of currently loaded sheet data
-                   this.SourceViewerCurrentSheetLoaded = sheetName;
+                // keep track of currently loaded sheet data
+                this.SourceViewerCurrentSheetLoaded = sheetName;
             }
             else if (viewerContainer === "viewerContainer2") {
                 _this = this;
@@ -1133,7 +1119,7 @@ function ComplianceReviewManager(complianceCheckManager,
                             }
                         }
                     }
-                    
+
                     break;
                 }
             }
@@ -1147,7 +1133,7 @@ function ComplianceReviewManager(complianceCheckManager,
         var id = viewerContainer.replace("#", "");
         var currentSheetDataTable = document.getElementById(id);
         // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
+        // jsGridTbodyTableIndex = 1
         var currentSheetRows = currentSheetDataTable.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
         var currentCheckStatusArray = {};
@@ -1276,79 +1262,105 @@ function ComplianceReviewManager(complianceCheckManager,
         var tableData = [];
         var columnHeaders = [];
 
-        var componentId =  Number(row.cells[3].innerText);
-        var groupId = Number(row.cells[4].innerText);
+        var componentId = Number(row.cells[3].innerText)
         for (var componentsGroupID in this.ComplianceCheckManager) {
+            // for (var componentsGroupName in this.ComplianceCheckManager.CheckComponentsGroups) {
 
             // get the componentgroupd corresponding to selected component 
             var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-            if(componentsGroupList && componentsGroupID != "restore") {
-          
-            var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-
-                var div = document.createElement("DIV");
-                parentTable.appendChild(div);
-
-                div.innerHTML = "Check Details :";
-                div.style.fontSize = "20px";
-                div.style.fontWeight = "bold";
-
-                for (var i = 0; i < 3; i++) {
-                    columnHeader = {};
-                    var title;
-                    if (i === 0) {
-                        title = "Property";
-                        name = "Property";
-                    }
-                    else if (i === 1) {
-                        title = "Value";
-                        name = "Value";
-                    }
-                    else if (i === 2) {
-                        title = "Status";
-                        name = "Status";
-                    }
-
-                    columnHeader["name"] = name;
-                    columnHeader["title"] = title;
-                    columnHeader["type"] = "textarea";
-                    columnHeader["width"] = "30";
-                    columnHeaders.push(columnHeader);
+            var componentsGroup = undefined;
+            for (var groupId in componentsGroupList) {
+                if (componentsGroupList[groupId].ComponentClass.replace(/\s/g, '') != reviewTableId) {
+                    continue;
                 }
 
-                // // show component class name as property in detailed review table               
-            
-                for (var propertyId in component.properties) {
-                    property = component.properties[propertyId];
-            
-                    this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
+                componentsGroup = componentsGroupList[groupId];
+            }
+            if (!componentsGroup) {
+                continue;
+            }
 
-                    tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-                    tableData.push(tableRowContent);
+            if (!(componentId in componentsGroup.CheckComponents)) {
+                continue;
+            }
+            var component = componentsGroup.CheckComponents[componentId];
+
+            var div = document.createElement("DIV");
+            parentTable.appendChild(div);
+
+            div.innerHTML = "Check Details :";
+            div.style.fontSize = "20px";
+            div.style.fontWeight = "bold";
+
+            for (var i = 0; i < 3; i++) {
+                columnHeader = {};
+                var title;
+                if (i === 0) {
+                    title = "Property";
+                    name = "Property";
+                }
+                else if (i === 1) {
+                    title = "Value";
+                    name = "Value";
+                }
+                else if (i === 2) {
+                    title = "Status";
+                    name = "Status";
                 }
 
-                var id = "#" + this.DetailedReviewTableContainer;
-                this.LoadDetailedReviewTableData(this, columnHeaders, tableData, id);
-                this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
+                columnHeader["name"] = name;
+                columnHeader["title"] = title;
+                columnHeader["type"] = "textarea";
+                columnHeader["width"] = "30";
+                columnHeaders.push(columnHeader);
+            }
 
-                var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
-                // jsGridHeaderTableIndex = 0 
+            // // show component class name as property in detailed review table               
+            // var property = new CheckProperty("ComponentClass",
+            //     component.SubComponentClass,
+            //     "ComponentClass",
+            //     component.SubComponentClass,
+            //     "",
+            //     true,
+            //     "Match");
+
+            // this.detailedReviewRowComments[0] = property.Description;
+
+            // tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
+            // tableData.push(tableRowContent);
+            // tbody.appendChild(tr);
+
+            for (var propertyId in component.properties) {
+                property = component.properties[propertyId];
+                // for (var j = 0; j < component.CheckProperties.length; j++) {
+                //     property = component.CheckProperties[j];
+                this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
+
+                tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
+                tableData.push(tableRowContent);
+            }
+
+            var id = "#" + this.DetailedReviewTableContainer;
+            this.LoadDetailedReviewTableData(this, columnHeaders, tableData, id);
+            this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
+
+            var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
+            // jsGridHeaderTableIndex = 0 
             // jsGridTbodyTableIndex = 1
-                var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-                modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "565px";
-                modelBrowserHeaderTable.style.backgroundColor = "white";
-                modelBrowserHeaderTable.style.overflowX = "hidden";
+            var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
+            modelBrowserHeaderTable.style.position = "fixed"
+            modelBrowserHeaderTable.style.width = "565px";
+            modelBrowserHeaderTable.style.backgroundColor = "white";
+            modelBrowserHeaderTable.style.overflowX = "hidden";
 
-                // jsGridHeaderTableIndex = 0 
+            // jsGridHeaderTableIndex = 0 
             // jsGridTbodyTableIndex = 1
-                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
-                modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width = "579px";
-                modelBrowserDataTable.style.margin = "55px 0px 0px 0px"
+            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
+            modelBrowserDataTable.style.position = "static"
+            modelBrowserDataTable.style.width = "579px";
+            modelBrowserDataTable.style.margin = "55px 0px 0px 0px"
 
-                break;
+            break;
             //}
             }
         }
@@ -1363,7 +1375,7 @@ function ComplianceReviewManager(complianceCheckManager,
             return;
         }
         // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
+        // jsGridTbodyTableIndex = 1
         var detailedReviewTableRows = detailedReviewTableContainer.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
         for (var i = 0; i < detailedReviewTableRows.length; i++) {
@@ -1408,13 +1420,13 @@ function ComplianceReviewManager(complianceCheckManager,
                 autoload: true,
                 controller: db,
                 data: tableData,
-                headerRowRenderer: function() {
+                headerRowRenderer: function () {
                     var fields = $(viewerContainer).jsGrid("option", "fields");
                     var result = $("<tr>").height(0).append($("<th>").width(194))
-                    .append($("<th>").width(190));
+                        .append($("<th>").width(190));
 
                     result = result.add($("<tr>")
-                    .append($("<th>").attr("colspan", 2).text('Source'/*AnalyticsData.SourceAName*/)))
+                        .append($("<th>").attr("colspan", 2).text('Source'/*AnalyticsData.SourceAName*/)))
 
 
                     var tr = $("<tr class='jsgrid-header-row'>");
@@ -1498,7 +1510,7 @@ function ComplianceReviewManager(complianceCheckManager,
         if (status.toLowerCase() === ("OK").toLowerCase()) {
             return SuccessColor;
         }
-        else if(status.toLowerCase() === ("MATECHED").toLowerCase()) {
+        else if (status.toLowerCase() === ("MATECHED").toLowerCase()) {
             return MatchedColor;
         }
         else if (status.toLowerCase() === ("Error").toLowerCase()) {
@@ -1516,8 +1528,8 @@ function ComplianceReviewManager(complianceCheckManager,
         else if (status.toLowerCase() === ("Accepted").toLowerCase()) {
             return AcceptedColor;
         }
-        else if (status.toLowerCase() === ("Error(A)").toLowerCase() || status.toLowerCase() === ("Warning(A)").toLowerCase() 
-        || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
+        else if (status.toLowerCase() === ("Error(A)").toLowerCase() || status.toLowerCase() === ("Warning(A)").toLowerCase()
+            || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
             return PropertyAcceptedColor;
         }
         else if(status.toLowerCase() === ("OK(A)").toLowerCase()) {
@@ -1538,4 +1550,4 @@ function ComplianceReviewManager(complianceCheckManager,
 
         return tableElement.parentElement.parentElement.id;
     }
-}
+//}
