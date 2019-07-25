@@ -6,11 +6,7 @@ function ComparisonReviewManager(comparisonCheckManager,
     mainReviewTableContainer,
     detailedReviewTableContainer,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy/*,
-    sourceAComponentIdVsComponentData,
-    sourceANodeIdVsComponentData,
-    sourceBComponentIdVsComponentData,
-    sourceBNodeIdVsComponentData*/) 
+    sourceBComponentsHierarchy) 
     {
         
     this.MainReviewTableColumns = 6;   
@@ -222,21 +218,19 @@ function ComparisonReviewManager(comparisonCheckManager,
                 for (var j = 0; j < modelBrowserDataRows.length; j++) {
                     var currentRow = modelBrowserDataRows[j];
 
-                    var status = currentRow.cells[2].innerText;
-                    if (currentRow.cells.length === 7) {
-                        if (currentRow.cells[3].innerText !== undefined &&
-                            currentRow.cells[3].innerText !== "") {
+                    // var status = currentRow.cells[2].innerText;
+                    // if (currentRow.cells.length === 7) {
+                    //     if (currentRow.cells[3].innerText !== undefined &&
+                    //         currentRow.cells[3].innerText !== "") {
 
-                            var sourceANodeId = currentRow.cells[3].innerText;
-                            // this.SourceANodeIdVsStatus[sourceANodeId] = [currentRow, status];
-                        }
-                        if (currentRow.cells[4].innerText !== undefined &&
-                            currentRow.cells[4].innerText !== "") {
+                    //         //var sourceANodeId = currentRow.cells[3].innerText;                            
+                    //     }
+                    //     if (currentRow.cells[4].innerText !== undefined &&
+                    //         currentRow.cells[4].innerText !== "") {
 
-                            var sourceBNodeId = currentRow.cells[4].innerText;
-                            // this.SourceBNodeIdVsStatus[sourceBNodeId] = [currentRow, status];
-                        }
-                    }
+                    //         var sourceBNodeId = currentRow.cells[4].innerText;                            
+                    //     }
+                    // }
 
                     // hide additional columns
                     for (var i = 0; i < currentRow.cells.length; i++) {

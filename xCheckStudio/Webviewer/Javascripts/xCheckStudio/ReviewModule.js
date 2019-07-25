@@ -477,11 +477,7 @@ function loadComparisonData(comparisonCheckGroups,
         "ComparisonMainReviewCell",
         "ComparisonDetailedReviewCell",
         sourceAComponentsHierarchy,
-        sourceBComponentsHierarchy/*,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined*/);
+        sourceBComponentsHierarchy);
 
     // populate review table
     comparisonReviewManager.populateReviewTable();
