@@ -3,10 +3,9 @@ function ComplianceReviewManager(complianceCheckManager,
     viewerData,
     sourceComponents,
     mainReviewTableContainer,
-    detailedReviewTableContainer,
-    //componentIdVsComponentData,
-    //nodeIdVsComponentData,
-    detailedReviewRowCommentDiv) {
+    detailedReviewTableContainer,   
+    detailedReviewRowCommentDiv,
+    componentsHierarchy) {
 
     this.MainReviewTableColumns = 4;
     this.MainReviewTableIdColumn = 3;
@@ -22,7 +21,7 @@ function ComplianceReviewManager(complianceCheckManager,
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
-    this.NodeIdStatusData = {};
+    this.NodeIdStatusData = componentsHierarchy;
 
     //ComponentIdVsComponentData = componentIdVsComponentData;
     //this.NodeIdVsComponentData = nodeIdVsComponentData;
@@ -224,14 +223,14 @@ function ComplianceReviewManager(complianceCheckManager,
                         }
                     }
 
-                    var status = currentRow.cells[1].innerText;
-                    if (currentRow.cells.length === 3) {
-                        if (currentRow.cells[2].innerText !== undefined &&
-                            currentRow.cells[2].innerText !== "") {
-                            var nodeId = currentRow.cells[2].innerText;
-                            this.NodeIdStatusData[nodeId] = [currentRow, status];
-                        }
-                    }
+                    // var status = currentRow.cells[1].innerText;
+                    // if (currentRow.cells.length === 3) {
+                    //     if (currentRow.cells[2].innerText !== undefined &&
+                    //         currentRow.cells[2].innerText !== "") {
+                    //         var nodeId = currentRow.cells[2].innerText;
+                    //         this.NodeIdStatusData[nodeId] = [currentRow, status];
+                    //     }
+                    // }
                 }
 
                 modelBrowserDataTable.style.position = "static"

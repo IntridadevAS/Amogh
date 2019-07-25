@@ -18,10 +18,10 @@ function HighlightManager(viewer,
     this.ComponentIdVsComponentData = componentIdVsComponentData
     this.NodeIdVsComponentData = nodeIdVsComponentData;
     
-    HighlightManager.prototype.changeComponentColorInViewer = function (component) {    
+    HighlightManager.prototype.changeComponentColorInViewer = function (component, override, parentComponent) {    
         
         nodeIdString = component.NodeId;
-        var hexColor = xCheckStudio.Util.getComponentHexColor(component);
+        var hexColor = xCheckStudio.Util.getComponentHexColor(component, override, parentComponent);
         if (hexColor === undefined) {
             return;
         }
@@ -30,8 +30,7 @@ function HighlightManager(viewer,
         if (nodeId === undefined ||
             isNaN(nodeId)) {
             return;
-        }
-       
+        }       
 
         // set nodes face and line colors from status of compoentns
         var rgbColor = xCheckStudio.Util.hexToRgb(hexColor);

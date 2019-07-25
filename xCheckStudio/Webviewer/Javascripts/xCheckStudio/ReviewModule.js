@@ -317,7 +317,9 @@ function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
     sourceBComplianceCheckGroups,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceAComplianceHierarchy,
+    sourceBComplianceHierarchy) {
     if (!comparisonCheckGroups &&
         !sourceAComplianceCheckGroups &&
         !sourceBComplianceCheckGroups) {
@@ -392,13 +394,15 @@ function populateCheckResults(comparisonCheckGroups,
             if (sourceAComplianceCheckGroups) {
                 loadSourceAComplianceData(sourceAComplianceCheckGroups,
                     sourceAViewerOptions,
-                    sourceAClassWiseComponents);
+                    sourceAClassWiseComponents,
+                    sourceAComplianceHierarchy,);
             }
 
             if (sourceBComplianceCheckGroups) {
                 loadSourceBComplianceData(sourceBComplianceCheckGroups,
                     sourceBViewerOptions,
-                    sourceBClassWiseComponents);
+                    sourceBClassWiseComponents,
+                    sourceBComplianceHierarchy);
             }
 
             // make buttons collapsible
@@ -419,14 +423,16 @@ function populateCheckResults(comparisonCheckGroups,
 
 function loadSourceAComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceAClassWiseComponents) {
+    sourceAClassWiseComponents,
+    sourceAComplianceHierarchy) {
 
     sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
         sourceAClassWiseComponents,
         'SourceAComplianceMainReviewCell',
         'SourceAComplianceDetailedReviewCell',
-        'SourceAComplianceDetailedReviewComment');
+        'SourceAComplianceDetailedReviewComment',
+         sourceAComplianceHierarchy);
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
@@ -437,21 +443,16 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
 function loadSourceBComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceBClassWiseComponents) {
-
-    // var sourceViewerOptions = undefined;
-    // if(viewerOptions['SourceBContainerId'] !== undefined &&
-    //     viewerOptions['SourceBEndPointUri'] !== undefined)
-    // {
-    //     sourceViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
-    // }
+    sourceBClassWiseComponents,
+    sourceBComplianceHierarchy) {    
 
     sourceBComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
         sourceBClassWiseComponents,
         'SourceBComplianceMainReviewCell',
         'SourceBComplianceDetailedReviewCell',
-        'SourceBComplianceDetailedReviewComment');
+        'SourceBComplianceDetailedReviewComment',
+         sourceBComplianceHierarchy);
 
 
     // populate review table
@@ -477,11 +478,7 @@ function loadComparisonData(comparisonCheckGroups,
         "ComparisonMainReviewCell",
         "ComparisonDetailedReviewCell",
         sourceAComponentsHierarchy,
-        sourceBComponentsHierarchy/*,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined*/);
+        sourceBComponentsHierarchy);
 
     // populate review table
     comparisonReviewManager.populateReviewTable();
