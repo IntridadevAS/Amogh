@@ -1592,11 +1592,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                                         property.Severity = 'OK(T)';
                                         property.transpose = transposeType;
                                         component.status = "OK(T)";
+                                        component.transpose = transposeType;
                                     }
                                     else if(transposeType == 'righttoleft' && (property.SourceAName !== "" && property.SourceBName !== "")) {
                                         property.Severity = 'OK(T)';
                                         property.transpose = transposeType;
                                         component.status = "OK(T)";
+                                        component.transpose = transposeType;
                                     }
                                     else {
                                         if((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null && 
