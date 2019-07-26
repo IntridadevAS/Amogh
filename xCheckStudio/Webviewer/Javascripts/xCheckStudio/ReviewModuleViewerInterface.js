@@ -53,7 +53,13 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         for(var id in children) {
             var child = children[id];
 
-            var overrideColor = false;
+            if (component.MainClass.toLowerCase() === "pipingnetworksegment" &&
+                child.MainClass.toLowerCase() === "component" &&
+                child.SubClass.toLowerCase() === "centerline") {
+                continue;
+            }
+
+            var overrideColor = false;         
             if ((component.MainClass.toLowerCase() === "pipingnetworksystem" &&
                  child.MainClass.toLowerCase() === "pipingnetworksegment") ||
                 ((component.MainClass.toLowerCase() === "pipe" ||
