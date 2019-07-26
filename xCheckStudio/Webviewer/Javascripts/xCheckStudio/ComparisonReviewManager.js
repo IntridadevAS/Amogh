@@ -1467,8 +1467,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
                                 if(property.Severity !== "OK" &&  property.Severity !== "No Value") {
-                                   
-                                    if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
+                                    if(property.Severity == 'ACCEPTED') {
+                                        component.status = 'OK(A)(T)';
+                                    }
+                                    else if(transposeType == 'lefttoright' && (property.SourceAName !== "" && property.SourceBName !== "")) {
                                         property.Severity = 'OK(T)';
                                         property.transpose = transposeType;
                                     }

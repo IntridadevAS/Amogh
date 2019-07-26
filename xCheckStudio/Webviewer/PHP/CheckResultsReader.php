@@ -341,7 +341,7 @@
 
                             $componentId = $componentRow['id'];
 
-                            $componentStatus = 'OK(T)';
+                            $componentStatus = 'OK';
                             $isPropertyStatusOk = true;
                              // read properties                                                                  
                             $checkPropertiesResults = $dbh->query("SELECT *FROM ComparisonCheckProperties where ownerComponent=$componentId;");

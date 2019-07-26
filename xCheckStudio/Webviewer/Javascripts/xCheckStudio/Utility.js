@@ -40,6 +40,23 @@ var xCheckStudio;
         }
         Util.fileExists = fileExists;
 
+        function isAccepted(component) {
+            var accepted = false;
+
+            if(component.accepted == 'true') {
+                accepted = true;
+            }
+            return accepted;
+        }
+
+        function isTransposed(component) {
+            var transposed = false;
+
+            if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                transposed = true;
+            }
+            return transposed;
+        }
 
         function getComponentHexColor  (component, override, parentComponent) {
             status = component.Status;
@@ -85,66 +102,44 @@ var xCheckStudio;
             if (status.toLowerCase() === "ok") {
                 return SuccessColor;
             }
-            else if (status.toLowerCase() ==="error") {
-                if(component.accepted == 'true') {
+            else if (status.toLowerCase() === ("Error").toLowerCase()) {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || 
-                        component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || 
-                         component.transpose == 'righttoleft') && 
-                         component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return HoopsViewerErrorColor;
                 }           
             }
-            else if (status.toLowerCase() === "warning") {
-                if(component.accepted == 'true') {
+            else if (status.toLowerCase() === ("Warning").toLowerCase()) {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || 
-                        component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || 
-                         component.transpose == 'righttoleft') && 
-                         component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return WarningColor;
                 }          
             }
-            else if (status.toLowerCase() === "no match") {
-                if(component.accepted == 'true') {
+            else if (status.toLowerCase() === ("No Match").toLowerCase()) {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || 
-                        component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || 
-                         component.transpose == 'righttoleft') && 
-                         component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return NoMatchColor;
                 }
             }
-            else if (status.toLowerCase() === "no value") {
-                if(component.accepted == 'true') {
+            else if (status.toLowerCase() === ("No Value").toLowerCase()) {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
-                component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {

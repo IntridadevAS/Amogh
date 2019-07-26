@@ -926,23 +926,80 @@ function checkIsOrderMaintained(checkType) {
     }
 }
 
-function getCheckCase() {
+function getCheckCase(sourcetype, viewerContainer) {
     var fileName;
+    var dummylist = [];
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
-    if (checkCaseSelect.value == "None") {
-        return;
-    }
-
-    for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-        var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-        if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
-            fileName = checkCaseFileData.FileName;
-            break;
+    if(sourcetype == undefined && 
+       viewerContainer == undefined) {
+       
+        checkCaseFilesData.FilteredCheckCaseDataList = [];
+        checkCaseFilesData.populateCheckCases();
+    } 
+    else {
+        var fileExtensionA;
+        var fileExtensionB;
+        fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+        if (sourceBFileName !== undefined) {
+            fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+    
         }
-    }
-    if (fileName !== undefined) {
-        checkCaseManager.readCheckCaseData(fileName);
+    
+        // checkCaseSelect.options.add(new Option("None", "None"));
+    
+        if(viewerContainer == "viewerContainer1") {
+            for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                    if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                        checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
+                    }      
+            }
+        }
+    
+        else if(viewerContainer == "viewerContainer2") {
+            for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
+                var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
+                var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
+                if(fileExtensionA == fileExtensionB) {
+                    if(count >= 2)
+                        dummylist.push(checkCaseFileData);
+                }
+                else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                    dummylist.push(checkCaseFileData);
+                }      
+            }
+            checkCaseFilesData.FilteredCheckCaseDataList = [];
+            checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
+        }
+    
+        for (var i = checkCaseSelect.length - 1; i >= 0; i--) {
+            checkCaseSelect.remove(i);
+        }
+                
+        for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
+            var checkCaseData = checkCaseFilesData.FilteredCheckCaseDataList[i];
+
+            checkCaseSelect.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
+        }
+
+        for (var i = 0; i < checkCaseSelect.options.length; i++) {
+            var checkCaseOption = checkCaseSelect.options[i];
+            checkCaseOption.className = "casesppidvspdm";
+        }
+
+
+        for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+            var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+            if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
+                fileName = checkCaseFileData.FileName;
+                break;
+            }
+        }
+    
+        if (fileName !== undefined) {
+            checkCaseManager.readCheckCaseData(fileName);
+        }
     }
 }
 
@@ -1016,11 +1073,8 @@ function loadExcelDataSource(fileExtension,
         if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
         }
-        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-            if (success) {
-                getCheckCase();
-            }
-        });
+        getCheckCase(fileExtension, viewerContainer);
+
     }
 
 
@@ -1138,11 +1192,7 @@ function loadModel(fileName,
                     }
                     manageControlsOnDatasourceLoad(fileName, viewerContainer, modelTreeContainer);
                     if (!checkCaseSelected) {
-                        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-                            if (success) {
-                                getCheckCase();
-                            }
-                        });
+                        getCheckCase(fileExtension, viewerContainer);
                     }
                     return true;
                 }
@@ -1425,11 +1475,7 @@ function readDbDataSource(uri,
         sourceManager1 = createSourceManager(fileExtension, viewerContainer, modelTreeContainer);
         sourceManager1.LoadData(uri).then(function (result) {
             if (!checkCaseSelected) {
-                checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-                    if (success) {
-                        getCheckCase();
-                    }
-                });
+                getCheckCase(fileExtension, viewerContainer);
             }
         });
     }
@@ -1437,11 +1483,7 @@ function readDbDataSource(uri,
         sourceManager2 = createSourceManager(fileExtension, viewerContainer, modelTreeContainer);
         sourceManager2.LoadData(uri).then(function (result) {
             if (!checkCaseSelected) {
-                checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, true).then(function (success) {
-                    if (success) {
-                        getCheckCase();
-                    }
-                });
+                getCheckCase(fileExtension, viewerContainer);
             }
         });
     }
@@ -1829,12 +1871,9 @@ function clearData(source) {
         sourceManager1 = null;
         sourceManager2 = null;
         enableDropZone("dropZone1");
-        checkCaseFilesData.readCheckCaseFiles().then(function (success) {
-            if (success) {
-                getCheckCase();
-                clearDBEntriesOnClearModule(source);
-            }
-        });;
+        getCheckCase();
+        clearDBEntriesOnClearModule(source);
+
     }
     else if (source.toLowerCase() == "sourcea") {
         document.getElementById("modelTree1").innerHTML = "";;
@@ -1867,12 +1906,9 @@ function clearData(source) {
             excludeNone = false;
         }
         sourceManager1 = null;
-        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
-            if (success) {
-                getCheckCase();
-                clearDBEntriesOnClearModule(source);
-            }
-        });
+        getCheckCase();
+        clearDBEntriesOnClearModule(source);
+      
     }
     else if (source.toLowerCase() == "sourceb") {
         document.getElementById("modelTree2").innerHTML = "";
@@ -1904,12 +1940,9 @@ function clearData(source) {
         if (sourceAFileName == undefined && sourceBFileName == undefined) {
             excludeNone = false;
         }
-        checkCaseFilesData.readCheckCaseFiles(fileExtensionA, fileExtensionB, excludeNone).then(function (success) {
-            if (success) {
-                getCheckCase();
-                clearDBEntriesOnClearModule(source);
-            }
-        });
+        getCheckCase();
+        clearDBEntriesOnClearModule(source);
+
     }
 }
 function cancelreviewresults() {
