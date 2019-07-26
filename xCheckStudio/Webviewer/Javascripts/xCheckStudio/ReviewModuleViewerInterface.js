@@ -38,19 +38,31 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
         for(var id in this.NodeIdStatusData) {
             var component = this.NodeIdStatusData[id];
-            this.ChangeComponentColor(component);
+            this.ChangeComponentColor(component, false, undefined);
         }
     }
 
-    ReviewModuleViewerInterface.prototype.ChangeComponentColor = function(component) {
+    ReviewModuleViewerInterface.prototype.ChangeComponentColor = function(component, override, parentComponent) {
         var status = component.Status;
-        var nodeId = component.NodeId;
+        //var nodeId = component.NodeId;
         if(status !== null) {
-            this.highlightManager.changeComponentColorInViewer(component);
-        }
+            this.highlightManager.changeComponentColorInViewer(component, override, parentComponent);
+        }      
+
         var children = component.Children;
-        for(var child in children) {
-            this.ChangeComponentColor(children[child]);
+        for(var id in children) {
+            var child = children[id];
+
+            var overrideColor = false;
+            if ((component.MainClass.toLowerCase() === "pipingnetworksystem" &&
+                 child.MainClass.toLowerCase() === "pipingnetworksegment") ||
+                ((component.MainClass.toLowerCase() === "pipe" ||
+                component.MainClass.toLowerCase() === "hvac") && 
+                child.MainClass.toLowerCase() === "bran")) {
+                overrideColor = true;
+            }
+
+            this.ChangeComponentColor(child, overrideColor, component);
         }
     }
 
@@ -135,6 +147,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
 
+                // create nav cube
+                _this.ShowNavigationCube();
+
                 _this.highlightComponentsfromResult();
             },
             selectionArray: function (selections) {
@@ -166,6 +181,25 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 },
         });
     };
+
+    ReviewModuleViewerInterface.prototype.ShowNavigationCube = function ()
+    {
+        // create nav cube
+        var navCube = this.Viewer.view.getNavCube();
+        navCube.enable();
+        // resize nav cube
+        var overlayManager = this.Viewer.getOverlayManager();
+        overlayManager.setViewport(Communicator.BuiltinOverlayIndex.NavCube, 
+                                   Communicator.OverlayAnchor.UpperRightCorner, 
+                                   0, 
+                                   Communicator.OverlayUnit.ProportionOfCanvas, 
+                                   0, 
+                                   Communicator.OverlayUnit.ProportionOfCanvas, 
+                                   100, 
+                                   Communicator.OverlayUnit.Pixels, 
+                                   100, 
+                                   Communicator.OverlayUnit.Pixels);
+    }
 
     ReviewModuleViewerInterface.prototype.menu = function (x, y) {
         var i = document.getElementById("menu").style;

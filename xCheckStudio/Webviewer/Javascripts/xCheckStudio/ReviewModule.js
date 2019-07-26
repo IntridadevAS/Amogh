@@ -51,6 +51,22 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
+function highlightSelectedRowOnRightClick(selectedRow) {
+    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+    if(typeOfRow == "ComparisonMainReviewTbody") { 
+        comparisonReviewManager.SelectedComponentRow = selectedRow[0];
+        comparisonReviewManager.ChangeBackgroundColor(selectedRow[0]);
+    }
+    else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+        sourceAComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+        sourceAComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
+    }
+    else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+        sourceBComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+        sourceBComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
+    }
+}
+
 function onTransposeClick(key, selectedRow) {
     if(selectedRow[0].nodeName == "BUTTON") {
         var typeOfRow = selectedRow[0].offsetParent.id;
@@ -141,7 +157,7 @@ function chooseRestoreTranspose(selectedRow) {
             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return true;
             }
-            else if(component.transpose !== null) {
+            else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML.includes('(T)')) {
                 return false;
             }else { return true; }
         }
@@ -317,7 +333,9 @@ function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
     sourceBComplianceCheckGroups,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceAComplianceHierarchy,
+    sourceBComplianceHierarchy) {
     if (!comparisonCheckGroups &&
         !sourceAComplianceCheckGroups &&
         !sourceBComplianceCheckGroups) {
@@ -392,13 +410,15 @@ function populateCheckResults(comparisonCheckGroups,
             if (sourceAComplianceCheckGroups) {
                 loadSourceAComplianceData(sourceAComplianceCheckGroups,
                     sourceAViewerOptions,
-                    sourceAClassWiseComponents);
+                    sourceAClassWiseComponents,
+                    sourceAComplianceHierarchy,);
             }
 
             if (sourceBComplianceCheckGroups) {
                 loadSourceBComplianceData(sourceBComplianceCheckGroups,
                     sourceBViewerOptions,
-                    sourceBClassWiseComponents);
+                    sourceBClassWiseComponents,
+                    sourceBComplianceHierarchy);
             }
 
             // make buttons collapsible
@@ -419,14 +439,16 @@ function populateCheckResults(comparisonCheckGroups,
 
 function loadSourceAComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceAClassWiseComponents) {
+    sourceAClassWiseComponents,
+    sourceAComplianceHierarchy) {
 
     sourceAComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
         sourceAClassWiseComponents,
         'SourceAComplianceMainReviewCell',
         'SourceAComplianceDetailedReviewCell',
-        'SourceAComplianceDetailedReviewComment');
+        'SourceAComplianceDetailedReviewComment',
+         sourceAComplianceHierarchy);
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
@@ -437,21 +459,16 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
 function loadSourceBComplianceData(complianceCheckGroups,
     sourceViewerOptions,
-    sourceBClassWiseComponents) {
-
-    // var sourceViewerOptions = undefined;
-    // if(viewerOptions['SourceBContainerId'] !== undefined &&
-    //     viewerOptions['SourceBEndPointUri'] !== undefined)
-    // {
-    //     sourceViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
-    // }
+    sourceBClassWiseComponents,
+    sourceBComplianceHierarchy) {    
 
     sourceBComplianceReviewManager = new ComplianceReviewManager(complianceCheckGroups,
         sourceViewerOptions,
         sourceBClassWiseComponents,
         'SourceBComplianceMainReviewCell',
         'SourceBComplianceDetailedReviewCell',
-        'SourceBComplianceDetailedReviewComment');
+        'SourceBComplianceDetailedReviewComment',
+         sourceBComplianceHierarchy);
 
 
     // populate review table
@@ -477,11 +494,7 @@ function loadComparisonData(comparisonCheckGroups,
         "ComparisonMainReviewCell",
         "ComparisonDetailedReviewCell",
         sourceAComponentsHierarchy,
-        sourceBComponentsHierarchy/*,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined,
-                                                            undefined*/);
+        sourceBComponentsHierarchy);
 
     // populate review table
     comparisonReviewManager.populateReviewTable();

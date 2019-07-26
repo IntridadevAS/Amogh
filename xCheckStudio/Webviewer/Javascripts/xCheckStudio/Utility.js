@@ -40,22 +40,73 @@ var xCheckStudio;
         }
         Util.fileExists = fileExists;
 
+        function isAccepted(component) {
+            var accepted = false;
 
-        function getComponentHexColor  (component) {
+            if(component.accepted == 'true') {
+                accepted = true;
+            }
+            return accepted;
+        }
+
+        function isTransposed(component) {
+            var transposed = false;
+
+            if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+                transposed = true;
+            }
+            return transposed;
+        }
+
+        function getComponentHexColor  (component, override, parentComponent) {
             status = component.Status;
+            
+            // this is for overriding colors for pipes and branches
+            if(override && parentComponent)
+            {
+                if (parentComponent.Status.toLowerCase().includes("error")) {
+
+                    if (parentComponent.accepted.toLowerCase() != 'true' ||
+                        parentComponent.transpose !== 'lefttoright' ||
+                        parentComponent.transpose !== 'righttoleft') {
+                        return HoopsViewerErrorColor;
+                    }
+                }
+                else if (parentComponent.Status.toLowerCase().includes("warning")) {
+
+                    if ((parentComponent.accepted.toLowerCase() != 'true' ||
+                        parentComponent.transpose !== 'lefttoright' ||
+                        parentComponent.transpose !== 'righttoleft') && 
+                        status.toLowerCase() !=="error") {
+                        return WarningColor;
+                    }
+                }
+                else if (parentComponent.Status.toLowerCase().includes("no match")) {
+
+                    if ((parentComponent.accepted.toLowerCase() != 'true' ||
+                        parentComponent.transpose !== 'lefttoright' ||
+                        parentComponent.transpose !== 'righttoleft') && 
+                        (status.toLowerCase() !=="error" ||  
+                         status.toLowerCase() !=="warning")) {
+                        
+                            return NoMatchColor;
+                    }
+                }
+                //  else if(parentComponent.Status.toLowerCase().includes("ok"))
+                //  {
+                     
+                //  }
+            }
+
             // var color;
-            if (status.toLowerCase() === ("OK").toLowerCase()) {
+            if (status.toLowerCase() === "ok") {
                 return SuccessColor;
             }
             else if (status.toLowerCase() === ("Error").toLowerCase()) {
-                if(component.accepted == 'true') {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
-                component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
@@ -63,14 +114,10 @@ var xCheckStudio;
                 }           
             }
             else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-                if(component.accepted == 'true') {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
-                component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
@@ -78,14 +125,10 @@ var xCheckStudio;
                 }          
             }
             else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-                if(component.accepted == 'true') {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
-                component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
@@ -93,37 +136,33 @@ var xCheckStudio;
                 }
             }
             else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-                if(component.accepted == 'true') {
+                if(isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
-                    return PropertyAcceptedColor;
-                }
-                else if((component.transpose == 'lefttoright' || component.transpose == 'righttoleft') && 
-                component.accepted == 'true') {
+                else if(isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return NoValueColor;
                 }
             }
-            else if (status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
+            else if (status.toLowerCase() === "accepted(t)") {
                 return AcceptedColor;
             }
-            else if (status.toLowerCase() === ("Error(A)").toLowerCase() || 
-                     status.toLowerCase() === ("Warning(A)").toLowerCase() || 
-                     status.toLowerCase() === ("No Match(A)").toLowerCase() || 
-                     status.toLowerCase() === ("No Value(A)").toLowerCase()) {
+            else if (status.toLowerCase() === "error(a)" || 
+                     status.toLowerCase() === "warning(a)" || 
+                     status.toLowerCase() === "no Match(a)" || 
+                     status.toLowerCase() === "no Value(a)") {
                 return PropertyAcceptedColor;
             }
-            else if(status.toLowerCase() === ("Error(T)").toLowerCase() || 
-                    status.toLowerCase() === ("Warning(T)").toLowerCase()) {
+            else if(status.toLowerCase() === "error(t)" || 
+                    status.toLowerCase() === "warning(t)") {
                 return PropertyAcceptedColor;
             }
             else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
                 return PropertyAcceptedColor;
             }
-            else if(status.toLowerCase() === ("OK(T)").toLowerCase()) {
+            else if(status.toLowerCase() === "ok(t)") {
                 return AcceptedColor;
             }
             else {

@@ -892,8 +892,10 @@
                     var comparisonCheckGroups = undefined;
                     var sourceAComplianceCheckGroups = undefined;
                     var sourceBComplianceCheckGroups = undefined;
-                    var sourceAComponentsHierarchy = undefined;
-                    var sourceBComponentsHierarchy = undefined;
+                    var sourceAComparisonHierarchy = undefined;
+                    var sourceBComparisonHierarchy = undefined;
+                    var sourceAComplianceHierarchy = undefined;
+                    var sourceBComplianceHierarchy = undefined;
 
                     for (var key in checkResults) {
                         if (!checkResults.hasOwnProperty(key)) {
@@ -912,11 +914,17 @@
                             sourceBComplianceCheckGroups = new CheckGroups();
                             sourceBComplianceCheckGroups.restore(checkResults[key], true);
                         }
-                        else if(key == 'sourceAComponentsHierarchy') {
-                            sourceAComponentsHierarchy = checkResults[key];
+                        else if(key == 'SourceAComparisonComponentsHierarchy') {
+                            sourceAComparisonHierarchy = checkResults[key];
                         }
-                        else if(key == 'sourceBComponentsHierarchy') {
-                            sourceBComponentsHierarchy = checkResults[key];
+                        else if(key == 'SourceBComparisonComponentsHierarchy') {
+                            sourceBComparisonHierarchy = checkResults[key];
+                        }
+                        else if(key == 'SourceAComplianceComponentsHierarchy') {
+                            sourceAComplianceHierarchy = checkResults[key];
+                        }
+                        else if(key == 'SourceBComplianceComponentsHierarchy') {
+                            sourceBComplianceHierarchy = checkResults[key];
                         }
                     }
 
@@ -924,8 +932,10 @@
                     populateCheckResults(comparisonCheckGroups,
                         sourceAComplianceCheckGroups,
                         sourceBComplianceCheckGroups,
-                        sourceAComponentsHierarchy,
-                        sourceBComponentsHierarchy);
+                        sourceAComparisonHierarchy,
+                        sourceBComparisonHierarchy,
+                        sourceAComplianceHierarchy,
+                        sourceBComplianceHierarchy);
                         
 
                     // load analytics data

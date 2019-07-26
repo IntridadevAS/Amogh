@@ -7,6 +7,7 @@ function contextMenuComponentLevel() {
             var accept = true;
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
+            highlightSelectedRowOnRightClick(selectedRow);
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);
@@ -38,6 +39,7 @@ function contextMenuComponentLevel() {
             var accept = true;
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
+            highlightSelectedRowOnRightClick(selectedRow);
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);
@@ -72,6 +74,7 @@ function contextMenuComponentLevel() {
             accept = chooseAction(selectedRow);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
+            highlightSelectedRowOnRightClick(selectedRow);
             return {
                 callback: function(key, options){
                     executeContextMenuClicked(key, options, this);

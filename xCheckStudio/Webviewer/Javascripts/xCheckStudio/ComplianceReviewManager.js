@@ -3,10 +3,9 @@ function ComplianceReviewManager(complianceCheckManager,
     viewerData,
     sourceComponents,
     mainReviewTableContainer,
-    detailedReviewTableContainer,
-    //componentIdVsComponentData,
-    //nodeIdVsComponentData,
-    detailedReviewRowCommentDiv) {
+    detailedReviewTableContainer,   
+    detailedReviewRowCommentDiv,
+    componentsHierarchy) {
 
     this.MainReviewTableColumns = 4;
     this.MainReviewTableIdColumn = 3;
@@ -22,7 +21,7 @@ function ComplianceReviewManager(complianceCheckManager,
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
-    this.NodeIdStatusData = {};
+    this.NodeIdStatusData = componentsHierarchy;
 
     //ComponentIdVsComponentData = componentIdVsComponentData;
     //this.NodeIdVsComponentData = nodeIdVsComponentData;
@@ -224,14 +223,14 @@ function ComplianceReviewManager(complianceCheckManager,
                         }
                     }
 
-                    var status = currentRow.cells[1].innerText;
-                    if (currentRow.cells.length === 3) {
-                        if (currentRow.cells[2].innerText !== undefined &&
-                            currentRow.cells[2].innerText !== "") {
-                            var nodeId = currentRow.cells[2].innerText;
-                            this.NodeIdStatusData[nodeId] = [currentRow, status];
-                        }
-                    }
+                    // var status = currentRow.cells[1].innerText;
+                    // if (currentRow.cells.length === 3) {
+                    //     if (currentRow.cells[2].innerText !== undefined &&
+                    //         currentRow.cells[2].innerText !== "") {
+                    //         var nodeId = currentRow.cells[2].innerText;
+                    //         this.NodeIdStatusData[nodeId] = [currentRow, status];
+                    //     }
+                    // }
                 }
 
                 modelBrowserDataTable.style.position = "static"
@@ -383,7 +382,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     async: true,
                     data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate },
                     success: function (msg) {
-                        _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
+                        _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "OK(A)";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = "OK(A)";
                         for (var propertyId in component.properties) {
@@ -427,7 +426,7 @@ function ComplianceReviewManager(complianceCheckManager,
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
-                            else if(msg.trim() == "ACCEPTED") {
+                            if(msg.trim() == "OK(A)") {
                                 var changedStatus = msg.trim();
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 _this.getRowHighlightColor(changedStatus);
