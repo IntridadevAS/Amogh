@@ -51,6 +51,18 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
+function highlightSelectedRowOnRightClick(typeOfRow, selectedRow) {
+    if(typeOfRow == "ComparisonMainReviewTbody") { 
+        comparisonReviewManager.SelectedComponentRow = selectedRow[0];
+    }
+    else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+        sourceAComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+    }
+    else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+        sourceBComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+    }
+}
+
 function onTransposeClick(key, selectedRow) {
     if(selectedRow[0].nodeName == "BUTTON") {
         var typeOfRow = selectedRow[0].offsetParent.id;
@@ -58,6 +70,7 @@ function onTransposeClick(key, selectedRow) {
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody") {
             comparisonReviewManager.transposePropertyValueComponentLevel(key, selectedRow, comparisonReviewManager);
         }
@@ -74,6 +87,7 @@ function onRestoreTranspose(selectedRow) {
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody") {
             comparisonReviewManager.restoreTransposeComponentLevel(selectedRow, comparisonReviewManager);
         }
@@ -141,7 +155,7 @@ function chooseRestoreTranspose(selectedRow) {
             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return true;
             }
-            else if(component.transpose !== null) {
+            else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML.includes('(T)')) {
                 return false;
             }else { return true; }
         }
@@ -172,6 +186,7 @@ function onAcceptClick(rowClicked) {
         }  
     }
     else {
+        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
             comparisonReviewManager.updateStatus(selectedRow, comparisonReviewManager);
         }
@@ -200,6 +215,7 @@ function onUnAcceptClick(rowClicked) {
         }  
     }
     else {
+        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
             comparisonReviewManager.unAcceptStatus(selectedRow, comparisonReviewManager);
         }

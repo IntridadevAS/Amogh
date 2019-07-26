@@ -382,7 +382,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     async: true,
                     data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate },
                     success: function (msg) {
-                        _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "ACCEPTED";
+                        _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "OK(A)";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = "OK(A)";
                         for (var propertyId in component.properties) {
@@ -426,7 +426,7 @@ function ComplianceReviewManager(complianceCheckManager,
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 // _this.SelectedComponentRow.cells[2] = changedStatus;
                             }
-                            else if(msg.trim() == "ACCEPTED") {
+                            if(msg.trim() == "OK(A)") {
                                 var changedStatus = msg.trim();
                                 _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
                                 _this.getRowHighlightColor(changedStatus);
