@@ -1,4 +1,4 @@
-<CheckCase name="P&amp;ID(.xml) - 3D(.rvm)">
+<CheckCase name="P&amp;ID(.xml) - 3D(.rvm)-C">
 
 	<Check type="Comparison" sourceAType="XML" sourceBType="RVM">
 	    <ComponentGroup sourceAGroupName="PipingNetworkSystem" sourceBGroupName="PIPE">
@@ -45,7 +45,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>				
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>				
 			</ComponentClass>
 		    <ComponentClass sourceAComponentClass="Column" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>						
@@ -56,7 +56,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 				
 			</ComponentClass>			
 			<ComponentClass sourceAComponentClass="Drum" sourceBComponentClass="EQUI">
@@ -68,7 +68,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="HeatExchanger" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -79,7 +79,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="HeatExchangers" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -90,7 +90,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Columns" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -101,7 +101,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>				
 			<ComponentClass sourceAComponentClass="Condenser/Cooler" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -112,7 +112,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Motor" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -123,7 +123,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Vessel/Knock-OutDrum" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -134,7 +134,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="EndCap" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -145,7 +145,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Pumps" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -156,7 +156,18 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
+			</ComponentClass>
+			<ComponentClass sourceAComponentClass="Pump" sourceBComponentClass="EQUI">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			  <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/> 
+				<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+				<Property sourceAName="Owner_handle" sourceBName="Owner"  severity="Warning"/>
+				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
+				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
+				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Vessel/Re-Boiler" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -167,7 +178,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Strainer" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -178,7 +189,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Plug" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -189,7 +200,7 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 			<ComponentClass sourceAComponentClass="Vessel/Dryer" sourceBComponentClass="EQUI">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
@@ -200,7 +211,18 @@
 				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
 				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
 				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
-				<Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
+			</ComponentClass>
+			<ComponentClass sourceAComponentClass="Drum-Vessel" sourceBComponentClass="EQUI">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			    <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/> 
+				<Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+				<Property sourceAName="Owner_handle" sourceBName="Owner"  severity="Warning"/>
+				<Property sourceAName="Function" sourceBName="Func"  severity="Warning"/>
+				<Property sourceAName="Number" sourceBName="NUMB"  severity="Warning"/>
+				<Property sourceAName="AreaPath" sourceBName="Area"  severity="Warning"/>		
+				<Property sourceAName="Specification" sourceBName="Spref"  severity="Error"/>
 			</ComponentClass>
 	    </ComponentGroup>
 		
@@ -230,8 +252,7 @@
 		<ComponentGroup sourceAGroupName="PipingComponent" sourceBGroupName="VALV">
 		    <ComponentClass sourceAComponentClass="GeneralValve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -259,8 +280,7 @@
 
 		    <ComponentClass sourceAComponentClass="CheckValve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -275,8 +295,7 @@
 
 		    <ComponentClass sourceAComponentClass="Valve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -291,8 +310,7 @@
 
 		    <ComponentClass sourceAComponentClass="ClosedGeneralValve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -307,8 +325,7 @@
 
 		    <ComponentClass sourceAComponentClass="4WayValve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -323,8 +340,7 @@
 
 		    <ComponentClass sourceAComponentClass="ClosedGlobeValve" sourceBComponentClass="VALV">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -360,8 +376,7 @@
 		<ComponentGroup sourceAGroupName="PipingComponent" sourceBGroupName="OLET">		
 			<ComponentClass sourceAComponentClass="PipeTee" sourceBComponentClass="OLET">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -379,8 +394,7 @@
 		<ComponentGroup sourceAGroupName="PipingComponent" sourceBGroupName="REDU">
 			<ComponentClass sourceAComponentClass="ConcentricReducer" sourceBComponentClass="REDU">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -396,8 +410,6 @@
 		
 			<ComponentClass sourceAComponentClass="EccentricReducer" sourceBComponentClass="REDU">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -417,7 +429,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowTransmitter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -429,7 +440,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowController" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -443,7 +453,6 @@
 
 		    <ComponentClass sourceAComponentClass="InstrumentIndicator" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -455,7 +464,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicator" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -465,9 +473,8 @@
 					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
             </ComponentClass>
 
-		    <ComponentClass sourceAComponentClass="LevelIndicatorControler" sourceBComponentClass="INST">
+		    <ComponentClass sourceAComponentClass="LevelIndicatorController" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -479,7 +486,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicatorController" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -491,7 +497,6 @@
 			
 		    <ComponentClass sourceAComponentClass="SharedDisplayControl" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -503,7 +508,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarmHigh" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -515,7 +519,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarmLow" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -527,7 +530,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarm" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -539,7 +541,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelTransmitter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -551,7 +552,6 @@
 
 		    <ComponentClass sourceAComponentClass="PressureIndicator" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -563,7 +563,6 @@
 
 		    <ComponentClass sourceAComponentClass="VibrationAlarm" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -575,7 +574,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicatorTransmitter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -587,7 +585,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowAlarmHigh" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -599,7 +596,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowAlarmLow" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -611,7 +607,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowSignalConverter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -623,7 +618,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureTransmitter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -635,7 +629,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureIndicatorController" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -647,7 +640,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureAlarmHigh" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -659,7 +651,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureAlarmLow" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -671,7 +662,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelSignalConverter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -683,7 +673,97 @@
 
 		    <ComponentClass sourceAComponentClass="LevelIndicatorTransmitter" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+			
+		    <ComponentClass sourceAComponentClass="PressureIndicatorTransmitter" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureIndicatorController" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureIndicator" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureAlarmHigh" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureAlarmLow" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="FlowSignalConverter" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="TemperatureIndicator" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="LevelIndicator" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureRelay" sourceBComponentClass="INST">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -700,7 +780,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowTransmitter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -712,7 +791,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowController" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -724,7 +802,6 @@
 
 		    <ComponentClass sourceAComponentClass="InstrumentIndicator" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -736,7 +813,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicator" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -748,7 +824,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelIndicatorController" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -760,7 +835,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicatorController" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -772,7 +846,6 @@
 
 		    <ComponentClass sourceAComponentClass="SharedDisplayControl" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -784,7 +857,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarmHigh" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -796,7 +868,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarmLow" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -808,7 +879,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelAlarm" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -820,7 +890,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelTransmitter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -832,7 +901,6 @@
 
 		    <ComponentClass sourceAComponentClass="PressureIndicator" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -844,7 +912,6 @@
 
 		    <ComponentClass sourceAComponentClass="VibrationAlarm" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -856,7 +923,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowIndicatorTransmitter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -868,7 +934,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowAlarmHigh" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -880,7 +945,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowAlarmLow" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -892,7 +956,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowSignalConverter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -904,7 +967,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureTransmitter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -916,7 +978,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureIndicatorController" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -928,7 +989,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureAlarmHigh" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -940,7 +1000,6 @@
 
 		    <ComponentClass sourceAComponentClass="TemperatureAlarmLow" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -952,7 +1011,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelSignalConverter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -964,7 +1022,6 @@
 
 		    <ComponentClass sourceAComponentClass="LevelIndicatorTransmitter" sourceBComponentClass="PCOM">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -973,7 +1030,97 @@
 					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
 					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
             </ComponentClass>
-	
+
+		    <ComponentClass sourceAComponentClass="PressureIndicatorTransmitter" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureIndicatorController" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureIndicator" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureAlarmHigh" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureAlarmLow" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="FlowSignalConverter" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="TemperatureIndicator" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="LevelIndicator" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>
+		    <ComponentClass sourceAComponentClass="PressureRelay" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
+			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
+			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
+			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
+					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Error"/>					
+                    <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+					<Property sourceAName="Inlet_Size" sourceBName="ABORE"  severity="Error"/>	
+					<Property sourceAName="Outlet_Size" sourceBName="LBORE"  severity="Error"/>	
+            </ComponentClass>	
 			
 	    </ComponentGroup>
 		
@@ -981,8 +1128,6 @@
 			
 		    <ComponentClass sourceAComponentClass="FlowElement" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -994,8 +1139,6 @@
 
 		    <ComponentClass sourceAComponentClass="FlowControlValve" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -1007,8 +1150,8 @@
 
 		    <ComponentClass sourceAComponentClass="LevelSwitchHigh" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -1020,8 +1163,6 @@
 
 		    <ComponentClass sourceAComponentClass="TempIndicatorController" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -1033,8 +1174,8 @@
 
 		    <ComponentClass sourceAComponentClass="InstrumentIndicator" sourceBComponentClass="INST">
 		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
-		      <Matchwith sourceAPropertyname="Specification"  sourceBPropertyname ="Spre"/>
-		      <Matchwith sourceAPropertyname="PDMS_Type"  sourceBPropertyname ="TYPE"/>
+		      
+		      
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 			 		<Property sourceAName="PDMS_Type" sourceBName="Type"  severity="Error"/>
@@ -1049,6 +1190,7 @@
 	    <ComponentGroup sourceAGroupName="ProcessInstrument" sourceBGroupName="PCOM">
 			
 		    <ComponentClass sourceAComponentClass="FlowElement" sourceBComponentClass="PCOM">
+					<Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
@@ -1058,6 +1200,7 @@
             </ComponentClass>			
 
 		    <ComponentClass sourceAComponentClass="FlowControlValve" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
@@ -1067,6 +1210,7 @@
             </ComponentClass>
 
 		    <ComponentClass sourceAComponentClass="LevelSwitchHigh" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
@@ -1076,6 +1220,7 @@
             </ComponentClass>
 
 		    <ComponentClass sourceAComponentClass="TempIndicatorController" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
@@ -1085,6 +1230,7 @@
             </ComponentClass>
 
 		    <ComponentClass sourceAComponentClass="InstrumentIndicator" sourceBComponentClass="PCOM">
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>
 			        <Property sourceAName="TagName" sourceBName="Name"  severity="Error"/>
 			 		<Property sourceAName="ComponentClass" sourceBName="Type"  severity="Error"/>
 					<Property sourceAName="Insulation_Table" sourceBName="ISPE"  severity="Warning"/>					
