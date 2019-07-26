@@ -62,12 +62,12 @@ function startExplode() {
         if (currentViewer._params.containerId === "viewerContainer1") {
             slider = document.getElementById("explodeSlider1");
             outputFiled = document.getElementById("explodeValue1");
-            overlayField = document.getElementById("overlay1");
+            overlayField = document.getElementById("explodeOverlay1");
         }
         else if (currentViewer._params.containerId === "viewerContainer2") {
             slider = document.getElementById("explodeSlider2");
             outputFiled = document.getElementById("explodeValue2");
-            overlayField = document.getElementById("overlay2");
+            overlayField = document.getElementById("explodeOverlay2");
         }
         if (!slider || !outputFiled || !overlayField) {
             return;
@@ -97,7 +97,6 @@ function startExplode() {
 
                 });
             }
-
         }
     }
 }
@@ -377,11 +376,11 @@ function stopExplode() {
         var overlayField;
         if (currentViewer._params.containerId === "viewerContainer1") {
             slider = document.getElementById("explodeSlider1");
-            overlayField = document.getElementById("overlay1");
+            overlayField = document.getElementById("explodeOverlay1");
         }
         else if (currentViewer._params.containerId === "viewerContainer2") {
             slider = document.getElementById("explodeSlider2");
-            overlayField = document.getElementById("overlay2");
+            overlayField = document.getElementById("explodeOverlay2");
         }
         if (!slider || !overlayField) {
             return;
