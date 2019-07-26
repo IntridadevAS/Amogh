@@ -51,15 +51,19 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
-function highlightSelectedRowOnRightClick(typeOfRow, selectedRow) {
+function highlightSelectedRowOnRightClick(selectedRow) {
+    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
     if(typeOfRow == "ComparisonMainReviewTbody") { 
         comparisonReviewManager.SelectedComponentRow = selectedRow[0];
+        comparisonReviewManager.ChangeBackgroundColor(selectedRow[0]);
     }
     else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
         sourceAComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+        sourceAComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
     }
     else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
         sourceBComplianceReviewManager.SelectedComponentRow = selectedRow[0];
+        sourceBComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
     }
 }
 
@@ -70,7 +74,6 @@ function onTransposeClick(key, selectedRow) {
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody") {
             comparisonReviewManager.transposePropertyValueComponentLevel(key, selectedRow, comparisonReviewManager);
         }
@@ -87,7 +90,6 @@ function onRestoreTranspose(selectedRow) {
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody") {
             comparisonReviewManager.restoreTransposeComponentLevel(selectedRow, comparisonReviewManager);
         }
@@ -186,7 +188,6 @@ function onAcceptClick(rowClicked) {
         }  
     }
     else {
-        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
             comparisonReviewManager.updateStatus(selectedRow, comparisonReviewManager);
         }
@@ -215,7 +216,6 @@ function onUnAcceptClick(rowClicked) {
         }  
     }
     else {
-        highlightSelectedRowOnRightClick(typeOfRow, selectedRow);
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
             comparisonReviewManager.unAcceptStatus(selectedRow, comparisonReviewManager);
         }
