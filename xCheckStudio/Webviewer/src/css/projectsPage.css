@@ -1,0 +1,731 @@
+/* temp */
+
+.content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  /* background-image: url("../../public/imgs/MainPageBckgndField.svg"); */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  overflow-y: auto;
+}
+
+.dropDownProjects {
+  height: 20px;
+  width: 20px;
+}
+
+h1 {
+  margin: 0 0 0 5px;
+}
+
+h2 {
+  margin: 0 5px;
+
+}
+
+.starCheckBox {
+  display: none;
+
+}
+
+input[type=checkbox] + label {
+  cursor: pointer;
+}
+
+.starCheckBox + .starCheckBoxLabel::before {
+  content: url("../../public/symbols/favoriteStar.svg");
+}
+
+.starCheckBox:checked + .starCheckBoxLabel {
+  content: url("../../public/symbols/favoriteStarWhite.svg");
+}
+
+.sortBy {
+  box-sizing: border-box;
+  height: 30px;
+  background-color: #47474750;
+  border: 1px solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  position: absolute;
+  /* box-shadow: 0 3px 6px 0 black; */
+  right: 0;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.sortBy select, .sortBy option {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.sortBy label {
+  padding-right: 5px;
+}
+
+.sortBy option {
+  border: none;
+  background: black;
+  color: inherit;
+}
+
+.catagoryContainer {
+  margin: 30px 30px 0px 30px;
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-rows: repeat(auto-fit, 220px);
+  grid-gap: 10px;
+  min-height: 220px;
+  max-height: 680px;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+.hideProjects {
+  display: none;
+}
+
+.rotateArrows {
+  transform: rotate(-90deg);
+}
+
+.card {
+  box-sizing: border-box;
+  position: relative;
+  background-color: var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  border: solid var(--xCheckMedGrey);
+  border-width: var(--borderWidth);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+}
+
+.card:focus {
+  border-color: blue;
+}
+
+.card:hover, .newProject:hover, .checkSpaceCard:hover {
+  border-color: var(--xCheckWhite);
+  border-width: 2px;
+}
+
+.hiddenBtn {
+  visibility: hidden;
+}
+
+.hovered .hiddenBtn {
+  visibility: visible;
+}
+
+.projectName {
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
+  background-color: var(--xCheckDarkGrey);
+  border-top: 1px solid var(--xCheckMedGrey);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 5px;
+}
+
+.plusBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: url('../../public/symbols/plus.svg') var(--xCheckDarkGrey);
+  border: 1px solid var(--xCheckMedGrey);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: auto;
+}
+
+.star{
+  background-color: var(--xCheckDarkGrey);
+  -webkit-mask-image: url("../../public/symbols/favoriteStar.svg");
+  mask-image: url("../../public/symbols/favoriteStar.svg");
+  width: 30px;
+  height: 30px;
+}
+.favorite .star {
+  background-color: var(--xCheckWhite);
+}
+
+.projectButtons {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: grid;
+  grid-template-rows: repeat(auto-fit, 30px);
+  grid-row-gap: 5px;
+}
+
+.btnSymbol {
+  box-sizing: border-box;
+  height: 30px;
+  width: 30px;
+}
+
+.btnSymbol:hover {
+  border-color: var(--intridaBlue);
+}
+
+.newProjectCard {
+  background-color: #47474733;
+}
+
+.newCardCenter {
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+}
+
+.projectName h2 {
+  margin: 0;
+}
+
+.projectName p {
+  margin: 0;
+}
+
+.selectedCard {
+  border-width: 2px;
+  border-color: var(--intridaBlue);
+}
+
+.checkCard {
+  padding-left: 8px;
+}
+
+.dataSet {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.dropDownSymb {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* CheckSpace */
+
+.overlayBackground{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  background-color: #47474788;
+  display: none;
+}
+
+.open {
+  display: block;
+}
+
+.projectOverlay {
+  position: absolute;
+  top: 80px;
+  bottom: 80px;
+  left: 30px;
+  right: 20px;
+  background-color: var(--xCheckBlack);
+  padding: 0 10px 10px 10px;
+  border: solid 3px var(--xCheckWhite);
+  border-radius: var(--borderRadiusVal);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.checkSpaceBody {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 220px auto;
+  grid-template-areas:
+  "projectDescription checkSpace";
+  grid-gap: 10px;
+}
+
+.checkInfoContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  grid-area: checkInfo;
+}
+
+.checkTitle{
+  height: 30px;
+  text-align: center;
+}
+
+.checkDescription {
+  background-color: var(--xCheckDarkGrey);
+  height: auto;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  flex-grow: 1;
+  padding: 5px;
+  overflow-y: auto;
+}
+
+.projectDescription{
+  grid-area: projectDescription;
+}
+
+.checkSpaceHeader {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkSpaceButtons{
+  position: absolute;
+  right: 5px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-column-gap: 5px;
+}
+
+.checkSpaceButtons > .sortBy{
+  position: relative;
+}
+
+.closeCheckSpace {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/*  CheckSpace: project info */
+
+.checkSpaceProjectInfo{
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  padding-top: 40px;
+}
+
+.projectInfoBoxes {
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  background-color: var(--xCheckDarkGrey);
+  border-radius: var(--borderRadiusVal);
+}
+
+.projectInfoBoxes p {
+  margin: 5px;
+}
+
+.projectCard img {
+  width: 220px;
+  height: 120px;
+}
+
+/* CheckSpace: Checks  */
+
+/* .checkSpaceContainer {
+} */
+
+.checkSpaceContainer h1 {
+  margin: 5px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkCardContainer{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-rows: repeat(auto-fill, 180px);
+  grid-gap: 10px;
+  overflow-y: scroll;
+}
+
+.checkSpaceCard {
+  border: solid var(--borderWidth) var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  position: relative;
+}
+
+.chkRevToggle {
+  position: absolute;
+  left: 10px;
+  box-sizing: border-box;
+  height: 30px;
+  width: 220px;
+  border: 2px solid;
+  background-color: var(--xCheckBlack);
+  border-radius: var(--borderRadiusVal);
+}
+
+.chkRevToggle:hover {
+  border-color: var(--xCheckWhite);
+  border-width: 2px;
+
+}
+
+.chkRevBorderBlue {
+  border-color: var(--intridaBlue);
+}
+
+.chkRevBorderRed {
+  border-color: var(--xCheckRed);
+}
+
+.checkSpaceCard a {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.checkCardInfo {
+  background-image: var(--checkSpaceGradient);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 120px;
+  position: relative;
+}
+
+.reviewCardInfo {
+  background-image: var(--reviewSpaceGradient);
+}
+
+
+
+.checkCardInfoNew {
+  background-image: linear-gradient(to bottom, var(--xCheckWhite), var(--intridaBlue));
+  opacity: 0.5;
+}
+
+.checkCardInfo ul {
+  margin: 10px 0 0 0;
+}
+
+.checkCardInfo h3, .checkCardInfo p {
+  margin: 3px 0 0 0;
+  padding-left: 5px;
+}
+
+.checkCardTitle {
+  flex-grow: 1;
+  background-color: var(--xCheckDarkGrey);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.checkCardTitleNew {
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.checkCardInfo p {
+  margin: 0;
+  padding-left: 5px;
+}
+
+.checkCardInfo ul {
+  position: relative;
+  bottom: 10px;
+  list-style: none;
+  padding-left: 5px;
+}
+
+.checkCardInfo li {
+  font-size: 10px;
+}
+
+.checkSpaceCardName {
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+  left: 0;
+  right: 0;
+  background-color: var(--xCheckDarkGrey);
+  border-top: 1px solid var(--xCheckMedGrey);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+/* END CHECKSPACE OVERLAY */
+/* NEW PROJECT OVERLAY */
+
+.projectOverlays {
+  z-index: 4;
+  position: absolute;
+  left: 50%;
+  margin-left: -290px;
+  top: 60px;
+  bottom: 60px;
+  box-sizing: border-box;
+  width: 580px;
+  display: none;
+  padding: 0 10px 10px 10px;
+  border: var(--borderWidthHilite) solid var(--xCheckWhite);
+  border-radius: var(--borderRadiusVal);
+  background-color: var(--xCheckBlack);
+}
+
+.projectOverlaysOpen {
+  display: grid;
+  grid-template-rows: 40px auto;
+}
+
+.projectHeader {
+  /* grid-area: header; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.newProjectForm {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 220px auto;
+  grid-template-rows: auto 180px;
+  grid-template-areas:
+    'projectInfo comments'
+    'newCheck comments';
+  grid-gap: 10px;
+}
+.editProjectForm {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 220px auto;
+  grid-template-rows: auto 180px;
+  grid-template-areas:
+    'projectInfo comments'
+    'projectInfo comments';
+  grid-gap: 10px;
+}
+
+.projectInfo {
+  grid-area: projectInfo;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.projectCard {
+  box-sizing: border-box;
+  position: relative;
+  width: 220px;
+  height: 220px;
+  background-color: var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  border: solid var(--borderWidth) var(--xCheckMedGrey);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.projectCardAE {
+  width: 220px;
+  height: 180px;
+  box-sizing: border-box;
+  border: solid var(--borderWidth) var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.topOfProjectCard{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  background: linear-gradient(to bottom, var(--xCheckWhite), var(--intridaBlue));
+  opacity: 0.5;
+}
+
+.projectName input, .projectName select, .projectType select, .projectType option, .projectParametersContainer select, .projectParametersContainer select {
+  margin: 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+
+.projectName input::placeholder {
+  color: inherit;
+}
+
+.projectName input {
+  font-size: 20px;
+}
+
+.projectParametersContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: var(--xCheckDarkGrey);
+  border-radius: var(--borderRadiusVal);
+  border: solid var(--borderWidth) var(--xCheckMedGrey);
+  padding:5px;
+  margin-bottom: 5px;
+}
+
+.projectParametersContainer span {
+  margin-left: 5px;
+}
+
+.projectParametersContainer h3 {
+  margin: 2px;
+}
+
+.projectDescriptionContainer {
+  background-color: var(--xCheckDarkGrey);
+  border-radius: var(--borderRadiusVal);
+  border: solid var(--borderWidth) var(--xCheckMedGrey);
+  display: flex;
+  flex-direction: column;
+  padding-left:5px;
+  padding-top: 5px;
+  flex-grow: 1;
+}
+
+.newDescription {
+  flex-grow: 1;
+  background: none;
+  border: none;
+  padding: 5px;
+  font: inherit;
+  overflow-y: auto;
+  resize: none;
+}
+
+.projectComments {
+  grid-area: comments;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color: var(--xCheckDarkGrey);
+  border-radius: var(--borderRadiusVal);
+  border: 1px solid var(--xCheckMedGrey);
+  padding: 0 10px 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.newComments {
+  flex-grow: 1;
+  border: 1px solid var(--intridaBlue);
+  border-radius: var(--borderRadiusVal);
+  background-color: var(--xCheckBlack);
+  padding: 5px;
+  font: inherit;
+  overflow-y: auto;
+  resize: none;
+}
+
+.newCommentsReview {
+  border-color: var(--xCheckRed);
+}
+
+.submitNewProject {
+  width: auto;
+  height: auto;
+}
+
+/* START DELETE ITEM WARNING BAR  */
+
+.deleteWindow {
+  display: none;
+}
+
+.deleteOpen {
+  display: block;
+}
+
+.deleteContainer {
+  width: 580px;
+  height: 155px;
+  border: var(--borderWidthHilite) solid var(--xCheckWhite);
+  background-color: var(--xCheckDarkGrey);
+  position: fixed;
+  top: 200px;
+  left: 50%;
+  margin-left: -290px;
+}
+
+.deleteTopBar {
+  background-color: var(--xCheckMedGrey);
+  display: flex;
+  align-items: center;
+  height: 55px;
+  padding-left: 15px;
+}
+
+.deleteTopBar .btnSymbol {
+  border: 1px solid var(--intridaBlue);
+}
+
+.msgArea {
+  padding-left: 15px;
+  padding-top: 5px;
+}
+
+
+.buttonAreaDelete {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+}
+
+.buttonAreaDelete button {
+  width: 90px;
+  border: 1px solid var(--intridaBlue);
+  border-radius: var(--borderRadiusVal);
+  font-size: 20px;
+  font-family: inherit;
+  color: inherit;
+}
+
+.buttonAreaDelete button+button {
+  margin-left: 5px;
+}
+
+.buttonAreaDelete img {
+  margin-right: 5px;
+}
+
+/* END DELETE ITEM WARNING BAR */

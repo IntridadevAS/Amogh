@@ -71,3 +71,52 @@ function createProject(projectname, descriptionText, functionText, projectScope)
 
     });
 }
+
+function createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite) {
+    $.ajax({
+        data: {
+            'InvokeFunction': 'CreateProject',
+            'projectName': projectname
+            /*'description': projectDescription,
+            'function': functionText*/
+        },
+        type: "POST",
+        url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+
+        if (msg === 'success') {
+
+            var path = "Projects/" + projectname + "/" + projectname + ".db";
+
+            // add this project's entry in main DB
+            $.ajax({
+                data: {
+                    'InvokeFunction': 'AddNewProjectToMainDB',
+                    'projectname': projectname,
+                    'projectDescription': projectDescription,
+                    'projectType': projectType,
+                    'path': path,
+                    "projectStatus": projectStatus,
+                    "projectComments": projectComments,
+                    "projectIsFavorite": projectIsFavorite
+                },
+                type: "POST",
+                url: "PHP/ProjectManager.php"
+            }).done(function (msg) 
+            {
+
+                if (msg === 'success') 
+                {
+                    //alert("Main.db record added.");
+                    window.location.href = "checkModule.html";
+                }
+            });
+        }
+        else {
+            alert(msg);
+        }
+
+    });
+}
+
+

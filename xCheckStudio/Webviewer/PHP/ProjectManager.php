@@ -8,6 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "AddProjectToMainDB":
             AddProjectToMainDB();
             break;
+        case "AddNewProjectToMainDB":
+            AddNewProjectToMainDB();
+            break;
         case "DeleteProject":
             DeleteProject();
             break;
@@ -643,7 +646,6 @@ function SaveSelectedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
         }                    
     }  
 }
-
 
 function SaveVieweroptions($tempDbh, $dbh, $tableName)
 {
@@ -2119,31 +2121,31 @@ function IsLoadProject()
 function CreateProject()
 {
     $projectName = trim($_POST["projectName"], " ");
-    $description = trim($_POST["description"], " ");
-    $function = trim($_POST["function"], " ");
+   // $description = trim($_POST["description"], " ");
+   // $function = trim($_POST["function"], " ");
 
     if($projectName == "")
     {
         echo "Project Name cannot be empty";
         return;
     }
-    if($description == "")
-    {
-        echo "Project description cannot be empty";
-        return;
-    }
-    if($function == "")
-    {
-        echo "Project function cannot be empty";
-        return;
-    }
+    // if($description == "")
+    // {
+    //     echo "Project description cannot be empty";
+    //     return;
+    // }
+    // if($function == "")
+    // {
+    //     echo "Project function cannot be empty";
+    //     return;
+    // }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         $query =  "select projectname from Projects where projectname='". $projectName."' COLLATE NOCASE;";      
         $count=0;
         foreach ($dbh->query($query) as $row)
         {
-        $count = $count+1;
+            $count = $count+1;
         }
         if ($count != 0)
         {
@@ -2179,6 +2181,7 @@ function CreateProject()
     }              	
     echo "success";
 }
+
 
 /*
 |
@@ -2254,6 +2257,73 @@ function AddProjectToMainDB()
 
 /*
 |
+|   Adds new project in Main.db. This is updated as per new design
+|
+*/
+function AddNewProjectToMainDB()
+{
+    session_start();
+    if( !isset($_SESSION['Name']))
+    {
+        echo "fail";           
+        return;
+    }
+
+    $userName  = $_SESSION['Name'];
+    $projectName = trim($_POST["projectname"], " ");      
+    $path = trim($_POST["path"], " ");
+    $projectDescription = trim($_POST["projectDescription"], " ");
+    $projectType = trim($_POST["projectType"], " ");  
+    $projectStatus = trim($_POST["projectStatus"], " ");  
+    $projectComments = trim($_POST["projectComments"], " "); 
+    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+    
+
+    try{
+    $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
+    // first get user id from userName
+    $query =  "select userid from LoginInfo where username='". $userName."';";        
+  
+    foreach ($dbh->query($query) as $row)
+    {         
+        
+        $userid = $row[0];            
+        
+        // projectname is text column
+        // userid is integer column
+        // path is text column
+        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status) VALUES (?,?,?,?,?,?,?,?)';
+        $stmt = $dbh->prepare($query);
+        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus));     
+      
+        
+        // get project id for recently added row and write it into session variable
+        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();
+        $stmt =  $dbh->query($qry);       
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $_SESSION['ProjectId'] = $row['projectid'];
+            break;                    
+        }
+
+        $dbh = null; //This is how you close a PDO connection
+        echo 'success';                 
+        
+        return;
+    }
+    
+        $dbh = null; //This is how you close a PDO connection
+        echo 'fail';            
+    }
+    catch(Exception $e) {
+        //echo 'Message: ' .$e->getMessage();
+        echo "fail"; 
+        return;
+    } 
+}
+
+/*
+|
 |   Deletes specific project from Main.db
 |
 */
@@ -2288,15 +2358,35 @@ function DeleteProject()
 
 function GetProjects()
 {
-    $userid = trim($_POST["userid"], " ");
-    if($userid == "")
-    {
+    session_start();
+    $userName  = $_SESSION['Name'];
+    try{
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
+    // first get user id from userName
+        $query =  "select userid from LoginInfo where username='". $userName."';";        
+        $userid=0;
+
+        foreach ($dbh->query($query) as $row)
+        {         
+            $userid = $row[0];     
+            break;
+        }
+    }
+    catch(Exception $e) {
         echo 'fail';
+        return;
+      }
+   
+
+   // $userid = trim($_POST["userid"], " ");
+    if($userid === 0)
+    {
+        echo 'second fail';
         return;
     }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select * from Projects where userid=".$userid." OR projectscope='public';";      
+        $query =  "select * from Projects where userid=".$userid;      
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);
@@ -2307,5 +2397,7 @@ function GetProjects()
         return;
       } 
 }
+
+
 
 ?>
