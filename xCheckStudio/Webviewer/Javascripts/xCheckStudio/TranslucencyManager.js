@@ -3,8 +3,7 @@ function TranslucensyManager() {
     this.ChangedComponents = [];
 
 
-    TranslucensyManager.prototype.Start()
-    {
+    TranslucensyManager.prototype.Start = function () {
         if (!currentViewer) {
             return;
         }
@@ -38,15 +37,27 @@ function TranslucensyManager() {
 
 
         slider.oninput = function () {
-            
+
             _this.onTranslucencyValueChanged(this.value)
 
         }
     }
 
-    TranslucensyManager.prototype.onTranslucencyValueChanged(value)
-    {
+    TranslucensyManager.prototype.onTranslucencyValueChanged = function (value) {
+        var outputFiled;
+        if (currentViewer._params.containerId === "viewerContainer1") {            
+            outputFiled = document.getElementById("translucencyValue1");            
+        }
+        else if (currentViewer._params.containerId === "viewerContainer2") {         
+            outputFiled = document.getElementById("translucencyValue2");            
+        }       
+        if(!outputFiled)
+        {
+            return;
+        }
+
         outputFiled.innerHTML = value;
+        
         if (currentViewer) {
             var selectionManager = currentViewer.selectionManager;
             var selectedNodes = [];
@@ -60,9 +71,8 @@ function TranslucensyManager() {
         }
     }
 
-    TranslucensyManager.prototype.Stop()
-    {
-        if (currentViewer) {          
+    TranslucensyManager.prototype.Stop = function () {
+        if (currentViewer) {
 
             var slider;
             var overlayField;
@@ -89,8 +99,7 @@ function startTranslucensy() {
 }
 
 function stopTranslucensy() {
-    if(!translucensyManager)
-    {
+    if (!translucensyManager) {
         return;
     }
 
