@@ -530,7 +530,7 @@
             global $SelectedComponents;
             global $SourceNotCheckedComponents;            
             global $SourceNotMatchedComponents;
-            
+
             foreach ($SourceComponents as $id => $sourceComponent)
             {
                 // check is component is selected or not for performing check
@@ -543,8 +543,7 @@
                         {
                             $SourceNotCheckedComponents[$compKey] = $sourceComponent;                                                   
                         }
-
-                    continue;
+                        continue;
                 }
 
                 // check if component class exists in checkcase
@@ -556,9 +555,10 @@
                     {
                         $SourceNotMatchedComponents[$compKey] = $sourceComponent;                        
                     }
+
+                    addUndefinedComponents($sourceComponent);
                     continue;
                 }
-                
                 // get check case group
                 $checkCaseGroup = getComponentGroup($sourceComponent['mainclass'], NULL);
 
@@ -575,9 +575,10 @@
                     {
                         $SourceNotMatchedComponents[$compKey] = $sourceComponent;                        
                     }
+                    addUndefinedComponents($sourceComponent);
+
                     continue;
                 }
-                
                 // get check case component
                 $checkCaseComponentClass = getComponentClass($sourceComponent['subclass'],
                                                              NULL, 
@@ -670,7 +671,53 @@
                     }
                     
                 }
-            }                                                   
+            } 
+        }
+
+        function addUndefinedComponents($sourceComponent) {
+            global $SourceProperties;
+            global $CheckComponentsGroups;
+
+            $nodeId = NULL;
+            if(isset($sourceComponent['nodeid']))
+            {
+                $nodeId =$sourceComponent['nodeid'];
+            }
+
+            $checkComponent = new CheckComponent($sourceComponent['name'],
+                                        "",
+                                    $sourceComponent['subclass'],
+                                    $nodeId ,
+                                    "");
+
+            if(!empty($CheckComponentsGroups) &&
+                array_key_exists('Undefined', $CheckComponentsGroups))
+            {
+                $checkComponentGroup = $CheckComponentsGroups['Undefined'];
+            }
+            else
+            {
+                $checkComponentGroup = new CheckComponentGroup('Undefined');
+                $CheckComponentsGroups['Undefined'] = $checkComponentGroup;
+            }
+
+            $sourceComponentProperties =  $SourceProperties[$sourceComponent['id']];
+            
+            foreach ($sourceComponentProperties as $name => $property) 
+            {                       
+                $checkProperty = new CheckProperty($property["name"],
+                                                    $property["value"],
+                                                    "",
+                                                    "",
+                                                    "undefined",
+                                                    NULL,
+                                                    NULL);
+
+                $checkProperty->PerformCheck = false;
+                $checkComponent->AddCheckProperty($checkProperty);
+            }    
+            $checkComponent->Status = "undefined";
+            $checkComponentGroup->AddCheckComponent($checkComponent);
         }
 
 ?>
