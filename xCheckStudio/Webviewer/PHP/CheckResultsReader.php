@@ -353,11 +353,17 @@
                                 {
                                     $sourceAValue = $propertyRow['sourceAValue'];
                                     $sourceBValue = $propertyRow['sourceBValue'];
-                                    if($propertyRow['accepted'] == 'true')
-                                        $changedStatus = 'ACCEPTED';
-                                    else 
-                                        $changedStatus = $propertyRow['severity'];
-
+                                        if($propertyRow['accepted'] == 'true')
+                                            $changedStatus = 'ACCEPTED';
+                                        else {
+                                            $changedStatus = $propertyRow['severity'];
+                                            if(($propertyRow['severity'] == 'Error' || $propertyRow['severity'] == 'No Match') && $componentValues['status'] == 'OK(A)' && $propertyRow['transpose'] == null) {
+                                                $componentValues['status'] = $componentRow['status'];
+                                            }
+                                        }
+                                    
+                                    
+                                        
                                     if($propertyRow['transpose'] == 'lefttoright') {
                                         $sourceBValue = $sourceAValue;
                                         $changedStatus = 'OK(T)';
@@ -372,18 +378,24 @@
                                     }
                                     else {
                                         if(($propertyRow['severity'] == 'Error' || $propertyRow['severity'] == 'No Match') && 
-                                        $componentValues['status'] == 'OK(T)') {
+                                        ($componentValues['status'] == 'OK(T)' || $componentValues['status'] == 'OK(A)(T)')) {
                                             if($propertyRow['accepted'] == 'true') {
                                                 $componentValues['status'] = 'OK(A)(T)';
                                             }
                                             else if(!strpos($componentRow['status'], '(T)')) {
                                                 $componentValues['status'] = $componentRow['status'] . "(T)";
-                                             }                                     
+                                            } 
+                                            else if(($propertyRow['accepted'] == 'false') && ($componentValues['status'] == 'OK(T)' || $componentValues['status'] == 'OK(A)(T)'))  {
+                                                    $componentValues['status'] = $componentRow['status'] ;        
+                                            }   
                                         }
                                     }
                                     
                                     if($changedStatus !== 'OK(T)' && $changedStatus !== 'OK') {
                                         $isPropertyStatusOk = false;
+                                    }
+                                    else {
+                                        if($changedStatus == 'OK(T)') {  $componentStatus = 'OK(T)'; }
                                     }
                                     $propertyValues = array('id'=>$propertyRow['id'], 
                                                             'sourceAName'=>$propertyRow['sourceAName'],  

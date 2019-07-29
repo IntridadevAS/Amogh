@@ -117,10 +117,20 @@ function updateComponentComparisonStatusInReview() {
         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=? AND status!=?');
         $command->execute(array($status, $componentid, $dontChangeOk));
 
-        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity!=? AND severity!=?');
-        $command->execute(array($status, $componentid, $dontChangeOk, $dontChangeNoValue));
-
-
+       
+        $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+        $command->execute(array($componentid));
+        $transposed = $command->fetchAll(PDO::FETCH_ASSOC);
+        $index = 0;
+        while($index < count($transposed)) { 
+            if($transposed[$index]['transpose'] == null) {
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE id=? AND severity!=? AND severity!=?');
+                $command->execute(array($status, $transposed[$index]['id'], $dontChangeOk, $dontChangeNoValue));
+        
+            }
+            $index++;
+        }
+  
         $dbh->commit();
         $dbh = null; 
 
@@ -685,6 +695,9 @@ function rejectAcceptStatusComparisonProperty() {
         $originalstatus = $command->fetch();
     }
 
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
+    $command->execute(array($acceptedStatus, $componentid));
+
     $dbh->commit();
 
     $dbh->beginTransaction();
@@ -714,7 +727,7 @@ function rejectAcceptStatusComparisonProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)') {
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)' && $statusChanged[$index]['severity'] != 'No Value') {
                     if($statusChanged[$index]['accepted'] == "false" && strpos($componentstatus1['status'], '(A)') == true) {
                         $toBecompstatus = str_replace("(A)", "", $componentstatus1['status']);
                     }
@@ -730,9 +743,6 @@ function rejectAcceptStatusComparisonProperty() {
 
     $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
     $command->execute(array($toBecompstatus, $componentid));
-
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
-    $command->execute(array($acceptedStatus, $componentid));
 
     $dbh->commit();
 
