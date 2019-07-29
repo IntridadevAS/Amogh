@@ -142,8 +142,7 @@ function chooseRestoreTranspose(selectedRow) {
         var typeOfRow = selectedRow[0].offsetParent.id;
         var groupId = selectedRow[0].attributes[0].value;
         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
-            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK') {
+            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
                 return false;
             } else { return true; }
         }
@@ -157,7 +156,7 @@ function chooseRestoreTranspose(selectedRow) {
             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return true;
             }
-            else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML.includes('(T)')) {
+            else if(component.transpose !== null) {
                 return false;
             }else { return true; }
         }
@@ -540,5 +539,5 @@ function onReferenceClick(selectedRow) {
 }
 
 function toggleDropdown() {
-    document.getElementById("homeDropdown").classList.toggle("show");
+    document.getElementById("newReferenceDropdown").classList.toggle("show");
 }

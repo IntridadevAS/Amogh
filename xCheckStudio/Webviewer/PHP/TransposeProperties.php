@@ -146,6 +146,9 @@ function RestoreProperty() {
         $originalstatus = $command->fetch();
     }
 
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
+    $command->execute(array($transposeType, $componentid));
+
     $dbh->commit();
 
     $dbh->beginTransaction();
@@ -175,7 +178,8 @@ function RestoreProperty() {
             }
             else 
             {
-                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)' && $statusChanged[$index]['severity'] != 'No Value') {
+                if($statusChanged[$index]['severity'] != 'OK' && $statusChanged[$index]['severity'] != 'OK(T)' && $statusChanged[$index]['severity'] != 'No Value' &&
+                $statusChanged[$index]['accepted'] == 'false') {
                     if($statusChanged[$index]['transpose'] == null && strpos($componentstatus1['status'], '(T)') == true) {
                         $toBecompstatus = str_replace("(T)", "", $componentstatus1['status']);
                     }
@@ -191,9 +195,6 @@ function RestoreProperty() {
 
     $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
     $command->execute(array($toBecompstatus, $componentid));
-
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
-    $command->execute(array($transposeType, $componentid));
 
     $dbh->commit();
 

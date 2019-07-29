@@ -872,7 +872,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                                     }
                                 }
                             }
-                            _this.updateReviewComponentGridData(selectedRow["context"], groupId, component.status);
+                            _this.SelectedComponentRow.cells[2].innerText = component.status;
+                            _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                         }
                     });   
                 }
@@ -919,8 +920,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                                
                             }
-                            _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                             _this.SelectedComponentRow.cells[2].innerText = changedStatus;
+                            _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                         }
                     });   
                 }
@@ -1103,6 +1104,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                             index++;
                         }
+                        _this.SelectedComponentRow.cells[2].innerText = component.status;
                         _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
                 });   
@@ -1137,8 +1139,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                            
                         }
-                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                         _this.SelectedComponentRow.cells[2].innerText = changedStatus;
+                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                     }
                 });   
             }
@@ -1363,8 +1365,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                             }
                         }
-                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                         _this.SelectedComponentRow.cells[2].innerText = changedStatus;
+                        _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                     }
                 });   
             }
@@ -1403,8 +1405,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         
                     }
-                    _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                     _this.SelectedComponentRow.cells[2].innerText = changedStatus;
+                    _this.updateReviewComponentGridData(_this.SelectedComponentRow, groupId, changedStatus);
                 }
                     
             });   
@@ -1439,6 +1441,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }                
                             index++;
                         }
+                        _this.SelectedComponentRow.cells[2].innerText = component.status;
                         _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
                 });   
@@ -1488,6 +1491,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                                 }
                                     
                             }
+                            _this.SelectedComponentRow.cells[2].innerText = component.status;
                             _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                         }
                     });   
