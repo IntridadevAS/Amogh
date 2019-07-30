@@ -1,28 +1,17 @@
 <?php
-
     include 'GenericComponent.php';
 
     if(!isset($_POST['Components']) ||
        !isset($_POST['Source']) ||
-       !isset($_POST['DataSourceType']))
+       !isset($_POST['DataSourceType']) ||
+       !isset($_POST['ProjectName']))
     {
         echo 'fail';
         return;
     }
 
-    session_start();
-    
     // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
    
     $Components = json_decode($_POST['Components'],false);
     // var_dump($Components);

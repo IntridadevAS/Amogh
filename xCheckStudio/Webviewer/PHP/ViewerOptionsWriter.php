@@ -3,25 +3,14 @@
     include 'Utility.php';
 
     if(!isset($_POST['SourceViewerOptions'] ) ||
+       !isset($_POST['ProjectName']) ||
        !isset($_POST['SourceViewerOptionsTable'] ))
     {
         echo 'fails';
         return;
     }  
        
-    session_start();
-    
-    // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     $SourceViewerOptions = json_decode($_POST['SourceViewerOptions'],true);
     $SourceViewerOptionsTable = $_POST['SourceViewerOptionsTable'];

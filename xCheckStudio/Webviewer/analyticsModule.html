@@ -433,11 +433,15 @@
 
             window.onload = function () {            
             // read data source info
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             $.ajax({
                 url: 'PHP/DataSourceInfoReader.php',
                 type: "POST",
                 async: true,
-                data: {},
+                data: {
+                    'ProjectName': object.projectname
+                },
                 success: function (msg) 
                 {                   
                     if(msg !== "fail")
@@ -476,12 +480,16 @@
                 }
             });
 
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             // read check case info
             $.ajax({
                 url: 'PHP/CheckCaseinfoReader.php',
                 type: "POST",
                 async: true,
-                data: {},
+                data: {
+                    'ProjectName': object.projectname
+                },
                 success: function (msg) {
                     if (msg !== "fail") {
                         var checkCaseInfo = JSON.parse(msg);
@@ -505,11 +513,15 @@
 
             // read check results data
             // read  check data
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             $.ajax({
                     url: 'PHP/CheckResultsReader.php',
                     type: "POST",
                     async: true,
-                    data: {},
+                    data: {
+                        'ProjectName': object.projectname
+                    },
                     success: function (msg) 
                     {
                         var checkResults = JSON.parse(msg);                      

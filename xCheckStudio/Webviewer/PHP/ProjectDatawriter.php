@@ -9,20 +9,12 @@
     //        echo 'fail at 9';
     //        return;
     //    }
-
-       session_start();
-    
-       // get project name
-       $projectName = NULL;
-       if(isset($_SESSION['ProjectName']))
-       {
-           $projectName =  $_SESSION['ProjectName'];              
-       }
-       else
-       {
-           echo 'fail';
-           return;
-       }	
+    if(!isset($_POST["ProjectName"]))
+    {
+        echo "fail";
+        return;
+    }
+        $projectName = $_POST['ProjectName'];
 
        // save checkmodele control states
        writeCheckModuleControlsState($projectName);

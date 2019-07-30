@@ -1,18 +1,8 @@
 <?php
 
-session_start();
 
-// get project name
-$projectName = NULL;
-if(isset($_SESSION['ProjectName']))
-{
- $projectName =  $_SESSION['ProjectName'];              
-}
-else
-{
- echo 'fail';
- return;
-}
+
+$projectName = $_POST['ProjectName'];
 
 $transposeType = $_POST['transposeType'];
 $transposeLevel = $_POST['transposeLevel'];

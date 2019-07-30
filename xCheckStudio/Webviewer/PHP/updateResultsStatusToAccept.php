@@ -1,23 +1,11 @@
 <?php
-if(!isset($_POST['tabletoupdate']))
+if(!isset($_POST['tabletoupdate']) || !isset($_POST['ProjectName']))
 {
  echo 'fail';
  return;
 }
 
-session_start();
-
-// get project name
-$projectName = NULL;
-if(isset($_SESSION['ProjectName']))
-{
- $projectName =  $_SESSION['ProjectName'];              
-}
-else
-{
- echo 'fail';
- return;
-}	
+$projectName = $_POST['ProjectName'];
 
 $tabletoupdate = $_POST['tabletoupdate'];
 

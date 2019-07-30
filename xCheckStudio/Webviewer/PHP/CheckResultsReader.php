@@ -1,19 +1,12 @@
 <?php
         include 'Utility.php';       
-
-        session_start();
-            
-        // get project name
-        $projectName = NULL;
-        if(isset($_SESSION['ProjectName']))
-        {
-            $projectName =  $_SESSION['ProjectName'];              
-        }
-        else
+        if(!isset($_POST['ProjectName']))
         {
             echo 'fail';
-            return;              
-        }	
+            return;
+        }
+        
+        $projectName = $_POST['ProjectName'];
 
         // $sourceAComponents = array();
         // $sourceBComponents = array();

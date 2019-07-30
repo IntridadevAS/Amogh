@@ -1,24 +1,14 @@
 <?php
     
-    if(!isset($_POST['CheckType']))
+    if(!isset($_POST['CheckType']) || !isset($_POST['ProjectName']) )
     {
         echo 'fail';
         return;
     }
 
-    session_start();
-        
-    // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+     // get project name
+     $projectName = $_POST['ProjectName'];
+
 
     $values =readAnalyticsData();    
     if($values != 'fail')

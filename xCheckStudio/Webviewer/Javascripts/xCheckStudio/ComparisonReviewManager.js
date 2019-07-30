@@ -959,11 +959,15 @@ function ComparisonReviewManager(comparisonCheckManager,
                 async: true,
                 data: {'tabletoupdate': tabletoupdate},
                 success: function (msg) {
+                    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                    var object = JSON.parse(projectinfo);
                     $.ajax({
                         url: 'PHP/CheckResultsReader.php',
                         type: "POST",
                         async: true,
-                        data: {},
+                        data: {
+                            'ProjectName': object.projectname
+                        },
                         success: function (msg) {
                             $("#ComparisonMainReviewCell").empty();
                             $("#ComparisonDetailedReviewCell").empty();

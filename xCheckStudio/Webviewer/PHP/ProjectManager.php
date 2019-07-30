@@ -70,18 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function CreateProjectDBonSaveInCheckModule()
 {
     // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }
-
+    $projectName = $_POST['ProjectName'];
     try
     {   
 
@@ -107,17 +96,7 @@ function CreateProjectDBonSaveInCheckModule()
 function SaveComponentsToCheckSpaceDB()
 {
        // get project name
-       session_start();   
-       $projectName = NULL;
-       if(isset($_SESSION['ProjectName']))
-       {
-           $projectName =  $_SESSION['ProjectName'];              
-       }
-       else
-       {
-           echo 'fail';
-           return;
-       }	
+       $projectName = $_POST['ProjectName'];	
 
        $dbPath = "../Projects/".$projectName."/".$projectName.".db";       
        $tempDBPath = "../Projects/".$projectName."/".$projectName."_temp.db";       
@@ -283,19 +262,8 @@ function SaveNotSelectedComponents()
         $componentsTable = $_POST['componentsTable'];
         $notSelectedComponentsTable = $_POST['notSelectedComponentsTable'];       
 
-         // get project name
-         session_start();   
-         $projectName = NULL;
-         if(isset($_SESSION['ProjectName']))
-         {
-             $projectName =  $_SESSION['ProjectName'];              
-         }
-         else
-         {
-             echo 'fail';
-             return;
-         }	  
-        
+        $projectName = $_POST['ProjectName'];
+
         // get not selected components
         $components = getSourceComponents($projectName, $componentsTable);
         if($components === NULL)
@@ -467,18 +435,7 @@ function isComponentSelected($component, $SelectedComponents){
 function SaveCheckResultsToCheckSpaceDB()
 {
        // get project name
-       session_start();   
-       $projectName = NULL;
-       if(isset($_SESSION['ProjectName']))
-       {
-           $projectName =  $_SESSION['ProjectName'];              
-       }
-       else
-       {
-           echo 'fail';
-           return;
-       }	
-
+       $projectName = $_POST['ProjectName'];
        $dbh;
         try
             {        
@@ -1347,18 +1304,7 @@ function SaveSelectedComponents()
         $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
         $selectedComponents = json_decode($_POST['selectedComponents'], true);
 
-         // get project name
-         session_start();   
-         $projectName = NULL;
-         if(isset($_SESSION['ProjectName']))
-         {
-             $projectName =  $_SESSION['ProjectName'];              
-         }
-         else
-         {
-             echo 'fail';
-             return;
-         }	
+        $projectName = $_POST['ProjectName'];
 
         $dbh;
         try
@@ -1461,18 +1407,7 @@ function SaveDatasourceInfo()
             $orderMaintained  = $_POST['orderMaintained'];   
         } 
 
-        // get project name
-        session_start();   
-        $projectName = NULL;
-        if(isset($_SESSION['ProjectName']))
-        {
-            $projectName =  $_SESSION['ProjectName'];              
-        }
-        else
-        {
-            echo 'fail';
-            return;
-        }	
+        $projectName = $_POST['ProjectName'];
 
      $dbh;
      try
@@ -1533,18 +1468,7 @@ function SaveCheckModuleControlsState()
          return;
     }
 
-    // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     $dbh;
      try
@@ -1604,19 +1528,7 @@ function SaveCheckCaseData()
     }
     $checkCaseData =  $_POST['CheckCaseManager'];   
 
-     // get project name
-     session_start();   
-     $projectName = NULL;
-     if(isset($_SESSION['ProjectName']))
-     {
-         $projectName =  $_SESSION['ProjectName'];              
-     }
-     else
-     {
-         echo 'fail';
-         return;
-     }	
-
+    $projectName = $_POST['ProjectName'];
                 
     $dbh;
     try
@@ -1664,18 +1576,7 @@ function SaveCheckCaseData()
 function DeleteComparisonResults()
 {
     // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
-
+    $projectName = $_POST['ProjectName'];
     $dbh;
     try
     {    
@@ -1725,18 +1626,7 @@ function DeleteComparisonResults()
 */  
 function DeleteSourceAComplianceResults()
 {
-    // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     $dbh;
     try
@@ -1783,18 +1673,7 @@ function DeleteSourceAComplianceResults()
 */ 
 function DeleteSourceBComplianceResults()
 {
-     // get project name
-     session_start();   
-     $projectName = NULL;
-     if(isset($_SESSION['ProjectName']))
-     {
-         $projectName =  $_SESSION['ProjectName'];              
-     }
-     else
-     {
-         echo 'fail';
-         return;
-     }	
+    $projectName = $_POST['ProjectName'];
  
      $dbh;
      try
@@ -1836,18 +1715,7 @@ function DeleteSourceBComplianceResults()
 
 function ReadCheckModuleControlsState()
 {
-    // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     $dbh;
         try
@@ -1897,18 +1765,7 @@ function ReadSelectedComponents()
     }
     $source = $_POST['source'];
 
-    // get project name
-    session_start();   
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     $dbh;
         try
@@ -2182,79 +2039,6 @@ function CreateProject()
     echo "success";
 }
 
-
-/*
-|
-|   Adds new project in Main.db
-|
-*/
-function AddProjectToMainDB()
-{
-    session_start();
-    if( !isset($_SESSION['Name']))
-    {
-        echo "fail";           
-        return;
-    }
-
-    $userName  = $_SESSION['Name'];
-    $projectName = trim($_POST["projectName"], " ");      
-    $path = trim($_POST["path"], " ");
-    $description = trim($_POST["description"], " ");
-    $function = trim($_POST["function"], " ");    
-    
-    $projectScope = $_POST["projectScope"];    
-    if(strtolower($projectScope) === 'true')
-    {
-        $projectScope = "public";
-    }
-    else
-    {
-        $projectScope = "private";
-    }
-
-    try{
-    $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
-    // first get user id from userName
-    $query =  "select userid from LoginInfo where username='". $userName."';";        
-
-    foreach ($dbh->query($query) as $row)
-    {         
-        $userid = $row[0];            
-      
-        // projectname is text column
-        // userid is integer column
-        // path is text column
-        $query = 'INSERT INTO Projects (userid, projectname, description, function, path, projectscope) VALUES (?, ?, ?, ?, ?,?)';
-        $stmt = $dbh->prepare($query);
-        $stmt->execute(array( $userid, $projectName, $description, $function, $path, $projectScope));     
-      
-        
-        // get project id for recently added row and write it into session variable
-        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();    
-        $stmt =  $dbh->query($qry);       
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
-        {
-            $_SESSION['ProjectId'] = $row['projectid'];
-            break;                    
-        }
-
-        $dbh = null; //This is how you close a PDO connection
-        echo 'success';                
-        
-        return;
-    }
-    
-        $dbh = null; //This is how you close a PDO connection
-        echo 'fail';            
-    }
-    catch(Exception $e) {
-        //echo 'Message: ' .$e->getMessage();
-        echo "fail"; 
-        return;
-    } 
-}
-
 /*
 |
 |   Adds new project in Main.db. This is updated as per new design
@@ -2262,14 +2046,9 @@ function AddProjectToMainDB()
 */
 function AddNewProjectToMainDB()
 {
-    session_start();
-    if( !isset($_SESSION['Name']))
-    {
-        echo "fail";           
-        return;
-    }
 
-    $userName  = $_SESSION['Name'];
+   // $userName  = $_SESSION['Name'];
+    $userid = trim($_POST["userid"], " ");      
     $projectName = trim($_POST["projectname"], " ");      
     $path = trim($_POST["path"], " ");
     $projectDescription = trim($_POST["projectDescription"], " ");
@@ -2280,23 +2059,28 @@ function AddNewProjectToMainDB()
     
 
     try{
-    $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
-    // first get user id from userName
-    $query =  "select userid from LoginInfo where username='". $userName."';";        
-  
-    foreach ($dbh->query($query) as $row)
-    {         
-        
-        $userid = $row[0];            
-        
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
         // projectname is text column
         // userid is integer column
         // path is text column
         $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status) VALUES (?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
         $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus));     
-      
-        
+        $_SESSION['ProjectId'] = $dbh->lastInsertId();
+        $array = array(
+            "projectid" => $dbh->lastInsertId(),
+            "projectname" => $projectName,
+            "type" => $projectType,
+            "comments" => $projectComments,
+            "IsFavourite" => $projectIsFavorite,
+            "description" => $projectDescription,
+            "path" => $path,
+            "status" => $projectStatus,
+        );
+         echo json_encode($array);
+         $dbh = null; //This is how you close a PDO connection
+        return;      
+        /*
         // get project id for recently added row and write it into session variable
         $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();
         $stmt =  $dbh->query($qry);       
@@ -2305,19 +2089,14 @@ function AddNewProjectToMainDB()
             $_SESSION['ProjectId'] = $row['projectid'];
             break;                    
         }
-
-        $dbh = null; //This is how you close a PDO connection
-        echo 'success';                 
-        
-        return;
-    }
-    
-        $dbh = null; //This is how you close a PDO connection
-        echo 'fail';            
+        */ 
     }
     catch(Exception $e) {
         //echo 'Message: ' .$e->getMessage();
-        echo "fail"; 
+        $array = array(
+            "projectid" => -1,
+        );
+        echo json_encode($array);
         return;
     } 
 }
@@ -2358,30 +2137,10 @@ function DeleteProject()
 
 function GetProjects()
 {
-    session_start();
-    $userName  = $_SESSION['Name'];
-    try{
-        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
-    // first get user id from userName
-        $query =  "select userid from LoginInfo where username='". $userName."';";        
-        $userid=0;
-
-        foreach ($dbh->query($query) as $row)
-        {         
-            $userid = $row[0];     
-            break;
-        }
-    }
-    catch(Exception $e) {
-        echo 'fail';
-        return;
-      }
-   
-
-   // $userid = trim($_POST["userid"], " ");
-    if($userid === 0)
+    $userid = trim($_POST["userid"], " ");
+    if($userid === -1)
     {
-        echo 'second fail';
+        echo 'fail';
         return;
     }
     try{
@@ -2397,7 +2156,5 @@ function GetProjects()
         return;
       } 
 }
-
-
 
 ?>

@@ -1,6 +1,5 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
     //$json = file_get_contents('UserInformation/loginInfo.json');
     //$json_data = json_decode($json, true);
 
@@ -13,11 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Enter Details";
         return;
     }
-
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select *from LoginInfo where username='". $name."';";        
-  
+        //$query =  "select *from LoginInfo where username='". $name."';";        
+        $query =  "select * from LoginInfo where username='".$name."' and password='".$password."'";
+        
         foreach ($dbh->query($query) as $row)
         {
             if($password == $row[2])
@@ -26,14 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              session_start();
              $_SESSION['Name']= $name;
              $_SESSION['UserId']= $row[0];
-
-            echo "correct match";
+             $array = array(
+                "userid" => $row[0],
+                "username" => $row[1],
+                "alias"   => $row[4],
+                "type"  => $row[3],
+                "permission"  => $row[5],
+            );
+             echo json_encode($array);
             return;
             }            
         }
         $dbh = null; //This is how you close a PDO connection
 
-        echo "no match";
+        echo "Failed";
         return;
     }
     catch(Exception $e) {
