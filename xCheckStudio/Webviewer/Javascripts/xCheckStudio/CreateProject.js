@@ -92,6 +92,7 @@ function createNewProject(projectname, projectDescription, projectType, projectS
             $.ajax({
                 data: {
                     'InvokeFunction': 'AddNewProjectToMainDB',
+                    'userid': localStorage.getItem('userid'),
                     'projectname': projectname,
                     'projectDescription': projectDescription,
                     'projectType': projectType,
@@ -104,10 +105,9 @@ function createNewProject(projectname, projectDescription, projectType, projectS
                 url: "PHP/ProjectManager.php"
             }).done(function (msg) 
             {
-
-                if (msg === 'success') 
-                {
-                    //alert("Main.db record added.");
+                var object = JSON.parse(msg);
+                if (object.projectid !== -1){
+                    localStorage.setItem('projectinfo', JSON.stringify(msg));
                     window.location.href = "checkModule.html";
                 }
             });

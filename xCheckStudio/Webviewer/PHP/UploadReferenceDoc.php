@@ -3,24 +3,14 @@
     if(!isset($_POST['ReferenceDataDir']) ||
        !isset( $_POST['ReferenceTable']) ||
        !isset( $_POST['Component']) ||
+       !isset($_POST['ProjectName']) ||
        !isset( $_POST['TypeofReference']))
     {
         echo 'fail';
         return;
     }
   
-    session_start();
-    // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
     
     $supportedFiles = array("pdf","PDF","txt","TXT", "xml", "XML","jpg", "JPG", "jpeg", "JPEG", "jpe", "JPE", "bmp", "BMP", "gif", "GIF", "tif", "TIF", "png", "PNG");
 

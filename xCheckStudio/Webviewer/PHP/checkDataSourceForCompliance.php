@@ -4,25 +4,14 @@
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SelectedCompoents'] ) ||
+               !isset($_POST['ProjectName']) ||
                !isset($_POST['ContainerId'] ) )
             {
                 echo 'fail';
                 return;
             }
             
-            session_start();
-    
-            // get project name
-            $projectName = NULL;
-            if(isset($_SESSION['ProjectName']))
-            {
-                $projectName =  $_SESSION['ProjectName'];              
-            }
-            else
-            {
-                echo 'fail';
-                return;
-            }	
+            $projectName = $_POST['ProjectName'];
 
             $ComplianceCheckRulesArray = array(
                 "None"=> "1",

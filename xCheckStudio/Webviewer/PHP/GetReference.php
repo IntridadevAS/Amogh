@@ -1,25 +1,14 @@
 <?php
 
-    if(!isset($_POST['ReferenceTable']) ||    
-       !isset($_POST['Component']))
+    if(!isset($_POST['ReferenceTable']) ||  
+        !isset($_POST['ProjectName']) ||  
+        !isset($_POST['Component']))
     {
         echo 'fail';
         return;
     }
 
-    session_start();
-    
-    // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     GetReferenceData($projectName);
     function GetReferenceData($projectName)

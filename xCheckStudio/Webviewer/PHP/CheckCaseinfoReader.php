@@ -1,18 +1,13 @@
 <?php
     
-    session_start();
-        
-    // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
+    if(!isset($_POST['ProjectName']))
     {
         echo 'fail';
         return;
-    }	
+    }
+        
+    // get project name
+    $projectName = $_POST['ProjectName'];
 
     $values =readCheckCaseInfo();
     if($values != 'fail')

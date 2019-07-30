@@ -122,13 +122,17 @@ function AnalyticsManager(comparisonCheckGroups,
     }
 
     AnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
-       
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
             type: "POST",
             async: true,
-            data: { 'CheckType': 'Comparison' },
+            data: { 
+                'CheckType': 'Comparison',
+                'ProjectName': object.projectname
+            },
             success: function (msg) {
                 if (msg != 'fail') {
                     var checkResults = JSON.parse(msg);
@@ -239,12 +243,17 @@ function AnalyticsManager(comparisonCheckGroups,
 
     AnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = function () {
 
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
             type: "POST",
             async: true,
-            data: { 'CheckType': 'SourceACompliance' },
+            data: { 
+                'CheckType': 'SourceACompliance',
+                'ProjectName': object.projectname
+            },
             success: function (msg) {
                 if (msg != 'fail') {
                     var checkResults = JSON.parse(msg);
@@ -316,12 +325,18 @@ function AnalyticsManager(comparisonCheckGroups,
 
     AnalyticsManager.prototype.populateSourceBComplianceAnalyticsData = function () {
 
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
+
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
             type: "POST",
             async: true,
-            data: { 'CheckType': 'SourceBCompliance' },
+            data: { 
+                'CheckType': 'SourceBCompliance',
+                'ProjectName': object.projectname
+            },
             success: function (msg) {
                 if (msg != 'fail') {
                     var checkResults = JSON.parse(msg);

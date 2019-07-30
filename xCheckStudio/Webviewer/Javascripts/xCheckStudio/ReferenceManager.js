@@ -70,13 +70,16 @@ var ReferenceManager = function (selectedComponentRow) {
         }
 
         // get already existing referemce data
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         $.ajax({
             url: 'PHP/GetReference.php',
             type: "POST",
             async: true,
             data: {
                 'ReferenceTable': referenceTable,
-                'Component': checkComponentId
+                'Component': checkComponentId,
+                'ProjectName': object.projectname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -207,6 +210,9 @@ var ReferenceManager = function (selectedComponentRow) {
             return;
         }
 
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
+
         // add reference
         $.ajax({
             url: 'PHP/AddReference.php',
@@ -216,7 +222,8 @@ var ReferenceManager = function (selectedComponentRow) {
                 'ReferenceTable': referenceTable,
                 'TypeofReference': "WebAddress",
                 'Component': checkComponentId,
-                'referenceData': webAddressString
+                'referenceData': webAddressString,
+                'ProjectName': object.projectname
             },
             success: function (msg) {
                 if (msg != 'fail') {

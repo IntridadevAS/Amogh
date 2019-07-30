@@ -82,12 +82,15 @@ ExcelSourceManager.prototype.AddComponentsToDB = function () {
   else if (this.ViewerContainer.toLowerCase() == "viewercontainer2") {
     source = "SourceB"
   }
+  var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+  var object = JSON.parse(projectinfo);
 
   $.ajax({
     data: {
       'Components': JSON.stringify(this.SourceProperties),
       'Source': source,
-      'DataSourceType': '1D'
+      'DataSourceType': '1D',
+      'ProjectName': object.projectname
     },
     type: "POST",
     url: "PHP/AddComponentsToDB.php"
