@@ -1088,6 +1088,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                         component.status = status[0];
+                        if(component.transpose != null) {
+                            if(!status[0].includes("(T)")) 
+                                component.status = status[0] + "(T)";
+                        }
                         var index = 0;
                         for(var propertyId in properties) {
                             property = properties[propertyId];
@@ -1438,6 +1442,10 @@ function ComparisonReviewManager(comparisonCheckManager,
                             if(property.accepted == 'false') {
                                 component.properties[index].Severity = property.severity;
                                 component.properties[index].transpose = null;
+                            }
+                            else if(property.accepted == 'true') {
+                                if(!status[0].includes("(A)")) 
+                                    component.status = status[0] + "(A)";
                             }                
                             index++;
                         }

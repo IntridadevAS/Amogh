@@ -156,7 +156,7 @@ function chooseRestoreTranspose(selectedRow) {
             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
                 return true;
             }
-            else if(component.transpose !== null) {
+            else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML == 'OK(A)(T)' ) {
                 return false;
             }else { return true; }
         }
