@@ -108,6 +108,7 @@ let controller = {
     $.ajax({
       data: {
           'InvokeFunction': 'GetProjects',
+          'userid':localStorage.getItem('userid'),
       },
       type: "POST",
       url: "PHP/ProjectManager.php"
@@ -121,7 +122,8 @@ let controller = {
             else 
                 model.publicProjects.push(object[i]);
           }
-          //model.myProjects = array;
+
+          
           projectView.renderProjects();
   });
     /*fetch('../tests/allProjects.json', {
