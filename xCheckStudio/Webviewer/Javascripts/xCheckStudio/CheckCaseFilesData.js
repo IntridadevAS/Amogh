@@ -72,7 +72,7 @@ var CheckCaseFilesData = function () {
             checkCaseSelect.remove(i);
         }
              
-        checkCaseSelect.options.add(new Option("None", "None"));
+        checkCaseSelect.options.add(new Option("AutoSelect", "AutoSelect"));
 
         for (var i = 0; i < this.CheckCaseFileDataList.length; i++) {
             var checkCaseData = this.CheckCaseFileDataList[i];

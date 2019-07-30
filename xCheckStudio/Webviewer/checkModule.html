@@ -2482,7 +2482,7 @@
                     // this new project to be created
                     var checkCaseSelect = document.getElementById("checkCaseSelect");
                     checkCaseSelect.onchange = function () {
-                        if (this.value === "None") {
+                        if (this.value === "AutoSelect") {
                             checkCaseManager = undefined;
 
                             // disable controls
@@ -2491,6 +2491,7 @@
                             return;
                         }
 
+                        $("#checkCaseSelect option[value='AutoSelect']").prop("disabled", true);
                         checkCaseSelected = true;
                         var fileName;
                         for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {

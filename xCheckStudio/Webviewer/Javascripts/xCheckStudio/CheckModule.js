@@ -931,7 +931,7 @@ function getCheckCase(sourcetype, viewerContainer) {
     var dummylist = [];
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
-    if(sourcetype == undefined && 
+    if(sourcetype == undefined || 
        viewerContainer == undefined) {
        
         checkCaseFilesData.FilteredCheckCaseDataList = [];
@@ -940,7 +940,9 @@ function getCheckCase(sourcetype, viewerContainer) {
     else {
         var fileExtensionA;
         var fileExtensionB;
-        fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+        if (sourceAFileName !== undefined) {
+            fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+        }
         if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
     
@@ -949,26 +951,60 @@ function getCheckCase(sourcetype, viewerContainer) {
         // checkCaseSelect.options.add(new Option("None", "None"));
     
         if(viewerContainer == "viewerContainer1") {
-            for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-                var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-                    if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
-                        checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
-                    }      
+            if(fileExtensionB == undefined) {
+                checkCaseFilesData.FilteredCheckCaseDataList = [];
+                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                        if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                            checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
+                        }      
+                }
             }
+            else {
+                for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
+                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
+                    if(fileExtensionA == fileExtensionB) {
+                        if(count >= 2)
+                            dummylist.push(checkCaseFileData);
+                    }
+                    else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                        dummylist.push(checkCaseFileData);
+                    }      
+                }
+                checkCaseFilesData.FilteredCheckCaseDataList = [];
+                checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
+            }         
         }
     
         else if(viewerContainer == "viewerContainer2") {
-            for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
-                var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
-                var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
-                if(fileExtensionA == fileExtensionB) {
-                    if(count >= 2)
+            if(fileExtensionA !== undefined) {
+                for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
+                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
+                    if(fileExtensionA == fileExtensionB) {
+                        if(count >= 2)
+                            dummylist.push(checkCaseFileData);
+                    }
+                    else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
                         dummylist.push(checkCaseFileData);
+                    }      
                 }
-                else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
-                    dummylist.push(checkCaseFileData);
-                }      
             }
+            else {
+                checkCaseFilesData.FilteredCheckCaseDataList = [];
+                for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                    var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
+                    if(fileExtensionA == fileExtensionB) {
+                        if(count >= 2)
+                            dummylist.push(checkCaseFileData);
+                    }
+                    else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                        dummylist.push(checkCaseFileData);
+                    }    
+                }
+            }       
             checkCaseFilesData.FilteredCheckCaseDataList = [];
             checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
         }
@@ -1011,6 +1047,14 @@ function loadExcelDataSource(fileExtension,
     //     alert("CheckCaseManager not found.");
     //     return false;
     // }
+    var fileExtensionA;
+    var fileExtensionB;
+
+    fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+    if (sourceBFileName !== undefined) {
+        fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+    }
+
     if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
         var sourceAType;
         var sourceBType;
@@ -1045,16 +1089,24 @@ function loadExcelDataSource(fileExtension,
         }
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if (fileExtensionA == fileExtensionB) {
-                    if (sourceAType == fileExtensionA && fileExtension == fileExtensionA) {
+                else if (fileExtensionA == fileExtensionB && sourceAType !== sourceBType) {
+                    if (sourceAType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionA.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
+                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
                 }
             }
             else {
@@ -1066,13 +1118,6 @@ function loadExcelDataSource(fileExtension,
         }
     }
     else if (checkCaseManager && !checkCaseSelected) {
-        var fileExtensionA;
-        var fileExtensionB;
-
-        fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-        if (sourceBFileName !== undefined) {
-            fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-        }
         getCheckCase(fileExtension, viewerContainer);
 
     }
@@ -1136,16 +1181,24 @@ function loadModel(fileName,
         }
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if (fileExtensionA == fileExtensionB && sourceAType != sourceBType) {
-                    if (sourceAType == fileExtensionA && fileExtension.toUpperCase() == fileExtensionA) {
+                else if (fileExtensionA == fileExtensionB && sourceAType !== sourceBType) {
+                    if (sourceAType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionA.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
+                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
                 }
             }
             else {
@@ -1403,16 +1456,24 @@ function loadDbDataSource(fileExtension,
         }
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-                if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                    sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+                if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+                sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
-                else if (fileExtensionA == fileExtensionB) {
-                    if (sourceAType == fileExtensionA && fileExtension == fileExtensionA) {
+                else if (fileExtensionA == fileExtensionB && sourceAType !== sourceBType) {
+                    if (sourceAType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionA.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
+                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                        alert("Data source type doesn't match with check case.");
+                        return false;
+                    }
+                }
+                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                    alert("Data source type doesn't match with check case.");
+                    return false;
                 }
             }
             else {
@@ -1897,16 +1958,17 @@ function clearData(source) {
         sourceAFileName = undefined;
         var fileExtensionA;
         var fileExtensionB;
+        var sourceType;
         if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-
+            sourceType = fileExtensionB.toLowerCase();
         }
 
         if (sourceAFileName == undefined && sourceBFileName == undefined) {
             excludeNone = false;
         }
         sourceManager1 = null;
-        getCheckCase();
+        getCheckCase(sourceType, 'viewerContainer2');
         clearDBEntriesOnClearModule(source);
       
     }
@@ -1932,15 +1994,17 @@ function clearData(source) {
         excludeNone = true;
         var fileExtensionA;
         var fileExtensionB;
+        var sourceType;
         if (sourceAFileName !== undefined) {
             fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+            sourceType = fileExtensionA.toLowerCase();
         }
 
         sourceManager2 = null;
         if (sourceAFileName == undefined && sourceBFileName == undefined) {
             excludeNone = false;
         }
-        getCheckCase();
+        getCheckCase(sourceType, 'viewerContainer1');
         clearDBEntriesOnClearModule(source);
 
     }
