@@ -1,9 +1,9 @@
-var translucensyManager;
-function TranslucensyManager() {
-    this.ChangedComponents = [];
+var translucencyManagers = {};
+function TranslucencyManager() {
+    this.ChangedComponents = {};
 
 
-    TranslucensyManager.prototype.Start = function () {
+    TranslucencyManager.prototype.Start = function () {
         if (!currentViewer) {
             return;
         }
@@ -35,7 +35,7 @@ function TranslucensyManager() {
         overlayField.style.display = "block";
         outputFiled.innerHTML = slider.value;
 
-
+        //slider.value = 1;
         slider.oninput = function () {
 
             _this.onTranslucencyValueChanged(this.value)
@@ -43,7 +43,7 @@ function TranslucensyManager() {
         }
     }
 
-    TranslucensyManager.prototype.onTranslucencyValueChanged = function (value) {
+    TranslucencyManager.prototype.onTranslucencyValueChanged = function (value) {
         var outputFiled;
         if (currentViewer._params.containerId === "viewerContainer1") {            
             outputFiled = document.getElementById("translucencyValue1");            
@@ -67,12 +67,22 @@ function TranslucensyManager() {
                 }
             });
 
-            currentViewer.model.setNodesOpacity(selectedNodes, Number(value));
+               // maintain changed components
+               for(var i = 0; i <selectedNodes.length; i++)
+               {
+                   var selectedNode = selectedNodes[i];                  
+                   this.ChangedComponents[selectedNode] = Number(value) ;                
+               }
+
+            currentViewer.model.setNodesOpacity(selectedNodes, Number(value));         
         }
     }
 
-    TranslucensyManager.prototype.Stop = function () {
+    TranslucencyManager.prototype.Stop = function () {
         if (currentViewer) {
+
+            // reset opacity for changed components
+            this.ResetTranslucensy();
 
             var slider;
             var overlayField;
@@ -87,53 +97,85 @@ function TranslucensyManager() {
             if (!slider || !overlayField) {
                 return;
             }
-            slider.value = 0;
+           
+            slider.value = 1;
             overlayField.style.display = "none";
         }
     }
+
+    TranslucencyManager.prototype.ResetTranslucensy = function () {
+        if (!currentViewer) {
+            return;
+        }      
+
+        var changedNodes = Object.keys(this.ChangedComponents);
+        var nodes = [];
+        for(var i = 0; i <changedNodes.length; i++)
+       {
+          nodes.push( Number(changedNodes[i]));
+       } 
+       
+        // reset opacity
+        currentViewer.model.resetNodesOpacity(nodes);
+
+        // clear the changed components object
+        this.ChangedComponents = {};
+    }
+
+    TranslucencyManager.prototype.ComponentSelected = function (nodeId) {
+        if (!currentViewer) {
+            return;
+        }
+
+        var slider;
+        var outputFiled;
+        if (currentViewer._params.containerId === "viewerContainer1") {
+            slider = document.getElementById("translucencySlider1");
+            outputFiled = document.getElementById("translucencyValue1");
+        }
+        else if (currentViewer._params.containerId === "viewerContainer2") {
+            slider = document.getElementById("translucencySlider2");
+            outputFiled = document.getElementById("translucencyValue2");
+        }
+
+        if (!slider ||
+            !outputFiled) {
+            return;
+        }
+
+        if (nodeId in this.ChangedComponents) {
+            // set values
+            slider.value = this.ChangedComponents[nodeId];           
+        }
+        else {
+            // set values
+            slider.value = 1;
+        }
+
+        outputFiled.innerHTML = slider.value;
+    }
 }
 
-function startTranslucensy() {
-    translucensyManager = new TranslucensyManager();
-    translucensyManager.Start();
-}
 
-function stopTranslucensy() {
-    if (!translucensyManager) {
+
+function startTranslucency() {
+    if (!currentViewer) {
         return;
     }
 
-    translucensyManager.Stop();
-    translucensyManager = undefined;
+    var translucencyManager = new TranslucencyManager();
+    translucencyManager.Start();
+
+    translucencyManagers[currentViewer._params.containerId] = translucencyManager;    
 }
 
-// function setNodeOpacityToTranslucencySlider(selectedNodeId, viewerContainer) {
-//     if (!selectedNodeId ||
-//         !currentViewer) {
-//         return;
-//     }
+function stopTranslucency() {
+    if (!currentViewer ||
+        !currentViewer._params.containerId in translucencyManagers)
+    {
+        return;
+    }
 
-//     var overlayField;
-//     var slider;
-//     if (viewerContainer === "viewerContainer1") {
-//         overlayField = document.getElementById("translucencyOverlay1");
-//         slider = document.getElementById("translucencySlider1");
-//     }
-//     else if (viewerContainer === "viewerContainer2") {
-//         overlayField = document.getElementById("translucencyOverlay2");
-//         slider = document.getElementById("translucencySlider2");
-//     }
-
-//     if (!overlayField ||
-//         !slider) {
-//         return;
-//     }
-
-//     currentViewer.model.getNodesOpacity([selectedNodeId]).then(function (transparencies) {
-//         if (transparencies.lenght === 0) {
-//             return;
-//         }
-
-//         slider.value = transparencies[0];
-//     });
-// }
+    translucencyManagers[currentViewer._params.containerId].Stop();
+    delete translucencyManagers[currentViewer._params.containerId]; 
+}
