@@ -68,6 +68,9 @@
     <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script>
     <script src='configurations\dir.php'></script>
 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
+
     </meta>
     </meta>
 
@@ -307,6 +310,14 @@
         <a href="#" onclick="stopExplode()">
             Stop Explode
             <!--<span>Ctrl + ?!</span>-->
+        </a>
+        <a href="#" onclick="startTranslucency()">
+            Start Translucency
+            <!-- <span>Ctrl + T</span> -->
+        </a>
+        <a href="#" onclick="stopTranslucency()">
+            Stop Translucency
+            <!-- <span>Ctrl + T</span> -->
         </a>
     </div>
     <div class="toast" id="toast">
@@ -2053,25 +2064,45 @@
                 <div class="bg1">
                     <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
                         class="example-canvas-small">
-                        <div id="overlay1" class="sliderOverlay">
+
+                        <!-- explode slider -->
+                        <div id="explodeOverlay1" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider"
-                                    id="explodeSlider1">
+                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
                                 <p> <span id="explodeValue1"></span></p>
                             </div>
                         </div>
-                    </div>
+                        
+                        <!-- Translucency slider -->
+                        <div id="translucencyOverlay1" class="sliderOverlay">
+                            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+                                <p> <span id="translucencyValue1"></span></p>
+                            </div>
+                        </div>
+                        
+                        </div>
                     <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
                         class="example-canvas-small">
-                        <div id="overlay2" class="sliderOverlay">
+                    
+                        <!-- explode slider -->
+                        <div id="explodeOverlay2" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider"
-                                    id="explodeSlider2">
+                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
                                 <p> <span id="explodeValue2"></span></p>
                             </div>
                         </div>
+                    
+                        <!-- Translucency slider -->
+                        <div id="translucencyOverlay2" class="sliderOverlay">
+                            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
+                                <p> <span id="translucencyValue2"></span></p>
+                            </div>
+                        </div>
+                    
                     </div>
-                </div>
+                    </div>
                 <div id="datagraphics" class="viewdatagraphics">View data graphics</div>
                 <div class="openmenu" id="openmenu">
                     <img src="images/UIPackage/module2-with-open-menu-bg-llist.png" class="bgllist" />
@@ -2339,79 +2370,79 @@
             }
         }
 
-        function startExplode() {
+        // function startExplode() {
 
-            if (currentViewer) {
-                var slider;
-                var outputFiled;
-                var overlayField;
-                if (currentViewer._params.containerId === "viewerContainer1") {
-                    slider = document.getElementById("explodeSlider1");
-                    outputFiled = document.getElementById("explodeValue1");
-                    overlayField = document.getElementById("overlay1");
-                }
-                else if (currentViewer._params.containerId === "viewerContainer2") {
-                    slider = document.getElementById("explodeSlider2");
-                    outputFiled = document.getElementById("explodeValue2");
-                    overlayField = document.getElementById("overlay2");
-                }
-                if (!slider || !outputFiled || !overlayField) {
-                    return;
-                }
+        //     if (currentViewer) {
+        //         var slider;
+        //         var outputFiled;
+        //         var overlayField;
+        //         if (currentViewer._params.containerId === "viewerContainer1") {
+        //             slider = document.getElementById("explodeSlider1");
+        //             outputFiled = document.getElementById("explodeValue1");
+        //             overlayField = document.getElementById("explodeOverlay1");
+        //         }
+        //         else if (currentViewer._params.containerId === "viewerContainer2") {
+        //             slider = document.getElementById("explodeSlider2");
+        //             outputFiled = document.getElementById("explodeValue2");
+        //             overlayField = document.getElementById("overlay2");
+        //         }
+        //         if (!slider || !outputFiled || !overlayField) {
+        //             return;
+        //         }
 
-                // overlayField.style.top = "270px";
-                // overlayField.style.left = "555px";
+        //         // overlayField.style.top = "270px";
+        //         // overlayField.style.left = "555px";
 
-                overlayField.style.bottom = "30px";
-                //overlayField.style.right = "15px";
+        //         overlayField.style.bottom = "30px";
+        //         //overlayField.style.right = "15px";
 
-                overlayField.style.display = "block";
+        //         overlayField.style.display = "block";
 
-                outputFiled.innerHTML = slider.value;
+        //         outputFiled.innerHTML = slider.value;
 
-                slider.oninput = function () {
-                    outputFiled.innerHTML = this.value;
+        //         slider.oninput = function () {
+        //             outputFiled.innerHTML = this.value;
 
-                    if (currentViewer) {
-                        var explodeManager = currentViewer.getExplodeManager();
-                        if (explodeManager.getActive()) {
-                            explodeManager.stop();
-                        }
+        //             if (currentViewer) {
+        //                 var explodeManager = currentViewer.getExplodeManager();
+        //                 if (explodeManager.getActive()) {
+        //                     explodeManager.stop();
+        //                 }
 
-                        explodeManager.setMagnitude(Number(this.value));
-                        explodeManager.start().then(function () {
+        //                 explodeManager.setMagnitude(Number(this.value));
+        //                 explodeManager.start().then(function () {
 
-                        });
-                    }
+        //                 });
+        //             }
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
 
-        function stopExplode() {
-            if (currentViewer) {
-                var explodeManager = currentViewer.getExplodeManager();
-                if (explodeManager.getActive()) {
-                    explodeManager.stop();
-                }
+        // function stopExplode() {
+        //     if (currentViewer) {
+        //         var explodeManager = currentViewer.getExplodeManager();
+        //         if (explodeManager.getActive()) {
+        //             explodeManager.stop();
+        //         }
 
-                var slider;
-                var overlayField;
-                if (currentViewer._params.containerId === "viewerContainer1") {
-                    slider = document.getElementById("explodeSlider1");
-                    overlayField = document.getElementById("overlay1");
-                }
-                else if (currentViewer._params.containerId === "viewerContainer2") {
-                    slider = document.getElementById("explodeSlider2");
-                    overlayField = document.getElementById("overlay2");
-                }
-                if (!slider || !overlayField) {
-                    return;
-                }
-                slider.value = 0;
-                overlayField.style.display = "none";
-            }
-        }
+        //         var slider;
+        //         var overlayField;
+        //         if (currentViewer._params.containerId === "viewerContainer1") {
+        //             slider = document.getElementById("explodeSlider1");
+        //             overlayField = document.getElementById("explodeOverlay1");
+        //         }
+        //         else if (currentViewer._params.containerId === "viewerContainer2") {
+        //             slider = document.getElementById("explodeSlider2");
+        //             overlayField = document.getElementById("overlay2");
+        //         }
+        //         if (!slider || !overlayField) {
+        //             return;
+        //         }
+        //         slider.value = 0;
+        //         overlayField.style.display = "none";
+        //     }
+        // }
 
         function setFront() {
             if (currentViewer) {

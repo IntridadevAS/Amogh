@@ -53,54 +53,7 @@ function showAll() {
     }
 }
 
-function startExplode() {
 
-    if (currentViewer) {
-        var slider;
-        var outputFiled;
-        var overlayField;
-        if (currentViewer._params.containerId === "viewerContainer1") {
-            slider = document.getElementById("explodeSlider1");
-            outputFiled = document.getElementById("explodeValue1");
-            overlayField = document.getElementById("overlay1");
-        }
-        else if (currentViewer._params.containerId === "viewerContainer2") {
-            slider = document.getElementById("explodeSlider2");
-            outputFiled = document.getElementById("explodeValue2");
-            overlayField = document.getElementById("overlay2");
-        }
-        if (!slider || !outputFiled || !overlayField) {
-            return;
-        }
-
-        // overlayField.style.top = "270px";
-        // overlayField.style.left = "555px";
-
-        overlayField.style.bottom = "30px";
-        //overlayField.style.right = "15px";
-
-        overlayField.style.display = "block";
-
-        outputFiled.innerHTML = slider.value;
-
-        slider.oninput = function () {
-            outputFiled.innerHTML = this.value;
-
-            if (currentViewer) {
-                var explodeManager = currentViewer.getExplodeManager();
-                if (explodeManager.getActive()) {
-                    explodeManager.stop();
-                }
-
-                explodeManager.setMagnitude(Number(this.value));
-                explodeManager.start().then(function () {
-
-                });
-            }
-
-        }
-    }
-}
 
 function onCheckButtonClick() {
     var busySpinner = document.getElementById("divLoading");
@@ -364,31 +317,6 @@ function deleteCheckResultsFromDB(checkType) {
             return resolve(true);
         });
     });
-}
-
-function stopExplode() {
-    if (currentViewer) {
-        var explodeManager = currentViewer.getExplodeManager();
-        if (explodeManager.getActive()) {
-            explodeManager.stop();
-        }
-
-        var slider;
-        var overlayField;
-        if (currentViewer._params.containerId === "viewerContainer1") {
-            slider = document.getElementById("explodeSlider1");
-            overlayField = document.getElementById("overlay1");
-        }
-        else if (currentViewer._params.containerId === "viewerContainer2") {
-            slider = document.getElementById("explodeSlider2");
-            overlayField = document.getElementById("overlay2");
-        }
-        if (!slider || !overlayField) {
-            return;
-        }
-        slider.value = 0;
-        overlayField.style.display = "none";
-    }
 }
 
 function setFront() {
