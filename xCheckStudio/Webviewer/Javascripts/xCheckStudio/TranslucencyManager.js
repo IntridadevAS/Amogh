@@ -31,7 +31,9 @@ function TranslucencyManager() {
             return;
         }
 
-        overlayField.style.bottom = "30px";
+        overlayField.style.right = "10px";
+        overlayField.style.bottom = "45%";
+        // overlayField.style.bottom = "30px";
         overlayField.style.display = "block";
         outputFiled.innerHTML = slider.value;
 
@@ -163,6 +165,11 @@ function startTranslucency() {
         return;
     }
 
+    if (explodeActive()) {
+        alert("Please stop explode before activating translucency.");
+        return;
+    }
+
     var translucencyManager = new TranslucencyManager();
     translucencyManager.Start();
 
@@ -171,11 +178,21 @@ function startTranslucency() {
 
 function stopTranslucency() {
     if (!currentViewer ||
-        !currentViewer._params.containerId in translucencyManagers)
+        !(currentViewer._params.containerId in translucencyManagers))
     {
         return;
     }
 
     translucencyManagers[currentViewer._params.containerId].Stop();
     delete translucencyManagers[currentViewer._params.containerId]; 
+}
+
+function translucencyActive()
+{
+    if (currentViewer &&
+        (currentViewer._params.containerId in translucencyManagers)) {
+        return true;
+    } 
+
+    return false;
 }
