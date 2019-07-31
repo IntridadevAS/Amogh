@@ -151,7 +151,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 viewer.view.fitWorld();
 
                 // create nav cube
-                _this.ShowNavigationCube();
+                showNavigationCube(viewer);
 
                 _this.highlightComponentsfromResult();
             },
@@ -189,25 +189,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             },
         });
     };
-
-    ReviewModuleViewerInterface.prototype.ShowNavigationCube = function () {
-        // create nav cube
-        var navCube = this.Viewer.view.getNavCube();
-        navCube.enable();
-        // resize nav cube
-        var overlayManager = this.Viewer.getOverlayManager();
-        overlayManager.setViewport(Communicator.BuiltinOverlayIndex.NavCube,
-            Communicator.OverlayAnchor.UpperRightCorner,
-            0,
-            Communicator.OverlayUnit.ProportionOfCanvas,
-            0,
-            Communicator.OverlayUnit.ProportionOfCanvas,
-            100,
-            Communicator.OverlayUnit.Pixels,
-            100,
-            Communicator.OverlayUnit.Pixels);
-    }
-
+    
     ReviewModuleViewerInterface.prototype.menu = function (x, y) {
         var i = document.getElementById("menu").style;
         i.top = y + "px";

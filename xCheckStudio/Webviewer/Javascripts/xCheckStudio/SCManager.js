@@ -57,7 +57,7 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 _this.BindEvents(viewer);
 
                 // show navigation cube
-                _this.ShowNavigationCube();
+                showNavigationCube(viewer);
 
                 // construct model tree
                 _this.ModelTree = new SCModelBrowser(_this.ViewerOptions.modelTree,
@@ -94,24 +94,6 @@ SCManager.prototype.LoadData = function (selectedComponents) {
         });
     });
 };
-
-SCManager.prototype.ShowNavigationCube = function () {
-    // create nav cube
-    var navCube = this.Webviewer.view.getNavCube();
-    navCube.enable();
-    // resize nav cube
-    var overlayManager = this.Webviewer.getOverlayManager();
-    overlayManager.setViewport(Communicator.BuiltinOverlayIndex.NavCube,
-        Communicator.OverlayAnchor.UpperRightCorner,
-        0,
-        Communicator.OverlayUnit.ProportionOfCanvas,
-        0,
-        Communicator.OverlayUnit.ProportionOfCanvas,
-        100,
-        Communicator.OverlayUnit.Pixels,
-        100,
-        Communicator.OverlayUnit.Pixels);
-}
 
 SCManager.prototype.SetViewerBackgroundColor = function () {
     var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");

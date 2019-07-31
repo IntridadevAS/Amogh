@@ -52,6 +52,7 @@
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
 
     <script type="text/javascript">
         // Load the Visualization API and the corechart package.
@@ -334,38 +335,16 @@
             <img src="images/show.png" /> Show All
             <!-- <span>Ctrl + ?!</span> -->
         </a>
-
+        
         <hr />
-        <a href="#" onclick="setFront()">
-            Front
-            <!-- <span>Ctrl + ?!</span> -->
+        <a href="#" onclick="showNavCube()">
+           Show Navigation Cube
         </a>
-        <a href="#" onclick="setBack()">
-            Back
-            <!-- <span>Ctrl + ?!</span> -->
+        <a href="#" onclick="hideNavCube()">
+            Hide Navigation Cube
         </a>
-        <a href="#" onclick="setTop()">
-            Top
-            <!-- <span>Ctrl + ?!</span> -->
-        </a>
-        <a href="#" onclick="setBottom()">
-            Bottom
-            <!-- <span>Ctrl + ?!</span> -->
-        </a>
-        <a href="#" onclick="setRight()">
-            Right
-            <!-- <span>Ctrl + ?!</span> -->
-        </a>
-        <a href="#" onclick="setLeft()">
-            Left
-            <!-- <span>Ctrl + ?!</span> -->
-        </a>
-        <a href="#" onclick="setISO()">
-            ISO
-            <!-- <span>Ctrl + ?!</span> -->
-        </a>
+        
         <hr />
-
         <a href="#" onclick="startExplode()">
             Start Explode
             <!-- <span>Ctrl + ?!</span> -->
@@ -808,45 +787,7 @@
                 currentViewer.model.setNodesVisibilities(map);
                 hiidenEntities = [];
             }
-        }
-
-       
-
-        function setFront() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setBack() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Back, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setTop() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Top, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setBottom() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Bottom, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setRight() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Right, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setLeft() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Left, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setISO() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-            }
-        }
+        }  
 
         var analyticsManager;
         var currentlyOpenedTab;

@@ -319,48 +319,6 @@ function deleteCheckResultsFromDB(checkType) {
     });
 }
 
-function setFront() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setBack() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Back, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setTop() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Top, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setBottom() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Bottom, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setRight() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Right, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setLeft() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Left, Communicator.DefaultTransitionDuration);
-    }
-}
-
-function setISO() {
-    if (currentViewer) {
-        currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-    }
-}
-
 function disableControlsOnLoad() {
     // diable check all CB for source A
     var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');

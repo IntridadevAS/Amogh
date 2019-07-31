@@ -70,6 +70,7 @@
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
 
     </meta>
     </meta>
@@ -270,37 +271,16 @@
         <a href="#" onclick="showAll()">
             <img src="images/show.png" /> Show All
             <!--<span>Ctrl + ?!</span>-->
+        </a>     
+        
+        <hr />
+        <a href="#" onclick="showNavCube()">
+           Show Navigation Cube
+        </a>
+        <a href="#" onclick="hideNavCube()">
+            Hide Navigation Cube
         </a>
 
-        <hr />
-        <a href="#" onclick="setFront()">
-            Front
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setBack()">
-            Back
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setTop()">
-            Top
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setBottom()">
-            Bottom
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setRight()">
-            Right
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setLeft()">
-            Left
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
-        <a href="#" onclick="setISO()">
-            ISO
-            <!--<span>Ctrl + ?!</span>-->
-        </a>
         <hr />
 
         <a href="#" onclick="startExplode()">
@@ -2368,117 +2348,7 @@
                 currentViewer.model.setNodesVisibilities(map);
                 hiidenEntities = [];
             }
-        }
-
-        // function startExplode() {
-
-        //     if (currentViewer) {
-        //         var slider;
-        //         var outputFiled;
-        //         var overlayField;
-        //         if (currentViewer._params.containerId === "viewerContainer1") {
-        //             slider = document.getElementById("explodeSlider1");
-        //             outputFiled = document.getElementById("explodeValue1");
-        //             overlayField = document.getElementById("explodeOverlay1");
-        //         }
-        //         else if (currentViewer._params.containerId === "viewerContainer2") {
-        //             slider = document.getElementById("explodeSlider2");
-        //             outputFiled = document.getElementById("explodeValue2");
-        //             overlayField = document.getElementById("overlay2");
-        //         }
-        //         if (!slider || !outputFiled || !overlayField) {
-        //             return;
-        //         }
-
-        //         // overlayField.style.top = "270px";
-        //         // overlayField.style.left = "555px";
-
-        //         overlayField.style.bottom = "30px";
-        //         //overlayField.style.right = "15px";
-
-        //         overlayField.style.display = "block";
-
-        //         outputFiled.innerHTML = slider.value;
-
-        //         slider.oninput = function () {
-        //             outputFiled.innerHTML = this.value;
-
-        //             if (currentViewer) {
-        //                 var explodeManager = currentViewer.getExplodeManager();
-        //                 if (explodeManager.getActive()) {
-        //                     explodeManager.stop();
-        //                 }
-
-        //                 explodeManager.setMagnitude(Number(this.value));
-        //                 explodeManager.start().then(function () {
-
-        //                 });
-        //             }
-
-        //         }
-        //     }
-        // }
-
-        // function stopExplode() {
-        //     if (currentViewer) {
-        //         var explodeManager = currentViewer.getExplodeManager();
-        //         if (explodeManager.getActive()) {
-        //             explodeManager.stop();
-        //         }
-
-        //         var slider;
-        //         var overlayField;
-        //         if (currentViewer._params.containerId === "viewerContainer1") {
-        //             slider = document.getElementById("explodeSlider1");
-        //             overlayField = document.getElementById("explodeOverlay1");
-        //         }
-        //         else if (currentViewer._params.containerId === "viewerContainer2") {
-        //             slider = document.getElementById("explodeSlider2");
-        //             overlayField = document.getElementById("overlay2");
-        //         }
-        //         if (!slider || !overlayField) {
-        //             return;
-        //         }
-        //         slider.value = 0;
-        //         overlayField.style.display = "none";
-        //     }
-        // }
-
-        function setFront() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setBack() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Back, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setTop() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Top, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setBottom() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Bottom, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setRight() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Right, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setLeft() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Left, Communicator.DefaultTransitionDuration);
-            }
-        }
-        function setISO() {
-            if (currentViewer) {
-                currentViewer.view.setViewOrientation(Communicator.ViewOrientation.Iso, Communicator.DefaultTransitionDuration);
-            }
-        }
+        }      
 
         window.onload = function () {
 
