@@ -108,6 +108,7 @@ let controller = {
     $.ajax({
       data: {
           'InvokeFunction': 'GetProjects',
+          'userid':localStorage.getItem('userid'),
       },
       type: "POST",
       url: "PHP/ProjectManager.php"
@@ -121,7 +122,8 @@ let controller = {
             else 
                 model.publicProjects.push(object[i]);
           }
-          //model.myProjects = array;
+
+          
           projectView.renderProjects();
   });
     /*fetch('../tests/allProjects.json', {
@@ -154,10 +156,16 @@ let controller = {
   },
 // TODO: Prototech, insert fetch URL to match server
   fetchProjectChecks: function(projID){
-    fetch(`../tests/checks${projID}.json`)
-        .then(response => response.json())
-        .then(data => model.projectChecks = data)
-        .then(function(){checkView.init()})
+    // fetch(`../tests/checks${projID}.json`)
+    //     .then(response => response.json())
+    //     .then(data => model.projectChecks = data)
+    //     .then(function(){checkView.init()})
+
+    // Currently just navigating to checkModule.html
+    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
+    // and then move to check module 
+    localStorage.setItem("loadSavedProject",true);
+    window.location.href = "checkModule.html";
   },
 
   getChecks: function(){
@@ -175,10 +183,15 @@ let controller = {
 
 // TODO: Prototech, insert fetch URL to match server
   fetchProjectReviews: function(projID){
-    fetch(`../tests/reviews${projID}.json`)
-        .then(response => response.json())
-        .then(data => model.projectReviews = data)
-        .then(function(){checkView.init()})
+    // fetch(`../tests/reviews${projID}.json`)
+    //     .then(response => response.json())
+    //     .then(data => model.projectReviews = data)
+    //     .then(function(){checkView.init()})
+
+    // Currently just navigating to reviewe module page
+    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
+    // and then move to review module 
+    window.location.href = "module2.html";
   },
 
   getReviews: function(){

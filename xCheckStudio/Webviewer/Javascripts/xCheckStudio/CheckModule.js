@@ -304,10 +304,12 @@ function deleteCheckResultsFromDB(checkType) {
         if (functionToInvoke === undefined) {
             return resolve(false);
         }
-
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         $.ajax({
             data: {
-                'InvokeFunction': functionToInvoke
+                'InvokeFunction': functionToInvoke,
+                'ProjectName': object.projectname
             },
             async: false,
             type: "POST",
@@ -357,31 +359,15 @@ function disableControlsOnLoad() {
 }
 
 function setUserName() {
-    $.ajax({
-        data: { 'variable': 'Name' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var pierrediv = document.getElementById("pierre");
-            if (msg != "" && pierrediv != null)
-                pierrediv.innerHTML = msg;
-        }
-    });
+    var pierrediv = document.getElementById("pierre");
+    pierrediv.innerHTML = localStorage.getItem("username");
 }
 
 function setProjectName() {
-    $.ajax({
-        data: { 'variable': 'ProjectName' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var powerplantdiv = document.getElementById("powerplant");
-            if (msg != "" && powerplantdiv != null)
-                powerplant.innerHTML = msg;
-        }
-    });
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var projectInfoObject = JSON.parse(projectinfo);
+    var powerplantdiv = document.getElementById("powerplant");
+    powerplant.innerHTML = projectInfoObject.projectname;
 }
 
 function CreateNewTab() {
@@ -1451,7 +1437,8 @@ function saveData() {
             var viewerOptions = [];
             viewerOptions.push(sourceManager1.Webviewer._params.containerId);
             viewerOptions.push(sourceManager1.Webviewer._params.endpointUri);
-
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             // write viewer options data to data base
             $.ajax({
                 url: 'PHP/ViewerOptionsWriter.php',
@@ -1460,7 +1447,8 @@ function saveData() {
                 data:
                 {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
-                    "SourceViewerOptionsTable": "SourceAViewerOptions"
+                    "SourceViewerOptionsTable": "SourceAViewerOptions",
+                    'ProjectName': object.projectname
                 },
                 success: function (msg) {
                 }
@@ -1488,7 +1476,8 @@ function saveData() {
             var viewerOptions = [];
             viewerOptions.push(sourceManager2.Webviewer._params.containerId);
             viewerOptions.push(sourceManager2.Webviewer._params.endpointUri);
-
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             // write viewer options data to data base
             $.ajax({
                 url: 'PHP/ViewerOptionsWriter.php',
@@ -1497,7 +1486,8 @@ function saveData() {
                 data:
                 {
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
-                    "SourceViewerOptionsTable": "SourceBViewerOptions"
+                    "SourceViewerOptionsTable": "SourceBViewerOptions",
+                    'ProjectName': object.projectname
                 },
                 success: function (msg) {
                 }
@@ -1522,6 +1512,9 @@ function saveData() {
     var controlStatesArray = getControlStates();
 
     // write source A selected components, differet control statuses to DB        
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
+
     $.ajax({
         url: 'PHP/ProjectDatawriter.php',
         type: "POST",
@@ -1542,6 +1535,7 @@ function saveData() {
             "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
             "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
             "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
+            "ProjectName": object.projectname
         },
         success: function (msg) {
         },
@@ -1754,8 +1748,14 @@ function resetCheckSwitchesForSource1() {
 }
 
 function clearDBEntriesOnClearModule(source) {
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
+
     $.ajax({
-        data: { 'Source': source },
+        data: { 'Source': source,
+        'ProjectName': object.projectname
+        },
         type: "POST",
         url: "PHP/RemoveComponentsFromDB.php"
     }).done(function (msg) {
@@ -1767,7 +1767,10 @@ function clearDBEntriesOnClearModule(source) {
     });
 
     $.ajax({
-        data: { 'Source': source },
+        data: { 
+            'Source': source,
+            'ProjectName': object.projectname
+        },
         type: "POST",
         url: "PHP/DeleteSourceFilesFromDirectory.php"
     }).done(function (msg) {
@@ -1920,31 +1923,27 @@ function OnShowToast(text) {
 }
 
 function isLoadProject() {
-    return new Promise((resolve) => {
-
-        $.ajax({
-            data: {
-                'InvokeFunction': 'IsLoadProject'
-            },
-            type: "POST",
-            url: "PHP/ProjectManager.php"
-        }).done(function (msg) {
-            var result = false;
-            if (msg.toLowerCase() === 'true') {
-                result = true;
-            }
-
-            resolve(result);
-        });
-    });
+    var loadsavedproject = localStorage.getItem('loadSavedProject')
+    
+    if(loadsavedproject == 'true') {
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
 }
 
 
 function loadProjectForCheck() {
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
+
     // restore the control state
     $.ajax({
         data: {
-            'InvokeFunction': 'ReadCheckModuleControlsState'
+            'InvokeFunction': 'ReadCheckModuleControlsState',
+            'ProjectName': object.projectname
         },
         type: "POST",
         url: "PHP/ProjectManager.php"
@@ -2016,12 +2015,15 @@ function loadProjectForCheck() {
         }
     });
 
+    
     // read check case info
     $.ajax({
         url: 'PHP/CheckCaseinfoReader.php',
         type: "POST",
         async: true,
-        data: {},
+        data: {
+            'ProjectName': object.projectname
+        },
         success: function (checkCaseString) {
             if (checkCaseString === "fail") {
                 return;
@@ -2055,7 +2057,9 @@ function loadProjectForCheck() {
                 url: 'PHP/SourceViewerOptionsReader.php',
                 type: "POST",
                 async: true,
-                data: {},
+                data: {
+                    'ProjectName': object.projectname
+                },
                 success: function (vieweroptionsString) {
                     var viewerOptions = JSON.parse(vieweroptionsString);
 
@@ -2094,51 +2098,57 @@ function loadSources(viewerOptions) {
                     selectedComponents = AllSelectedComponenets['SourceANodeIdwiseSelectedComps'];
                 }
 
-                // get project name
-                $.ajax({
-                    data: { 'variable': 'ProjectName' },
-                    type: "POST",
-                    url: "PHP/GetSessionVariable.php"
-                }).done(function (msg) {
-                    if (msg !== 'fail') {
-                        // load source A
-                        loadSourceA(viewerOptions, dataSourceInfo, selectedComponents, msg).then(function (isSourceALoaded) {
+                loadSourceA(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceALoaded) {
 
-                            // load source B
-                            if ('sourceBFileName' in dataSourceInfo) {
+                    // load source B
+                    if ('sourceBFileName' in dataSourceInfo) {
 
-                                selectedComponents = undefined;
-                                if ('SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
-                                    // select source B selected components      
-                                    selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];
-                                }
+                        selectedComponents = undefined;
+                        if ('SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
+                            // select source B selected components      
+                            selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];
+                        }
 
-                                loadSourceB(viewerOptions, dataSourceInfo, selectedComponents, msg).then(function (isSourceBLoaded) {
+                        loadSourceB(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceBLoaded) {
 
-                                });
-
-                            }
                         });
+
                     }
                 });
+
+                // get project name
+                // $.ajax({
+                //     data: { 'variable': 'ProjectName' },
+                //     type: "POST",
+                //     url: "PHP/GetSessionVariable.php"
+                // }).done(function (msg) {
+                //     if (msg !== 'fail') {
+                //         // load source A
+                        
+                //     }
+                // });
             });
         }
     });
 }
 
-function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectName) {
+function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
 
         if (dataSourceInfo.sourceAType.toLowerCase() === "xls" ||
             dataSourceInfo.sourceAType.toLowerCase() === "json") {
-
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             // get class wise properties for excel and other 1D datasources
             $.ajax({
                 url: 'PHP/ClasswiseComponentsReader.php',
                 type: "POST",
                 async: false,
-                data: { 'Source': "SourceA" },
+                data: { 
+                    'Source': "SourceA",
+                    'ProjectName': object.projectname
+                    },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {
@@ -2165,6 +2175,7 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
                          // hide load data source a button
                          hideLoadButton("modelTree1");
                          
+                         addTabHeaders("modelTree1", dataSourceInfo["sourceAFileName"]);
                         // enable source a controls
                         // enable check all CB for source A
                         var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
@@ -2271,19 +2282,23 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
     });
 }
 
-function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectName) {
+function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
 
         if (dataSourceInfo.sourceBType.toLowerCase() === "xls" ||
             dataSourceInfo.sourceBType.toLowerCase() === "json") {
-
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var object = JSON.parse(projectinfo);
             // get class wise properties for excel and other 1D datasources
             $.ajax({
                 url: 'PHP/ClasswiseComponentsReader.php',
                 type: "POST",
                 async: false,
-                data: { 'Source': "SourceB" },
+                data: {
+                     'Source': "SourceB",
+                     'ProjectName': object.projectname 
+                    },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {
@@ -2309,6 +2324,7 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
                                 dataSourceInfo["sourceBFileName"]);
                         }
 
+                        addTabHeaders("modelTree2", dataSourceInfo["sourceAFileName"]);
                         // hide load data source b button
                         hideLoadButton("modelTree2");
 
@@ -2422,11 +2438,15 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
 function getDataSourceInfo() {
     return new Promise((resolve) => {
         // read data source info
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         $.ajax({
             url: 'PHP/DataSourceInfoReader.php',
             type: "POST",
             async: true,
-            data: {},
+            data: {
+                'ProjectName': object.projectname
+            },
             success: function (msg) {
                 if (msg === "fail") {
                     return resolve(undefined);
@@ -2440,11 +2460,15 @@ function getDataSourceInfo() {
 }
 
 function getSelectedComponentsFromDB(source) {
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
+
     return new Promise((resolve) => {
         $.ajax({
             data: {
                 'InvokeFunction': 'ReadSelectedComponents',
-                'source': source
+                'source': source,
+                'ProjectName': object.projectname
             },
             type: "POST",
             url: "PHP/ProjectManager.php"
@@ -2565,13 +2589,16 @@ function onSaveProject(event) {
 }
 
 function saveComponentsToCheckSpaceDB() {
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     $.ajax({
         url: 'PHP/ProjectManager.php',
         type: "POST",
         async: false,
         data:
         {
-            'InvokeFunction': "SaveComponentsToCheckSpaceDB"
+            'InvokeFunction': "SaveComponentsToCheckSpaceDB",
+            'ProjectName': object.projectname
         },
         success: function (msg) {
         }
@@ -2580,6 +2607,8 @@ function saveComponentsToCheckSpaceDB() {
 
 function createProjectDBonSave() {
     return new Promise((resolve) => {
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
 
         $.ajax({
             url: 'PHP/ProjectManager.php',
@@ -2587,7 +2616,8 @@ function createProjectDBonSave() {
             async: false,
             data:
             {
-                'InvokeFunction': "CreateProjectDBonSaveInCheckModule"
+                'InvokeFunction': "CreateProjectDBonSaveInCheckModule",
+                'ProjectName': object.projectname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -2602,6 +2632,8 @@ function createProjectDBonSave() {
 
 function saveNotSelectedComponents() {
     // write source a selected components
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     if (sourceManager1) {
         var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
 
@@ -2615,7 +2647,8 @@ function saveNotSelectedComponents() {
                 'InvokeFunction': "SaveNotSelectedComponents",
                 "notSelectedComponentsTable": "SourceANotSelectedComponents",
                 "selectedComponents": JSON.stringify(selectedCompoents),
-                "componentsTable": "SourceAComponents"
+                "componentsTable": "SourceAComponents",
+                "ProjectName": object.projectname
             },
             success: function (msg) {
             }
@@ -2636,7 +2669,8 @@ function saveNotSelectedComponents() {
                 'InvokeFunction': "SaveNotSelectedComponents",
                 "notSelectedComponentsTable": "SourceBNotSelectedComponents",
                 "selectedComponents": JSON.stringify(selectedCompoents),
-                "componentsTable": "SourceBComponents"
+                "componentsTable": "SourceBComponents",
+                "ProjectName": object.projectname
             },
             success: function (msg) {
             }
@@ -2645,7 +2679,8 @@ function saveNotSelectedComponents() {
 }
 
 function saveSelectedComponents() {
-
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     // write source a selected components
     if (sourceManager1) {
         var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
@@ -2660,7 +2695,8 @@ function saveSelectedComponents() {
                 'InvokeFunction': "SaveSelectedComponents",
                 "selectedComponentsTableName": "SourceASelectedComponents",
                 "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-                "selectedComponents": JSON.stringify(selectedCompoents)
+                "selectedComponents": JSON.stringify(selectedCompoents),
+                "ProjectName": object.projectname
             },
             success: function (msg) {
             }
@@ -2681,7 +2717,8 @@ function saveSelectedComponents() {
                 'InvokeFunction': "SaveSelectedComponents",
                 "selectedComponentsTableName": "SourceBSelectedComponents",
                 "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-                "selectedComponents": JSON.stringify(selectedCompoents)
+                "selectedComponents": JSON.stringify(selectedCompoents),
+                "ProjectName": object.projectname
             },
             success: function (msg) {
             }
@@ -2698,7 +2735,8 @@ function saveSourceViewerOptions() {
         var viewerOptions = [];
         viewerOptions.push(sourceManager1.Webviewer._params.containerId);
         viewerOptions.push(sourceManager1.Webviewer._params.endpointUri);
-
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         // write viewer options data to data base
         $.ajax({
             url: 'PHP/ViewerOptionsWriter.php',
@@ -2707,7 +2745,8 @@ function saveSourceViewerOptions() {
             data:
             {
                 "SourceViewerOptions": JSON.stringify(viewerOptions),
-                "SourceViewerOptionsTable": "SourceAViewerOptions"
+                "SourceViewerOptionsTable": "SourceAViewerOptions",
+                'ProjectName': object.projectname
             },
             success: function (msg) {
             }
@@ -2722,7 +2761,8 @@ function saveSourceViewerOptions() {
         var viewerOptions = [];
         viewerOptions.push(sourceManager2.Webviewer._params.containerId);
         viewerOptions.push(sourceManager2.Webviewer._params.endpointUri);
-
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var object = JSON.parse(projectinfo);
         // write viewer options data to data base
         $.ajax({
             url: 'PHP/ViewerOptionsWriter.php',
@@ -2731,7 +2771,8 @@ function saveSourceViewerOptions() {
             data:
             {
                 "SourceViewerOptions": JSON.stringify(viewerOptions),
-                "SourceViewerOptionsTable": "SourceBViewerOptions"
+                "SourceViewerOptionsTable": "SourceBViewerOptions",
+                'ProjectName': object.projectname
             },
             success: function (msg) {
             }
@@ -2749,7 +2790,8 @@ function saveDataSourceInfo() {
     if (sourceManager2) {
         sourceBType = sourceManager2.SourceType;
     }
-
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     $.ajax
         ({
             url: 'PHP/ProjectManager.php',
@@ -2762,7 +2804,8 @@ function saveDataSourceInfo() {
                 "SourceBFileName": sourceBFileName,
                 "SourceAType": sourceAType,
                 "SourceBType": sourceBType,
-                "orderMaintained": OrderMaintained
+                "orderMaintained": OrderMaintained,
+                "ProjectName": object.projectname
             },
             success: function (msg) {
 
@@ -2775,7 +2818,8 @@ function saveDataSourceInfo() {
 
 function saveControlsState() {
     var controlStatesArray = getControlStates();
-
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     $.ajax
         ({
             url: 'PHP/ProjectManager.php',
@@ -2788,7 +2832,8 @@ function saveControlsState() {
                 "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
                 "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
                 "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
-                "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch']
+                "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
+                "ProjectName": object.projectname
             },
             success: function (msg) {
 

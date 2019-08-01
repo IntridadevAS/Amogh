@@ -2370,7 +2370,7 @@
                 onCheckButtonClick();
             };
 
-            isLoadProject().then(function (result) {
+                result = isLoadProject();
                 if (result) {
 
                     loadSavedProject = true;
@@ -2426,7 +2426,6 @@
 
                     checkCaseManager = new CheckCaseManager();
                 }
-            });
         };
 
         window.onclick = function (event) {

@@ -1,20 +1,11 @@
 <?php
-    if(!isset($_POST['Source']))
+    if(!isset($_POST['Source']) || !isset($_POST['ProjectName']))
     {
         echo 'fail';
         return;
     }
-    session_start();
-$projectName = NULL;
-if(isset($_SESSION['ProjectName']))
-{
-    $projectName =  $_SESSION['ProjectName']; 
-}
-else
-{
-    echo 'fail';
-    return;
-}
+    
+    $projectName = $_POST['ProjectName'];
 
 $excludeFile = "../Projects/".$projectName."/".$projectName.".db";
 $exclude[] = $excludeFile;

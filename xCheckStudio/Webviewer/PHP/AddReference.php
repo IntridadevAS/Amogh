@@ -3,25 +3,15 @@
     if(!isset($_POST['ReferenceTable']) ||
        !isset($_POST['TypeofReference'])||
        !isset($_POST['Component'])||
+       !isset($_POST['ProjectName']) ||
        !isset($_POST['referenceData']))
     {
         echo 'fail';
         return;
     }
-
-    session_start();
         
     // get project name
-    $projectName = NULL;
-    if(isset($_SESSION['ProjectName']))
-    {
-        $projectName =  $_SESSION['ProjectName'];              
-    }
-    else
-    {
-        echo 'fail';
-        return;
-    }	
+    $projectName = $_POST['ProjectName'];
 
     AddReference($projectName);
     function AddReference($projectName)

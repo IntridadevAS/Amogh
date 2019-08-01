@@ -1,29 +1,13 @@
 function setUserName() {
-    $.ajax({
-        data: { 'variable': 'Name' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var pierrediv = document.getElementById("pierre");
-            if (msg != "" && pierrediv != null)
-                pierrediv.innerHTML = msg;
-        }
-    });
+    var pierrediv = document.getElementById("pierre");
+    pierrediv.innerHTML = localStorage.getItem("username");
 }
 
 function setProjectName() {
-    $.ajax({
-        data: { 'variable': 'ProjectName' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var powerplantdiv = document.getElementById("powerplant");
-            if (msg != "" && powerplantdiv != null)
-                powerplant.innerHTML = msg;
-        }
-    });
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var projectInfoObject = JSON.parse(projectinfo);
+    var powerplantdiv = document.getElementById("powerplant");
+    powerplant.innerHTML = projectInfoObject.projectname;
 }
 
 function executeContextMenuClicked(key, options, _this) {
@@ -340,12 +324,15 @@ function populateCheckResults(comparisonCheckGroups,
         !sourceBComplianceCheckGroups) {
         return;
     }
-
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     $.ajax({
         url: 'PHP/SourceViewerOptionsReader.php',
         type: "POST",
         async: true,
-        data: {},
+        data: {
+            'ProjectName': object.projectname
+        },
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
 
@@ -356,11 +343,15 @@ function populateCheckResults(comparisonCheckGroups,
                 // this ajax call is synchronous
 
                 // get class wise properties for excel and other 1D datasources
+               
                 $.ajax({
                     url: 'PHP/ClasswiseComponentsReader.php',
                     type: "POST",
                     async: false,
-                    data: { 'Source': "SourceA" },
+                    data: {
+                         'Source': "SourceA",
+                         'ProjectName': object.projectname 
+                        },
                     success: function (msg) {
                         if (msg != 'fail') {
                             sourceAClassWiseComponents = JSON.parse(msg);
@@ -383,7 +374,10 @@ function populateCheckResults(comparisonCheckGroups,
                     url: 'PHP/ClasswiseComponentsReader.php',
                     type: "POST",
                     async: false,
-                    data: { 'Source': "SourceB" },
+                    data: {
+                        'Source': "SourceB",
+                        'ProjectName': object.projectname
+                    },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
                             sourceBClassWiseComponents = JSON.parse(msg);
@@ -508,7 +502,8 @@ function onHomeClick() {
 function onSaveProject(event) {
     // var busySpinner = document.getElementById("divLoading");
     // busySpinner.className = 'show';
-
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var object = JSON.parse(projectinfo);
     try {
 
         $.ajax({
@@ -517,7 +512,8 @@ function onSaveProject(event) {
             async: false,
             data:
             {
-                'InvokeFunction': "SaveCheckResultsToCheckSpaceDB"
+                'InvokeFunction': "SaveCheckResultsToCheckSpaceDB",
+                'ProjectName': object.projectname
             },
             success: function (msg) {
                 alert("Saved check results.");
