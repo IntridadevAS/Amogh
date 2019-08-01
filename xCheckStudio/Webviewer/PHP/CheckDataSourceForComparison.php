@@ -657,15 +657,23 @@
                     $checkCasePropSourceB = $checkCaseMappingProperty['SourceAName'];
                 }
 
+                $checkCasePropSourceA =  strtolower($checkCasePropSourceA);
+                $checkCasePropSourceB =  strtolower($checkCasePropSourceB);
+
                 $sourceAComponentProperties =  $SourceAProperties[$sourceAComponent['id']];
                 $sourceBComponentProperties =  $SourceBProperties[$sourceBComponent['id']];               
 
-                if (array_key_exists($checkCasePropSourceA, $sourceAComponentProperties)) 
+                // get key array in case insestive manner
+                // only keys are in lower case
+                $sourceAPropertiesLowerCase =array_change_key_case($sourceAComponentProperties, CASE_LOWER);
+                $sourceBPropertiesLowerCase =array_change_key_case($sourceBComponentProperties, CASE_LOWER);     
+
+                if (array_key_exists($checkCasePropSourceA, $sourceAPropertiesLowerCase)) 
                 {                    
-                    if (array_key_exists($checkCasePropSourceB, $sourceBComponentProperties)) 
+                    if (array_key_exists($checkCasePropSourceB, $sourceBPropertiesLowerCase)) 
                     {
-                        $property1 =$sourceAComponentProperties[$checkCasePropSourceA];
-                        $property2 =$sourceBComponentProperties[$checkCasePropSourceB];
+                        $property1 =$sourceAPropertiesLowerCase[$checkCasePropSourceA];
+                        $property2 =$sourceBPropertiesLowerCase[$checkCasePropSourceB];
 
                         // $property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
                         // $property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
@@ -703,7 +711,7 @@
                     }
                     else 
                     {
-                        $property1 =$sourceAComponentProperties[$checkCasePropSourceA];
+                        $property1 =$sourceAPropertiesLowerCase[$checkCasePropSourceA];
                         //$property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
 
                         $property1Name = $property1["name"];
@@ -714,9 +722,9 @@
                         $performCheck = false;               
                     }
                 }
-                else if (array_key_exists($checkCasePropSourceB, $sourceBComponentProperties)) 
+                else if (array_key_exists($checkCasePropSourceB, $sourceBPropertiesLowerCase)) 
                 {
-                    $property2 =$sourceBComponentProperties[$checkCasePropSourceB];
+                    $property2 =$sourceBPropertiesLowerCase[$checkCasePropSourceB];
                     //$property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
 
                     $property1Name = "";
@@ -923,17 +931,25 @@
                                 $sourceBMatchwithPropertyName = $key;
                             }     
 
+                            $sourceAMatchwithPropertyName =  strtolower($sourceAMatchwithPropertyName);
+                            $sourceBMatchwithPropertyName =  strtolower($sourceBMatchwithPropertyName);
+
                             $sourceAComponentProperties =  $SourceAProperties[$sourceAComponent['id']];
                             $sourceBComponentProperties =  $SourceBProperties[$sourceBComponent['id']];
 
-                            if (!array_key_exists($sourceAMatchwithPropertyName, $sourceAComponentProperties) ||
-                                !array_key_exists($sourceBMatchwithPropertyName, $sourceBComponentProperties))
+                            // get key array in case insestive manner
+                            // only keys are in lower case
+                             $sourceAPropertiesLowerCase =array_change_key_case($sourceAComponentProperties, CASE_LOWER);
+                             $sourceBPropertiesLowerCase =array_change_key_case($sourceBComponentProperties, CASE_LOWER);                           
+
+                            if (!array_key_exists($sourceAMatchwithPropertyName, $sourceAPropertiesLowerCase) ||
+                                !array_key_exists($sourceBMatchwithPropertyName, $sourceBPropertiesLowerCase))
                             {
                                 return false;
                             }                          
 
-                            $sourceAMatchwithProperty = $sourceAComponentProperties[$sourceAMatchwithPropertyName];
-                            $sourceBMatchwithProperty = $sourceBComponentProperties[$sourceBMatchwithPropertyName];
+                            $sourceAMatchwithProperty = $sourceAPropertiesLowerCase[$sourceAMatchwithPropertyName];
+                            $sourceBMatchwithProperty = $sourceBPropertiesLowerCase[$sourceBMatchwithPropertyName];
                           
 
                             if ($sourceAMatchwithProperty['value'] != $sourceBMatchwithProperty['value']) 
