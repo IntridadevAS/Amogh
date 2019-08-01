@@ -141,16 +141,6 @@ function getProjectsInfo() {
             }
 
         });
-        
-        // $.ajax({
-        //     data: { 'variable': 'UserId' },
-        //     type: "POST",
-        //     url: "PHP/GetSessionVariable.php"
-        // }).done(function (msg) {
-        //     if (msg !== 'fail') {
-        //         
-        //     }
-        // });
     });
 }
 

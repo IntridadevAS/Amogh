@@ -489,32 +489,12 @@ var ReferenceManager = function (selectedComponentRow) {
     }
 
     ReferenceManager.prototype.OnDocumentReferenceSelected = function (item) {
-
-        // $.ajax({
-        //     data: { 'variable': 'ProjectName' },
-        //     type: "POST",
-        //     url: "PHP/GetSessionVariable.php"
-        // }).done(function (msg) {
-        //     if (msg !== 'fail') {
-        //         window.open("Projects/" + msg + "/" + item.innerText);
-        //     }
-        // });
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var projectInfoObject = JSON.parse(projectinfo);
         window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);
     }
 
     ReferenceManager.prototype.OnPictureReferenceSelected = function (item) {
-
-        // $.ajax({
-        //     data: { 'variable': 'ProjectName' },
-        //     type: "POST",
-        //     url: "PHP/GetSessionVariable.php"
-        // }).done(function (msg) {
-        //     if (msg !== 'fail') {
-        //         window.open("Projects/" + msg + "/" + item.innerText);
-        //     }
-        // });
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var projectInfoObject = JSON.parse(projectinfo);
         window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);

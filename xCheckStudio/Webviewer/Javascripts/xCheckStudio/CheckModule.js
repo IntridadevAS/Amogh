@@ -359,33 +359,11 @@ function disableControlsOnLoad() {
 }
 
 function setUserName() {
-    // $.ajax({
-    //     data: { 'variable': 'Name' },
-    //     type: "POST",
-    //     url: "PHP/GetSessionVariable.php"
-    // }).done(function (msg) {
-    //     if (msg !== 'fail') {
-    //         var pierrediv = document.getElementById("pierre");
-    //         if (msg != "" && pierrediv != null)
-    //             pierrediv.innerHTML = msg;
-    //     }
-    // });
     var pierrediv = document.getElementById("pierre");
     pierrediv.innerHTML = localStorage.getItem("username");
 }
 
 function setProjectName() {
-    // $.ajax({
-    //     data: { 'variable': 'ProjectName' },
-    //     type: "POST",
-    //     url: "PHP/GetSessionVariable.php"
-    // }).done(function (msg) {
-    //     if (msg !== 'fail') {
-    //         var powerplantdiv = document.getElementById("powerplant");
-    //         if (msg != "" && powerplantdiv != null)
-    //             powerplant.innerHTML = msg;
-    //     }
-    // });
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var projectInfoObject = JSON.parse(projectinfo);
     var powerplantdiv = document.getElementById("powerplant");
@@ -1954,23 +1932,6 @@ function isLoadProject() {
     {
         return false;
     }
-    // return new Promise((resolve) => {
-
-    //     $.ajax({
-    //         data: {
-    //             'InvokeFunction': 'IsLoadProject'
-    //         },
-    //         type: "POST",
-    //         url: "PHP/ProjectManager.php"
-    //     }).done(function (msg) {
-    //         var result = false;
-    //         if (msg.toLowerCase() === 'true') {
-    //             result = true;
-    //         }
-
-    //         resolve(result);
-    //     });
-    // });
 }
 
 

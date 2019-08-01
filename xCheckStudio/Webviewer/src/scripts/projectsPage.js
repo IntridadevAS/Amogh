@@ -160,6 +160,10 @@ let controller = {
     //     .then(response => response.json())
     //     .then(data => model.projectChecks = data)
     //     .then(function(){checkView.init()})
+
+    // Currently just navigating to checkModule.html
+    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
+    // and then move to check module 
     localStorage.setItem("loadSavedProject",true);
     window.location.href = "checkModule.html";
   },
@@ -183,6 +187,10 @@ let controller = {
     //     .then(response => response.json())
     //     .then(data => model.projectReviews = data)
     //     .then(function(){checkView.init()})
+
+    // Currently just navigating to reviewe module page
+    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
+    // and then move to review module 
     window.location.href = "module2.html";
   },
 
