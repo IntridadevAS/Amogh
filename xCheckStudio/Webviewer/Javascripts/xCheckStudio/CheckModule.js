@@ -359,31 +359,37 @@ function disableControlsOnLoad() {
 }
 
 function setUserName() {
-    $.ajax({
-        data: { 'variable': 'Name' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var pierrediv = document.getElementById("pierre");
-            if (msg != "" && pierrediv != null)
-                pierrediv.innerHTML = msg;
-        }
-    });
+    // $.ajax({
+    //     data: { 'variable': 'Name' },
+    //     type: "POST",
+    //     url: "PHP/GetSessionVariable.php"
+    // }).done(function (msg) {
+    //     if (msg !== 'fail') {
+    //         var pierrediv = document.getElementById("pierre");
+    //         if (msg != "" && pierrediv != null)
+    //             pierrediv.innerHTML = msg;
+    //     }
+    // });
+    var pierrediv = document.getElementById("pierre");
+    pierrediv.innerHTML = localStorage.getItem("username");
 }
 
 function setProjectName() {
-    $.ajax({
-        data: { 'variable': 'ProjectName' },
-        type: "POST",
-        url: "PHP/GetSessionVariable.php"
-    }).done(function (msg) {
-        if (msg !== 'fail') {
-            var powerplantdiv = document.getElementById("powerplant");
-            if (msg != "" && powerplantdiv != null)
-                powerplant.innerHTML = msg;
-        }
-    });
+    // $.ajax({
+    //     data: { 'variable': 'ProjectName' },
+    //     type: "POST",
+    //     url: "PHP/GetSessionVariable.php"
+    // }).done(function (msg) {
+    //     if (msg !== 'fail') {
+    //         var powerplantdiv = document.getElementById("powerplant");
+    //         if (msg != "" && powerplantdiv != null)
+    //             powerplant.innerHTML = msg;
+    //     }
+    // });
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var projectInfoObject = JSON.parse(projectinfo);
+    var powerplantdiv = document.getElementById("powerplant");
+    powerplant.innerHTML = projectInfoObject.projectname;
 }
 
 function CreateNewTab() {
@@ -1939,23 +1945,32 @@ function OnShowToast(text) {
 }
 
 function isLoadProject() {
-    return new Promise((resolve) => {
+    var loadsavedproject = localStorage.getItem('loadSavedProject')
+    
+    if(loadsavedproject == 'true') {
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+    // return new Promise((resolve) => {
 
-        $.ajax({
-            data: {
-                'InvokeFunction': 'IsLoadProject'
-            },
-            type: "POST",
-            url: "PHP/ProjectManager.php"
-        }).done(function (msg) {
-            var result = false;
-            if (msg.toLowerCase() === 'true') {
-                result = true;
-            }
+    //     $.ajax({
+    //         data: {
+    //             'InvokeFunction': 'IsLoadProject'
+    //         },
+    //         type: "POST",
+    //         url: "PHP/ProjectManager.php"
+    //     }).done(function (msg) {
+    //         var result = false;
+    //         if (msg.toLowerCase() === 'true') {
+    //             result = true;
+    //         }
 
-            resolve(result);
-        });
-    });
+    //         resolve(result);
+    //     });
+    // });
 }
 
 
@@ -2122,39 +2137,41 @@ function loadSources(viewerOptions) {
                     selectedComponents = AllSelectedComponenets['SourceANodeIdwiseSelectedComps'];
                 }
 
-                // get project name
-                $.ajax({
-                    data: { 'variable': 'ProjectName' },
-                    type: "POST",
-                    url: "PHP/GetSessionVariable.php"
-                }).done(function (msg) {
-                    if (msg !== 'fail') {
-                        // load source A
-                        loadSourceA(viewerOptions, dataSourceInfo, selectedComponents, msg).then(function (isSourceALoaded) {
+                loadSourceA(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceALoaded) {
 
-                            // load source B
-                            if ('sourceBFileName' in dataSourceInfo) {
+                    // load source B
+                    if ('sourceBFileName' in dataSourceInfo) {
 
-                                selectedComponents = undefined;
-                                if ('SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
-                                    // select source B selected components      
-                                    selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];
-                                }
+                        selectedComponents = undefined;
+                        if ('SourceBNodeIdwiseSelectedComps' in AllSelectedComponenets) {
+                            // select source B selected components      
+                            selectedComponents = AllSelectedComponenets['SourceBNodeIdwiseSelectedComps'];
+                        }
 
-                                loadSourceB(viewerOptions, dataSourceInfo, selectedComponents, msg).then(function (isSourceBLoaded) {
+                        loadSourceB(viewerOptions, dataSourceInfo, selectedComponents).then(function (isSourceBLoaded) {
 
-                                });
-
-                            }
                         });
+
                     }
                 });
+
+                // get project name
+                // $.ajax({
+                //     data: { 'variable': 'ProjectName' },
+                //     type: "POST",
+                //     url: "PHP/GetSessionVariable.php"
+                // }).done(function (msg) {
+                //     if (msg !== 'fail') {
+                //         // load source A
+                        
+                //     }
+                // });
             });
         }
     });
 }
 
-function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectName) {
+function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
 
@@ -2197,6 +2214,7 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
                          // hide load data source a button
                          hideLoadButton("modelTree1");
                          
+                         addTabHeaders("modelTree1", dataSourceInfo["sourceAFileName"]);
                         // enable source a controls
                         // enable check all CB for source A
                         var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
@@ -2303,7 +2321,7 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents, projectNa
     });
 }
 
-function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectName) {
+function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
 
     return new Promise((resolve) => {
 
@@ -2345,6 +2363,7 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents, projectNa
                                 dataSourceInfo["sourceBFileName"]);
                         }
 
+                        addTabHeaders("modelTree2", dataSourceInfo["sourceAFileName"]);
                         // hide load data source b button
                         hideLoadButton("modelTree2");
 

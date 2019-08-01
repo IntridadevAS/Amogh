@@ -414,7 +414,7 @@
           if (projectIsFavorite === undefined || projectIsFavorite === "") {
              //Do something if user does not enter project type
           }*/
-
+          localStorage.setItem("loadSavedProject",false);
           setProjectSessionData(projectname).then(function () {
               // create project database
               //createProject(projectname, descriptionText, functionText, projectScope);

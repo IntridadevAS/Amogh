@@ -371,11 +371,14 @@ var ReferenceManager = function (selectedComponentRow) {
             
             _this.CloseAddRefernceDocumentOverlay();
         };
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var projectInfoObject = JSON.parse(projectinfo);
         var formData = new FormData(document.getElementById("UploadReferenceDocForm"));
         formData.append('ReferenceDataDir', referenceDataDir);
         formData.append('ReferenceTable', referenceTable);
         formData.append('Component', checkComponentId);
         formData.append('TypeofReference', "Document");
+        formData.append('ProjectName', projectInfoObject.projectname)
     
         xhr.send(formData);
     }
@@ -461,11 +464,14 @@ var ReferenceManager = function (selectedComponentRow) {
 
             _this.CloseAddReferncePictureOverlay();
         };
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var projectInfoObject = JSON.parse(projectinfo);
         var formData = new FormData(document.getElementById("UploadReferencePicForm"));
         formData.append('ReferenceDataDir', referenceDataDir);
         formData.append('ReferenceTable', referenceTable);
         formData.append('Component', checkComponentId);
         formData.append('TypeofReference', "Picture");
+        formData.append('ProjectName', projectInfoObject.projectname)
         xhr.send(formData);
     }
 
@@ -484,28 +490,34 @@ var ReferenceManager = function (selectedComponentRow) {
 
     ReferenceManager.prototype.OnDocumentReferenceSelected = function (item) {
 
-        $.ajax({
-            data: { 'variable': 'ProjectName' },
-            type: "POST",
-            url: "PHP/GetSessionVariable.php"
-        }).done(function (msg) {
-            if (msg !== 'fail') {
-                window.open("Projects/" + msg + "/" + item.innerText);
-            }
-        });
+        // $.ajax({
+        //     data: { 'variable': 'ProjectName' },
+        //     type: "POST",
+        //     url: "PHP/GetSessionVariable.php"
+        // }).done(function (msg) {
+        //     if (msg !== 'fail') {
+        //         window.open("Projects/" + msg + "/" + item.innerText);
+        //     }
+        // });
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var projectInfoObject = JSON.parse(projectinfo);
+        window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);
     }
 
     ReferenceManager.prototype.OnPictureReferenceSelected = function (item) {
 
-        $.ajax({
-            data: { 'variable': 'ProjectName' },
-            type: "POST",
-            url: "PHP/GetSessionVariable.php"
-        }).done(function (msg) {
-            if (msg !== 'fail') {
-                window.open("Projects/" + msg + "/" + item.innerText);
-            }
-        });
+        // $.ajax({
+        //     data: { 'variable': 'ProjectName' },
+        //     type: "POST",
+        //     url: "PHP/GetSessionVariable.php"
+        // }).done(function (msg) {
+        //     if (msg !== 'fail') {
+        //         window.open("Projects/" + msg + "/" + item.innerText);
+        //     }
+        // });
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var projectInfoObject = JSON.parse(projectinfo);
+        window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);
     }
 
     ReferenceManager.prototype.Highlight = function (item) {

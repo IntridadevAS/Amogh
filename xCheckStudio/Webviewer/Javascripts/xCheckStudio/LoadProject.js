@@ -78,7 +78,7 @@ function loadProject(projectName, projectId) {
         }).done(function (msg) {
             if (msg !== 'fail') {
                 var fromCheckClick = localStorage.getItem('FromCheckClick')
-                localStorage.clear();
+                // localStorage.clear();
 
                 if (fromCheckClick.toLowerCase() === 'true') {
                     window.location.href = "checkModule.html";
@@ -116,39 +116,41 @@ function getProjectsInfo() {
 
     return new Promise((resolve) => {
 
+        var userId = localStorage.getItem("userid");;
+        if (userId === NaN) {
+            resolve(undefined);
+        }
+
+        // get projects information
         $.ajax({
-            data: { 'variable': 'UserId' },
+            data: {
+                'InvokeFunction': 'GetProjects',
+                'userid': userId
+            },
             type: "POST",
-            url: "PHP/GetSessionVariable.php"
+            url: "PHP/ProjectManager.php"
         }).done(function (msg) {
+
             if (msg !== 'fail') {
-                var userId = Number(msg);
-                if (userId === NaN) {
-                    resolve(undefined);
-                }
+                var projects = JSON.parse(msg);
 
-                // get projects information
-                $.ajax({
-                    data: {
-                        'InvokeFunction': 'GetProjects',
-                        'userid': userId
-                    },
-                    type: "POST",
-                    url: "PHP/ProjectManager.php"
-                }).done(function (msg) {
-
-                    if (msg !== 'fail') {
-                        var projects = JSON.parse(msg);
-
-                        resolve(projects);
-                    }
-                    else {
-                        resolve(undefined);
-                    }
-
-                });
+                resolve(projects);
             }
+            else {
+                resolve(undefined);
+            }
+
         });
+        
+        // $.ajax({
+        //     data: { 'variable': 'UserId' },
+        //     type: "POST",
+        //     url: "PHP/GetSessionVariable.php"
+        // }).done(function (msg) {
+        //     if (msg !== 'fail') {
+        //         
+        //     }
+        // });
     });
 }
 
