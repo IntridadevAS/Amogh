@@ -92,7 +92,7 @@ function createNewProject(projectname, projectDescription, projectType, projectS
                 var object = JSON.parse(msg);
                 if (object.projectid !== -1){
                     localStorage.setItem('projectinfo', JSON.stringify(msg));
-                    window.location.href = "checkModule.html";
+                    //CreateNewCheckCase();
                 }
             });
         }
@@ -102,5 +102,6 @@ function createNewProject(projectname, projectDescription, projectType, projectS
 
     });
 }
+
 
 
