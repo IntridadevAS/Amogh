@@ -161,7 +161,8 @@ function TranslucencyManager() {
 
 
 function startTranslucency() {
-    if (!currentViewer) {
+    if (!currentViewer ||
+        translucencyActive()) {
         return;
     }
 

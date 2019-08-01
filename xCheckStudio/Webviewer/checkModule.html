@@ -37,12 +37,12 @@
     <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\i18n.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\languagescript.js"></script>
-    
+
     <script type="text/javascript" src="Javascripts/xCheckStudio/ModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts/xCheckStudio/SCModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts/xCheckStudio/ExcelModelBrowser.js"></script>
     <script type="text/javascript" src="Javascripts/xCheckStudio/DBModelBrowser.js"></script>
-    
+
     <script type="text/javascript" src="Javascripts\xCheckStudio\xCheckStudioInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\GenericProperties.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentNodeData.js"></script>
@@ -50,13 +50,13 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckRules.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>    
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\SourceManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSourceManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\DBSourceManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\SCManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script> 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleStringCollection.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
@@ -271,11 +271,11 @@
         <a href="#" onclick="showAll()">
             <img src="images/show.png" /> Show All
             <!--<span>Ctrl + ?!</span>-->
-        </a>     
-        
+        </a>
+
         <hr />
         <a href="#" onclick="showNavCube()">
-           Show Navigation Cube
+            Show Navigation Cube
         </a>
         <a href="#" onclick="hideNavCube()">
             Hide Navigation Cube
@@ -2042,9 +2042,9 @@
             </div>
             <div class="group32" id="dataSourceViewer" style="opacity: 0.99">
                 <div class="bg1">
-                    <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
-                        class="example-canvas-small">
-
+                    <div style="position: relative">
+                
+                
                         <!-- explode slider -->
                         <div id="explodeOverlay1" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2052,7 +2052,7 @@
                                 <p> <span id="explodeValue1"></span></p>
                             </div>
                         </div>
-                        
+                
                         <!-- Translucency slider -->
                         <div id="translucencyOverlay1" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2060,11 +2060,12 @@
                                 <p> <span id="translucencyValue1"></span></p>
                             </div>
                         </div>
-                        
+                
+                        <div id="viewerContainer1" style="height: 380px; width: 560px;margin: 20px 0 0 20px; display: block"
+                            class="example-canvas-small">
+                
                         </div>
-                    <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
-                        class="example-canvas-small">
-                    
+                
                         <!-- explode slider -->
                         <div id="explodeOverlay2" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2072,7 +2073,7 @@
                                 <p> <span id="explodeValue2"></span></p>
                             </div>
                         </div>
-                    
+                
                         <!-- Translucency slider -->
                         <div id="translucencyOverlay2" class="sliderOverlay">
                             <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2080,9 +2081,13 @@
                                 <p> <span id="translucencyValue2"></span></p>
                             </div>
                         </div>
-                    
+                
+                        <div id="viewerContainer2" style="height: 380px; width: 560px; margin: 20px 0 0 20px; display: none"
+                            class="example-canvas-small">
+                
+                        </div>
                     </div>
-                    </div>
+                </div>
                 <div id="datagraphics" class="viewdatagraphics">View data graphics</div>
                 <div class="openmenu" id="openmenu">
                     <img src="images/UIPackage/module2-with-open-menu-bg-llist.png" class="bgllist" />
@@ -2348,7 +2353,7 @@
                 currentViewer.model.setNodesVisibilities(map);
                 hiidenEntities = [];
             }
-        }      
+        }
 
         window.onload = function () {
 
