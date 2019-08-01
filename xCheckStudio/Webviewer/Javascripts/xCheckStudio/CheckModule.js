@@ -413,7 +413,16 @@ function CreateNewTab() {
 
     if (currentViewer) {
 
-        stopExplode();
+        // stop explode
+        if (explodeActive()) {
+            stopExplode();
+        }
+
+        // stop translucency
+        if (translucencyActive()) {
+            stopTranslucency()
+        }
+
         currentViewer = undefined;
     }
 }
@@ -803,12 +812,12 @@ function getCheckCase(sourcetype, viewerContainer) {
     var dummylist = [];
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
-    if(sourcetype == undefined || 
-       viewerContainer == undefined) {
-       
+    if (sourcetype == undefined ||
+        viewerContainer == undefined) {
+
         checkCaseFilesData.FilteredCheckCaseDataList = [];
         checkCaseFilesData.populateCheckCases();
-    } 
+    }
     else {
         var fileExtensionA;
         var fileExtensionB;
@@ -817,74 +826,74 @@ function getCheckCase(sourcetype, viewerContainer) {
         }
         if (sourceBFileName !== undefined) {
             fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-    
+
         }
-    
+
         // checkCaseSelect.options.add(new Option("None", "None"));
-    
-        if(viewerContainer == "viewerContainer1") {
-            if(fileExtensionB == undefined) {
+
+        if (viewerContainer == "viewerContainer1") {
+            if (fileExtensionB == undefined) {
                 checkCaseFilesData.FilteredCheckCaseDataList = [];
                 for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
                     var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-                        if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
-                            checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
-                        }      
+                    if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
+                        checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
+                    }
                 }
             }
             else {
                 for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
                     var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
-                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
-                    if(fileExtensionA == fileExtensionB) {
-                        if(count >= 2)
+                    var count = checkCaseFileData.SourceTypes.filter(x => x == sourcetype).length;
+                    if (fileExtensionA == fileExtensionB) {
+                        if (count >= 2)
                             dummylist.push(checkCaseFileData);
                     }
                     else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
                         dummylist.push(checkCaseFileData);
-                    }      
+                    }
                 }
                 checkCaseFilesData.FilteredCheckCaseDataList = [];
                 checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
-            }         
+            }
         }
-    
-        else if(viewerContainer == "viewerContainer2") {
-            if(fileExtensionA !== undefined) {
+
+        else if (viewerContainer == "viewerContainer2") {
+            if (fileExtensionA !== undefined) {
                 for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
                     var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
-                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
-                    if(fileExtensionA == fileExtensionB) {
-                        if(count >= 2)
+                    var count = checkCaseFileData.SourceTypes.filter(x => x == sourcetype).length;
+                    if (fileExtensionA == fileExtensionB) {
+                        if (count >= 2)
                             dummylist.push(checkCaseFileData);
                     }
                     else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
                         dummylist.push(checkCaseFileData);
-                    }      
+                    }
                 }
             }
             else {
                 checkCaseFilesData.FilteredCheckCaseDataList = [];
                 for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
                     var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-                    var count = checkCaseFileData.SourceTypes.filter(x => x==sourcetype).length;
-                    if(fileExtensionA == fileExtensionB) {
-                        if(count >= 2)
+                    var count = checkCaseFileData.SourceTypes.filter(x => x == sourcetype).length;
+                    if (fileExtensionA == fileExtensionB) {
+                        if (count >= 2)
                             dummylist.push(checkCaseFileData);
                     }
                     else if (checkCaseFileData.SourceTypes.includes(sourcetype)) {
                         dummylist.push(checkCaseFileData);
-                    }    
+                    }
                 }
-            }       
+            }
             checkCaseFilesData.FilteredCheckCaseDataList = [];
             checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
         }
-    
+
         for (var i = checkCaseSelect.length - 1; i >= 0; i--) {
             checkCaseSelect.remove(i);
         }
-                
+
         for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
             var checkCaseData = checkCaseFilesData.FilteredCheckCaseDataList[i];
 
@@ -904,7 +913,7 @@ function getCheckCase(sourcetype, viewerContainer) {
                 break;
             }
         }
-    
+
         if (fileName !== undefined) {
             checkCaseManager.readCheckCaseData(fileName);
         }
@@ -971,12 +980,12 @@ function loadExcelDataSource(fileExtension,
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
-                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                    else if (sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
                 }
-                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                else if (sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
@@ -1054,7 +1063,7 @@ function loadModel(fileName,
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
                 if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
@@ -1063,12 +1072,12 @@ function loadModel(fileName,
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
-                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                    else if (sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
                 }
-                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                else if (sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
@@ -1329,7 +1338,7 @@ function loadDbDataSource(fileExtension,
         else if (viewerContainer === "viewerContainer2") {
             if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
                 if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-                sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
+                    sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
@@ -1338,12 +1347,12 @@ function loadDbDataSource(fileExtension,
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
-                    else if(sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+                    else if (sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
                         alert("Data source type doesn't match with check case.");
                         return false;
                     }
                 }
-                else if(sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+                else if (sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
                     alert("Data source type doesn't match with check case.");
                     return false;
                 }
@@ -1646,7 +1655,15 @@ function OpenTab(tabName) {
         if (currentViewer &&
             currentViewer._params.containerId !== "viewerContainer1") {
 
-            stopExplode();
+            // stop explode
+            if (explodeActive()) {
+                stopExplode();
+            }
+
+            // stop translucency
+            if (translucencyActive()) {
+                stopTranslucency()
+            }
             currentViewer = undefined;
         }
 
@@ -1672,7 +1689,15 @@ function OpenTab(tabName) {
         if (currentViewer &&
             currentViewer._params.containerId !== "viewerContainer2") {
 
-            stopExplode();
+            // stop explode
+            if (explodeActive()) {
+                stopExplode();
+            }
+
+            // stop translucency
+            if (translucencyActive()) {
+                stopTranslucency()
+            }
             currentViewer = undefined;
         }
         if (sourceManager2 && sourceManager2.Webviewer) {
@@ -1859,7 +1884,7 @@ function clearData(source) {
         sourceManager1 = null;
         getCheckCase(sourceType, 'viewerContainer2');
         clearDBEntriesOnClearModule(source);
-      
+
     }
     else if (source.toLowerCase() == "sourceb") {
         document.getElementById("modelTree2").innerHTML = "";
@@ -2199,7 +2224,7 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
                         component = document.getElementById('infobtn');
                         if (component.classList.contains("disabledbutton")) {
                             component.classList.remove('disabledbutton');
-                        }                       
+                        }
                     }
 
                     return resolve(true);
