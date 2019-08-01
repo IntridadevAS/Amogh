@@ -1,5 +1,5 @@
 let model = {
-  init: function(){},
+  init: function () { },
   currentProject: null,
   myProjects: [],
   publicProjects: [],
@@ -13,29 +13,29 @@ let model = {
 }
 
 let controller = {
-  init: function(){
+  init: function () {
     this.fetchProjects();
     projectView.init();
     this.permissions();
   },
 
-  permissions: function(){
+  permissions: function () {
     return true;//revert this later.
-    if (userInformation.permissions == ("check"||"prep")){
+    if (userInformation.permissions == ("check" || "prep")) {
       return true;
     } else {
       return false;
     }
   },
 
-  currentModule: function(){
+  currentModule: function () {
     return model.currentModule;
   },
 
-  setModule: function(){
+  setModule: function () {
     let projID = this.getCurrentProj();
-    if (this.permissions()){
-      if (model.currentModule == "check"){
+    if (this.permissions()) {
+      if (model.currentModule == "check") {
         model.currentModule = "review";
       } else if (model.currentModule == "review") {
         model.currentModule = "check";
@@ -44,88 +44,134 @@ let controller = {
     }
   },
 
-  setSortBy: function(sortByValue){
+  setSortBy: function (sortByValue) {
     model.sortBy = sortByValue;
     this.fetchProjects();
   },
 
-  setSortChecksBy: function(sortByValue){
+  setSortChecksBy: function (sortByValue) {
     model.sortChecksBy = sortByValue;
     this.fetchProjectChecks();
   },
 
-  getCurrentProj: function(){
+  getCurrentProj: function () {
     return model.currentProject;
   },
 
-  setMyCurrentProj: function(projID){
-    model.currentProject = model.myProjects[projID];
+  setMyCurrentProj: function (projID) {
+    let obj = model.myProjects.find(obj => obj.projectid == projID);
+    model.currentProject = obj;
 
   },
-  setPublicCurrentProj: function(projID){
-    model.currentProject = model.publicProjects[projID];
+  setPublicCurrentProj: function (projID) {
+    let obj = model.publicProjects.find(obj => obj.projectid == projID);
+    model.currentProject = obj;
   },
 
-  editCheck: function(checkID) {
+  editCheck: function (checkID) {
     this.setCurrentCheck(checkID);
     editCheckView.init();
   },
 
-  editReview: function(reviewID) {
+  editReview: function (reviewID) {
     this.setCurrentReview(reviewID);
     editReviewView.init();
   },
 
-  setCurrentCheck: function(checkID){
-    for (check of model.projectChecks.checks){
-      if (check.checkID == checkID) {
+  setCurrentCheck: function (checkID) {
+    for (check of model.projectChecks) {
+      if (check.checkid == checkID) {
         model.currentCheck = check;
       }
     }
   },
 
-  getCurrentCheck: function(){
+  getCurrentCheck: function () {
     return model.currentCheck;
   },
 
-  setCurrentReview: function(reviewID){
-    for (review of model.projectReviews.reviews){
+  setCurrentReview: function (reviewID) {
+    for (review of model.projectReviews.reviews) {
       if (review.reviewID == reviewID) {
         model.currentReview = review;
-        }
       }
-    },
+    }
+  },
 
-    getCurrentReview: function(){
-      return model.currentReview;
-    },
+  getCurrentReview: function () {
+    return model.currentReview;
+  },
 
-// ASSUMPTIONS FOR FETCH :
-  //Authorization for authorization key for particular user
-    // TODO: Prototech - where is this stored? Provided by server? In electronJS? How to access?
-  // Sort header for how projects to be sorted in server provided JSON file.
-  fetchProjects: function(){
+  createNewProject: function (projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite) {
     $.ajax({
       data: {
-          'InvokeFunction': 'GetProjects',
-          'userid':localStorage.getItem('userid'),
+        'InvokeFunction': 'CreateProject',
+        'projectName': projectname
+        /*'description': projectDescription,
+        'function': functionText*/
       },
       type: "POST",
       url: "PHP/ProjectManager.php"
-  }).done(function (msg) {
-          var object = JSON.parse(msg);
-          var array = [];
-          for(var i in object) {
-            var obj = object[i];
-            if(obj.type === 'Private')
-                model.myProjects.push(object[i]);
-            else 
-                model.publicProjects.push(object[i]);
-          }
+    }).done(function (msg) {
 
-          
-          projectView.renderProjects();
-  });
+      if (msg === 'success') {
+
+        var path = "Projects/" + projectname + "/" + projectname + ".db";
+
+        // add this project's entry in main DB
+        $.ajax({
+          data: {
+            'InvokeFunction': 'AddNewProjectToMainDB',
+            'userid': localStorage.getItem('userid'),
+            'projectname': projectname,
+            'projectDescription': projectDescription,
+            'projectType': projectType,
+            'path': path,
+            "projectStatus": projectStatus,
+            "projectComments": projectComments,
+            "projectIsFavorite": projectIsFavorite
+          },
+          type: "POST",
+          url: "PHP/ProjectManager.php"
+        }).done(function (msg) {
+          var object = JSON.parse(msg);
+          if (object.projectid !== -1) {
+            localStorage.setItem('projectinfo', JSON.stringify(msg));
+          }
+        });
+      }
+      else {
+        alert(msg);
+      }
+
+    });
+  },
+  // ASSUMPTIONS FOR FETCH :
+  //Authorization for authorization key for particular user
+  // TODO: Prototech - where is this stored? Provided by server? In electronJS? How to access?
+  // Sort header for how projects to be sorted in server provided JSON file.
+  fetchProjects: function () {
+    model.myProjects = [];
+    model.publicProjects = [];
+    $.ajax({
+      data: {
+        'InvokeFunction': 'GetProjects',
+        'userid': localStorage.getItem('userid'),
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      var object = JSON.parse(msg);
+      var array = [];
+      for (var i in object) {
+        var obj = object[i];
+        if (obj.type === 'Private')
+          model.myProjects.push(object[i]);
+        else
+          model.publicProjects.push(object[i]);
+      }
+      projectView.renderProjects();
+    });
     /*fetch('../tests/allProjects.json', {
       method: 'GET',
       headers: {
@@ -139,44 +185,52 @@ let controller = {
       })*/
   },
 
-  getMyProjects: function(){
+  getMyProjects: function () {
     return model.myProjects;
   },
 
-  getPublicProjects: function(){
+  getPublicProjects: function () {
     return model.publicProjects;
   },
 
-  fetchProjectInfo: function(projID){
-    if (model.currentModule == "check"){
+  fetchProjectInfo: function (projID) {
+    if (model.currentModule == "check") {
       this.fetchProjectChecks(projID);
-    } else if (model.currentModule =="review"){
+    } else if (model.currentModule == "review") {
       this.fetchProjectReviews(projID);
     }
   },
-// TODO: Prototech, insert fetch URL to match server
-  fetchProjectChecks: function(projID){
-    // fetch(`../tests/checks${projID}.json`)
-    //     .then(response => response.json())
-    //     .then(data => model.projectChecks = data)
-    //     .then(function(){checkView.init()})
-
-    // Currently just navigating to checkModule.html
-    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
-    // and then move to check module 
-    localStorage.setItem("loadSavedProject",true);
-    window.location.href = "checkModule.html";
+  // TODO: Prototech, insert fetch URL to match server
+  fetchProjectChecks: function (projID) {
+    var currentProj = this.getCurrentProj();
+    this.clearChecksReviews();
+    //var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //var object = JSON.parse(projectinfo);
+    $.ajax({
+      data: {
+        'InvokeFunction': 'GetCheckSpaces',
+        'userid': localStorage.getItem('userid'),
+        'ProjectId': currentProj.projectid,
+        'ProjectName': currentProj.projectname,
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      var objectArray = JSON.parse(msg);
+      model.projectChecks = [...objectArray];
+      checkView.init()
+    });
   },
 
-  getChecks: function(){
+  getChecks: function () {
     return model.projectChecks;
   },
 
-  getReviews: function(){
+  getReviews: function () {
     return model.projectReviews;
   },
 
-  clearChecksReviews: function(){
+  clearChecksReviews: function () {
     model.projectChecks = [];
     model.projectReviews = [];
   },
@@ -194,62 +248,64 @@ let controller = {
     window.location.href = "module2.html";
   },
 
-  getReviews: function(){
+  getReviews: function () {
     return model.projectReviews;
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  setFavoriteProject: function(projID){
+  // TODO: Prototech, insert fetch URL to match server
+  setFavoriteProject: function (projID) {
     fetch(`exampleServer/project/${projID}`, {
       method: "POST"
     })
       .then(this.fetchProjects);
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  setFavoriteCheck: function(checkID){
+  // TODO: Prototech, insert fetch URL to match server
+  setFavoriteCheck: function (checkID) {
     fetch(`exampleServer/check/${checkID}`, {
       method: "POST"
     })
       .then(this.fetchProjectChecks);
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  setFavoriteReview: function(reviewID){
+  // TODO: Prototech, insert fetch URL to match server
+  setFavoriteReview: function (reviewID) {
     fetch(`exampleServer/check/${reviewID}`, {
       method: "POST"
     })
       .then(this.fetchProjectReviews);
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  deleteProject: function(projID){
+  // TODO: Prototech, insert fetch URL to match server
+  deleteProject: function (projID) {
     fetch(`exampleServer/deleteProject/${projID}`, {
       method: "POST"
     })
-    .then(deleteItems.closeDeleteItems())
-    .then(this.fetchProjects());
+      .then(deleteItems.closeDeleteItems())
+      .then(this.fetchProjects());
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  deleteCheck: function(checkID){
+  // TODO: Prototech, insert fetch URL to match server
+  deleteCheck: function (checkID) {
     fetch(`exampleServer/deleteCheck/${checkID}`, {
-      method: "POST"})
+      method: "POST"
+    })
       .then(deleteItems.closeDeleteItems())
       .then(this.fetchProjectChecks());
   },
 
-  deleteReview: function(reviewID){
+  deleteReview: function (reviewID) {
     fetch(`exampleServer/deleteReview/${reviewID}`, {
-      method: "POST"})
+      method: "POST"
+    })
       .then(deleteItems.closeDeleteItems())
       .then(this.fetchProjectReviews());
   },
 
-  editProject(id, type){
+  editProject(id, type) {
     console.log(id);
     console.log(type);
-    if (type=="public"){
+    if (type == "Public") {
       controller.setPublicCurrentProj(id);
     } else {
       console.log(2);
@@ -260,7 +316,7 @@ let controller = {
 }
 
 let projectView = {
-  init: function(){
+  init: function () {
     this.projects = document.getElementById("projects");
     this.publicProjectsCont = document.getElementById("pubProjectsContainer");
     this.checks = document.getElementById("checks");
@@ -269,92 +325,92 @@ let projectView = {
     let publicProjectsCont = this.publicProjectsCont;
 
 
-// Event Listeners
+    // Event Listeners
 
-    myProjDropDown.addEventListener("click", function(){
+    myProjDropDown.addEventListener("click", function () {
       projects.classList.toggle("hideProjects");
       this.classList.toggle("rotateArrows");
     });
 
-    publicProjDropDown.addEventListener("click", function(){
+    publicProjDropDown.addEventListener("click", function () {
       publicProjectsCont.classList.toggle("hideProjects");
       this.classList.toggle("rotateArrows");
     });
 
-    projects.addEventListener("click", function(event){
+    projects.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
-      if (selected.classList.contains('newProjectCard')){
+      if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
-      } else if (event.target.closest('.projectButtons')){
+      } else if (event.target.closest('.projectButtons')) {
       } else {
         controller.setMyCurrentProj(selected.id);
         controller.fetchProjectInfo(selected.id);
       }
     });
 
-    publicProjectsCont.addEventListener("click", function(event){
+    publicProjectsCont.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
-      if (selected.classList.contains('newProjectCard')){
+      if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
-      } else if (event.target.closest('.projectButtons')){
+      } else if (event.target.closest('.projectButtons')) {
       } else {
         controller.setPublicCurrentProj(selected.id);
         controller.fetchProjectInfo(selected.id);
       }
     });
-// End Event Listeners
+    // End Event Listeners
   },
 
   // all rendering functions
-  renderProjects: function(){
+  renderProjects: function () {
     this.clearProjects();
     this.renderMyProjects();
     this.renderPublicProjects();
   },
 
-  hoverProject: function(subject){
+  hoverProject: function (subject) {
     subject.classList.add("hovered");
   },
 
-  leaveProject: function(subject){
+  leaveProject: function (subject) {
     subject.classList.remove("hovered");
   },
 
-  clearProjects: function(){
+  clearProjects: function () {
     let newProjectCard = "";
-    if (controller.permissions()){
+    if (controller.permissions()) {
       newProjectCard += `
         <div class="card newProjectCard">\
             <div class="plusBtn"></div>
         </div>`
     }
 
-      this.projects.innerHTML = newProjectCard;
-      this.publicProjectsCont.innerHTML = newProjectCard;
+    this.projects.innerHTML = newProjectCard;
+    this.publicProjectsCont.innerHTML = newProjectCard;
   },
 
-  infoDeleteButtons: function(){
+  infoDeleteButtons: function () {
     if (controller.permissions()) {
 
     }
   },
 
-  createCard: function(project){
+  createCard: function (project) {
     let newDiv = document.createElement('DIV');
     newDiv.classList.add('card');
-    newDiv.setAttribute("onmouseenter","projectView.hoverProject(this);");
-    newDiv.setAttribute("onmouseleave","projectView.leaveProject(this);");
+    newDiv.setAttribute("onmouseenter", "projectView.hoverProject(this);");
+    newDiv.setAttribute("onmouseleave", "projectView.leaveProject(this);");
     if (project.favorite) {
       newDiv.classList.add('favorite');
     }
     newDiv.setAttribute("id", project.projectid);
     let htmlInner = `<div class="projectButtons">\
       <div class="star" onclick="controller.setFavoriteProject(${project.projectid})"></div>`
-    if (controller.permissions()){
+    if (controller.permissions()) {
       htmlInner +=
         `<div class="btnSymbol hiddenBtn" onclick="console.log('works');">\
           <img class="btnSymbol" src="../public/symbols/infoMenu.svg"\
-          onclick="controller.editProject(${project.projectid}, 'myProject');">\
+          onclick="controller.editProject(${project.projectid}, '${project.type}');">\
         </div>\
         <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('project', ${project.projectid});">\
           <img src="../public/symbols/TrashDelete.svg">\
@@ -368,7 +424,7 @@ let projectView = {
     return newDiv
   },
 
-  renderMyProjects: function(){
+  renderMyProjects: function () {
     let myProjects = Object.values(controller.getMyProjects());
     for (project of myProjects) {
       let newCard = this.createCard(project);
@@ -377,7 +433,7 @@ let projectView = {
     }
   },
 
-  renderPublicProjects: function(){
+  renderPublicProjects: function () {
     let publicProjects = Object.values(controller.getPublicProjects());
     for (project of publicProjects) {
       let newCard = this.createCard(project);
@@ -387,7 +443,8 @@ let projectView = {
 }
 
 let checkView = {
-  init: function(){
+
+  init: function () {
     this.checkCardContainer = document.getElementById("checkCardContainer");
     this.checkSpaceProjectName = document.getElementById("checkSpaceProjectName");
     this.checkSpaceProjectDescription = document.getElementById("projectDescription");
@@ -405,23 +462,24 @@ let checkView = {
     this.setToggleBtn();
 
     this.renderProject();
-    if (controller.currentModule() == "check"){
+    if (controller.currentModule() == "check") {
       this.selectedChecks = controller.getChecks();
       this.renderChecks();
-    } else if (controller.currentModule() == "review"){
+    } else if (controller.currentModule() == "review") {
       this.selectedReviews = controller.getReviews();
       this.renderReviews();
     }
 
-    document.getElementById("refreshChecks").onclick = function(){
-      controller.fetchProjectInfo(checkView.cProject.projectID)};
+    document.getElementById("refreshChecks").onclick = function () {
+      controller.fetchProjectInfo(checkView.cProject.projectID)
+    };
 
-//starts Edit Project View overlay - accessed by onclick from button
-    this.editProject.addEventListener("click", function(){
+    //starts Edit Project View overlay - accessed by onclick from button
+    this.editProject.addEventListener("click", function () {
       editProjectView.init();
     });
 
-//REMOVED FOR BETA-1. POTENTIAL RETURN BETA-2. ALLOWS SELECTING OF A CHECK TO SEE MORE INFORMATION
+    //REMOVED FOR BETA-1. POTENTIAL RETURN BETA-2. ALLOWS SELECTING OF A CHECK TO SEE MORE INFORMATION
     // this.checkCardContainer.addEventListener("click", function(event){
     //   let selectedCard = event.target.closest(".checkSpaceCard");
     //   if (selectedCard.id !== controller.getCurrentCheck()){
@@ -433,20 +491,20 @@ let checkView = {
     // this.renderChecks();
   },
 
-  renderProject: function(){
-    this.checkSpaceProjectName.innerHTML = `${this.cProject.name} - ${this.cProject.status}`;
+  renderProject: function () {
+    this.checkSpaceProjectName.innerHTML = `${this.cProject.projectname} - ${this.cProject.status}`;
     this.checkSpaceProjectDescription.innerHTML = `${this.cProject.description}`;
   },
 
-  setToggleBtn: function(){
-    if (!controller.permissions()){
+  setToggleBtn: function () {
+    if (!controller.permissions()) {
       this.toggle.remove();
-    } else if (controller.permissions()){
-      if (controller.currentModule() == "review"){
+    } else if (controller.permissions()) {
+      if (controller.currentModule() == "review") {
         this.toggle.innerHTML = "<h2>ENTER CHECKS</h2>";
         this.toggle.classList.add("chkRevBorderBlue");
         this.toggle.classList.remove("chkRevBorderRed");
-      } else if (controller.currentModule() == "check"){
+      } else if (controller.currentModule() == "check") {
         this.toggle.innerHTML = "<h2>ENTER REVIEWS</h2>";
         this.toggle.classList.add("chkRevBorderRed");
         this.toggle.classList.remove("chkRevBorderBlue");
@@ -454,16 +512,16 @@ let checkView = {
     }
   },
 
-  hoverCheck: function(subject){
+  hoverCheck: function (subject) {
     subject.classList.add("hovered");
   },
 
-  leaveCheck: function(subject){
+  leaveCheck: function (subject) {
     subject.classList.remove("hovered");
   },
 
-  renderChecks: function(){
-    if (controller.permissions()){
+  renderChecks: function () {
+    if (controller.permissions()) {
       let newCheckCard = `
         <div class="checkSpaceCard" onclick="newCheckView.init()">\
           <div class="checkCardInfo checkCardInfoNew"><div class="plusBtn"></div></div>\
@@ -472,45 +530,45 @@ let checkView = {
       this.checkCardContainer.innerHTML = newCheckCard;
     }
 
-    let selectedChecks = Object.values(this.selectedChecks.checks);
-    for (check of selectedChecks) {
+    //let selectedChecks = Object.values(this.selectedChecks.checks);
+    for (check of this.selectedChecks) {
 
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
-      newDiv.setAttribute("id", check.checkID);
-      newDiv.setAttribute("onmouseenter","checkView.hoverCheck(this)");
-      newDiv.setAttribute("onmouseleave","checkView.leaveCheck(this)");
+      newDiv.setAttribute("id", check.checkid);
+      newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
+      newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
       if (project.favorite) {
         newDiv.classList.add('favorite');
       }
-      let htmlInner = `<a href=${check.url}><div class="checkCardInfo">`
-      htmlInner += `<p>${check.createDate}</p>`;
+      let htmlInner = `<a href=checkmodule.html><div class="checkCardInfo">`
+      htmlInner += `<p>${check.createdate}</p>`;
       htmlInner += `<ul>`;
-      for (li of check.datasets) {
+      /*for (li of check.datasets) {
         htmlInner += `<li>${li}</li>`
-      }
+      }*/
       htmlInner += "</ul></div>"
-      htmlInner += `<div class='checkCardTitle'><h2>${check.name}<h2>`;
-      htmlInner += `<p>${check.status}</p></div></a>`
+      htmlInner += `<div class='checkCardTitle'><h2>${check.checkname}<h2>`;
+      htmlInner += `<p>${check.checkstatus}</p></div></a>`
       htmlInner += `<div class="projectButtons">`;
-      htmlInner += `<div class="star" onclick="controller.setFavoriteCheck(${check.checkID})"></div>`;
-      if (controller.permissions()){
+      htmlInner += `<div class="star" onclick="controller.setFavoriteCheck(${check.checkid})"></div>`;
+      if (controller.permissions()) {
         htmlInner += `
-            <div class="btnSymbol hiddenBtn" onclick="controller.editCheck(${check.checkID});">\
+            <div class="btnSymbol hiddenBtn" onclick="controller.editCheck(${check.checkid});">\
               <img class="btnSymbol" src="../public/symbols/infoMenu.svg">\
             </div>\
-            <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('check', ${check.checkID});">\
+            <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('check', ${check.checkid});">\
               <img src="../public/symbols/TrashDelete.svg">\
             </div>`;
       }
-      htmlInner+= `</div>`
+      htmlInner += `</div>`
       newDiv.innerHTML = htmlInner;
       this.checkCardContainer.appendChild(newDiv);
     }
   },
 
 
-  renderReviews: function(){
+  renderReviews: function () {
 
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
@@ -519,8 +577,8 @@ let checkView = {
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
       newDiv.setAttribute("id", review.reviewID);
-      newDiv.setAttribute("onmouseenter","checkView.hoverCheck(this)");
-      newDiv.setAttribute("onmouseleave","checkView.leaveCheck(this)");
+      newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
+      newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
       if (project.favorite) {
         newDiv.classList.add('favorite');
       }
@@ -535,7 +593,7 @@ let checkView = {
       htmlInner += `<p>${review.status}</p></div></a>`
       htmlInner += `<div class="projectButtons">`;
       htmlInner += `<div class="star" onclick="controller.setFavoriteReview(${review.reviewID})"></div>`;
-      if(controller.permissions()){
+      if (controller.permissions()) {
         htmlInner += `
         <div class="btnSymbol hiddenBtn" onclick="controller.editReview(${review.reviewID});">\
           <img class="btnSymbol" src="../public/symbols/infoMenu.svg">\
@@ -557,37 +615,56 @@ let checkView = {
   //   this.checkDescription.innerHTML = `${thisCheck.description}`;
   // },
 
-  closeCheckSpace: function(){
+  closeCheckSpace: function () {
     this.checkSpaceOpen.classList.remove("open");
     controller.clearChecksReviews();
   }
 }
 
 let newProjectView = {
-  init: function() {
+  init: function () {
     this.newProjectOverlay = document.getElementById("newProject");
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
   },
-  closeNewProject: function(){
+  closeNewProject: function () {
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
   }
 }
 
 let newCheckView = {
-  init: function(projectID) {
+  init: function (projectID) {
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
     this.newCheckOverlay = document.getElementById("newCheck");
     this.newCheckOverlay.classList.add("projectOverlaysOpen");
 
   },
-  closeNewCheck: function(){
+  closeNewCheck: function () {
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
+  },
+
+  createNewCheck: function (checkspace) {
+    var currentProj = controller.getCurrentProj();
+    $.ajax({
+      data: {
+        'InvokeFunction': 'CreateCheckSpace',
+        'ProjectName': currentProj.projectname,
+        'ProjectId': currentProj.projectid,
+        'userid': localStorage.getItem('userid'),
+        'CheckSpaceInfo': JSON.stringify(checkspace)
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      if (msg === 'Success') {
+        window.location.href = "checkModule.html";
+      }
+    });
   }
 }
 
 let editProjectView = {
-  init: function() {
+  init: function () {
     this.editProjectOverlay = document.getElementById("editProject");
     let currentProjectName = document.getElementById("currentProjectName");
     let editProjectName = document.getElementById("editProjectName");
@@ -603,23 +680,23 @@ let editProjectView = {
 
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
-    currentProjectName.innerHTML = this.currentProject.name;
-    editProjectName.value = this.currentProject.name;
+    currentProjectName.innerHTML = this.currentProject.projectname;
+    editProjectName.value = this.currentProject.projectname;
     editCreator.innerHTML = this.currentProject.creator;
     editDateCreated.innerHTML = this.currentProject.dateCreated;
     editProjectDescription.innerHTML = this.currentProject.description;
     editComments.value = this.currentProject.comments;
   },
 
-    closeEditProject: function(){
-      document.getElementById("editProjectForm").submit();
-      this.editProjectOverlay.classList.remove("projectOverlaysOpen");
-      controller.fetchProjects();
-    }
+  closeEditProject: function () {
+    //document.getElementById("editProjectForm").submit();
+    this.editProjectOverlay.classList.remove("projectOverlaysOpen");
+    controller.fetchProjects();
   }
+}
 
 let editCheckView = {
-  init: function() {
+  init: function () {
     this.editCheckOverlay = document.getElementById("editCheck");
     let currentCheckName = document.getElementById("currentCheckName");
     let editCheckName = document.getElementById("editCheckName");
@@ -633,12 +710,12 @@ let editCheckView = {
 
     this.currentCheck = controller.getCurrentCheck();
     console.log(this.currentProject);
-    currentCheckName.innerHTML = this.currentCheck.name;
-    editCheckName.value = this.currentCheck.name;
+    currentCheckName.innerHTML = this.currentCheck.checkname;
+    editCheckName.value = this.currentCheck.checkname;
     editCreator.innerHTML = this.currentCheck.creator;
-    editDateCreated.innerHTML = this.currentCheck.dateCreated;
-    editCheckDescription.innerHTML = this.currentCheck.description;
-    editComments.value = this.currentCheck.comments;
+    editDateCreated.innerHTML = this.currentCheck.checkdate;
+    editCheckDescription.innerHTML = this.currentCheck.checkdescription;
+    editComments.value = this.currentCheck.checkcomments;
 
   },
 
@@ -647,15 +724,15 @@ let editCheckView = {
   //   if(controller.)
   // },
 
-  closeEditCheck: function(){
-    document.getElementById("editCheckForm").submit();
+  closeEditCheck: function () {
+    //document.getElementById("editCheckForm").submit();
     this.editCheckOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectChecks();
   }
 }
 
 let editReviewView = {
-  init: function() {
+  init: function () {
     this.editReviewOverlay = document.getElementById("editReview");
     let currentReviewName = document.getElementById("currentReviewName");
     let editReviewName = document.getElementById("editReviewName");
@@ -683,7 +760,7 @@ let editReviewView = {
 
   },
 
-  closeEditReview: function(){
+  closeEditReview: function () {
     document.getElementById("editReviewForm").submit();
     this.editReviewOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectReviews();
@@ -691,7 +768,7 @@ let editReviewView = {
 }
 
 let deleteItems = {
-  init: function(type, id) {
+  init: function (type, id) {
     this.deleteBox = document.getElementById("delete");
     let closeDelete = document.getElementById("deleteCancel");
     let message = document.getElementById("deleteMsg");
@@ -711,12 +788,12 @@ let deleteItems = {
       message.innerHTML = "Project and all associated Checks and Reviews?";
     } else if (type == "check") {
       message.innerHTML = "Check and all association Reviews?";
-    } else if (type == "review"){
+    } else if (type == "review") {
       message.innerHTML = "Review?";
     }
   },
 
-  deleteItem: function() {
+  deleteItem: function () {
     if (this.type == "project") {
       controller.deleteProject(this.this.id);
       deleteItems.closeDeleteItems();
@@ -726,7 +803,7 @@ let deleteItems = {
     }
   },
 
-  closeDeleteItems: function(){
+  closeDeleteItems: function () {
     this.deleteBox.classList.remove("deleteOpen");
   }
 }
