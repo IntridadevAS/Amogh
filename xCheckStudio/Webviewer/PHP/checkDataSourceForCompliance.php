@@ -615,7 +615,7 @@
                 if(strtolower($checkCaseGroup['SourceAName']) == strtolower($sourceComponent['mainclass']))
                 {
                     $sourceComponentProperties =  $SourceProperties[$sourceComponent['id']];
-                    $sourceComponentProperties = array_change_key_case($sourceComponentProperties); 
+                    $sourceComponentProperties = array_change_key_case($sourceComponentProperties, CASE_LOWER); 
 
                     if(is_array ($checkCaseComponentClass['MappingProperties']) || 
                        is_object ($checkCaseComponentClass['MappingProperties'])) 
