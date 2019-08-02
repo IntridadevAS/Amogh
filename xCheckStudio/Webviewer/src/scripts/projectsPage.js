@@ -836,8 +836,8 @@ let deleteItems = {
     if (this.type == "project") {
       controller.deleteProject(this.id);
       deleteItems.closeDeleteItems();
-    } else if (thisclass.type == "check") {
-      controller.deleteCheck(thisclass.id);
+    } else if (this.type == "check") {
+      controller.deleteCheck(this.id);
       deleteItems.closeDeleteItems();
     }
   },
