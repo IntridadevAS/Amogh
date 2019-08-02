@@ -2110,6 +2110,7 @@ function AddNewProjectToMainDB()
 function DeleteProject()
 {
     $projectid = trim($_POST["projectid"], " ");
+    $projectname = trim($_POST["projectname"], " ");
     if($projectid == "")
     {
         echo "Project Id cannot be empty";

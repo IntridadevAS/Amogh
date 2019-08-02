@@ -138,6 +138,7 @@ let controller = {
           var object = JSON.parse(msg);
           if (object.projectid !== -1) {
             localStorage.setItem('projectinfo', JSON.stringify(msg));
+            controller.fetchProjects();
           }
         });
       }
@@ -289,11 +290,27 @@ let controller = {
 
   // TODO: Prototech, insert fetch URL to match server
   deleteProject: function (projID) {
-    fetch(`exampleServer/deleteProject/${projID}`, {
+    /*fetch(`exampleServer/deleteProject/${projID}`, {
       method: "POST"
     })
       .then(deleteItems.closeDeleteItems())
-      .then(this.fetchProjects());
+      .then(this.fetchProjects());*/
+      var currentProj = controller.getCurrentProj();
+      $.ajax({
+        data: {
+          'InvokeFunction': 'DeleteProject',
+          'projectname': currentProj.projectname,
+          'projectid': currentProj.projectid,
+        },
+        type: "POST",
+        url: "PHP/ProjectManager.php"
+      }).done(function (msg) {
+        if (msg !== 0) {
+          //window.location.href = "checkModule.html";
+          deleteItems.closeDeleteItems();
+          controller.fetchProjects();
+        }
+      });
   },
 
   // TODO: Prototech, insert fetch URL to match server
@@ -553,7 +570,7 @@ let checkView = {
         newDiv.classList.add('favorite');
       }
       let htmlInner = `<a href=checkmodule.html><div class="checkCardInfo">`
-      htmlInner += `<p>${check.createdate}</p>`;
+      htmlInner += `<p>${check.checkdate}</p>`;
       htmlInner += `<ul>`;
       /*for (li of check.datasets) {
         htmlInner += `<li>${li}</li>`
@@ -667,8 +684,10 @@ let newCheckView = {
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      if (msg === 'Success') {
-        window.location.href = "checkModule.html";
+      var object = JSON.parse(msg);
+      if (object.checkid !== -1) {
+        controller.fetchProjectChecks(controller.getCurrentProj().projectid);
+        newCheckView.closeNewCheck();
       }
     });
   }
@@ -793,7 +812,15 @@ let deleteItems = {
 
     delType.innerHTML = this.type;
 
-    deleteBtn.setAttribute("onclick", this.deleteItem);
+    deleteBtn.onclick = this.deleteItem;
+
+    let obj = model.myProjects.find(obj => obj.projectid == id);
+      if(obj === undefined){
+        controller.setPublicCurrentProj(id);
+      }
+      else{
+        controller.setMyCurrentProj(id);
+      }
 
     if (type == "project") {
       message.innerHTML = "Project and all associated Checks and Reviews?";
@@ -802,14 +829,15 @@ let deleteItems = {
     } else if (type == "review") {
       message.innerHTML = "Review?";
     }
+    this.deleteItem();
   },
 
   deleteItem: function () {
     if (this.type == "project") {
-      controller.deleteProject(this.this.id);
+      controller.deleteProject(this.id);
       deleteItems.closeDeleteItems();
-    } else if (this.type == "check") {
-      controller.deleteCheck(this.id);
+    } else if (thisclass.type == "check") {
+      controller.deleteCheck(thisclass.id);
       deleteItems.closeDeleteItems();
     }
   },
