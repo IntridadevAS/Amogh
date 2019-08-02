@@ -2056,6 +2056,7 @@ function AddNewProjectToMainDB()
     $projectStatus = trim($_POST["projectStatus"], " ");  
     $projectComments = trim($_POST["projectComments"], " "); 
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+    $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");   
     
 
     try{
@@ -2063,11 +2064,13 @@ function AddNewProjectToMainDB()
         // projectname is text column
         // userid is integer column
         // path is text column
-        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status) VALUES (?,?,?,?,?,?,?,?)';
+        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status,createddate) VALUES (?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
-        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus));     
+        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate));     
         $_SESSION['ProjectId'] = $dbh->lastInsertId();
-        $array = array(
+        $insertedId = $dbh->lastInsertId();
+        if($insertedId !=0 && $insertedId !=-1){
+            $array = array(
             "projectid" => $dbh->lastInsertId(),
             "projectname" => $projectName,
             "type" => $projectType,
@@ -2076,20 +2079,18 @@ function AddNewProjectToMainDB()
             "description" => $projectDescription,
             "path" => $path,
             "status" => $projectStatus,
-        );
+            "createddate" => $projectCreatedDate,
+            );
          echo json_encode($array);
-         $dbh = null; //This is how you close a PDO connection
-        return;      
-        /*
-        // get project id for recently added row and write it into session variable
-        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();
-        $stmt =  $dbh->query($qry);       
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
-        {
-            $_SESSION['ProjectId'] = $row['projectid'];
-            break;                    
         }
-        */ 
+        else{
+            $array = array(
+                "projectid" => -1,
+            );
+            echo json_encode($array);
+        }
+        $dbh = null; //This is how you close a PDO connection
+        return;      
     }
     catch(Exception $e) {
         //echo 'Message: ' .$e->getMessage();
