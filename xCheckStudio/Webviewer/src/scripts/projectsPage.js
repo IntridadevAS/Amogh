@@ -129,7 +129,8 @@ let controller = {
             'path': path,
             "projectStatus": projectStatus,
             "projectComments": projectComments,
-            "projectIsFavorite": projectIsFavorite
+            "projectIsFavorite": projectIsFavorite,
+            "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime()
           },
           type: "POST",
           url: "PHP/ProjectManager.php"
@@ -693,7 +694,7 @@ let editProjectView = {
     currentProjectName.innerHTML = this.currentProject.projectname;
     editProjectName.value = this.currentProject.projectname;
     editCreator.innerHTML = this.currentProject.creator;
-    editDateCreated.innerHTML = this.currentProject.dateCreated;
+    editDateCreated.innerHTML = this.currentProject.createddate;
     editProjectDescription.innerHTML = this.currentProject.description;
     editComments.value = this.currentProject.comments;
   },
