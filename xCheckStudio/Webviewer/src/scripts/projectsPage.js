@@ -138,6 +138,7 @@ let controller = {
           var object = JSON.parse(msg);
           if (object.projectid !== -1) {
             localStorage.setItem('projectinfo', JSON.stringify(msg));
+            newProjectView.closeNewProject();
             controller.fetchProjects();
           }
         });
