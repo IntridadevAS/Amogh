@@ -204,8 +204,6 @@ let controller = {
   fetchProjectChecks: function (projID) {
     var currentProj = this.getCurrentProj();
     this.clearChecksReviews();
-    //var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //var object = JSON.parse(projectinfo);
     $.ajax({
       data: {
         'InvokeFunction': 'GetCheckSpaces',
@@ -244,8 +242,20 @@ let controller = {
 
     // Currently just navigating to reviewe module page
     // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
-    // and then move to review module 
-    window.location.href = "module2.html";
+    // and then move to review module
+    $.ajax({
+      data: {
+        'InvokeFunction': 'GetProjects',
+        'userid': localStorage.getItem('userid'),
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      var objectArray = JSON.parse(msg);
+      model.projectChecks = [...objectArray];
+      checkView.init()
+    });
+    //window.location.href = "module2.html";
   },
 
   getReviews: function () {
@@ -572,8 +582,8 @@ let checkView = {
 
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
-    let selectedReviews = Object.values(this.selectedReviews.reviews);
-    for (review of selectedReviews) {
+    //let selectedReviews = Object.values(this.selectedReviews.reviews);
+    for (review of this.selectedReviews) {
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
       newDiv.setAttribute("id", review.reviewID);
