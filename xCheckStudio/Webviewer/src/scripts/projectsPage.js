@@ -69,6 +69,7 @@ let controller = {
   },
 
   editCheck: function (checkID) {
+    event.stopPropagation();
     this.setCurrentCheck(checkID);
     editCheckView.init();
   },
@@ -307,7 +308,6 @@ let controller = {
         url: "PHP/ProjectManager.php"
       }).done(function (msg) {
         if (msg !== 0) {
-          //window.location.href = "checkModule.html";
           deleteItems.closeDeleteItems();
           controller.fetchProjects();
         }
@@ -545,6 +545,15 @@ let checkView = {
     subject.classList.add("hovered");
   },
 
+  checkClicked: function(subject){
+    var proj = model.currentProject;
+    localStorage.setItem('projectinfo', JSON.stringify(proj));
+    controller.setCurrentCheck(subject.id);
+    var check = model.currentCheck;
+    localStorage.setItem('checkinfo', JSON.stringify(check));
+    window.location.href = "checkModule.html";
+  },
+
   leaveCheck: function (subject) {
     subject.classList.remove("hovered");
   },
@@ -567,10 +576,11 @@ let checkView = {
       newDiv.setAttribute("id", check.checkid);
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
+      newDiv.setAttribute("onclick", "checkView.checkClicked(this)");
       if (project.favorite) {
         newDiv.classList.add('favorite');
       }
-      let htmlInner = `<a href=checkmodule.html><div class="checkCardInfo">`
+      let htmlInner = `<div class="checkCardInfo">`
       htmlInner += `<p>${check.checkdate}</p>`;
       htmlInner += `<ul>`;
       /*for (li of check.datasets) {
@@ -578,7 +588,7 @@ let checkView = {
       }*/
       htmlInner += "</ul></div>"
       htmlInner += `<div class='checkCardTitle'><h2>${check.checkname}<h2>`;
-      htmlInner += `<p>${check.checkstatus}</p></div></a>`
+      htmlInner += `<p>${check.checkstatus}</p></div>`
       htmlInner += `<div class="projectButtons">`;
       htmlInner += `<div class="star" onclick="controller.setFavoriteCheck(${check.checkid})"></div>`;
       if (controller.permissions()) {

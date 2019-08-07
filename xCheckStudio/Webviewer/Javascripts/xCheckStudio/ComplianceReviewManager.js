@@ -41,7 +41,6 @@ function ComplianceReviewManager(complianceCheckManager,
     this.SourceViewerCurrentSheetLoaded = undefined;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var projectInfoObject = JSON.parse(projectinfo);
 
     ComplianceReviewManager.prototype.loadDatasource = function () {
         if (this.ViewerData !== undefined) {
@@ -383,7 +382,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     url: 'PHP/updateResultsStatusToAccept.php',
                     type: "POST",
                     async: true,
-                    data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectInfoObject.projectname },
+                    data: { 'componentid': componentId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectinfo.projectname },
                     success: function (msg) {
                         _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId].Status = "OK(A)";
                         var component = _this.ComplianceCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
@@ -421,7 +420,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
-                        data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText, 'ProjectName' : projectInfoObject.projectname},
+                        data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText, 'ProjectName' : projectinfo.projectname},
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[1].innerHTML;
                             if(!originalstatus.includes("(A)")) {
@@ -516,7 +515,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectInfoObject.projectname},
+                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectinfo.projectname},
                 success: function (msg) {
                 var index = 0;
                     var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
@@ -565,16 +564,15 @@ function ComplianceReviewManager(complianceCheckManager,
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'tabletoupdate': tabletoupdate, 'ProjectName' : projectInfoObject.projectname},
+                data: {'tabletoupdate': tabletoupdate, 'ProjectName' : projectinfo.projectname},
                 success: function (msg) {
                     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-                    var object = JSON.parse(projectinfo);
                     $.ajax({
                         url: 'PHP/CheckResultsReader.php',
                         type: "POST",
                         async: true,
                         data: {
-                            'ProjectName': object.projectname
+                            'ProjectName': projectinfo.projectname
                         },
                         success: function (msg) {
                                 $("#SourceAComplianceMainReviewCell").empty();
@@ -645,7 +643,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     type: "POST",
                     dataType: 'JSON',
                     async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectInfoObject.projectname },
+                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectinfo.projectname },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
@@ -680,7 +678,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     type: "POST",
                     async: true,
                     dataType: 'JSON',
-                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText, 'ProjectName' : projectInfoObject.projectname},
+                    data: {'componentid' : componentId, 'tabletoupdate': tableToUpdate, 'sourcePropertyName': selectedRow[0].cells[0].innerText, 'ProjectName' : projectinfo.projectname},
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
@@ -726,7 +724,7 @@ function ComplianceReviewManager(complianceCheckManager,
                 type: "POST",
                 async: true,
                 dataType: 'JSON',
-                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectInfoObject.projectname},
+                data: {'groupid' : groupId, 'tabletoupdate': tableToUpdate, 'ProjectName' : projectinfo.projectname},
                 success: function (msg) {
                     var status = new Array();
                     status = msg;

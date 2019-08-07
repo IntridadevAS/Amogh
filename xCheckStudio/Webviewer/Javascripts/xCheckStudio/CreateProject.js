@@ -5,9 +5,8 @@ function setUserName() {
 
 function setProjectName() {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var projectInfoObject = JSON.parse(projectinfo);
     var powerplantdiv = document.getElementById("powerplant");
-    powerplant.innerHTML = projectInfoObject.projectname;
+    powerplant.innerHTML = projectinfo.projectname;
 }
 
 
