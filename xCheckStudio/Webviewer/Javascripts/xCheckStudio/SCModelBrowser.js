@@ -358,45 +358,24 @@ SCModelBrowser.prototype.loadModelBrowserTable = function () {
             onRefreshed: function (config) {
                 _this.AddTableContentCount(this._container.context.id);
                 var sorting = this.getSorting();
-                if (sorting.field !== undefined || sorting.order !== undefined) {
+                if (sorting.field !== undefined || 
+                    sorting.order !== undefined) {
 
                     _this.addClassesToModelBrowser();
                     for (var i = 0; i < _this.NodeGroups.length; i++) {
                         _this.CreateGroup(_this.NodeGroups[i]);
                     }
-
-                    // if (config.grid._container[0].id === "modelTree1") {
-                    //     _this.addClassesToModelBrowser();
-                    //     for (var i = 0; i < _this.NodeGroups.length; i++) {
-                    //         _this.CreateGroup(_this.NodeGroups[i]);
-                    //     }
-                    // }
-                    // else if (config.grid._container[0].id === "modelTree2") {
-                    //     _this.addClassesToModelBrowser();
-                    //     for (var i = 0; i < _this.NodeGroups.length; i++) {
-                    //         _this.CreateGroup(_this.NodeGroups[i]);
-                    //     }
-                    // }
                 }
             },
             onDataLoaded: function (args) {
                 _this.addClassesToModelBrowser();
                 for (var i = 0; i < _this.NodeGroups.length; i++) {
                     _this.CreateGroup(_this.NodeGroups[i]);
-                }
-
-                // if (args.grid._container[0].id === "modelTree1") {
-                //     _this.addClassesToModelBrowser();
-                //     for (var i = 0; i < _this.NodeGroups.length; i++) {
-                //         _this.CreateGroup(_this.NodeGroups[i]);
-                //     }
-                // }
-                // else if (args.grid._container[0].id === "modelTree2") {
-                //     _this.addClassesToModelBrowser();
-                //     for (var i = 0; i < _this.NodeGroups.length; i++) {
-                //         _this.CreateGroup(_this.NodeGroups[i]);
-                //     }
-                // }
+                } 
+                
+                // initialize the context menu
+                var modelBrowserContextMenuManager = new ModelBrowserContextMenuManager();
+                modelBrowserContextMenuManager.Init(_this);
             },
             rowClick: function (args) {
                 _this.SelectionManager.HandleRowSelect(args.event.currentTarget, _this.Webviewer);                              
@@ -430,33 +409,6 @@ SCModelBrowser.prototype.AddTableContentCount = function (containerId) {
     }
     countBox.innerText = "Count: " + modelBrowserTableRows.length;
 }
-
-// SCModelBrowser.prototype.addselectedRowsToArray = function (viewerContainer) {
-//     var container = document.getElementById(viewerContainer.replace("#", ""));
-//     var modelTreeContainerElement = container;
-
-//     var modelTreeHeaderDiv = modelTreeContainerElement.children[0];
-
-//     var modelBrowserTable = modelTreeContainerElement.children[1];
-//     var modelBrowserTableRows = modelBrowserTable.getElementsByTagName("tr");
-
-//     for (var i = 0; i < modelBrowserTableRows.length; i++) {
-//         var row = modelBrowserTableRows[i];
-
-//         var checkedComponent = {
-//             'Name': row.cells[modelBrowserComponentColumn].textContent,
-//             'MainComponentClass': row.cells[modelBrowserMainClassColumn].textContent,
-//             'SubComponentClass': row.cells[modelBrowserSubClassColumn].textContent,
-//             'NodeId': row.cells[modelBrowserNodeIdColumn].textContent
-//             //'Source': row.cells[modelBrowserSourceColumn].textContent,
-//             //'Destination': row.cells[modelBrowserDestinationColumn].textContent,
-//             //'Owner': row.cells[modelBrowserOwnerColumn].textContent
-//         };
-//         this.SelectedCompoents.push(checkedComponent);
-//     }
-
-
-// }
 
 SCModelBrowser.prototype.isAssemblyNode = function (nodeId) {
     var nodeType = this.Webviewer.model.getNodeType(nodeId);

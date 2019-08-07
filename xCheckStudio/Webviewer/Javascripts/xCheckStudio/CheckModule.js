@@ -15,7 +15,7 @@ var sourceACheckedItemCount = 0;
 var sourceBTotalItemCount = 0;
 var sourceBCheckedItemCount = 0;
 
-var hiidenEntities = [];
+// var hiidenEntities = [];
 
 var currentViewer;
 
@@ -23,37 +23,6 @@ var currentViewer;
 document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
 }, false);
-
-function hide() {
-    if (currentViewer) {
-
-        var results = currentViewer.selectionManager.getResults();
-
-        var map = {};
-        for (var i = 0; i < results.length; i++) {
-            var selectedItem = results[i];
-            map[selectedItem._nodeId] = false;
-            hiidenEntities.push(selectedItem._nodeId);
-        }
-
-        currentViewer.model.setNodesVisibilities(map);
-    }
-}
-
-function showAll() {
-    if (currentViewer && hiidenEntities.length > 0) {
-        var map = {};
-        for (var i = 0; i < hiidenEntities.length; i++) {
-            var hiddenEntity = hiidenEntities[i];
-            map[hiddenEntity] = true;
-        }
-
-        currentViewer.model.setNodesVisibilities(map);
-        hiidenEntities = [];
-    }
-}
-
-
 
 function onCheckButtonClick() {
     var busySpinner = document.getElementById("divLoading");
