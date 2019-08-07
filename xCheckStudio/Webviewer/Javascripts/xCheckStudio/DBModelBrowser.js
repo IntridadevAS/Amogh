@@ -6,11 +6,10 @@ function DBModelBrowser(modelBrowserContainer,
     ModelBrowser.call(this, modelBrowserContainer);
 
     this.DBData = dbData;
-    this.SelectedCompoents = selectedComponents !== undefined ? selectedComponents : [];
 
-    //this.NodeGroups = [];
-    this.SelectedComponentRow;
     this.SelectedComponentRowFromDB;
+
+    this.SelectionManager = new DBSelectionManager(selectedComponents);
 }
 // assign ModelBrowser's method to this class
 DBModelBrowser.prototype = Object.create(ModelBrowser.prototype);
@@ -111,7 +110,12 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
                     var checkBox = document.createElement("INPUT");
                     checkBox.setAttribute("type", "checkbox");
                     //checkBox.checked = false;
-                    checkBox.checked = _this.IsComponentChecked(name, mainComponentClass, subComponentClass);
+                    checkBox.checked = _this.SelectionManager.IsComponentChecked(name, 
+                                                                                 mainComponentClass, 
+                                                                                 subComponentClass);
+                    checkBox.onchange = function () {
+                        _this.SelectionManager.HandleSelectFormCheckBox(this);                        
+                    }
 
                     tableRowContent[columnHeaders[0].name] = checkBox;
                     tableRowContent[columnHeaders[1].name] = name;
@@ -135,39 +139,41 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
     }
 
     var viewerContainer = "#" + this.ModelBrowserContainer;
-
     this.LoadModelBrowserTable(this, columnHeaders, tableData, viewerContainer);
 
-
-    // select first component in model browser
-    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
-    var modelBrowserDataTable = modelBrowserData.children[1];
-    var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-    this.ShowSelectedDBData(modelBrowserTableRows[0]);
-    this.SelectedComponentRow = modelBrowserTableRows[0];
-    this.ChangeBackgroundColor(this.SelectedComponentRow);
-    // for (var i = 0; i < _this.NodeGroups.length; i++) {
-    //     this.CreateGroup(this.NodeGroups[i]);
-    // }
-    var countBox;
-    if (this.ModelBrowserContainer === "modelTree1") {
-        sourceATotalItemCount = modelBrowserTableRows.length;
-    }
-    if (this.ModelBrowserContainer === "modelTree2") {
-        sourceBTotalItemCount = modelBrowserTableRows.length;
-    }
-    // countBox.innerText =  "Count :" + modelBrowserTableRows.length;
-    // countBox.style.fontSize = "20px";
-
-    var modelBrowserHeaderTable = modelBrowserData.children[0];
+    // maintain first row as selected row by default
+    var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
+    this.SelectionManager.HandleRowSelect(modelBrowserTableRows[0]);
+    this.ShowSelectedDBData(modelBrowserTableRows[0]);   
+   
+  
+    var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
     modelBrowserHeaderTable.style.position = "fixed"
     modelBrowserHeaderTable.style.width = "543px";
 
+    var modelBrowserDataTable = this.GetModelBrowserDataTable();
     modelBrowserDataTable.style.position = "static"
     modelBrowserDataTable.style.width = "556px";
-    modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
-    //}
+    modelBrowserDataTable.style.margin = "47px 0px 0px 0px"  
+}
 
+DBModelBrowser.prototype.GetModelBrowserHeaderTable = function()
+{
+    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
+    return modelBrowserData.children[0];
+}
+
+DBModelBrowser.prototype.GetModelBrowserDataTable = function()
+{
+    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
+    return modelBrowserData.children[1];
+}
+
+DBModelBrowser.prototype.GetModelBrowserDataRows = function()
+{   
+    var modelBrowserDataTable = this.GetModelBrowserDataTable();
+    
+    return modelBrowserDataTable.getElementsByTagName("tr");
 }
 
 DBModelBrowser.prototype.GetComponentstyleClass = function (componentName) {
@@ -175,30 +181,8 @@ DBModelBrowser.prototype.GetComponentstyleClass = function (componentName) {
     componentStyleClass = componentStyleClass.replace(":", "");
     componentStyleClass = componentStyleClass.replace(".", "");
     componentStyleClass = componentStyleClass.replace("/", "");
-
-    // while (this.NodeGroups.includes(componentStyleClass)) {
-    //     componentStyleClass += "-" + this.revisedRandId();
-    // }
+   
     return componentStyleClass;
-}
-
-DBModelBrowser.prototype.IsComponentChecked = function (componentName,
-    mainClass,
-    subClass) {
-    if (this.SelectedCompoents &&
-        (mainClass in this.SelectedCompoents)) {
-        var classWiseSelectedComps = this.SelectedCompoents[mainClass];
-
-        for (var key in classWiseSelectedComps) {
-            var comp = classWiseSelectedComps[key];
-            if (componentName === comp["name"] &&
-                subClass === comp["subClass"]) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 DBModelBrowser.prototype.LoadModelBrowserTable = function (_this,
@@ -242,31 +226,10 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (_this,
 
             },
             rowClick: function (args) {
-
-                if (args.event.target.type === "checkbox") {
-                    checkBox = args.event.target;
-                    // select component check box state change event
-                    checkBox.onchange = function () {
-                        _this.HandleComponentCheck(this);
-                    }
-                }
-                else {
-                    if (_this.SelectedComponentRow === args.event.currentTarget) {
-                        return;
-                    }
-
-                    if (_this.SelectedComponentRow) {
-                        _this.RestoreBackgroundColor(_this.SelectedComponentRow);
-                    }
-
-                    _this.ShowSelectedDBData(args.event.currentTarget)
-                    _this.ChangeBackgroundColor(args.event.currentTarget)
-                    _this.SelectedComponentRow = args.event.currentTarget;
-                }
-
-
+     
+                _this.SelectionManager.HandleRowSelect(args.event.currentTarget);  
+                _this.ShowSelectedDBData(args.event.currentTarget);                
             }
-
         });
 
     });
@@ -411,79 +374,6 @@ DBModelBrowser.prototype.RestoreBackgroundColor = function (row) {
     row.style.backgroundColor = "#ffffff";
 }
 
-DBModelBrowser.prototype.HandleComponentCheck = function (currentCheckBox) {
-
-    var currentCell = currentCheckBox.parentElement;
-    if (currentCell.tagName.toLowerCase() !== 'td') {
-        return;
-    }
-
-    var currentRow = currentCell.parentElement;
-    if (currentRow.tagName.toLowerCase() !== 'tr' ||
-        currentRow.cells.length < 2) {
-        return;
-    }
-
-    // maintain track of selected/deselected components
-    if (currentCheckBox.checked &&
-        !this.SelectedCompoentExists(currentRow)) {
-
-        var checkedComponent = {
-            'Name': currentRow.cells[1].textContent.trim(),
-            'MainComponentClass': currentRow.cells[2].textContent.trim(),
-            'ComponentClass': currentRow.cells[3].textContent.trim(),
-            'Description': currentRow.cells[4].textContent.trim()
-        };
-
-        this.SelectedCompoents.push(checkedComponent);
-    }
-    else if (this.SelectedCompoentExists(currentRow)) {
-        this.RemoveFromselectedCompoents(currentRow);
-    }
-
-    var currentTable = currentRow.parentElement;
-    if (currentTable.tagName.toLowerCase() !== 'tbody') {
-        return;
-    }
-
-    var currentComponentCell = currentRow.cells[1];
-    var currentRowStyle = currentComponentCell.className;
-
-    var currentClassList = currentRow.classList;
-    // var currentClassName = currentRow.className;
-    // var index = currentClassName.lastIndexOf(" ");
-
-    // check/uncheck all child and further child rows
-    // var styleToCheck = currentClassName + " " + currentRowStyle;
-
-    //index 1 and 2 for class names from parent row
-    var styleToCheck = currentClassList[1] + " " + currentClassList[2] + " " + currentRowStyle;
-    for (var i = 0; i < currentTable.rows.length; i++) {
-
-        var row = currentTable.rows[i];
-        if (row === currentRow) {
-            continue;
-        }
-
-        var rowClassList = row.classList;
-
-        //index 1 and 2 for class names inherited from parent row 
-        // rowClassList[rowClassList.length -1] is for class applied for current row
-        var rowStyleCheck = rowClassList[1] + " " + rowClassList[2] + " " + rowClassList[rowClassList.length - 1];
-
-        if (rowStyleCheck === styleToCheck) {
-
-            var checkBox = row.cells[0].children[0];
-            if (checkBox.checked === currentCheckBox.checked) {
-                continue;
-            }
-
-            checkBox.checked = currentCheckBox.checked;
-            this.HandleComponentCheck(checkBox);
-        }
-    }
-}
-
 DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
     var viewerContainerData;
     if (this.ModelBrowserContainer === "modelTree1") {
@@ -586,43 +476,18 @@ DBModelBrowser.prototype.LoadDBDataTable = function (_this,
 }
 
 DBModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
-    for (var i = 0; i < this.SelectedCompoents.length; i++) {
-        var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-            component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-            component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
-            component['Description'] == componentRow.cells[4].textContent.trim()) {
-            return true;
-        }
-    }
-
-    return false;
+    return this.SelectionManager.SelectedCompoentExists(componentRow);
 }
-
-DBModelBrowser.prototype.RemoveFromselectedCompoents = function (componentRow) {
-    for (var i = 0; i < this.SelectedCompoents.length; i++) {
-        var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-            component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-            component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
-            component['Description'] === componentRow.cells[4].textContent.trim()) {
-
-            this.SelectedCompoents.splice(i, 1);
-            break;
-        }
-    }
-}
-
 
 DBModelBrowser.prototype.GetSelectedComponents = function () {
-    return this.SelectedCompoents;
+    return this.SelectionManager.GetSelectedComponents();
 }
 
 DBModelBrowser.prototype.AddSelectedComponent = function (checkedComponent) {
-    this.SelectedCompoents.push(checkedComponent);
+    this.SelectionManager.AddSelectedComponent(checkedComponent);
 }
 
-DBModelBrowser.prototype.ClearSelectedComponent = function (checkedComponent) {
-    this.SelectedCompoents = [];
+DBModelBrowser.prototype.ClearSelectedComponent = function () {
+    this.SelectionManager.ClearSelectedComponent();
 }
 

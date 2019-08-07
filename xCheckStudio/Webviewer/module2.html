@@ -54,6 +54,8 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\OperationManager.js"></script>   
+    
     <script type="text/javascript">
         // Load the Visualization API and the corechart package.
         google.charts.load('current', { 'packages': ['corechart'] });   
@@ -756,38 +758,7 @@
 
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
-        }, false);
-
-
-        var hiidenEntities = [];
-        function hide() {
-            if (currentViewer) {
-
-                var results = currentViewer.selectionManager.getResults();
-                //currentViewer.model.setNodesVisibilities(boolMap);
-                var map = {};
-                for (var i = 0; i < results.length; i++) {
-                    var selectedItem = results[i];
-                    map[selectedItem._nodeId] = false;
-                    hiidenEntities.push(selectedItem._nodeId);
-                }
-
-                currentViewer.model.setNodesVisibilities(map);
-            }
-        }
-
-        function showAll() {
-            if (currentViewer && hiidenEntities.length > 0) {
-                var map = {};
-                for (var i = 0; i < hiidenEntities.length; i++) {
-                    var hiddenEntity = hiidenEntities[i];
-                    map[hiddenEntity] = true;
-                }
-
-                currentViewer.model.setNodesVisibilities(map);
-                hiidenEntities = [];
-            }
-        }  
+        }, false);   
 
         var analyticsManager;
         var currentlyOpenedTab;

@@ -15,7 +15,7 @@ var sourceACheckedItemCount = 0;
 var sourceBTotalItemCount = 0;
 var sourceBCheckedItemCount = 0;
 
-var hiidenEntities = [];
+// var hiidenEntities = [];
 
 var currentViewer;
 
@@ -23,37 +23,6 @@ var currentViewer;
 document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
 }, false);
-
-function hide() {
-    if (currentViewer) {
-
-        var results = currentViewer.selectionManager.getResults();
-
-        var map = {};
-        for (var i = 0; i < results.length; i++) {
-            var selectedItem = results[i];
-            map[selectedItem._nodeId] = false;
-            hiidenEntities.push(selectedItem._nodeId);
-        }
-
-        currentViewer.model.setNodesVisibilities(map);
-    }
-}
-
-function showAll() {
-    if (currentViewer && hiidenEntities.length > 0) {
-        var map = {};
-        for (var i = 0; i < hiidenEntities.length; i++) {
-            var hiddenEntity = hiidenEntities[i];
-            map[hiddenEntity] = true;
-        }
-
-        currentViewer.model.setNodesVisibilities(map);
-        hiidenEntities = [];
-    }
-}
-
-
 
 function onCheckButtonClick() {
     var busySpinner = document.getElementById("divLoading");
@@ -1186,92 +1155,92 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
         if (currentCheckBox.checked) {
             var checkedComponent;
 
-            if (sourceManager1 && modelTreeContainer === "modelTree1") {
-                if (sourceManager1.IsSCSource()) {
+            if (sourceManager1 &&
+                modelTreeContainer === "modelTree1") {
 
-                    var checkedComponent = {};
+                var checkedComponent = {};
+                if (sourceManager1.IsSCSource()) {
 
                     checkedComponent['Name'] = row.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent['MainComponentClass'] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                     checkedComponent['ComponentClass'] = row.cells[modelBrowserSubClassColumn].textContent.trim();
                     checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
 
-                    if (checkBoxId === "checkAllSourceACB" &&
-                        !sourceManager1.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager1.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
                 }
-                else if (sourceManager1.IsExcelSource()) {
+                else if (sourceManager1.IsExcelSource() ||
+                    sourceManager1.IsDBSource()) {
                     checkedComponent = {
                         'Name': row.cells[1].textContent.trim(),
                         'MainComponentClass': row.cells[2].textContent.trim(),
                         'ComponentClass': row.cells[3].textContent.trim(),
                         'Description': row.cells[4].textContent.trim()
                     };
-
-                    if (checkBoxId === "checkAllSourceACB" &&
-                        sourceManager1 &&
-                        !sourceManager1.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager1.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
                 }
-                else if (sourceManager1.IsDBSource()) {
-                    checkedComponent = {
-                        'Name': row.cells[1].textContent.trim(),
-                        'MainComponentClass': row.cells[2].textContent.trim(),
-                        'ComponentClass': row.cells[3].textContent.trim(),
-                        'Description': row.cells[4].textContent.trim()
-                    };
-
-                    if (checkBoxId === "checkAllSourceACB" &&
-                        sourceManager1 &&
-                        !sourceManager1.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager1.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
+                else {
+                    continue;
                 }
 
+                // add selected component
+                if (checkBoxId === "checkAllSourceACB" &&
+                    sourceManager1 &&
+                    !sourceManager1.ModelTree.SelectedCompoentExists(row)) {
+                    sourceManager1.ModelTree.AddSelectedComponent(checkedComponent);
+                }
+
+                // select and highlight row
+                if (!sourceManager1.ModelTree.SelectionManager.SelectedComponentRows.includes(row)) {
+                    sourceManager1.ModelTree.SelectionManager.SelectedComponentRows.push(row);
+                    sourceManager1.ModelTree.SelectionManager.ChangeBackgroundColor(row);
+                }
             }
-            if (sourceManager2 && modelTreeContainer === "modelTree2") {
+            else if (sourceManager2 &&
+                modelTreeContainer === "modelTree2") {
+
+                var checkedComponent = {};
                 if (sourceManager2.IsSCSource()) {
-                    var checkedComponent = {};
+                    // var checkedComponent = {};
                     checkedComponent["Name"] = row.cells[modelBrowserComponentColumn].textContent.trim();
                     checkedComponent["MainComponentClass"] = row.cells[modelBrowserMainClassColumn].textContent.trim();
                     checkedComponent["ComponentClass"] = row.cells[modelBrowserSubClassColumn].textContent.trim();
                     checkedComponent["NodeId"] = row.cells[modelBrowserNodeIdColumn].textContent.trim();
-
-                    if (checkBoxId === "checkAllSourceBCB" &&
-                        !sourceManager2.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager2.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
                 }
-                else if (sourceManager2.IsExcelSource()) {
+                else if (sourceManager2.IsExcelSource() ||
+                    sourceManager2.IsDBSource()) {
                     checkedComponent = {
                         'Name': row.cells[1].textContent.trim(),
                         'MainComponentClass': row.cells[2].textContent.trim(),
                         'ComponentClass': row.cells[3].textContent.trim(),
                         'Description': row.cells[4].textContent.trim()
                     };
-
-                    if (checkBoxId === "checkAllSourceBCB" &&
-                        sourceManager2 &&
-                        !sourceManager2.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager2.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
                 }
-                else if (sourceManager2.IsDBSource()) {
-                    checkedComponent = {
-                        'Name': row.cells[1].textContent.trim(),
-                        'MainComponentClass': row.cells[2].textContent.trim(),
-                        'ComponentClass': row.cells[3].textContent.trim(),
-                        'Description': row.cells[4].textContent.trim()
-                    };
-
-                    if (checkBoxId === "checkAllSourceBCB" &&
-                        sourceManager2 &&
-                        !sourceManager2.ModelTree.SelectedCompoentExists(row)) {
-                        sourceManager2.ModelTree.AddSelectedComponent(checkedComponent);
-                    }
+                else {
+                    continue;
                 }
+
+                // add selected component
+                if (checkBoxId === "checkAllSourceBCB" &&
+                    !sourceManager2.ModelTree.SelectedCompoentExists(row)) {
+                    sourceManager2.ModelTree.AddSelectedComponent(checkedComponent);
+                }
+
+                // select and highlight row
+                if (!sourceManager2.ModelTree.SelectionManager.SelectedComponentRows.includes(row)) {
+                    sourceManager2.ModelTree.SelectionManager.SelectedComponentRows.push(row);
+                    sourceManager2.ModelTree.SelectionManager.ChangeBackgroundColor(row);
+                }
+            }
+        }
+        else {
+            // unhighlight
+            if (sourceManager1 &&
+                modelTreeContainer === "modelTree1") {
+                sourceManager1.ModelTree.SelectionManager.RestoreBackgroundColor(row);
+                sourceManager1.ModelTree.SelectionManager.SelectedComponentRows = [];
+            }
+            else if (sourceManager2 &&
+                modelTreeContainer === "modelTree2") {
+                sourceManager2.ModelTree.SelectionManager.RestoreBackgroundColor(row);
+                sourceManager2.ModelTree.SelectionManager.SelectedComponentRows = [];
             }
         }
     }
@@ -1778,8 +1747,9 @@ function clearDBEntriesOnClearModule(source) {
     var object = JSON.parse(projectinfo);
 
     $.ajax({
-        data: { 'Source': source,
-        'ProjectName': object.projectname
+        data: {
+            'Source': source,
+            'ProjectName': object.projectname
         },
         type: "POST",
         url: "PHP/RemoveComponentsFromDB.php"
@@ -1792,7 +1762,7 @@ function clearDBEntriesOnClearModule(source) {
     });
 
     $.ajax({
-        data: { 
+        data: {
             'Source': source,
             'ProjectName': object.projectname
         },
@@ -1949,12 +1919,11 @@ function OnShowToast(text) {
 
 function isLoadProject() {
     var loadsavedproject = localStorage.getItem('loadSavedProject')
-    
-    if(loadsavedproject == 'true') {
+
+    if (loadsavedproject == 'true') {
         return true;
     }
-    else 
-    {
+    else {
         return false;
     }
 }
@@ -2040,7 +2009,7 @@ function loadProjectForCheck() {
         }
     });
 
-    
+
     // read check case info
     $.ajax({
         url: 'PHP/CheckCaseinfoReader.php',
@@ -2149,7 +2118,7 @@ function loadSources(viewerOptions) {
                 // }).done(function (msg) {
                 //     if (msg !== 'fail') {
                 //         // load source A
-                        
+
                 //     }
                 // });
             });
@@ -2170,10 +2139,10 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
                 url: 'PHP/ClasswiseComponentsReader.php',
                 type: "POST",
                 async: false,
-                data: { 
+                data: {
                     'Source': "SourceA",
                     'ProjectName': object.projectname
-                    },
+                },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {
@@ -2197,10 +2166,10 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
                                 dataSourceInfo["sourceAFileName"]);
                         }
 
-                         // hide load data source a button
-                         hideLoadButton("modelTree1");
-                         
-                         addTabHeaders("modelTree1", dataSourceInfo["sourceAFileName"]);
+                        // hide load data source a button
+                        hideLoadButton("modelTree1");
+
+                        addTabHeaders("modelTree1", dataSourceInfo["sourceAFileName"]);
                         // enable source a controls
                         // enable check all CB for source A
                         var component = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
@@ -2321,9 +2290,9 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
                 type: "POST",
                 async: false,
                 data: {
-                     'Source': "SourceB",
-                     'ProjectName': object.projectname 
-                    },
+                    'Source': "SourceB",
+                    'ProjectName': object.projectname
+                },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {

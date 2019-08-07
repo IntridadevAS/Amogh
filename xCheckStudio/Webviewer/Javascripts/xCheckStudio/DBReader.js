@@ -2,9 +2,10 @@ function DBReader() {
 
     this.DBData = {};
 
-    DBReader.prototype.ReadDBData = function (uri) {
-        var _this = this;
+    DBReader.prototype.ReadDBData = function (uri) {       
         return new Promise((resolve) => {
+            var _this = this;
+
             $.ajax({
                 url: 'PHP/PDOConnectionForDatabases.php',
                 type: 'POST',
@@ -13,7 +14,7 @@ function DBReader() {
                 async: false,
                 success: function (data) {
 
-                    var sourceProperties = this.ProcessDBData(data);
+                    var sourceProperties = _this.ProcessDBData(data);
 
                     return resolve(sourceProperties);
 

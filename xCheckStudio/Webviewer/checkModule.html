@@ -72,6 +72,20 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\SelectionManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\SCSelectionManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSelectionManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\DBSelectionManager.js"></script>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ContextMenuManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowserContextMenuManager.js"></script>   
+
+    <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
+    <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\OperationManager.js"></script>   
+
     </meta>
     </meta>
 
@@ -297,6 +311,10 @@
         </a>
         <a href="#" onclick="stopTranslucency()">
             Stop Translucency
+            <!-- <span>Ctrl + T</span> -->
+        </a>
+        <a href="#" onclick="isolate()">
+            Isolate
             <!-- <span>Ctrl + T</span> -->
         </a>
     </div>
@@ -2320,40 +2338,6 @@
     </script>
     <!-- Scripts -->
     <script>
-
-
-        document.addEventListener("contextmenu", function (e) {
-            e.preventDefault();
-        }, false);
-
-        function hide() {
-            if (currentViewer) {
-
-                var results = currentViewer.selectionManager.getResults();
-
-                var map = {};
-                for (var i = 0; i < results.length; i++) {
-                    var selectedItem = results[i];
-                    map[selectedItem._nodeId] = false;
-                    hiidenEntities.push(selectedItem._nodeId);
-                }
-
-                currentViewer.model.setNodesVisibilities(map);
-            }
-        }
-
-        function showAll() {
-            if (currentViewer && hiidenEntities.length > 0) {
-                var map = {};
-                for (var i = 0; i < hiidenEntities.length; i++) {
-                    var hiddenEntity = hiidenEntities[i];
-                    map[hiddenEntity] = true;
-                }
-
-                currentViewer.model.setNodesVisibilities(map);
-                hiidenEntities = [];
-            }
-        }
 
         window.onload = function () {
 
