@@ -32,7 +32,7 @@ function CreateCheckSpace()
     $CheckCreateDate = $obj['checkdate'];
     try
     {
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+        $dbPath = "../Projects/".$projectName."/Project.db";
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         if( CreateCheckSpaceSchemaIfNot($dbh) == true)
         {
@@ -53,6 +53,7 @@ function CreateCheckSpace()
             );
          echo json_encode($array);
          $dbh = null; //This is how you close a PDO connection
+         mkdir("../Projects/".$projectName."/CheckSpaces/".$CheckName, 0777, true);
         return;      
         }
         echo "Success";
@@ -74,7 +75,7 @@ function GetCheckSpaces()
     
     try
     {
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";   
+        $dbPath = "../Projects/".$projectName."/Project.db";
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
         $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     

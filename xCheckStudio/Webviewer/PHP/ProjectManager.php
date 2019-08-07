@@ -1978,24 +1978,11 @@ function IsLoadProject()
 function CreateProject()
 {
     $projectName = trim($_POST["projectName"], " ");
-   // $description = trim($_POST["description"], " ");
-   // $function = trim($_POST["function"], " ");
-
     if($projectName == "")
     {
         echo "Project Name cannot be empty";
         return;
     }
-    // if($description == "")
-    // {
-    //     echo "Project description cannot be empty";
-    //     return;
-    // }
-    // if($function == "")
-    // {
-    //     echo "Project function cannot be empty";
-    //     return;
-    // }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         $query =  "select projectname from Projects where projectname='". $projectName."' COLLATE NOCASE;";      
@@ -2023,17 +2010,7 @@ function CreateProject()
         if(mkdir($path, 0777, true))
         {
             // create project database           
-            //$database = new SQLite3($path."/".$projectName.".db");	
-            $database = new SQLite3($path."/".$projectName."_temp.db");	
-            
-            // create SourceA and SourceB directories
-            mkdir($path."/SourceA", 0777, true);
-            mkdir($path."/SourceB", 0777, true);
-            
-            // set session variables for sourceA and sourceB directory paths relative to index.html
-            session_start();
-            $_SESSION['SourceAPath']= "Projects/".$projectName."/SourceA";             
-            $_SESSION['SourceBPath']= "Projects/".$projectName."/SourceB";
+            $database = new SQLite3($path."/Project.db");	
         }
     }              	
     echo "success";

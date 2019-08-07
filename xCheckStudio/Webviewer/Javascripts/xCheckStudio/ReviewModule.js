@@ -5,9 +5,8 @@ function setUserName() {
 
 function setProjectName() {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var projectInfoObject = JSON.parse(projectinfo);
     var powerplantdiv = document.getElementById("powerplant");
-    powerplant.innerHTML = projectInfoObject.projectname;
+    powerplant.innerHTML = projectinfo.projectname;
 }
 
 function highlightSelectedRowOnRightClick(selectedRow) {
@@ -217,13 +216,12 @@ function populateCheckResults(comparisonCheckGroups,
         return;
     }
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var object = JSON.parse(projectinfo);
     $.ajax({
         url: 'PHP/SourceViewerOptionsReader.php',
         type: "POST",
         async: true,
         data: {
-            'ProjectName': object.projectname
+            'ProjectName': projectinfo.projectname
         },
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
@@ -242,7 +240,7 @@ function populateCheckResults(comparisonCheckGroups,
                     async: false,
                     data: {
                          'Source': "SourceA",
-                         'ProjectName': object.projectname 
+                         'ProjectName': projectinfo.projectname 
                         },
                     success: function (msg) {
                         if (msg != 'fail') {
@@ -268,7 +266,7 @@ function populateCheckResults(comparisonCheckGroups,
                     async: false,
                     data: {
                         'Source': "SourceB",
-                        'ProjectName': object.projectname
+                        'ProjectName': projectinfo.projectname
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
@@ -395,7 +393,6 @@ function onSaveProject(event) {
     // var busySpinner = document.getElementById("divLoading");
     // busySpinner.className = 'show';
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var object = JSON.parse(projectinfo);
     try {
 
         $.ajax({
@@ -405,7 +402,7 @@ function onSaveProject(event) {
             data:
             {
                 'InvokeFunction': "SaveCheckResultsToCheckSpaceDB",
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname
             },
             success: function (msg) {
                 alert("Saved check results.");

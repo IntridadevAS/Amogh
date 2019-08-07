@@ -43,7 +43,6 @@ function CheckManager(name) {
            var sourceASelectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();             
            var sourceBSelectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();              
            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-           var object = JSON.parse(projectinfo);
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',
                 type: "POST",
@@ -53,7 +52,7 @@ function CheckManager(name) {
                     "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
                     "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
                     "orderMaintained" : orderMaintained,
-                    "ProjectName": object.projectname
+                    "ProjectName": projectinfo.projectname
                 },
                 success: function (data) {
                     // alert("success");
@@ -70,7 +69,6 @@ function CheckManager(name) {
             var SelectedCompoents = interfaceObject.ModelTree.GetSelectedComponents();
             var containerID = interfaceObject.GetViewerContainerID();            
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var object = JSON.parse(projectinfo);
             $.ajax({
                 url: 'PHP/checkDataSourceForCompliance.php',
                 type: "POST",
@@ -79,7 +77,7 @@ function CheckManager(name) {
                         "CheckCaseType": JSON.stringify(checkCaseType),                       
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
                         "ContainerId": containerID,
-                        'ProjectName': object.projectname                     
+                        'ProjectName': projectinfo.projectname                     
                 },
                 success: function (data) {
                     // alert("success");
