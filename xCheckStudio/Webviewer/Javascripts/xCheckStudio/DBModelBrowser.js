@@ -144,7 +144,7 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
     // maintain first row as selected row by default
     var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
     this.SelectionManager.HandleRowSelect(modelBrowserTableRows[0]);
-    this.ShowSelectedSheetData(modelBrowserTableRows[0]);   
+    this.ShowSelectedDBData(modelBrowserTableRows[0]);   
    
   
     var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
