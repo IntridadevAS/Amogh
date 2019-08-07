@@ -1,4 +1,5 @@
 <?php
+require_once 'Utility.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
@@ -32,7 +33,7 @@ function CreateCheckSpace()
     $CheckCreateDate = $obj['checkdate'];
     try
     {
-        $dbPath = "../Projects/".$projectName."/Project.db";
+        $dbPath = getProjectDatabasePath($projectName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         if( CreateCheckSpaceSchemaIfNot($dbh) == true)
         {
@@ -53,7 +54,9 @@ function CreateCheckSpace()
             );
          echo json_encode($array);
          $dbh = null; //This is how you close a PDO connection
-         mkdir("../Projects/".$projectName."/CheckSpaces/".$CheckName, 0777, true);
+         mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
+         mkdir(getCheckSourceAPath($projectName, $CheckName), 0777, true);
+         mkdir(getCheckSourceBPath($projectName, $CheckName), 0777, true);
         return;      
         }
         echo "Success";
@@ -75,7 +78,7 @@ function GetCheckSpaces()
     
     try
     {
-        $dbPath = "../Projects/".$projectName."/Project.db";
+        $dbPath = getProjectDatabasePath($projectName);;
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
         $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     

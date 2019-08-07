@@ -1,12 +1,4 @@
 <?php    
-    $projectpath = getCheckDirectoryPath($projectname, $checkname);
-    echo $projectpath;
-    echo '\n';
-    $projectpath = getCheckDatabasePath($projectname, $checkname);
-    echo $projectpath;
-    echo '\n';
-    return;
-
     function getProjectDirectoryPath($projectName)
     {
         $projectDirPath = "../Projects/".$projectName;
@@ -31,6 +23,19 @@
         $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName."_temp.db";
         return $dbPath;
     }
+
+    function getCheckSourceAPath($projectName, $checkName)
+    {
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/SourceA";
+        return $dbPath;
+    }
+
+    function getCheckSourceBPath($projectName, $checkName)
+    {
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/SourceB";
+        return $dbPath;
+    }
+
 
     function tableExists($dbh, $tableName)
     {
