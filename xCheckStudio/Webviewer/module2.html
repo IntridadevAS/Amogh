@@ -34,7 +34,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ContextMenuReviewModule.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
     <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <!-- <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> -->
@@ -55,6 +55,8 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\OperationManager.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>   
     
     <script type="text/javascript">
         // Load the Visualization API and the corechart package.
@@ -364,6 +366,12 @@
             Stop Translucency
             <!-- <span>Ctrl + T</span> -->
         </a>
+
+        <a href="#" onclick="isolate()">
+            Isolate
+            <!-- <span>Ctrl + T</span> -->
+        </a>
+
     </div>
 
     <input id="anPageName" name="page" type="hidden" value="module2" />
@@ -836,10 +844,7 @@
 
 
                     // load analytics data
-                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
-                    contextMenuComponentLevel();
-                    contextMenuPropertyLevel();
-                    contextMenuCategoryLevel();
+                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';            
                 },
                 error: function (error) {
                     //alert('error; ' + eval(error));

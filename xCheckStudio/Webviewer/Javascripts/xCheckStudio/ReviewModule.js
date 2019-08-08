@@ -10,31 +10,6 @@ function setProjectName() {
     powerplant.innerHTML = projectInfoObject.projectname;
 }
 
-function executeContextMenuClicked(key, options, _this) {
-    if (key === "menuItem") {
-        if(options.items[key].name == "Accept") {
-            onAcceptClick(_this); 
-        }
-        else {
-            onUnAcceptClick(_this); 
-        }
-    }
-    if (key === "menuItem2") {
-        if(options.items[key].name == "Restore") {
-            onRestoreTranspose(_this);
-        }
-    }
-    else if (key === "lefttoright" || key === "righttoleft") {
-        onTransposeClick(key, _this);
-        
-    }
-    else if (key === "freeze") {
-    }
-    else if (key === "reference") {
-        onReferenceClick(_this);
-    }
-}
-
 function highlightSelectedRowOnRightClick(selectedRow) {
     var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
     if(typeOfRow == "ComparisonMainReviewTbody") { 
@@ -51,137 +26,78 @@ function highlightSelectedRowOnRightClick(selectedRow) {
     }
 }
 
-function onTransposeClick(key, selectedRow) {
-    if(selectedRow[0].nodeName == "BUTTON") {
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        comparisonReviewManager.transposePropertyValueCategoryLevel(key, selectedRow[0], comparisonReviewManager);
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.transposePropertyValueComponentLevel(key, selectedRow, comparisonReviewManager);
-        }
-        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.transposePropertyValue(key, selectedRow, comparisonReviewManager);
-        }
-    }
-}
+// function chooseAction(selectedRow) {
+//     if(selectedRow[0].nodeName == "BUTTON") { 
+//         var typeOfRow = selectedRow[0].offsetParent.id;
+//         var groupId = selectedRow[0].attributes[0].value;
+//         if(typeOfRow == "ComparisonMainReviewTbody" || 
+//            typeOfRow == "ComparisonDetailedReviewTbody") { 
+//             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
+//               comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
+//                 return false;
+//             } else { return true; }
+//         }
+//         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") { 
+//             if(sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+//                 return false;
+//             }else { return true; }
+//         }
+//         else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+//             if(sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
+//                 return false;
+//             }else { return true; }
+//         }
+//     }
+//     else {
+//         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+//         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+//             if(selectedRow[0].cells[ComparisonColumns.Status].innerHTML == "OK(A)" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
+//             selectedRow[0].cells[ComparisonColumns.Status].innerHTML == 'OK(A)(T)') {
+//                 return false;
+//             }else { return true; }
+//         }
+//         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
+//         typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
+//             if(selectedRow[0].cells[1].innerHTML == "OK(A)" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
+//                 return false;
+//             } else { return true; }
+//         }   
+//     }                       
+// }
 
-function onRestoreTranspose(selectedRow) {
-    if(selectedRow[0].nodeName == "BUTTON") {
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        comparisonReviewManager.restoreTransposeCategoryLevel(selectedRow[0], comparisonReviewManager);
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.restoreTransposeComponentLevel(selectedRow, comparisonReviewManager);
-        }
-        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.restoreTransposePropertyValue(selectedRow, comparisonReviewManager);
-        }
-    }
-}
-
-function chooseAction(selectedRow) {
-    if(selectedRow[0].nodeName == "BUTTON") { 
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        var groupId = selectedRow[0].attributes[0].value;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
-            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
-                return false;
-            } else { return true; }
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") { 
-            if(sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
-                return false;
-            }else { return true; }
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            if(sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
-                return false;
-            }else { return true; }
-        }
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK(A)" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
-            selectedRow[0].cells[2].innerHTML == 'OK(A)(T)') {
-                return false;
-            }else { return true; }
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-        typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            if(selectedRow[0].cells[1].innerHTML == "OK(A)" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
-                return false;
-            } else { return true; }
-        }   
-    }                       
-}
-
-function chooseRestoreTranspose(selectedRow) {
-    if(selectedRow[0].nodeName == "BUTTON") { 
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        var groupId = selectedRow[0].attributes[0].value;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
-                return false;
-            } else { return true; }
-        }
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody") {
-            var componentId = selectedRow[0].cells[5].innerHTML;
-            var groupId = selectedRow[0].cells[6].innerHTML;
-            var component = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId]["CheckComponents"][componentId]
-            if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
-                return true;
-            }
-            else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML == 'OK(A)(T)' ) {
-                return false;
-            }else { return true; }
-        }
-        else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML.includes('(T)')) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-    }
-}
-
-function onAcceptClick(rowClicked) {
-    var selectedRow = rowClicked;
-    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-    if(rowClicked[0].nodeName == "BUTTON") {
-        typeOfRow = selectedRow[0].offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.updateStatusOfCategory(rowClicked[0], comparisonReviewManager);
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-            sourceAComplianceReviewManager.updateStatusOfCategory(rowClicked[0]);
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-            sourceBComplianceReviewManager.updateStatusOfCategory(rowClicked[0]);
-        }  
-    }
-    else {
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.updateStatus(selectedRow, comparisonReviewManager);
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
-            sourceAComplianceReviewManager.updateStatusOfComplianceElement(selectedRow);
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            sourceBComplianceReviewManager.updateStatusOfComplianceElement(selectedRow);
-        }                             
-    }      
-}
+// function chooseRestoreTranspose(selectedRow) {
+//     if(selectedRow[0].nodeName == "BUTTON") { 
+//         var typeOfRow = selectedRow[0].offsetParent.id;
+//         var groupId = selectedRow[0].attributes[0].value;
+//         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
+//             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
+//                 return false;
+//             } else { return true; }
+//         }
+//     }
+//     else {
+//         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+//         if(typeOfRow == "ComparisonMainReviewTbody") {
+//             var componentId = selectedRow[0].cells[5].innerHTML;
+//             var groupId = selectedRow[0].cells[6].innerHTML;
+//             var component = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId]["CheckComponents"][componentId]
+//             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
+//                 return true;
+//             }
+//             else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML == 'OK(A)(T)' ) {
+//                 return false;
+//             }else { return true; }
+//         }
+//         else if(typeOfRow == "ComparisonDetailedReviewTbody") {
+//             if(selectedRow[0].cells[4].innerHTML.includes('(T)')) {
+//                 return false;
+//             }
+//             else {
+//                 return true;
+//             }
+//         }
+//     }
+// }
 
 function onUnAcceptClick(rowClicked) {
     var selectedRow = rowClicked;
@@ -199,10 +115,13 @@ function onUnAcceptClick(rowClicked) {
         }  
     }
     else {
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.unAcceptStatus(selectedRow, comparisonReviewManager);
+        if (typeOfRow == "ComparisonMainReviewTbody") {
+            comparisonReviewManager.UnAcceptComponent(selectedRow);
         }
-        
+        else if (typeOfRow == "ComparisonDetailedReviewTbody") {
+            comparisonReviewManager.UnAcceptProperty(selectedRow);
+        }
+
         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
             sourceAComplianceReviewManager.unAcceptStatus(selectedRow, sourceAComplianceReviewManager);
         }
@@ -239,7 +158,8 @@ function disableContextMenuAccept(_this) {
     }
     else {
         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
+        if(typeOfRow == "ComparisonMainReviewTbody" || 
+           typeOfRow == "ComparisonDetailedReviewTbody") {
             if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" || 
             selectedRow[0].cells[2].innerHTML == "OK(T)" || selectedRow[0].cells[4].innerHTML == "OK(T)" ||
             selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[4].innerHTML == "undefined") {
@@ -256,35 +176,7 @@ function disableContextMenuAccept(_this) {
     }
 }
 
-function disableContextMenuTranspose(_this) {
-    var selectedRow = _this;
-    var groupId = selectedRow[0].attributes[0].value;
-    if(selectedRow[0].nodeName == "BUTTON") {
-        if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
-        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'No Match' ||
-        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)' ||
-        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
-        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') { 
-            return true;
-        }
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "SourceBComplianceMainReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "OK(A)" ||
-            selectedRow[0].cells[2].innerHTML == "No Match" || selectedRow[0].cells[2].innerHTML == "OK(A)(T)" || selectedRow[0].cells[2].innerHTML == "No Match(A)") {
-                return true;
-            }
-        }
-        else if(selectedRow[0].cells[4].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "No Value" || selectedRow[0].cells[4].innerHTML == "undefined"
-        || selectedRow[0].cells[4].innerHTML == "ACCEPTED" || selectedRow[0].cells[4].innerHTML == "OK(T)") {
-            return true;
-        }
-        else if(selectedRow[0].cells[0].innerHTML == "" || selectedRow[0].cells[3].innerHTML == "") {
-            return true;
-        }
-    }
-}
+
 
 function acceptAllCategories() {
     var tab = this.currentlyOpenedTab;

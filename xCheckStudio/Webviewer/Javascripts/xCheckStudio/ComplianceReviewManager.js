@@ -120,13 +120,13 @@ function ComplianceReviewManager(complianceCheckManager,
                     columnHeader = {};
                     var title;
                     if (i === 0) {
-                        if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
-                            title = "Name";
-                        }
-                        if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
-                            //title = AnalyticsData.SourceBName;
-                            title = "Name";
-                        }
+                        // if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
+                        //     title = "Name";
+                        // }
+                        // if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
+                        //title = AnalyticsData.SourceBName;
+                        title = "Name";
+                        // }
                         // title = "Source A";
                         name = "SourceA";
                     }
@@ -296,7 +296,16 @@ function ComplianceReviewManager(complianceCheckManager,
                 controller: db,
                 data: tableData,
                 fields: columnHeaders,
-                margin: "0px",
+                margin: "0px",                
+                onDataLoaded: function (args) {
+                    if (_this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
+
+                        initializeSourceAComplianceContextMenus();
+                    }
+                    else if (_this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
+                        initializeSourceBComplianceContextMenus();
+                    }
+                },
                 onItemUpdated: function(args) {
                     for(var index = 0; index < args.grid.data.length; index++) {
                         if(args.grid.data[index].ID == args.row[0].cells[3].innerHTML)
