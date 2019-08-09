@@ -57,6 +57,7 @@ function CreateCheckSpace()
          mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
          mkdir(getCheckSourceAPath($projectName, $CheckName), 0777, true);
          mkdir(getCheckSourceBPath($projectName, $CheckName), 0777, true);
+         $database = new SQLite3(getCheckDatabasePath($projectName, $CheckName));	
         return;      
         }
         echo "Success";

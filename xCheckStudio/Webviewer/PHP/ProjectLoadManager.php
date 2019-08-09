@@ -1,6 +1,6 @@
 <?php
-
-    if(!isset($_POST["ProjectName"]))
+    require_once 'Utility.php';
+    if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
     {
         echo 'fail';
         return;
@@ -23,12 +23,11 @@
     {
         // get project name       
         $projectName = $_POST["ProjectName"];
-       
-
+        $checkName = $_POST['CheckName'];
         try
         {
             // project DB
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";           
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);    
             if(!file_exists ($dbPath ))
             { 
                 echo 'fail';
@@ -36,7 +35,7 @@
             }       
 
             // create temp db
-            $tempDBPath = "../Projects/".$projectName."/".$projectName."_temp.db";   
+            $tempDBPath = getCheckDatabasePath($projectName, $checkName);
             if(file_exists ($tempDBPath ))
             { 
                 unlink($tempDBPath);

@@ -6,12 +6,12 @@
     {
         global $CheckComponentsGroups;
         global $projectName;
+        global $checkName;
 
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -172,11 +172,11 @@
     {
         global $CheckComponentsGroups;
         global $projectName;
+        global $checkName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -372,11 +372,11 @@
     function writeComparisonCheckStatistics()
     {
         global $projectName;
+        global $checkName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -535,11 +535,11 @@
     function writeSourceAComplianceCheckStatistics()
     {
         global $projectName;
+        global $checkName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -582,11 +582,11 @@
    function writeSourceBComplianceCheckStatistics()
     {
         global $projectName;
+        global $checkName;
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -627,13 +627,12 @@
     
     function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
                                             $tableName,
-                                            $projectName)
+                                            $projectName,$checkName)
     {        
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-            //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction

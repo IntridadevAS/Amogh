@@ -1,10 +1,11 @@
 <?php
             include 'CheckComponents.php';
             include 'CheckResultsWriter.php';
-
+            require_once 'Utility.php';
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SelectedCompoents'] ) ||
                !isset($_POST['ProjectName']) ||
+               !isset($_POST['CheckName']) ||
                !isset($_POST['ContainerId'] ) )
             {
                 echo 'fail';
@@ -12,7 +13,7 @@
             }
             
             $projectName = $_POST['ProjectName'];
-
+            $checkName = $_POST['CheckName'];
             $ComplianceCheckRulesArray = array(
                 "None"=> "1",
                 "Must_Have_Value"=> "2",
@@ -103,12 +104,13 @@
         function getSourceComponents()
         {
             global $projectName;
+            global $checkName;
             global $SourceComponents;           
             global $SourceProperties;                  
             global $Source;
             try{   
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction

@@ -1,4 +1,5 @@
-<?php    
+<?php
+
     function getProjectDirectoryPath($projectName)
     {
         $projectDirPath = "../Projects/".$projectName;
@@ -21,6 +22,12 @@
     function getCheckDatabasePath($projectName, $checkName)
     {
         $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName."_temp.db";
+        return $dbPath;
+    }
+
+    function getSavedCheckDatabasePath($projectName, $checkName)
+    {
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName.".db";
         return $dbPath;
     }
 

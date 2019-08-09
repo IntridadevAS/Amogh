@@ -1,15 +1,16 @@
 <?php
-    if(!isset($_POST['Source']) || !isset($_POST['ProjectName']))
+    require_once 'Utility.php';
+    if(!isset($_POST['Source']) || !isset($_POST['ProjectName']) || !isset($_POST['CheckName']) ||)
     {
         echo 'fail';
         return;
     }
     
     $projectName = $_POST['ProjectName'];
-
-$excludeFile = "../Projects/".$projectName."/".$projectName.".db";
-$exclude[] = $excludeFile;
-deleteFilesFromDirectory();
+    $checkName = $_POST['CheckName'];
+    $excludeFile = "../Projects/".$projectName."/".$projectName.".db";
+    $exclude[] = $excludeFile;
+    deleteFilesFromDirectory();
 
 function deleteAll($str) {
     //It it's a file.
