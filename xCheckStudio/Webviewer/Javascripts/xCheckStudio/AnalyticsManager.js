@@ -123,7 +123,7 @@ function AnalyticsManager(comparisonCheckGroups,
 
     AnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var object = JSON.parse(projectinfo);
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
@@ -131,7 +131,8 @@ function AnalyticsManager(comparisonCheckGroups,
             async: true,
             data: { 
                 'CheckType': 'Comparison',
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -244,7 +245,7 @@ function AnalyticsManager(comparisonCheckGroups,
     AnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = function () {
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var object = JSON.parse(projectinfo);
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
@@ -252,7 +253,8 @@ function AnalyticsManager(comparisonCheckGroups,
             async: true,
             data: { 
                 'CheckType': 'SourceACompliance',
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -326,8 +328,7 @@ function AnalyticsManager(comparisonCheckGroups,
     AnalyticsManager.prototype.populateSourceBComplianceAnalyticsData = function () {
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var object = JSON.parse(projectinfo);
-
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var _this = this;
         $.ajax({
             url: 'PHP/AnalyticsDataReader.php',
@@ -335,7 +336,8 @@ function AnalyticsManager(comparisonCheckGroups,
             async: true,
             data: { 
                 'CheckType': 'SourceBCompliance',
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {

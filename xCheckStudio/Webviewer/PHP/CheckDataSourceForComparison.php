@@ -1,11 +1,12 @@
 <?php
             include 'CheckComponents.php';
             include 'CheckResultsWriter.php';
-    
+            require_once 'Utility.php';
 
             if(!isset($_POST['CheckCaseType']) ||
                !isset($_POST['SourceASelectedCompoents'] )||
                !isset($_POST['ProjectName']) ||
+               !isset($_POST['CheckName']) ||
                !isset($_POST['SourceBSelectedCompoents'] ) )
             {
                 echo 'fail';
@@ -13,7 +14,8 @@
             }
     
             $projectName = $_POST['ProjectName'];
-          
+            $checkName = $_POST['CheckName'];
+
             $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
             $SourceASelectedComponents = json_decode($_POST['SourceASelectedCompoents'],true);
             $SourceBSelectedComponents = json_decode($_POST['SourceBSelectedCompoents'],true); 
@@ -47,10 +49,10 @@
             // write not matched components to database
             writeNotMatchedComponentsToDB($SourceANotMatchedComponents, 
                                           "SourceANotMatchedComponents", 
-                                          $projectName);
+                                          $projectName,$checkName);
             writeNotMatchedComponentsToDB($SourceBNotMatchedComponents, 
                                           "SourceBNotMatchedComponents", 
-                                          $projectName);
+                                          $projectName,$checkName);
             
             writeComparisonCheckStatistics();
 
@@ -58,13 +60,14 @@
             function getSourceComponents()
             {
                 global $projectName;
+                global $checkName;
                 global $SourceAComponents;
                 global $SourceBComponents;
                 global $SourceAProperties;
                 global $SourceBProperties;                
                 try{   
                         // open database
-                        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                        $dbPath = getCheckDatabasePath($projectName, $checkName);
                         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
  
                         // begin the transaction

@@ -1,18 +1,22 @@
 <?php 
 
-    session_start();
+    require_once '../PHP/Utility.php';
+
+    if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
+    {
+        echo 'Project Name or Check Name not set';
+        return; 
+    }
+    
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
 
     // check if sourceA and sourceB paths are in session data
-    if(!isset( $_SESSION["SourceAPath"]) ||
-    !isset( $_SESSION["SourceBPath"]) ||
-    !isset( $_POST["ConvertToSCS"]))
+    if(!isset( $_POST["ConvertToSCS"]))
     {
         echo "fail";
         return;
     }
-
-    $sourceADirectory =  $_SESSION["SourceAPath"];
-    $sourceBDirectory =  $_SESSION["SourceBPath"];
     $ConvertToSCS = $_POST["ConvertToSCS"];
 
     $errors = array();
@@ -31,23 +35,20 @@
     $studioPath = implode("/", $array);
     $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
-    $scriptParentDirectory = dirname ( __DIR__ );
-
     foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
     {
             $temp = $_FILES["dataSouresName"]["tmp_name"][$key];
             $name = $_FILES["dataSouresName"]["name"][$key];
-        
-        
+    
             if($_POST['viewerContainer'] == "viewerContainer1")
             {
-                $UploadFolder= $scriptParentDirectory."/".$sourceADirectory."/".$name;
-                //$UploadFolder=__DIR__."/scs/SourceA/".$name;	
+                $sourceADirectory =  getCheckSourceAPath($projectName, $checkName);
+                $UploadFolder= $sourceADirectory."/".$name;
             }
             if($_POST['viewerContainer'] == "viewerContainer2")
             {
-                $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$name;
-                //$UploadFolder=__DIR__."/scs/SourceB/".$name;
+                $sourceBDirectory =  getCheckSourceBPath($projectName, $checkName);
+                $UploadFolder= $sourceBDirectory."/".$name;
             }
         
         if(empty($temp))
@@ -74,31 +75,7 @@
 
 
     if($counter>0)
-    {
-        // if(count($errors)>0)
-        // {
-        //     // echo "<b>Errors:</b>";
-        //     // echo "<br/><ul>";
-        //     // foreach($errors as $error)
-        //     // {
-        //     //     echo "<li>".$error."</li>";
-        //     // }
-        //     // echo "</ul><br/>";
-        // }
-        
-        // if(count($uploadedFiles)>0){
-        //     // echo "<b>Uploaded Files:</b>";
-        //     // echo "<br/><ul>";
-        //     // foreach($uploadedFiles as $fileName)
-        //     // {
-        //     //     echo "<li>".$fileName."</li>";
-        //     // }
-        //     // echo "</ul><br/>";
-            
-        //     // echo count($uploadedFiles)." file(s) are successfully uploaded.";
-        // }    
-        
-        
+    {    
         echo 'Model Has Been Uploaded !';
         echo "<br>";
         
@@ -112,40 +89,23 @@
                 $ext = pathinfo($fileName, PATHINFO_EXTENSION);
                 if(in_array($ext, $validSources) == true)
                 {
-        
-                    if($_POST['viewerContainer'] == "viewerContainer1")
-                    {
-                        $UploadFolder=  $scriptParentDirectory."/".$sourceADirectory."/".$fileName;               
-                    }
-                    if($_POST['viewerContainer'] == "viewerContainer2")
-                    {
-                        $UploadFolder= $scriptParentDirectory."/".$sourceBDirectory."/".$fileName;               
-                    }
-        
-                    // $UploadFolder=__DIR__."/scs/".$fileName;		
                     $output_name=explode(".",$fileName);
-                    
+        
                     if($_POST['viewerContainer'] == "viewerContainer1")
                     {
-                        $output_file_path= $scriptParentDirectory."/".$sourceADirectory."/"."$output_name[0]";
+                        $sourceADirectory =  getCheckSourceAPath($projectName, $checkName);
+                        $UploadFolder= $sourceADirectory."/".$fileName;  
+                        $output_file_path= $sourceADirectory."/".$output_name[0];             
                     }
-                    if($_POST['viewerContainer'] == "viewerContainer2")
+                    else if($_POST['viewerContainer'] == "viewerContainer2")
                     {
-                        $output_file_path=$scriptParentDirectory."/".$sourceBDirectory."/"."$output_name[0]";
+                        $sourceBDirectory =  getCheckSourceBPath($projectName, $checkName);
+                        $UploadFolder= $sourceBDirectory."/".$fileName; 
+                        $output_file_path=$sourceBDirectory."/".$output_name[0];              
                     }
-        
-                    // $output_file_path=__DIR__."/scs/"."$output_name[0]";
                     
                     $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
-                    //echo "Command : ".$command;
-                    //print_r($command);
-                    //'$command';
-                    
                     exec($command, $output);
-                    //print_r($output);
-                    
-                    //`$launch_converter $dest $output_file_path`;
-                    // echo "<br>";
                     echo 'File Conversion Complete..You can load the model..';
         
                     break; 

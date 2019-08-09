@@ -3,7 +3,7 @@
 
 
 $projectName = $_POST['ProjectName'];
-
+$checkName = $_POST['CheckName'];
 $transposeType = $_POST['transposeType'];
 $transposeLevel = $_POST['transposeLevel'];
 
@@ -29,12 +29,13 @@ else if($transposeLevel == 'categorylevel') {
 function TransposeProperty() {
     $componentid = $_POST['componentid']; 
     global $projectName;
+    global $checkName;
     global $transposeType;
 
     $sourceAPropertyName = $_POST['sourceAPropertyName'];
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -107,6 +108,7 @@ function TransposeProperty() {
 function RestoreProperty() {
     $componentid = $_POST['componentid']; 
     global $projectName;
+    global $checkName;
     $transposeType = null;
     $originalstatus= "";
     $statusArray = array();
@@ -114,7 +116,7 @@ function RestoreProperty() {
     $sourceAPropertyName = $_POST['sourceAPropertyName'];
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -197,6 +199,7 @@ function RestoreProperty() {
 
 function TransposeComponentProperties() {
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     global $transposeType;
 
@@ -204,7 +207,7 @@ function TransposeComponentProperties() {
     try{
     
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $dontChangeOk = 'OK';
         $dbh->beginTransaction();
@@ -238,11 +241,12 @@ function TransposeComponentProperties() {
 function RestoreComponentLevelTranspose() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $transposeType = null;
 
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -290,10 +294,11 @@ function RestoreComponentLevelTranspose() {
 function RestoreCategoryLevelTranspose() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
     $transposeType = null;
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
@@ -370,10 +375,11 @@ function transposePropertiesCategoryLevel() {
     }
 
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
     global $transposeType;
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'OK(T)';

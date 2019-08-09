@@ -1,80 +1,85 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Check Studio</title>
-    <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/projectsPage.css">
-    <link rel="stylesheet" href="src/css/fonts.css">
-    <script type="text/javascript" src="src/scripts/userInfo.js"></script>
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\CreateProject.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProject.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\SessionManager.js"></script>
-    
-  </head>
-  <body>
-    <header>
-      <button type="button" class="dropDownMenu" >
-      </button>
-      <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
-      <div class="userInfo">
-        <p class="userName"> User Name </p>
-        <img id="userImg" src="public/notAUserImg.jpg" alt="">
-        <div class="programCntrls">
-          <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
-          <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
-          <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check Studio</title>
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/projectsPage.css">
+  <link rel="stylesheet" href="src/css/fonts.css">
+  <script type="text/javascript" src="src/scripts/userInfo.js"></script>
+  <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CreateProject.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProject.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SessionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <button type="button" class="dropDownMenu">
+    </button>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
+    <div class="userInfo">
+      <p class="userName"> User Name </p>
+      <img id="userImg" src="public/notAUserImg.jpg" alt="">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- My Projects -->
+  <div class="content">
+    <section id="myProjects" class="catagoryContainer">
+      <div class="horizContainer">
+        <img class="dropDownProjects" id="dropDownMyProj" src="public/symbols/chevronDN.svg" alt="">
+        <h1>My Projects</h1>
+        <div class="sortBy">
+          <label for="sortMyProjects">Sort By:</label>
+          <select name="sortMyProjects" onchange="controller.setSortBy(this.value);">
+            <option value="name" selected>Name A-Z</option>
+            <option value="nameReverse" selected>Name Z-A</option>
+            <option value="status">Status A-Z</option>
+            <option value="statusReverse">Status Z-A</option>
+            <option value="date">Date Oldest-Newest</option>
+            <option value="dateReverse">Date Newest-Oldest</option>
+          </select>
+        </div>
+      </div>
+      <div class="cardContainer" id="projects">
+        <div class="card newProjectCard">
+          <div class="projectName newCardCenter">
+            <h2>New Project</h2>
+          </div>
         </div>
       </div>
 
-    </header>
+    </section>
 
-<!-- My Projects -->
-    <div class="content">
-      <section id="myProjects" class="catagoryContainer">
-        <div class="horizContainer">
-          <img class="dropDownProjects" id="dropDownMyProj" src="public/symbols/chevronDN.svg" alt="">
-          <h1>My Projects</h1>
-          <div class="sortBy">
-            <label for="sortMyProjects">Sort By:</label>
-            <select name="sortMyProjects" onchange="controller.setSortBy(this.value);">
-              <option value="name" selected>Name A-Z</option>
-              <option value="nameReverse" selected>Name Z-A</option>
-              <option value="status">Status A-Z</option>
-              <option value="statusReverse">Status Z-A</option>
-              <option value="date">Date Oldest-Newest</option>
-              <option value="dateReverse">Date Newest-Oldest</option>
-            </select>
-          </div>
-        </div>
-        <div class="cardContainer" id="projects">
-          <div class="card newProjectCard">
-            <div class="projectName newCardCenter">
-              <h2>New Project</h2>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-<!-- Public Domain Projects -->
-      <section id="publicProjects" class="catagoryContainer">
-        <div class="horizContainer">
-          <img class="dropDownProjects" id="dropDownPublicProj" src="public/symbols/chevronDN.svg" alt="">
-          <h1>Public Projects</h1>
-        </div>
-        <div class="cardContainer" id="pubProjectsContainer">
-        </div>
-      </section>
+    <!-- Public Domain Projects -->
+    <section id="publicProjects" class="catagoryContainer">
+      <div class="horizContainer">
+        <img class="dropDownProjects" id="dropDownPublicProj" src="public/symbols/chevronDN.svg" alt="">
+        <h1>Public Projects</h1>
+      </div>
+      <div class="cardContainer" id="pubProjectsContainer">
+      </div>
+    </section>
 
 
     <!-- PROJECT OVERLAY -->
     <section id="checkSpaceOverlay" class="overlayBackground">
-      <div id = "checkSpace" class="projectOverlay">
+      <div id="checkSpace" class="projectOverlay">
         <div class="checkSpaceHeader">
-          <button id="checkReviewToggle" class="chkRevToggle" onclick="controller.setModule();" type="button" name="button"></button>
+          <button id="checkReviewToggle" class="chkRevToggle" onclick="controller.setModule();" type="button"
+            name="button"></button>
           <h1 id=checkSpaceProjectName></h1>
           <div class="checkSpaceButtons">
             <div class="sortBy">
@@ -88,7 +93,8 @@
                 <option value="dateReverse">Date Newest-Oldest</option>
               </select>
             </div>
-            <button id="refreshChecks" type="button" class="btnSymbol" name="refresh" onClick="checkView.renderChecks();">
+            <button id="refreshChecks" type="button" class="btnSymbol" name="refresh"
+              onClick="checkView.renderChecks();">
               <img src="public/symbols/refresh.svg" alt="">
             </button>
             <button id="editProjectFromCheck" type="button" class="btnSymbol" name="projectInfo">
@@ -102,14 +108,14 @@
         <div class="checkSpaceBody">
           <div id="projectOverlayProjectDescription" class="projectInfoBoxes projectDescription">
             <p>Project Description:<p>
-            <p class="smallScript" id="projectDescription"></p>
+                <p class="smallScript" id="projectDescription"></p>
           </div>
           <div id="checkCardContainer" class="checkCardContainer"></div>
         </div>
       </div>
     </section>
-  <!-- END CHECKSPACE OVERLAY -->
-  <!-- BEGINNING NEW PROJECT OVERLAY -->
+    <!-- END CHECKSPACE OVERLAY -->
+    <!-- BEGINNING NEW PROJECT OVERLAY -->
     <section id="newProject" class="projectOverlays">
       <div class="projectHeader">
         <h1>New Project</h1>
@@ -121,7 +127,8 @@
         <div class="projectInfo">
           <div class="projectCardAE">
             <div class="projectButtons">
-              <input id="favoriteProject" id="inputprojectisfavorite" class="starCheckBox" type="checkbox" name="favoriteProject" value="true"></input>
+              <input id="favoriteProject" id="inputprojectisfavorite" class="starCheckBox" type="checkbox"
+                name="favoriteProject" value="true"></input>
               <label for="favoriteProject" class="starCheckBoxLabel"></label>
             </div>
             <div class="projectName">
@@ -157,13 +164,13 @@
             </div>
           </div>
           <div class="checkCardTitle checkCardTitleNew">
-            <h2>New Check</h2>
+            <h2>Create</h2>
           </div>
         </div>
       </form>
     </section>
     <!-- END NEW PROJECT OVERLAY -->
-  <!-- BEGINNING NEW CHECK OVERLAY -->
+    <!-- BEGINNING NEW CHECK OVERLAY -->
     <section id="newCheck" class="projectOverlays">
       <div class="projectHeader">
         <h1>New CheckSpace</h1>
@@ -171,7 +178,7 @@
           <img src="public/symbols/closeWin.svg" alt="">
         </button>
       </div>
-      <form class="newProjectForm" action="index.html" method="post">
+      <form id="checkCaseform" class="newProjectForm" method="post">
         <div class="projectInfo">
           <div class="projectCardAE">
             <div class="topOfProjectCard"></div>
@@ -205,7 +212,8 @@
           <h2>Comments</h2>
           <textarea class="newComments" name="checkComments"></textarea>
         </div>
-        <div class="checkSpaceCard submitNewProject" onclick="this.parentNode.submit();">
+        <!--<div class="checkSpaceCard submitNewProject" onclick="this.parentNode.submit();">-->
+        <div class="checkSpaceCard submitNewProject" onClick="OnCreateNewCheckCase()">
           <div class="checkCardInfo checkCardInfoNew">
             <div class="plusBtn">
             </div>
@@ -385,64 +393,78 @@
     <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
     <script>
       function OnCreateProject() {
-          var projectname = document.getElementById("inputprojectname").value;
-          if (projectname === undefined || projectname === "") {
-             //Do something if user does not enter project name
-          }
-          var projectDescription = document.getElementById("inputprojectdescription").value;
-          if (projectDescription === undefined || projectDescription === "") {
-             //Do something if user does not enter project description
-          }
-          var projectComments = document.getElementById("inputprojectcomments").value;
-          if (projectComments === undefined || projectComments === "") {
-             //Do something if user does not enter project comments
-          }
-          
-          var projectType = document.getElementById("inputprojecttype").value;
-          if (projectType === undefined || projectType === "") {
-             //Do something if user does not enter project type
-          }
+        var projectname = document.getElementById("inputprojectname").value;
+        if (projectname === undefined || projectname === "") {
+          //Do something if user does not enter project name
+        }
+        var projectDescription = document.getElementById("inputprojectdescription").value;
+        if (projectDescription === undefined || projectDescription === "") {
+          //Do something if user does not enter project description
+        }
+        var projectComments = document.getElementById("inputprojectcomments").value;
+        if (projectComments === undefined || projectComments === "") {
+          //Do something if user does not enter project comments
+        }
 
-          var projectStatus = document.getElementById("inputprojectstatus").value;
-          if (projectStatus === undefined || projectStatus === "") {
-             //Do something if user does not enter project status
-          }
-          
-          var projectIsFavorite=1;
-          //Don't forget to implement Favorite option
-          /*var projectIsFavorite = document.getElementById("inputprojectisfavorite").value;
-          if (projectIsFavorite === undefined || projectIsFavorite === "") {
-             //Do something if user does not enter project type
-          }*/
+        var projectType = document.getElementById("inputprojecttype").value;
+        if (projectType === undefined || projectType === "") {
+          //Do something if user does not enter project type
+        }
+
+        var projectStatus = document.getElementById("inputprojectstatus").value;
+        if (projectStatus === undefined || projectStatus === "") {
+          //Do something if user does not enter project status
+        }
+
+        var projectIsFavorite = 1;
+        //Don't forget to implement Favorite option
+        /*var projectIsFavorite = document.getElementById("inputprojectisfavorite").value;
+        if (projectIsFavorite === undefined || projectIsFavorite === "") {
+           //Do something if user does not enter project type
+        }*/
+
+        //setProjectSessionData(projectname).then(function () {
+          // create project database
+          //createProject(projectname, descriptionText, functionText, projectScope);
           localStorage.setItem("loadSavedProject",false);
-          setProjectSessionData(projectname).then(function () {
-              // create project database
-              //createProject(projectname, descriptionText, functionText, projectScope);
-              createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
-          });
+          controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
+        //});
 
       }
 
       function setProjectSessionData(projectName) {
-          return new Promise((resolve) => {
-              $.ajax({
-                  data: {
-                      'InvokeFunction': 'CreateProjectSession',
-                      'projectName': projectName,
-                      'projectId': "",   // for now send the empty project ID, 
-                                         // later in  AddProjectToMainDB() overwrite it                       
-                      'loadProject' : 'FALSE',
-                      'sourceAPath' : "Projects/"+projectName+"/SourceA",
-                      'sourceBPath' : "Projects/"+projectName+"/SourceB"
-                  },
-                  type: "POST",
-                  url: "PHP/ProjectManager.php"
-              }).done(function (msg) {                    
-                  return resolve(true);
-              });
+        return new Promise((resolve) => {
+          $.ajax({
+            data: {
+              'InvokeFunction': 'CreateProjectSession',
+              'projectName': projectName,
+              'projectId': "",   // for now send the empty project ID, 
+              // later in  AddProjectToMainDB() overwrite it                       
+              'loadProject': 'FALSE',
+              'sourceAPath': "Projects/" + projectName + "/SourceA",
+              'sourceBPath': "Projects/" + projectName + "/SourceB"
+            },
+            type: "POST",
+            url: "PHP/ProjectManager.php"
+          }).done(function (msg) {
+            return resolve(true);
           });
+        });
       }
 
-  </script>
-  </body>
+      function OnCreateNewCheckCase() {
+        var queryString = $('#checkCaseform').serializeArray();
+        var checkspace = {};
+        for (var i in queryString) {
+          checkspace[queryString[i].name] = queryString[i].value;
+        }
+        checkspace["checkdate"] = xCheckStudio.Util.getCurrentDateTime();
+        checkspace["checkisfavourite"] = document.getElementById('favoriteCheck').value;
+        if (checkspace.checkName !== '') {
+            newCheckView.createNewCheck(checkspace);
+        }
+      }
+    </script>
+</body>
+
 </html>

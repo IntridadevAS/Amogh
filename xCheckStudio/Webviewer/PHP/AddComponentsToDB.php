@@ -1,9 +1,11 @@
 <?php
+    require_once 'Utility.php';
     include 'GenericComponent.php';
 
     if(!isset($_POST['Components']) ||
        !isset($_POST['Source']) ||
        !isset($_POST['DataSourceType']) ||
+       !isset($_POST['CheckName']) ||
        !isset($_POST['ProjectName']))
     {
         echo 'fail';
@@ -12,6 +14,7 @@
 
     // get project name
     $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
    
     $Components = json_decode($_POST['Components'],false);
     // var_dump($Components);
@@ -37,13 +40,14 @@
     function addComponentsToDB($ComponentsList)
     {
         global $projectName;
+        global $checkName;
         //global $SourceDataSheets;
 
         $dbh;
         try{
         
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             
             // create Components table
@@ -167,11 +171,12 @@
     function add1DComponentsToDB($ComponentsList)
     {      
         global $projectName;
+        global $checkName;
         $dbh;
         try{
         
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             
             // create Components table

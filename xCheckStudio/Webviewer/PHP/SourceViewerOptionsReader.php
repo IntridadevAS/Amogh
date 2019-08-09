@@ -2,7 +2,7 @@
 
     include 'Utility.php';      
 
-    if(!isset($_POST["ProjectName"]))
+    if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
     {
         echo "fail";
         return;
@@ -16,9 +16,9 @@
         function readViwerOptions()
         {
             $projectName = $_POST['ProjectName'];
-            
+            $checkName = $_POST['CheckName'];
             //global $DBPath ;
-            $DBPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $DBPath = getCheckDatabasePath($projectName, $checkName);
             try
             {                   
                 //$dbPath = "../Projects/".$projectName."/".$projectName.".db";

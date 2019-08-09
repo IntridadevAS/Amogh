@@ -77,14 +77,14 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
   }
   
   var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-  var object = JSON.parse(projectinfo);
-
+  var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
   $.ajax({
     data: { 
       'Components': JSON.stringify(this.SourceProperties),
       'Source': source,
       'DataSourceType': '1D',
-      'ProjectName': object.projectname
+      'ProjectName': projectinfo.projectname,
+      'CheckName': checkinfo.checkname
     },
     type: "POST",
     url: "PHP/AddComponentsToDB.php"

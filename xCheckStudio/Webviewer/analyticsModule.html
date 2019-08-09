@@ -434,13 +434,14 @@
             window.onload = function () {            
             // read data source info
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var object = JSON.parse(projectinfo);
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
             $.ajax({
                 url: 'PHP/DataSourceInfoReader.php',
                 type: "POST",
                 async: true,
                 data: {
-                    'ProjectName': object.projectname
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname
                 },
                 success: function (msg) 
                 {                   
@@ -481,14 +482,15 @@
             });
 
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var object = JSON.parse(projectinfo);
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
             // read check case info
             $.ajax({
                 url: 'PHP/CheckCaseinfoReader.php',
                 type: "POST",
                 async: true,
                 data: {
-                    'ProjectName': object.projectname
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname
                 },
                 success: function (msg) {
                     if (msg !== "fail") {
@@ -514,13 +516,14 @@
             // read check results data
             // read  check data
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var object = JSON.parse(projectinfo);
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
             $.ajax({
                     url: 'PHP/CheckResultsReader.php',
                     type: "POST",
                     async: true,
                     data: {
-                        'ProjectName': object.projectname
+                        'ProjectName': projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
                     },
                     success: function (msg) 
                     {

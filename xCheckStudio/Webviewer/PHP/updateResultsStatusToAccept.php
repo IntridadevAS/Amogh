@@ -1,12 +1,12 @@
 <?php
-if(!isset($_POST['tabletoupdate']) || !isset($_POST['ProjectName']))
+if(!isset($_POST['tabletoupdate']) || !isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
 {
  echo 'fail';
  return;
 }
 
 $projectName = $_POST['ProjectName'];
-
+$checkName = $_POST['CheckName'];
 $tabletoupdate = $_POST['tabletoupdate'];
 
 switch ($tabletoupdate) {
@@ -88,6 +88,7 @@ switch ($tabletoupdate) {
 
 function updateComponentComparisonStatusInReview() {
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
  //global $SourceDataSheets;
 
@@ -95,7 +96,7 @@ function updateComponentComparisonStatusInReview() {
     try{
     
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'true';
         $dontChangeOk = 'OK';
@@ -138,10 +139,11 @@ function updatePropertyComparisonStatusInReview() {
     }
 
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $sourceAPropertyName = $_POST['sourceAPropertyName'];
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
@@ -223,9 +225,10 @@ function updateCategoryComparisonStatusInReview() {
     }
 
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'ACCEPTED';
@@ -260,6 +263,7 @@ function updateCategoryComparisonStatusInReview() {
 
 function updateComponentComplianceStatusInReview() {
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     global $tabletoupdate;
  //global $SourceDataSheets;
@@ -268,7 +272,7 @@ function updateComponentComplianceStatusInReview() {
     try{
     
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'true';
         $dontChangeOk = 'OK';
@@ -303,6 +307,7 @@ function updateComponentComplianceStatusInReview() {
 
 function updatePropertyComplianceStatusInReview() {
     global $projectName;
+    global $checkName;
     global $tabletoupdate;
     $componentid = $_POST['componentid']; 
 
@@ -311,7 +316,7 @@ function updatePropertyComplianceStatusInReview() {
     else 
         return;
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
@@ -381,10 +386,11 @@ function updateCategoryComplianceStatusInReview() {
     }
 
     global $projectName;
+    global $checkName;
     global $tabletoupdate;
     $groupid = $_POST['groupid'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'ACCEPTED';
@@ -430,8 +436,8 @@ function updateCategoryComplianceStatusInReview() {
 
 function updateStatusOfAllComparisonCategories() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'ACCEPTED';
@@ -452,8 +458,8 @@ function updateStatusOfAllComparisonCategories() {
 
 function updateStatusOfAllComplianceACategories() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
@@ -473,8 +479,8 @@ function updateStatusOfAllComplianceACategories() {
 
 function updateStatusOfAllComplianceBCategories() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
@@ -494,8 +500,8 @@ function updateStatusOfAllComplianceBCategories() {
 
 function updateStatusOfAllComparisonCategoriesToOriginal() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'false';
@@ -529,8 +535,8 @@ function updateStatusOfAllComparisonCategoriesToOriginal() {
 
 function updateStatusOfAllComplianceACategoriesToOriginal() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'false';
@@ -564,8 +570,8 @@ function updateStatusOfAllComplianceACategoriesToOriginal() {
 
 function updateStatusOfAllComplianceBCategoriesToOriginal() {
     global $projectName;
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    global $checkName;
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'false';
@@ -601,10 +607,11 @@ function updateStatusOfAllComplianceBCategoriesToOriginal() {
 function rejectAcceptStatusComparisonComponent() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
 
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -652,6 +659,7 @@ function rejectAcceptStatusComparisonComponent() {
 function rejectAcceptStatusComparisonProperty() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $sourceAPropertyName = $_POST['sourceAPropertyName'];
     $sourceBPropertyName = $_POST['sourceBPropertyName'];
@@ -659,7 +667,7 @@ function rejectAcceptStatusComparisonProperty() {
     $originalstatus;
     $acceptedStatus = 'false';
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
 
@@ -744,9 +752,10 @@ function rejectAcceptStatusComparisonProperty() {
 function rejectAcceptStatusComparisonCategory() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
@@ -822,10 +831,9 @@ function rejectAcceptStatusComparisonCategory() {
 function rejectAcceptStatusComplianceAComponent() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
-
-
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -874,13 +882,14 @@ function rejectAcceptStatusComplianceAComponent() {
 function rejectAcceptStatusComplianceAProperty() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $sourcePropertyName = $_POST['sourcePropertyName'];
     $toBecompstatus = " ";
     $originalstatus;
     $acceptedStatus = 'false';
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
 
@@ -954,9 +963,10 @@ function rejectAcceptStatusComplianceAProperty() {
 function rejectAcceptStatusComplianceACategory() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
@@ -1047,10 +1057,11 @@ function rejectAcceptStatusComplianceACategory() {
 function rejectAcceptStatusComplianceBComponent() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
 
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $dbh->beginTransaction();
@@ -1099,13 +1110,14 @@ function rejectAcceptStatusComplianceBComponent() {
 function rejectAcceptStatusComplianceBProperty() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $sourcePropertyName = $_POST['sourcePropertyName'];
     $toBecompstatus = " ";
     $originalstatus;
     $acceptedStatus = 'false';
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
 
@@ -1178,9 +1190,10 @@ function rejectAcceptStatusComplianceBProperty() {
 function rejectAcceptStatusComplianceBCategory() {
     $statusArray = array();
     global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
-    $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+    $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';

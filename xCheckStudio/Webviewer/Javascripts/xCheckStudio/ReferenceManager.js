@@ -71,7 +71,7 @@ var ReferenceManager = function (selectedComponentRow) {
 
         // get already existing referemce data
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var object = JSON.parse(projectinfo);
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         $.ajax({
             url: 'PHP/GetReference.php',
             type: "POST",
@@ -79,7 +79,8 @@ var ReferenceManager = function (selectedComponentRow) {
             data: {
                 'ReferenceTable': referenceTable,
                 'Component': checkComponentId,
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -211,8 +212,7 @@ var ReferenceManager = function (selectedComponentRow) {
         }
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var object = JSON.parse(projectinfo);
-
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         // add reference
         $.ajax({
             url: 'PHP/AddReference.php',
@@ -223,7 +223,8 @@ var ReferenceManager = function (selectedComponentRow) {
                 'TypeofReference': "WebAddress",
                 'Component': checkComponentId,
                 'referenceData': webAddressString,
-                'ProjectName': object.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {
@@ -372,14 +373,14 @@ var ReferenceManager = function (selectedComponentRow) {
             _this.CloseAddRefernceDocumentOverlay();
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var projectInfoObject = JSON.parse(projectinfo);
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var formData = new FormData(document.getElementById("UploadReferenceDocForm"));
         formData.append('ReferenceDataDir', referenceDataDir);
         formData.append('ReferenceTable', referenceTable);
         formData.append('Component', checkComponentId);
         formData.append('TypeofReference', "Document");
-        formData.append('ProjectName', projectInfoObject.projectname)
-    
+        formData.append('ProjectName', projectinfo.projectname);
+        formData.append('CheckName', checkinfo.checkname);
         xhr.send(formData);
     }
 
@@ -465,13 +466,14 @@ var ReferenceManager = function (selectedComponentRow) {
             _this.CloseAddReferncePictureOverlay();
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var projectInfoObject = JSON.parse(projectinfo);
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var formData = new FormData(document.getElementById("UploadReferencePicForm"));
         formData.append('ReferenceDataDir', referenceDataDir);
         formData.append('ReferenceTable', referenceTable);
         formData.append('Component', checkComponentId);
         formData.append('TypeofReference', "Picture");
-        formData.append('ProjectName', projectInfoObject.projectname)
+        formData.append('ProjectName', projectinfo.projectname);
+        formData.append('CheckName', checkinfo.checkname);
         xhr.send(formData);
     }
 
@@ -490,14 +492,12 @@ var ReferenceManager = function (selectedComponentRow) {
 
     ReferenceManager.prototype.OnDocumentReferenceSelected = function (item) {
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var projectInfoObject = JSON.parse(projectinfo);
-        window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);
+        window.open("Projects/" + projectinfo.projectname + "/" + item.innerText);
     }
 
     ReferenceManager.prototype.OnPictureReferenceSelected = function (item) {
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var projectInfoObject = JSON.parse(projectinfo);
-        window.open("Projects/" + projectInfoObject.projectname + "/" + item.innerText);
+        window.open("Projects/" + projectinfo.projectname + "/" + item.innerText);
     }
 
     ReferenceManager.prototype.Highlight = function (item) {

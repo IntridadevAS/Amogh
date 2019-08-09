@@ -1,20 +1,22 @@
 <?php
-    if(!isset($_POST['Source']) || !isset($_POST['ProjectName']))
+    require_once 'Utility.php';
+    if(!isset($_POST['Source']) || !isset($_POST['ProjectName']) || !isset($_POST['CheckName']))
     {
         echo 'fail';
         return;
     }
     
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     removeComponentsFromDB();
 
     function removeComponentsFromDB()
     {
         global $projectName;
+        global $checkName;
         $dbh;
         try{
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             $source = $_POST['Source']; 
             $dbh->beginTransaction();

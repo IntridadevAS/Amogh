@@ -5,9 +5,8 @@ function setUserName() {
 
 function setProjectName() {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var projectInfoObject = JSON.parse(projectinfo);
     var powerplantdiv = document.getElementById("powerplant");
-    powerplant.innerHTML = projectInfoObject.projectname;
+    powerplant.innerHTML = projectinfo.projectname;
 }
 
 
@@ -92,7 +91,7 @@ function createNewProject(projectname, projectDescription, projectType, projectS
                 var object = JSON.parse(msg);
                 if (object.projectid !== -1){
                     localStorage.setItem('projectinfo', JSON.stringify(msg));
-                    window.location.href = "checkModule.html";
+                    //CreateNewCheckCase();
                 }
             });
         }
@@ -102,5 +101,6 @@ function createNewProject(projectname, projectDescription, projectType, projectS
 
     });
 }
+
 
 

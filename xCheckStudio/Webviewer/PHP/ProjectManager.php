@@ -1,4 +1,5 @@
 <?php
+    require_once 'Utility.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
     switch ($InvokeFunction) {
@@ -74,7 +75,7 @@ function CreateProjectDBonSaveInCheckModule()
     try
     {   
 
-        $dbPath = "../Projects/".$projectName."/".$projectName.".db";     
+        $dbPath = getProjectDatabasePath($projectName);
         if(file_exists ($dbPath ))
         { 
             unlink($dbPath);
@@ -97,9 +98,9 @@ function SaveComponentsToCheckSpaceDB()
 {
        // get project name
        $projectName = $_POST['ProjectName'];	
-
-       $dbPath = "../Projects/".$projectName."/".$projectName.".db";       
-       $tempDBPath = "../Projects/".$projectName."/".$projectName."_temp.db";       
+       $checkName = $_POST['CheckName'];
+       $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+       $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
        if(!file_exists ($dbPath ) || 
           !file_exists ($tempDBPath ))
        { 
@@ -263,9 +264,9 @@ function SaveNotSelectedComponents()
         $notSelectedComponentsTable = $_POST['notSelectedComponentsTable'];       
 
         $projectName = $_POST['ProjectName'];
-
+        $checkName = $_POST['CheckName'];
         // get not selected components
-        $components = getSourceComponents($projectName, $componentsTable);
+        $components = getSourceComponents($projectName, $checkName, $componentsTable);
         if($components === NULL)
         {
             echo 'fail';
@@ -292,17 +293,17 @@ function SaveNotSelectedComponents()
 
         writeNotCheckedComponentsToDB($notCheckedComponents, 
                                       $notSelectedComponentsTable, 
-                                      $projectName);
+                                      $projectName, $checkName);
 }
 
 function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
                                         $tableName,
-                                        $projectName)
+                                        $projectName, $checkName)
 {        
         try
         {   
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";            
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);           
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -382,13 +383,13 @@ function isComponentSelected($component, $SelectedComponents){
 } 
 
  // get source components
- function getSourceComponents($projectName, $componentsTable)
+ function getSourceComponents($projectName, $checkName, $componentsTable)
  {           
      $components = array();        
 
      try{   
              // open database
-             $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+             $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
              $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
              // begin the transaction
@@ -436,12 +437,12 @@ function SaveCheckResultsToCheckSpaceDB()
 {
        // get project name
        $projectName = $_POST['ProjectName'];
+       $checkName = $_POST['CheckName'];
        $dbh;
         try
             {        
                 // open database
-                //$tempDbPath = "../Projects/".$projectName."/CheckResults_temp.db";
-                $tempDbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $tempDbPath = getCheckDatabasePath($projectName, $checkName);
                 if(!file_exists ( $tempDbPath ))
                 {
                     echo 'fail';
@@ -450,7 +451,7 @@ function SaveCheckResultsToCheckSpaceDB()
 
                 $tempDbh = new PDO("sqlite:$tempDbPath") or die("cannot open the database");
 
-                $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+                $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
                 if(!file_exists ($dbPath ))
                 { 
                     // create temporary project database          
@@ -1305,12 +1306,12 @@ function SaveSelectedComponents()
         $selectedComponents = json_decode($_POST['selectedComponents'], true);
 
         $projectName = $_POST['ProjectName'];
-
+        $checkName = $_POST['CheckName'];
         $dbh;
         try
             {        
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+                $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -1408,12 +1409,13 @@ function SaveDatasourceInfo()
         } 
 
         $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
 
      $dbh;
      try
      {        
          // open database
-         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
          $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
          
          // begin the transaction
@@ -1469,12 +1471,12 @@ function SaveCheckModuleControlsState()
     }
 
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     $dbh;
      try
      {        
          // open database
-         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
          $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
          
          // begin the transaction
@@ -1529,12 +1531,13 @@ function SaveCheckCaseData()
     $checkCaseData =  $_POST['CheckCaseManager'];   
 
     $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
                 
     $dbh;
     try
     {        
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                     
         // begin the transaction
@@ -1577,11 +1580,12 @@ function DeleteComparisonResults()
 {
     // get project name
     $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $dbh;
     try
     {    
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
         // begin the transaction
@@ -1627,12 +1631,12 @@ function DeleteComparisonResults()
 function DeleteSourceAComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     $dbh;
     try
     {    
         // open database
-        $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
         // begin the transaction
@@ -1679,7 +1683,7 @@ function DeleteSourceBComplianceResults()
      try
      {    
          // open database
-         $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
          $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
  
          // begin the transaction
@@ -1716,12 +1720,12 @@ function DeleteSourceBComplianceResults()
 function ReadCheckModuleControlsState()
 {
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     $dbh;
         try
         {        
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction
@@ -1766,12 +1770,12 @@ function ReadSelectedComponents()
     $source = $_POST['source'];
 
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     $dbh;
         try
         {        
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction
@@ -1978,24 +1982,11 @@ function IsLoadProject()
 function CreateProject()
 {
     $projectName = trim($_POST["projectName"], " ");
-   // $description = trim($_POST["description"], " ");
-   // $function = trim($_POST["function"], " ");
-
     if($projectName == "")
     {
         echo "Project Name cannot be empty";
         return;
     }
-    // if($description == "")
-    // {
-    //     echo "Project description cannot be empty";
-    //     return;
-    // }
-    // if($function == "")
-    // {
-    //     echo "Project function cannot be empty";
-    //     return;
-    // }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         $query =  "select projectname from Projects where projectname='". $projectName."' COLLATE NOCASE;";      
@@ -2023,17 +2014,7 @@ function CreateProject()
         if(mkdir($path, 0777, true))
         {
             // create project database           
-            //$database = new SQLite3($path."/".$projectName.".db");	
-            $database = new SQLite3($path."/".$projectName."_temp.db");	
-            
-            // create SourceA and SourceB directories
-            mkdir($path."/SourceA", 0777, true);
-            mkdir($path."/SourceB", 0777, true);
-            
-            // set session variables for sourceA and sourceB directory paths relative to index.html
-            session_start();
-            $_SESSION['SourceAPath']= "Projects/".$projectName."/SourceA";             
-            $_SESSION['SourceBPath']= "Projects/".$projectName."/SourceB";
+            $database = new SQLite3($path."/Project.db");	
         }
     }              	
     echo "success";
@@ -2056,6 +2037,7 @@ function AddNewProjectToMainDB()
     $projectStatus = trim($_POST["projectStatus"], " ");  
     $projectComments = trim($_POST["projectComments"], " "); 
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+    $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");   
     
 
     try{
@@ -2063,11 +2045,13 @@ function AddNewProjectToMainDB()
         // projectname is text column
         // userid is integer column
         // path is text column
-        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status) VALUES (?,?,?,?,?,?,?,?)';
+        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status,createddate) VALUES (?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
-        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus));     
+        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate));     
         $_SESSION['ProjectId'] = $dbh->lastInsertId();
-        $array = array(
+        $insertedId = $dbh->lastInsertId();
+        if($insertedId !=0 && $insertedId !=-1){
+            $array = array(
             "projectid" => $dbh->lastInsertId(),
             "projectname" => $projectName,
             "type" => $projectType,
@@ -2076,20 +2060,18 @@ function AddNewProjectToMainDB()
             "description" => $projectDescription,
             "path" => $path,
             "status" => $projectStatus,
-        );
+            "createddate" => $projectCreatedDate,
+            );
          echo json_encode($array);
-         $dbh = null; //This is how you close a PDO connection
-        return;      
-        /*
-        // get project id for recently added row and write it into session variable
-        $qry = 'SELECT projectid FROM Projects where rowid='.$dbh->lastInsertId();
-        $stmt =  $dbh->query($qry);       
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
-        {
-            $_SESSION['ProjectId'] = $row['projectid'];
-            break;                    
         }
-        */ 
+        else{
+            $array = array(
+                "projectid" => -1,
+            );
+            echo json_encode($array);
+        }
+        $dbh = null; //This is how you close a PDO connection
+        return;      
     }
     catch(Exception $e) {
         //echo 'Message: ' .$e->getMessage();
@@ -2109,6 +2091,7 @@ function AddNewProjectToMainDB()
 function DeleteProject()
 {
     $projectid = trim($_POST["projectid"], " ");
+    $projectname = trim($_POST["projectname"], " ");
     if($projectid == "")
     {
         echo "Project Id cannot be empty";

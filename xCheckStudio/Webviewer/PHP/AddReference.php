@@ -1,9 +1,11 @@
 <?php
+    require_once 'Utility.php';
 
     if(!isset($_POST['ReferenceTable']) ||
        !isset($_POST['TypeofReference'])||
        !isset($_POST['Component'])||
        !isset($_POST['ProjectName']) ||
+       !isset($_POST['CheckName']) ||
        !isset($_POST['referenceData']))
     {
         echo 'fail';
@@ -12,7 +14,7 @@
         
     // get project name
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     AddReference($projectName);
     function AddReference($projectName)
     {
@@ -24,7 +26,7 @@
             $referenceData =$_POST['referenceData'];
 
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction

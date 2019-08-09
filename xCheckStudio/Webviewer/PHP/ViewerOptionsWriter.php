@@ -4,6 +4,7 @@
 
     if(!isset($_POST['SourceViewerOptions'] ) ||
        !isset($_POST['ProjectName']) ||
+       !isset($_POST['CheckName']) ||
        !isset($_POST['SourceViewerOptionsTable'] ))
     {
         echo 'fails';
@@ -11,7 +12,7 @@
     }  
        
     $projectName = $_POST['ProjectName'];
-
+    $checkName = $_POST['CheckName'];
     $SourceViewerOptions = json_decode($_POST['SourceViewerOptions'],true);
     $SourceViewerOptionsTable = $_POST['SourceViewerOptionsTable'];
       
@@ -20,12 +21,12 @@
     function writeSourceViewerOptions($viewerOptionsTable, $viewerOptions)
     {
         global $projectName;
-
+        global $checkName;
         try
         {   
             // open database
             //$dbPath = getProjectDatabasePath($projectName);
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");       
  
             // begin the transaction
