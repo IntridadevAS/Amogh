@@ -20,12 +20,7 @@ ModelBrowserContextMenuManager.prototype.Init = function (modelBrowser) {
       $("#" + this.ModelBrowser.ModelBrowserContainer).contextMenu({
             className: 'contextMenu_style',
             selector: '.jsgrid-row, .jsgrid-alt-row',
-            build: function ($triggerElement, e) {
-                  //var selectedRow = $triggerElement;
-                  // var accept = true;
-                  // accept = chooseAction(selectedRow);
-                  // var conditionalName = (accept) ? 'Accept' : 'Unaccept';
-                  // highlightSelectedRowOnRightClick(selectedRow);
+            build: function ($triggerElement, e) {                  
                   return {
                         callback: function (key, options) {
                               _this.OnMenuItemClicked(key, options);
