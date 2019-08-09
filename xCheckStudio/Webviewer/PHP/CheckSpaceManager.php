@@ -31,42 +31,70 @@ function CreateCheckSpace()
     $CheckComments = $obj['checkComments'];
     $CheckIsFavourite = $obj['checkisfavourite'];
     $CheckCreateDate = $obj['checkdate'];
-    try
+    if (CheckIfCheckSpaceExists($projectName , $CheckName) == false)
     {
-        $dbPath = getProjectDatabasePath($projectName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        if( CreateCheckSpaceSchemaIfNot($dbh) == true)
+        try
         {
-            $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid) VALUES (?,?,?,?,?,?,?,?,?)';
-            $stmt = $dbh->prepare($query);
-            $stmt->execute(array( $CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId));     
-            $array = array(
-            "checkid" => $dbh->lastInsertId(),
-            "checkname" => $CheckName,
-            "checkstatus" => $CheckStatus,
-            "checkconfiguration" => $CheckConfiguration,
-            "checkdescription" => $CheckDescription,
-            "checkcomments" => $CheckComments,
-            "checkisfavourite" => $CheckIsFavourite,
-            "checkdate" => $CheckCreateDate,
-            "projectid" => $ProjectId,
-            "userid" => $UserId
-            );
-         echo json_encode($array);
-         $dbh = null; //This is how you close a PDO connection
-         mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
-         mkdir(getCheckSourceAPath($projectName, $CheckName), 0777, true);
-         mkdir(getCheckSourceBPath($projectName, $CheckName), 0777, true);
-         $database = new SQLite3(getCheckDatabasePath($projectName, $CheckName));	
-        return;      
+            $dbPath = getProjectDatabasePath($projectName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+            if( CreateCheckSpaceSchemaIfNot($dbh) == true)
+            {
+                $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid) VALUES (?,?,?,?,?,?,?,?,?)';
+                $stmt = $dbh->prepare($query);
+                $stmt->execute(array( $CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId));     
+                $array = array(
+                "checkid" => $dbh->lastInsertId(),
+                "checkname" => $CheckName,
+                "checkstatus" => $CheckStatus,
+                "checkconfiguration" => $CheckConfiguration,
+                "checkdescription" => $CheckDescription,
+                "checkcomments" => $CheckComments,
+                "checkisfavourite" => $CheckIsFavourite,
+                "checkdate" => $CheckCreateDate,
+                "projectid" => $ProjectId,
+                "userid" => $UserId
+                );
+                echo json_encode($array);
+                $dbh = null; //This is how you close a PDO connection
+                mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
+                mkdir(getCheckSourceAPath($projectName, $CheckName), 0777, true);
+                mkdir(getCheckSourceBPath($projectName, $CheckName), 0777, true);
+                $database = new SQLite3(getCheckDatabasePath($projectName, $CheckName));	     
+            }
         }
-        echo "Success";
+        catch(Exception $e) 
+        {    
+            $array = array(
+                "checkid" => -1,
+                );    
+            echo json_encode($array);
+            return;
+        }
+    }
+    else{
+        $array = array(
+            "checkid" => 0,
+            );    
+        echo json_encode($array);
         return;
     }
-    catch(Exception $e) 
-    {        
-        echo "Fail "; 
-        return;
+}
+
+function CheckIfCheckSpaceExists($projectName, $checkName){
+    $dbh = new PDO("sqlite:".getProjectDatabasePath($projectName)) or die("cannot open the database");
+    $query =  "select checkname from CheckSpace where checkname='". $checkName."' COLLATE NOCASE;";      
+    $count=0;
+    foreach ($dbh->query($query) as $row)
+    {
+        $count = $count+1;
+        break;
+    }
+    $dbh = null;
+    if ($count != 0){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 
