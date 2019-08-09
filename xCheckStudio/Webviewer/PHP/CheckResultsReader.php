@@ -333,13 +333,13 @@
                                     
                                         
                                     if($propertyRow['transpose'] == 'lefttoright') {
-                                        $sourceBValue = $sourceAValue;
+                                        // $sourceBValue = $sourceAValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'OK(A)')
                                             $componentValues['status'] = 'OK(A)(T)';
                                     }
                                     else if($propertyRow['transpose'] == 'righttoleft') {
-                                        $sourceAValue = $sourceBValue;
+                                        // $sourceAValue = $sourceBValue;
                                         $changedStatus = 'OK(T)';
                                         if($componentValues['status'] == 'OK(A)')
                                             $componentValues['status'] = 'OK(A)(T)';

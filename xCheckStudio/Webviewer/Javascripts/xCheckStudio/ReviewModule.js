@@ -34,174 +34,6 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
-function highlightSelectedRowOnRightClick(selectedRow) {
-    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-    if(typeOfRow == "ComparisonMainReviewTbody") { 
-        comparisonReviewManager.SelectedComponentRow = selectedRow[0];
-        comparisonReviewManager.ChangeBackgroundColor(selectedRow[0]);
-    }
-    else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-        sourceAComplianceReviewManager.SelectedComponentRow = selectedRow[0];
-        sourceAComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
-    }
-    else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-        sourceBComplianceReviewManager.SelectedComponentRow = selectedRow[0];
-        sourceBComplianceReviewManager.ChangeBackgroundColor(selectedRow[0]);
-    }
-}
-
-// function chooseAction(selectedRow) {
-//     if(selectedRow[0].nodeName == "BUTTON") { 
-//         var typeOfRow = selectedRow[0].offsetParent.id;
-//         var groupId = selectedRow[0].attributes[0].value;
-//         if(typeOfRow == "ComparisonMainReviewTbody" || 
-//            typeOfRow == "ComparisonDetailedReviewTbody") { 
-//             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
-//               comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
-//                 return false;
-//             } else { return true; }
-//         }
-//         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") { 
-//             if(sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
-//                 return false;
-//             }else { return true; }
-//         }
-//         else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-//             if(sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED') {
-//                 return false;
-//             }else { return true; }
-//         }
-//     }
-//     else {
-//         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-//         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") {
-//             if(selectedRow[0].cells[ComparisonColumns.Status].innerHTML == "OK(A)" || selectedRow[0].cells[4].innerHTML == "ACCEPTED" ||
-//             selectedRow[0].cells[ComparisonColumns.Status].innerHTML == 'OK(A)(T)') {
-//                 return false;
-//             }else { return true; }
-//         }
-//         else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-//         typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-//             if(selectedRow[0].cells[1].innerHTML == "OK(A)" || selectedRow[0].cells[2].innerHTML == "ACCEPTED") {
-//                 return false;
-//             } else { return true; }
-//         }   
-//     }                       
-// }
-
-// function chooseRestoreTranspose(selectedRow) {
-//     if(selectedRow[0].nodeName == "BUTTON") { 
-//         var typeOfRow = selectedRow[0].offsetParent.id;
-//         var groupId = selectedRow[0].attributes[0].value;
-//         if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-//             if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
-//                 return false;
-//             } else { return true; }
-//         }
-//     }
-//     else {
-//         var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-//         if(typeOfRow == "ComparisonMainReviewTbody") {
-//             var componentId = selectedRow[0].cells[5].innerHTML;
-//             var groupId = selectedRow[0].cells[6].innerHTML;
-//             var component = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId]["CheckComponents"][componentId]
-//             if(selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)' && selectedRow[0].cells[2].innerHTML == 'ACCEPTED(T)') {
-//                 return true;
-//             }
-//             else if(component.transpose !== null || selectedRow[0].cells[2].innerHTML == 'OK(A)(T)' ) {
-//                 return false;
-//             }else { return true; }
-//         }
-//         else if(typeOfRow == "ComparisonDetailedReviewTbody") {
-//             if(selectedRow[0].cells[4].innerHTML.includes('(T)')) {
-//                 return false;
-//             }
-//             else {
-//                 return true;
-//             }
-//         }
-//     }
-// }
-
-function onUnAcceptClick(rowClicked) {
-    var selectedRow = rowClicked;
-    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-    if(rowClicked[0].nodeName == "BUTTON") {
-        typeOfRow = selectedRow[0].offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody") {
-           comparisonReviewManager.unAcceptCategory(rowClicked[0], comparisonReviewManager);
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-            sourceAComplianceReviewManager.unAcceptCategory(rowClicked[0], sourceAComplianceReviewManager);
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-            sourceBComplianceReviewManager.unAcceptCategory(rowClicked[0], sourceBComplianceReviewManager);
-        }  
-    }
-    else {
-        if (typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.UnAcceptComponent(selectedRow);
-        }
-        else if (typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.UnAcceptProperty(selectedRow);
-        }
-
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") {
-            sourceAComplianceReviewManager.unAcceptStatus(selectedRow, sourceAComplianceReviewManager);
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            sourceBComplianceReviewManager.unAcceptStatus(selectedRow, sourceBComplianceReviewManager);
-        }                             
-    }      
-}
-
-function disableContextMenuAccept(_this) {
-    var selectedRow = _this;
-                                    
-    if(selectedRow[0].nodeName == "BUTTON") { 
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        var groupId = selectedRow[0].attributes[0].value;
-        if(typeOfRow == "ComparisonMainReviewTbody" || typeOfRow == "ComparisonDetailedReviewTbody") { 
-            if(comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
-            comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') {
-                return true;
-            }
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody") { 
-            if(sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
-            sourceAComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') {
-                return true;
-            }
-        }
-        else if(typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            if(sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].categoryStatus == 'OK' ||
-            sourceBComplianceReviewManager.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass == 'Undefined') {
-                return true;
-            }
-        }
-    }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if(typeOfRow == "ComparisonMainReviewTbody" || 
-           typeOfRow == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML == "OK" || selectedRow[0].cells[4].innerHTML == "OK" || 
-            selectedRow[0].cells[2].innerHTML == "OK(T)" || selectedRow[0].cells[4].innerHTML == "OK(T)" ||
-            selectedRow[0].cells[2].innerHTML == "undefined" || selectedRow[0].cells[4].innerHTML == "undefined") {
-                return true;
-            }
-        }
-        else if(typeOfRow == "SourceAComplianceMainReviewTbody" || typeOfRow == "ComplianceADetailedReviewTbody" || 
-        typeOfRow == "SourceBComplianceMainReviewTbody" || typeOfRow == "ComplianceBDetailedReviewTbody") {
-            if(selectedRow[0].cells[1].innerHTML == "OK" || selectedRow[0].cells[2].innerHTML == "OK" ||
-            selectedRow[0].cells[1].innerHTML == "undefined" || selectedRow[0].cells[2].innerHTML == "undefined") {
-                return true;
-            }
-        }   
-    }
-}
-
-
-
 function acceptAllCategories() {
     var tab = this.currentlyOpenedTab;
     if (this.currentlyOpenedTab == "ComparisonTabPage") {
@@ -363,9 +195,6 @@ function loadSourceAComplianceData(complianceCheckGroups,
 
     // populate review table
     sourceAComplianceReviewManager.populateReviewTable();
-    if (comparisonReviewManager !== undefined)
-        comparisonReviewManager.complianceA = sourceAComplianceReviewManager;
-
 }
 
 function loadSourceBComplianceData(complianceCheckGroups,
@@ -383,9 +212,7 @@ function loadSourceBComplianceData(complianceCheckGroups,
 
 
     // populate review table
-    sourceBComplianceReviewManager.populateReviewTable();
-    if (comparisonReviewManager !== undefined)
-        comparisonReviewManager.complianceB = sourceBComplianceReviewManager;
+    sourceBComplianceReviewManager.populateReviewTable(); 
 
 }
 
@@ -453,6 +280,6 @@ function onReferenceClick(selectedRow) {
     referenceManager.ShowReferenceDiv();
 }
 
-function toggleDropdown() {
+function toggleReferenceDropdown() {
     document.getElementById("newReferenceDropdown").classList.toggle("show");
 }

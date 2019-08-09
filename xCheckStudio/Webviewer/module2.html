@@ -33,8 +33,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>    
     <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <!-- <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> -->
@@ -58,6 +57,13 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>   
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>   
     
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewSelectionManager.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonSelectionManager.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComplianceSelectionManager.js"></script>   
+
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonContextMenuManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComplianceContextMenuManager.js"></script>
     <script type="text/javascript">
         // Load the Visualization API and the corechart package.
         google.charts.load('current', { 'packages': ['corechart'] });   
@@ -248,7 +254,7 @@
                 <tr>
                     <td width="10%" height="100%" style="vertical-align:top">
                         <div class="dropdown">
-                            <button onclick="toggleDropdown()" class="dropbtn">New Reference</button>
+                            <button onclick="toggleReferenceDropdown()" class="dropbtn">New Reference</button>
                             <div id="newReferenceDropdown" class="dropdown-content">
                                 <a href="#webAddress" id="addWebAddressBtn">Web Address</a>
                                 <a href="#document" id="addDocumentBtn">Document</a>
@@ -1024,8 +1030,8 @@
                         comparisonReviewManager.unhighlightSelectedSheetRow(comparisonReviewManager.checkStatusArrayB,
                             comparisonReviewManager.SelectedComponentRowFromSheetB);
                     }
-                    if (comparisonReviewManager.SelectedComponentRow) {
-                        comparisonReviewManager.RestoreBackgroundColor(comparisonReviewManager.SelectedComponentRow);
+                    if (comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+                        comparisonReviewManager.SelectionManager.RestoreBackgroundColor(comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
                 }
             }
@@ -1061,7 +1067,7 @@
                             sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
                     }
                     if (sourceAComplianceReviewManager.SelectedComponentRow) {
-                        sourceAComplianceReviewManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                        sourceAComplianceReviewManager.SelectionManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
                     }
                 }
             }
@@ -1097,7 +1103,7 @@
                             sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
                     }
                     if (sourceBComplianceReviewManager.SelectedComponentRow) {
-                        sourceBComplianceReviewManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                        sourceBComplianceReviewManager.SelectionManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
                     }
                 }
             }
