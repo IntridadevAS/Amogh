@@ -2104,8 +2104,9 @@ function DeleteProject()
         $stmt->execute();
         echo $stmt->rowCount();
         $dbh = null;
+        deleteFolder(getProjectDirectoryPath($projectname));
         return;
-        }
+    }
     catch(Exception $e) {
         echo 'Message: ' .$e->getMessage();
         return;
