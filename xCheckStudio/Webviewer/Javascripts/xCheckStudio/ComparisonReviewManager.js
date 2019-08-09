@@ -51,6 +51,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
     ComparisonReviewManager.prototype.populateReviewTable = function () 
     {
 
@@ -844,54 +845,22 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     };
 
-    ComparisonReviewManager.prototype.updateStatus = function(selectedRow, _this) {
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") {
-            if(selectedRow[0].cells[2].innerHTML !== "OK") {
-                var componentId = selectedRow[0].cells[5].innerHTML;
-                var groupId = selectedRow[0].cells[6].innerHTML;
-               
-                try{
-                    $.ajax({
-                        url: 'PHP/updateResultsStatusToAccept.php',
-                        type: "POST",
-                        async: true,
-                        data: {'componentid' : componentId, 'tabletoupdate': "comparison", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
-                        success: function (msg) {
-                            var cell = 0;
-                            for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                                selectedRow[0].cells[cell].style.backgroundColor = "rgb(203, 242, 135)";
-                            }
-                            var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
-                            component.status = "OK(A)";
-                            for (var propertyId in component.properties) {
-                                property = component.properties[propertyId];
-                                if(property.Severity !== "OK" && property.Severity !== "No Value") {
-                                    if(property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
-                                        component.properties[propertyId].Severity = 'ACCEPTED';
-                                        component.status = "OK(A)(T)";
-                                        component.properties[propertyId].transpose = property.transpose;
-                                    }
-                                    else if(property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
-                                        component.properties[propertyId].Severity = 'ACCEPTED';
-                                        component.status = "OK(A)(T)";
-                                        component.properties[propertyId].transpose = property.transpose;
-                                    }
-                                    else {
-                                        component.properties[propertyId].Severity = 'ACCEPTED';
-                                    }
-                                }
-                            }
-                            _this.SelectedComponentRow.cells[2].innerText = component.status;
-                            _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
-                        }
-                    });   
-                }
-                catch(error) {}        
-                // $("#ComparisonDetailedReviewCell").empty();
-            }
-        }
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            if(selectedRow[0].cells[4].innerHTML !== "OK" && selectedRow[0].cells[4].innerHTML !== "ACCEPTED" &&  _this.SelectedComponentRow.cells[2].innerHTML !== 'OK') {
+
+    ComparisonReviewManager.prototype.GetComparisonResultId = function(selectedRow) {
+        return selectedRow.cells[ComparisonColumns.ResultId].innerHTML;
+    }
+    
+    ComparisonReviewManager.prototype.GetComparisonResultGroupId = function(selectedRow) {
+        return selectedRow.cells[ComparisonColumns.GroupId].innerHTML;
+    }
+
+    ComparisonReviewManager.prototype.updateStatusForProperty = function(selectedRow) {
+        var _this = this;
+        // if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
+            // if(selectedRow[0].cells[4].innerHTML !== "OK" && 
+            //   selectedRow[0].cells[4].innerHTML !== "ACCEPTED" &&  
+            //   _this.SelectedComponentRow.cells[2].innerHTML !== 'OK') 
+            // {
                 selectedRow[0].cells[4].innerHTML = "ACCEPTED";
                 var cell = 0;
                 for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
@@ -1035,7 +1004,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         data: {
                             'ProjectName': projectinfo.projectname,
                             'CheckName': checkinfo.checkname
-                        },
+                            },
                         success: function (msg) {
                             $("#ComparisonMainReviewCell").empty();
                             $("#ComparisonDetailedReviewCell").empty();
@@ -1139,24 +1108,38 @@ function ComparisonReviewManager(comparisonCheckManager,
             console.log(error);}  
     }
 
-    ComparisonReviewManager.prototype.unAcceptStatus = function(selectedRow, _this) {
-        if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonMainReviewTbody") { 
-            var componentId = selectedRow[0].cells[5].innerHTML;
-            var groupId = selectedRow[0].cells[6].innerHTML;
-            try{
-                $.ajax({
-                    url: 'PHP/updateResultsStatusToAccept.php',
-                    type: "POST",
-                    dataType: 'JSON',
-                    async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
-                    success: function (msg) {
-                        var status = new Array();
-                        status = msg;
-                        var properties = status[1];
-                        var cell = 0;
-                        for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
-                            selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+    ComparisonReviewManager.prototype.UnAcceptComponent = function(selectedRow) {
+        
+        var componentId = this.GetComparisonResultId(selectedRow[0]);
+        var groupId = this.GetComparisonResultGroupId(selectedRow[0]); 
+
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                dataType: 'JSON',
+                async: true,
+                data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var properties = status[1];
+                    var cell = 0;
+                    for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
+                        selectedRow[0].cells[cell].style.backgroundColor = _this.getRowHighlightColor(status[0]);
+                    }
+                    var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                    component.status = status[0];
+                    if(component.transpose != null) {
+                        if(!status[0].includes("(T)")) 
+                            component.status = status[0] + "(T)";
+                    }
+                    var index = 0;
+                    for(var propertyId in properties) {
+                        property = properties[propertyId];
+                        if(property.transpose == 'lefttoright' && property.severity !== 'No Value') {
+                            component.properties[index].Severity = 'OK(T)';
+                            component.properties[index].transpose = property.transpose;
                         }
                         else if(property.transpose == 'righttoleft' && property.severity !== 'No Value') {
                             component.properties[index].Severity = 'OK(T)';
@@ -1172,33 +1155,42 @@ function ComparisonReviewManager(comparisonCheckManager,
                 }
             });   
         }
-        else if(selectedRow[0].offsetParent.offsetParent.offsetParent.id == "ComparisonDetailedReviewTbody") {
-            var componentId = this.SelectedComponentRow.cells[5].innerHTML;
-            var groupId = this.SelectedComponentRow.cells[6].innerHTML;
-            try{
-                $.ajax({
-                    url: 'PHP/updateResultsStatusToAccept.php',
-                    type: "POST",
-                    async: true,
-                    dataType: 'JSON',
-                    data: {'componentid' : componentId, 'tabletoupdate': "rejectPropertyFromComparisonTab", 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
-                    success: function (msg) {
-                        var status = new Array();
-                        status = msg;
-                        var changedStatus = status[0];
-                        _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
-                                      
-                        var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
-                        for(var i = 0; i < propertiesLen; i++) {
-                            var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
-                            if(sourceAName == null) { sourceAName = ""; }
-                            var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
-                            if(sourceBName == null) { sourceBName = ""; }
+        catch(error) {} 
+    }
 
-                            if(sourceAName == selectedRow[0].cells[0].innerText && sourceBName == selectedRow[0].cells[3].innerText) {
-                                _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
-                            }
-                           
+    ComparisonReviewManager.prototype.UnAcceptProperty = function(selectedRow) {
+
+        var componentId = this.GetComparisonResultId(this.SelectedComponentRow);
+        var groupId = this.GetComparisonResultGroupId(this.SelectedComponentRow);       
+        
+        try{
+            $.ajax({
+                url: 'PHP/updateResultsStatusToAccept.php',
+                type: "POST",
+                async: true,
+                dataType: 'JSON',
+                data: {'componentid' : componentId, 
+                       'tabletoupdate': "rejectPropertyFromComparisonTab", 
+                       'sourceAPropertyName': selectedRow[0].cells[ComparisonPropertyColumns.SourceAName].innerText, 
+                       'sourceBPropertyName': selectedRow[0].cells[ComparisonPropertyColumns.SourceBName].innerText, 
+                       'ProjectName' : projectInfoObject.projectname,
+                       'CheckName': checkinfo.checkname },
+                success: function (msg) {
+                    var status = new Array();
+                    status = msg;
+                    var changedStatus = status[0];
+                    _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["Status"] = changedStatus;
+                                  
+                    var propertiesLen = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"].length;
+                    for(var i = 0; i < propertiesLen; i++) {
+                        var sourceAName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceAName"];
+                        if(sourceAName == null) { sourceAName = ""; }
+                        var sourceBName = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["SourceBName"];
+                        if(sourceBName == null) { sourceBName = ""; }
+
+                        if(sourceAName == selectedRow[0].cells[ComparisonPropertyColumns.SourceAName].innerText && 
+                           sourceBName == selectedRow[0].cells[ComparisonPropertyColumns.SourceBName].innerText) {
+                            _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId]["properties"][i]["Severity"] = status[1];
                         }
                        
                     }
@@ -1535,7 +1527,13 @@ function ComparisonReviewManager(comparisonCheckManager,
                 type: "POST",
                 async: true,
                 dataType : 'JSON',
-                data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
+                data: {'componentid' : componentId, 
+                       'transposeType' : transposeType, 
+                       'sourceAPropertyName': sourceAPropertyName, 
+                       'sourceBPropertyName': sourceBPropertyName, 
+                       'transposeLevel' : 'propertyLevel', 
+                       'ProjectName' : projectinfo.projectname,
+                       'CheckName': checkinfo.checkname },
                 success: function (msg) {
                     var status = new Array();
                     status = msg;
