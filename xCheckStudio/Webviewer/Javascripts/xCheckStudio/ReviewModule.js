@@ -216,12 +216,14 @@ function populateCheckResults(comparisonCheckGroups,
         return;
     }
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     $.ajax({
         url: 'PHP/SourceViewerOptionsReader.php',
         type: "POST",
         async: true,
         data: {
-            'ProjectName': projectinfo.projectname
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
         },
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
@@ -266,7 +268,8 @@ function populateCheckResults(comparisonCheckGroups,
                     async: false,
                     data: {
                         'Source': "SourceB",
-                        'ProjectName': projectinfo.projectname
+                        'ProjectName': projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
@@ -393,6 +396,7 @@ function onSaveProject(event) {
     // var busySpinner = document.getElementById("divLoading");
     // busySpinner.className = 'show';
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     try {
 
         $.ajax({
@@ -402,7 +406,8 @@ function onSaveProject(event) {
             data:
             {
                 'InvokeFunction': "SaveCheckResultsToCheckSpaceDB",
-                'ProjectName': projectinfo.projectname
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
             },
             success: function (msg) {
                 alert("Saved check results.");

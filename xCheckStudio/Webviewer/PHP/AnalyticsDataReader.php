@@ -1,6 +1,6 @@
 <?php
-    
-    if(!isset($_POST['CheckType']) || !isset($_POST['ProjectName']) )
+    require_once 'Utility.php';
+    if(!isset($_POST['CheckType']) || !isset($_POST['CheckName']) || !isset($_POST['ProjectName']) )
     {
         echo 'fail';
         return;
@@ -8,7 +8,7 @@
 
      // get project name
      $projectName = $_POST['ProjectName'];
-
+     $checkName = $_POST['CheckName'];
 
     $values =readAnalyticsData();    
     if($values != 'fail')
@@ -78,6 +78,7 @@
         }
       
         global $projectName;
+        global $checkName;
         //$dbh;
         try
         {  
@@ -96,23 +97,10 @@
             }           
 
             // open database
-            $mainDbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $mainDbPath = getCheckDatabasePath($projectName, $checkName);
             $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
             // begin the transaction
             $mainDbh->beginTransaction(); 
-          
-        //    $dbh = NULL;
-        //    if(!$loadProject)
-        //    {
-        //         $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
-        //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        //         // begin the transaction          
-        //         $dbh->beginTransaction();            
-        //    }
-        //    else
-        //    {
-        //         $dbh = $mainDbh;
-        //    }
 
             // get ok components count
             $okCount = 0;

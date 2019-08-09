@@ -10,6 +10,7 @@ function CheckCaseManager() {
     CheckCaseManager.prototype.readCheckCaseData = function (fileName) {
         var _this = this;
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/readCheckCaseXml.php", true);
         xhr.onload = function (data) {           
@@ -20,7 +21,8 @@ function CheckCaseManager() {
                 data: {
                     'InvokeFunction': "SaveCheckCaseData",
                     "CheckCaseManager": JSON.stringify(_this),
-                    "ProjectName": projectinfo.projectname
+                    "ProjectName": projectinfo.projectname,
+                    "CheckName": checkinfo.checkname
                 },
                 async: false,
                 type: "POST",

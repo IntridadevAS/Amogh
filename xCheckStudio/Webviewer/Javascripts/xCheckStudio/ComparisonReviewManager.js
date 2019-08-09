@@ -50,6 +50,7 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SourceBViewerCurrentSheetLoaded = undefined;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     ComparisonReviewManager.prototype.populateReviewTable = function () 
     {
 
@@ -854,7 +855,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         url: 'PHP/updateResultsStatusToAccept.php',
                         type: "POST",
                         async: true,
-                        data: {'componentid' : componentId, 'tabletoupdate': "comparison", 'ProjectName' : projectinfo.projectname },
+                        data: {'componentid' : componentId, 'tabletoupdate': "comparison", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                         success: function (msg) {
                             var cell = 0;
                             for(cell = 0; cell < selectedRow[0].cells.length; cell++) {
@@ -907,7 +908,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         type: "POST",
                         async: true,
                         data: {'componentid' : componentId, 'tabletoupdate': "comparisonDetailed", 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText,
-                        'ProjectName' : projectinfo.projectname },
+                        'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                         success: function (msg) {
                             var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
                             var changedStatus = originalstatus;
@@ -1023,15 +1024,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'tabletoupdate': tabletoupdate, 'ProjectName' : projectinfo.projectname},
+                data: {'tabletoupdate': tabletoupdate, 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname},
                 success: function (msg) {
                     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
                     $.ajax({
                         url: 'PHP/CheckResultsReader.php',
                         type: "POST",
                         async: true,
                         data: {
-                            'ProjectName': projectinfo.projectname
+                            'ProjectName': projectinfo.projectname,
+                            'CheckName': checkinfo.checkname
                         },
                         success: function (msg) {
                             $("#ComparisonMainReviewCell").empty();
@@ -1093,7 +1096,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 url: 'PHP/updateResultsStatusToAccept.php',
                 type: "POST",
                 async: true,
-                data: {'groupid' : groupId, 'tabletoupdate': "category", 'ProjectName' : projectinfo.projectname},
+                data: {'groupid' : groupId, 'tabletoupdate': "category", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname},
                 success: function (msg) {
                     for(var i = 0; i < noOfComponents; i++) {
                         if(categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
@@ -1146,7 +1149,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     type: "POST",
                     dataType: 'JSON',
                     async: true,
-                    data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab", 'ProjectName' : projectinfo.projectname },
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectComponentFromComparisonTab", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
@@ -1178,7 +1181,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     type: "POST",
                     async: true,
                     dataType: 'JSON',
-                    data: {'componentid' : componentId, 'tabletoupdate': "rejectPropertyFromComparisonTab", 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'ProjectName' : projectinfo.projectname },
+                    data: {'componentid' : componentId, 'tabletoupdate': "rejectPropertyFromComparisonTab", 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
@@ -1308,7 +1311,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 type: "POST",
                 async: true,
                 dataType: 'JSON',
-                data: {'groupid' : groupId, 'tabletoupdate': "rejectCategoryFromComparisonTab", 'ProjectName' : projectinfo.projectname},
+                data: {'groupid' : groupId, 'tabletoupdate': "rejectCategoryFromComparisonTab", 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname},
                 success: function (msg) {
                     var status = new Array();
                     status = msg;
@@ -1422,7 +1425,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     url: 'PHP/TransposeProperties.php',
                     type: "POST",
                     async: true,
-                    data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel', 'ProjectName' : projectinfo.projectname },
+                    data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                     success: function (msg) {
                         var originalstatus = _this.SelectedComponentRow.cells[2].innerHTML;
                         var changedStatus = originalstatus;
@@ -1532,7 +1535,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 type: "POST",
                 async: true,
                 dataType : 'JSON',
-                data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel', 'ProjectName' : projectinfo.projectname },
+                data: {'componentid' : componentId, 'transposeType' : transposeType, 'sourceAPropertyName': selectedRow[0].cells[0].innerText, 'sourceBPropertyName': selectedRow[0].cells[3].innerText, 'transposeLevel' : 'propertyLevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                 success: function (msg) {
                     var status = new Array();
                     status = msg;
@@ -1572,7 +1575,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                     type: "POST",
                     dataType: 'JSON',
                     async: true,
-                    data: {'componentid' : componentId, 'transposeType' : 'restoreComponent', 'transposeLevel' : 'componentLevel', 'ProjectName' : projectinfo.projectname  },
+                    data: {'componentid' : componentId, 'transposeType' : 'restoreComponent', 'transposeLevel' : 'componentLevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname  },
                     success: function (msg) {
                         var status = new Array();
                         status = msg;
@@ -1615,7 +1618,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                         url: 'PHP/TransposeProperties.php',
                         type: "POST",
                         async: true,
-                        data: {'componentid' : componentId, 'transposeType' : transposeType, 'transposeLevel' : 'componentLevel', 'ProjectName' : projectinfo.projectname },
+                        data: {'componentid' : componentId, 'transposeType' : transposeType, 'transposeLevel' : 'componentLevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname },
                         success: function (msg) {
                             var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                             component.transpose = transposeType;
@@ -1667,7 +1670,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 type: "POST",
                 async: true,
                 dataType: 'JSON',
-                data: {'groupid' : groupId, 'transposeType' : 'restoreCategory', 'transposeLevel' : 'categorylevel', 'ProjectName' : projectinfo.projectname},
+                data: {'groupid' : groupId, 'transposeType' : 'restoreCategory', 'transposeLevel' : 'categorylevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname},
                 success: function (msg) {
                     var status = new Array();
                     status = msg;
@@ -1731,7 +1734,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 url: 'PHP/TransposeProperties.php',
                 type: "POST",
                 async: true,
-                data: {'groupid' : groupId, 'transposeType' : transposeType, 'transposeLevel' : 'categorylevel', 'ProjectName' : projectinfo.projectname},
+                data: {'groupid' : groupId, 'transposeType' : transposeType, 'transposeLevel' : 'categorylevel', 'ProjectName' : projectinfo.projectname, 'CheckName': checkinfo.checkname},
                 success: function (msg) {
                    
                     var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];

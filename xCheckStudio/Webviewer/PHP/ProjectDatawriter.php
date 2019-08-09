@@ -1,24 +1,16 @@
 <?php
 
     include 'Utility.php';       
-
-    // if(!isset($_POST['SourceANodeIdvsComponentIdList']) ||       
-    //    !isset($_POST["SourceASelectedComponents"]) ||      
-    //    !isset($_POST["SourceAFileName"]))
-    //    {
-    //        echo 'fail at 9';
-    //        return;
-    //    }
-    if(!isset($_POST["ProjectName"]))
+    if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
     {
         echo "fail";
         return;
     }
         $projectName = $_POST['ProjectName'];
-
+        $checkName = $_POST['CheckName'];
        // save checkmodele control states
-       writeCheckModuleControlsState($projectName);
-       function writeCheckModuleControlsState($projectName)
+       writeCheckModuleControlsState($projectName, $checkName);
+       function writeCheckModuleControlsState($projectName, $checkName)
        {
            if(!isset($_POST["comparisonSwithOn"]) ||
            !isset($_POST["sourceAComplianceSwitchOn"]) ||
@@ -35,7 +27,7 @@
             {        
                 // open database
                 //$dbPath = getProjectDatabasePath($projectName);
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -76,8 +68,8 @@
        }
 
        // write Source A file name, source B file name
-       writeDatasourceInfo($projectName);
-       function writeDatasourceInfo($projectName)
+       writeDatasourceInfo($projectName, $checkName);
+       function writeDatasourceInfo($projectName, $checkName)
        {
         
             $sourceAName  = NULL;
@@ -112,7 +104,7 @@
             {        
                 // open database
                 //$dbPath = getProjectDatabasePath($projectName);
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -160,14 +152,14 @@
         $SourceANodeIdvsComponentIdList =  json_decode($_POST['SourceANodeIdvsComponentIdList'],true);      
         
             // write source a selected components
-            writeSelectedComponents($projectName, 
+            writeSelectedComponents($projectName, $checkName,
                                     'SourceASelectedComponents', 
                                     $SourceASelectedComponents, 
                                     $SourceANodeIdvsComponentIdList );
             
             
             // write source A not selected components
-            writeNotSelectedComponents($projectName,
+            writeNotSelectedComponents($projectName, $checkName,
                                         $SourceASelectedComponents,
                                         "SourceANotSelectedComponents",
                                         "SourceAComponents" );
@@ -180,19 +172,19 @@
             $SourceBNodeIdvsComponentIdList =  json_decode($_POST['SourceBNodeIdvsComponentIdList'],true);  
 
             // write source b selected components
-            writeSelectedComponents($projectName, 
+            writeSelectedComponents($projectName, $checkName,
                                 'SourceBSelectedComponents', 
                                 $SourceBSelectedComponents, 
                                 $SourceBNodeIdvsComponentIdList);
 
             // write source b not selected components
-            writeNotSelectedComponents($projectName,
+            writeNotSelectedComponents($projectName, $checkName,
                                        $SourceBSelectedComponents,
                                        "SourceBNotSelectedComponents",
                                        "SourceBComponents");
         }
 
-        function writeSelectedComponents($projectName, 
+        function writeSelectedComponents($projectName, $checkName,
                                         $selectedComponentsTable, 
                                         $SelectedComponents, 
                                         $nodeIdvsComponentIdList)
@@ -202,7 +194,7 @@
             {        
                 // open database
                 //$dbPath = getProjectDatabasePath($projectName);
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
                 
                 // begin the transaction
@@ -265,13 +257,13 @@
         }
 
 
-    function writeNotSelectedComponents($projectName,
+    function writeNotSelectedComponents($projectName, $checkName,
                                             $selectedComponents,
                                             $notSelectedComponentsTable,
                                             $componentsTable)
     {          
 
-            $components = getSourceComponents($projectName, $componentsTable);
+            $components = getSourceComponents($projectName, $checkName, $componentsTable);
             if($components === NULL)
             {               
                 return 'fail';
@@ -298,19 +290,20 @@
            
             writeNotCheckedComponentsToDB($notCheckedComponents, 
                                           $notSelectedComponentsTable, 
-                                          $projectName);
+                                          $projectName,
+                                          $checkName);
         }
 
         
     function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
                                            $tableName,
-                                           $projectName)
+                                           $projectName,
+                                           $checkName)
     {        
         try
         {   
             // open database
-            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";            
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
             // begin the transaction
@@ -364,14 +357,13 @@
     }
 
     // get source components
- function getSourceComponents($projectName, $componentsTable)
+ function getSourceComponents($projectName, $checkName,  $componentsTable)
  {           
      $components = array();        
 
      try{   
              // open database
-             //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
-             $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+             $dbPath = getCheckDatabasePath($projectName, $checkName);
              $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
              // begin the transaction

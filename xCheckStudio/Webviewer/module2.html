@@ -782,13 +782,15 @@
             // set user name
             setUserName();
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
             // read  check data
             $.ajax({
                 url: 'PHP/CheckResultsReader.php',
                 type: "POST",
                 async: true,
                 data: {
-                    'ProjectName': projectinfo.projectname
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname
                 },
                 success: function (msg) {
                     var checkResults = JSON.parse(msg);

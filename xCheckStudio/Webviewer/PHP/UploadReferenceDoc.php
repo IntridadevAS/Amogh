@@ -1,9 +1,10 @@
 <?php
-
+    require_once 'Utility.php';
     if(!isset($_POST['ReferenceDataDir']) ||
        !isset( $_POST['ReferenceTable']) ||
        !isset( $_POST['Component']) ||
        !isset($_POST['ProjectName']) ||
+       !isset($_POST['CheckName']) ||
        !isset( $_POST['TypeofReference']))
     {
         echo 'fail';
@@ -11,7 +12,7 @@
     }
   
     $projectName = $_POST['ProjectName'];
-    
+    $checkName = $_POST['CheckName'];
     $supportedFiles = array("pdf","PDF","txt","TXT", "xml", "XML","jpg", "JPG", "jpeg", "JPEG", "jpe", "JPE", "bmp", "BMP", "gif", "GIF", "tif", "TIF", "png", "PNG");
 
     $ext = pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION);
@@ -22,7 +23,7 @@
     }    
 
     $webViewerDirectory = dirname ( __DIR__ );
-    $target_dir = $webViewerDirectory."/Projects/".$projectName."/".$_POST['ReferenceDataDir'];
+    $target_dir = $webViewerDirectory."/Projects/".$projectName."/".$checkName."/".$_POST['ReferenceDataDir'];
 
     // create target directory if not exists
     if (!file_exists($target_dir)) {
@@ -41,7 +42,7 @@
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) 
     {
         $dataToSave = $_POST['ReferenceDataDir']."/".basename($target_file);
-        if(AddDocumentReference($projectName, $dataToSave))
+        if(AddDocumentReference($projectName, $checkName, $dataToSave))
         {
             echo $dataToSave;
         }
@@ -56,7 +57,7 @@
     }
 
    
-    function AddDocumentReference($projectName, 
+    function AddDocumentReference($projectName, $checkName, 
                                   $referenceData)
     {
         $dbh;
@@ -66,7 +67,7 @@
             $typeofReference = $_POST['TypeofReference'];
 
             // open database
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction

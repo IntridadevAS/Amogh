@@ -1,13 +1,13 @@
 <?php
         include 'Utility.php';       
-        if(!isset($_POST['ProjectName']))
+        if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
         {
             echo 'fail';
             return;
         }
         
         $projectName = $_POST['ProjectName'];
-
+        $checkName = $_POST['CheckName'];
         // $sourceAComponents = array();
         // $sourceBComponents = array();
         $sourceAComparisonComponentsHierarchy = array();
@@ -25,7 +25,6 @@
                                                            'SourceBComplianceCheckProperties');
 
         $data = readDataSourceInfo();
-
         
        // getSourceComponents();
 
@@ -91,11 +90,11 @@
                                          $CheckPropertiesTable)
         {
             global $projectName;           
-          
+            global $checkName;
             try
             {   
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";              
+                $dbPath = getCheckDatabasePath($projectName, $checkName);         
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction
@@ -126,36 +125,12 @@
         function readComparisonCheckData()
         {
             global $projectName;
+            global $checkName;
             
-            // //session_start();
-            // if(!isset($_SESSION['LoadProject'] ))
-            // {
-            //    echo "fail";
-            //    return NULL;                
-            // }
-            // $loadProject = $_SESSION['LoadProject'];
-
-            // $dbPath = NULL;
-            // if(strtolower($loadProject) === 'true')
-            // {
-            //     $dbPath = getProjectDatabasePath($projectName);   
-            // }
-            // else if(strtolower($loadProject) === 'false')
-            // {                
-            //     $dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
-            // }
-            // else
-            // {
-            //     echo "fail";
-            //     return NULL;    
-            // }
-
             try
             {   
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
-                //$dbPath = getProjectDatabasePath($projectName);
-                //$dbPath = "../Projects/".$projectName."/CheckResults_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction
@@ -448,19 +423,20 @@
 
         function readDataSourceInfo() {      
             global $projectName;
-
+            global $checkName;
             $dbh;
             try
             {        
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
+
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
                 // begin the transaction
                 $dbh->beginTransaction();
                 
                 $results = $dbh->query("SELECT *FROM  DatasourceInfo;");     
-
+                
                 $data = array();
                 while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
                 {
@@ -489,8 +465,8 @@
             global $sourceBComparisonComponentsHierarchy;
             global $comparisonResult;
             global $projectName;
-            
-            $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";
+            global $checkName;
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             $dbh->beginTransaction();           
@@ -612,7 +588,7 @@
         {            
             //global $sourceAComplianceComponentsHierarchy;
             global $projectName;            
-
+            global $checkName;
             if($complianceResult === NULL)
             { 
                 return;
@@ -621,7 +597,7 @@
             try
             {   
                 // open database
-                $dbPath = "../Projects/".$projectName."/".$projectName."_temp.db";               
+                $dbPath = getCheckDatabasePath($projectName, $checkName);            
                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
    
                 // begin the transaction
@@ -667,7 +643,7 @@
                                                     $isSourceA)
         {
             global $projectName;
-
+            global $checkName;
             if($nodeId == null)
             {
                 return NULL;
