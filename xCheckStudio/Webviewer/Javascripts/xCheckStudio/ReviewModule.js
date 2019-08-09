@@ -9,6 +9,31 @@ function setProjectName() {
     powerplant.innerHTML = projectinfo.projectname;
 }
 
+function executeContextMenuClicked(key, options, _this) {
+    if (key === "menuItem") {
+        if(options.items[key].name == "Accept") {
+            onAcceptClick(_this); 
+        }
+        else {
+            onUnAcceptClick(_this); 
+        }
+    }
+    if (key === "menuItem2") {
+        if(options.items[key].name == "Restore") {
+            onRestoreTranspose(_this);
+        }
+    }
+    else if (key === "lefttoright" || key === "righttoleft") {
+        onTransposeClick(key, _this);
+        
+    }
+    else if (key === "freeze") {
+    }
+    else if (key === "reference") {
+        onReferenceClick(_this);
+    }
+}
+
 function highlightSelectedRowOnRightClick(selectedRow) {
     var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
     if(typeOfRow == "ComparisonMainReviewTbody") { 
