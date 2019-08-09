@@ -237,8 +237,8 @@ let controller = {
     model.projectReviews = [];
   },
 
-// TODO: Prototech, insert fetch URL to match server
-  fetchProjectReviews: function(projID){
+  // TODO: Prototech, insert fetch URL to match server
+  fetchProjectReviews: function (projID) {
     // fetch(`../tests/reviews${projID}.json`)
     //     .then(response => response.json())
     //     .then(data => model.projectReviews = data)
@@ -297,21 +297,21 @@ let controller = {
     })
       .then(deleteItems.closeDeleteItems())
       .then(this.fetchProjects());*/
-      var currentProj = controller.getCurrentProj();
-      $.ajax({
-        data: {
-          'InvokeFunction': 'DeleteProject',
-          'projectname': currentProj.projectname,
-          'projectid': currentProj.projectid,
-        },
-        type: "POST",
-        url: "PHP/ProjectManager.php"
-      }).done(function (msg) {
-        if (msg !== 0) {
-          deleteItems.closeDeleteItems();
-          controller.fetchProjects();
-        }
-      });
+    var currentProj = controller.getCurrentProj();
+    $.ajax({
+      data: {
+        'InvokeFunction': 'DeleteProject',
+        'projectname': currentProj.projectname,
+        'projectid': currentProj.projectid,
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      if (msg !== 0) {
+        deleteItems.closeDeleteItems();
+        controller.fetchProjects();
+      }
+    });
   },
 
   // TODO: Prototech, insert fetch URL to match server
@@ -545,7 +545,7 @@ let checkView = {
     subject.classList.add("hovered");
   },
 
-  checkClicked: function(subject){
+  checkClicked: function (subject) {
     var proj = model.currentProject;
     localStorage.setItem('projectinfo', JSON.stringify(proj));
     controller.setCurrentCheck(subject.id);
@@ -696,7 +696,13 @@ let newCheckView = {
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
       var object = JSON.parse(msg);
-      if (object.checkid !== -1) {
+      if (object.checkid === 0) {
+        alert('Check Space with provided name already exists');
+      }
+      else if (object.checkid === -1) {
+        alert('Failed to create check space');
+      }
+      else{
         controller.fetchProjectChecks(controller.getCurrentProj().projectid);
         newCheckView.closeNewCheck();
       }
@@ -826,12 +832,12 @@ let deleteItems = {
     deleteBtn.onclick = this.deleteItem;
 
     let obj = model.myProjects.find(obj => obj.projectid == id);
-      if(obj === undefined){
-        controller.setPublicCurrentProj(id);
-      }
-      else{
-        controller.setMyCurrentProj(id);
-      }
+    if (obj === undefined) {
+      controller.setPublicCurrentProj(id);
+    }
+    else {
+      controller.setMyCurrentProj(id);
+    }
 
     if (type == "project") {
       message.innerHTML = "Project and all associated Checks and Reviews?";
