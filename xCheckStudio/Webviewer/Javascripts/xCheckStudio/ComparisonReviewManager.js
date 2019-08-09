@@ -373,10 +373,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
 
         return undefined;
-    }
-
-    ComparisonReviewManager.prototype.GetCurrentSheetInViewer = function (viewerContainer) {
-    }
+    }    
 
     ComparisonReviewManager.prototype.LoadSelectedSheetDataInViewer = function (viewerContainer, 
                                                                                 sheetName, 
