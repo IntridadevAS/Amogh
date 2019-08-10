@@ -53,4 +53,8 @@
         }
         return rmdir($dir);
     }
+
+    function CopyFile($soureFilePath, $destinationFilePath){
+        return copy($soureFilePath, $destinationFilePath);
+    }
 ?>

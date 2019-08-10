@@ -63,7 +63,7 @@ let controller = {
     model.currentProject = obj;
 
   },
-  
+
   setPublicCurrentProj: function (projID) {
     let obj = model.publicProjects.find(obj => obj.projectid == projID);
     model.currentProject = obj;
@@ -76,6 +76,7 @@ let controller = {
   },
 
   editReview: function (reviewID) {
+    event.stopPropagation();
     this.setCurrentReview(reviewID);
     editReviewView.init();
   },
@@ -93,8 +94,8 @@ let controller = {
   },
 
   setCurrentReview: function (reviewID) {
-    for (review of model.projectReviews.reviews) {
-      if (review.reviewID == reviewID) {
+    for (review of model.projectReviews) {
+      if (review.checkid == reviewID) {
         model.currentReview = review;
       }
     }
@@ -205,7 +206,7 @@ let controller = {
       this.fetchProjectReviews(projID);
     }
   },
-  
+
   // TODO: Prototech, insert fetch URL to match server
   fetchProjectChecks: function (projID) {
     var currentProj = this.getCurrentProj();
@@ -241,27 +242,23 @@ let controller = {
 
   // TODO: Prototech, insert fetch URL to match server
   fetchProjectReviews: function (projID) {
-    // fetch(`../tests/reviews${projID}.json`)
-    //     .then(response => response.json())
-    //     .then(data => model.projectReviews = data)
-    //     .then(function(){checkView.init()})
 
-    // Currently just navigating to reviewe module page
-    // When checkSpaces comes we need to create overlay to select checkSpace from project to work on
-    // and then move to review module
+    var currentProj = this.getCurrentProj();
+    this.clearChecksReviews();
     $.ajax({
       data: {
-        'InvokeFunction': 'GetProjects',
+        'InvokeFunction': 'GetCheckSpaces',
         'userid': localStorage.getItem('userid'),
+        'ProjectId': currentProj.projectid,
+        'ProjectName': currentProj.projectname,
       },
       type: "POST",
-      url: "PHP/ProjectManager.php"
+      url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
       var objectArray = JSON.parse(msg);
-      model.projectChecks = [...objectArray];
+      model.projectReviews = [...objectArray];
       checkView.init()
     });
-    //window.location.href = "module2.html";
   },
 
   getReviews: function () {
@@ -616,13 +613,35 @@ let checkView = {
     }
   },
 
+  reviewClicked: function(subject){
+    controller.setCurrentReview(subject.id);
+    var currentProj = controller.getCurrentProj();
+    var currentReview = controller.getCurrentReview();
+  
+    $.ajax({
+      data: {
+        'InvokeFunction': 'CreateTempCheckSpaceDBByCopy',
+        'ProjectName': currentProj.projectname,
+        'CheckName': currentReview.checkname,
+      },
+      type: "POST",
+      url: "PHP/ProjectLoadManager.php"
+    }).done(function (msg) {
+      if (msg === 'success') {
+        localStorage.setItem('reviewinfo', JSON.stringify(currentReview));
+        window.location.href = "module2.html";
+      }
+    });
+  },
+
 
   renderReviews: function () {
 
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
     //let selectedReviews = Object.values(this.selectedReviews.reviews);
-    for (review of this.selectedReviews) {
+    /* This code is from Alex. For now, we don't have mechanism to save Reviews with specified name and rest things. So commenting it...Rahul K][10 Aug 2019]
+      for (review of this.selectedReviews) {
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
       newDiv.setAttribute("id", review.reviewID);
@@ -634,9 +653,7 @@ let checkView = {
       let htmlInner = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`
       htmlInner += `<p>${review.createDate}</p>`;
       htmlInner += `<ul>`;
-      for (li of review.datasets) {
-        htmlInner += `<li>${li}</li>`
-      }
+      
       htmlInner += "</ul></div>"
       htmlInner += `<div class='checkCardTitle'><h2>${review.name}<h2>`;
       htmlInner += `<p>${review.status}</p></div></a>`
@@ -650,6 +667,38 @@ let checkView = {
         <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('review', ${review.reviewID});">\
           <img src="../public/symbols/TrashDelete.svg">\
         </div>`
+      }
+      htmlInner += `</div>`
+      newDiv.innerHTML = htmlInner;
+      this.checkCardContainer.appendChild(newDiv);
+  }*/
+    for (review of this.selectedReviews) {
+      let newDiv = document.createElement('DIV');
+      newDiv.classList.add('checkSpaceCard');
+      newDiv.setAttribute("id", review.checkid);
+      newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
+      newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
+      newDiv.setAttribute("onclick", "checkView.reviewClicked(this)");
+      if (project.favorite) {
+        newDiv.classList.add('favorite');
+      }
+      let htmlInner;// = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`
+      htmlInner += `<p>${review.checkdate}</p>`;
+      htmlInner += `<ul>`;
+
+      htmlInner += "</ul></div>"
+      htmlInner += `<div class='checkCardTitle'><h2>${review.checkname}<h2>`;
+      htmlInner += `<p>${review.checkstatus}</p></div></a>`
+      htmlInner += `<div class="projectButtons">`;
+      htmlInner += `<div class="star" onclick="controller.setFavoriteReview(${review.checkid})"></div>`;
+      if (controller.permissions()) {
+        htmlInner += `
+      <div class="btnSymbol hiddenBtn" onclick="controller.editReview(${review.checkid});">\
+        <img class="btnSymbol" src="../public/symbols/infoMenu.svg">\
+      </div>\
+      <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('review', ${review.checkid});">\
+        <img src="../public/symbols/TrashDelete.svg">\
+      </div>`
       }
       htmlInner += `</div>`
       newDiv.innerHTML = htmlInner;
@@ -806,19 +855,19 @@ let editReviewView = {
     this.currentReview = controller.getCurrentReview();
     console.log(this.currentReview);
 
-    currentReviewName.innerHTML = this.currentReview.name;
-    editReviewName.value = this.currentReview.name;
+    currentReviewName.innerHTML = this.currentReview.checkname;
+    editReviewName.value = this.currentReview.checkname;
     editCreator.innerHTML = this.currentReview.creator;
-    editDateCreated.innerHTML = this.currentReview.dateCreated;
-    editReviewDescription.innerHTML = this.currentReview.description;
-    editComments.value = this.currentReview.comments;
+    editDateCreated.innerHTML = this.currentReview.checkdate;
+    editReviewDescription.innerHTML = this.currentReview.checkdescription;
+    editComments.value = this.currentReview.checkcomments;
     lastEditedBy.innerHTML = this.currentReview.editedBy;
     lastEditedDate.innerHTML = this.currentReview.editDate;
 
   },
 
   closeEditReview: function () {
-    document.getElementById("editReviewForm").submit();
+    //document.getElementById("editReviewForm").submit();
     this.editReviewOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectReviews();
   }
@@ -852,7 +901,7 @@ let deleteItems = {
       }
     } else if (type == "check") {
       message.innerHTML = "Check and all association Reviews?";
-        controller.setCurrentCheck(id);
+      controller.setCurrentCheck(id);
     } else if (type == "review") {
       message.innerHTML = "Review?";
     }
