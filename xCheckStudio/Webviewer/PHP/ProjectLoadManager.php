@@ -13,9 +13,34 @@
         {
             case "CreateTempCheckSpaceDB":
                 CreateTempCheckSpaceDB();
-                break;        
+                break;
+            case "CreateTempCheckSpaceDBByCopy":
+            CreateTempCheckSpaceDBByCopy();
+                break;     
             default:
                 echo "No Function Found!";
+        }
+    }
+
+    function CreateTempCheckSpaceDBByCopy(){
+        $projectName = $_POST["ProjectName"];
+        $checkName = $_POST['CheckName'];
+        try{
+            $destinationPath = getCheckDatabasePath($projectName, $checkName);
+            $sourcePath = getSavedCheckDatabasePath($projectName, $checkName);
+            if (CopyFile($sourcePath, $destinationPath) === true){
+                echo "success"; 
+                return;
+            }
+            else{
+                echo 'Fail';
+                return;
+            }
+            
+        }
+        catch(Exception $e){
+            echo 'Fail';
+            return;
         }
     }
 
