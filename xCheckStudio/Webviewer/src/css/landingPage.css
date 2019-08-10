@@ -45,3 +45,9 @@
 .prep {
   border-color: var(--intridaBlue);
 }
+
+.disabled {
+  pointer-events: none;
+  border-color: #C0C0C0;
+  color: #C0C0C0;
+}

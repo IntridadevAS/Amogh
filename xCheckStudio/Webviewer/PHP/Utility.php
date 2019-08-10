@@ -57,4 +57,8 @@
     function CopyFile($soureFilePath, $destinationFilePath){
         return copy($soureFilePath, $destinationFilePath);
     }
+
+    function CheckIfFileExists($path){
+        return file_exists($path);
+    }
 ?>

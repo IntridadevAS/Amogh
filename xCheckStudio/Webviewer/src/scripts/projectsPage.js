@@ -9,7 +9,7 @@ let model = {
   currentReview: null,
   projectReviews: [],
   projectChecks: [],
-  currentModule: "check",
+  currentModule: "",
 }
 
 let controller = {
@@ -17,11 +17,16 @@ let controller = {
     this.fetchProjects();
     projectView.init();
     this.permissions();
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if(userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
+        model.currentModule = "check";
+    else
+        model.currentModule = "review";
   },
 
   permissions: function () {
-    return true;//revert this later.
-    if (userInformation.permissions == ("check" || "prep")) {
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if (userinfo.permission === ("check" || "prep" || "Admin")) {
       return true;
     } else {
       return false;
@@ -120,12 +125,12 @@ let controller = {
       if (msg === 'success') {
 
         var path = "Projects/" + projectname + "/" + projectname + ".db";
-
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
         // add this project's entry in main DB
         $.ajax({
           data: {
             'InvokeFunction': 'AddNewProjectToMainDB',
-            'userid': localStorage.getItem('userid'),
+            'userid': userinfo.userid,
             'projectname': projectname,
             'projectDescription': projectDescription,
             'projectType': projectType,
@@ -159,10 +164,11 @@ let controller = {
   fetchProjects: function () {
     model.myProjects = [];
     model.publicProjects = [];
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     $.ajax({
       data: {
         'InvokeFunction': 'GetProjects',
-        'userid': localStorage.getItem('userid'),
+        'userid': userinfo.userid,
       },
       type: "POST",
       url: "PHP/ProjectManager.php"
@@ -559,6 +565,7 @@ let checkView = {
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
     window.location.href = "checkModule.html";
+    //localStorage.setItem("loadSavedProject",true);
   },
 
   leaveCheck: function (subject) {

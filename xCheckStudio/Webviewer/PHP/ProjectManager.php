@@ -1723,9 +1723,17 @@ function ReadCheckModuleControlsState()
     $checkName = $_POST['CheckName'];
     $dbh;
         try
-        {        
+        {   
             // open database
             $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+            $status = CheckIfFileExists($dbPath);
+            //echo $status;
+            //return;
+            if(!CheckIfFileExists($dbPath)){
+                echo 'NoCheckCase';
+                return;
+            }
+
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction
@@ -1755,8 +1763,8 @@ function ReadCheckModuleControlsState()
         }
         catch(Exception $e) 
         {        
-            return "fail"; 
-            //return;
+            echo "Fail"; 
+            return;
         } 
 }
 
@@ -2129,7 +2137,7 @@ function GetProjects()
     }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select * from Projects where userid=".$userid;      
+        $query =  "select * from Projects where userid=".$userid;
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);

@@ -125,6 +125,31 @@ function GetCheckSpaces(){
     }
 }
 
+function GetPublicCheckSpaces(){
+    // get project name
+    $userid = trim($_POST["userid"], " ");
+    $projectName = $_POST['ProjectName'];   
+    $ProjectId = trim($_POST["ProjectId"], " ");   
+    
+    try
+    {
+        $dbPath = getProjectDatabasePath($projectName);;
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        CreateCheckSpaceSchemaIfNot($dbh);
+        $query =  "select * from CheckSpace where type='Public'";
+        $stmt = $dbh->query($query);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data);
+        $dbh = null;
+        return;
+    }
+    catch(Exception $e) 
+    {        
+        echo "Fail "; 
+        return;
+    }
+}
+
 function CreateCheckSpaceSchemaIfNot($dbh){
     try
     {

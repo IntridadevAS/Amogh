@@ -115,8 +115,8 @@ function createTempCheckSpaceDB(projectName)
 function getProjectsInfo() {
 
     return new Promise((resolve) => {
-
-        var userId = localStorage.getItem("userid");;
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+        var userId = userinfo.userid;
         if (userId === NaN) {
             resolve(undefined);
         }
