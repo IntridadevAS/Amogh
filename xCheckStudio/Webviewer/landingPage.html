@@ -29,13 +29,13 @@
     </div>
   </header>
   <div class="container">
-    <a href="#" onclick="OnCheckClick()" class="module check">
+    <a href="#" id="checkmodule" onclick="OnCheckClick()" class="module check">
       C.
     </a>
-    <a href="#" onclick="OnReviewClicked()" class="module review">
+    <a href="#" id="reviewmodule" onclick="OnReviewClicked()" class="module review">
       R.
     </a>
-    <a href="prephomepage.html" class="module prep">
+    <a href="prephomepage.html" id="prepmodule" class="module prep">
       P.
     </a>
   </div>
@@ -53,10 +53,10 @@
       // set local storage variable to know where did it come from to
       // createProject.html i.e. Check tile click or Review tile click
       localStorage.setItem("FromCheckClick", false);
-      window.location.assign("createproject.html");
+      window.location.assign("projectsPage.html");
     }
-
   </script>
+  <script type="text/javascript" src="src/scripts/landingpage.js"></script>
 </body>
 
 </html>

@@ -12,11 +12,7 @@ function validateLogindetails(callbackfunction){
             }
             else {
                 var object = JSON.parse(msg);
-                localStorage.setItem("userid", object.userid);
-                localStorage.setItem("username", object.username);
-                localStorage.setItem("alias", object.alias);
-                localStorage.setItem("type", object.type);
-                localStorage.setItem("permission", object.permission);
+                localStorage.setItem('userinfo', JSON.stringify(object));
                 window[callbackfunction](0);
             }
         }, 

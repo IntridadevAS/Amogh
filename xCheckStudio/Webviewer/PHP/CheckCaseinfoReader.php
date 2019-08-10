@@ -28,6 +28,10 @@
         {        
             // open database
             $dbPath = getCheckDatabasePath($projectName, $checkName);
+            if(CheckIfFileExists($dbPath) === false){
+                echo "fail"; 
+                return;
+            }
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
             // begin the transaction

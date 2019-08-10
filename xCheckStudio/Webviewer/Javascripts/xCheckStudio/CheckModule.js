@@ -330,7 +330,8 @@ function disableControlsOnLoad() {
 
 function setUserName() {
     var pierrediv = document.getElementById("pierre");
-    pierrediv.innerHTML = localStorage.getItem("username");
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    pierrediv.innerHTML = userinfo.username;
 }
 
 function setProjectName() {
@@ -1933,7 +1934,6 @@ function OnShowToast(text) {
 
 function isLoadProject() {
     var loadsavedproject = localStorage.getItem('loadSavedProject')
-
     if (loadsavedproject == 'true') {
         return true;
     }
@@ -1956,7 +1956,12 @@ function loadProjectForCheck() {
         type: "POST",
         url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-        if (msg !== 'fail') {
+        if(msg === 'NoCheckCase'){
+            alert('No saved check case found.\nPlease create new.');
+            localStorage.setItem('loadSavedProject', false);
+            window.location.reload();
+        }
+        else if (msg !== 'fail') {
             var checkModuleControlsState = JSON.parse(msg);
 
             // comparison swith
