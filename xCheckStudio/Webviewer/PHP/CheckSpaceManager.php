@@ -10,13 +10,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetCheckSpaces":
             GetCheckSpaces();
             break;
+        case "DeleteCheckSpace":
+        DeleteCheckSpace();
+            break;
         default:
             echo "No Function Found!";
     }
 }
 
-function CreateCheckSpace()
-{
+function CreateCheckSpace(){
     // get project name
     $UserId = trim($_POST["userid"], " ");      
     $projectName = $_POST['ProjectName'];
@@ -98,8 +100,7 @@ function CheckIfCheckSpaceExists($projectName, $checkName){
     }
 }
 
-function GetCheckSpaces()
-{
+function GetCheckSpaces(){
     // get project name
     $userid = trim($_POST["userid"], " ");
     $projectName = $_POST['ProjectName'];   
@@ -124,8 +125,7 @@ function GetCheckSpaces()
     }
 }
 
-function CreateCheckSpaceSchemaIfNot($dbh)
-{
+function CreateCheckSpaceSchemaIfNot($dbh){
     try
     {
         $table_name = 'CheckSpace'; 
@@ -162,4 +162,28 @@ function CreateCheckSpaceSchemaIfNot($dbh)
     return true;   
 }
 
+function DeleteCheckSpace(){
+    $CheckId = $_POST['CheckId'];
+    $ProjectName = trim($_POST["ProjectName"], " ");
+    $CheckName = trim($_POST["CheckName"], " ");
+    if($CheckId == "")
+    {
+        echo "CheckId Id cannot be empty";
+        return;
+    }
+    try{
+        $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
+        $query =  "Delete from CheckSpace where checkid='". $CheckId."';";      ;
+        $stmt = $dbh->prepare($query);      
+        $stmt->execute();
+        echo $stmt->rowCount();
+        $dbh = null;
+        deleteFolder(getCheckDirectoryPath($ProjectName, $CheckName));
+        return;
+    }
+    catch(Exception $e) {
+        echo 'Message: ' .$e->getMessage();
+        return;
+    } 
+}
 ?>

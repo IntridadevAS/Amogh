@@ -63,6 +63,7 @@ let controller = {
     model.currentProject = obj;
 
   },
+  
   setPublicCurrentProj: function (projID) {
     let obj = model.publicProjects.find(obj => obj.projectid == projID);
     model.currentProject = obj;
@@ -204,6 +205,7 @@ let controller = {
       this.fetchProjectReviews(projID);
     }
   },
+  
   // TODO: Prototech, insert fetch URL to match server
   fetchProjectChecks: function (projID) {
     var currentProj = this.getCurrentProj();
@@ -292,11 +294,6 @@ let controller = {
 
   // TODO: Prototech, insert fetch URL to match server
   deleteProject: function (projID) {
-    /*fetch(`exampleServer/deleteProject/${projID}`, {
-      method: "POST"
-    })
-      .then(deleteItems.closeDeleteItems())
-      .then(this.fetchProjects());*/
     var currentProj = controller.getCurrentProj();
     $.ajax({
       data: {
@@ -316,11 +313,24 @@ let controller = {
 
   // TODO: Prototech, insert fetch URL to match server
   deleteCheck: function (checkID) {
-    fetch(`exampleServer/deleteCheck/${checkID}`, {
-      method: "POST"
-    })
-      .then(deleteItems.closeDeleteItems())
-      .then(this.fetchProjectChecks());
+    event.stopPropagation();
+    var currentProj = controller.getCurrentProj();
+    var currentCheck = controller.getCurrentCheck();
+    $.ajax({
+      data: {
+        'InvokeFunction': 'DeleteCheckSpace',
+        'ProjectName': currentProj.projectname,
+        'CheckName': currentCheck.checkname,
+        'CheckId': currentCheck.checkid,
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      if (msg !== 0) {
+        deleteItems.closeDeleteItems();
+        controller.fetchProjectChecks();
+      }
+    });
   },
 
   deleteReview: function (reviewID) {
@@ -702,7 +712,7 @@ let newCheckView = {
       else if (object.checkid === -1) {
         alert('Failed to create check space');
       }
-      else{
+      else {
         controller.fetchProjectChecks(controller.getCurrentProj().projectid);
         newCheckView.closeNewCheck();
       }
@@ -831,18 +841,18 @@ let deleteItems = {
 
     deleteBtn.onclick = this.deleteItem;
 
-    let obj = model.myProjects.find(obj => obj.projectid == id);
-    if (obj === undefined) {
-      controller.setPublicCurrentProj(id);
-    }
-    else {
-      controller.setMyCurrentProj(id);
-    }
-
     if (type == "project") {
       message.innerHTML = "Project and all associated Checks and Reviews?";
+      let obj = model.myProjects.find(obj => obj.projectid == id);
+      if (obj === undefined) {
+        controller.setPublicCurrentProj(id);
+      }
+      else {
+        controller.setMyCurrentProj(id);
+      }
     } else if (type == "check") {
       message.innerHTML = "Check and all association Reviews?";
+        controller.setCurrentCheck(id);
     } else if (type == "review") {
       message.innerHTML = "Review?";
     }
