@@ -136,7 +136,7 @@ function GetPublicCheckSpaces(){
         $dbPath = getProjectDatabasePath($projectName);;
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
-        $query =  "select * from CheckSpace where type='Public'";
+        $query =  "select * from CheckSpace where userid=".$userid;
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);

@@ -249,13 +249,13 @@ let controller = {
 
   // TODO: Prototech, insert fetch URL to match server
   fetchProjectReviews: function (projID) {
-
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     var currentProj = this.getCurrentProj();
     this.clearChecksReviews();
     $.ajax({
       data: {
         'InvokeFunction': 'GetCheckSpaces',
-        'userid': localStorage.getItem('userid'),
+        'userid': userinfo.userid,
         'ProjectId': currentProj.projectid,
         'ProjectName': currentProj.projectname,
       },
@@ -751,12 +751,13 @@ let newCheckView = {
 
   createNewCheck: function (checkspace) {
     var currentProj = controller.getCurrentProj();
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     $.ajax({
       data: {
         'InvokeFunction': 'CreateCheckSpace',
         'ProjectName': currentProj.projectname,
         'ProjectId': currentProj.projectid,
-        'userid': localStorage.getItem('userid'),
+        'userid': userinfo.userid,
         'CheckSpaceInfo': JSON.stringify(checkspace)
       },
       type: "POST",
