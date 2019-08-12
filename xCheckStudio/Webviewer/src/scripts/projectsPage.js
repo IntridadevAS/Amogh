@@ -216,11 +216,12 @@ let controller = {
   // TODO: Prototech, insert fetch URL to match server
   fetchProjectChecks: function (projID) {
     var currentProj = this.getCurrentProj();
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     this.clearChecksReviews();
     $.ajax({
       data: {
         'InvokeFunction': 'GetCheckSpaces',
-        'userid': localStorage.getItem('userid'),
+        'userid': userinfo.userid,
         'ProjectId': currentProj.projectid,
         'ProjectName': currentProj.projectname,
       },
