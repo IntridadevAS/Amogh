@@ -19,10 +19,10 @@ if(!isset( $_SESSION["SourceAPath"]) ||
     unset($array[sizeof($array)-1]);
     unset($array[sizeof($array)-1]);
     $studioPath = implode("/", $array);
-    $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
     $mainFileName = $_POST['MainFile'];
-
 
     if($_POST['viewerContainer'] == "viewerContainer1")
     {

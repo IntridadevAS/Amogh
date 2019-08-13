@@ -33,7 +33,8 @@
     unset($array[sizeof($array)-1]);
     unset($array[sizeof($array)-1]);
     $studioPath = implode("/", $array);
-    $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
     foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
     {
@@ -104,7 +105,7 @@
                         $output_file_path=$sourceBDirectory."/".$output_name[0];              
                     }
                     
-                    $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';
+                    $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';                  
                     exec($command, $output);
                     echo 'File Conversion Complete..You can load the model..';
         

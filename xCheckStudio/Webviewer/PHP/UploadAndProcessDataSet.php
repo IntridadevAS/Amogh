@@ -65,7 +65,8 @@
                     unset($array[sizeof($array)-1]);
                     unset($array[sizeof($array)-1]);
                     $studioPath = implode("/", $array);
-                    $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+                    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+                    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
                     $command = '"'.$launch_converter. '" "'. $UploadPath. '" "'.$output_file_path.'"';                         
                     exec($command, $output);
@@ -86,7 +87,8 @@
                     unset($array[sizeof($array)-1]);
                     unset($array[sizeof($array)-1]);
                     $studioPath = implode("/", $array);
-                    $launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+                    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+                    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
                     $UploadPath= $webViewerDirectory."/configurations/temp/".$fileName;    
                     $output_name=explode(".",$fileName);  

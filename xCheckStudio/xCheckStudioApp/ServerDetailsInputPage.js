@@ -7,7 +7,7 @@ window.onload = function () {
         var host = document.getElementById("hostInput").value;
         var port = document.getElementById("portInput").value;
 
-        var url = "http://" + host + ":" + port + "/Webviewer";
+        var url = "http://" + host + ":" + port ;
 
         try {
             var request = new XMLHttpRequest();
