@@ -781,8 +781,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 margin: "0px",
                 onDataLoaded: function (args) {
                     //initializeComparisonContextMenus();
-                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.SourceAReviewModuleViewerInterface, 
-                                                                                                    _this.SourceAReviewModuleViewerInterface);
+                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this);
                     reviewComparisonContextMenuManager.Init();
                 },
                 onItemUpdated: function(args) {
