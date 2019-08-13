@@ -7,9 +7,6 @@ function ComplianceReviewManager(complianceCheckManager,
     detailedReviewRowCommentDiv,
     componentsHierarchy) {
 
-    this.MainReviewTableColumns = 4;
-    this.MainReviewTableIdColumn = 3;
-
     this.ViewerData = viewerData;
 
     this.SourceComponents = sourceComponents;

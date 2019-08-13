@@ -7,11 +7,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     detailedReviewTableContainer,
     sourceAComponentsHierarchy,
     sourceBComponentsHierarchy) 
-    {
-        
-    this.MainReviewTableColumns = 6;   
-    this.MainReviewTableIdColumn = 5; 
-
+    {      
+  
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
 
