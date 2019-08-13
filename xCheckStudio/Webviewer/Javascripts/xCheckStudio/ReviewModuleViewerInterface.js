@@ -132,6 +132,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 parentTable.innerHTML = '';
             }
         }
+
+        this.selectedCheckComponentData = undefined;
     }
 
     ReviewModuleViewerInterface.prototype.bindEvents = function (viewer) {
@@ -154,19 +156,16 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     return;
                 }
 
-                for (var _i = 0, selections_1 = selections; _i < selections_1.length; _i++) {
-                    var selection = selections_1[_i];
-
+                for (var i = 0; i < selections.length; i++) {
+                    var selection = selections[i];
                     var sel = selection.getSelection();
 
                     // if translucency control is on
                     if (viewer._params.containerId in translucencyManagers) {
                         translucencyManagers[viewer._params.containerId].ComponentSelected(sel.getNodeId());
                     }
-
-                    if (_this.selectedNodeId !== sel.getNodeId()) {
-                        _this.onSelection(selection);
-                    }
+                    
+                    _this.onSelection(selection);
                 }
             },
 
@@ -203,7 +202,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.highlightComponent = function (nodeIdString) {
 
         var nodeId = Number(nodeIdString);
-        if (nodeIdString === undefined || nodeId === NaN) {
+        if (!nodeIdString || 
+            nodeId === NaN) {
             this.unHighlightComponent();
             return;
         }
@@ -224,7 +224,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
     ReviewModuleViewerInterface.prototype.onSelection = function (selectionEvent) {
         var selection = selectionEvent.getSelection();
-        if (!selection.isNodeSelection()) {
+        
+        if (!selection.isNodeSelection() ||
+            this.selectedNodeId === selection.getNodeId()) {
             return;
         }
 
@@ -237,81 +239,131 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             return;
         }
 
-        // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
-        if (model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance ||
+        // select valid node
+        this.SelectValidNode();
+
+        if (!this.selectedNodeId ||
+            model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance ||
             model.getNodeType(this.selectedNodeId) === Communicator.NodeType.Unknown) {
-            while (model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance) {
-                var parent_1 = model.getNodeParent(this.selectedNodeId);
-                if (parent_1 !== null &&
-                    (model.getNodeType(parent_1) === Communicator.NodeType.AssemblyNode ||
-                        model.getNodeType(parent_1) === Communicator.NodeType.Part ||
-                        model.getNodeType(parent_1) === Communicator.NodeType.PartInstance)) {
-                    this.selectedNodeId = parent_1;
-                    this.highlightManager.highlightNodeInViewer(parent_1);
-                }
-                else {
-                    break;
-                }
-            }
+            return;
         }
 
-        if (model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.BodyInstance ||
-            model.getNodeType(this.selectedNodeId) !== Communicator.NodeType.Unknown) {
+        // get check component id
+        var checkComponentData = undefined;
+        if (this.ViewerOptions[0] === "viewerContainer1") {
 
-            // get check component id
-            var checkComponentData = undefined;
-            if (this.ViewerOptions[0] === "viewerContainer1") {
+            if (this.ReviewManager.SourceANodeIdvsCheckComponent !== undefined &&
+                this.selectedNodeId in this.ReviewManager.SourceANodeIdvsCheckComponent) {
+                checkComponentData = this.ReviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
 
-                if (this.ReviewManager.SourceANodeIdvsCheckComponent !== undefined &&
-                    this.selectedNodeId in this.ReviewManager.SourceANodeIdvsCheckComponent) {
-                    checkComponentData = this.ReviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
-
-                    // highlight component in second viewer
-                    this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceBNodeId']);
-                }
-                else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-                    this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
-                    checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-                }
-                else {
-                    return;
-                }
+                // highlight component in second viewer
+                this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceBNodeId']);
             }
-            else if (this.ViewerOptions[0] === "viewerContainer2") {
-                if (this.ReviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
-                    this.selectedNodeId in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
-                    checkComponentData = this.ReviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];
-
-                    // highlight component in first viewer
-                    this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceANodeId']);
-                }
-                else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-                    this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
-                    checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-                }
-                else {
-                    return;
-                }
+            else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+                this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
+                checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
             }
             else {
                 return;
             }
+        }
+        else if (this.ViewerOptions[0] === "viewerContainer2") {
+            if (this.ReviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
+                this.selectedNodeId in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
+                checkComponentData = this.ReviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];
 
-            if (this.selectedCheckComponentData === checkComponentData["Id"]) {
-                return;
+                // highlight component in first viewer
+                this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceANodeId']);
             }
-            this.selectedCheckComponentData == checkComponentData["Id"];
-
-            // highlight corresponding component in review table 
-            if (!this.HighlightReviewComponent(checkComponentData)) {
-                this.unHighlightComponent();
-                this.unHighlightAll();
-
+            else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+                this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
+                checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
+            }
+            else {
                 return;
             }
         }
+        else {
+            return;
+        }
 
+        if (this.selectedCheckComponentData === checkComponentData["Id"]) {
+            return;
+        }
+        this.selectedCheckComponentData = checkComponentData["Id"];
+
+        // highlight corresponding component in review table 
+        if (!this.HighlightReviewComponent(checkComponentData)) {
+            this.unHighlightComponent();
+            this.unHighlightAll();
+
+            return;
+        }
+        //}
     };
+
+    ReviewModuleViewerInterface.prototype.IsNodeInCheckResults = function (node) {
+
+        var nodeIdvsCheckComponent;
+        if (this.ViewerOptions[0] === "viewerContainer1") {
+            nodeIdvsCheckComponent = this.ReviewManager.SourceANodeIdvsCheckComponent;
+        }
+        else if (this.ViewerOptions[0] === "viewerContainer2") {
+            nodeIdvsCheckComponent = this.ReviewManager.SourceBNodeIdvsCheckComponent;
+        }
+
+        if (!nodeIdvsCheckComponent) {
+            return false;
+        }
+
+        if (node in nodeIdvsCheckComponent) {
+            return true;
+        }
+
+        return false;
+    }
+
+    ReviewModuleViewerInterface.prototype.SelectValidNode = function () {              
+        if (this.IsNodeInCheckResults(this.selectedNodeId))
+        {
+            return;
+        }
+
+        var model = this.Viewer.model;
+        while(this.selectedNodeId)
+        {
+              this.selectedNodeId = model.getNodeParent(this.selectedNodeId);
+
+              if(this.IsNodeInCheckResults(this.selectedNodeId))
+              {
+                  this.highlightManager.highlightNodeInViewer(this.selectedNodeId);
+                  break;
+              }
+        }
+
+        // if (nodeType === Communicator.NodeType.BodyInstance ||
+        //     nodeType === Communicator.NodeType.Unknown ||
+        //     !this.IsNodeInCheckResults(this.selectedNodeId)) {
+
+        //     while (nodeType === Communicator.NodeType.BodyInstance) {
+        //         var parentNode = model.getNodeParent(this.selectedNodeId);
+               
+        //         var parentNodeType = model.getNodeType(parentNode);
+        //         if (parentNodeType === Communicator.NodeType.AssemblyNode ||
+        //             parentNodeType === Communicator.NodeType.Part ||
+        //             parentNodeType === Communicator.NodeType.PartInstance) {
+                   
+        //                     this.selectedNodeId = parent_1;
+        //                     nodeType = model.getNodeType(this.selectedNodeId);
+
+        //             this.highlightManager.highlightNodeInViewer(parent_1);
+        //         }
+        //         // else {
+        //         //     break;
+        //         // }
+        //     }
+        // }
+    }
 
     ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (checkcComponentData) {
         var componentsGroupName = checkcComponentData["MainClass"];
@@ -339,7 +391,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                             continue;
                         }
 
-                        var checkComponentId = childRowColumns[this.ReviewManager.MainReviewTableIdColumn].innerText
+                        var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
                         if (checkComponentId == checkcComponentData["Id"]) {
                             // open collapsible area
                             if (nextSibling.style.display != "block") {
@@ -353,6 +405,11 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                             this.ReviewManager.SelectionManager.ChangeBackgroundColor(childRow)
                             this.ReviewManager.populateDetailedReviewTable(childRow);
                             this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
+
+                            // scroll to row                           
+                            var reviewTable = this.ReviewManager.GetReviewTable(childRow);                           
+                            reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
+                            document.getElementById("ComparisonMainReviewTbody").scrollTop =  reviewTable.offsetTop;
 
                             //break;
                             return true;
