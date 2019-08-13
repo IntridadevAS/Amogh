@@ -159,33 +159,41 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
             return;
         }
 
-        // If we selected a body, then get the assembly node that holds it (loadSubtreeFromXXX() works on assembly nodes)
-        if (model.getNodeType(this.SelectedNodeId) === Communicator.NodeType.BodyInstance) {
-
-            while (model.getNodeType(this.SelectedNodeId) === Communicator.NodeType.BodyInstance) {
-                var parent = model.getNodeParent(this.SelectedNodeId);
-
-                if (parent !== null &&
-                    (model.getNodeType(parent) === Communicator.NodeType.AssemblyNode ||
-                        model.getNodeType(parent) === Communicator.NodeType.Part ||
-                        model.getNodeType(parent) === Communicator.NodeType.PartInstance)) {
-                    this.SelectedNodeId = parent;
-                    // select this node
-                    this.Webviewer.selectPart(parent);
-                }
-                else {
-                    break;
-                }
-            }
-        }
+        // select valid node
+        this.SelectValidNode();
+        if(!this.SelectedNodeId)
+        {
+            return;
+        }       
 
         if (model.getNodeType(this.SelectedNodeId) !== Communicator.NodeType.BodyInstance) {
             // highlight corresponding component in model browser table
-            this.ModelTree.HighlightModelBrowserRow(this._selectedNodeId);
+            this.ModelTree.HighlightModelBrowserRow(this.SelectedNodeId);
         }
-
     }
 };
+
+SCManager.prototype.SelectValidNode = function () {
+
+    if (this.SelectedNodeId in this.SourceProperties)
+    {
+        return;
+    }
+
+    var model = this.Webviewer.model;
+    while(this.SelectedNodeId)
+    {
+          this.SelectedNodeId = model.getNodeParent(this.SelectedNodeId);
+
+          if(this.SelectedNodeId in this.SourceProperties)
+          {
+               // select this node
+               this.Webviewer.selectPart(this.SelectedNodeId);
+
+              break;
+          }
+    }    
+}
 
 SCManager.prototype.CreateNodeIdArray = function (nodeId) {
     var _this = this;
