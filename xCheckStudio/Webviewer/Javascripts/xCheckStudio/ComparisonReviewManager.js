@@ -228,7 +228,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 var tableData = this.CreateTableData(componentsGroup.CheckComponents, groupId, componentsGroup.ComponentClass);               
 
                 var id = "#" + div.id;
-                this.LoadReviewTableData(this, columnHeaders, tableData, id);      
+                this.LoadReviewTableData(columnHeaders, tableData, id);      
                 this.highlightMainReviewTableFromCheckStatus(div.id);
 
                 var modelBrowserData = document.getElementById(div.id);               
@@ -749,7 +749,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     }
 
-    ComparisonReviewManager.prototype.LoadReviewTableData = function (_this, columnHeaders, tableData, containerDiv) {
+    ComparisonReviewManager.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
+        var _this = this;
         $(function () {
             var db = {
                 loadData: filter => {
@@ -780,7 +781,8 @@ function ComparisonReviewManager(comparisonCheckManager,
                 margin: "0px",
                 onDataLoaded: function (args) {
                     //initializeComparisonContextMenus();
-                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager();
+                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.SourceAReviewModuleViewerInterface, 
+                                                                                                    _this.SourceAReviewModuleViewerInterface);
                     reviewComparisonContextMenuManager.Init();
                 },
                 onItemUpdated: function(args) {
