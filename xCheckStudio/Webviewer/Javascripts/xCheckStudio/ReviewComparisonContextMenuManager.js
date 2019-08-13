@@ -1,6 +1,8 @@
-function ReviewComparisonContextMenuManager() {
+function ReviewComparisonContextMenuManager(comparisonReviewManager) {
     // call super constructor
     ReviewModuleContextMenuManager.call(this);
+
+    this.ComparisonReviewManager = comparisonReviewManager;
 }
 
 // assign parent's method to this class
@@ -74,7 +76,14 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         name: "Reference",
                     },
                     "isolate": {
-                        name: "Isolate"
+                        name: "Isolate",
+                        visible: function () {
+                            if (_this.HaveIsolate()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
                     },
                     "showAll": {
                         name: "Show All"
@@ -83,6 +92,15 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             };
         }
     });
+}
+
+ReviewComparisonContextMenuManager.prototype.HaveIsolate = function () {
+    if (this.ComparisonReviewManager.SourceAReviewModuleViewerInterface ||
+        this.ComparisonReviewManager.SourceBReviewModuleViewerInterface) {
+        return true;
+    }
+
+    return false;
 }
 
 ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = function () {
@@ -341,7 +359,7 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     }
     else if (key === "lefttoright" ||
         key === "righttoleft") {
-            this.OnTransposeClick(key, selectedRow);
+        this.OnTransposeClick(key, selectedRow);
     }
     else if (key === "freeze") {
     }
@@ -413,7 +431,89 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
 }
 
 ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
+
+    // get selected source A and B node ids
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes) {
+        return;
+    }
+
+
+    // source a isolate
+    var sourceANodeIds = nodes["SourceA"];
+    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewModuleViewerInterface;
+
+    if (sourceANodeIds.length > 0 &&
+        sourceAViewerInterface) {
+
+        // perform isolate
+        var isolateManager = new IsolateManager(sourceAViewerInterface.Viewer);
+        isolateManager.Isolate(sourceANodeIds).then(function (affectedNodes) {
+
+        });
+
+    }
+
+    // source b isolate
+    var sourceBNodeIds = nodes["SourceB"];
+    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewModuleViewerInterface;
+
+    if (sourceBNodeIds.length > 0 &&
+        sourceBViewerInterface) {
+
+        // perform isolate
+        var isolateManager = new IsolateManager(sourceBViewerInterface.Viewer);
+        isolateManager.Isolate(sourceBNodeIds).then(function (affectedNodes) {
+
+        });
+    }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
+    // source A
+    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewModuleViewerInterface;
+    if (sourceAViewerInterface) {
+        sourceAViewerInterface.Viewer.model.setNodesVisibility([sourceAViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
+            sourceAViewerInterface.Viewer.view.fitWorld();
+        });
+    }
+
+    // source b
+    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewModuleViewerInterface;
+    if (sourceBViewerInterface) {
+        sourceBViewerInterface.Viewer.model.setNodesVisibility([sourceBViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
+            sourceBViewerInterface.Viewer.view.fitWorld();
+        });
+    }
+}
+
+
+ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
+    var selectionManager = this.ComparisonReviewManager.SelectionManager;
+    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+        return undefined;
+    }
+
+    var sourceANodeIds = [];
+    var sourceBNodeIds = [];
+    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
+        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+
+        // source A
+        var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
+        if (sourceANodeIdCell.innerText !== "") {
+            sourceANodeIds.push(Number(sourceANodeIdCell.innerText));
+        }
+
+        // source B
+        var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
+        if (sourceBNodeIdCell.innerText !== "") {
+            sourceBNodeIds.push(Number(sourceBNodeIdCell.innerText));
+        }
+    }
+
+    return {
+        "SourceA": sourceANodeIds,
+        "SourceB": sourceBNodeIds
+    };
 }
