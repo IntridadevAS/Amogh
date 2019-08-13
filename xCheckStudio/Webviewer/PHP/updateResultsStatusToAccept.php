@@ -188,7 +188,9 @@ function updatePropertyComparisonStatusInReview() {
             $index++;
             continue;
         }
-        else if(($statusChanged[$index]['severity'] == 'OK' || $statusChanged[$index]['severity'] == 'No Value') && $statusChanged[$index]['accepted'] == 'false') {
+        else if(($statusChanged[$index]['severity'] == 'OK' || 
+        $statusChanged[$index]['severity'] == 'No Value') 
+        && $statusChanged[$index]['accepted'] == 'false') {
             $index++;
             continue;
         }
@@ -200,6 +202,7 @@ function updatePropertyComparisonStatusInReview() {
             else {
                 $toBecompstatus = 'false';
                 $propertyTransposed = false;
+                break;
             }
             $index++;
         }

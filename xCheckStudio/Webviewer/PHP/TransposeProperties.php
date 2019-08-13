@@ -85,6 +85,7 @@ function TransposeProperty() {
             else {
                 $toBecompstatus = null;
                 $propertyAccepted = false;
+                break;
             }
             $index++;
         }

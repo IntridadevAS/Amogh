@@ -330,19 +330,15 @@
                                             }
                                         }
                                     
-                                    
                                         
-                                    if($propertyRow['transpose'] == 'lefttoright') {
-                                        // $sourceBValue = $sourceAValue;
+                                    if($propertyRow['transpose'] == 'lefttoright' || $propertyRow['transpose'] == 'righttoleft') {
                                         $changedStatus = 'OK(T)';
-                                        if($componentValues['status'] == 'OK(A)')
+                                        if($componentValues['status'] == 'OK(A)') {
                                             $componentValues['status'] = 'OK(A)(T)';
-                                    }
-                                    else if($propertyRow['transpose'] == 'righttoleft') {
-                                        // $sourceAValue = $sourceBValue;
-                                        $changedStatus = 'OK(T)';
-                                        if($componentValues['status'] == 'OK(A)')
-                                            $componentValues['status'] = 'OK(A)(T)';
+                                        }
+                                        else if(strpos($componentValues['status'], '(T)') == false) {
+                                            $componentValues['status'] =  $componentRow['status'] . "(T)";
+                                        }
                                     }
                                     else {
                                         if(($propertyRow['severity'] == 'Error' || $propertyRow['severity'] == 'No Match') && 
