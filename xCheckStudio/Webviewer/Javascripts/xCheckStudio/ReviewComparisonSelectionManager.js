@@ -139,4 +139,11 @@ ReviewComparisonSelectionManager.prototype.ScrollToHighlightedCheckComponentRow 
             collapsibleClass.className = "collapsible";
         }
     }
-}  
+}
+
+ReviewComparisonSelectionManager.prototype.ChangeBackgroundColorAfterAcceptOrTanspose =  function(row, status) {
+    var color = this.GetRowHighlightColor(status);
+    for(var cell = 0; cell < row.cells.length; cell++) {
+        row.cells[cell].style.backgroundColor = color;
+    }
+}

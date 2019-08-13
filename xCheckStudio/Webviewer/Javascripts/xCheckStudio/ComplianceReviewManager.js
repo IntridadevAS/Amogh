@@ -1255,25 +1255,26 @@ function ComplianceReviewManager(complianceCheckManager,
                 else if (column.Tagnumber !== undefined) {
                     componentName = currentSheetRow.cells[column.Tagnumber].innerText;
                 }
-                if (modelBrowserRow.cells[0].innerText !== "" && modelBrowserRow.cells[0].innerText === componentName) {
+                if (this.getSourceNameFromMainReviewRow(modelBrowserRow) !== "" &&
+                    this.getSourceNameFromMainReviewRow(modelBrowserRow) === componentName) {
                     var color = modelBrowserRow.cells[0].style.backgroundColor;
                     for (var j = 0; j < currentSheetRow.cells.length; j++) {
                         cell = currentSheetRow.cells[j];
                         cell.style.backgroundColor = color;
                         cell.style.height = "10px"
                     }
-                    currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
+                    currentCheckStatusArray[currentSheetRow.rowIndex] = this.getStatusFromMainReviewRow(modelBrowserRow);
                     break;
                 }
-                else if (modelBrowserRow.cells[1].innerText !== "" && modelBrowserRow.cells[1].innerText === componentName) {
-                    var color = modelBrowserRow.cells[0].style.backgroundColor;
-                    for (var j = 0; j < currentSheetRow.cells.length; j++) {
-                        cell = currentSheetRow.cells[j];
-                        cell.style.backgroundColor = color;
-                    }
-                    currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
-                    break;
-                }
+                // else if (modelBrowserRow.cells[1].innerText !== "" && modelBrowserRow.cells[1].innerText === componentName) {
+                //     var color = modelBrowserRow.cells[0].style.backgroundColor;
+                //     for (var j = 0; j < currentSheetRow.cells.length; j++) {
+                //         cell = currentSheetRow.cells[j];
+                //         cell.style.backgroundColor = color;
+                //     }
+                //     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
+                //     break;
+                // }
             }
         }
 
@@ -1578,5 +1579,13 @@ function ComplianceReviewManager(complianceCheckManager,
         var tableElement = tBodyElement.parentElement;
 
         return tableElement.parentElement.parentElement.id;
+    }
+
+    ComplianceReviewManager.prototype.getSourceNameFromMainReviewRow = function(row) {
+         return row.cells[ComplianceColumns.SourceName].innerText;
+    }
+
+    ComplianceReviewManager.prototype.getStatusFromMainReviewRow =  function(row) {
+        return row.cells[ComplianceColumns.Status].innerText;
     }
 }

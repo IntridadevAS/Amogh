@@ -1,4 +1,6 @@
 <?php
+require_once 'Utility.php';
+
 if(!isset($_POST['tabletoupdate']) || !isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
 {
  echo 'fail';
