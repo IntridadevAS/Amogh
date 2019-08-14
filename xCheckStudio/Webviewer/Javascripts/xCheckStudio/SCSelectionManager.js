@@ -53,7 +53,7 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBo
         this.SelectedCompoents.push(checkedComponent);
 
          // highlight selected row
-         this.ChangeBackgroundColor(currentRow);
+         this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
         if (!this.SelectedComponentRows.includes(currentRow)) {
@@ -64,7 +64,7 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBo
         this.RemoveFromselectedCompoents(currentRow);
 
         // restore color
-        this.RestoreBackgroundColor(currentRow);
+        this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
         if (this.SelectedComponentRows.includes(currentRow)) {
@@ -153,11 +153,11 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBo
 
                 if (checkBox.checked) {
                     // highlight selected row
-                    this.ChangeBackgroundColor(row);
+                    this.ApplyHighlightColor(row);
                 }
                 else {
                     // unhighlight selected row
-                    this.RestoreBackgroundColor(row);
+                    this.RemoveHighlightColor(row);
                 }
             }
         }
@@ -247,13 +247,13 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer) {
     // unhighlight old row
     if (this.HighlightedComponentRow &&
         !this.SelectedComponentRows.includes(this.HighlightedComponentRow)) {
-        this.RestoreBackgroundColor(this.HighlightedComponentRow);
+        this.RemoveHighlightColor(this.HighlightedComponentRow);
     }
 
     // highlight new row  
     if(!this.SelectedComponentRows.includes(row))  
     {
-        this.ChangeBackgroundColor(row);
+        this.ApplyHighlightColor(row);
     }
     this.HighlightedComponentRow = row;
 

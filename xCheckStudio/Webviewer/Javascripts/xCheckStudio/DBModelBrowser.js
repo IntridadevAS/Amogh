@@ -366,11 +366,11 @@ DBModelBrowser.prototype.ShowSelectedDBData = function (browserRow) {
     }
 }
 
-DBModelBrowser.prototype.ChangeBackgroundColor = function (row) {
+DBModelBrowser.prototype.ApplyHighlightColor = function (row) {
     row.style.backgroundColor = "#9999ff";
 }
 
-DBModelBrowser.prototype.RestoreBackgroundColor = function (row) {
+DBModelBrowser.prototype.RemoveHighlightColor = function (row) {
     row.style.backgroundColor = "#ffffff";
 }
 

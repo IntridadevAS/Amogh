@@ -144,7 +144,7 @@ SCModelBrowser.prototype.addClassesToModelBrowser = function () {
                 modelBrowserRows[i].classList.add(classList[j]);
             }
 
-            this.SelectionManager.RestoreBackgroundColor(modelBrowserRows[i])
+            this.SelectionManager.RemoveHighlightColor(modelBrowserRows[i])
         }
     }
 }

@@ -18,7 +18,7 @@ SelectionManager.prototype.RemoveFromselectedCompoents = function (componentRow)
 /* 
    This function 
 */
-SelectionManager.prototype.UnApplyHighlightColor = function (row) {
+SelectionManager.prototype.RemoveHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = "#ffffff"
