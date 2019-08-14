@@ -1,40 +1,39 @@
 var translucencyManagers = {};
-function TranslucencyManager(viewer, fromViewer) {
+function TranslucencyManager(viewers,
+    fromViewer,
+    selectedNodes) {
     this.ChangedComponents = {};
-    this.Viewer = viewer;
+    this.Viewers = viewers;
     this.FromViewer = fromViewer;
-
+    this.SelectedNodes = selectedNodes;
 
     TranslucencyManager.prototype.Start = function () {
-        if (!this.Viewer) {
+        if (this.Viewers.length === 0) {
             return;
         }
 
-        if(this.FromViewer)
-        {
+        if (this.FromViewer) {
             this.StartFromViewer();
         }
-        else
-        {
+        else {
             this.StartFromComponentTable();
-        }        
+        }
     }
 
     /* This method starts the translucency control from viewer right click context menu*/
-    TranslucencyManager.prototype.StartFromViewer = function ()
-    {
+    TranslucencyManager.prototype.StartFromViewer = function () {
         var _this = this;
 
         var slider;
         var outputFiled;
         var overlayField;
 
-        if (this.Viewer._params.containerId === "viewerContainer1") {
+        if (this.Viewers[0]._params.containerId === "viewerContainer1") {
             slider = document.getElementById("translucencySlider1");
             outputFiled = document.getElementById("translucencyValue1");
             overlayField = document.getElementById("translucencyOverlay1");
         }
-        else if (this.Viewer._params.containerId === "viewerContainer2") {
+        else if (this.Viewers[0]._params.containerId === "viewerContainer2") {
             slider = document.getElementById("translucencySlider2");
             outputFiled = document.getElementById("translucencyValue2");
             overlayField = document.getElementById("translucencyOverlay2");
@@ -48,115 +47,175 @@ function TranslucencyManager(viewer, fromViewer) {
 
         overlayField.style.right = "10px";
         overlayField.style.bottom = "45%";
-        // overlayField.style.bottom = "30px";
         overlayField.style.display = "block";
         outputFiled.innerHTML = slider.value;
 
         //slider.value = 1;
         slider.oninput = function () {
 
-            _this.onTranslucencyValueChanged(this.value)
+            for (var i = 0; i < _this.Viewers.length; i++) {
+                _this.onTranslucencyValueChanged(_this.Viewers[i], this.value);
 
+            }
         }
     }
-    
+
     /* This method starts the translucency control from modelbrowser/review table
      right click context menu*/
-    TranslucencyManager.prototype.StartFromComponentTable = function ()
-    {
-    }
+    TranslucencyManager.prototype.StartFromComponentTable = function () {
 
-    TranslucencyManager.prototype.onTranslucencyValueChanged = function (value) {
-        var outputFiled;
-        if (this.Viewer._params.containerId === "viewerContainer1") {            
-            outputFiled = document.getElementById("translucencyValue1");            
-        }
-        else if (this.Viewer._params.containerId === "viewerContainer2") {         
-            outputFiled = document.getElementById("translucencyValue2");            
-        }       
-        if(!outputFiled)
-        {
+        var _this = this;
+
+        var slider = document.getElementById("translucencySlider2");
+        var outputFiled = document.getElementById("translucencyValue2");
+        var overlayField = document.getElementById("translucencyOverlay2");
+
+        if (!slider ||
+            !outputFiled ||
+            !overlayField) {
             return;
         }
 
+        overlayField.style.right = "10px";
+        overlayField.style.bottom = "45%";
+        overlayField.style.display = "block";
+        outputFiled.innerHTML = slider.value;
+
+        //slider.value = 1;
+        slider.oninput = function () {
+
+            for (var i = 0; i < _this.Viewers.length; i++) {
+                _this.onTranslucencyValueChanged(_this.Viewers[i], this.value);
+
+            }
+        }
+    }
+
+    TranslucencyManager.prototype.ShowTranslucencyValue = function (viewer, value) {
+        var outputFiled;
+        if (viewer._params.containerId === "viewerContainer1" &&
+            this.FromViewer) {
+            outputFiled = document.getElementById("translucencyValue1");
+        }
+        else if (viewer._params.containerId === "viewerContainer2") {
+            outputFiled = document.getElementById("translucencyValue2");
+        }
+        if (!outputFiled) {
+            return;
+        }
         outputFiled.innerHTML = value;
-        
-        if (this.Viewer) {
-            var selectionManager = this.Viewer.selectionManager;
+    }
+
+    TranslucencyManager.prototype.onTranslucencyValueChanged = function (viewer, value) {
+
+        // show translucency value
+        this.ShowTranslucencyValue(viewer, value);
+
+        if (viewer) {
+
             var selectedNodes = [];
-            selectionManager.each(function (selectionItem) {
-                if (selectionItem.isNodeSelection()) {
-                    selectedNodes.push(selectionItem._nodeId);
+            if (this.FromViewer) {
+                var selectionManager = viewer.selectionManager;
+                selectionManager.each(function (selectionItem) {
+                    if (selectionItem.isNodeSelection()) {
+                        selectedNodes.push(selectionItem._nodeId);
+                    }
+                });
+            }
+            else {
+                selectedNodes = this.SelectedNodes[viewer._params.containerId];
+            }
+
+            // maintain changed components
+            for (var i = 0; i < selectedNodes.length; i++) {
+                var selectedNode = selectedNodes[i];
+
+                if (viewer._params.containerId in this.ChangedComponents) {
+                    this.ChangedComponents[viewer._params.containerId][selectedNode] = Number(value);
                 }
-            });
+                else {
+                    var changedNodes = {};
+                    changedNodes[selectedNode] = Number(value);
+                    this.ChangedComponents[viewer._params.containerId] = changedNodes;
+                }
+            }
 
-               // maintain changed components
-               for(var i = 0; i <selectedNodes.length; i++)
-               {
-                   var selectedNode = selectedNodes[i];                  
-                   this.ChangedComponents[selectedNode] = Number(value) ;                
-               }
-
-               this.Viewer.model.setNodesOpacity(selectedNodes, Number(value));         
+            viewer.model.setNodesOpacity(selectedNodes, Number(value));
         }
     }
 
     TranslucencyManager.prototype.Stop = function () {
-        if (this.Viewer) {
+        if (this.Viewers.length > 0) {
 
             // reset opacity for changed components
             this.ResetTranslucensy();
 
             var slider;
             var overlayField;
-            if (this.Viewer._params.containerId === "viewerContainer1") {
-                slider = document.getElementById("translucencySlider1");
-                overlayField = document.getElementById("translucencyOverlay1");
+            if (this.FromViewer) {
+                if (this.Viewers[0]._params.containerId === "viewerContainer1") {
+                    slider = document.getElementById("translucencySlider1");
+                    overlayField = document.getElementById("translucencyOverlay1");
+                }
+                else if (this.Viewers[0]._params.containerId === "viewerContainer2") {
+                    slider = document.getElementById("translucencySlider2");
+                    overlayField = document.getElementById("translucencyOverlay2");
+                }
             }
-            else if (this.Viewer._params.containerId === "viewerContainer2") {
+            else {
+                // if translucency is from browser table or component table
                 slider = document.getElementById("translucencySlider2");
                 overlayField = document.getElementById("translucencyOverlay2");
             }
+
             if (!slider || !overlayField) {
                 return;
             }
-           
+
             slider.value = 1;
             overlayField.style.display = "none";
         }
     }
 
     TranslucencyManager.prototype.ResetTranslucensy = function () {
-        if (!this.Viewer) {
+        if (this.Viewers.length === 0) {
             return;
-        }      
+        }
 
-        var changedNodes = Object.keys(this.ChangedComponents);
-        var nodes = [];
-        for(var i = 0; i <changedNodes.length; i++)
-       {
-          nodes.push( Number(changedNodes[i]));
-       } 
-       
-        // reset opacity
-        this.Viewer.model.resetNodesOpacity(nodes);
+        for (var i = 0; i < this.Viewers.length; i++) {
+            var viewer = this.Viewers[i];
+            if (!(viewer._params.containerId in this.ChangedComponents)) {
+                continue;
+            }
+
+            var changedNodes = Object.keys(this.ChangedComponents[viewer._params.containerId]);
+            var nodes = [];
+            for (var ii = 0; ii < changedNodes.length; ii++) {
+                nodes.push(Number(changedNodes[ii]));
+            }
+
+            // reset opacity
+            viewer.model.resetNodesOpacity(nodes);
+        }
 
         // clear the changed components object
         this.ChangedComponents = {};
     }
 
+    /* This method will be called only when the translucency is activated from viewer and 
+    any component is viewer is selected*/
     TranslucencyManager.prototype.ComponentSelected = function (nodeId) {
-        if (!this.Viewer) {
+        if (this.Viewers.length === 0) {
             return;
         }
 
         var slider;
         var outputFiled;
-        if (this.Viewer._params.containerId === "viewerContainer1") {
+        if (this.Viewers[0]._params.containerId === "viewerContainer1") {
             slider = document.getElementById("translucencySlider1");
             outputFiled = document.getElementById("translucencyValue1");
         }
-        else if (this.Viewer._params.containerId === "viewerContainer2") {
+        else if (this.Viewers[0]._params.containerId === "viewerContainer2") {
             slider = document.getElementById("translucencySlider2");
             outputFiled = document.getElementById("translucencyValue2");
         }
@@ -166,9 +225,10 @@ function TranslucencyManager(viewer, fromViewer) {
             return;
         }
 
-        if (nodeId in this.ChangedComponents) {
+        if (this.Viewers[0]._params.containerId in this.ChangedComponents &&
+            nodeId in this.ChangedComponents[this.Viewers[0]._params.containerId]) {
             // set values
-            slider.value = this.ChangedComponents[nodeId];           
+            slider.value = this.ChangedComponents[this.Viewers[0]._params.containerId][nodeId];
         }
         else {
             // set values
@@ -183,7 +243,8 @@ function TranslucencyManager(viewer, fromViewer) {
 
 function startTranslucency() {
     if (!currentViewer ||
-        translucencyActive()) {
+        !activateTranslucencyInCurrentViewer()) {
+        alert("Can't activate translucency.");
         return;
     }
 
@@ -192,29 +253,42 @@ function startTranslucency() {
         return;
     }
 
-    var translucencyManager = new TranslucencyManager(currentViewer, true);
+    var translucencyManager = new TranslucencyManager([currentViewer], true);
     translucencyManager.Start();
 
-    translucencyManagers[currentViewer._params.containerId] = translucencyManager;    
+    translucencyManagers[currentViewer._params.containerId] = translucencyManager;
 }
 
 function stopTranslucency() {
+
     if (!currentViewer ||
-        !(currentViewer._params.containerId in translucencyManagers))
-    {
+        !(currentViewer._params.containerId in translucencyManagers)) {
         return;
     }
 
     translucencyManagers[currentViewer._params.containerId].Stop();
-    delete translucencyManagers[currentViewer._params.containerId]; 
+    delete translucencyManagers[currentViewer._params.containerId];
+
+    // for (var key in translucencyManagers) {
+    //     translucencyManagers[key].Stop();
+    //     delete translucencyManagers[key];
+    // }
 }
 
-function translucencyActive()
-{
-    if (currentViewer &&
-        (currentViewer._params.containerId in translucencyManagers)) {
+function translucencyActive() {
+    if (Object.keys(translucencyManagers).length > 0) {
         return true;
-    } 
+    }
+
+    return false;
+}
+
+function activateTranslucencyInCurrentViewer() {
+    if (currentViewer &&
+        !(currentViewer._params.containerId in translucencyManagers) &&
+        !("both" in translucencyManagers)) {
+        return true;
+    }
 
     return false;
 }

@@ -560,6 +560,12 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
 
 ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
 
+    if(translucencyActive())
+    {
+        alert("Can't activate translucency.");
+        return;
+    }
+
     // get selected source A and B node ids
     var nodes = this.GetNodeIdsFormComponentRow();
     if (!nodes) {
@@ -569,17 +575,32 @@ ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
     // activate translucency
     var sourceANodeIds = nodes["SourceA"];
     var sourceBNodeIds = nodes["SourceB"];
-    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewModuleViewerInterface;  
+    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewModuleViewerInterface;
     var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewModuleViewerInterface;
 
-    if ((sourceANodeIds.length > 0 && sourceAViewerInterface) || 
-        (sourceBNodeIds.length > 0 && sourceBViewerInterface)) {
-            
-        var translucencyManager = new TranslucencyManager(sourceAViewerInterface.Viewer, false);
-        translucencyManager.Start();
-    }     
+    var viewers = [];
+    var selectedNodes = {};
+    if (sourceANodeIds.length > 0 && sourceAViewerInterface) {
+        viewers.push(sourceAViewerInterface.Viewer);
+        selectedNodes[sourceAViewerInterface.Viewer._params.containerId] = sourceANodeIds;
+    }
+    if (sourceBNodeIds.length > 0 && sourceBViewerInterface) {
+        viewers.push(sourceBViewerInterface.Viewer);
+        selectedNodes[sourceBViewerInterface.Viewer._params.containerId] = sourceBNodeIds;
+    }
+
+    var translucencyManager = new TranslucencyManager(viewers, false, selectedNodes);
+    translucencyManager.Start();
+    
+    translucencyManagers["both"] = translucencyManager;
 }
 
 ReviewComparisonContextMenuManager.prototype.OnStopTranslucency = function () {
+    if (!("both" in translucencyManagers))
+    {
+        return;
+    }
 
+    translucencyManagers["both"].Stop();
+    delete translucencyManagers["both"]; 
 }
