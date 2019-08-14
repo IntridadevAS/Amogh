@@ -1033,6 +1033,11 @@
                     if (comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow) {
                         comparisonReviewManager.SelectionManager.RemoveHighlightColor(comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
+                    if(comparisonReviewManager.SourceAViewerCurrentSheetLoaded !== undefined ||
+                    comparisonReviewManager.SourceBViewerCurrentSheetLoaded !== undefined) {
+                        comparisonReviewManager.SourceAViewerCurrentSheetLoaded = undefined;
+                        comparisonReviewManager.SourceBViewerCurrentSheetLoaded = undefined;
+                    }       
                 }
             }
             else if (tabName === "SourceAComplianceTabPage") {
