@@ -99,7 +99,8 @@ function populateCheckResults(comparisonCheckGroups,
                     async: false,
                     data: {
                          'Source': "SourceA",
-                         'ProjectName': projectinfo.projectname 
+                         'ProjectName': projectinfo.projectname ,
+                         'CheckName': checkinfo.checkname
                         },
                     success: function (msg) {
                         if (msg != 'fail') {

@@ -7,15 +7,15 @@ function ReviewComplianceSelectionManager() {
 ReviewComplianceSelectionManager.prototype = Object.create(ReviewSelectionManager.prototype);
 ReviewComplianceSelectionManager.prototype.constructor = ReviewComplianceSelectionManager;
 
-ReviewComplianceSelectionManager.prototype.ChangeBackgroundColor = function (row) {
+ReviewComplianceSelectionManager.prototype.ApplyHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = "#B2BABB"
     }
 }
 
-ReviewComplianceSelectionManager.prototype.RestoreBackgroundColor = function (row) {
-    var Color = this.GetRowHighlightColor(row.cells[1].innerHTML);
+ReviewComplianceSelectionManager.prototype.UnApplyHighlightColor = function (row) {
+    var Color = this.GetRowHighlightColor(row.cells[ComplianceColumns.Status].innerHTML);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = Color;
@@ -53,5 +53,12 @@ ReviewComplianceSelectionManager.prototype.GetRowHighlightColor = function (stat
     }
     else {
         return "#ffffff";
+    }
+}
+
+ReviewComplianceSelectionManager.prototype.ChangeBackgroundColor =  function(row, status) {
+    var color = this.GetRowHighlightColor(status);
+    for(var cell = 0; cell < row.cells.length; cell++) {
+        row.cells[cell].style.backgroundColor = color;
     }
 }

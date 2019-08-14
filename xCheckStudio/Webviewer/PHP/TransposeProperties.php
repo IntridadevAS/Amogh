@@ -1,5 +1,5 @@
 <?php
-
+require_once 'Utility.php';
 
 
 $projectName = $_POST['ProjectName'];
@@ -85,6 +85,7 @@ function TransposeProperty() {
             else {
                 $toBecompstatus = null;
                 $propertyAccepted = false;
+                break;
             }
             $index++;
         }

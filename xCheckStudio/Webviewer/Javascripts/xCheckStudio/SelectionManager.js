@@ -18,7 +18,7 @@ SelectionManager.prototype.RemoveFromselectedCompoents = function (componentRow)
 /* 
    This function 
 */
-SelectionManager.prototype.RestoreBackgroundColor = function (row) {
+SelectionManager.prototype.UnApplyHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = "#ffffff"
@@ -28,7 +28,7 @@ SelectionManager.prototype.RestoreBackgroundColor = function (row) {
 /* 
    This function 
 */
-SelectionManager.prototype.ChangeBackgroundColor = function (row) {
+SelectionManager.prototype.ApplyHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = "#B2BABB"
