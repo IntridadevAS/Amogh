@@ -112,7 +112,7 @@ ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = functio
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
-            accept = ChooseActionForComplianceGroup(selectedRow[0]);
+            accept = _this.ChooseActionForComplianceGroup(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             return {
                 callback: function (key, options) {
@@ -203,32 +203,104 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptComponent= function (rowClicked)
 {
-    this.ComplianceReviewManager.UpdateStatusForComponent(rowClicked);
+    var tableToUpdate = this.GetTableNameToAcceptComponent();
+    this.ComplianceReviewManager.UpdateStatusForComponent(rowClicked, tableToUpdate);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptProperty= function (rowClicked)
 {
-    this.ComplianceReviewManager.UpdateStatusForProperty(rowClicked);
+    var tableToUpdate = this.GetTableNameToAcceptProperty();
+    this.ComplianceReviewManager.UpdateStatusForProperty(rowClicked, tableToUpdate);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptGroup= function (rowClicked)
 {
-    this.ComplianceReviewManager.UpdateStatusOfCategory(rowClicked[0]);
+    var tableToUpdate = this.GetTableNameToAcceptGroup();
+    this.ComplianceReviewManager.UpdateStatusOfCategory(rowClicked[0], tableToUpdate);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponent= function (rowClicked)
 {
-    this.ComplianceReviewManager.UnAcceptComponent(rowClicked);
+    var tableToUpdate = this.GetTableNameToUnAcceptComponent();
+    this.ComplianceReviewManager.UnAcceptComponent(rowClicked, tableToUpdate);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty= function (rowClicked)
 {
-    this.ComplianceReviewManager.UnAcceptProperty(rowClicked);
+    var tableToUpdate = this.GetTableNameToUnAcceptProperty();
+    this.ComplianceReviewManager.UnAcceptProperty(rowClicked, tableToUpdate);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptGroup= function (rowClicked)
 {
-    this.ComplianceReviewManager.UnAcceptCategory(rowClicked[0]);
+    var tableToUpdate = this.GetTableNameToUnAcceptGroup();
+    this.ComplianceReviewManager.UnAcceptCategory(rowClicked[0], tableToUpdate);
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptComponent = function() {
+    var tableToUpdate = "";
+    if(this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+        tableToUpdate = "complianceSourceA";
+    }
+    else if(this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+        tableToUpdate = "complianceSourceB";
+    }
+    return tableToUpdate;
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptProperty = function() {
+    var tableToUpdate = "";
+    if(this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
+        tableToUpdate = "ComplianceADetailedReview";
+    }
+    else if(this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
+        tableToUpdate = "ComplianceBDetailedReview";
+    }
+    return tableToUpdate;
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptGroup = function() {
+    var tableToUpdate = "";
+    if (this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+        tableToUpdate = "categoryComplianceA";
+    }
+    else if (this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+        tableToUpdate = "categoryComplianceB";
+    }
+    return tableToUpdate;
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptComponent = function() {
+    var tableToUpdate = "";
+    if(this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+        tableToUpdate = "rejectComponentFromComplianceATab";
+    }
+    else if(this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+        tableToUpdate = "rejectComponentFromComplianceBTab";
+    }
+    return tableToUpdate;
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptProperty = function() {
+    var tableToUpdate = "";
+    if(this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
+        tableToUpdate = "rejectPropertyFromComplianceATab";
+    }
+    else if(this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
+        tableToUpdate = "rejectPropertyFromComplianceBTab";
+    }
+    return tableToUpdate;
+}
+
+ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = function() {
+    var tableToUpdate = "";
+    if (this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+        tableToUpdate = "rejectCategoryFromComplianceATab";
+    }
+    else if (this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+        tableToUpdate = "rejectCategoryFromComplianceBTab";
+    }
+    return tableToUpdate;
 }
 
 ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {

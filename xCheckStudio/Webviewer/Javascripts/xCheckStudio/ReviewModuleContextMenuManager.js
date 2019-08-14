@@ -7,15 +7,15 @@ ReviewModuleContextMenuManager.prototype.HighlightSelectedRowOnRightClick = func
     var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
     if(typeOfRow == "ComparisonMainReviewTbody") { 
         comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow = selectedRow[0];
-        comparisonReviewManager.SelectionManager.ChangeBackgroundColor(selectedRow[0]);
+        comparisonReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
     }
     else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
         sourceAComplianceReviewManager.SelectedComponentRow = selectedRow[0];
-        sourceAComplianceReviewManager.SelectionManager.ChangeBackgroundColor(selectedRow[0]);
+        sourceAComplianceReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
     }
     else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
         sourceBComplianceReviewManager.SelectedComponentRow = selectedRow[0];
-        sourceBComplianceReviewManager.SelectionManager.ChangeBackgroundColor(selectedRow[0]);
+        sourceBComplianceReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
     }
 }
 

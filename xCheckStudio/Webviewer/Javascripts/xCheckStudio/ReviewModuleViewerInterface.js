@@ -91,12 +91,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 var rowIndex = _this.ReviewManager.SelectedComponentRowFromSheetB.rowIndex;
                 obj = Object.keys(_this.ReviewManager.checkStatusArrayB)
                 var status = _this.ReviewManager.checkStatusArrayB[obj[0]][rowIndex]
-                var color = _this.ReviewManager.SelectionManager.GetRowHighlightColor(status);
-                for (var j = 0; j < _this.ReviewManager.SelectedComponentRowFromSheetB.cells.length; j++) {
-                    cell = _this.ReviewManager.SelectedComponentRowFromSheetB.cells[j];
-                    cell.style.backgroundColor = color;
-                }
-
+                _this.ReviewManager.SelectionManager.ChangeBackgroundColor(_this.ReviewManager.SelectedComponentRowFromSheetB, status);
                 _this.ReviewManager.SelectedComponentRowFromSheetB = undefined;
             }
         }
@@ -112,19 +107,14 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 var rowIndex = _this.ReviewManager.SelectedComponentRowFromSheetA.rowIndex;
                 obj = Object.keys(_this.ReviewManager.checkStatusArrayA)
                 var status = _this.ReviewManager.checkStatusArrayA[obj[0]][rowIndex]
-                var color = _this.ReviewManager.SelectionManager.GetRowHighlightColor(status);
-                for (var j = 0; j < _this.ReviewManager.SelectedComponentRowFromSheetA.cells.length; j++) {
-                    cell = _this.ReviewManager.SelectedComponentRowFromSheetA.cells[j];
-                    cell.style.backgroundColor = color;
-                }
-
+                _this.ReviewManager.SelectionManager.ChangeBackgroundColor(_this.ReviewManager.SelectedComponentRowFromSheetA, status);
                 _this.ReviewManager.SelectedComponentRowFromSheetA = undefined;
             }
         }
 
         // restore highlightcolor of selected row in main review table
         if (_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-            _this.ReviewManager.SelectionManager.RestoreBackgroundColor(_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+            _this.ReviewManager.SelectionManager.UnApplyHighlightColor(_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
             _this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = undefined;
 
             var parentTable = document.getElementById(_this.ReviewManager.DetailedReviewTableContainer);
@@ -399,7 +389,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                             }
 
                             if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-                                this.ReviewManager.SelectionManager.RestoreBackgroundColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+                                this.ReviewManager.SelectionManager.UnApplyHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
                             }
 
                             this.ReviewManager.SelectionManager.ChangeBackgroundColor(childRow)

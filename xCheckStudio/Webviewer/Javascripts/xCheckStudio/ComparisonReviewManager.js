@@ -337,11 +337,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 return;
             }
             var status = currentRow.cells[ComparisonColumns.Status].innerHTML;
-            var color = this.SelectionManager.GetRowHighlightColor(status);
-            for (var j = 0; j < currentRow.cells.length; j++) {
-                cell = currentRow.cells[j];
-                cell.style.backgroundColor = color;
-            }
+            this.SelectionManager.ChangeBackgroundColor(currentRow, status);
         }
     }
 
@@ -583,7 +579,12 @@ function ComparisonReviewManager(comparisonCheckManager,
         this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, this.MainReviewTableContainer);           
     }     
 
-    ComparisonReviewManager.prototype.LoadSheetTableData = function (columnHeaders, tableData, viewerContainer, CurrentReviewTableRow, column, sheetName) {
+    ComparisonReviewManager.prototype.LoadSheetTableData = function (columnHeaders, 
+        tableData, 
+        viewerContainer,
+         CurrentReviewTableRow, 
+         column, 
+         sheetName) {
 
         var _this = this;
         if (viewerContainer === "#viewerContainer1" || viewerContainer === "#viewerContainer2") {
@@ -688,7 +689,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
 
         // highlight sheet data row
-        this.SelectionManager.ChangeBackgroundColor(row);
+        this.SelectionManager.ApplyHighlightColor(row);
 
         // highlight check result component row
         this.HighlightRowInMainReviewTable(row, viewerContainer);
@@ -840,8 +841,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         if (this.SourceAComponents !== undefined &&
             this.SourceBComponents !== undefined) {
                 
-            this.checkStatusArrayA = {};
-            this.checkStatusArrayB = {};
+            // this.checkStatusArrayA = {};
+            // this.checkStatusArrayB = {};
             var result = sheetName.split('-');                   
 
             if (row.cells[ComparisonColumns.SourceAName].innerText !== "") {
@@ -868,8 +869,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceBViewerData !== undefined) 
         {
 
-            this.checkStatusArrayA = {};
-            this.checkStatusArrayB = {};
+            // this.checkStatusArrayA = {};
+            // this.checkStatusArrayB = {};
             var result = sheetName.split('-');
 
             this.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], row);
@@ -880,8 +881,8 @@ function ComparisonReviewManager(comparisonCheckManager,
             this.SourceBComponents !== undefined) 
         {
 
-            this.checkStatusArrayA = {};
-            this.checkStatusArrayB = {};
+            // this.checkStatusArrayA = {};
+            // this.checkStatusArrayB = {};
             var result = sheetName.split('-');
 
             this.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], row);
@@ -956,12 +957,11 @@ function ComparisonReviewManager(comparisonCheckManager,
                         if(sourceAName == propertiesNames.SourceAName && 
                             sourceBName == propertiesNames.SourceBName) {
                             selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
-                            _this.SelectionManager.ChangeBackgroundColorAfterAcceptOrTanspose(selectedRow[0], 'ACCEPTED');
+                            _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                             properties[i]["Severity"] = "ACCEPTED";
                         }
                         
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
                     _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
                 }
             });   
@@ -989,7 +989,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                 success: function (msg) {
                     var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
                     component.status = "OK(A)";
-                    _this.SelectionManager.ChangeBackgroundColorAfterAcceptOrTanspose(selectedRow[0], component.status);
+                    _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], component.status);
                     for (var propertyId in component.properties) {
                         property = component.properties[propertyId];
                         if (property.Severity !== "OK" && property.Severity !== "No Value") {
@@ -1004,7 +1004,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                         }
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = component.status;
                     _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                 }
             });
@@ -1027,6 +1026,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         "groupId" : this.GetComparisonResultGroupId(selectedRow)};
 
         $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function() {
+            _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
             _this.populateDetailedReviewTable(selectedRow);
             $(gridId).jsGrid("refresh");
         });
@@ -1183,7 +1183,7 @@ function ComparisonReviewManager(comparisonCheckManager,
                             component.status = status[0] + "(T)";
                     }
 
-                    _this.SelectionManager.ChangeBackgroundColorAfterAcceptOrTanspose(selectedRow[0], component.status);
+                    _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], component.status);
 
                     var index = 0;
                     for(var propertyId in properties) {
@@ -1198,7 +1198,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                         index++;
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = component.status;
                     _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                 }
             });   
@@ -1237,6 +1236,9 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                     var propertiesLen = properties.length;
 
+                    if(component["transpose"] !== null && !status[0].includes("(T)")) {
+                        changedStatus = status[0] + "(T)";
+                    }
                     component["Status"] = changedStatus;
                     for(var i = 0; i < propertiesLen; i++) {
                         var sourceAName = properties[i]["SourceAName"];
@@ -1256,7 +1258,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                        
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
                     _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
                 }
             });   
@@ -1401,17 +1402,17 @@ function ComparisonReviewManager(comparisonCheckManager,
                         component.Status = changedStatus;
                     }
                     if(msg.trim() == "OK(T)" || msg.trim() == "OK(A)(T)") {
-                            changedStatus = msg.trim();
+                        changedStatus = msg.trim();
                         component.Status = changedStatus;
                         component.transpose = transposeType;
                     }
 
-                    _this.SelectionManager.ChangeBackgroundColorAfterAcceptOrTanspose(_this.SelectionManager.HighlightedCheckComponentRow, changedStatus);
+                    _this.SelectionManager.ChangeBackgroundColor(_this.SelectionManager.HighlightedCheckComponentRow, changedStatus);
 
                     var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML;
                     var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML;
 
-                    _this.SelectionManager.ChangeBackgroundColorAfterAcceptOrTanspose(selectedRow[0], 'OK(T)');
+                    _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], 'OK(T)');
 
                     var propertiesLen = properties.length;
 
@@ -1450,7 +1451,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }
                         }
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
                     _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
                 }
             });   
@@ -1489,9 +1489,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                     var component = checkComponents[componentId];
                     var properties = component["properties"];
 
-                    component["Status"] = changedStatus;
-                    component["transpose"] = null;
-
                     var propertiesLen = properties.length;
 
                     for(var i = 0; i < propertiesLen; i++) {
@@ -1511,9 +1508,14 @@ function ComparisonReviewManager(comparisonCheckManager,
                             properties[i]["Severity"] = status[1];
                             properties[i]["transpose"] = null;
                         }
+                        else if(properties[i]["transpose"] !== null && !status[0].includes("(T)")) {
+                            changedStatus = status[0] + "(T)";
+                        }
                         
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+
+                    component["Status"] = changedStatus;
+                    component["transpose"] = null;
                     _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
                 }
                     
@@ -1558,7 +1560,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                             }                
                             index++;
                         }
-                        _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = component.status;
                         _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                     }
                 });   
@@ -1608,7 +1609,6 @@ function ComparisonReviewManager(comparisonCheckManager,
                         }
                             
                     }
-                    _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = component.status;
                     _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
                 },
             });   
@@ -1889,9 +1889,11 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
 
         if (viewerContainer === "#viewerContainer1") {
+            this.checkStatusArrayA = {};
             this.checkStatusArrayA[sheetName] = checkStatusArray;
         }
         else if (viewerContainer === "#viewerContainer2") {
+            this.checkStatusArrayB = {};
             this.checkStatusArrayB[sheetName] = checkStatusArray;
         }
     }
@@ -1940,7 +1942,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
 
-                        this.SelectionManager.ChangeBackgroundColor(this.SelectedComponentRowFromSheetA);
+                        this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
 
                         var sheetDataTable1 = containerChildren[1].getElementsByTagName("table")[0];
                         sheetDataTable1.focus();
@@ -1954,7 +1956,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
                         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
 
-                        this.SelectionManager.ChangeBackgroundColor(this.SelectedComponentRowFromSheetB);
+                        this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
 
                         var sheetDataTable2 = containerChildren[1].getElementsByTagName("table")[0];
                         sheetDataTable2.focus();
@@ -1973,11 +1975,7 @@ function ComparisonReviewManager(comparisonCheckManager,
         obj = Object.keys(checkStatusArray)
         var status = checkStatusArray[obj[0]][rowIndex]
         if (status !== undefined) {
-            var color = this.SelectionManager.GetRowHighlightColor(status);
-            for (var j = 0; j < currentRow.cells.length; j++) {
-                cell = currentRow.cells[j];
-                cell.style.backgroundColor = color;
-            }
+            this.SelectionManager.ChangeBackgroundColor(currentRow, status);
         }
         else {
             color = "#fffff"
@@ -2112,12 +2110,8 @@ function ComparisonReviewManager(comparisonCheckManager,
         for (var i = 0; i < detailedReviewTableRows.length; i++) {
             var currentRow = detailedReviewTableRows[i];
             if (currentRow.cells.length > 1) {
-                var status = currentRow.cells[4].innerHTML;
-                var color = this.SelectionManager.GetRowHighlightColor(status);
-                for (var j = 0; j < currentRow.cells.length; j++) {
-                    cell = currentRow.cells[j];
-                    cell.style.backgroundColor = color;
-                }
+                var status = currentRow.cells[ComparisonPropertyColumns.Status].innerHTML;
+                this.SelectionManager.ChangeBackgroundColor(currentRow, status);
             }
         }
     }
@@ -2179,7 +2173,7 @@ function ComparisonReviewManager(comparisonCheckManager,
    }
 
    ComparisonReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = function(row) {
-        return {SourceAName : row.cells[ComparisonPropertyColumns.SourceAName].innerHTML, 
-                SourceBName : row.cells[ComparisonPropertyColumns.SourceBName].innerHTML}
+        return {SourceAName : row.cells[ComparisonPropertyColumns.SourceAName].innerText, 
+                SourceBName : row.cells[ComparisonPropertyColumns.SourceBName].innerText}
    }
 }

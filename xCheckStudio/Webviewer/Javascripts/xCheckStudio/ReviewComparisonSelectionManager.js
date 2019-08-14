@@ -25,7 +25,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         // component row doesn't exist already
 
         // highlight selected row
-        this.ChangeBackgroundColor(currentRow);
+        this.ApplyHighlightColor(currentRow);
 
         // keep track of selected component row
         this.SelectedCheckComponentRows.push(currentRow);
@@ -33,7 +33,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     else if (this.SelectedCheckComponentRows.includes(currentRow)) {
 
         // restore color
-        this.RestoreBackgroundColor(currentRow);
+        this.UnApplyHighlightColor(currentRow);
 
         // remove current row from selected rows array
         var index = this.SelectedCheckComponentRows.indexOf(currentRow);
@@ -43,14 +43,14 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     }
 }
 
-ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row) {
+ReviewComparisonSelectionManager.prototype.ApplyHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = "#B2BABB"
     }
 }
 
-ReviewComparisonSelectionManager.prototype.RestoreBackgroundColor = function (row) {
+ReviewComparisonSelectionManager.prototype.UnApplyHighlightColor = function (row) {
     var Color = this.GetRowHighlightColor(row.cells[ComparisonColumns.Status].innerHTML);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
@@ -112,10 +112,10 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
 
     if (this.HighlightedCheckComponentRow &&
         !this.SelectedCheckComponentRows.includes(this.HighlightedCheckComponentRow)) {
-        this.RestoreBackgroundColor(this.HighlightedCheckComponentRow);
+        this.UnApplyHighlightColor(this.HighlightedCheckComponentRow);
     }
 
-    this.ChangeBackgroundColor(currentReviewTableRow);
+    this.ApplyHighlightColor(currentReviewTableRow);
     this.HighlightedCheckComponentRow = currentReviewTableRow;
 }
 
@@ -141,7 +141,7 @@ ReviewComparisonSelectionManager.prototype.ScrollToHighlightedCheckComponentRow 
     }
 }
 
-ReviewComparisonSelectionManager.prototype.ChangeBackgroundColorAfterAcceptOrTanspose =  function(row, status) {
+ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor =  function(row, status) {
     var color = this.GetRowHighlightColor(status);
     for(var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;

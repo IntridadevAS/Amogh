@@ -53,3 +53,26 @@ const ComplianceColumns = {
     GroupId: 5
 }
 
+// Compliance main review column names
+const ComplianceColumnNames = {
+    Select: "Select",
+    SourceName: "SourceA",
+    Status: "Status",
+    NodeId: "NodeId",
+    ResultId: "ID",
+    GroupId: "groupId"
+}
+
+const CompliancePropertyColumns = {
+    PropertyName: 0,
+    PropertyValue: 1,
+    Status: 2
+}
+
+// column names
+const CompliancePropertyColumnNames = {
+    PropertyName: "Property",
+    PropertyValue: "Value",
+    Status: "Status"
+}
+

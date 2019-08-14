@@ -1031,7 +1031,7 @@
                             comparisonReviewManager.SelectedComponentRowFromSheetB);
                     }
                     if (comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-                        comparisonReviewManager.SelectionManager.RestoreBackgroundColor(comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow);
+                        comparisonReviewManager.SelectionManager.UnApplyHighlightColor(comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
                 }
             }
@@ -1067,7 +1067,7 @@
                             sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
                     }
                     if (sourceAComplianceReviewManager.SelectedComponentRow) {
-                        sourceAComplianceReviewManager.SelectionManager.RestoreBackgroundColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                        sourceAComplianceReviewManager.SelectionManager.UnApplyHighlightColor(sourceAComplianceReviewManager.SelectedComponentRow);
                     }
                 }
             }
@@ -1103,7 +1103,7 @@
                             sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
                     }
                     if (sourceBComplianceReviewManager.SelectedComponentRow) {
-                        sourceBComplianceReviewManager.SelectionManager.RestoreBackgroundColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                        sourceBComplianceReviewManager.SelectionManager.UnApplyHighlightColor(sourceBComplianceReviewManager.SelectedComponentRow);
                     }
                 }
             }
