@@ -36,7 +36,7 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentChec
           this.SelectedCompoents.push(checkedComponent);
 
           // highlight selected row
-          this.ChangeBackgroundColor(currentRow);
+          this.ApplyHighlightColor(currentRow);
 
           // maintain selected rows
           if (!this.SelectedComponentRows.includes(currentRow)) {
@@ -47,7 +47,7 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentChec
           this.RemoveFromselectedCompoents(currentRow);
 
           // restore color
-          this.RestoreBackgroundColor(currentRow);
+          this.RemoveHighlightColor(currentRow);
 
           // maintain selected rows
           if (this.SelectedComponentRows.includes(currentRow)) {
@@ -179,12 +179,12 @@ ExcelSelectionManager.prototype.HandleRowSelect = function (row) {
 
      if (this.HighlightedComponentRow &&
           !this.SelectedComponentRows.includes(this.HighlightedComponentRow)) {
-          this.RestoreBackgroundColor(this.HighlightedComponentRow);
+          this.RemoveHighlightColor(this.HighlightedComponentRow);
      }
 
      // highlight new row  
      if (!this.SelectedComponentRows.includes(row)) {
-          this.ChangeBackgroundColor(row);
+          this.ApplyHighlightColor(row);
      }
      this.HighlightedComponentRow = row;
 
@@ -249,10 +249,10 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow) {
                     }
 
                     if (this.SelectedComponentRow) {
-                         this.RestoreBackgroundColor(this.SelectedComponentRow);
+                         this.RemoveHighlightColor(this.SelectedComponentRow);
                     }
 
-                    this.ChangeBackgroundColor(rowData);
+                    this.ApplyHighlightColor(rowData);
                     this.SelectedComponentRow = rowData;
 
                     if (this.SelectedComponentRowFromSheet) {

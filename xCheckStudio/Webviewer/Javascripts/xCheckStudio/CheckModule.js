@@ -1203,7 +1203,7 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                 // select and highlight row
                 if (!sourceManager1.ModelTree.SelectionManager.SelectedComponentRows.includes(row)) {
                     sourceManager1.ModelTree.SelectionManager.SelectedComponentRows.push(row);
-                    sourceManager1.ModelTree.SelectionManager.ChangeBackgroundColor(row);
+                    sourceManager1.ModelTree.SelectionManager.ApplyHighlightColor(row);
                 }
             }
             else if (sourceManager2 &&
@@ -1239,7 +1239,7 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
                 // select and highlight row
                 if (!sourceManager2.ModelTree.SelectionManager.SelectedComponentRows.includes(row)) {
                     sourceManager2.ModelTree.SelectionManager.SelectedComponentRows.push(row);
-                    sourceManager2.ModelTree.SelectionManager.ChangeBackgroundColor(row);
+                    sourceManager2.ModelTree.SelectionManager.ApplyHighlightColor(row);
                 }
             }
         }
@@ -1247,12 +1247,12 @@ function checkAllCBClick(checkBox, modelTreeContainer, checkBoxId) {
             // unhighlight
             if (sourceManager1 &&
                 modelTreeContainer === "modelTree1") {
-                sourceManager1.ModelTree.SelectionManager.RestoreBackgroundColor(row);
+                sourceManager1.ModelTree.SelectionManager.RemoveHighlightColor(row);
                 sourceManager1.ModelTree.SelectionManager.SelectedComponentRows = [];
             }
             else if (sourceManager2 &&
                 modelTreeContainer === "modelTree2") {
-                sourceManager2.ModelTree.SelectionManager.RestoreBackgroundColor(row);
+                sourceManager2.ModelTree.SelectionManager.RemoveHighlightColor(row);
                 sourceManager2.ModelTree.SelectionManager.SelectedComponentRows = [];
             }
         }

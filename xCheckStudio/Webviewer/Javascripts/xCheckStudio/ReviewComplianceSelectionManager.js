@@ -14,7 +14,7 @@ ReviewComplianceSelectionManager.prototype.ApplyHighlightColor = function (row) 
     }
 }
 
-ReviewComplianceSelectionManager.prototype.UnApplyHighlightColor = function (row) {
+ReviewComplianceSelectionManager.prototype.RemoveHighlightColor = function (row) {
     var Color = this.GetRowHighlightColor(row.cells[ComplianceColumns.Status].innerHTML);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];

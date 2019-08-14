@@ -209,7 +209,7 @@ ExcelModeBrowser.prototype.SelectedCompoentExists = function (componentRow) {
     return this.SelectionManager.SelectedCompoentExists(componentRow);
 }
 
-ExcelModeBrowser.prototype.ChangeBackgroundColor = function (row) {
+ExcelModeBrowser.prototype.ApplyHighlightColor = function (row) {
     // row.style.backgroundColor = "#B2BABB";
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
@@ -217,7 +217,7 @@ ExcelModeBrowser.prototype.ChangeBackgroundColor = function (row) {
     }
 }
 
-ExcelModeBrowser.prototype.RestoreBackgroundColor = function (row) {
+ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
     // row.style.backgroundColor = "#ffffff";
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
