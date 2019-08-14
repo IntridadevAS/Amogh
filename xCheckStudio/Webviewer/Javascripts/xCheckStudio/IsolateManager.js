@@ -19,6 +19,8 @@ IsolateManager.prototype.Isolate = function (nodes) {
     });
 }
 
+/* This methode is called from right click context menu item 'Isolate' where
+   viewer on which right click is performed is 'currentViewer'*/
 function isolate() {
     if (!currentViewer) {
         return;
