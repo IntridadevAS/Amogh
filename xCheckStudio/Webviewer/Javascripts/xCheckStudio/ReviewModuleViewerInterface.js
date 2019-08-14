@@ -114,7 +114,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
         // restore highlightcolor of selected row in main review table
         if (_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-            _this.ReviewManager.SelectionManager.UnApplyHighlightColor(_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+            _this.ReviewManager.SelectionManager.RemoveHighlightColor(_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
             _this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = undefined;
 
             var parentTable = document.getElementById(_this.ReviewManager.DetailedReviewTableContainer);
@@ -389,7 +389,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                             }
 
                             if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-                                this.ReviewManager.SelectionManager.UnApplyHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+                                this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
                             }
 
                             this.ReviewManager.SelectionManager.ChangeBackgroundColor(childRow)

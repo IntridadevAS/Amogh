@@ -794,7 +794,7 @@ function ComplianceReviewManager(complianceCheckManager,
         }
 
         if (this.SelectedComponentRow) {
-            this.SelectionManager.UnApplyHighlightColor(this.SelectedComponentRow);
+            this.SelectionManager.RemoveHighlightColor(this.SelectedComponentRow);
         }
 
         this.SelectionManager.ApplyHighlightColor(currentReviewTableRow);
@@ -832,7 +832,7 @@ function ComplianceReviewManager(complianceCheckManager,
            
             if (_this.SelectedComponentRow) 
             {
-                _this.SelectionManager.UnApplyHighlightColor(_this.SelectedComponentRow);
+                _this.SelectionManager.RemoveHighlightColor(_this.SelectedComponentRow);
             }
             
             this.HighlightRowInSheetData(thisRow, viewerContainer);
@@ -930,7 +930,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
                 }
                 if (_this.SelectedComponentRow) {
-                    _this.SelectionManager.UnApplyHighlightColor(_this.SelectedComponentRow);
+                    _this.SelectionManager.RemoveHighlightColor(_this.SelectedComponentRow);
                 }
 
                 _this.checkStatusArray = {};
@@ -946,7 +946,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
                 }
                 if (_this.SelectedComponentRow) {
-                    _this.SelectionManager.UnApplyHighlightColor(_this.SelectedComponentRow);
+                    _this.SelectionManager.RemoveHighlightColor(_this.SelectedComponentRow);
                 }
                 _this.checkStatusArray = {};
                 _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer2", thisRow, column, sheetName);
@@ -1040,7 +1040,7 @@ function ComplianceReviewManager(complianceCheckManager,
                     }
 
                     if (this.SelectedComponentRow) {
-                        this.SelectionManager.UnApplyHighlightColor(_this.SelectedComponentRow);
+                        this.SelectionManager.RemoveHighlightColor(_this.SelectedComponentRow);
                     }
 
                     this.SelectionManager.ApplyHighlightColor(modelBrowserRow);
@@ -1206,7 +1206,7 @@ function ComplianceReviewManager(complianceCheckManager,
                         return;
                     }
                     if (this.SelectedComponentRow) {
-                        this.SelectionManager.UnApplyHighlightColor(this.SelectedComponentRow);
+                        this.SelectionManager.RemoveHighlightColor(this.SelectedComponentRow);
                     }
                     this.SelectedComponentRow = thisRow;
                     this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRow);

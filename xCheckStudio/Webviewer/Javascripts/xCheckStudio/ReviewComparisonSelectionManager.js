@@ -33,7 +33,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     else if (this.SelectedCheckComponentRows.includes(currentRow)) {
 
         // restore color
-        this.UnApplyHighlightColor(currentRow);
+        this.RemoveHighlightColor(currentRow);
 
         // remove current row from selected rows array
         var index = this.SelectedCheckComponentRows.indexOf(currentRow);
@@ -50,7 +50,7 @@ ReviewComparisonSelectionManager.prototype.ApplyHighlightColor = function (row) 
     }
 }
 
-ReviewComparisonSelectionManager.prototype.UnApplyHighlightColor = function (row) {
+ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row) {
     var Color = this.GetRowHighlightColor(row.cells[ComparisonColumns.Status].innerHTML);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
@@ -112,7 +112,7 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
 
     if (this.HighlightedCheckComponentRow &&
         !this.SelectedCheckComponentRows.includes(this.HighlightedCheckComponentRow)) {
-        this.UnApplyHighlightColor(this.HighlightedCheckComponentRow);
+        this.RemoveHighlightColor(this.HighlightedCheckComponentRow);
     }
 
     this.ApplyHighlightColor(currentReviewTableRow);
