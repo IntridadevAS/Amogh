@@ -391,7 +391,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                             // scroll to row                           
                             var reviewTable = this.ReviewManager.GetReviewTable(childRow);
                             reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
-                            document.getElementById("ComparisonMainReviewTbody").scrollTop = reviewTable.offsetTop;
+                            reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
 
                             //break;
                             return true;
