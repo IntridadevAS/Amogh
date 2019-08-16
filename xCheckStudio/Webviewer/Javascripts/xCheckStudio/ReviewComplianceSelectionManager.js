@@ -22,43 +22,61 @@ ReviewComplianceSelectionManager.prototype.RemoveHighlightColor = function (row)
     }
 }
 
-ReviewComplianceSelectionManager.prototype.GetRowHighlightColor = function (status) {
-    if (status.toLowerCase() === ("OK").toLowerCase()) {
-        return SuccessColor;
-    }
-    else if(status.toLowerCase() === ("MATECHED").toLowerCase()) {
-        return MatchedColor;
-    }
-    else if (status.toLowerCase() === ("Error").toLowerCase()) {
-        return ErrorColor;
-    }
-    else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-        return WarningColor;
-    }
-    else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-        return NoMatchColor;
-    }
-    else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-        return NoValueColor;
-    }
-    else if (status.toLowerCase() === ("Accepted").toLowerCase()) {
-        return AcceptedColor;
-    }
-    else if (status.toLowerCase() === ("Error(A)").toLowerCase() || status.toLowerCase() === ("Warning(A)").toLowerCase() 
-    || status.toLowerCase() === ("No Match(A)").toLowerCase() || status.toLowerCase() === ("No Value(A)").toLowerCase()) {
-        return PropertyAcceptedColor;
-    }
-    else if(status.toLowerCase() === ("OK(A)").toLowerCase()) {
-        return AcceptedColor;
-    }
-    else {
-        return "#ffffff";
-    }
-}
-
 ReviewComplianceSelectionManager.prototype.ChangeBackgroundColor =  function(row, status) {
     var color = this.GetRowHighlightColor(status);
     for(var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;
     }
+}
+
+ReviewComplianceSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentCheckBox) {
+    var currentCell = currentCheckBox.parentElement;
+    if (currentCell.tagName.toLowerCase() !== 'td') {
+        return;
+    }
+
+    var currentRow = currentCell.parentElement;
+    if (currentRow.tagName.toLowerCase() !== 'tr' ||
+        currentRow.cells.length < Object.keys(ComplianceColumns).length) {
+        return;
+    }
+
+    if (currentCheckBox.checked &&
+        !this.SelectedCheckComponentRows.includes(currentRow)) {
+        // if check component is selected and and selected 
+        // component row doesn't exist already
+
+        // highlight selected row
+        this.ApplyHighlightColor(currentRow);
+
+        // keep track of selected component row
+        this.SelectedCheckComponentRows.push(currentRow);
+    }
+    else if (this.SelectedCheckComponentRows.includes(currentRow)) {
+
+        // restore color
+        this.RemoveHighlightColor(currentRow);
+
+        // remove current row from selected rows array
+        var index = this.SelectedCheckComponentRows.indexOf(currentRow);
+        if (index !== -1) {
+            this.SelectedCheckComponentRows.splice(index, 1);
+        }
+    }
+}
+
+ReviewComplianceSelectionManager.prototype.MaintainHighlightedRow = function (currentReviewTableRow) {
+    if (this.HighlightedCheckComponentRow === currentReviewTableRow) {
+        return false;
+    }
+
+    if (this.HighlightedCheckComponentRow &&
+        !this.SelectedCheckComponentRows.includes(this.HighlightedCheckComponentRow)) {
+        this.RemoveHighlightColor(this.HighlightedCheckComponentRow);
+    }
+
+    this.ApplyHighlightColor(currentReviewTableRow);
+    this.HighlightedCheckComponentRow = currentReviewTableRow;
+
+    return true;
 }

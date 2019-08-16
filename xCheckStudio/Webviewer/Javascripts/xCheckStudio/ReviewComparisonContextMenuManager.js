@@ -70,7 +70,14 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                     },
                     "restoreItem": {
                         name: transposeconditionalName,
-                        visible: function () { if (transposeconditionalName == 'Restore') { return true; } else { return false; } },
+                        visible: function () {
+                            if (transposeconditionalName == 'Restore') {
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+                        },
                     },
                     "reference": {
                         name: "Reference",
@@ -78,7 +85,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                     "isolate": {
                         name: "Isolate",
                         visible: function () {
-                            if (_this.HaveIsolate()) {
+                            if (_this.HaveSCOperations()) {
                                 return true;
                             }
 
@@ -86,7 +93,34 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         }
                     },
                     "showAll": {
-                        name: "Show All"
+                        name: "Show All",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
+                    "startTranslucency": {
+                        name: "Start Translucency",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
+                    "stopTranslucency": {
+                        name: "Stop Translucency",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
                     }
                 }
             };
@@ -94,7 +128,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
     });
 }
 
-ReviewComparisonContextMenuManager.prototype.HaveIsolate = function () {
+ReviewComparisonContextMenuManager.prototype.HaveSCOperations = function () {
     if (this.ComparisonReviewManager.SourceAReviewModuleViewerInterface ||
         this.ComparisonReviewManager.SourceBReviewModuleViewerInterface) {
         return true;
@@ -372,6 +406,12 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "showAll") {
         this.OnShowAllClick();
     }
+    else if (key === "startTranslucency") {
+        this.OnStartTranslucency();
+    }
+    else if (key === "stopTranslucency") {
+        this.OnStopTranslucency();
+    }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowClicked) {
@@ -516,4 +556,51 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         "SourceA": sourceANodeIds,
         "SourceB": sourceBNodeIds
     };
+}
+
+ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
+
+    if(translucencyActive())
+    {
+        alert("Can't activate translucency.");
+        return;
+    }
+
+    // get selected source A and B node ids
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes) {
+        return;
+    }
+
+    // activate translucency
+    var sourceANodeIds = nodes["SourceA"];
+    var sourceBNodeIds = nodes["SourceB"];
+    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewModuleViewerInterface;
+    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewModuleViewerInterface;
+
+    var viewers = [];
+    var selectedNodes = {};
+    if (sourceANodeIds.length > 0 && sourceAViewerInterface) {
+        viewers.push(sourceAViewerInterface.Viewer);
+        selectedNodes[sourceAViewerInterface.Viewer._params.containerId] = sourceANodeIds;
+    }
+    if (sourceBNodeIds.length > 0 && sourceBViewerInterface) {
+        viewers.push(sourceBViewerInterface.Viewer);
+        selectedNodes[sourceBViewerInterface.Viewer._params.containerId] = sourceBNodeIds;
+    }
+
+    var translucencyManager = new TranslucencyManager(viewers, selectedNodes, "translucencySlider2");
+    translucencyManager.Start();
+    
+    translucencyManagers["both"] = translucencyManager;
+}
+
+ReviewComparisonContextMenuManager.prototype.OnStopTranslucency = function () {
+    if (!("both" in translucencyManagers))
+    {
+        return;
+    }
+
+    translucencyManagers["both"].Stop();
+    delete translucencyManagers["both"]; 
 }

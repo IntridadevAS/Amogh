@@ -388,10 +388,8 @@ function CreateNewTab() {
             stopExplode();
         }
 
-        // stop translucency
-        if (translucencyActive()) {
-            stopTranslucency()
-        }
+        // stop translucency      
+        stopTranslucency();
 
         currentViewer = undefined;
     }
@@ -1077,14 +1075,14 @@ function loadModel(fileName,
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     $.ajax({
-        data: 
-        { 
+        data:
+        {
             'viewerContainer': viewerContainer,
             'fileName': fileNameWithoutExt,
             'dataSourceType': '3D',
             'ProjectName': projectinfo.projectname,
             'CheckName': checkinfo.checkname
-         },
+        },
         type: "POST",
         url: "PHP/GetSourceFilePath.php"
     }).done(function (uri) {
@@ -1645,10 +1643,9 @@ function OpenTab(tabName) {
                 stopExplode();
             }
 
-            // stop translucency
-            if (translucencyActive()) {
-                stopTranslucency()
-            }
+            // stop translucency           
+            stopTranslucency();
+
             currentViewer = undefined;
         }
 
@@ -1679,10 +1676,9 @@ function OpenTab(tabName) {
                 stopExplode();
             }
 
-            // stop translucency
-            if (translucencyActive()) {
-                stopTranslucency()
-            }
+            // stop translucency           
+            stopTranslucency();
+
             currentViewer = undefined;
         }
         if (sourceManager2 && sourceManager2.Webviewer) {
@@ -1762,9 +1758,10 @@ function clearDBEntriesOnClearModule(source) {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     $.ajax({
-        data: { 'Source': source,
-        'ProjectName': projectinfo.projectname,
-        'CheckName': checkinfo.checkname
+        data: {
+            'Source': source,
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
         },
         type: "POST",
         url: "PHP/RemoveComponentsFromDB.php"
@@ -1956,7 +1953,7 @@ function loadProjectForCheck() {
         type: "POST",
         url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-        if(msg === 'NoCheckCase'){
+        if (msg === 'NoCheckCase') {
             alert('No saved check case found.\nPlease create new.');
             localStorage.setItem('loadSavedProject', false);
             window.location.reload();
@@ -2164,7 +2161,7 @@ function loadSourceA(viewerParams, dataSourceInfo, selectedComponents) {
                     'Source': "SourceA",
                     'ProjectName': projectinfo.projectname,
                     'CheckName': checkinfo.checkname
-                    },
+                },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {
@@ -2312,10 +2309,10 @@ function loadSourceB(viewerParams, dataSourceInfo, selectedComponents) {
                 type: "POST",
                 async: false,
                 data: {
-                     'Source': "SourceB",
-                     'ProjectName': projectinfo.projectname,
-                     'CheckName': checkinfo.checkname
-                    },
+                    'Source': "SourceB",
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname
+                },
                 success: function (msg) {
                     if (msg != 'fail' &&
                         msg != "") {

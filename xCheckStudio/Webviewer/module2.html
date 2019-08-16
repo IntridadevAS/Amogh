@@ -953,6 +953,11 @@
         }
 
         function openCheckResultTab(tabName) {
+            if(tabName=== currentlyOpenedTab)
+            {
+                return;
+            }
+
             var tabs = document.getElementsByClassName("checkResultsContainerTab");
             for (var i = 0; i < tabs.length; i++) {
                 tabs[i].style.display = "none";
@@ -961,35 +966,35 @@
             document.getElementById(tabName).style.display = "block";
 
             // // clear all contents of checksViewTable
-            var checksViewTable = document.getElementById("checksViewTable");
+            //var checksViewTable = document.getElementById("checksViewTable");
 
             var viewerContainer1 = document.getElementById("viewerContainer1");
-            //viewerContainer1.innerHTML = ""
-            for (var i = 0; i < viewerContainer1.children.length; i++) {
-                var childElement = viewerContainer1.children[i];
-                if (childElement.id !== "explodeOverlay1") {
-                    viewerContainer1.removeChild(childElement);
-                    i--;
-                }
-                else {
-                    childElement.style.display = "none";
-                    document.getElementById("explodeSlider1").value = 0;
-                }
-            }
+            viewerContainer1.innerHTML = ""
+            // for (var i = 0; i < viewerContainer1.children.length; i++) {
+            //     var childElement = viewerContainer1.children[i];
+            //     if (childElement.id !== "explodeOverlay1") {
+            //         viewerContainer1.removeChild(childElement);
+            //         i--;
+            //     }
+            //     else {
+            //         childElement.style.display = "none";
+            //         document.getElementById("explodeSlider1").value = 0;
+            //     }
+            // }
 
             var viewerContainer2 = document.getElementById("viewerContainer2");
-            //viewerContainer2.innerHTML = ""
-            for (var i = 0; i < viewerContainer2.children.length; i++) {
-                var childElement = viewerContainer2.children[i];
-                if (childElement.id !== "explodeOverlay2") {
-                    viewerContainer2.removeChild(childElement);
-                    i--;
-                }
-                else {
-                    childElement.style.display = "none";
-                    document.getElementById("explodeSlider2").value = 0;
-                }
-            }
+            viewerContainer2.innerHTML = ""
+            // for (var i = 0; i < viewerContainer2.children.length; i++) {
+            //     var childElement = viewerContainer2.children[i];
+            //     if (childElement.id !== "explodeOverlay2") {
+            //         viewerContainer2.removeChild(childElement);
+            //         i--;
+            //     }
+            //     else {
+            //         childElement.style.display = "none";
+            //         document.getElementById("explodeSlider2").value = 0;
+            //     }
+            // }
 
             if (tabName === "ComparisonTabPage") {
                 currentlyOpenedTab = "ComparisonTabPage";
@@ -1071,8 +1076,8 @@
                         sourceAComplianceReviewManager.unhighlightSelectedSheetRow(sourceAComplianceReviewManager.checkStatusArray,
                             sourceAComplianceReviewManager.SelectedComponentRowFromSheetA);
                     }
-                    if (sourceAComplianceReviewManager.SelectedComponentRow) {
-                        sourceAComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceAComplianceReviewManager.SelectedComponentRow);
+                    if (sourceAComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+                        sourceAComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceAComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
                 }
             }
@@ -1107,8 +1112,8 @@
                         sourceBComplianceReviewManager.unhighlightSelectedSheetRow(sourceBComplianceReviewManager.checkStatusArray,
                             sourceBComplianceReviewManager.SelectedComponentRowFromSheetB);
                     }
-                    if (sourceBComplianceReviewManager.SelectedComponentRow) {
-                        sourceBComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceBComplianceReviewManager.SelectedComponentRow);
+                    if (sourceBComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+                        sourceBComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceBComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
                 }
             }
@@ -1158,6 +1163,9 @@
                 tabName === "SourceBComplianceTabPage") {
                 sourceBComplianceReviewManager.loadDatasource();
             }
+
+            // stop all active translucencies, if any
+            stopAllTranslucency();
         }
 
         function gotoCheckModule() {

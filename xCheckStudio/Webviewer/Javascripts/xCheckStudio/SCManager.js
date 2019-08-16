@@ -116,14 +116,13 @@ SCManager.prototype.BindEvents = function (viewer) {
 
                 var sel = selection.getSelection();
 
-                // if translucency control is on
-                if(viewer._params.containerId in translucencyManagers)
-                {
-                    translucencyManagers[viewer._params.containerId].ComponentSelected(sel.getNodeId());
-                }
-
                 if (_this.SelectedNodeId !== sel.getNodeId()) {
                     _this.OnSelection(selection);
+
+                    // if translucency control is on
+                    if (viewer._params.containerId in translucencyManagers) {
+                        translucencyManagers[viewer._params.containerId].ComponentSelected(this.SelectedNodeId);
+                    }
                 }
             }
         },
