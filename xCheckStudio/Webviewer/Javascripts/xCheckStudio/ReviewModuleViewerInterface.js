@@ -82,7 +82,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         if (_this.ViewerOptions[0] === "viewerContainer1") {
             if (_this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
                 _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
-              
+
                 _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
                 _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
             }
@@ -98,11 +98,11 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         else if (_this.ViewerOptions[0] === "viewerContainer2") {
             if (_this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
                 _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
-                
+
                 _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
                 _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;
             }
-            else if (_this.ReviewManager.SelectedComponentRowFromSheetA !== undefined) {               
+            else if (_this.ReviewManager.SelectedComponentRowFromSheetA !== undefined) {
                 // reset color of row
                 var rowIndex = _this.ReviewManager.SelectedComponentRowFromSheetA.rowIndex;
                 obj = Object.keys(_this.ReviewManager.checkStatusArrayA)
@@ -154,7 +154,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                     if (viewer._params.containerId in translucencyManagers) {
                         translucencyManagers[viewer._params.containerId].ComponentSelected(sel.getNodeId());
                     }
-                    
+
                     _this.onSelection(selection);
                 }
             },
@@ -192,7 +192,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.highlightComponent = function (nodeIdString) {
 
         var nodeId = Number(nodeIdString);
-        if (!nodeIdString || 
+        if (!nodeIdString ||
             nodeId === NaN) {
             this.unHighlightComponent();
             return;
@@ -214,7 +214,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
     ReviewModuleViewerInterface.prototype.onSelection = function (selectionEvent) {
         var selection = selectionEvent.getSelection();
-        
+
         if (!selection.isNodeSelection() ||
             this.selectedNodeId === selection.getNodeId()) {
             return;
@@ -313,22 +313,19 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         return false;
     }
 
-    ReviewModuleViewerInterface.prototype.SelectValidNode = function () {              
-        if (this.IsNodeInCheckResults(this.selectedNodeId))
-        {
+    ReviewModuleViewerInterface.prototype.SelectValidNode = function () {
+        if (this.IsNodeInCheckResults(this.selectedNodeId)) {
             return;
         }
 
         var model = this.Viewer.model;
-        while(this.selectedNodeId)
-        {
-              this.selectedNodeId = model.getNodeParent(this.selectedNodeId);
+        while (this.selectedNodeId) {
+            this.selectedNodeId = model.getNodeParent(this.selectedNodeId);
 
-              if(this.IsNodeInCheckResults(this.selectedNodeId))
-              {
-                  this.highlightManager.highlightNodeInViewer(this.selectedNodeId);
-                  break;
-              }
+            if (this.IsNodeInCheckResults(this.selectedNodeId)) {
+                this.highlightManager.highlightNodeInViewer(this.selectedNodeId);
+                break;
+            }
         }
 
         // if (nodeType === Communicator.NodeType.BodyInstance ||
@@ -337,12 +334,12 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
         //     while (nodeType === Communicator.NodeType.BodyInstance) {
         //         var parentNode = model.getNodeParent(this.selectedNodeId);
-               
+
         //         var parentNodeType = model.getNodeType(parentNode);
         //         if (parentNodeType === Communicator.NodeType.AssemblyNode ||
         //             parentNodeType === Communicator.NodeType.Part ||
         //             parentNodeType === Communicator.NodeType.PartInstance) {
-                   
+
         //                     this.selectedNodeId = parent_1;
         //                     nodeType = model.getNodeType(this.selectedNodeId);
 
@@ -392,18 +389,19 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                                 this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
                             }
 
-                            this.ReviewManager.SelectionManager.ChangeBackgroundColor(childRow)
+                            // highlight selected row
+                            this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
                             this.ReviewManager.populateDetailedReviewTable(childRow);
                             this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
 
                             // scroll to row                           
-                            var reviewTable = this.ReviewManager.GetReviewTable(childRow);                           
+                            var reviewTable = this.ReviewManager.GetReviewTable(childRow);
                             reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
-                            document.getElementById("ComparisonMainReviewTbody").scrollTop =  reviewTable.offsetTop;
+                            document.getElementById("ComparisonMainReviewTbody").scrollTop = reviewTable.offsetTop;
 
                             //break;
                             return true;
-                        }        
+                        }
                     }
                 }
             }

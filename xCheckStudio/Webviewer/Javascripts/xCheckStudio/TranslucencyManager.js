@@ -292,3 +292,11 @@ function activateTranslucencyInCurrentViewer() {
 
     return false;
 }
+
+function stopAllTranslucency() {
+
+    for (var key in translucencyManagers) {
+        translucencyManagers[key].Stop();
+        delete translucencyManagers[key];
+    }
+}

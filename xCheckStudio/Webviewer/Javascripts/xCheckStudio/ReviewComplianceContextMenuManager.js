@@ -304,7 +304,52 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = funct
 }
 
 ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {
+    // get selected source A and B node ids
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes ||
+        nodes.length === 0) {
+        return;
+    }
+ 
+     // source isolate   /
+     var viewerInterface =  this.ComplianceReviewManager.ReviewModuleViewerInterface;
+ 
+     if (viewerInterface) {
+ 
+         // perform isolate
+         var isolateManager = new IsolateManager(viewerInterface.Viewer);
+         isolateManager.Isolate(nodes).then(function (affectedNodes) {
+ 
+         }); 
+     }    
 }
 
 ReviewComplianceContextMenuManager.prototype.OnShowAllClick = function () {
+    var viewerInterface =  this.ComplianceReviewManager.ReviewModuleViewerInterface;
+ 
+     if (viewerInterface) {
+        viewerInterface.Viewer.model.setNodesVisibility([viewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
+            viewerInterface.Viewer.view.fitWorld();
+         });
+     }
+}
+
+ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
+    var selectionManager = this.ComplianceReviewManager.SelectionManager;
+    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+        return undefined;
+    }
+
+    var sourceNodeIds = [];  
+    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
+        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+
+      
+        var sourceNodeIdCell = selectedRow.cells[ComplianceColumns.NodeId];
+        if (sourceNodeIdCell.innerText !== "") {
+            sourceNodeIds.push(Number(sourceNodeIdCell.innerText));
+        }      
+    }
+
+    return sourceNodeIds;
 }
