@@ -589,7 +589,7 @@ ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
         selectedNodes[sourceBViewerInterface.Viewer._params.containerId] = sourceBNodeIds;
     }
 
-    var translucencyManager = new TranslucencyManager(viewers, false, selectedNodes);
+    var translucencyManager = new TranslucencyManager(viewers, selectedNodes, "translucencySlider2");
     translucencyManager.Start();
     
     translucencyManagers["both"] = translucencyManager;

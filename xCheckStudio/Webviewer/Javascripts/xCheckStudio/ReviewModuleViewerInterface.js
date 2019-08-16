@@ -148,25 +148,21 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
                 for (var i = 0; i < selections.length; i++) {
                     var selection = selections[i];
-                    var sel = selection.getSelection();
+                    var sel = selection.getSelection();                    
+
+                    _this.onSelection(selection);
 
                     // if translucency control is on
                     if (viewer._params.containerId in translucencyManagers) {
-                        translucencyManagers[viewer._params.containerId].ComponentSelected(sel.getNodeId());
+                        translucencyManagers[viewer._params.containerId].ComponentSelected(_this.selectedNodeId);
                     }
-
-                    _this.onSelection(selection);
                 }
             },
 
             contextMenu: function (position) {
-                //alert("contextMenu: " + position.x + ", " + position.y);                
-                // _this.menu(position.x, position.y);
-                //if (currentViewer === undefined) {
+               
                 currentViewer = viewer;
-                //}
-
-                _this.menu(event.clientX, event.clientY);
+               _this.menu(event.clientX, event.clientY);
             },
         });
     };
@@ -295,11 +291,18 @@ var ReviewModuleViewerInterface = function (viewerOptions,
     ReviewModuleViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
         var nodeIdvsCheckComponent;
+        // if comparison
         if (this.ViewerOptions[0] === "viewerContainer1") {
             nodeIdvsCheckComponent = this.ReviewManager.SourceANodeIdvsCheckComponent;
         }
         else if (this.ViewerOptions[0] === "viewerContainer2") {
             nodeIdvsCheckComponent = this.ReviewManager.SourceBNodeIdvsCheckComponent;
+        }
+
+        // if compliance
+        if (!nodeIdvsCheckComponent &&
+            this.ReviewManager.SourceNodeIdvsCheckComponent) {
+            nodeIdvsCheckComponent = this.ReviewManager.SourceNodeIdvsCheckComponent;
         }
 
         if (!nodeIdvsCheckComponent) {
@@ -327,29 +330,6 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 break;
             }
         }
-
-        // if (nodeType === Communicator.NodeType.BodyInstance ||
-        //     nodeType === Communicator.NodeType.Unknown ||
-        //     !this.IsNodeInCheckResults(this.selectedNodeId)) {
-
-        //     while (nodeType === Communicator.NodeType.BodyInstance) {
-        //         var parentNode = model.getNodeParent(this.selectedNodeId);
-
-        //         var parentNodeType = model.getNodeType(parentNode);
-        //         if (parentNodeType === Communicator.NodeType.AssemblyNode ||
-        //             parentNodeType === Communicator.NodeType.Part ||
-        //             parentNodeType === Communicator.NodeType.PartInstance) {
-
-        //                     this.selectedNodeId = parent_1;
-        //                     nodeType = model.getNodeType(this.selectedNodeId);
-
-        //             this.highlightManager.highlightNodeInViewer(parent_1);
-        //         }
-        //         // else {
-        //         //     break;
-        //         // }
-        //     }
-        // }
     }
 
     ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (checkcComponentData) {
@@ -374,11 +354,25 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
                         var childRow = childRows[k];
                         var childRowColumns = childRow.getElementsByTagName("td");
-                        if (childRowColumns.length <= 0) {
+                        // if (childRowColumns.length <= 0) {
+                        //     continue;
+                        // }
+
+                        var checkComponentId;
+                        if(childRowColumns.length === Object.keys(ComparisonColumns).length)
+                        {
+                            checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                        }
+                        else if(childRowColumns.length === Object.keys(ComplianceColumns).length)
+                        {
+                            checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
+                        }
+                        else 
+                        {
                             continue;
                         }
 
-                        var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                        //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
                         if (checkComponentId == checkcComponentData["Id"]) {
                             // open collapsible area
                             if (nextSibling.style.display != "block") {

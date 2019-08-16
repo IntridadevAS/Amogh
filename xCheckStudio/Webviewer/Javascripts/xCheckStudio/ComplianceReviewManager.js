@@ -1438,7 +1438,7 @@ function ComplianceReviewManager(complianceCheckManager,
         return tableRowContent;
     }    
 
-    ComplianceReviewManager.prototype.getReviewTableId = function (row) {
+    ComplianceReviewManager.prototype.GetReviewTableId = function (row) {
         var tBodyElement = row.parentElement;
         if (!tBodyElement) {
             return;
@@ -1446,6 +1446,16 @@ function ComplianceReviewManager(complianceCheckManager,
         var tableElement = tBodyElement.parentElement;
 
         return tableElement.parentElement.parentElement.id;
+    }
+
+    ComplianceReviewManager.prototype.GetReviewTable = function (row) {
+        var tBodyElement = row.parentElement;
+        if (!tBodyElement) {
+            return;
+        }
+        var tableElement = tBodyElement.parentElement;
+
+        return tableElement.parentElement.parentElement;
     }
 
     ComplianceReviewManager.prototype.getSourceNameFromMainReviewRow = function(row) {

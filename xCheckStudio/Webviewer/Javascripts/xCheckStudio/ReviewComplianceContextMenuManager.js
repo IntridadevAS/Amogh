@@ -57,15 +57,57 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         name: "Reference",
                     },
                     "isolate": {
-                        name: "Isolate"
+                        name: "Isolate",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
                     },
                     "showAll": {
-                        name: "Show All"
+                        name: "Show All",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
+                    "startTranslucency": {
+                        name: "Start Translucency",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
+                    "stopTranslucency": {
+                        name: "Stop Translucency",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
                     }
                 }
             };
         }
     });
+}
+
+ReviewComplianceContextMenuManager.prototype.HaveSCOperations = function () {
+    if (this.ComplianceReviewManager.ReviewModuleViewerInterface) {
+        return true;
+    }
+
+    return false;
 }
 
 ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = function () {
@@ -199,6 +241,12 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "showAll") {
         this.OnShowAllClick();
     }
+    else if (key === "startTranslucency") {
+        this.OnStartTranslucency();
+    }
+    else if (key === "stopTranslucency") {
+        this.OnStopTranslucency();
+    }
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptComponent= function (rowClicked)
@@ -311,7 +359,7 @@ ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {
         return;
     }
  
-     // source isolate   /
+     // source isolate
      var viewerInterface =  this.ComplianceReviewManager.ReviewModuleViewerInterface;
  
      if (viewerInterface) {
@@ -352,4 +400,47 @@ ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
     }
 
     return sourceNodeIds;
+}
+
+ReviewComplianceContextMenuManager.prototype.OnStartTranslucency = function () {
+    if(translucencyActive())
+    {
+        alert("Can't activate translucency.");
+        return;
+    }
+
+    // get selected source A and B node ids
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes) {
+        return;
+    }
+
+    // activate translucency 
+    var viewerInterface =  this.ComplianceReviewManager.ReviewModuleViewerInterface;
+    
+    var selectedNodes = {};
+    selectedNodes[viewerInterface.Viewer._params.containerId] = nodes;   
+
+     // get slider id
+     var sliderId = getSliderId(viewerInterface.Viewer._params.containerId);
+     if(!sliderId)
+     {
+         return;
+     }
+     
+    var translucencyManager = new TranslucencyManager([viewerInterface.Viewer], selectedNodes, sliderId);
+    translucencyManager.Start();
+    
+    translucencyManagers[viewerInterface.Viewer._params.containerId] = translucencyManager;
+}
+
+ReviewComplianceContextMenuManager.prototype.OnStopTranslucency = function () {
+    var viewerInterface =  this.ComplianceReviewManager.ReviewModuleViewerInterface;
+    if (!(viewerInterface.Viewer._params.containerId in translucencyManagers))
+    {
+        return;
+    }
+
+    translucencyManagers[viewerInterface.Viewer._params.containerId].Stop();
+    delete translucencyManagers[viewerInterface.Viewer._params.containerId]; 
 }
