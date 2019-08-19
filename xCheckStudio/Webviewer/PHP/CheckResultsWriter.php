@@ -39,14 +39,14 @@
              $command = 'CREATE TABLE '.$checkComponentsTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT,                
-                subComponentClass TEXT,
+                subComponentClass TEXT,            
                 status TEXT,
                 accepted TEXT,
                 nodeId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
-            $dbh->exec($command);    
+            $ss = $dbh->exec($command);    
             
-             // ComparisonCheckProperties table
+            // ComparisonCheckProperties table
 
             // drop table if exists
             $command = 'DROP TABLE IF EXISTS '. $checkPropertiesTable. ';';
@@ -100,21 +100,22 @@
                 // Insert Components to database
 
                 foreach($checkComponentGroup->Components as $key => $checkComponent)
-                {
+                {                   
                     $insertComponentQuery = 'INSERT INTO '.$checkComponentsTable.'(
                         name, 
                         subComponentClass, 
                         status, 
                         accepted,
                         nodeId,
-                        ownerGroup) VALUES(?,?,?,?,?,?) ';                                        
+                        ownerGroup) VALUES(?,?,?,?,?,?) ';                                                                          
+
                     $componentValues = array($checkComponent->SourceAName, 
-                                             $checkComponent->SubComponentClass,
+                                             $checkComponent->SourceASubComponentClass,
                                              $checkComponent->Status,
                                              'false',
                                              $checkComponent->SourceANodeId,
-                                             $groupId);
-
+                                             $groupId);                   
+                   
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);
 
@@ -205,7 +206,8 @@
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 sourceAName TEXT,
                 sourceBName TEXT,
-                subComponentClass TEXT,
+                sourceASubComponentClass TEXT,
+                sourceBSubComponentClass TEXT,
                 status TEXT,
                 accepted TEXT,
                 sourceANodeId TEXT,
@@ -241,13 +243,7 @@
 
                 $componentClass = $checkComponentGroup->ComponentClass;
                 $componentCount =  count(  $checkComponentGroup->Components );
-                $categoryStatus = 'OK';
-                // for($component = 0; $component < $checkComponentGroup->Components; $component++) {
-                //     if($checkComponentGroup->Components[$component]->$s !== 'OK') {
-                //         checkGroup.categoryStatus = "UNACCEPTED";
-                //         break;
-                //     }
-                // }
+                $categoryStatus = 'OK';               
 
                 $groupcomponentcount = count($checkComponentGroup->Components);
                 $compcount = 0;
@@ -293,16 +289,18 @@
                     $insertComponentQuery = 'INSERT INTO ComparisonCheckComponents(
                         sourceAName, 
                         sourceBName, 
-                        subComponentClass, 
+                        sourceASubComponentClass, 
+                        sourceBSubComponentClass,
                         status,
                         accepted, 
                         sourceANodeId, 
                         sourceBNodeId,
                         ownerGroup,
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
+                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
-                                             $checkComponent->SubComponentClass,
+                                             $checkComponent->SourceASubComponentClass,
+                                             $checkComponent->SourceBSubComponentClass,
                                              $checkComponent->Status,
                                              'false',
                                              $checkComponent->SourceANodeId,

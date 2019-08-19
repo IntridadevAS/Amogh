@@ -871,11 +871,7 @@ function ComplianceReviewManager(complianceCheckManager,
             for (var componentId in classWiseComponents) 
             {
                 componentProperties = classWiseComponents[componentId];
-                break;
-                // for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) 
-                // {
-                //     properties.push(mainComponentClasseData[subComponentClass][i]);
-                // }
+                break;                
             }
             if (componentProperties === undefined) {
                 return;

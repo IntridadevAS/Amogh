@@ -609,6 +609,7 @@
                 $checkComponent = new CheckComponent($sourceComponent['name'],
                                                      "",
                                                     $sourceComponent['subclass'],
+                                                    "",
                                                     $nodeId ,
                                                     "");
 
@@ -678,6 +679,7 @@
             $checkComponent = new CheckComponent($sourceComponent['name'],
                                         "",
                                     $sourceComponent['subclass'],
+                                    "",
                                     $nodeId ,
                                     "");
 

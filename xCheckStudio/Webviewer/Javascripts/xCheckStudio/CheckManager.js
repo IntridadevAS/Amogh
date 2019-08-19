@@ -109,7 +109,8 @@ function CheckComponentGroup(componentClass) {
 
             var checkComponent = new CheckComponent(componentData.SourceAName,
                 componentData.SourceBName,
-                componentData.SubComponentClass,
+                componentData.SourceASubComponentClass,
+                componentData.SourceBSubComponentClass,
                 componentData.SourceANodeId,
                 componentData.SourceBNodeId);
 
@@ -120,16 +121,17 @@ function CheckComponentGroup(componentClass) {
 }
 
 function CheckComponent(sourceAName,
-    sourceBName,
-    /* identifier,*/
-    subComponentClass,
+    sourceBName,  
+    sourceASubComponentClass,
+    sourceBSubComponentClass,
     sourceANodeId,
     sourceBNodeId) {
 
     //this.Identifier = identifier;
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
-    this.SubComponentClass = subComponentClass
+    this.SourceASubComponentClass = sourceASubComponentClass;
+    this.SourceBSubComponentClass = sourceBSubComponentClass;
 
     this.Status = "OK";
     this.CheckProperties = [];
@@ -140,13 +142,7 @@ function CheckComponent(sourceAName,
     CheckComponent.prototype.AddCheckProperty = function (property) {
         this.CheckProperties.push(property);
 
-        if (!property.PerformCheck) {
-            // if (property.Severity.toLowerCase() === ("No Value").toLowerCase() &&
-            //     this.Status.toLowerCase() !== ("Error").toLowerCase() &&
-            //     this.Status.toLowerCase() !== ("Warning").toLowerCase()) {
-            //     this.Status = "No Value";
-            // }
-            // else
+        if (!property.PerformCheck) {          
             if (property.Severity.toLowerCase() === ("Error").toLowerCase()) {
                 this.Status = "Error";
             }
@@ -161,7 +157,6 @@ function CheckComponent(sourceAName,
                     this.Status = "Warning";
                 }
             }
-
         }
     }
 
@@ -184,14 +179,6 @@ function CheckComponent(sourceAName,
     }
 
     CheckComponent.prototype.restore = function (componentData) {
-
-        // if (componentData.Status.toLowerCase() === "no match") {
-        //     // if component data having status as No match, there is no need 
-        //     // restore properties for this component
-        //     this.Status = "No Match";
-        //     return;
-        // }
-
         for (var i = 0; i < componentData.CheckProperties.length; i++) {
             var checkPropertyData = componentData.CheckProperties[i];
 

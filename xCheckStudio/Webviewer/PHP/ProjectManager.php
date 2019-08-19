@@ -1191,7 +1191,8 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             sourceAName TEXT,
             sourceBName TEXT,
-            subComponentClass TEXT,
+            sourceASubComponentClass TEXT,
+            sourceBSubComponentClass TEXT,
             status TEXT,
             accepted TEXT,
             sourceANodeId TEXT,
@@ -1201,7 +1202,16 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
         $dbh->exec($command);    
       
         $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                    sourceAName, sourceBName, subComponentClass, status, accepted, sourceANodeId, sourceBNodeId, ownerGroup, transpose) VALUES(?,?,?,?,?,?,?,?,?,?)");
+                    sourceAName, 
+                    sourceBName, 
+                    sourceASubComponentClass, 
+                    sourceBSubComponentClass, 
+                    status, 
+                    accepted, 
+                    sourceANodeId,
+                    sourceBNodeId, 
+                    ownerGroup, 
+                    transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1209,7 +1219,8 @@ function SaveComparisonCheckComponents( $tempDbh, $dbh)
             $insertStmt->execute(array($row['id'], 
                                  $row['sourceAName'], 
                                  $row['sourceBName'],
-                                 $row['subComponentClass'], 
+                                 $row['sourceASubComponentClass'], 
+                                 $row['sourceBSubComponentClass'], 
                                  $row['status'], 
                                  $row['accepted'], 
                                  $row['sourceANodeId'],

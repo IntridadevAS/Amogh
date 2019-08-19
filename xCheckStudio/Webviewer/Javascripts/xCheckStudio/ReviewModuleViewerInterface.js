@@ -14,6 +14,24 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
     this.ReviewManager = reviewManager;
 
+    this.DontColorComponents = {
+        "centerline": {
+            "mainClass": "component",
+            "parentMainClass": "pipingnetworksegment"
+        }
+    };
+
+    // format
+    //  this.OverrideSeverityColorComponents = {
+    //     "parent Component mainClass" :  ["child componet class 1",....., "child componet class n"]
+    // }
+    this.OverrideSeverityColorComponents = {
+        "pipingnetworksystem": ["pipingnetworksegment"],
+        "pipe": ["bran"],
+        "hvac": ["bran"],
+        "equi":["cone", "cyli", "dish"]
+    };
+
     ReviewModuleViewerInterface.prototype.setupViewer = function (width, height) {
 
         // create and start viewer
@@ -40,8 +58,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             var component = this.NodeIdStatusData[id];
             this.ChangeComponentColor(component, false, undefined);
         }
-    }
-
+    }  
+                
     ReviewModuleViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) {
         var status = component.Status;
         //var nodeId = component.NodeId;
@@ -53,24 +71,29 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         for (var id in children) {
             var child = children[id];
 
-            if (component.MainClass.toLowerCase() === "pipingnetworksegment" &&
-                child.MainClass.toLowerCase() === "component" &&
-                child.SubClass.toLowerCase() === "centerline") {
-                continue;
+            // take care of don't color components
+            if(child.SubClass.toLowerCase() in this.DontColorComponents)
+            {
+                var dontColorComponent = this.DontColorComponents[child.SubClass.toLowerCase()];
+                if(child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
+                   component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"] )
+                   {
+                       continue;
+                   }
+            }            
+
+            // take care of color overriding from status components
+            var overrideColorWithSeverityPreference = false;
+            if (component.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+                var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[component.MainClass.toLowerCase()];
+                if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase())) {
+                    overrideColorWithSeverityPreference = true;
+                }
             }
 
-            var overrideColor = false;
-            if ((component.MainClass.toLowerCase() === "pipingnetworksystem" &&
-                child.MainClass.toLowerCase() === "pipingnetworksegment") ||
-                ((component.MainClass.toLowerCase() === "pipe" ||
-                    component.MainClass.toLowerCase() === "hvac") &&
-                    child.MainClass.toLowerCase() === "bran")) {
-                overrideColor = true;
-            }
-
-            this.ChangeComponentColor(child, overrideColor, component);
+            this.ChangeComponentColor(child, overrideColorWithSeverityPreference, component);
         }
-    }
+    }  
 
     ReviewModuleViewerInterface.prototype.unHighlightAll = function () {
         var _this = this;

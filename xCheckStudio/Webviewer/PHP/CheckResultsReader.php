@@ -36,15 +36,15 @@
             $results['Comparison'] = $comparisonResult;
             
             // create component hierarchy
-            createComparisonComponentsHierarchy();
+            createComparisonComponentsHierarchy();            
             if($sourceAComparisonComponentsHierarchy !== null) {
                 $results['SourceAComparisonComponentsHierarchy'] = $sourceAComparisonComponentsHierarchy;
             }
             if($sourceBComparisonComponentsHierarchy !== null) {
                 $results['SourceBComparisonComponentsHierarchy'] = $sourceBComparisonComponentsHierarchy;
             }
-        }
-        
+        }   
+
         if($sourceAComplianceResult != NULL)
         {
             $results['SourceACompliance'] = $sourceAComplianceResult;
@@ -190,7 +190,7 @@
 
                             $componentValues = array('id'=>$componentRow['id'], 
                                             'name'=>$componentRow['name'],                                              
-                                            'subComponentClass'=>$componentRow['subComponentClass'],
+                                            'subComponentClass'=>$componentRow['subComponentClass'],                                           
                                             'status'=>$changedStatus,
                                             'nodeId'=>$componentRow['nodeId'],
                                             'ownerGroup'=>$componentRow['ownerGroup']);                                                         
@@ -299,7 +299,8 @@
                             $componentValues = array('id'=>$componentRow['id'], 
                                             'sourceAName'=>$componentRow['sourceAName'],  
                                             'sourceBName'=>$componentRow['sourceBName'],
-                                            'subComponentClass'=>$componentRow['subComponentClass'],
+                                            'sourceASubComponentClass'=>$componentRow['sourceASubComponentClass'],
+                                            'sourceBSubComponentClass'=>$componentRow['sourceBSubComponentClass'],
                                             'status'=>$changedStatus,
                                             'sourceANodeId'=>$componentRow['sourceANodeId'],
                                             'sourceBNodeId'=>$componentRow['sourceBNodeId'],
@@ -456,12 +457,13 @@
             } 
         }
 
-        function createComparisonComponentsHierarchy() {       
+        function createComparisonComponentsHierarchy() {    
             global $sourceAComparisonComponentsHierarchy;
             global $sourceBComparisonComponentsHierarchy;
             global $comparisonResult;
             global $projectName;
-            global $checkName;
+            global $checkName;         
+
             $dbPath = getCheckDatabasePath($projectName, $checkName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
@@ -484,7 +486,7 @@
                             if($comp !== NULL && 
                                !array_key_exists($comp['NodeId'], $sourceAComparisonComponentsHierarchy)) {
                             
-                                array_push($sourceAComparisonComponentsHierarchy, $comp);
+                                $sourceAComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
                             }
                         }
                     }
@@ -493,16 +495,15 @@
                     for($index = 1 ; $index <= count($comparisonResult); $index++) {
                         $group = $comparisonResult[$index];
             
-                        foreach($group['components'] as $key =>  $value) {
-                            // $compIndex = $value['id'];
+                        foreach($group['components'] as $key =>  $value) {                           
                             $status = $value['status'];                            
-                            $sourceBNodeId = $value['sourceBNodeId'];                        
-                     
+                            $sourceBNodeId = $value['sourceBNodeId'];
+
                             $comp = traverseRecursivelyForComparison($dbh, $sourceBNodeId, $traversedNodes, false);                     
-                                         
+                           
                             if($comp !== NULL && 
                                !array_key_exists($comp['NodeId'], $sourceBComparisonComponentsHierarchy)) {
-                                array_push($sourceBComparisonComponentsHierarchy, $comp);
+                                $sourceBComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
                             }
                         }
                     }
@@ -515,7 +516,7 @@
                                      $nodeId, 
                                      &$traversedNodes, 
                                      $isSourceA)
-        {
+        {      
             global $projectName;
 
             if($nodeId == null)
@@ -524,10 +525,10 @@
             }
             if($traversedNodes != null &&
                in_array($nodeId, $traversedNodes))
-            {               
+            {          
                 return NULL;
             }              
-            array_push($traversedNodes, $nodeId);           
+            array_push($traversedNodes, $nodeId);   
 
             $component = [];
             $component["NodeId"] = $nodeId;
@@ -575,7 +576,7 @@
                     array_push($component["Children"], $childComponent);
                 }
             }
-
+   
             return $component;                   
         }    
 
@@ -614,8 +615,9 @@
                                                                  
                         if($comp !== NULL && 
                         !array_key_exists($comp['NodeId'], $componentsHierarchy)) 
-                        {                    
-                            array_push($componentsHierarchy, $comp);
+                        {   
+                            $componentsHierarchy[$comp['NodeId']] =  $comp;          
+                           
                         }
                     }
                 }
