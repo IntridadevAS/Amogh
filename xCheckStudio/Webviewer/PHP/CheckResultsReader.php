@@ -566,6 +566,7 @@
             $component["transpose"] = $comparisonComponentRow['transpose'];
             $component["Status"] =  $comparisonComponentRow['status'];
 
+            // traverse child if any
             $childrenStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where parentid =$nodeId"); 
             while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) 
             {               
@@ -575,8 +576,30 @@
                 {
                     array_push($component["Children"], $childComponent);
                 }
+            }          
+           
+            // traverse parent, if any
+            $parentComponent = NULL;
+            $parentNode = $compRow['parentid'];
+            $parentStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =".$parentNode);
+           
+            while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
+            {    
+                $parentComponent = traverseRecursivelyForComparison($dbh, $parentRow['nodeid'], $traversedNodes, $isSourceA);
+
+                if($parentComponent !== NULL)
+                {
+                    array_push($parentComponent["Children"], $component);
+                }
+                
+                break;
             }
-   
+
+            if($parentComponent != NULL)
+            {
+                return $parentComponent;
+            }
+
             return $component;                   
         }    
 
@@ -686,6 +709,7 @@
             $component["accepted"] = $complianceComponentRow['accepted'];           
             $component["Status"] =  $complianceComponentRow['status'];
 
+            // traverse children, if any
             $childrenStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where parentid =$nodeId"); 
             while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) 
             {               
@@ -695,6 +719,28 @@
                 {
                     array_push($component["Children"], $childComponent);
                 }
+            }
+
+            // traverse parent, if any
+            $parentComponent = NULL;
+            $parentNode = $compRow['parentid'];
+            $parentStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =".$parentNode);
+            
+            while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
+            {    
+                $parentComponent = traverseRecursivelyForComparison($dbh, $parentRow['nodeid'], $traversedNodes, $isSourceA);
+
+                if($parentComponent !== NULL)
+                {
+                    array_push($parentComponent["Children"], $component);
+                }
+                
+                break;
+            }
+
+            if($parentComponent != NULL)
+            {
+                return $parentComponent;
             }
 
             return $component;                   
