@@ -35,7 +35,8 @@ function CheckGroup(id, componentClass, categoryStatus)
             {
                 var componentData = componentsData[id];
                 var compId = componentData.id;
-                var subComponentClass =  componentData.subComponentClass;
+                var sourceASubComponentClass =  componentData.SourceASubComponentClass;
+                var sourceBSubComponentClass =  componentData.SourceBSubComponentClass;
                 var status =  componentData.status;
                 var transpose = componentData.transpose;
                 var sourceAName = undefined;
@@ -57,7 +58,8 @@ function CheckGroup(id, componentClass, categoryStatus)
                 var component =new  Component(compId, 
                                             sourceAName, 
                                             sourceBName, 
-                                            subComponentClass, 
+                                            sourceASubComponentClass, 
+                                            sourceBSubComponentClass, 
                                             status, 
                                             sourceANodeId, 
                                             sourceBNodeId,
@@ -74,7 +76,8 @@ function CheckGroup(id, componentClass, categoryStatus)
 function Component(id, 
                    sourceAName, 
                    sourceBName, 
-                   subComponentClass, 
+                   sourceASubComponentClass, 
+                   sourceBSubComponentClass, 
                    status, 
                    sourceANodeId, 
                    sourceBNodeId,
@@ -83,7 +86,8 @@ function Component(id,
     this.ID = id;
     this.SourceAName = sourceAName;
     this.SourceBName = sourceBName;
-    this.SubComponentClass = subComponentClass;
+    this.SourceASubComponentClass = sourceASubComponentClass;
+    this.SourceBSubComponentClass = sourceBSubComponentClass;
     this.Status = status;
     this.SourceANodeId = sourceANodeId;
     this.SourceBNodeId = sourceBNodeId;

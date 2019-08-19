@@ -19,7 +19,8 @@
             {
                 var $SourceAName;
                 var $SourceBName;
-                var $SubComponentClass;
+                var $SourceASubComponentClass;
+                var $SourceBSubComponentClass;
             
                 var $Status;
                 var $CheckProperties;
@@ -29,13 +30,15 @@
             
                 function __construct( $sourceAName,
                                     $sourceBName,
-                                    $subComponentClass,
+                                    $sourceASubComponentClass,
+                                    $sourceBSubComponentClass,
                                     $sourceANodeId,
                                     $sourceBNodeId ) 
                 {
                     $this->SourceAName = $sourceAName;
                     $this->SourceBName = $sourceBName; 
-                    $this->SubComponentClass = $subComponentClass;
+                    $this->SourceASubComponentClass = $sourceASubComponentClass;
+                    $this->SourceBSubComponentClass = $sourceBSubComponentClass;
             
                     $this->Status = "OK";
                     $this->CheckProperties = array();

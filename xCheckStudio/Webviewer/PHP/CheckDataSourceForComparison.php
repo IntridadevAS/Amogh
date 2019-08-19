@@ -329,6 +329,7 @@
                             $checkComponent = new CheckComponent($sourceAComponent['name'],
                                 $sourceBComponent['name'],
                                 $sourceAComponent['subclass'],
+                                $sourceBComponent['subclass'],
                                 $sourceANodeId,
                                 $sourceBNodeId);
 
@@ -577,6 +578,7 @@
                         $checkComponent = new CheckComponent($sourceAComponent['name'],
                                                             $sourceBComponent['name'],
                                                             $sourceAComponent['subclass'],
+                                                            $sourceBComponent['subclass'],
                                                             $sourceANodeId,
                                                             $sourceBNodeId);
                         $checkComponentGroup->AddCheckComponent($checkComponent);
@@ -775,6 +777,7 @@
                     $checkComponent = new CheckComponent($sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
+                                                        "",
                                                         $nodeId ,
                                                         NULL);
 
@@ -806,6 +809,7 @@
                     }
                     $checkComponent = new CheckComponent("",
                                                         $sourceComponent["name"],
+                                                        "",
                                                         $sourceComponent["subclass"],
                                                         NULL,
                                                         $nodeId);
@@ -847,6 +851,7 @@
                     $checkComponent = new CheckComponent($sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
+                                                        "",
                                                         $nodeId ,
                                                         NULL);
 
@@ -878,6 +883,7 @@
                     }
                     $checkComponent = new CheckComponent("",
                                                         $sourceComponent["name"],
+                                                        "",
                                                         $sourceComponent["subclass"],
                                                         NULL,
                                                         $nodeId);

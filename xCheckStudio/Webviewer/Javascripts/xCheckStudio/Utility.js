@@ -91,11 +91,14 @@ var xCheckStudio;
                         
                             return NoMatchColor;
                     }
-                }
-                //  else if(parentComponent.Status.toLowerCase().includes("ok"))
-                //  {
-                     
-                //  }
+                }                
+            }
+            
+            // if component is mot mapped i.e. undefined, then 
+            // don't override the parent's highlight color
+            if (parentComponent &&
+                status.toLowerCase() === "undefined") {
+                return undefined;
             }
 
             // var color;
