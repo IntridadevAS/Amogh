@@ -5,10 +5,8 @@ function ExcelModeBrowser(modelBrowserContainer,
     // call super constructor
     ModelBrowser.call(this, modelBrowserContainer);
 
-    this.SheetData = sheetData;    
-   
-    this.SelectedComponentRowFromSheet;
-    
+    this.SheetData = sheetData;     
+        
     // selectiion manager
     this.SelectionManager = new ExcelSelectionManager(selectedComponents);
 }
@@ -70,13 +68,7 @@ ExcelModeBrowser.prototype.CreateModelBrowserTable = function () {
             var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
             var styleList = undefined;
             var componentStyleClass = this.getComponentstyleClass(mainComponentStyleClass);
-            //set  row data 
-            // var rowData = [];
-            // rowData.push(mainComponentClass);
-            // rowData.push("");
-            // rowData.push("");
-            // rowData.push("");
-
+          
             //add sheet names as 1st parent(collapsible row)
             // this.addComponentRow(styleList, componentStyleClass, rowData);
             var parentMainClassStyleList = componentStyleClass;
@@ -144,7 +136,7 @@ ExcelModeBrowser.prototype.CreateModelBrowserTable = function () {
 
         // maintain first row as selected row by default
         var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
-        this.SelectionManager.HandleRowSelect(modelBrowserTableRows[0]);
+        this.SelectionManager.HighlightBrowserRow(modelBrowserTableRows[0]);
         this.ShowSelectedSheetData(modelBrowserTableRows[0]);       
          
         var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
@@ -267,9 +259,9 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             },
             rowClick: function (args) {
 
-                _this.SelectionManager.HandleRowSelect(args.event.currentTarget);              
+                _this.SelectionManager.HighlightBrowserRow(args.event.currentTarget);              
 
-                 _this.ShowSelectedSheetData(args.event.currentTarget);               
+                _this.ShowSelectedSheetData(args.event.currentTarget);               
             }
         });
 
@@ -299,7 +291,8 @@ ExcelModeBrowser.prototype.AddTableContentCount = function (containerId) {
     countBox.innerText = "Count: " + modelBrowserTableRows.length;
 }
 
-ExcelModeBrowser.prototype.LoadSheetDataTable = function (_this, columnHeaders, tableData, viewerContainer) {
+ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, tableData, viewerContainer) {
+    var _this = this;
 
     $(function () {
 
@@ -321,7 +314,7 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (_this, columnHeaders, 
                 }
             },
             rowClick: function (args) {
-                _this.SelectionManager.HandleRowSelectInViewer(args.event.currentTarget);
+                _this.SelectionManager.HandleRowSelectInViewer(args.event.currentTarget, _this.ModelBrowserContainer);
             }
         });
 
@@ -374,23 +367,12 @@ ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
             }
             if (thisRow.cells[1].innerText === dataRow.cells[nameColumnIndex].innerText &&
                 thisRow.cells[3].innerText === dataRow.cells[identifierColumns.ComponentClass].innerText) {
-                if (this.SelectedComponentRowFromSheet) {
-                    for (var j = 0; j < this.SelectedComponentRowFromSheet.cells.length; j++) {
-                        cell = this.SelectedComponentRowFromSheet.cells[j];
-                        cell.style.backgroundColor = "#ffffff"
-                    }
+      
+                if (this.SelectionManager.HighlightSheetRow(dataRow)) {
+                    // scroll to selected row
+                    sheetDataTable.focus();
+                    sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
                 }
-
-                for (var j = 0; j < dataRow.cells.length; j++) {
-                    cell = dataRow.cells[j];
-                    cell.style.backgroundColor = "#B2BABB"
-                }
-
-                this.SelectedComponentRowFromSheet = dataRow;
-
-                // scroll to selected row
-                sheetDataTable.focus();
-                sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
 
                 break;
             }
@@ -501,12 +483,12 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
 
             if (this.ModelBrowserContainer === "modelTree1") {
                 _this = this;
-                _this.LoadSheetDataTable(_this, columnHeaders, tableData, "#viewerContainer1");
+                _this.LoadSheetDataTable(columnHeaders, tableData, "#viewerContainer1");
                 _this.HighlightRowInSheetData(browserRow);
             }
             else if (this.ModelBrowserContainer === "modelTree2") {
                 _this = this;
-                _this.LoadSheetDataTable(_this, columnHeaders, tableData, "#viewerContainer2");
+                _this.LoadSheetDataTable(columnHeaders, tableData, "#viewerContainer2");
                 _this.HighlightRowInSheetData(browserRow);
             }
         }
