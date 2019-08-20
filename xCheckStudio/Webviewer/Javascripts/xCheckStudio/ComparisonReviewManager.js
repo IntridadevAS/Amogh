@@ -367,7 +367,14 @@ function ComparisonReviewManager(comparisonCheckManager,
 
         return undefined;
     }    
-
+        
+    /* This method is called when the check result row is clicked in table. This 
+    function loads the sheet data in viewer for selected component result.
+    Inputs :
+         viewerContainer = container id in which the sheet data is to be loaded,
+         sheetName = sheet name to load,
+         CurrentReviewTableRow = current selected comparison result row 
+    */
     ComparisonReviewManager.prototype.LoadSelectedSheetDataInViewer = function (viewerContainer, 
                                                                                 sheetName, 
                                                                                 CurrentReviewTableRow) {       
@@ -509,7 +516,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         }
     };
     
-    ComparisonReviewManager.prototype.GetCheckComponentForViewerRow = function (sheetDataRow, viewerContainer)
+    /* This method returns the corresponding comparison 
+       check result row for selected sheet row*/
+    ComparisonReviewManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer)
     {
         var containerId = viewerContainer.replace("#", "");
         var viewerContainerData = document.getElementById(containerId)
@@ -564,9 +573,10 @@ function ComparisonReviewManager(comparisonCheckManager,
         return undefined;
     }
 
-    ComparisonReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow, viewerContainer) {
+    ComparisonReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow, 
+                                                                                viewerContainer) {
         
-        var reviewTableRow = this.GetCheckComponentForViewerRow(sheetDataRow, viewerContainer);
+        var reviewTableRow = this.GetCheckComponentForSheetRow(sheetDataRow, viewerContainer);
         if (!reviewTableRow) {
             return;
         }
@@ -574,9 +584,9 @@ function ComparisonReviewManager(comparisonCheckManager,
         // component group id which is container div for check components table of given row
         var containerDiv = this.GetReviewTableId(reviewTableRow);
         this.OnCheckComponentRowClicked(reviewTableRow, containerDiv); 
-
+       
         var reviewTable = this.GetReviewTable(reviewTableRow);
-        this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, this.MainReviewTableContainer);           
+        this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, this.MainReviewTableContainer);           
     }     
 
     ComparisonReviewManager.prototype.LoadSheetTableData = function (columnHeaders, 
@@ -839,18 +849,16 @@ function ComparisonReviewManager(comparisonCheckManager,
         var sheetName = containerDiv.replace("#", "");
 
         if (this.SourceAComponents !== undefined &&
-            this.SourceBComponents !== undefined) {
-                
-            // this.checkStatusArrayA = {};
-            // this.checkStatusArrayB = {};
+            this.SourceBComponents !== undefined) {               
+          
             var result = sheetName.split('-');                   
 
             if (row.cells[ComparisonColumns.SourceAName].innerText !== "") {
                 this.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], row);
             }
-            else 
-            {
+            else {
                 document.getElementById("viewerContainer1").innerHTML = "";
+                this.SourceAViewerCurrentSheetLoaded = undefined;  
             }
 
             if (row.cells[ComparisonColumns.SourceBName].innerText !== "") {
@@ -858,34 +866,39 @@ function ComparisonReviewManager(comparisonCheckManager,
             }
             else {
                 document.getElementById("viewerContainer2").innerHTML = "";
+                this.SourceBViewerCurrentSheetLoaded = undefined;  
             }
         }
         else if (this.SourceAViewerData !== undefined &&
-            this.SourceBViewerData !== undefined) 
+                 this.SourceBViewerData !== undefined) 
         {
             this.HighlightComponentInGraphicsViewer(row)
         }
         else if (this.SourceAComponents !== undefined &&
             this.SourceBViewerData !== undefined) 
         {
-
-            // this.checkStatusArrayA = {};
-            // this.checkStatusArrayB = {};
             var result = sheetName.split('-');
 
-            this.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], row);
+            if (row.cells[ComparisonColumns.SourceAName].innerText !== "") {
+                this.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], row);
+            } else {
+                document.getElementById("viewerContainer1").innerHTML = "";
+                this.SourceAViewerCurrentSheetLoaded = undefined;  
+            }
 
             this.HighlightComponentInGraphicsViewer(row)
         }
         else if (this.SourceAViewerData !== undefined &&
-            this.SourceBComponents !== undefined) 
-        {
-
-            // this.checkStatusArrayA = {};
-            // this.checkStatusArrayB = {};
+            this.SourceBComponents !== undefined) {
             var result = sheetName.split('-');
 
-            this.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], row);
+            if (row.cells[ComparisonColumns.SourceBName].innerText !== "") {
+                this.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], row);
+            }
+            else {
+                document.getElementById("viewerContainer2").innerHTML = "";
+                this.SourceBViewerCurrentSheetLoaded = undefined;  
+            }
 
             this.HighlightComponentInGraphicsViewer(row)
         }

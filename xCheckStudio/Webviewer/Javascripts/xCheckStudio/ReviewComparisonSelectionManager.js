@@ -119,31 +119,9 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     this.HighlightedCheckComponentRow = currentReviewTableRow;
 }
 
-ReviewComparisonSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function (reviewTable, mainReviewTableContainerId) {
-    if (!this.HighlightedCheckComponentRow ||
-        !reviewTable) {
-    }
-
-    reviewTable.scrollTop = reviewTableRow.offsetTop - reviewTableRow.offsetHeight;
-
-    var mainReviewTableContainer = document.getElementById(mainReviewTableContainerId);
-    if (!mainReviewTableContainer) {
-        return;
-    }
-
-    var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
-    for (var i = 0; i < collapsibleClasses.length; i++) {
-        var collapsibleClass = collapsibleClasses[i];
-        if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
-            collapsibleClass.nextElementSibling.style.display = "none";
-            collapsibleClass.className = "collapsible";
-        }
-    }
-}
-
-ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor =  function(row, status) {
+ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row, status) {
     var color = this.GetRowHighlightColor(status);
-    for(var cell = 0; cell < row.cells.length; cell++) {
+    for (var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;
     }
 }
