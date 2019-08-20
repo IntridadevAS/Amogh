@@ -7,19 +7,8 @@ function ReviewComparisonSelectionManager() {
 ReviewComparisonSelectionManager.prototype = Object.create(ReviewSelectionManager.prototype);
 ReviewComparisonSelectionManager.prototype.constructor = ReviewComparisonSelectionManager;
 
-ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentCheckBox) {
-    var currentCell = currentCheckBox.parentElement;
-    if (currentCell.tagName.toLowerCase() !== 'td') {
-        return;
-    }
-
-    var currentRow = currentCell.parentElement;
-    if (currentRow.tagName.toLowerCase() !== 'tr' ||
-        currentRow.cells.length < Object.keys(ComparisonColumns).length) {
-        return;
-    }
-
-    if (currentCheckBox.checked &&
+ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, checkBoxState) {
+    if (checkBoxState == "on" &&
         !this.SelectedCheckComponentRows.includes(currentRow)) {
         // if check component is selected and and selected 
         // component row doesn't exist already

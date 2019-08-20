@@ -51,6 +51,13 @@ const ComplianceColumns = {
     NodeId: 3,
     ResultId: 4,
     GroupId: 5
+
+    // // Select: 0,
+    // SourceName: 0,
+    // Status: 1,
+    // NodeId: 2,
+    // ResultId: 3,
+    // GroupId: 4
 }
 
 // Compliance main review column names

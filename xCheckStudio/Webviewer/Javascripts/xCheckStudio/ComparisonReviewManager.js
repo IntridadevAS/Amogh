@@ -47,233 +47,6 @@ function ComparisonReviewManager(comparisonCheckManager,
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     this.SelectionManager = new ReviewComparisonSelectionManager();
-  
-    ComparisonReviewManager.prototype.CreateCheckGroupButton = function(groupId, componentClass)
-    {
-        
-        var btn = document.createElement("BUTTON");
-        var att = document.createAttribute("groupId");
-        att.value = groupId;
-        btn.setAttributeNode(att);       // Create a <button> element
-        btn.className = "collapsible";
-        var t = document.createTextNode(componentClass);       // Create a text node
-        btn.appendChild(t);
-
-        return btn;
-    }
-
-    ComparisonReviewManager.prototype.CreateMainTableHeaders = function()
-    {
-        var columnHeaders = [];
-        for (var i = 0; i < Object.keys(ComparisonColumns).length; i++) {
-            columnHeader = {};
-            var title;
-            if (i === ComparisonColumns.Select) {
-                title = '';
-                name = ComparisonColumnNames.Select;
-                width = "20";
-            }
-            else if (i === ComparisonColumns.SourceAName) {
-                title = 'SourceA';
-                name = ComparisonColumnNames.SourceAName;
-                width = "35";
-            }
-            else if (i === ComparisonColumns.SourceBName) {
-                title = "SourceB";
-                name = ComparisonColumnNames.SourceBName;
-                width = "34";
-            }
-            else if (i === ComparisonColumns.Status) {
-                title = "Status";
-                name = ComparisonColumnNames.Status;
-                width = "34";
-            }
-            else if (i === ComparisonColumns.SourceANodeId) 
-            {
-                title = "SourceANodeId";
-                name = ComparisonColumnNames.SourceANodeId;
-                width = "10";
-            }
-            else if (i === ComparisonColumns.SourceBNodeId) 
-            {
-                title = "SourceBNodeId";
-                name = ComparisonColumnNames.SourceBNodeId;
-                width = "10";
-            }
-            else if (i === ComparisonColumns.ResultId) 
-            {
-                title = "ID";
-                name = ComparisonColumnNames.ResultId;
-                width = "10";
-            }
-            else if (i === ComparisonColumns.GroupId) 
-            {
-                title = "groupId";
-                name = ComparisonColumnNames.GroupId;
-                width = "10";
-            }
-
-            columnHeader["title"] = title;
-            columnHeader["name"] = name;
-            columnHeader["type"] = "text";
-            columnHeader["width"] = width;
-            columnHeaders.push(columnHeader);
-        }
-
-        return columnHeaders;
-    }
-
-    ComparisonReviewManager.prototype.CreateTableData =function(checkComponents, 
-                                                                groupId,
-                                                                mainClass)
-    {
-
-        var _this = this;
-        var tableData = [];
-        for (var componentId in checkComponents)
-        {
-            // if (!componentsGroup.CheckComponents.hasOwnProperty(componentId)) {
-            //     continue;
-            // }
-
-            component = checkComponents[componentId];            
-                              
-            tableRowContent = {};
-
-            // select check box column
-            var checkBox = document.createElement("INPUT");
-            checkBox.setAttribute("type", "checkbox");           
-            checkBox.checked = false;                                          
-            // select component check box state change event
-            checkBox.onchange = function () {
-                _this.SelectionManager.HandleCheckComponentSelectFormCheckBox(this);
-            }       
-
-            tableRowContent[ComparisonColumnNames.Select] = checkBox;                 
-            tableRowContent[ComparisonColumnNames.SourceAName] = component.SourceAName;
-            tableRowContent[ComparisonColumnNames.SourceBName] = component.SourceBName;
-            tableRowContent[ComparisonColumnNames.Status] = component.Status;
-            tableRowContent[ComparisonColumnNames.SourceANodeId] = component.SourceANodeId;
-            tableRowContent[ComparisonColumnNames.SourceBNodeId] = component.SourceBNodeId;
-            tableRowContent[ComparisonColumnNames.ResultId] = component.ID;
-            tableRowContent[ComparisonColumnNames.GroupId] = groupId;
-
-            tableData.push(tableRowContent);
-
-            // maintain track of check components
-            if (component.SourceANodeId ) 
-            {
-                this.SourceANodeIdvsCheckComponent[component.SourceANodeId] = { "Id" :component.ID, 
-                                                                                "SourceAName": component.SourceAName,
-                                                                                "SourceBName": component.SourceBName,
-                                                                             "MainClass": mainClass,
-                                                                             "SourceANodeId": component.SourceANodeId,
-                                                                             "SourceBNodeId": component.SourceBNodeId,};
-                this.SourceAComponentIdvsNodeId[component.ID] = component.SourceANodeId;
-            }
-            if(component.SourceBNodeId)
-            {
-                this.SourceBNodeIdvsCheckComponent[component.SourceBNodeId] = { "Id" :component.ID, 
-                                                                            "SourceAName": component.SourceAName,
-                                                                            "SourceBName": component.SourceBName,
-                                                                            "MainClass": mainClass,
-                                                                            "SourceANodeId": component.SourceANodeId,
-                                                                            "SourceBNodeId": component.SourceBNodeId,};                       
-                this.SourceBComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
-            }
-        }
-
-        return tableData;
-    }
-
-    ComparisonReviewManager.prototype.populateReviewTable = function () 
-    {
-
-         var parentTable = document.getElementById(this.MainReviewTableContainer);
-
-
-        for (var key in this.ComparisonCheckManager) {
-            if (!this.ComparisonCheckManager.hasOwnProperty(key)) {
-                continue;
-            }
-
-            var checkGroups = this.ComparisonCheckManager[key];
-            for (var groupId in checkGroups) {
-                if (!checkGroups.hasOwnProperty(groupId)) {
-                    continue;
-                }
-
-                // get check group
-                var componentsGroup = checkGroups[groupId];                
-                if (componentsGroup.CheckComponents.length === 0) {
-                    continue;
-                }
-
-                // create check group button
-                var btn = this.CreateCheckGroupButton(groupId, componentsGroup.ComponentClass);
-                parentTable.appendChild(btn);
-
-                var div = document.createElement("DIV");
-                div.className = "content scrollable";
-                div.id = componentsGroup.ComponentClass.replace(/\s/g, '');
-                parentTable.appendChild(div);
-
-                // create column headers
-                var columnHeaders = this.CreateMainTableHeaders();
-
-                // create table data
-                var tableData = this.CreateTableData(componentsGroup.CheckComponents, groupId, componentsGroup.ComponentClass);               
-
-                var id = "#" + div.id;
-                this.LoadReviewTableData(columnHeaders, tableData, id);      
-                this.highlightMainReviewTableFromCheckStatus(div.id);
-
-                var modelBrowserData = document.getElementById(div.id);               
-                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
-                var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-
-                var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-                modelBrowserHeaderTable.style.position = "fixed"
-                modelBrowserHeaderTable.style.width = "565px";
-                modelBrowserHeaderTable.style.overflowX = "hide";
-                var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
-                for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
-                    var currentRow = modelBrowserHeaderTableRows[j];
-                    for (var i = 0; i < currentRow.cells.length; i++) {
-                        if (i > ComparisonColumns.Status) {
-                            currentRow.cells[i].style.display = "none";
-                        }
-                    }
-                }
-
-
-                // keep track of component id vs table row and status                
-                var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
-                var modelBrowserDataRows = modelBrowserDataTable.getElementsByTagName("tr");
-                for (var j = 0; j < modelBrowserDataRows.length; j++) {
-                    var currentRow = modelBrowserDataRows[j];                
-
-                    // hide additional columns
-                    for (var i = 0; i < currentRow.cells.length; i++) {
-                        if (i > ComparisonColumns.Status) {
-                            currentRow.cells[i].style.display = "none";
-                        }
-                    }
-                }
-
-                modelBrowserDataTable.style.position = "static"
-                modelBrowserDataTable.style.width = "578px";
-                modelBrowserDataTable.style.margin = "45px 0px 0px 0px"
-
-                var jsgriddiv = $('#' + componentsGroup.ComponentClass.replace(/\s/g, '')).find('.jsgrid-grid-body');
-                var div2 = document.createElement("DIV");
-                div2.id = componentsGroup.ComponentClass + "_child";
-                div2.innerText = "Count :" + modelBrowserTableRows.length;
-                div2.style.fontSize = "10px";
-                jsgriddiv[0].appendChild(div2);
-            }
-        }
-    }
 
     ComparisonReviewManager.prototype.loadDatasources = function () {
         var modal = document.getElementById('maximizeViewerContainer');              
@@ -313,30 +86,64 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
         var modelBrowserData = document.getElementById(containerId);
+        var categoryId = containerId + "System_table_container";
+        // var gridDiv = modelBrowserData.getElementsByTagName(categoryId);
+        
 
         // jsGridHeaderTableIndex = 0 
             // jsGridTbodyTableIndex = 1
-        var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex];
+        var modelBrowserDataTable = modelBrowserData.children[0];
         var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
         // var countBox;
+        var div2 = document.createElement("DIV");
         var id = containerId + "_child";
-        var countBox = document.getElementById(id);
-        countBox.innerText = "Count :" + modelBrowserTableRows.length;
+        div2.id = id;
+        div2.style.fontSize = "13px";
+        
+        // var countBox = document.getElementById(id);
+        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
+        var rowCount = modelBrowserTableRows.length-2;
+        div2.innerHTML = "Count :" + rowCount;
+        modelBrowserDataTable.appendChild(div2);
+    }
+
+    ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function(component, mainClass) {
+        // maintain track of check components
+        if (component.SourceANodeId ) 
+        {
+            this.SourceANodeIdvsCheckComponent[component.SourceANodeId] = { "Id" :component.ID, 
+                                    "SourceAName": component.SourceAName,
+                                    "SourceBName": component.SourceBName,
+                                "MainClass": mainClass,
+                                "SourceANodeId": component.SourceANodeId,
+                                "SourceBNodeId": component.SourceBNodeId,};
+            // this.SourceAComponentIdvsNodeId[component.ID] = component.SourceANodeId;
+        }
+        if(component.SourceBNodeId)
+        {
+            this.SourceBNodeIdvsCheckComponent[component.SourceBNodeId] = { "Id" :component.ID, 
+                                "SourceAName": component.SourceAName,
+                                "SourceBName": component.SourceBName,
+                                "MainClass": mainClass,
+                                "SourceANodeId": component.SourceANodeId,
+                                "SourceBNodeId": component.SourceBNodeId,};                       
+            // this.SourceBComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
+        }
     }
 
     ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
         var mainReviewTableContainer = document.getElementById(containerId);
         // jsGridHeaderTableIndex = 0 
             // jsGridTbodyTableIndex = 1
-        var mainReviewTableRows = mainReviewTableContainer.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
+        var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
 
-        for (var i = 0; i < mainReviewTableRows.length; i++) {
+        for (var i = 1; i < mainReviewTableRows.length; i++) {
             var currentRow = mainReviewTableRows[i];
             if (currentRow.cells.length < 3) {
                 return;
             }
-            var status = currentRow.cells[ComparisonColumns.Status].innerHTML;
+            var status = currentRow.cells[ComparisonColumns.Status].innerText;
             this.SelectionManager.ChangeBackgroundColor(currentRow, status);
         }
     }

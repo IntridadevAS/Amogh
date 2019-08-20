@@ -234,9 +234,10 @@ function loadComparisonData(comparisonCheckGroups,
         "ComparisonDetailedReviewCell",
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
-
+ 
+    comparisonReviewModuleTable = new ComparisonReviewModuleTable(comparisonReviewManager, "ComparisonMainReviewCell")
     // populate review table
-    comparisonReviewManager.populateReviewTable();
+    comparisonReviewModuleTable.populateReviewTable();
 }
 
 function onHomeClick() {
