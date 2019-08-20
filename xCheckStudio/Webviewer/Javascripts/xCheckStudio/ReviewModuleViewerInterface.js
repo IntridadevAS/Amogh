@@ -29,7 +29,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         "pipingnetworksystem": ["pipingnetworksegment"],
         "pipe": ["bran"],
         "hvac": ["bran"],
-        "equi":["cone", "cyli", "dish"]
+        "equi": ["cone", "cyli", "dish"]
     };
 
     ReviewModuleViewerInterface.prototype.setupViewer = function (width, height) {
@@ -58,8 +58,8 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             var component = this.NodeIdStatusData[id];
             this.ChangeComponentColor(component, false, undefined);
         }
-    }  
-                
+    }
+
     ReviewModuleViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) {
         var status = component.Status;
         //var nodeId = component.NodeId;
@@ -72,15 +72,13 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             var child = children[id];
 
             // take care of don't color components
-            if(child.SubClass.toLowerCase() in this.DontColorComponents)
-            {
+            if (child.SubClass.toLowerCase() in this.DontColorComponents) {
                 var dontColorComponent = this.DontColorComponents[child.SubClass.toLowerCase()];
-                if(child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
-                   component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"] )
-                   {
-                       continue;
-                   }
-            }            
+                if (child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
+                    component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"]) {
+                    continue;
+                }
+            }
 
             // take care of color overriding from status components
             var overrideColorWithSeverityPreference = false;
@@ -93,7 +91,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
             this.ChangeComponentColor(child, overrideColorWithSeverityPreference, component);
         }
-    }  
+    }
 
     ReviewModuleViewerInterface.prototype.unHighlightAll = function () {
         var _this = this;
@@ -145,8 +143,6 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 parentTable.innerHTML = '';
             }
         }
-
-        this.selectedCheckComponentData = undefined;
     }
 
     ReviewModuleViewerInterface.prototype.bindEvents = function (viewer) {
@@ -171,7 +167,7 @@ var ReviewModuleViewerInterface = function (viewerOptions,
 
                 for (var i = 0; i < selections.length; i++) {
                     var selection = selections[i];
-                    var sel = selection.getSelection();                    
+                    var sel = selection.getSelection();
 
                     _this.onSelection(selection);
 
@@ -183,9 +179,9 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             },
 
             contextMenu: function (position) {
-               
+
                 currentViewer = viewer;
-               _this.menu(event.clientX, event.clientY);
+                _this.menu(event.clientX, event.clientY);
             },
         });
     };
@@ -265,15 +261,15 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 this.selectedNodeId in this.ReviewManager.SourceANodeIdvsCheckComponent) {
                 checkComponentData = this.ReviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
 
-                // highlight component in second viewer
-                this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceBNodeId']);
+                // // highlight component in second viewer
+                // if (this.ReviewManager.SourceBReviewModuleViewerInterface &&
+                //     checkComponentData['SourceBNodeId'] in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
+                //     this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceBNodeId']);
+                // }
             }
             else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
                 this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
                 checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-            }
-            else {
-                return;
             }
         }
         else if (this.ViewerOptions[0] === "viewerContainer2") {
@@ -281,34 +277,39 @@ var ReviewModuleViewerInterface = function (viewerOptions,
                 this.selectedNodeId in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
                 checkComponentData = this.ReviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];
 
-                // highlight component in first viewer
-                this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceANodeId']);
+                // // highlight component in first viewer
+                // if (this.ReviewManager.SourceAReviewModuleViewerInterface &&
+                //     checkComponentData['SourceANodeId'] in this.ReviewManager.SourceANodeIdvsCheckComponent) {
+                //     this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceANodeId']);
+                // }
             }
             else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
                 this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
                 checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
             }
-            else {
-                return;
-            }
         }
-        else {
+
+        if (!checkComponentData) {
             return;
         }
 
-        if (this.selectedCheckComponentData === checkComponentData["Id"]) {
-            return;
-        }
-        this.selectedCheckComponentData = checkComponentData["Id"];
-
-        // highlight corresponding component in review table 
-        if (!this.HighlightReviewComponent(checkComponentData)) {
+        var reviewRow = this.GetReviewComponentRow(checkComponentData);
+        if(!reviewRow)
+        {
             this.unHighlightComponent();
             this.unHighlightAll();
 
             return;
         }
-        //}
+
+        // component group id which is container div for check components table of given row
+        var containerDiv = this.ReviewManager.GetReviewTableId(reviewRow);
+        this.ReviewManager.OnCheckComponentRowClicked(reviewRow, containerDiv); 
+
+        var reviewTable = this.ReviewManager.GetReviewTable(reviewRow);
+        this.ReviewManager.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, 
+                                                                                 reviewRow, 
+                                                                                 this.ReviewManager.MainReviewTableContainer);          
     };
 
     ReviewModuleViewerInterface.prototype.IsNodeInCheckResults = function (node) {
@@ -355,76 +356,140 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         }
     }
 
-    ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (checkcComponentData) {
+    /* This function returns the comparison check 
+    component row for given check component data */
+    ReviewModuleViewerInterface.prototype.GetReviewComponentRow = function (checkcComponentData) {
         var componentsGroupName = checkcComponentData["MainClass"];
         var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
         if (!mainReviewTableContainer) {
-            return false;
+            return undefined;
         }
 
         var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
         for (var i = 0; i < doc.length; i++) {
-            // var result = doc[i].innerHTML.split("-");
 
-            if (doc[i].innerHTML === componentsGroupName) {
-                var nextSibling = doc[i].nextSibling;
+            if (doc[i].innerHTML !== componentsGroupName) {
+                continue;
+            }
+            var nextSibling = doc[i].nextSibling;
 
-                var siblingCount = nextSibling.childElementCount;
-                for (var j = 0; j < siblingCount; j++) {
-                    var child = doc[i].nextSibling.children[j];
-                    var childRows = child.getElementsByTagName("tr");
-                    for (var k = 0; k < childRows.length; k++) {
+            var siblingCount = nextSibling.childElementCount;
+            for (var j = 0; j < siblingCount; j++) {
+                var child = doc[i].nextSibling.children[j];
+                var childRows = child.getElementsByTagName("tr");
+                for (var k = 0; k < childRows.length; k++) {
 
-                        var childRow = childRows[k];
-                        var childRowColumns = childRow.getElementsByTagName("td");
-                        // if (childRowColumns.length <= 0) {
-                        //     continue;
+                    var childRow = childRows[k];
+                    var childRowColumns = childRow.getElementsByTagName("td");
+
+                    var checkComponentId;
+                    if (childRowColumns.length === Object.keys(ComparisonColumns).length) {
+                        checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                    }
+                    else if (childRowColumns.length === Object.keys(ComplianceColumns).length) {
+                        checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
+                    }
+                    else {
+                        continue;
+                    }
+
+                    //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                    if (checkComponentId == checkcComponentData["Id"]) {
+
+                        // // open collapsible area
+                        // if (nextSibling.style.display != "block") {
+                        //     nextSibling.style.display = "block";
                         // }
 
-                        var checkComponentId;
-                        if(childRowColumns.length === Object.keys(ComparisonColumns).length)
-                        {
-                            checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
-                        }
-                        else if(childRowColumns.length === Object.keys(ComplianceColumns).length)
-                        {
-                            checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
-                        }
-                        else 
-                        {
-                            continue;
-                        }
+                        // if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+                        //     this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+                        // }
 
-                        //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
-                        if (checkComponentId == checkcComponentData["Id"]) {
-                            // open collapsible area
-                            if (nextSibling.style.display != "block") {
-                                nextSibling.style.display = "block";
-                            }
+                        // // highlight selected row
+                        // this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
+                        // this.ReviewManager.populateDetailedReviewTable(childRow);
+                        // this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
 
-                            if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-                                this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
-                            }
+                        // // scroll to row                           
+                        // var reviewTable = this.ReviewManager.GetReviewTable(childRow);
+                        // reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
+                        // reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
 
-                            // highlight selected row
-                            this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
-                            this.ReviewManager.populateDetailedReviewTable(childRow);
-                            this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
-
-                            // scroll to row                           
-                            var reviewTable = this.ReviewManager.GetReviewTable(childRow);
-                            reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
-                            reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
-
-                            //break;
-                            return true;
-                        }
+                        //break;
+                        return childRow;
                     }
                 }
             }
+            //}
         }
 
-        return false;
+        return undefined;
     }
+
+    // ReviewModuleViewerInterface.prototype.HighlightReviewComponent = function (checkcComponentData) {
+    //     var componentsGroupName = checkcComponentData["MainClass"];
+    //     var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
+    //     if (!mainReviewTableContainer) {
+    //         return false;
+    //     }
+
+    //     var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
+    //     for (var i = 0; i < doc.length; i++) {
+    //         // var result = doc[i].innerHTML.split("-");
+
+    //         if (doc[i].innerHTML === componentsGroupName) {
+    //             var nextSibling = doc[i].nextSibling;
+
+    //             var siblingCount = nextSibling.childElementCount;
+    //             for (var j = 0; j < siblingCount; j++) {
+    //                 var child = doc[i].nextSibling.children[j];
+    //                 var childRows = child.getElementsByTagName("tr");
+    //                 for (var k = 0; k < childRows.length; k++) {
+
+    //                     var childRow = childRows[k];
+    //                     var childRowColumns = childRow.getElementsByTagName("td");
+
+    //                     var checkComponentId;
+    //                     if (childRowColumns.length === Object.keys(ComparisonColumns).length) {
+    //                         checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+    //                     }
+    //                     else if (childRowColumns.length === Object.keys(ComplianceColumns).length) {
+    //                         checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
+    //                     }
+    //                     else {
+    //                         continue;
+    //                     }
+
+    //                     //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+    //                     if (checkComponentId == checkcComponentData["Id"]) {
+    //                         // open collapsible area
+    //                         if (nextSibling.style.display != "block") {
+    //                             nextSibling.style.display = "block";
+    //                         }
+
+    //                         if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+    //                             this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+    //                         }
+
+    //                         // highlight selected row
+    //                         this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
+    //                         this.ReviewManager.populateDetailedReviewTable(childRow);
+    //                         this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
+
+    //                         // scroll to row                           
+    //                         var reviewTable = this.ReviewManager.GetReviewTable(childRow);
+    //                         reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
+    //                         reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
+
+    //                         //break;
+    //                         return true;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return false;
+    // }
 }
 

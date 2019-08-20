@@ -119,12 +119,13 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     this.HighlightedCheckComponentRow = currentReviewTableRow;
 }
 
-ReviewComparisonSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function (reviewTable, mainReviewTableContainerId) {
+ReviewComparisonSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function (reviewTable, reviewRow, mainReviewTableContainerId) {  
+
     if (!this.HighlightedCheckComponentRow ||
         !reviewTable) {
-    }
+    }    
 
-    reviewTable.scrollTop = reviewTableRow.offsetTop - reviewTableRow.offsetHeight;
+    reviewTable.scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight;
 
     var mainReviewTableContainer = document.getElementById(mainReviewTableContainerId);
     if (!mainReviewTableContainer) {
