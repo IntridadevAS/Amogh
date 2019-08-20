@@ -50,3 +50,29 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
         return "#ffffff";
     }
 }
+
+ReviewSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function (reviewTable, reviewRow, mainReviewTableContainerId) {
+
+    if (!this.HighlightedCheckComponentRow ||
+        !reviewTable) {
+    }
+
+    reviewTable.scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight;
+
+    var mainReviewTableContainer = document.getElementById(mainReviewTableContainerId);
+    if (!mainReviewTableContainer) {
+        return;
+    }
+
+    var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
+    for (var i = 0; i < collapsibleClasses.length; i++) {
+        var collapsibleClass = collapsibleClasses[i];
+        if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
+            collapsibleClass.nextElementSibling.style.display = "none";
+            collapsibleClass.className = "collapsible";
+        }
+        else {
+            collapsibleClass.nextElementSibling.style.display = "block";
+        }
+    }
+}
