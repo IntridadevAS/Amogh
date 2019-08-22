@@ -148,10 +148,10 @@ ModelBrowserContextMenuManager.prototype.OnStartTranslucencyClicked = function (
 
       var sliderId;
       var viewer = this.ModelBrowser.Webviewer;
-      if (viewer._params.containerId === "viewerContainer1") {
+      if (viewer._params.containerId === "visualizerA") {
             sliderId = "translucencySlider1";
       }
-      else if (viewer._params.containerId === "viewerContainer2") {
+      else if (viewer._params.containerId === "visualizerB") {
             sliderId = "translucencySlider2";
       }
       if (!sliderId) {

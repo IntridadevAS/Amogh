@@ -280,10 +280,10 @@ SCSelectionManager.prototype.BrowserItemClick = function (nodeId, viewer) {
     }
 
     // keep track of graphically selected node
-    if (viewer._params.containerId === "viewerContainer1") {
+    if (viewer._params.containerId === "visualizerA") {
         sourceManager1.SelectedNodeId = nodeID;
     }
-    else if (viewer._params.containerId === "viewerContainer2") {
+    else if (viewer._params.containerId === "visualizerB") {
         sourceManager2.SelectedNodeId = nodeID;
     }
 

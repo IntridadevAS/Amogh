@@ -305,13 +305,13 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, tableDa
             fields: columnHeaders,
             margin: "0px",
             onRefreshed: function (config) {
-                var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-                for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-                    currentChild = excelSheetParentContainer.children[i];
-                    if (currentChild.className === "viewdatagraphics") {
-                        currentChild.style.display = "none";
-                    }
-                }
+                // var excelSheetParentContainer = document.getElementById("dataSourceViewer");
+                // for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
+                //     currentChild = excelSheetParentContainer.children[i];
+                //     if (currentChild.className === "viewdatagraphics") {
+                //         currentChild.style.display = "none";
+                //     }
+                // }
             },
             rowClick: function (args) {
                 _this.SelectionManager.HandleRowSelectInViewer(args.event.currentTarget, _this.ModelBrowserContainer);
@@ -330,10 +330,10 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, tableDa
 ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
     var viewerContainerData;
     if (this.ModelBrowserContainer === "modelTree1") {
-        viewerContainerData = document.getElementById("viewerContainer1")
+        viewerContainerData = document.getElementById("visualizerA")
     }
     else if (this.ModelBrowserContainer === "modelTree2") {
-        viewerContainerData = document.getElementById("viewerContainer2")
+        viewerContainerData = document.getElementById("visualizerB")
     }
     if (viewerContainerData != undefined) {
         var containerChildren = viewerContainerData.children;
@@ -391,10 +391,10 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
 
     var viewerContainerData;
     if (this.ModelBrowserContainer === "modelTree1") {
-        viewerContainerData = document.getElementById("viewerContainer1")
+        viewerContainerData = document.getElementById("visualizerA")
     }
     else if (this.ModelBrowserContainer === "modelTree2") {
-        viewerContainerData = document.getElementById("viewerContainer2")
+        viewerContainerData = document.getElementById("visualizerB")
     }
 
     if (viewerContainerData.childElementCount > 1 && 
@@ -483,12 +483,12 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
 
             if (this.ModelBrowserContainer === "modelTree1") {
                 _this = this;
-                _this.LoadSheetDataTable(columnHeaders, tableData, "#viewerContainer1");
+                _this.LoadSheetDataTable(columnHeaders, tableData, "#visualizerA");
                 _this.HighlightRowInSheetData(browserRow);
             }
             else if (this.ModelBrowserContainer === "modelTree2") {
                 _this = this;
-                _this.LoadSheetDataTable(columnHeaders, tableData, "#viewerContainer2");
+                _this.LoadSheetDataTable(columnHeaders, tableData, "#visualizerB");
                 _this.HighlightRowInSheetData(browserRow);
             }
         }

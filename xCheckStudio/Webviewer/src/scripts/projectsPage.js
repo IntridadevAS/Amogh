@@ -565,7 +565,8 @@ let checkView = {
     controller.setCurrentCheck(subject.id);
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
-    window.location.href = "checkModule.html";
+    //window.location.href = "checkModule.html";
+    window.location.href = "checkPage.html";
     //localStorage.setItem("loadSavedProject",true);
   },
 

@@ -68,22 +68,22 @@ SCManager.prototype.LoadData = function (selectedComponents) {
 
                 _this.CreateNodeIdArray(viewer.model.getAbsoluteRootNode());
 
-                // show busy spinner
-                var busySpinner = document.getElementById("divLoading");
-                busySpinner.className = 'show';
+                // // show busy spinner
+                // var busySpinner = document.getElementById("divLoading");
+                // busySpinner.className = 'show';
 
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
                 _this.ReadProperties(rootNodeId, identifierProperties, undefined);
 
-                // hide view data graphics text on viewer conatainer
-                var scViewerContainer = document.getElementById("dataSourceViewer");
-                for (var i = 0; i < scViewerContainer.childElementCount; i++) {
-                    var currentChild = scViewerContainer.children[i];
-                    if (currentChild.className === "viewdatagraphics") {
-                        currentChild.style.display = "none";
-                    }
-                }
+                // // hide view data graphics text on viewer conatainer
+                // var scViewerContainer = document.getElementById("dataSourceViewer");
+                // for (var i = 0; i < scViewerContainer.childElementCount; i++) {
+                //     var currentChild = scViewerContainer.children[i];
+                //     if (currentChild.className === "viewdatagraphics") {
+                //         currentChild.style.display = "none";
+                //     }
+                // }
 
                 return resolve(true);
 
@@ -304,10 +304,10 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
             if (_this.NodeIdArray.length == 0) {
                 _this.NodeIdArray = undefined;
 
-                _this.ModelTree.addModelBrowser(_this.Webviewer.model.getAbsoluteRootNode(), undefined);
-                if (checkCaseSelected) {
-                    checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-                }
+                _this.ModelTree.addModelBrowser( _this.SourceProperties);
+                // if (checkCaseSelected) {
+                //     checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+                // }
                 // add components to database
                 _this.AddComponentsToDB();
             }
@@ -331,10 +331,10 @@ SCManager.prototype.AddComponentsToDB = function () {
     var _this = this;
 
     var source = undefined;
-    if (this.Webviewer._params.containerId.toLowerCase() == "viewercontainer1") {
+    if (this.Webviewer._params.containerId.toLowerCase() == "visualizerA") {
         source = "SourceA"
     }
-    else if (this.Webviewer._params.containerId.toLowerCase() == "viewercontainer2") {
+    else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerB") {
         source = "SourceB"
     }
 
@@ -354,10 +354,10 @@ SCManager.prototype.AddComponentsToDB = function () {
         if (msg !== 'fail') {
             _this.NodeIdvsComponentIdList = JSON.parse(msg);
         }
-        // remove busy spinner
-        var busySpinner = document.getElementById("divLoading");
-        if (busySpinner.classList.contains('show'))
-            busySpinner.classList.remove('show')
+        // // remove busy spinner
+        // var busySpinner = document.getElementById("divLoading");
+        // if (busySpinner.classList.contains('show'))
+        //     busySpinner.classList.remove('show')
     });
 }
 

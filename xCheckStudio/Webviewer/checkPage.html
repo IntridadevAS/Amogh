@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CheckModule</title>
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/checkPage.css">
+  <link rel="stylesheet" href="src/css/fonts.css">
+</head>
+
+<body>
+  <header>
+    <div id="mainMenu" class="dropDownMenu">
+      <img src=" " alt="">
+    </div>
+    <h1 id="pageName"></h1>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
+    <div class="userInfo">
+      <p id="userName" class="userName"> User Name </p>
+      <img id="userImg" src="public/symbols/XD_Person.svg" alt="">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+      </div>
+    </div>
+
+  </header>
+  <div class="background">
+
+    <div class="tabButtonContainer" id="tabsContainer">
+      <div id="tabContainer" class="tabContainer">
+        <div id="addTab" class="addTab">
+          <img src="public/symbols/plus.svg" alt="">
+        </div>
+      </div>
+      <div class="buttonContainer">
+        <div class="buttonGroup">
+          <select class="checkCase" name="">
+            <option selected disabled>Select Check Case</option>
+            <option value="checkCase1">CheckCaseType 1</option>
+            <option value="checkCase2">CheckCaseType 2</option>
+            <option value="checkCase3">CheckCaseType 3</option>
+          </select>
+        </div>
+        <div class="buttonGroup">
+          <button id="units" data-tooltip="Units" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Units"></span>
+            <img src="public/symbols/XD_Units.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="isolate" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Isolate"></span>
+            <img src="public/symbols/XD_Isolate.svg" alt="">
+          </button>
+          <button id="show" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Show"></span>
+            <img src="public/symbols/XD_Show.svg" alt="">
+          </button>
+          <button id="hide" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Hide"></span>
+            <img src="public/symbols/XD_Hide.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="properties" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Properties"></span>
+            <img src="public/symbols/XD_Properties.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="clearData" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Clear Data"></span>
+            <img src="public/symbols/XD_ClearData.svg" alt="">
+          </button>
+          <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Save Progress"></span>
+            <img src="public/symbols/XD_SaveData.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="history" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="History"></span>
+            <img src="public/symbols/XD_HistoryVersion.svg" alt="">
+          </button>
+          <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Check Info"></span>
+            <img src="public/symbols/XD_Checkinfo.svg" alt="">
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="viewsContainer" id="viewsContainer">
+      <div id="addFiles" class="addFiles" onClick="viewPanels.hideAddPanel()">
+        <div class="loadDataContent">
+          <h3>Load Data</h3>
+          <p>Drag and Drop Here</p>
+          <div class="plusFileButton">
+            <img src="public/symbols/plus.svg" alt="">
+          </div>
+
+          <form id="uploadDatasourceForm" enctype="multipart/form-data">
+
+            <input id="fileInput" name="dataSouresName[]" multiple="multiple" type="file" style="display: none"
+              onchange="UploadManager.loadDataSource(event, 'fileInput', 'uploadDatasourceForm')"
+              accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS" />
+          </form>
+        </div>
+      </div>
+      <div id="viewPanelA" class="viewPanel">
+        <div id="tableDataA" class="tableContainer">
+          <!-- tableA           -->
+        </div>
+        <div id="center" class="grabBar"></div>
+        <div id="visualizerA" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <!-- visualizerA -->
+        </div>
+      </div>
+      <div id="viewPanelB" class="viewPanel hide">
+        <div id="tableDataB" class="tableContainer">
+          <!-- tableB -->
+        </div>
+        <div class="grabBar"></div>
+        <div id="visualizerB" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <!-- visualizerB -->
+        </div>
+      </div>
+      <div id="viewPanelC" class="viewPanel hide">
+        <div id="tableDataC" class="tableContainer">
+          <!-- tableC -->
+        </div>
+        <div class="grabBar"></div>
+        <div id="visualizerC" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <!-- visualizerC -->
+        </div>
+      </div>
+      <div id="viewPanelD" class="viewPanel hide">
+        <div id="tableDataD" class="tableContainer">
+          <!-- tableD -->
+        </div>
+        <div class="grabBar"></div>
+        <div id="visualizerD" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <!-- visualizerD -->
+        </div>
+      </div>
+
+      <div class="checkTogglesContainer">
+        <label class="toggleContainer" style="grid-area:compliance">Compliance
+          <input type="checkbox" class="toggleCheckBox" name="compliance">
+          <span class="toggleSlider"></span>
+        </label>
+        <label class="toggleContainer" style="grid-area:comparison">Comparison
+          <input type="checkbox" class="toggleCheckBox" name="comparison">
+          <span class="toggleSlider"></span>
+        </label>
+        <button type="submit" name="button"></button>
+      </div>
+      <div class="checkName">
+        <p>Example Project Name / Example Check Name</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+  </style>
+  <!-- JQuery dependencies -->
+  <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+  <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
+  <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
+  <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+
+  <!-- HOOPS Communicator dependencies -->
+  <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
+  <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+
+  <!-- JS Grid dependencies -->
+  <!-- <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/jsgrid.css" />
+  <link type="text/css" rel="stylesheet" href="Javascripts/jsgrid-1.5.3/css/theme.css" />
+  <script type="text/javascript" src="Javascripts\jsgrid-1.5.3\dist\jsgrid.js"></script> -->
+
+  <!-- xCheckStudio dependencies -->
+  <script type="text/javascript" src="src/scripts/checkPage.js"></script>
+  <script type="text/javascript" src="src/scripts/main.js"></script>
+
+  <!-- infragistics dependencies -->
+  <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
+  <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
+  <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
+  <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleConstants.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\UploadManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoadManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SourceManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSourceManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DBSourceManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SCManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts/xCheckStudio/ModelBrowser.js"></script>
+  <script type="text/javascript" src="Javascripts/xCheckStudio/SCModelBrowser.js"></script>
+  <script type="text/javascript" src="Javascripts/xCheckStudio/ExcelModelBrowser.js"></script>
+  <script type="text/javascript" src="Javascripts/xCheckStudio/DBModelBrowser.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SelectionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SCSelectionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSelectionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DBSelectionManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\xCheckStudioInterface.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ComponentIdentificationManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\GenericProperties.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ContextMenuManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowserContextMenuManager.js"></script>
+</body>
+
+</html>

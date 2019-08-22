@@ -1,3 +1,5 @@
+var SourceManagers = {};
+
 function SourceManager(sourceType)
 {
     this.SourceType = sourceType;  

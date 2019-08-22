@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="30" fill="none"/>
+    </clipPath>
+    <filter id="Rectangle_1219" x="15.671" y="2.5" width="7" height="12" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Polygon_1" x="12.5" y="7.404" width="13" height="11" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur-2"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="SymSave" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" fill="#323132" stroke="#8a8a8a" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <g id="Rectangle_1208" data-name="Rectangle 1208" transform="translate(3 10)" fill="#8a8a8a" stroke="#f2f3f4" stroke-width="1">
+      <path d="M0,0H22a0,0,0,0,1,0,0V15a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V0A0,0,0,0,1,0,0Z" stroke="none"/>
+      <path d="M1,.5H21a.5.5,0,0,1,.5.5V15A1.5,1.5,0,0,1,20,16.5H2A1.5,1.5,0,0,1,.5,15V1A.5.5,0,0,1,1,.5Z" fill="none"/>
+    </g>
+    <path id="Rectangle_1218" data-name="Rectangle 1218" d="M1,0H7A1,1,0,0,1,8,1V3A0,0,0,0,1,8,3H0A0,0,0,0,1,0,3V1A1,1,0,0,1,1,0Z" transform="translate(3 7)" fill="#fff"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Rectangle_1219)">
+      <rect id="Rectangle_1219-2" data-name="Rectangle 1219" width="4" height="9" transform="translate(20.17 12) rotate(180)" fill="#51e0dc"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Polygon_1)">
+      <g id="Polygon_1-2" data-name="Polygon 1" transform="translate(23 15.9) rotate(180)" fill="#51e0dc">
+        <path d="M 9.097879409790039 7.500002384185791 L 0.902119517326355 7.500002384185791 L 4.999999523162842 0.9434022903442383 L 9.097879409790039 7.500002384185791 Z" stroke="none"/>
+        <path d="M 4.999999523162842 1.886801719665527 L 1.804244995117188 7.000002384185791 L 8.195754051208496 7.000002384185791 L 4.999999523162842 1.886801719665527 M 4.999999523162842 0.4433975219726562 C 5.163042068481445 0.4433975219726562 5.326084613800049 0.5217323303222656 5.423999309539795 0.6784024238586426 L 9.521879196166992 7.235002517700195 C 9.730019569396973 7.56802225112915 9.490589141845703 8.000001907348633 9.097879409790039 8.000001907348633 L 0.9021196365356445 8.000001907348633 C 0.5094099044799805 8.000001907348633 0.2699794769287109 7.56802225112915 0.4781198501586914 7.235002517700195 L 4.575999736785889 0.6784024238586426 C 4.673914432525635 0.5217323303222656 4.836956977844238 0.4433975219726562 4.999999523162842 0.4433975219726562 Z" stroke="none" fill="#51e0dc"/>
+      </g>
+    </g>
+    <g id="Path_297" data-name="Path 297" transform="translate(3 17)" fill="#b3b3b3">
+      <path d="M 20.30768966674805 9.5 L 1.846150040626526 9.5 C 1.139217615127563 9.5 0.5578170418739319 9.025328636169434 0.5040608644485474 8.424400329589844 L 3.832310438156128 0.5 L 23.83979225158691 0.5 L 21.67255973815918 8.197830200195312 L 21.65385055541992 8.264289855957031 L 21.65385055541992 8.333330154418945 C 21.65385055541992 8.976630210876465 21.04997062683105 9.5 20.30768966674805 9.5 Z" stroke="none"/>
+      <path d="M 4.164615631103516 1 L 1.022178649902344 8.481992721557617 C 1.110576629638672 8.774636268615723 1.45210075378418 9 1.846149444580078 9 L 20.30768966674805 9 C 20.76635932922363 9 21.15385055541992 8.694700241088867 21.15385055541992 8.333330154418945 L 21.15385055541992 8.195249557495117 L 21.19127082824707 8.06233024597168 L 23.17958450317383 1 L 4.164615631103516 1 M 3.5 0 L 24.5 0 L 22.15385055541992 8.333330154418945 C 22.15385055541992 9.253809928894043 21.32728958129883 10 20.30768966674805 10 L 1.846149444580078 10 C 0.8265495300292969 10 0 9.253809928894043 0 8.333330154418945 L 3.5 0 Z" stroke="none" fill="#f2f3f4"/>
+    </g>
+  </g>
+</svg>

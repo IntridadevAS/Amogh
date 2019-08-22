@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="30" fill="none"/>
+    </clipPath>
+    <filter id="Rectangle_1208" x="3.5" y="4.5" width="23" height="21" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-color="#f2f3f4"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="SymIsolateaADD" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" fill="#323132" stroke="#15b9f9" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <rect id="Rectangle_1207" data-name="Rectangle 1207" width="8" height="6" transform="translate(11 12)" fill="#15b9f9"/>
+    <path id="Path_279" data-name="Path 279" d="M7487.795-3257.285c2.158,0,6.554.552,6.59-3.559s0-7.3,0-7.3" transform="translate(7497.771 -3242.016) rotate(180)" fill="none" stroke="#8a8a8a" stroke-linejoin="round" stroke-width="3"/>
+    <path id="Path_280" data-name="Path 280" d="M7487.795-3257.285c2.158,0,6.554.552,6.59-3.559s0-7.3,0-7.3" transform="translate(-7467.795 3272.383)" fill="none" stroke="#8a8a8a" stroke-linejoin="round" stroke-width="3"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Rectangle_1208)">
+      <g id="Rectangle_1208-2" data-name="Rectangle 1208" transform="translate(8 9)" fill="none" stroke="#f2f3f4" stroke-width="1">
+        <rect width="14" height="12" stroke="none"/>
+        <rect x="0.5" y="0.5" width="13" height="11" fill="none"/>
+      </g>
+    </g>
+    <text id="_" data-name="+" transform="translate(19 14.5)" fill="#f2f3f4" font-size="15" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="0.508" y="15">+</tspan></text>
+  </g>
+</svg>

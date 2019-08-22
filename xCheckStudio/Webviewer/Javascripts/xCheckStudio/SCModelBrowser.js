@@ -15,17 +15,18 @@ function SCModelBrowser(modelBrowserContainer,
     // call super constructor
     ModelBrowser.call(this, modelBrowserContainer);
 
+    this.Components;
     this.Webviewer = viewer;
     this.SourceType = sourceType;
 
     this.NodeIdVsCellClassList = {};
     this.NodeIdVsRowClassList = {};
-    this.modelTreeColumnHeaders = [];
+    //this.modelTreeColumnHeaders = [];
     this.modelTreeRowData = [];
 
     this.NodeGroups = [];
 
-    this.CreateHeaders();
+    // this.CreateHeaders();
     this.InitEvents();  
 
     // selectiion manager
@@ -37,64 +38,105 @@ function SCModelBrowser(modelBrowserContainer,
 SCModelBrowser.prototype = Object.create(ModelBrowser.prototype);
 SCModelBrowser.prototype.constructor = SCModelBrowser;
 
-SCModelBrowser.prototype.CreateHeaders = function () {
-    var _this = this;
+SCModelBrowser.prototype.CreateHeaders = function()
+    {
+        var columnHeaders = [];
+        for (var i = 0; i < Object.keys(ModelBrowserColumns).length; i++) {
+            columnHeader = {};
+            var headerText;
+            if (i === ModelBrowserColumns.Select) {
+                continue;
+            }
+            else if (i === ModelBrowserColumns.Component) {
+                headerText = ModelBrowserColumnNames.Component;
+                key = ModelBrowserColumnNames.Component.replace(/\s/g,'');
+                width = "30%";
+            }
+            else if (i === ModelBrowserColumns.MainClass) {
+                headerText = ModelBrowserColumnNames.MainClass;
+                key = ModelBrowserColumnNames.MainClass.replace(/\s/g,'');
+                width = "30%";
+            }
+            else if (i === ModelBrowserColumns.SubClass) {
+                headerText = ModelBrowserColumnNames.SubClass;
+                key = ModelBrowserColumnNames.SubClass.replace(/\s/g,'');
+                width = "30%";
+            }
+            else if (i === ModelBrowserColumns.NodeId) 
+            {
+                headerText = ModelBrowserColumnNames.NodeId;
+                key = ModelBrowserColumnNames.NodeId.replace(/\s/g,'');
+                width = "0%";
+            }            
 
-    // get container element Id 
-    var containerElement = document.getElementById(this.ModelBrowserContainer);
+            columnHeader["headerText"] = headerText;
+            columnHeader["key"] = key;
+            columnHeader["dataType"] = "string";
+            columnHeader["width"] = width;
+            columnHeaders.push(columnHeader);
+        }
 
-    var size = new Communicator.Point2(556, 364);
+        return columnHeaders;
+}
 
-    // create div element to hold model browser 
-    var tableDiv = document.createElement("div");
-    tableDiv.className = "scrollable";
-    tableDiv.style.width = size.x + "px";
-    tableDiv.style.height = size.y + "px";
-    containerElement.appendChild(tableDiv);
+// SCModelBrowser.prototype.CreateHeaders = function () {
+//     var _this = this;
 
-    // create model browser table
+//     // // get container element Id 
+//     // var containerElement = document.getElementById(this.ModelBrowserContainer);
 
-    //create header for table
-    columnHeader = {};
-    columnHeader["title"] = "";
-    columnHeader["name"] = "checkBox";
-    columnHeader["type"] = "text";
-    columnHeader["width"] = "20";
-    columnHeader["filtering"] = "false";
-    columnHeader["sorting"] = "false";
-    _this.modelTreeColumnHeaders.push(columnHeader);
+//     // var size = new Communicator.Point2(556, 364);
 
-    columnHeader = {};
-    columnHeader["title"] = "Item";
-    columnHeader["name"] = "Component";
-    columnHeader["type"] = "text";
-    columnHeader["width"] = "100";
-    _this.modelTreeColumnHeaders.push(columnHeader);
+//     // // create div element to hold model browser 
+//     // var tableDiv = document.createElement("div");
+//     // tableDiv.className = "scrollable";
+//     // tableDiv.style.width = size.x + "px";
+//     // tableDiv.style.height = size.y + "px";
+//     // containerElement.appendChild(tableDiv);
 
-    columnHeader = {};
-    columnHeader["title"] = "Category";
-    columnHeader["name"] = "MainComponentClass";
-    columnHeader["type"] = "text";
-    columnHeader["width"] = "100";
-    _this.modelTreeColumnHeaders.push(columnHeader);
+//     // create model browser table
 
-    columnHeader = {};
-    columnHeader["title"] = "Item Class";
-    columnHeader["name"] = "SubComponentClass";
-    columnHeader["type"] = "text";
-    columnHeader["width"] = "100";
-    _this.modelTreeColumnHeaders.push(columnHeader);
+//     //create header for table
+//     columnHeader = {};
+//     columnHeader["title"] = "";
+//     columnHeader["name"] = "checkBox";
+//     columnHeader["type"] = "text";
+//     columnHeader["width"] = "20";
+//     columnHeader["filtering"] = "false";
+//     columnHeader["sorting"] = "false";
+//     _this.modelTreeColumnHeaders.push(columnHeader);
 
-    columnHeader = {};
-    columnHeader["title"] = "NodeId";
-    columnHeader["name"] = "NodeId";
-    columnHeader["type"] = "text";
-    columnHeader["width"] = "0";
-    columnHeader["filtering"] = "false";
-    columnHeader["sorting"] = "false";
-    _this.modelTreeColumnHeaders.push(columnHeader);
+//     columnHeader = {};
+//     columnHeader["title"] = "Item";
+//     columnHeader["name"] = "Component";
+//     columnHeader["type"] = "text";
+//     columnHeader["width"] = "100";
+//     _this.modelTreeColumnHeaders.push(columnHeader);
 
-};
+//     columnHeader = {};
+//     columnHeader["title"] = "Category";
+//     columnHeader["name"] = "MainComponentClass";
+//     columnHeader["type"] = "text";
+//     columnHeader["width"] = "100";
+//     _this.modelTreeColumnHeaders.push(columnHeader);
+
+//     columnHeader = {};
+//     columnHeader["title"] = "Item Class";
+//     columnHeader["name"] = "SubComponentClass";
+//     columnHeader["type"] = "text";
+//     columnHeader["width"] = "100";
+//     _this.modelTreeColumnHeaders.push(columnHeader);
+
+//     columnHeader = {};
+//     columnHeader["title"] = "NodeId";
+//     columnHeader["name"] = "NodeId";
+//     columnHeader["type"] = "text";
+//     columnHeader["width"] = "0";
+//     columnHeader["filtering"] = "false";
+//     columnHeader["sorting"] = "false";
+//     _this.modelTreeColumnHeaders.push(columnHeader);
+
+// };
 
 SCModelBrowser.prototype.InitEvents = function () {
     var _this = this;
@@ -150,49 +192,51 @@ SCModelBrowser.prototype.addClassesToModelBrowser = function () {
 }
 
 SCModelBrowser.prototype.addComponentRow = function (nodeId, styleList, componentStyleClass) {
-    var _this = this;
-
-    var model = this.Webviewer.model;
-    //var componentName = model.getNodeName(nodeId);
-    if (styleList !== undefined) {
-        // row.classList = styleList;
-        _this.NodeIdVsRowClassList[nodeId] = styleList;
-    }
-
-    //add node properties to model browser table
-    var nodeData;
-    if (this.Webviewer._params.containerId === "viewerContainer1") {
-        nodeData = sourceManager1.SourceProperties[nodeId];
-    }
-    else if (this.Webviewer._params.containerId === "viewerContainer2") {
-        nodeData = sourceManager2.SourceProperties[nodeId];
-    }
-
-    if (nodeData == undefined) {
+    //var _this = this;
+    if (!(nodeId in  this.Components)) {
         return;
     }
+
+    //var model = this.Webviewer.model;
+    //var componentName = model.getNodeName(nodeId);
+    if (styleList !== undefined) {       
+        this.NodeIdVsRowClassList[nodeId] = styleList;
+    }    
+
+    //add node properties to model browser table
+    var nodeData = this.Components[nodeId];
+    // if (this.Webviewer._params.containerId === "visualizerA") {
+    //     nodeData = this.Components[nodeId];
+    // }
+    // else if (this.Webviewer._params.containerId === "visualizerB") {
+    //     nodeData = this.Components[nodeId];
+    // }
+
+    // if (nodeData == undefined) {
+    //     return;
+    // }
 
     tableRowContent = {};
     // if (nodeData != undefined) 
     // {
-    var checkBox = document.createElement("INPUT");
-    checkBox.setAttribute("type", "checkbox");
+    // var checkBox = document.createElement("INPUT");
+    // checkBox.setAttribute("type", "checkbox");
 
-    var checked = false;
-    if (_this.NodeIdvsSelectedComponents &&
-        (nodeId in _this.NodeIdvsSelectedComponents)) {
-        checked = true;
-    }
-    checkBox.checked = checked;
+    // var checked = false;
+    // if (this.NodeIdvsSelectedComponents &&
+    //     (nodeId in this.NodeIdvsSelectedComponents)) {
+    //     checked = true;
+    // }
+    // checkBox.checked = checked;
 
-    tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
+    // tableRowContent[this.modelTreeColumnHeaders[0].name] = checkBox;
 
-    // select component check box state change event
-    checkBox.onchange = function () {
-        _this.SelectionManager.HandleSelectFormCheckBox(this);
-    }
+    // // select component check box state change event
+    // checkBox.onchange = function () {
+    //     _this.SelectionManager.HandleSelectFormCheckBox(this);
+    // }
 
-    tableRowContent[this.modelTreeColumnHeaders[1].name] = nodeData.Name;
+    tableRowContent[ModelBrowserColumnNames.Component.replace(/\s/g,'')] = nodeData.Name;
     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
     if (isAssemblyNodeType) {
         if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
@@ -200,30 +244,15 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, styleList, componen
         }
     }
 
-    tableRowContent[this.modelTreeColumnHeaders[2].name] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-    tableRowContent[this.modelTreeColumnHeaders[3].name] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[this.modelTreeColumnHeaders[4].name] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
-    // }
-    //  else 
-    //  {
-    //      return;            
-
-    //  }
-
+    tableRowContent[ModelBrowserColumnNames.MainClass.replace(/\s/g,'')] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames.SubClass.replace(/\s/g,'')] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames.NodeId.replace(/\s/g,'')] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    
     this.modelTreeRowData.push(tableRowContent);
 
     if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
         this.NodeGroups.push(componentStyleClass);
     }
-
-    if (this.Webviewer._params.containerId === "viewerContainer1") {
-        sourceATotalItemCount = this.modelTreeRowData.length;
-    }
-    else if (this.Webviewer._params.containerId === "viewerContainer2") {
-        sourceBTotalItemCount = this.modelTreeRowData.length;
-    }
-
-
 }
 
 SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
@@ -233,10 +262,10 @@ SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
 SCModelBrowser.prototype.getComponentstyleClass = function (componentName) {
     var componentStyleClass = componentName.replace(" ", "");
     componentStyleClass = componentStyleClass.replace(":", "");
-    if (this.Webviewer._params.containerId === "viewerContainer2") {
+    if (this.Webviewer._params.containerId === "visualizerB") {
         componentStyleClass += "-viewer2";
     }
-    else if (this.Webviewer._params.containerId === "viewerContainer1") {
+    else if (this.Webviewer._params.containerId === "visualizerA") {
         componentStyleClass += "-viewer1";
     }
     while (this.NodeGroups.includes(componentStyleClass)) {
@@ -245,42 +274,52 @@ SCModelBrowser.prototype.getComponentstyleClass = function (componentName) {
     return componentStyleClass;
 }
 
-SCModelBrowser.prototype.addModelBrowser = function (nodeId, styleList) {
-    this.addModelBrowserComponent(nodeId, styleList);
+SCModelBrowser.prototype.addModelBrowser = function (components) {
+    if(!components)
+    {
+        return;
+    }
 
-    if (this.modelTreeColumnHeaders === undefined ||
-        this.modelTreeColumnHeaders.length === 0 ||
+    this.Components = components;
+
+    var headers = this.CreateHeaders();
+
+    var rootNode = this.Webviewer.model.getAbsoluteRootNode();
+    this.addModelBrowserComponent(rootNode, undefined);
+
+    if (headers === undefined ||
+        headers.length === 0 ||
         this.modelTreeRowData === undefined ||
         this.modelTreeRowData.length === 0) {
         return;
     }
 
-    this.loadModelBrowserTable();
+    this.loadModelBrowserTable(headers);
 
-    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
-    var modelBrowserDataTable = modelBrowserData.children[1];
+    // var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
+    // var modelBrowserDataTable = modelBrowserData.children[1];
 
-    var modelBrowserHeaderTable = modelBrowserData.children[0];
-    modelBrowserHeaderTable.style.position = "fixed"
-    modelBrowserHeaderTable.style.width = "543px";
-    modelBrowserHeaderTable.style.overflowX = "hide";
-    var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
-    for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
-        var currentRow = modelBrowserHeaderTableRows[j];
-        for (var i = 0; i < currentRow.cells.length; i++) {
-            if (i === 4 || i === 5 || i === 6 || i === 7) {
-                currentRow.cells[i].style.display = "none";
-            }
-            if (j === 1 && i === 0) {
-                currentRow.cells[i].innerHTML = ""
-            }
-        }
-    }
+    // var modelBrowserHeaderTable = modelBrowserData.children[0];
+    // modelBrowserHeaderTable.style.position = "fixed"
+    // modelBrowserHeaderTable.style.width = "543px";
+    // modelBrowserHeaderTable.style.overflowX = "hide";
+    // var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
+    // for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
+    //     var currentRow = modelBrowserHeaderTableRows[j];
+    //     for (var i = 0; i < currentRow.cells.length; i++) {
+    //         if (i === 4 || i === 5 || i === 6 || i === 7) {
+    //             currentRow.cells[i].style.display = "none";
+    //         }
+    //         if (j === 1 && i === 0) {
+    //             currentRow.cells[i].innerHTML = ""
+    //         }
+    //     }
+    // }
 
 
-    modelBrowserDataTable.style.position = "static"
-    modelBrowserDataTable.style.width = "556px";
-    modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
+    // modelBrowserDataTable.style.position = "static"
+    // modelBrowserDataTable.style.width = "556px";
+    // modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
 };
 
 SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, styleList) {
@@ -319,95 +358,175 @@ SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, styleList)
 
 };
 
-SCModelBrowser.prototype.loadModelBrowserTable = function () {
-
+SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
     var _this = this;
-    var viewerContainer = "#" + _this.ModelBrowserContainer;
-    var columnHeaders = _this.modelTreeColumnHeaders;
-    var tableData = _this.modelTreeRowData;
-
-    $(function () {
-        var db = {
-            loadData: filter => {
-                console.debug("Filter: ", filter);
-                let Component = (filter.Component || "").toLowerCase();
-                let MainComponentClass = (filter.MainComponentClass || "").toLowerCase();
-                let SubComponentClass = (filter.SubComponentClass || "").toLowerCase();
-                let dmy = parseInt(filter.dummy, 10);
-                this.recalculateTotals = true;
-                return $.grep(tableData, row => {
-                    return (!Component || row.Component.toLowerCase().indexOf(Component) >= 0)
-                        && (!MainComponentClass || row.MainComponentClass.toLowerCase().indexOf(MainComponentClass) >= 0)
-                        && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
-                        && (isNaN(dmy) || row.dummy === dmy);
-                });
-            }
-        };
-
-        $(viewerContainer).jsGrid({
-            width: "556px",
-            height: "364px",
-            filtering: true,
-            sorting: true,
-            autoload: true,
-            controller: db,
-            data: tableData,
-            fields: columnHeaders,
-            margin: "0px",
-            checked: true,
-            onRefreshed: function (config) {
-                _this.AddTableContentCount(this._container.context.id);
-                var sorting = this.getSorting();
-                if (sorting.field !== undefined || 
-                    sorting.order !== undefined) {
-
-                    _this.addClassesToModelBrowser();
-                    for (var i = 0; i < _this.NodeGroups.length; i++) {
-                        _this.CreateGroup(_this.NodeGroups[i]);
-                    }
-                }
-            },
-            onDataLoaded: function (args) {
-                _this.addClassesToModelBrowser();
-                for (var i = 0; i < _this.NodeGroups.length; i++) {
-                    _this.CreateGroup(_this.NodeGroups[i]);
-                } 
-                
-                // initialize the context menu
-                var modelBrowserContextMenuManager = new ModelBrowserContextMenuManager();
-                modelBrowserContextMenuManager.Init(_this);
-            },
-            rowClick: function (args) {
-                _this.SelectionManager.HandleRowSelect(args.event.currentTarget, _this.Webviewer);                              
-            }
+    var containerDiv = "#" + _this.ModelBrowserContainer;  
+        $(function () {
+            var table = JSON.stringify(_this.modelTreeRowData);
+            var isFiredFromCheckbox = false;
+            $(containerDiv).igGrid({
+                columns: columnHeaders,
+                autofitLastColumn: false,
+                autoGenerateColumns: false,
+                dataSource : table,
+                dataSourceType: "json",
+                responseDataKey: "results",
+                autoCommit: true,
+                height: "100%",
+                width: "100%",
+                features: [
+                    {
+                        name: "Sorting",
+                        sortingDialogContainment: "window"
+                    },
+                    {
+                        name: "Filtering",
+                        type: "local",
+                        dataFiltered: function (evt, ui) {
+                            //  var filteredData = evt.target.rows;
+                            // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
+                        }
+                    },
+                    {
+                        name: "Selection",
+                        mode: 'row',
+                        multipleSelection: true,
+                        activation: true,
+                        rowSelectionChanging : function(evt, ui) {
+                            
+                            if (isFiredFromCheckbox) {
+                                isFiredFromCheckbox = false;
+                            } else {
+                                // var id = containerDiv.replace("#", "");
+                                // _this.ReviewManager.OnCheckComponentRowClicked(ui.row.element[0], id)
+                                // return false;
+                            }
+                            
+                        }
+                    },
+                    {
+                        name: "RowSelectors",
+                        enableCheckBoxes: true,
+                        enableRowNumbering: false,
+                        enableSelectAllForPaging: true, // this option is true by default
+                        checkBoxStateChanging: function (evt, ui) {
+                            //we use this variable as a flag whether the selection is coming from a checkbox
+                            isFiredFromCheckbox = true;                          
+                        },
+                        checkBoxStateChanged: function (evt, ui) {
+                            //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                        }
+                    },
+                    {
+                        name: "Resizing"
+                    },
+                    {
+                        name: 'Hiding',
+                            columnSettings: [
+                            {columnKey: ModelBrowserColumns.NodeId, allowHiding: true, hidden: true},                           
+                        ]
+                    },
+                ]    
+            });
         });
+        
+        // var container = document.getElementById(containerDiv.replace("#", ""));
+        // container.style.width = "578px"
+        // container.style.height = "202px"
+        // container.style.margin = "0px"
+        // container.style.overflowX = "hidden";
+        // container.style.overflowY = "scroll";
+        // container.style.padding = "0";
+}
 
-    });
+// SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
+
+//     var _this = this;
+//     var viewerContainer = "#" + _this.ModelBrowserContainer;  
+//     var tableData = _this.modelTreeRowData;
+
+//     $(function () {
+//         var db = {
+//             loadData: filter => {
+//                 console.debug("Filter: ", filter);
+//                 let Component = (filter.Component || "").toLowerCase();
+//                 let MainComponentClass = (filter.MainComponentClass || "").toLowerCase();
+//                 let SubComponentClass = (filter.SubComponentClass || "").toLowerCase();
+//                 let dmy = parseInt(filter.dummy, 10);
+//                 this.recalculateTotals = true;
+//                 return $.grep(tableData, row => {
+//                     return (!Component || row.Component.toLowerCase().indexOf(Component) >= 0)
+//                         && (!MainComponentClass || row.MainComponentClass.toLowerCase().indexOf(MainComponentClass) >= 0)
+//                         && (!SubComponentClass || row.SubComponentClass.toLowerCase().indexOf(SubComponentClass) >= 0)
+//                         && (isNaN(dmy) || row.dummy === dmy);
+//                 });
+//             }
+//         };
+
+//         $(viewerContainer).jsGrid({
+//             width: "556px",
+//             height: "364px",
+//             filtering: true,
+//             sorting: true,
+//             autoload: true,
+//             controller: db,
+//             data: tableData,
+//             fields: columnHeaders,
+//             margin: "0px",
+//             checked: true,
+//             onRefreshed: function (config) {
+//                 _this.AddTableContentCount(this._container.context.id);
+//                 var sorting = this.getSorting();
+//                 if (sorting.field !== undefined || 
+//                     sorting.order !== undefined) {
+
+//                     _this.addClassesToModelBrowser();
+//                     for (var i = 0; i < _this.NodeGroups.length; i++) {
+//                         _this.CreateGroup(_this.NodeGroups[i]);
+//                     }
+//                 }
+//             },
+//             onDataLoaded: function (args) {
+//                 _this.addClassesToModelBrowser();
+//                 for (var i = 0; i < _this.NodeGroups.length; i++) {
+//                     _this.CreateGroup(_this.NodeGroups[i]);
+//                 } 
+                
+//                 // initialize the context menu
+//                 var modelBrowserContextMenuManager = new ModelBrowserContextMenuManager();
+//                 modelBrowserContextMenuManager.Init(_this);
+//             },
+//             rowClick: function (args) {
+//                 _this.SelectionManager.HandleRowSelect(args.event.currentTarget, _this.Webviewer);                              
+//             }
+//         });
+
+//     });
 
 
-    var container = document.getElementById(viewerContainer.replace("#", ""));
+//     var container = document.getElementById(viewerContainer.replace("#", ""));
 
-    container.style.width = "556px"
-    container.style.height = "364px"
-    container.style.margin = "0px"
-    container.style.overflowX = "hide";
-    container.style.overflowY = "scroll";
-    container.style.padding = "0";
-};
+//     container.style.width = "556px"
+//     container.style.height = "364px"
+//     container.style.margin = "0px"
+//     container.style.overflowX = "hide";
+//     container.style.overflowY = "scroll";
+//     container.style.padding = "0";
+// };
 
 SCModelBrowser.prototype.AddTableContentCount = function (containerId) {
-    var modelBrowserData = document.getElementById(containerId);
-    var modelBrowserDataTable = modelBrowserData.children[1];
-    var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+    // var modelBrowserData = document.getElementById(containerId);
+    // var modelBrowserDataTable = modelBrowserData.children[1];
+    // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
-    var countBox;
-    if (containerId === "modelTree1") {
-        countBox = document.getElementById("SourceAComponentCount");
-    }
-    if (containerId === "modelTree2") {
-        countBox = document.getElementById("SourceBComponentCount");
-    }
-    countBox.innerText = "Count: " + modelBrowserTableRows.length;
+    // var countBox;
+    // if (containerId === "modelTree1") {
+    //     countBox = document.getElementById("SourceAComponentCount");
+    // }
+    // if (containerId === "modelTree2") {
+    //     countBox = document.getElementById("SourceBComponentCount");
+    // }
+    // countBox.innerText = "Count: " + modelBrowserTableRows.length;
 }
 
 SCModelBrowser.prototype.isAssemblyNode = function (nodeId) {
@@ -452,7 +571,7 @@ SCModelBrowser.prototype.CreateGroup = function (group_name) {
 SCModelBrowser.prototype.ToggleGroup = function (group_name) {
     this.ToggleButton($('img.' + group_name));
     this.RestoreGroup(group_name);
-    if (this.Webviewer._params.containerId === "viewerContainer1") {
+    if (this.Webviewer._params.containerId === "visualizerA") {
         var groupName = group_name.split("");
         var length = groupName.length;
         var temp = "";
@@ -465,7 +584,7 @@ SCModelBrowser.prototype.ToggleGroup = function (group_name) {
             }
         }
     }
-    else if (this.Webviewer._params.containerId === "viewerContaine2") {
+    else if (this.Webviewer._params.containerId === "visualizerB") {
         var groupName = group_name.split("");
         var length = groupName.length;
         var temp = "";

@@ -21,7 +21,7 @@ var xCheckStudio;
                     request.open('HEAD', fileURL, true);
                     request.onreadystatechange = function () {
                         if (request.readyState === 4) {
-        
+
                             if (this.status == 200) {
                                 return resolve(true);
                             }
@@ -30,20 +30,20 @@ var xCheckStudio;
                             }
                         }
                     };
-        
+
                     request.send();
                 }
                 catch (err) {
                     return resolve(false);
                 }
-            });   
+            });
         }
         Util.fileExists = fileExists;
 
         function isAccepted(component) {
             var accepted = false;
 
-            if(component.accepted == 'true') {
+            if (component.accepted == 'true') {
                 accepted = true;
             }
             return accepted;
@@ -52,18 +52,17 @@ var xCheckStudio;
         function isTransposed(component) {
             var transposed = false;
 
-            if(component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+            if (component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
                 transposed = true;
             }
             return transposed;
         }
 
-        function getComponentHexColor  (component, override, parentComponent) {
+        function getComponentHexColor(component, override, parentComponent) {
             status = component.Status;
-            
+
             // this is for overriding colors for pipes and branches
-            if(override && parentComponent)
-            {
+            if (override && parentComponent) {
                 if (parentComponent.Status.toLowerCase().includes("error")) {
 
                     if (parentComponent.accepted.toLowerCase() != 'true' ||
@@ -76,8 +75,8 @@ var xCheckStudio;
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' ||
                         parentComponent.transpose !== 'lefttoright' ||
-                        parentComponent.transpose !== 'righttoleft') && 
-                        status.toLowerCase() !=="error") {
+                        parentComponent.transpose !== 'righttoleft') &&
+                        status.toLowerCase() !== "error") {
                         return WarningColor;
                     }
                 }
@@ -85,15 +84,15 @@ var xCheckStudio;
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' ||
                         parentComponent.transpose !== 'lefttoright' ||
-                        parentComponent.transpose !== 'righttoleft') && 
-                        (status.toLowerCase() !=="error" ||  
-                         status.toLowerCase() !=="warning")) {
-                        
-                            return NoMatchColor;
+                        parentComponent.transpose !== 'righttoleft') &&
+                        (status.toLowerCase() !== "error" ||
+                            status.toLowerCase() !== "warning")) {
+
+                        return NoMatchColor;
                     }
-                }                
+                }
             }
-            
+
             // if component is mot mapped i.e. undefined, then 
             // don't override the parent's highlight color
             if (parentComponent &&
@@ -106,32 +105,32 @@ var xCheckStudio;
                 return SuccessColor;
             }
             else if (status.toLowerCase() === ("Error").toLowerCase()) {
-                if(isAccepted(component)) {
+                if (isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(isTransposed(component)) {
+                else if (isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return HoopsViewerErrorColor;
-                }           
+                }
             }
             else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-                if(isAccepted(component)) {
+                if (isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(isTransposed(component)) {
+                else if (isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
                     return WarningColor;
-                }          
+                }
             }
             else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-                if(isAccepted(component)) {
+                if (isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(isTransposed(component)) {
+                else if (isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
@@ -139,10 +138,10 @@ var xCheckStudio;
                 }
             }
             else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-                if(isAccepted(component)) {
+                if (isAccepted(component)) {
                     return AcceptedColor;
                 }
-                else if(isTransposed(component)) {
+                else if (isTransposed(component)) {
                     return PropertyAcceptedColor;
                 }
                 else {
@@ -152,20 +151,20 @@ var xCheckStudio;
             else if (status.toLowerCase() === "accepted(t)") {
                 return AcceptedColor;
             }
-            else if (status.toLowerCase() === "error(a)" || 
-                     status.toLowerCase() === "warning(a)" || 
-                     status.toLowerCase() === "no Match(a)" || 
-                     status.toLowerCase() === "no Value(a)") {
+            else if (status.toLowerCase() === "error(a)" ||
+                status.toLowerCase() === "warning(a)" ||
+                status.toLowerCase() === "no Match(a)" ||
+                status.toLowerCase() === "no Value(a)") {
                 return PropertyAcceptedColor;
             }
-            else if(status.toLowerCase() === "error(t)" || 
-                    status.toLowerCase() === "warning(t)") {
+            else if (status.toLowerCase() === "error(t)" ||
+                status.toLowerCase() === "warning(t)") {
                 return PropertyAcceptedColor;
             }
-            else if(status.includes("(A)(T)") || status.includes("(T)(A)")) {
+            else if (status.includes("(A)(T)") || status.includes("(T)(A)")) {
                 return PropertyAcceptedColor;
             }
-            else if(status.toLowerCase() === "ok(t)") {
+            else if (status.toLowerCase() === "ok(t)") {
                 return AcceptedColor;
             }
             else {
@@ -191,6 +190,27 @@ var xCheckStudio;
             return Communicator.Color.black();
         }
         Util.hexToRgb = hexToRgb;
+
+        // this check whether input source is 3D
+        function isSource3D(fileExtension) {
+            if (Sources3D.includes(fileExtension.toLowerCase())) {
+                return true;
+            }
+
+            return false;
+        }
+        Util.isSource3D = isSource3D;
+
+        // this check whether input source is 1D
+        function isSource1D(fileExtension) {
+            if (Sources1D.includes(fileExtension.toLowerCase())) {
+                return true;
+            }
+
+            return false;
+        }
+        Util.isSource1D = isSource1D;
+
         function getCameraPlaneIntersectionPoint(camera, point, view) {
             var target = camera.getTarget();
             var normal = Communicator.Point3.subtract(camera.getPosition(), target).normalize();
@@ -269,11 +289,11 @@ var xCheckStudio;
         }
         Util.getRendererType = getRendererType;
 
-        function getCurrentDateTime(){
+        function getCurrentDateTime() {
             var today = new Date();
-            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
             var time = today.getHours() + ":" + today.getMinutes();
-            var dateTime = date+' '+time;
+            var dateTime = date + ' ' + time;
             return dateTime;
         }
         Util.getCurrentDateTime = getCurrentDateTime;

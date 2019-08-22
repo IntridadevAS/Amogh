@@ -602,7 +602,7 @@ function loadDataSource(event,
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "PHP/getSourceData.php", true);
+    xhr.open("POST", "PHP/GetSourceData.php", true);
     xhr.onload = function (data) {
         if (data.target.response === "undefined") {
             OnShowToast('Valid data source not found');

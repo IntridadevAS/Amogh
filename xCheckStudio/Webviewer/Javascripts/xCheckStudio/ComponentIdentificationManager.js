@@ -175,5 +175,5 @@ var xCheckStudio;
         ComponentIdentificationManager.getComponentIdentificationProperties = getComponentIdentificationProperties;
 
 
-    })(UploadManager = xCheckStudio.ComponentIdentificationManager || (xCheckStudio.ComponentIdentificationManager = {}));
+    })(ComponentIdentificationManager = xCheckStudio.ComponentIdentificationManager || (xCheckStudio.ComponentIdentificationManager = {}));
 })(xCheckStudio || (xCheckStudio = {}));

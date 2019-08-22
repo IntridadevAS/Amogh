@@ -453,13 +453,13 @@ DBModelBrowser.prototype.LoadDBDataTable = function (_this,
             fields: columnHeaders,
             margin: "0px",
             onRefreshed: function (config) {
-                var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-                for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-                    currentChild = excelSheetParentContainer.children[i];
-                    if (currentChild.className === "viewdatagraphics") {
-                        currentChild.style.display = "none";
-                    }
-                }
+                // var excelSheetParentContainer = document.getElementById("dataSourceViewer");
+                // for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
+                //     currentChild = excelSheetParentContainer.children[i];
+                //     if (currentChild.className === "viewdatagraphics") {
+                //         currentChild.style.display = "none";
+                //     }
+                // }
             },
             rowClick: function (args) {
                 _this.HighlightRowInModelBrowser(args.event.currentTarget)

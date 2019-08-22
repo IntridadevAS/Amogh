@@ -10,12 +10,12 @@ function ExplodeManager() {
         var slider;
         var outputFiled;
         var overlayField;
-        if (currentViewer._params.containerId === "viewerContainer1") {
+        if (currentViewer._params.containerId === "visualizerA") {
             slider = document.getElementById("explodeSlider1");
             outputFiled = document.getElementById("explodeValue1");
             overlayField = document.getElementById("explodeOverlay1");
         }
-        else if (currentViewer._params.containerId === "viewerContainer2") {
+        else if (currentViewer._params.containerId === "visualizerB") {
             slider = document.getElementById("explodeSlider2");
             outputFiled = document.getElementById("explodeValue2");
             overlayField = document.getElementById("explodeOverlay2");
@@ -50,11 +50,11 @@ function ExplodeManager() {
 
         var slider;
         var overlayField;
-        if (currentViewer._params.containerId === "viewerContainer1") {
+        if (currentViewer._params.containerId === "visualizerA") {
             slider = document.getElementById("explodeSlider1");
             overlayField = document.getElementById("explodeOverlay1");
         }
-        else if (currentViewer._params.containerId === "viewerContainer2") {
+        else if (currentViewer._params.containerId === "visualizerB") {
             slider = document.getElementById("explodeSlider2");
             overlayField = document.getElementById("explodeOverlay2");
         }
@@ -72,10 +72,10 @@ function ExplodeManager() {
 
         // set value label
         var outputFiled;
-        if (currentViewer._params.containerId === "viewerContainer1") {
+        if (currentViewer._params.containerId === "visualizerA") {
             outputFiled = document.getElementById("explodeValue1");
         }
-        else if (currentViewer._params.containerId === "viewerContainer2") {
+        else if (currentViewer._params.containerId === "visualizerB") {
             outputFiled = document.getElementById("explodeValue2");
         }
         if (!outputFiled) {
