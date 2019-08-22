@@ -8,8 +8,8 @@
 
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
     <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
-    <link rel="stylesheet" href="CSS\infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
-    <link rel="stylesheet" href="CSS\infragistics\structure\infragistics.css" type="text/css" />
+    <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
+    <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
 
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
     <link href="images/UIPackage/favicon.png" rel="shortcut icon" />
@@ -27,17 +27,18 @@
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>    
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script> 
+    <script type="text/javascript" src="Javascripts\xCheckStudio\Review1DViewerDataManager.js"></script>   
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>   
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewModuleTable.js"></script>
-    <script type="text/javascript" src="Javascripts\infragistics\infragistics.core.js"></script>
-    <script type="text/javascript" src="Javascripts\infragistics\infragistics.lob.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
+    <script type="text/javascript" src="src\Infragistics\infragistics.core.js"></script>
+    <script type="text/javascript" src="src\Infragistics\infragistics.lob.js"></script>
     
 
     <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
@@ -1127,15 +1128,15 @@
             // clear views before loading models into viewers
             if (typeof comparisonReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
-                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
+                if (comparisonReviewManager.SourceAReviewViewerInterface &&
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer) {
 
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.model.clear();
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer.model.clear();
                 }
 
-                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
+                if (comparisonReviewManager.SourceBReviewViewerInterface &&
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer.model.clear();
                 }
 
             }
@@ -1277,13 +1278,13 @@
         function resizeHoopsViewerCanvas() {
             if (document.getElementById("ComparisonDetailedReviewTbody").style.display === "block" &&
                 comparisonReviewManager !== undefined) {
-                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.resizeCanvas();
+                if (comparisonReviewManager.SourceAReviewViewerInterface &&
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer.resizeCanvas();
                 }
-                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.resizeCanvas();
+                if (comparisonReviewManager.SourceBReviewViewerInterface &&
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer.resizeCanvas();
                 }
             }
             else if (document.getElementById("ComplianceADetailedReviewTbody").style.display === "block" &&
