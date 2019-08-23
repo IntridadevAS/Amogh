@@ -328,7 +328,7 @@ Review1DViewerDataManager.prototype.OnViewerRowClicked = function (row, viewerCo
 
 /* This method returns the corresponding comparison 
    check result row for selected sheet row*/
-   Review1DViewerDataManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer) {
+Review1DViewerDataManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer) {
     var containerId = viewerContainer.replace("#", "");
     var viewerContainerData = document.getElementById(containerId)
 

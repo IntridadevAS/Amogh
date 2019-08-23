@@ -45,8 +45,10 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SelectionManager = new ReviewComparisonSelectionManager();
 
     // populate review table
-    this.CheckResultsTable = new ComparisonCheckResultsTable(this, "ComparisonMainReviewCell");   
+    this.CheckResultsTable = new ComparisonCheckResultsTable(this, mainReviewTableContainer);   
     this.CheckResultsTable.populateReviewTable();
+
+    this.CheckPropertiesTable = new ComparisonCheckPropertiesTable(this, detailedReviewTableContainer)
 
     this.SourceAReviewViewerInterface;
     this.SourceBReviewViewerInterface;
@@ -153,288 +155,6 @@ ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = func
     }
 }
 
-ComparisonReviewManager.prototype.GetClasswiseComponentsBySheetName = function (viewerContainer, sheetName) {
-
-    if (viewerContainer === "viewerContainer1" &&
-        sheetName in this.SourceAComponents) {
-        return this.SourceAComponents[sheetName];
-    }
-    else if (viewerContainer === "viewerContainer2" &&
-        sheetName in this.SourceBComponents) {
-        return this.SourceBComponents[sheetName];
-
-    }
-
-    return undefined;
-}
-
-ComparisonReviewManager.prototype.GetCurrentSheetInViewer = function (viewerContainer) {
-
-    if (viewerContainer === "viewerContainer1") {
-        return this.SourceAViewerCurrentSheetLoaded;
-    }
-    else if (viewerContainer === "viewerContainer2") {
-        return this.SourceBViewerCurrentSheetLoaded;
-    }
-
-    return undefined;
-}
-
-/* This method is called when the check result row is clicked in table. This 
-function loads the sheet data in viewer for selected component result.
-Inputs :
-     viewerContainer = container id in which the sheet data is to be loaded,
-     sheetName = sheet name to load,
-     CurrentReviewTableRow = current selected comparison result row 
-*/
-ComparisonReviewManager.prototype.LoadSelectedSheetDataInViewer = function (viewerContainer,
-    sheetName,
-    CurrentReviewTableRow) {
-
-    // get class wise components                                                                                    
-    var classWiseComponents = this.GetClasswiseComponentsBySheetName(viewerContainer, sheetName);
-    if (!classWiseComponents) {
-        return;
-    }
-
-    // current sheet in viewer
-    var currentlyLoadedSheet = this.GetCurrentSheetInViewer(viewerContainer);
-
-    //check if sheet is already loaded       
-    if (sheetName === currentlyLoadedSheet) {
-        if (CurrentReviewTableRow.cells[ComparisonColumns.Status].innerText === "No Match") {
-            if (viewerContainer === "viewerContainer1" &&
-                CurrentReviewTableRow.cells[ComparisonColumns.SourceAName].innerText === "") {
-                if (this.SelectedComponentRowFromSheetA) {
-                    this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA,
-                        this.SelectedComponentRowFromSheetA);
-                }
-
-                return;
-            }
-            else if (viewerContainer === "viewerContainer2" &&
-                CurrentReviewTableRow.cells[ComparisonColumns.SourceBName].innerText === "") {
-
-                if (this.SelectedComponentRowFromSheetB) {
-                    this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-                }
-
-                return;
-            }
-        }
-
-        this.HighlightRowInSheetData(CurrentReviewTableRow, viewerContainer);
-        return;
-    }
-
-    if (classWiseComponents !== {}) {
-        var componentProperties;
-        for (var componentId in classWiseComponents) {
-            componentProperties = classWiseComponents[componentId];
-            break;
-        }
-
-        if (componentProperties === undefined) {
-            return;
-        }
-
-        var column = {};
-        columnHeaders = [];
-
-        for (var i = 0; i < componentProperties.length; i++) {
-            var compProperty = componentProperties[i];
-
-            columnHeader = {};
-
-            columnHeader["name"] = compProperty['name'];
-            var type;
-            if (compProperty['format'].toLowerCase() === "string") {
-                type = "textarea";
-            }
-            else if (compProperty['format'].toLowerCase() === "number") {
-                type = "number";
-            }
-            else {
-                continue;
-            }
-
-            columnHeader["type"] = type;
-            columnHeader["width"] = "90";
-            columnHeaders.push(columnHeader);
-
-            //tagnumber is for instruments XLS data sheet
-            if (Object.keys(column).length <= 3) {
-                if (compProperty['name'] === "ComponentClass" ||
-                    compProperty['name'] === "Name" ||
-                    compProperty['name'] === "Description" ||
-                    compProperty['name'] === "Tagnumber") {
-                    column[compProperty['name']] = i;
-                }
-            }
-        }
-
-        tableData = [];
-        for (var componentId in classWiseComponents) {
-            var component = classWiseComponents[componentId];
-
-            tableRowContent = {};
-            for (var i = 0; i < component.length; i++) {
-                var compProperty = component[i];
-
-                // get property value
-                tableRowContent[compProperty['name']] = compProperty['value'];
-            }
-
-            tableData.push(tableRowContent);
-        }
-
-
-        if (CurrentReviewTableRow.tagName.toLowerCase() !== "tr") {
-            return;
-        }
-
-        if (viewerContainer === "viewerContainer1") {
-            this.checkStatusArrayA = {};
-            this.SelectedComponentRowFromSheetA = undefined;
-
-            this.LoadSheetTableData(columnHeaders, tableData, "#viewerContainer1", CurrentReviewTableRow, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer1");
-
-            // keep track of currently loaded sheet data
-            this.SourceAViewerCurrentSheetLoaded = sheetName;
-        }
-        else if (viewerContainer === "viewerContainer2") {
-            this.checkStatusArrayB = {};
-            this.SelectedComponentRowFromSheetB = undefined;
-
-            this.LoadSheetTableData(columnHeaders, tableData, "#viewerContainer2", CurrentReviewTableRow, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRow, "viewerContainer2");
-
-            // keep track of currently loaded sheet data
-            this.SourceBViewerCurrentSheetLoaded = sheetName;
-        }
-    }
-};
-
-/* This method returns the corresponding comparison 
-   check result row for selected sheet row*/
-ComparisonReviewManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer) {
-    var containerId = viewerContainer.replace("#", "");
-    var viewerContainerData = document.getElementById(containerId)
-
-    if (!viewerContainerData) {
-        return undefined;
-    }
-
-    var containerChildren = viewerContainerData.children;
-    var columnHeaders = containerChildren[0].getElementsByTagName("th");
-    var column = {};
-    for (var i = 0; i < columnHeaders.length; i++) {
-        columnHeader = columnHeaders[i];
-        //tagnumber is for instruments XLS data sheet
-        if (columnHeader.innerHTML.trim() === "ComponentClass" ||
-            columnHeader.innerHTML.trim() === "Name" ||
-            columnHeader.innerHTML.trim() === "Description" ||
-            columnHeader.innerHTML.trim() === "Tagnumber") {
-            column[columnHeader.innerHTML.trim()] = i;
-        }
-        if (Object.keys(column).length === 3) {
-            break;
-        }
-    }
-
-    var reviewTableId = "ComparisonMainReviewCell";
-    var reviewTableData = document.getElementById(reviewTableId);
-    var reviewTableRowsData = reviewTableData.getElementsByTagName("tr");
-
-
-    for (var i = 0; i < reviewTableRowsData.length; i++) {
-        reviewTableRow = reviewTableRowsData[i];
-        if (reviewTableRow.cells.length === 0) {
-            continue;
-        }
-
-        var componentName;
-        if (column.Name !== undefined) {
-            componentName = sheetDataRow.cells[column.Name].innerText;
-        }
-        else if (column.Tagnumber !== undefined) {
-            componentName = sheetDataRow.cells[column.Tagnumber].innerText;
-        }
-
-        if (componentName === reviewTableRow.cells[ComparisonColumns.SourceAName].innerText ||
-            componentName === reviewTableRow.cells[ComparisonColumns.SourceBName].innerText) {
-
-            return reviewTableRow;
-        }
-    }
-
-    return undefined;
-}
-
-ComparisonReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow,
-    viewerContainer) {
-
-    var reviewTableRow = this.GetCheckComponentForSheetRow(sheetDataRow, viewerContainer);
-    if (!reviewTableRow) {
-        return;
-    }
-
-    // component group id which is container div for check components table of given row
-    var containerDiv = this.GetReviewTableId(reviewTableRow);
-    this.OnCheckComponentRowClicked(reviewTableRow, containerDiv);
-
-    var reviewTable = this.GetReviewTable(reviewTableRow);
-    this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, this.MainReviewTableContainer);
-}
-
-ComparisonReviewManager.prototype.LoadSheetTableData = function (columnHeaders,
-    tableData,
-    viewerContainer,
-    CurrentReviewTableRow,
-    column,
-    sheetName) {
-
-    var _this = this;
-    if (viewerContainer === "#viewerContainer1" || viewerContainer === "#viewerContainer2") {
-        $(function () {
-
-            var width = "550px";
-            var height = "270px";
-
-            var modal = document.getElementById('maximizeViewerContainer');
-            if (modal.style.display === "block") {
-                width = "745px";
-                height = "370px";
-            }
-
-            $(viewerContainer).jsGrid({
-                height: height,
-                width: width,
-                autoload: true,
-                data: tableData,
-                fields: columnHeaders,
-                margin: "0px",
-                rowClick: function (args) {
-                    _this.OnViewerRowClicked(args.event.currentTarget, viewerContainer);
-                }
-            });
-
-        });
-
-        _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRow, column, sheetName);
-    }
-
-    var container = document.getElementById(viewerContainer.replace("#", ""));
-    // container.style.width = "550px"
-    // container.style.height = "270px"
-    container.style.overflowX = "scroll";
-    container.style.overflowY = "scroll";
-    container.style.margin = "0px";
-    container.style.top = "0px"
-
-};
-
 ComparisonReviewManager.prototype.IsFirstViewer = function (viewerContainer) {
     if (viewerContainer === "#viewerContainer1") {
         return true;
@@ -482,157 +202,92 @@ ComparisonReviewManager.prototype.SourceBComponentExists = function (row) {
     return false;
 }
 
-ComparisonReviewManager.prototype.OnViewerRowClicked = function (row, viewerContainer) {
+// ComparisonReviewManager.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
+//     var _this = this;
+//     $(function () {
+//         var db = {
+//             loadData: filter => {
+//                 //   console.debug("Filter: ", filter);
+//                 let sourceA = (filter.SourceA || "").toLowerCase();
+//                 let sourceB = (filter.SourceB || "").toLowerCase();
+//                 let status = (filter.Status || "").toLowerCase();
+//                 let dmy = parseInt(filter.dummy, 10);
+//                 this.recalculateTotals = true;
+//                 return $.grep(tableData, row => {
+//                     return (!sourceA || row.SourceA.toLowerCase().indexOf(sourceA) >= 0)
+//                         && (!sourceB || row.SourceB.toLowerCase().indexOf(sourceB) >= 0)
+//                         && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
+//                         && (isNaN(dmy) || row.dummy === dmy);
+//                 });
+//             }
+//         };
 
-    if ((this.IsFirstViewer(viewerContainer) &&
-        row === this.SelectedComponentRowFromSheetA) ||
-        (this.IsSecondViewer(viewerContainer) &&
-            row === this.SelectedComponentRowFromSheetB)) {
-        return;
-    }
+//         $(containerDiv).jsGrid({
+//             height: "202px",
+//             width: "578px",
+//             filtering: true,
+//             autoload: true,
+//             controller: db,
+//             sorting: true,
+//             data: tableData,
+//             fields: columnHeaders,
+//             margin: "0px",
+//             onDataLoaded: function (args) {
+//                 //initializeComparisonContextMenus();
+//                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this);
+//                 reviewComparisonContextMenuManager.Init();
+//             },
+//             onItemUpdated: function (args) {
+//                 for (var index = 0; index < args.grid.data.length; index++) {
+//                     if (args.grid.data[index].ID == args.row[0].cells[ComparisonColumns.ResultId].innerHTML) {
+//                         if (args.grid.data[index].Status !== args.row[0].cells[ComparisonColumns.Status].innerHTML) {
+//                             args.grid.data[index].Status = args.row[0].cells[ComparisonColumns.Status].innerHTML;
+//                             break;
+//                         }
+//                     }
+//                 }
+//             },
+//             onRefreshed: function (config) {
+//                 var id = containerDiv.replace("#", "");
+//                 // _this.AddTableContentCount(this._container.context.id);
+//                 document.getElementById(id).style.width = "578px";
+//                 _this.highlightMainReviewTableFromCheckStatus(id);
 
-    // highlight sheet data row
-    this.SelectionManager.ApplyHighlightColor(row);
+//                 // hide additional column cells
+//                 var tableRows = this._container.context.getElementsByTagName("tr");
+//                 for (var j = 0; j < tableRows.length; j++) {
+//                     var currentRow = tableRows[j];
+//                     for (var i = 0; i < currentRow.cells.length; i++) {
+//                         if (i > ComparisonColumns.Status) {
+//                             currentRow.cells[i].style.display = "none";
+//                         }
+//                     }
+//                 }
 
-    // highlight check result component row
-    this.HighlightRowInMainReviewTable(row, viewerContainer);
+//             },
+//             rowClick: function (args) {
+//                 _this.OnCheckComponentRowClicked(args.event.currentTarget, containerDiv);
+//             }
+//         });
 
-    // highlight corresponding component data in another viewer
-    if (this.IsFirstViewer(viewerContainer)) {
+//     });
 
-        if (this.SecondViewerExists() &&
-            this.SourceBComponentExists(this.SelectionManager.HighlightedCheckComponentRow)) {
-            if (this.SourceBComponents !== undefined) {
-                this.HighlightRowInSheetData(this.SelectionManager.HighlightedCheckComponentRow, "viewerContainer2");
-            }
-            else if (this.SourceBViewerData !== undefined) {
-                this.HighlightComponentInGraphicsViewer(this.SelectionManager.HighlightedCheckComponentRow)
-            }
-        }
+//     var container = document.getElementById(containerDiv.replace("#", ""));
+//     container.style.width = "578px"
+//     container.style.height = "202px"
+//     container.style.margin = "0px"
+//     container.style.overflowX = "hidden";
+//     container.style.overflowY = "scroll";
+//     container.style.padding = "0";
 
-        //for "no match" case unhighlight component 
-        if (!this.SourceBComponentExists(this.SelectionManager.HighlightedCheckComponentRow)) {
-
-            if (this.SourceBReviewViewerInterface) {
-                this.SourceBReviewViewerInterface.unHighlightComponent();
-            }
-            if (this.SelectedComponentRowFromSheetB) {
-                this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB)
-            }
-
-        }
-    }
-    else if (this.IsSecondViewer(viewerContainer)) {
-        if (this.FirstViewerExists() &&
-            this.SourceAComponentExists(this.SelectionManager.HighlightedCheckComponentRow)) {
-
-            if (this.SourceAComponents !== undefined) {
-                this.HighlightRowInSheetData(this.SelectionManager.HighlightedCheckComponentRow, "viewerContainer1");
-            }
-            else if (this.SourceAViewerData !== undefined) {
-                this.HighlightComponentInGraphicsViewer(this.SelectionManager.HighlightedCheckComponentRow)
-            }
-        }
-        //for "no match" case unhighlight component 
-        if (!this.SourceAComponentExists(this.SelectionManager.HighlightedCheckComponentRow)) {
-            if (this.SourceAReviewViewerInterface) {
-                this.SourceAReviewViewerInterface.unHighlightComponent();
-            }
-
-            if (this.SelectionManager.HighlightedCheckComponentRow) {
-                this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA)
-            }
-        }
-
-    }
-}
-
-ComparisonReviewManager.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
-    var _this = this;
-    $(function () {
-        var db = {
-            loadData: filter => {
-                //   console.debug("Filter: ", filter);
-                let sourceA = (filter.SourceA || "").toLowerCase();
-                let sourceB = (filter.SourceB || "").toLowerCase();
-                let status = (filter.Status || "").toLowerCase();
-                let dmy = parseInt(filter.dummy, 10);
-                this.recalculateTotals = true;
-                return $.grep(tableData, row => {
-                    return (!sourceA || row.SourceA.toLowerCase().indexOf(sourceA) >= 0)
-                        && (!sourceB || row.SourceB.toLowerCase().indexOf(sourceB) >= 0)
-                        && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
-                        && (isNaN(dmy) || row.dummy === dmy);
-                });
-            }
-        };
-
-        $(containerDiv).jsGrid({
-            height: "202px",
-            width: "578px",
-            filtering: true,
-            autoload: true,
-            controller: db,
-            sorting: true,
-            data: tableData,
-            fields: columnHeaders,
-            margin: "0px",
-            onDataLoaded: function (args) {
-                //initializeComparisonContextMenus();
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this);
-                reviewComparisonContextMenuManager.Init();
-            },
-            onItemUpdated: function (args) {
-                for (var index = 0; index < args.grid.data.length; index++) {
-                    if (args.grid.data[index].ID == args.row[0].cells[ComparisonColumns.ResultId].innerHTML) {
-                        if (args.grid.data[index].Status !== args.row[0].cells[ComparisonColumns.Status].innerHTML) {
-                            args.grid.data[index].Status = args.row[0].cells[ComparisonColumns.Status].innerHTML;
-                            break;
-                        }
-                    }
-                }
-            },
-            onRefreshed: function (config) {
-                var id = containerDiv.replace("#", "");
-                // _this.AddTableContentCount(this._container.context.id);
-                document.getElementById(id).style.width = "578px";
-                _this.highlightMainReviewTableFromCheckStatus(id);
-
-                // hide additional column cells
-                var tableRows = this._container.context.getElementsByTagName("tr");
-                for (var j = 0; j < tableRows.length; j++) {
-                    var currentRow = tableRows[j];
-                    for (var i = 0; i < currentRow.cells.length; i++) {
-                        if (i > ComparisonColumns.Status) {
-                            currentRow.cells[i].style.display = "none";
-                        }
-                    }
-                }
-
-            },
-            rowClick: function (args) {
-                _this.OnCheckComponentRowClicked(args.event.currentTarget, containerDiv);
-            }
-        });
-
-    });
-
-    var container = document.getElementById(containerDiv.replace("#", ""));
-    container.style.width = "578px"
-    container.style.height = "202px"
-    container.style.margin = "0px"
-    container.style.overflowX = "hidden";
-    container.style.overflowY = "scroll";
-    container.style.padding = "0";
-
-};
+// };
 
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
     //maintain highlighted row
     // this.SelectionManager.MaintainHighlightedRow(row);
 
     // populate property table
-    this.populateDetailedReviewTable(rowData);
+    this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
     var SheetDataViewer = new Review1DViewerDataManager(this);
     var sheetName = containerDiv.replace("#", "");
 
@@ -688,11 +343,6 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
 
         this.HighlightComponentInGraphicsViewer(rowData)
     }
-}
-
-ComparisonReviewManager.prototype.SetComment = function (comment) {
-    var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-    commentDiv.innerHTML = comment;
 }
 
 ComparisonReviewManager.prototype.GetComparisonResultId = function (selectedRow) {
@@ -1576,225 +1226,6 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, button) {
     }
 }
 
-ComparisonReviewManager.prototype.LoadDetailedReviewTableData = function (_this, columnHeaders, tableData, viewerContainer) {
-    //var _this = this;
-
-    $(function () {
-        var db = {
-            loadData: filter => {
-                //   console.debug("Filter: ", filter);
-                let A_property = (filter.A_Property || "").toLowerCase();
-                let A_value = (filter.A_Value || "").toLowerCase();
-                let B_property = (filter.B_Property || "").toLowerCase();
-                let B_value = (filter.B_Value || "").toLowerCase();
-                let status = (filter.Status || "").toLowerCase();
-                let dmy = parseInt(filter.dummy, 10);
-                this.recalculateTotals = true;
-                return $.grep(tableData, row => {
-                    return (!A_property || row.A_Property.toLowerCase().indexOf(A_property) >= 0)
-                        && (!A_value || row.A_Value.toLowerCase().indexOf(A_value) >= 0)
-                        && (!B_value || row.B_Value.toLowerCase().indexOf(B_value) >= 0)
-                        && (!B_property || row.B_Property.toLowerCase().indexOf(B_property) >= 0)
-                        && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
-                        && (isNaN(dmy) || row.dummy === dmy);
-                });
-            }
-
-        };
-
-        $(viewerContainer).jsGrid({
-            width: "576px",
-            height: "180px",
-            filtering: true,
-            autoload: true,
-            controller: db,
-            sorting: true,
-            data: tableData,
-            headerRowRenderer: function () {
-                var fields = $(viewerContainer).jsGrid("option", "fields");
-                var result = $("<tr>").height(0).append($("<th>").width(120))
-                    .append($("<th>").width(110))
-                    .append($("<th>").width(120))
-                    .append($("<th>").width(110));
-
-                result = result.add($("<tr>")
-                    .append($("<th>").attr("colspan", 2).text("SourceA"/*AnalyticsData.SourceAName*/))
-                    .append($("<th>").attr("colspan", 2).text("SourceB"/*AnalyticsData.SourceBName*/)))
-
-
-                var tr = $("<tr class='jsgrid-header-row'>");
-                var grid = this;
-
-                grid._eachField(function (field, index) {
-                    var th = $("<th>").text(field.title).width(field.width).appendTo(tr);
-
-                    if (grid.sorting && field.sorting) {
-                        th.on("click", function () {
-                            grid.sort(index);
-                        });
-                    }
-                });
-
-                return result.add(tr);
-            },
-            fields: columnHeaders,
-            margin: "0px",
-            onRefreshed: function (config) {
-                var id = viewerContainer.replace("#", "");
-                document.getElementById(id).style.width = "579px";
-                _this.highlightDetailedReviewTableFromCheckStatus(id);
-            },
-            rowClick: function (args) {
-                var comment = _this.detailedReviewRowComments[args.event.currentTarget.rowIndex];
-                var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                if (comment) {
-                    commentDiv.innerHTML = "Comment : <br>" + comment;
-                }
-                else {
-                    commentDiv.innerHTML = "Comment : <br>";
-                }
-            }
-        });
-    });
-
-    var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.width = "579px"
-    container.style.height = "180px"
-    container.style.margin = "0px"
-    container.style.overflowX = "hidden";
-    container.style.overflowY = "scroll";
-
-};
-
-ComparisonReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, reviewTableRow, column, sheetName) {
-    var reviewTableElement = reviewTableRow.parentElement;
-    var reviewTableRows = reviewTableElement.getElementsByTagName("tr");
-
-    var id = viewerContainer.replace("#", "");
-    var currentSheetDataTable = document.getElementById(id);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var currentSheetRows = currentSheetDataTable.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
-
-    var checkStatusArray = {};
-    for (var i = 0; i < reviewTableRows.length; i++) {
-        var CurrentReviewTableRow = reviewTableRows[i];
-        for (var j = 0; j < currentSheetRows.length; j++) {
-            currentSheetRow = currentSheetRows[j];
-            var componentName;
-            if (column['Name'] !== undefined) {
-                componentName = currentSheetRow.cells[column['Name']].innerText;
-            }
-            else if (column['Tagnumber'] !== undefined) {
-                componentName = currentSheetRow.cells[column['Tagnumber']].innerText;
-            }
-
-            var sourceComponentNames = this.getSourceNamesFromMainReviewRow(CurrentReviewTableRow);
-
-            if (sourceComponentNames.SourceAName !== "" && 
-               sourceComponentNames.SourceAName === componentName) {
-                var color = CurrentReviewTableRow.cells[0].style.backgroundColor;
-                for (var j = 0; j < currentSheetRow.cells.length; j++) {
-                    cell = currentSheetRow.cells[j];
-                    cell.style.backgroundColor = color;
-                }
-                checkStatusArray[currentSheetRow.rowIndex] = this.getStatusFromMainReviewRow(CurrentReviewTableRow);
-                break;
-            }
-            else if (sourceComponentNames.SourceBName !== "" && 
-                    sourceComponentNames.SourceBName === componentName) {
-                var color = CurrentReviewTableRow.cells[0].style.backgroundColor;
-                for (var j = 0; j < currentSheetRow.cells.length; j++) {
-                    cell = currentSheetRow.cells[j];
-                    cell.style.backgroundColor = color;
-                }
-                checkStatusArray[currentSheetRow.rowIndex] = this.getStatusFromMainReviewRow(CurrentReviewTableRow);
-                break;
-            }
-        }
-    }
-
-    if (viewerContainer === "#viewerContainer1") {
-        this.checkStatusArrayA = {};
-        this.checkStatusArrayA[sheetName] = checkStatusArray;
-    }
-    else if (viewerContainer === "#viewerContainer2") {
-        this.checkStatusArrayB = {};
-        this.checkStatusArrayB[sheetName] = checkStatusArray;
-    }
-}
-
-ComparisonReviewManager.prototype.HighlightRowInSheetData = function (CurrentReviewTableRow, viewerContainer) {
-    var containerId = viewerContainer.replace("#", "");
-    var viewerContainerData = document.getElementById(containerId);
-
-    if (viewerContainerData != undefined) {
-        var containerChildren = viewerContainerData.children;
-        // 0 index jsGrid header table
-        var columnHeaders = containerChildren[0].getElementsByTagName("th");
-        //1 index jsGrid table body
-        var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
-        var sourceDataViewTableRows = sheetDataTable.getElementsByTagName("tr");
-        var column = {};
-        for (var i = 0; i < columnHeaders.length; i++) {
-            columnHeader = columnHeaders[i];
-            //tagnumber is for instruments XLS data sheet
-            if (columnHeader.innerHTML.trim() === "ComponentClass" ||
-                columnHeader.innerHTML.trim() === "Name" ||
-                columnHeader.innerHTML.trim() === "Description" ||
-                columnHeader.innerHTML.trim() === "Tagnumber") {
-                column[columnHeader.innerHTML.trim()] = i;
-            }
-            if (Object.keys(column).length === 3) {
-                break;
-            }
-        }
-        for (var i = 0; i < sourceDataViewTableRows.length; i++) {
-            currentRowInSourceTable = sourceDataViewTableRows[i];
-
-            var componentName;
-            if (column.Name !== undefined) {
-                componentName = currentRowInSourceTable.cells[column.Name].innerText;
-            }
-            else if (column.Tagnumber !== undefined) {
-                componentName = currentRowInSourceTable.cells[column.Tagnumber].innerText;
-            }
-            if (CurrentReviewTableRow.cells[ComparisonColumns.SourceAName].innerText === componentName ||
-                CurrentReviewTableRow.cells[ComparisonColumns.SourceBName].innerText === componentName) {
-                if (containerId === "viewerContainer1") {
-                    if (this.SelectedComponentRowFromSheetA) {
-                        this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, this.SelectedComponentRowFromSheetA);
-                    }
-
-                    this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
-
-                    this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
-
-                    var sheetDataTable1 = containerChildren[1].getElementsByTagName("table")[0];
-                    sheetDataTable1.focus();
-                    sheetDataTable1.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
-                }
-                if (containerId === "viewerContainer2") {
-
-                    if (this.SelectedComponentRowFromSheetB) {
-                        this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-                    }
-
-                    this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
-
-                    this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
-
-                    var sheetDataTable2 = containerChildren[1].getElementsByTagName("table")[0];
-                    sheetDataTable2.focus();
-                    sheetDataTable2.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
-                }
-
-                break;
-            }
-        }
-    }
-}
-
 ComparisonReviewManager.prototype.unhighlightSelectedSheetRowInviewer = function (checkStatusArray,
     currentRow) {
     var rowIndex = currentRow.rowIndex;
@@ -1810,163 +1241,6 @@ ComparisonReviewManager.prototype.unhighlightSelectedSheetRowInviewer = function
             cell.style.backgroundColor = color;
         }
     }
-}
-
-ComparisonReviewManager.prototype.populateDetailedReviewTable = function (rowData) {
-    // clear comment
-    this.SetComment("");
-
-    this.detailedReviewRowComments = {};
-
-    var parentTable = document.getElementById("ComparisonDetailedReviewCell");
-    parentTable.innerHTML = '';
-
-    var tableData = [];
-    var columnHeaders = [];
-
-    var componentId = rowData.ResultId;
-    var groupId = rowData.GroupId;
-
-    for (var componentsGroupID in this.ComparisonCheckManager) {
-
-        // get the componentgroupd corresponding to selected component 
-        var componentsGroupList = this.ComparisonCheckManager[componentsGroupID];
-
-        if (componentsGroupList && componentsGroupID != "restore") {
-            var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-            var div = document.createElement("DIV");
-            parentTable.appendChild(div);
-
-            div.innerHTML = "Check Details :";
-            div.style.fontSize = "20px";
-            div.style.fontWeight = "bold";
-
-            for (var i = 0; i < Object.keys(ComparisonPropertyColumns).length; i++) {
-                columnHeader = {};
-                var title;
-                if (i === ComparisonPropertyColumns.SourceAName) {
-                    title = "Property";
-                    name = ComparisonPropertyColumnNames.SourceAName;
-                }
-                else if (i === ComparisonPropertyColumns.SourceAValue) {
-                    title = "Value";
-                    name = ComparisonPropertyColumnNames.SourceAValue;
-                }
-                else if (i === ComparisonPropertyColumns.SourceBValue) {
-                    title = "Value";
-                    name = ComparisonPropertyColumnNames.SourceBValue;
-                }
-                else if (i === ComparisonPropertyColumns.SourceBName) {
-                    title = "Property";
-                    name = ComparisonPropertyColumnNames.SourceBName;
-                }
-                else if (i === ComparisonPropertyColumns.Status) {
-                    title = "Status";
-                    name = ComparisonPropertyColumnNames.Status;
-                }
-
-                columnHeader["title"] = title;
-                columnHeader["name"] = name;
-                columnHeader["type"] = "textarea";
-                columnHeader["width"] = "27";
-                columnHeader["filtering"] = "true";
-                columnHeaders.push(columnHeader);
-            }
-
-            // show component class name as property in detailed review table    
-
-            var property;
-
-            for (var propertyId in component.properties) {
-                property = component.properties[propertyId];
-                tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-
-                this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
-
-                tableData.push(tableRowContent);
-            }
-
-            var id = "#ComparisonDetailedReviewCell";
-            this.LoadDetailedReviewTableData(this, columnHeaders, tableData, id);
-            this.highlightDetailedReviewTableFromCheckStatus("ComparisonDetailedReviewCell")
-
-            var modelBrowserData = document.getElementById("ComparisonDetailedReviewCell");
-
-            var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-            modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "565px";
-            modelBrowserHeaderTable.style.backgroundColor = "white";
-            modelBrowserHeaderTable.style.overflowX = "hide";
-            var modelBrowserHeaderTableRows = modelBrowserHeaderTable.getElementsByTagName("tr");
-            for (var j = 0; j < modelBrowserHeaderTableRows.length; j++) {
-                var currentRow = modelBrowserHeaderTableRows[j];
-                for (var i = 0; i < currentRow.cells.length; i++) {
-                    if (i === 5 || i === 6 || i === 7) {
-                        currentRow.cells[i].style.display = "none";
-                    }
-
-                }
-            }
-
-            // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
-            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
-            modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width = "579px";
-            modelBrowserDataTable.style.margin = "52px 0px 0px 0px"
-        }
-    }
-}
-
-ComparisonReviewManager.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {
-    var detailedReviewTableContainer = document.getElementById(containerId);
-    if (detailedReviewTableContainer === null) {
-        return;
-    }
-    if (detailedReviewTableContainer.children.length === 0) {
-        return;
-    }
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var detailedReviewTableRows = detailedReviewTableContainer.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
-
-    // var mainReviewTableRows = mainReviewTable.getElementsByTagName("tr");
-
-    for (var i = 0; i < detailedReviewTableRows.length; i++) {
-        var currentRow = detailedReviewTableRows[i];
-        if (currentRow.cells.length > 1) {
-            var status = currentRow.cells[ComparisonPropertyColumns.Status].innerHTML;
-            this.SelectionManager.ChangeBackgroundColor(currentRow, status);
-        }
-    }
-}
-
-ComparisonReviewManager.prototype.addPropertyRowToDetailedTable = function (property, columnHeaders) {
-
-    tableRowContent = {};
-    tableRowContent[columnHeaders[0].name] = property.SourceAName;
-    tableRowContent[columnHeaders[1].name] = property.SourceAValue;
-    tableRowContent[columnHeaders[2].name] = property.SourceBValue;
-    tableRowContent[columnHeaders[3].name] = property.SourceBName;
-    tableRowContent[columnHeaders[4].name] = property.Severity;
-
-    if (property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
-        tableRowContent[columnHeaders[4].name] = 'OK(T)';
-        tableRowContent[columnHeaders[2].name] = property.SourceAValue;
-    }
-    else if (property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
-        tableRowContent[columnHeaders[4].name] = 'OK(T)';
-        tableRowContent[columnHeaders[1].name] = property.SourceBValue;
-    }
-    // if (property.PerformCheck &&
-    //     property.Result) {
-    //     tableRowContent[columnHeaders[4].name] = "OK";
-    // }
-    // else {
-
-    // }
-    return tableRowContent;
 }
 
 ComparisonReviewManager.prototype.GetReviewTableId = function (row) {

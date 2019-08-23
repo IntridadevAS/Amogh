@@ -26,19 +26,21 @@ const ComparisonColumnNames = {
 // comparison property table
 // indices
 const ComparisonPropertyColumns = {
-    SourceAName: 0,
-    SourceAValue: 1,
-    SourceBValue: 2,
-    SourceBName: 3,
-    Status: 4
+    Select: 0,
+    SourceAName: 1,
+    SourceAValue: 2,
+    SourceBValue: 3,
+    SourceBName: 4,
+    Status: 5
 }
 
 // column names
 const ComparisonPropertyColumnNames = {
-    SourceAName: "A_Property",
-    SourceAValue: "A_Value",
-    SourceBValue: "B_Value",
-    SourceBName: "B_Property",
+    Select: "Select",
+    SourceAName: "PropertyA",
+    SourceAValue: "ValueA",
+    SourceBValue: "ValueB",
+    SourceBName: "PropertyB",
     Status: "Status"
 }
 
