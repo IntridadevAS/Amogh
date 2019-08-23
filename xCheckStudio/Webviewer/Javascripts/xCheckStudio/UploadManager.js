@@ -31,7 +31,8 @@ let UploadManager = {
 
                 UploadManager.upload(fileName,
                     formId,
-                    addedSource);
+                    addedSource,
+                    event.target.files);
                 // uploadAndLoadModel(fileExtension,
                 //     data.target.response,
                 //     viewerContainer,
@@ -48,20 +49,22 @@ let UploadManager = {
 
     upload: function (fileName,
         formId,
-        addedSource) {
+        addedSource,
+        files) {
         var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
         // var busySpinner = document.getElementById("divLoading");
         // busySpinner.className = 'show';
 
-        if (xCheckStudio.Util.isSource3D(fileExtension)) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "PHP/UploadSource.php", true);
-            xhr.onload = function (event) {
-                if (event.target.response !== "fail") {
+        if (xCheckStudio.Util.isSource3D(fileExtension) ||
+            xCheckStudio.Util.isSourceDB(fileExtension)) {
+
+            UploadManager.uploadSource(fileExtension, formId, addedSource.id).then(function (result) {
+
+                if (xCheckStudio.Util.isSource3D(fileExtension)) {
 
                     // load model
-                    LoadManager.loadModel(fileName,
+                    LoadManager.load3DModel(fileName,
                         addedSource.id,
                         addedSource.visualizer.id,
                         addedSource.tableData.id,
@@ -69,24 +72,95 @@ let UploadManager = {
 
                         });
                 }
+                else if (xCheckStudio.Util.isSourceDB(fileExtension)) {
+                    LoadManager.loadDBModel(fileExtension,
+                        files,
+                        addedSource.id,
+                        addedSource.visualizer.id,
+                        addedSource.tableData.id).then(function () {
 
-                // busySpinner.classList.remove('show')
+                        });
+                }
+            });
+
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("POST", "PHP/UploadSource.php", true);
+            // xhr.onload = function (event) {
+            //     if (event.target.response !== "fail") {
+
+            //         // load model
+            //         LoadManager.load3DModel(fileName,
+            //             addedSource.id,
+            //             addedSource.visualizer.id,
+            //             addedSource.tableData.id,
+            //             formId).then(function () {
+
+            //             });
+            //     }
+
+            //     // busySpinner.classList.remove('show')
+            // };
+            // var formData = new FormData(document.getElementById(formId));
+            // formData.append('Source', addedSource.id);
+
+            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            // formData.append('ProjectName', projectinfo.projectname);
+            // formData.append('CheckName', checkinfo.checkname);
+            // formData.append('ConvertToSCS', "true");
+
+            // xhr.send(formData);
+        }
+        else if (xCheckStudio.Util.isSource1D(fileExtension)) {
+            
+            if(xCheckStudio.Util.isSourceExcel(fileExtension))
+            {
+                LoadManager.loadExcelModel(fileExtension,
+                                    files,
+                                    addedSource.id,
+                                    addedSource.visualizer.id,
+                                    addedSource.tableData.id);
+            }
+            // else if(xCheckStudio.Util.isSourceDB(fileExtension))
+            // {
+                
+            // }
+        }
+    },
+
+    uploadSource: function (fileExtension,
+                            formId, 
+                            sourceId) {
+        return new Promise((resolve) => {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "PHP/UploadSource.php", true);
+            xhr.onload = function (event) {
+                if (event.target.response !== "fail") {
+
+                    return resolve(true);
+                }
+
+                return resolve(false);
             };
+
             var formData = new FormData(document.getElementById(formId));
-            formData.append('Source', addedSource.id);
+            formData.append('Source', sourceId);
 
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
             formData.append('ProjectName', projectinfo.projectname);
             formData.append('CheckName', checkinfo.checkname);
-            formData.append('ConvertToSCS', "true");
+            
+            var convertToScs = "false";
+            if (xCheckStudio.Util.isSource3D(fileExtension)) {
+                convertToScs = "true";
+            }
+            formData.append('ConvertToSCS', convertToScs);
 
-            xhr.send(formData);
-        }
-        else if (xCheckStudio.Util.isSource1D(fileExtension)) {
-
-        }
-    },
+            xhr.send(formData);            
+        });
+    }
 
     // uploadAndLoadModel: function (fileExtension,
     //     fileName, viewerContainer, modelTreeContainer, dataSource, formId, files) {

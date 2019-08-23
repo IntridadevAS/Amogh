@@ -41,31 +41,31 @@ SCModelBrowser.prototype.constructor = SCModelBrowser;
 SCModelBrowser.prototype.CreateHeaders = function()
     {
         var columnHeaders = [];
-        for (var i = 0; i < Object.keys(ModelBrowserColumns).length; i++) {
+        for (var i = 0; i < Object.keys(ModelBrowserColumns3D).length; i++) {
             columnHeader = {};
             var headerText;
-            if (i === ModelBrowserColumns.Select) {
+            if (i === ModelBrowserColumns3D.Select) {
                 continue;
             }
-            else if (i === ModelBrowserColumns.Component) {
-                headerText = ModelBrowserColumnNames.Component;
-                key = ModelBrowserColumnNames.Component.replace(/\s/g,'');
+            else if (i === ModelBrowserColumns3D.Component) {
+                headerText = ModelBrowserColumnNames3D.Component;
+                key = ModelBrowserColumnNames3D.Component.replace(/\s/g,'');
                 width = "30%";
             }
-            else if (i === ModelBrowserColumns.MainClass) {
-                headerText = ModelBrowserColumnNames.MainClass;
-                key = ModelBrowserColumnNames.MainClass.replace(/\s/g,'');
+            else if (i === ModelBrowserColumns3D.MainClass) {
+                headerText = ModelBrowserColumnNames3D.MainClass;
+                key = ModelBrowserColumnNames3D.MainClass.replace(/\s/g,'');
                 width = "30%";
             }
-            else if (i === ModelBrowserColumns.SubClass) {
-                headerText = ModelBrowserColumnNames.SubClass;
-                key = ModelBrowserColumnNames.SubClass.replace(/\s/g,'');
+            else if (i === ModelBrowserColumns3D.SubClass) {
+                headerText = ModelBrowserColumnNames3D.SubClass;
+                key = ModelBrowserColumnNames3D.SubClass.replace(/\s/g,'');
                 width = "30%";
             }
-            else if (i === ModelBrowserColumns.NodeId) 
+            else if (i === ModelBrowserColumns3D.NodeId) 
             {
-                headerText = ModelBrowserColumnNames.NodeId;
-                key = ModelBrowserColumnNames.NodeId.replace(/\s/g,'');
+                headerText = ModelBrowserColumnNames3D.NodeId;
+                key = ModelBrowserColumnNames3D.NodeId.replace(/\s/g,'');
                 width = "0%";
             }            
 
@@ -78,65 +78,6 @@ SCModelBrowser.prototype.CreateHeaders = function()
 
         return columnHeaders;
 }
-
-// SCModelBrowser.prototype.CreateHeaders = function () {
-//     var _this = this;
-
-//     // // get container element Id 
-//     // var containerElement = document.getElementById(this.ModelBrowserContainer);
-
-//     // var size = new Communicator.Point2(556, 364);
-
-//     // // create div element to hold model browser 
-//     // var tableDiv = document.createElement("div");
-//     // tableDiv.className = "scrollable";
-//     // tableDiv.style.width = size.x + "px";
-//     // tableDiv.style.height = size.y + "px";
-//     // containerElement.appendChild(tableDiv);
-
-//     // create model browser table
-
-//     //create header for table
-//     columnHeader = {};
-//     columnHeader["title"] = "";
-//     columnHeader["name"] = "checkBox";
-//     columnHeader["type"] = "text";
-//     columnHeader["width"] = "20";
-//     columnHeader["filtering"] = "false";
-//     columnHeader["sorting"] = "false";
-//     _this.modelTreeColumnHeaders.push(columnHeader);
-
-//     columnHeader = {};
-//     columnHeader["title"] = "Item";
-//     columnHeader["name"] = "Component";
-//     columnHeader["type"] = "text";
-//     columnHeader["width"] = "100";
-//     _this.modelTreeColumnHeaders.push(columnHeader);
-
-//     columnHeader = {};
-//     columnHeader["title"] = "Category";
-//     columnHeader["name"] = "MainComponentClass";
-//     columnHeader["type"] = "text";
-//     columnHeader["width"] = "100";
-//     _this.modelTreeColumnHeaders.push(columnHeader);
-
-//     columnHeader = {};
-//     columnHeader["title"] = "Item Class";
-//     columnHeader["name"] = "SubComponentClass";
-//     columnHeader["type"] = "text";
-//     columnHeader["width"] = "100";
-//     _this.modelTreeColumnHeaders.push(columnHeader);
-
-//     columnHeader = {};
-//     columnHeader["title"] = "NodeId";
-//     columnHeader["name"] = "NodeId";
-//     columnHeader["type"] = "text";
-//     columnHeader["width"] = "0";
-//     columnHeader["filtering"] = "false";
-//     columnHeader["sorting"] = "false";
-//     _this.modelTreeColumnHeaders.push(columnHeader);
-
-// };
 
 SCModelBrowser.prototype.InitEvents = function () {
     var _this = this;
@@ -236,7 +177,7 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, styleList, componen
     //     _this.SelectionManager.HandleSelectFormCheckBox(this);
     // }
 
-    tableRowContent[ModelBrowserColumnNames.Component.replace(/\s/g,'')] = nodeData.Name;
+    tableRowContent[ModelBrowserColumnNames3D.Component.replace(/\s/g,'')] = nodeData.Name;
     var isAssemblyNodeType = this.isAssemblyNode(nodeId);
     if (isAssemblyNodeType) {
         if (this.NodeGroups.indexOf(componentStyleClass) === -1) {
@@ -244,9 +185,9 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, styleList, componen
         }
     }
 
-    tableRowContent[ModelBrowserColumnNames.MainClass.replace(/\s/g,'')] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames.SubClass.replace(/\s/g,'')] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames.NodeId.replace(/\s/g,'')] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    tableRowContent[ModelBrowserColumnNames3D.MainClass.replace(/\s/g,'')] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames3D.SubClass.replace(/\s/g,'')] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames3D.NodeId.replace(/\s/g,'')] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
     
     this.modelTreeRowData.push(tableRowContent);
 
@@ -362,14 +303,14 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;  
         $(function () {
-            var table = JSON.stringify(_this.modelTreeRowData);
+            //var table = JSON.stringify(_this.modelTreeRowData);
             var isFiredFromCheckbox = false;
             $(containerDiv).igGrid({
                 columns: columnHeaders,
                 autofitLastColumn: false,
                 autoGenerateColumns: false,
-                dataSource : table,
-                dataSourceType: "json",
+                dataSource : _this.modelTreeRowData,
+                // dataSourceType: "json",
                 responseDataKey: "results",
                 autoCommit: true,
                 height: "100%",
@@ -423,7 +364,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     {
                         name: 'Hiding',
                             columnSettings: [
-                            {columnKey: ModelBrowserColumns.NodeId, allowHiding: true, hidden: true},                           
+                            {columnKey: ModelBrowserColumns3D.NodeId, allowHiding: true, hidden: true},                           
                         ]
                     },
                 ]    

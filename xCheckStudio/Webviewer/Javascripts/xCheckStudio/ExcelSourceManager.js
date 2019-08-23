@@ -22,7 +22,7 @@ ExcelSourceManager.prototype.IsExcelSource = function () {
 ExcelSourceManager.prototype.LoadData = function (file) {
   var _this = this;
   return new Promise((resolve) => {
-
+ 
     // read data
     var excelReader = new ExcelReader();
     excelReader.ReadFileData(file).then(function (properties) {
@@ -32,8 +32,10 @@ ExcelSourceManager.prototype.LoadData = function (file) {
       _this.AddComponentsToDB();
 
       //add model Browser Table
-      _this.ModelTree = new ExcelModeBrowser(_this.ModelBrowsercontainer, excelReader.SheetData);
-      _this.ModelTree.CreateModelBrowserTable();
+      _this.ModelTree = new ExcelModeBrowser(_this.ModelBrowsercontainer, 
+                                            _this.ViewerContainer, 
+                                            excelReader.SheetData);
+      _this.ModelTree.CreateModelBrowser();
 
       // check if data source loading order is maintained
       // if (checkCaseSelected) {
@@ -66,9 +68,10 @@ ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, select
 
   //add model Browser Table
   this.ModelTree = new ExcelModeBrowser(this.ModelBrowsercontainer,
+    this.ViewerContainer, 
     excelReader.SheetData,
     selectedComponents);
-    this.ModelTree.CreateModelBrowserTable();
+    this.ModelTree.CreateModelBrowser();
 }
 
 

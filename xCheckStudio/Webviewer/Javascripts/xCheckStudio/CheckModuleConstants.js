@@ -16,10 +16,12 @@ var Sources3D = ["xml",
 var Sources1D = ["json",
     "xls"];
 
+var ExcelSources = ["xls"];
+var DBSources = ["json"];
 
-// Model browser
+// 3D Model browser
 // column indices
-const ModelBrowserColumns = {
+const ModelBrowserColumns3D = {
     Select: 0,
     Component: 1,
     MainClass: 2,
@@ -28,10 +30,29 @@ const ModelBrowserColumns = {
 }
 
 // column names
-const ModelBrowserColumnNames = {
+const ModelBrowserColumnNames3D = {
     Select: "",
     Component: "Item",
     MainClass: "Category",
     SubClass: "Item Class",
     NodeId: "NodeId"
+}
+
+// 1D Model browser
+// column indices
+const ModelBrowserColumns1D = {
+    Select: 0,
+    Component: 1,
+    MainClass: 2,
+    SubClass: 3,
+    Description: 4
+}
+
+// column names
+const ModelBrowserColumnNames1D = {
+    Select: "",
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Item Class",
+    Description: "Description"
 }

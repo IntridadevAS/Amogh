@@ -211,6 +211,26 @@ var xCheckStudio;
         }
         Util.isSource1D = isSource1D;
 
+        // this check whether input source is 1D
+        function isSourceExcel(fileExtension) {
+            if (ExcelSources.includes(fileExtension.toLowerCase())) {
+                return true;
+            }
+
+            return false;
+        }
+        Util.isSourceExcel = isSourceExcel;
+
+        // this check whether input source is 1D
+        function isSourceDB(fileExtension) {
+            if (DBSources.includes(fileExtension.toLowerCase())) {
+                return true;
+            }
+
+            return false;
+        }
+        Util.isSourceDB = isSourceDB;
+
         function getCameraPlaneIntersectionPoint(camera, point, view) {
             var target = camera.getTarget();
             var normal = Communicator.Point3.subtract(camera.getPosition(), target).normalize();

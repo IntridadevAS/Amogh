@@ -1,7 +1,8 @@
 <?php
         require_once 'Utility.php';
         
-        if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
+        if(!isset($_POST['CheckName']) || 
+           !isset($_POST['ProjectName']))
         {
             echo 'Project Name or Check Name not set';
             return; 

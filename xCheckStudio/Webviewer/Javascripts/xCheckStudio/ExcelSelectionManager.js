@@ -146,9 +146,8 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row) {
      if (!this.SelectedComponentRows.includes(row)) {
           this.ApplyHighlightColor(row);
      }
-     this.HighlightedComponentRow = row;
-
-     //this.ShowSelectedSheetData(row)     
+     
+     this.HighlightedComponentRow = row;    
 }
 
 /* 
