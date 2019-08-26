@@ -7,19 +7,8 @@ function ReviewComparisonSelectionManager() {
 ReviewComparisonSelectionManager.prototype = Object.create(ReviewSelectionManager.prototype);
 ReviewComparisonSelectionManager.prototype.constructor = ReviewComparisonSelectionManager;
 
-ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentCheckBox) {
-    var currentCell = currentCheckBox.parentElement;
-    if (currentCell.tagName.toLowerCase() !== 'td') {
-        return;
-    }
-
-    var currentRow = currentCell.parentElement;
-    if (currentRow.tagName.toLowerCase() !== 'tr' ||
-        currentRow.cells.length < Object.keys(ComparisonColumns).length) {
-        return;
-    }
-
-    if (currentCheckBox.checked &&
+ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, checkBoxState) {
+    if (checkBoxState == "on" &&
         !this.SelectedCheckComponentRows.includes(currentRow)) {
         // if check component is selected and and selected 
         // component row doesn't exist already
@@ -57,53 +46,6 @@ ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row)
         cell.style.backgroundColor = Color;
     }
 }
-
-// ReviewComparisonSelectionManager.prototype.GetRowHighlightColor = function (status) {
-//     if (status.toLowerCase() === ("OK").toLowerCase()) {
-//         return SuccessColor;
-//     }
-//     else if (status.toLowerCase() === ("MATCHED").toLowerCase()) {
-//         return MatchedColor;
-//     }
-//     else if (status.toLowerCase() === ("Error").toLowerCase()) {
-//         return ErrorColor;
-//     }
-//     else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-//         return WarningColor;
-//     }
-//     else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-//         return NoMatchColor;
-//     }
-//     else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-//         return NoValueColor;
-//     }
-//     else if (status.toLowerCase() === ("Accepted").toLowerCase() ||
-//         status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
-//         return AcceptedColor;
-//     }
-//     else if (status.toLowerCase() === ("Error(A)").toLowerCase() ||
-//         status.toLowerCase() === ("Warning(A)").toLowerCase() ||
-//         status.toLowerCase() === ("No Match(A)").toLowerCase() ||
-//         status.toLowerCase() === ("No Value(A)").toLowerCase()) {
-//         return PropertyAcceptedColor;
-//     }
-//     else if (status.toLowerCase() === ("Error(T)").toLowerCase() ||
-//         status.toLowerCase() === ("Warning(T)").toLowerCase()) {
-//         return PropertyAcceptedColor;
-//     }
-//     else if (status.toLowerCase() === ("OK(A)(T)").toLowerCase() || status.toLowerCase() === ("OK(T)(A)").toLowerCase()) {
-//         return AcceptedColor;
-//     }
-//     else if (status.includes("(A)(T)") || status.includes("(T)(A)")) {
-//         return PropertyAcceptedColor;
-//     }
-//     else if (status.toLowerCase() === ("OK(T)").toLowerCase() || status.toLowerCase() === ("OK(A)").toLowerCase()) {
-//         return AcceptedColor;
-//     }
-//     else {
-//         return "#ffffff";
-//     }
-// }
 
 ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (currentReviewTableRow) {
     if (this.HighlightedCheckComponentRow === currentReviewTableRow) {
