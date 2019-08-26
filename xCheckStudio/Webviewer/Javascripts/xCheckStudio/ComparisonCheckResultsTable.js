@@ -118,6 +118,23 @@ ComparisonCheckResultsTable.prototype.CreateTableData =function(checkComponents,
     return tableData;   
 }
 
+ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
+    var mainReviewTableContainer = document.getElementById(containerId);
+    // jsGridHeaderTableIndex = 0 
+    // jsGridTbodyTableIndex = 1
+    var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
+
+    for (var i = 1; i < mainReviewTableRows.length; i++) {
+        var currentRow = mainReviewTableRows[i];
+        if (currentRow.cells.length < 3) {
+            return;
+        }
+        var status = currentRow.cells[ComparisonColumns.Status].innerText;
+        this.ReviewManager.SelectionManager.ChangeBackgroundColor(currentRow, status);
+    }
+}
+
+
 ComparisonCheckResultsTable.prototype.populateReviewTable = function () 
 {
         var ComparisonTableData = this.ReviewManager.ComparisonCheckManager;
@@ -162,7 +179,7 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function ()
             this.LoadReviewTableData(columnHeaders, tableData, id);      
 
             // highlight table rows as per their severity status
-            this.ReviewManager.highlightMainReviewTableFromCheckStatus(div.id);
+            this.highlightMainReviewTableFromCheckStatus(div.id);
 
             // Add category check results count 
             this.ReviewManager.AddTableContentCount(div.id);
@@ -171,7 +188,7 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function ()
 }
 
 ComparisonCheckResultsTable.prototype.RestoreBackgroundColorOfFilteredRows = function(filteredData) {
-    for(var row = 2; row < filteredData.length; row++) {
+    for(var row = 0; row < filteredData.length; row++) {
         var status = this.ReviewManager.GetCellValue(filteredData[row], ComparisonColumns.Status);
         this.ReviewManager.SelectionManager.ChangeBackgroundColor(filteredData[row], status);            
     }
@@ -183,11 +200,14 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     $(function () {
         var isFiredFromCheckbox = false;
         $(containerDiv).igGrid({
+            width : "575px",
+            height : "202px",
             columns: columnHeaders,
             autofitLastColumn: false,
             autoGenerateColumns: false,
             dataSource : tableData,
             responseDataKey: "results",
+            fixedHeaders : true,
             autoCommit: true,
             features: [
                 {
@@ -242,11 +262,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     });
     
     var container = document.getElementById(containerDiv.replace("#", ""));
-    container.style.width = "578px"
-    container.style.height = "202px"
     container.style.margin = "0px"
-    container.style.overflowX = "hidden";
-    container.style.overflowY = "scroll";
     container.style.padding = "0";
 
 };
@@ -439,13 +455,16 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData) {
     var viewerContainer = "#ComparisonDetailedReviewCell";
     var _this = this;
+
     $(function () {
         $(viewerContainer).igGrid({
             width: "100%",
+            height : "190px",
             columns: columnHeaders,
             autoGenerateColumns: false,
             dataSource : tableData,
             responseDataKey: "results",
+            fixedHeaders : true,
             features: [
                 {
                     name: 'MultiColumnHeaders'
@@ -494,12 +513,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     });
 
     var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.width = "579px"
-    container.style.height = "180px"
-    container.style.margin = "0px"
-    container.style.overflowX = "hidden";
-    container.style.overflowY = "scroll";
-
+    container.style.margin = "0px";
 };
 
 ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {

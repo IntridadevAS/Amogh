@@ -73,13 +73,15 @@ const ComplianceColumnNames = {
 }
 
 const CompliancePropertyColumns = {
-    PropertyName: 0,
-    PropertyValue: 1,
-    Status: 2
+    Select: 0,
+    PropertyName: 1,
+    PropertyValue: 2,
+    Status: 3
 }
 
 // column names
 const CompliancePropertyColumnNames = {
+    Select: "Select",
     PropertyName: "Property",
     PropertyValue: "Value",
     Status: "Status"

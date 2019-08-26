@@ -22,12 +22,6 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.ComparisonCheckManager = comparisonCheckManager;
 
-    this.SelectedComponentRowFromSheetA;
-    this.SelectedComponentRowFromSheetB;
-
-    this.checkStatusArrayA = {};
-    this.checkStatusArrayB = {};
-
     this.detailedReviewRowComments = {};
 
     this.SourceANodeIdvsCheckComponent = {};
@@ -52,6 +46,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.SourceAReviewViewerInterface;
     this.SourceBReviewViewerInterface;
+    this.SheetDataViewer;
 }
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
@@ -86,6 +81,10 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
             this);
         this.SourceBReviewViewerInterface.NodeIdStatusData = this.SourceBNodeIdVsStatus;
         this.SourceBReviewViewerInterface.setupViewer(550, 280);
+    }
+
+    if(this.SourceAComponents !== undefined || this.SourceBComponents !== undefined) {
+        this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceAComponents, this.SourceBComponents);
     }
 }
 
@@ -137,45 +136,6 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
         };
         // this.SourceBComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
     }
-}
-
-ComparisonReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var mainReviewTableContainer = document.getElementById(containerId);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
-
-    for (var i = 1; i < mainReviewTableRows.length; i++) {
-        var currentRow = mainReviewTableRows[i];
-        if (currentRow.cells.length < 3) {
-            return;
-        }
-        var status = currentRow.cells[ComparisonColumns.Status].innerText;
-        this.SelectionManager.ChangeBackgroundColor(currentRow, status);
-    }
-}
-
-ComparisonReviewManager.prototype.IsFirstViewer = function (viewerContainer) {
-    if (viewerContainer === "#viewerContainer1") {
-        return true;
-    }
-
-    return false;
-}
-ComparisonReviewManager.prototype.IsSecondViewer = function (viewerContainer) {
-    if (viewerContainer === "#viewerContainer2") {
-        return true;
-    }
-
-    return false;
-}
-
-ComparisonReviewManager.prototype.FirstViewerExists = function () {
-    if (document.getElementById("viewerContainer1").innerHTML !== "") {
-        return true;
-    }
-
-    return false;
 }
 
 ComparisonReviewManager.prototype.SecondViewerExists = function () {
@@ -288,7 +248,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
 
     // populate property table
     this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
-    var SheetDataViewer = new Review1DViewerDataManager(this);
+    
     var sheetName = containerDiv.replace("#", "");
 
     if (this.SourceAComponents !== undefined &&
@@ -297,18 +257,18 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceAName !== "") {
-            SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
         }
         else {
-            document.getElementById("viewerContainer1").innerHTML = "";
+            // document.getElementById("viewerContainer1").innerHTML = "";
             this.SourceAViewerCurrentSheetLoaded = undefined;
         }
 
         if (rowData.SourceBName !== "") {
-            SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
         }
         else {
-            document.getElementById("viewerContainer2").innerHTML = "";
+            // document.getElementById("viewerContainer2").innerHTML = "";
             this.SourceBViewerCurrentSheetLoaded = undefined;
         }
     }
@@ -321,9 +281,9 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceAName !== "") {
-            SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
         } else {
-            document.getElementById("viewerContainer1").innerHTML = "";
+            // document.getElementById("viewerContainer1").innerHTML = "";
             this.SourceAViewerCurrentSheetLoaded = undefined;
         }
 
@@ -334,10 +294,10 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceBName !== "") {
-            SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
         }
         else {
-            document.getElementById("viewerContainer2").innerHTML = "";
+            // document.getElementById("viewerContainer2").innerHTML = "";
             this.SourceBViewerCurrentSheetLoaded = undefined;
         }
 
@@ -1226,23 +1186,6 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, button) {
     }
 }
 
-ComparisonReviewManager.prototype.unhighlightSelectedSheetRowInviewer = function (checkStatusArray,
-    currentRow) {
-    var rowIndex = currentRow.rowIndex;
-    obj = Object.keys(checkStatusArray)
-    var status = checkStatusArray[obj[0]][rowIndex]
-    if (status !== undefined) {
-        this.SelectionManager.ChangeBackgroundColor(currentRow, status);
-    }
-    else {
-        color = "#fffff"
-        for (var j = 0; j < currentRow.cells.length; j++) {
-            cell = currentRow.cells[j];
-            cell.style.backgroundColor = color;
-        }
-    }
-}
-
 ComparisonReviewManager.prototype.GetReviewTableId = function (row) {
     var tBodyElement = row.parentElement;
     if (!tBodyElement) {
@@ -1250,7 +1193,7 @@ ComparisonReviewManager.prototype.GetReviewTableId = function (row) {
     }
     var tableElement = tBodyElement.parentElement;
 
-    return tableElement.parentElement.parentElement.id;
+    return tableElement.parentElement.parentElement.parentElement.id;
 }
 
 ComparisonReviewManager.prototype.GetReviewTable = function (row) {

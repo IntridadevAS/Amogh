@@ -57,22 +57,27 @@ ReviewSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function
         !reviewTable) {
     }
 
-    reviewTable.scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight;
+    var top = (reviewRow.offsetTop - reviewRow.offsetHeight);
 
-    var mainReviewTableContainer = document.getElementById(mainReviewTableContainerId);
-    if (!mainReviewTableContainer) {
-        return;
-    }
+    var ContainerId = reviewTable.parentElement.id;
+    $(function () {
+        $("#" + ContainerId + "table_scroll").scrollTop = top;
+    });
 
-    var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
-    for (var i = 0; i < collapsibleClasses.length; i++) {
-        var collapsibleClass = collapsibleClasses[i];
-        if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
-            collapsibleClass.nextElementSibling.style.display = "none";
-            collapsibleClass.className = "collapsible";
-        }
-        else {
-            collapsibleClass.nextElementSibling.style.display = "block";
-        }
-    }
+    var mainReviewTableContainer = document.getElementById("#" + ContainerId + "table_scroll");
+    // if (!mainReviewTableContainer) {
+    //     return;
+    // }
+
+    // var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
+    // for (var i = 0; i < collapsibleClasses.length; i++) {
+    //     var collapsibleClass = collapsibleClasses[i];
+    //     if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
+    //         collapsibleClass.nextElementSibling.style.display = "none";
+    //         collapsibleClass.className = "collapsible";
+    //     }
+    //     else {
+    //         collapsibleClass.nextElementSibling.style.display = "block";
+    //     }
+    // }
 }
