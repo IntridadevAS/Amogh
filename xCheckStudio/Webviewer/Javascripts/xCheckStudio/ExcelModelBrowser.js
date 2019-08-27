@@ -501,10 +501,10 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
 ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
     var viewerContainerData;
     if (this.ModelBrowserContainer === "modelTree1") {
-        viewerContainerData = document.getElementById("visualizerA")
+        viewerContainerData = document.getElementById("visualizera")
     }
     else if (this.ModelBrowserContainer === "modelTree2") {
-        viewerContainerData = document.getElementById("visualizerB")
+        viewerContainerData = document.getElementById("visualizerb")
     }
     if (viewerContainerData != undefined) {
         var containerChildren = viewerContainerData.children;

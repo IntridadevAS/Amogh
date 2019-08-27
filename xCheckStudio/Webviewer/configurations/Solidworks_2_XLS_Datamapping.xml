@@ -1,4 +1,4 @@
-<CheckCase name="3D(.sldasm) - Excel(.xls)">
+<CheckCase name="3D(.sldasm) - Excel(.xls)"  sourceA="SLDASM" sourceB="XLS">
 
 <Check type="Comparison" sourceAType="SLDASM" sourceBType="XLS">
 	<ComponentGroup sourceAGroupName="Equipment"  sourceBGroupName="Equipment">

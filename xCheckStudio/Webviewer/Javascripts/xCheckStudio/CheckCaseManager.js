@@ -1,3 +1,4 @@
+var checkCaseManager;
 function CheckCaseManager() {
     this.CheckCase;
     //this.OrderMaintained = 'true';
@@ -28,12 +29,12 @@ function CheckCaseManager() {
                 type: "POST",
                 url: "PHP/ProjectManager.php"
             }).done(function (msg) {   
-                var busySpinner = document.getElementById("divLoading");
-                if(busySpinner.classList.contains('show'))
-                    busySpinner.classList.remove('show')
-                if(!checkCaseSelected) {
-                    checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-                }
+                // var busySpinner = document.getElementById("divLoading");
+                // if(busySpinner.classList.contains('show'))
+                //     busySpinner.classList.remove('show')
+                // if(!checkCaseSelected) {
+                //     checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+                // }
             });
         };
         var formData = new FormData();

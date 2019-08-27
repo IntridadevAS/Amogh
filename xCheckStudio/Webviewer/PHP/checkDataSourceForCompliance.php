@@ -42,7 +42,7 @@
 
         $NotCheckedComponentsTable = NULL;
         //$NotMatchedComponentsTable = NULL;       
-        if( $ContainerId =='viewerContainer1')
+        if( $ContainerId =='visualizerA')
         {
             $Source="SourceA";
 
@@ -53,7 +53,7 @@
             $NotCheckedComponentsTable = "SourceAComplianceNotCheckedComponents";
            // $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";           
         }
-        else if($ContainerId == 'viewerContainer2')
+        else if($ContainerId == 'visualizerB')
         {
             $Source="SourceB";
 
@@ -91,11 +91,11 @@
                                   $CheckPropertiesTable);
 
 
-        if( $ContainerId =='viewerContainer1')
+        if( $ContainerId =='visualizerA')
         {
             writeSourceAComplianceCheckStatistics();
         }
-        else if($ContainerId == 'viewerContainer2')
+        else if($ContainerId == 'visualizerB')
         {
             writeSourceBComplianceCheckStatistics();
         }                                                

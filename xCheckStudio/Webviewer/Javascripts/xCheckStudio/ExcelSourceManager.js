@@ -1,4 +1,5 @@
-function ExcelSourceManager(sourceType,
+function ExcelSourceManager(sourceName,
+  sourceType,
   viewerContainer,
   modelBrowsercontainer) {
 
@@ -6,7 +7,7 @@ function ExcelSourceManager(sourceType,
   this.ViewerContainer = viewerContainer;
 
   // call super constructor
-  SourceManager.call(this, sourceType);
+  SourceManager.call(this, sourceName, sourceType);
 }
 
 
@@ -79,10 +80,10 @@ ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, select
 ExcelSourceManager.prototype.AddComponentsToDB = function () {
 
   var source = undefined;
-  if (this.ViewerContainer.toLowerCase() == "visualizerA") {
+  if (this.ViewerContainer.toLowerCase() == "visualizera") {
     source = "SourceA"
   }
-  else if (this.ViewerContainer.toLowerCase() == "visualizerB") {
+  else if (this.ViewerContainer.toLowerCase() == "visualizerb") {
     source = "SourceB"
   }
   var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));

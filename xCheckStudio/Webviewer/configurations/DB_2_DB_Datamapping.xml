@@ -1,4 +1,4 @@
-<CheckCase name="DB_2_DB">
+<CheckCase name="DB_2_DB" sourceA="JSON" sourceB="JSON">
 
 	<Check type="Comparison" sourceAType="JSON" sourceBType="JSON">
 	   <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PipeLine">

@@ -39,7 +39,7 @@
       </div>
       <div class="buttonContainer">
         <div class="buttonGroup">
-          <select class="checkCase" name="">
+          <select id="checkCaseSelect" class="checkCase" name="">
             <option selected disabled>Select Check Case</option>
             <option value="checkCase1">CheckCaseType 1</option>
             <option value="checkCase2">CheckCaseType 2</option>
@@ -112,28 +112,32 @@
         </div>
       </div>
       <div id="viewPanelA" class="viewPanel">
-        <div id="tableDataA" class="tableContainer">
+        <div class="tableContainer">
           <!-- tableA           -->
+          <table id="tableDataA"> </table>
         </div>
         <div id="center" class="grabBar"></div>
-        <div id="visualizerA" class="visualizerContainer">
+        <div  id="visualizerA" class="visualizerContainer" >
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-          <!-- visualizerA -->
+          <!-- visualizerA -->          
         </div>
       </div>
       <div id="viewPanelB" class="viewPanel hide">
-        <div id="tableDataB" class="tableContainer">
+        <div class="tableContainer">
           <!-- tableB -->
+           <!-- tableA           -->
+           <table id="tableDataB"> </table>
         </div>
-        <div class="grabBar"></div>        
-          <div id="visualizerB" class="visualizerContainer">
-            <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-            <!-- visualizerB -->
-          </div>
-        </div>      
+        <div class="grabBar"></div>
+        <div id="visualizerB" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <!-- visualizerB -->
+        </div>
+      </div>
       <div id="viewPanelC" class="viewPanel hide">
-        <div id="tableDataC" class="tableContainer">
+        <div class="tableContainer">
           <!-- tableC -->
+          <table id="tableDataC"> </table>
         </div>
         <div class="grabBar"></div>
         <div id="visualizerC" class="visualizerContainer">
@@ -142,8 +146,9 @@
         </div>
       </div>
       <div id="viewPanelD" class="viewPanel hide">
-        <div id="tableDataD" class="tableContainer">
+        <div class="tableContainer">
           <!-- tableD -->
+          <table id="tableDataD"> </table>
         </div>
         <div class="grabBar"></div>
         <div id="visualizerD" class="visualizerContainer">
@@ -154,14 +159,14 @@
 
       <div class="checkTogglesContainer">
         <label class="toggleContainer" style="grid-area:compliance">Compliance
-          <input type="checkbox" class="toggleCheckBox" name="compliance">
+          <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance">
           <span class="toggleSlider"></span>
         </label>
         <label class="toggleContainer" style="grid-area:comparison">Comparison
-          <input type="checkbox" class="toggleCheckBox" name="comparison">
+          <input id="comparisonSwitch" type="checkbox" class="toggleCheckBox" name="comparison">
           <span class="toggleSlider"></span>
         </label>
-        <button type="submit" name="button"></button>
+        <button id="checkButton" type="submit" name="button"></button>
       </div>
       <div class="checkName">
         <p>Example Project Name / Example Check Name</p>
@@ -172,6 +177,12 @@
   <style>
     ::-webkit-scrollbar {
       width: 6px;
+    }
+
+    .ui-iggrid tbody td {
+
+      white-space: nowrap;
+
     }
   </style>
   <!-- JQuery dependencies -->
@@ -234,6 +245,30 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseFilesData.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCase.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckCaseManager.js"></script>
+  <script src='configurations\dir.php'></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Check.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Save.js"></script>
+  <script>
+
+    window.onload = function () {
+      loadCheckCases();
+
+      var checkButton = document.getElementById("checkButton");
+      checkButton.onclick = function () {
+       
+        // show busy loader
+        onCheckButtonClick();
+      };
+    }
+
+  </script>
 </body>
 
 </html>

@@ -1,8 +1,9 @@
-function SCManager(sourceType,
+function SCManager(sourceName,
+    sourceType,
     viewerOptions) {
 
     // call super constructor
-    SourceManager.call(this, sourceType);
+    SourceManager.call(this, sourceName, sourceType);
 
     // Object.defineProperty(SCManager.prototype, 'constructor', {
     //     value: SCManager,
@@ -46,12 +47,12 @@ SCManager.prototype.LoadData = function (selectedComponents) {
         _this.Webviewer = viewer;
 
         // set viewer's background color
-        _this.SetViewerBackgroundColor();
-
+        _this.SetViewerBackgroundColor();      
 
         viewer.setCallbacks({
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
+                viewer.resizeCanvas();
 
                 // register viewer evenets
                 _this.BindEvents(viewer);
@@ -120,9 +121,9 @@ SCManager.prototype.BindEvents = function (viewer) {
                     _this.OnSelection(selection);
 
                     // if translucency control is on
-                    if (viewer._params.containerId in translucencyManagers) {
-                        translucencyManagers[viewer._params.containerId].ComponentSelected(this.SelectedNodeId);
-                    }
+                    // if (viewer._params.containerId in translucencyManagers) {
+                    //     translucencyManagers[viewer._params.containerId].ComponentSelected(this.SelectedNodeId);
+                    // }
                 }
             }
         },
@@ -160,12 +161,12 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
 
         // select valid node
         this.SelectValidNode();
-        if(!this.SelectedNodeId)
-        {
+        if (!this.SelectedNodeId) {
             return;
-        }       
+        }
 
         if (model.getNodeType(this.SelectedNodeId) !== Communicator.NodeType.BodyInstance) {
+
             // highlight corresponding component in model browser table
             this.ModelTree.HighlightModelBrowserRow(this.SelectedNodeId);
         }
@@ -174,24 +175,21 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
 
 SCManager.prototype.SelectValidNode = function () {
 
-    if (this.SelectedNodeId in this.SourceProperties)
-    {
+    if (this.SelectedNodeId in this.SourceProperties) {
         return;
     }
 
     var model = this.Webviewer.model;
-    while(this.SelectedNodeId)
-    {
-          this.SelectedNodeId = model.getNodeParent(this.SelectedNodeId);
+    while (this.SelectedNodeId) {
+        this.SelectedNodeId = model.getNodeParent(this.SelectedNodeId);
 
-          if(this.SelectedNodeId in this.SourceProperties)
-          {
-               // select this node
-               this.Webviewer.selectPart(this.SelectedNodeId);
+        if (this.SelectedNodeId in this.SourceProperties) {
+            // select this node
+            this.Webviewer.selectPart(this.SelectedNodeId);
 
-              break;
-          }
-    }    
+            break;
+        }
+    }
 }
 
 SCManager.prototype.CreateNodeIdArray = function (nodeId) {
@@ -304,7 +302,7 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
             if (_this.NodeIdArray.length == 0) {
                 _this.NodeIdArray = undefined;
 
-                _this.ModelTree.addModelBrowser( _this.SourceProperties);
+                _this.ModelTree.addModelBrowser(_this.SourceProperties);
                 // if (checkCaseSelected) {
                 //     checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
                 // }
@@ -331,23 +329,23 @@ SCManager.prototype.AddComponentsToDB = function () {
     var _this = this;
 
     var source = undefined;
-    if (this.Webviewer._params.containerId.toLowerCase() == "visualizerA") {
+    if (this.Webviewer._params.containerId.toLowerCase() == "visualizera") {
         source = "SourceA"
     }
-    else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerB") {
+    else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerb") {
         source = "SourceB"
     }
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     $.ajax({
-        data: { 
+        data: {
             'Components': JSON.stringify(this.SourceProperties),
-             'Source': source,
-             'DataSourceType': '3D',
-             'ProjectName': projectinfo.projectname,
-             'CheckName': checkinfo.checkname
-             },
+            'Source': source,
+            'DataSourceType': '3D',
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
         type: "POST",
         url: "PHP/AddComponentsToDB.php"
     }).done(function (msg) {
@@ -361,68 +359,71 @@ SCManager.prototype.AddComponentsToDB = function () {
     });
 }
 
+SCManager.prototype.ResizeViewer = function () {
+    this.Webviewer.resizeCanvas();
+}
 
-function XMLSourceManager(sourceType, viewerOptions) {
+function XMLSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 
 }
 // inherit from parent
 XMLSourceManager.prototype = Object.create(SCManager.prototype);
 XMLSourceManager.prototype.constructor = XMLSourceManager;
 
-function RVMSourceManager(sourceType, viewerOptions) {
+function RVMSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 RVMSourceManager.prototype = Object.create(SCManager.prototype);
 RVMSourceManager.prototype.constructor = RVMSourceManager;
 
-function SolidWorksSourceManager(sourceType, viewerOptions) {
+function SolidWorksSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 SolidWorksSourceManager.prototype = Object.create(SCManager.prototype);
 SolidWorksSourceManager.prototype.constructor = SolidWorksSourceManager;
 
 
-function DWGSourceManager(sourceType, viewerOptions) {
+function DWGSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 DWGSourceManager.prototype = Object.create(SCManager.prototype);
 DWGSourceManager.prototype.constructor = DWGSourceManager;
 
-function RVTSourceManager(sourceType, viewerOptions) {
+function RVTSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 RVTSourceManager.prototype = Object.create(SCManager.prototype);
 RVTSourceManager.prototype.constructor = RVTSourceManager;
 
-function IFCSourceManager(sourceType, viewerOptions) {
+function IFCSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 IFCSourceManager.prototype = Object.create(SCManager.prototype);
 IFCSourceManager.prototype.constructor = IFCSourceManager;
 
-function STEPSourceManager(sourceType, viewerOptions) {
+function STEPSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 STEPSourceManager.prototype = Object.create(SCManager.prototype);
 STEPSourceManager.prototype.constructor = STEPSourceManager;
 
-function IGSSourceManager(sourceType, viewerOptions) {
+function IGSSourceManager(sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceType, viewerOptions);
+    SCManager.call(this, sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 IGSSourceManager.prototype = Object.create(SCManager.prototype);

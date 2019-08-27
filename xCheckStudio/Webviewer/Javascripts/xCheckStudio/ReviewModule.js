@@ -87,7 +87,7 @@ function populateCheckResults(comparisonCheckGroups,
 
             var sourceAViewerOptions = undefined;
             var sourceAClassWiseComponents = undefined;
-            if (viewerOptions['SourceAContainerId'] === undefined ||
+            if (/*viewerOptions['SourceAContainerId'] === undefined ||*/
                 viewerOptions['SourceAEndPointUri'] === undefined) {
                 // this ajax call is synchronous
 
@@ -110,12 +110,12 @@ function populateCheckResults(comparisonCheckGroups,
                 });
             }
             else {
-                sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
+                sourceAViewerOptions = [/*viewerOptions['SourceAContainerId'],*/ viewerOptions['SourceAEndPointUri']];
             }
 
             var sourceBViewerOptions = undefined;
             var sourceBClassWiseComponents = undefined;
-            if (viewerOptions['SourceBContainerId'] === undefined ||
+            if (/*viewerOptions['SourceBContainerId'] === undefined ||*/
                 viewerOptions['SourceBEndPointUri'] === undefined) {
                 // this ajax call is synchronous
 
@@ -137,7 +137,7 @@ function populateCheckResults(comparisonCheckGroups,
                 });
             }
             else {
-                sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
+                sourceBViewerOptions = [/*viewerOptions['SourceBContainerId'],*/ viewerOptions['SourceBEndPointUri']];
             }
 
 

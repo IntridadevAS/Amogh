@@ -1,7 +1,8 @@
 var SourceManagers = {};
 
-function SourceManager(sourceType)
+function SourceManager(sourceName, sourceType)
 {
+    this.SourceName = sourceName;  
     this.SourceType = sourceType;  
     // this.IsFirstViewer = isFirstViewer;
     this.SourceProperties = {};
@@ -36,5 +37,9 @@ function SourceManager(sourceType)
     SourceManager.prototype.IsDBSource = function () {
         return false;
     }; 
+
+     // virtual function
+    SourceManager.prototype.ResizeViewer = function () {
+    }
 }
 

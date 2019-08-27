@@ -231,6 +231,26 @@ var xCheckStudio;
         }
         Util.isSourceDB = isSourceDB;
 
+        // this returns the element occurrence count in an array
+        function getArrayElementOccCount(arr) {
+
+            var arrayElementOccCount = {};
+            for (var i = 0; i < arr.length; i++) {
+                var element  = arr[i];
+                if(element in arrayElementOccCount)
+                {
+                    arrayElementOccCount[element] +=1;
+                }
+                else
+                {
+                    arrayElementOccCount[element] =1; 
+                }               
+            }
+
+            return arrayElementOccCount;
+        }
+        Util.getArrayElementOccCount = getArrayElementOccCount;
+
         function getCameraPlaneIntersectionPoint(camera, point, view) {
             var target = camera.getTarget();
             var normal = Communicator.Point3.subtract(camera.getPosition(), target).normalize();

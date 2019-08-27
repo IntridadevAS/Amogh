@@ -1,4 +1,5 @@
-function DBSourceManager(sourceType,
+function DBSourceManager(sourceName, 
+  sourceType,
   viewerContainer,
   modelBrowsercontainer) {
 
@@ -6,7 +7,7 @@ function DBSourceManager(sourceType,
   this.ViewerContainer = viewerContainer;
 
   // call super constructor
-  SourceManager.call(this, sourceType);
+  SourceManager.call(this,sourceName, sourceType);
 }
 
 // assign SourceManager's method to this class
@@ -69,10 +70,10 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
 DBSourceManager.prototype.AddComponentsToDB = function () {
 
   var source = undefined;
-  if (this.ViewerContainer.toLowerCase() == "visualizerA") {
+  if (this.ViewerContainer.toLowerCase() == "visualizera") {
     source = "SourceA"
   }
-  else if (this.ViewerContainer.toLowerCase() == "visualizerB") {
+  else if (this.ViewerContainer.toLowerCase() == "visualizerb") {
     source = "SourceB"
   }
   

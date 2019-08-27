@@ -69,7 +69,8 @@ let UploadManager = {
                         addedSource.visualizer.id,
                         addedSource.tableData.id,
                         formId).then(function () {
-
+                            // filter check case
+                            filterCheckCases(fileExtension);
                         });
                 }
                 else if (xCheckStudio.Util.isSourceDB(fileExtension)) {
@@ -78,7 +79,8 @@ let UploadManager = {
                         addedSource.id,
                         addedSource.visualizer.id,
                         addedSource.tableData.id).then(function () {
-
+                            // filter check case
+                            filterCheckCases(fileExtension);
                         });
                 }
             });
@@ -112,18 +114,20 @@ let UploadManager = {
             // xhr.send(formData);
         }
         else if (xCheckStudio.Util.isSource1D(fileExtension)) {
-            
-            if(xCheckStudio.Util.isSourceExcel(fileExtension))
-            {
+
+            if (xCheckStudio.Util.isSourceExcel(fileExtension)) {
                 LoadManager.loadExcelModel(fileExtension,
-                                    files,
-                                    addedSource.id,
-                                    addedSource.visualizer.id,
-                                    addedSource.tableData.id);
+                    files,
+                    addedSource.id,
+                    addedSource.visualizer.id,
+                    addedSource.tableData.id).then(function () {
+                        // filter check case
+                        filterCheckCases(fileExtension);
+                    });
             }
             // else if(xCheckStudio.Util.isSourceDB(fileExtension))
             // {
-                
+
             // }
         }
     },

@@ -192,7 +192,7 @@ ModelBrowserContextMenuManager.prototype.GetSelectedNodes = function () {
       for (var i = 0; i < browserSelectionManager.SelectedComponentRows.length; i++) {
 
             var selectedComponentRow = browserSelectionManager.SelectedComponentRows[i];
-            var nodeId = Number(selectedComponentRow.cells[modelBrowserNodeIdColumn].textContent.trim());
+            var nodeId = Number(selectedComponentRow.cells[ModelBrowserColumns3D.NodeId].textContent.trim());
 
             if (nodeId !== NaN) {
                   nodeIds.push(nodeId);

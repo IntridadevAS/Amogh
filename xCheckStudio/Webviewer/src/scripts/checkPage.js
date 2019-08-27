@@ -1,3 +1,5 @@
+var currentTabId;
+
 let model = {
   activeTabs: 0,
   selectedTab: [],
@@ -134,6 +136,9 @@ let viewTabs = {
     let tabID = selectedTab.dataset.id; //get relevant ID from data-id in tab element
     this.unselectAllTabs();
     selectedTab.classList.add("selectedTab");
+
+    // maintain currently active tab
+    currentTabId = tabID;
   },
 
   unselectAllTabs: function(){
@@ -172,23 +177,28 @@ let viewPanels = {
     this.addFilesPanel.classList.add("hide");
   },
 
-  hideAllPanels: function(){
-    for (panel of this.panels){
+  hideAllPanels: function () {
+    for (panel of this.panels) {
       panel.classList.add("hide");
     }
   },
 
-  showPanel: function(view){
+  showPanel: function (view) {
     this.hideAllPanels();
     view.classList.remove("hide");
   },
 
-  maxMin: function(selected){
+  maxMin: function (selected) {
     let parent = selected.parentNode;
-    if (parent.classList.contains("maximize")){
+    if (parent.classList.contains("maximize")) {
       parent.classList.remove("maximize");
     } else {
       parent.classList.add("maximize");
+    }
+
+    // resize canvas
+    if (currentTabId in SourceManagers) {
+      SourceManagers[currentTabId].ResizeViewer();
     }
   }
 }
@@ -196,14 +206,18 @@ let viewPanels = {
 controller.init();
 
 // Setup for grab bar controls
-let grabBarControl = function(element){
+let grabBarControl = function (element) {
   var m_pos;
-  function resize(event){
+  function resize(event) {
     var previous = element.previousElementSibling;
     var dx = m_pos - event.x;
     m_pos = event.x;
     previous.style.width = previous.offsetWidth - dx + "px";
 
+    // resize canvas
+    if (currentTabId in SourceManagers) {
+      SourceManagers[currentTabId].ResizeViewer();
+    }
   }
 
   element.addEventListener("mousedown", function(event){

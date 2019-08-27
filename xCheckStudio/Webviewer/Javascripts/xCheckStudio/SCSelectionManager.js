@@ -19,7 +19,6 @@ function SCSelectionManager(nodeIdvsSelectedComponents) {
         }
     }   
 }
-
 // assign SelectionManager's method to this class
 SCSelectionManager.prototype = Object.create(SelectionManager.prototype);
 SCSelectionManager.prototype.constructor = SCSelectionManager;
@@ -27,32 +26,40 @@ SCSelectionManager.prototype.constructor = SCSelectionManager;
 /* 
    This function is called when checkbox from the model browser table is checked or unchecked
 */
-SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBox) {
+SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow, 
+                                                                  checkBoxState, 
+                                                                  componentData,
+                                                                  containerDiv) {
 
-    var currentCell = currentCheckBox.parentElement;
-    if (currentCell.tagName.toLowerCase() !== 'td') {
-        return;
-    }
+    // var currentCell = currentCheckBox.parentElement;
+    // if (currentCell.tagName.toLowerCase() !== 'td') {
+    //     return;
+    // }
 
-    var currentRow = currentCell.parentElement;
-    if (currentRow.tagName.toLowerCase() !== 'tr' ||
-        currentRow.cells.length < 2) {
-        return;
-    }
+    // var currentRow = currentCell.parentElement;
+    // if (currentRow.tagName.toLowerCase() !== 'tr' ||
+    //     currentRow.cells.length < 2) {
+    //     return;
+    // }
 
     // maintain track of selected/deselected components
-    if (currentCheckBox.checked &&
-        !this.SelectedCompoentExists(currentRow)) {
+    if (checkBoxState === "on" &&
+         !this.SelectedCompoentExists(componentData)) {
 
         var checkedComponent = {};
-        checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
-        checkedComponent['MainComponentClass'] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
-        checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
-        checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
+        // checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
+        // checkedComponent['MainComponentClass'] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
+        // checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
+        // checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
+
+        checkedComponent['Name'] = componentData.component;
+        checkedComponent['MainComponentClass'] = componentData.mainClass;
+        checkedComponent['ComponentClass'] = componentData.subClass;
+        checkedComponent['NodeId'] = componentData.nodeId;
 
         this.SelectedCompoents.push(checkedComponent);
 
-         // highlight selected row
+         // highlight selected row         
          this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
@@ -60,11 +67,11 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBo
             this.SelectedComponentRows.push(currentRow);
         }
     }
-    else if (this.SelectedCompoentExists(currentRow)) {
-        this.RemoveFromselectedCompoents(currentRow);
+    else if (this.SelectedCompoentExists(componentData)) {
+        this.RemoveFromselectedCompoents(componentData);
 
-        // restore color
-        this.RemoveHighlightColor(currentRow);
+        // restore color        
+         this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
         if (this.SelectedComponentRows.includes(currentRow)) {
@@ -74,107 +81,138 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBo
             }
         }
     }
-
-    var currentTable = currentRow.parentElement;
-    if (currentTable.tagName.toLowerCase() !== 'tbody') {
+   
+    if(!componentData.children ||
+        componentData.children.length === 0)
+    {
         return;
     }
 
-    var currentComponentCell = currentRow.cells[1];
+    // expand current row
+    $(containerDiv).igTreeGrid( "expandRow", componentData.nodeId, function(){
+        
+    });
 
-    var currentClassList = currentRow.classList;
-    var styleToCheck = "";
-    for (var i = 0; i < currentClassList.length; i++) {
-        var styleClass = currentClassList[i];
-        if (styleClass.includes("jsgrid")) {
-            continue;
-        }
+    // traverse children
+    for(var i = 0; i < componentData.children.length; i++)
+    {
+        var childComponent = componentData.children[i];      
+        
 
-        if (styleToCheck == "") {
-            styleToCheck = styleClass;
-        }
-        else {
-            styleToCheck += " " + styleClass;
-        }
-    }
+        var childRow = $(containerDiv).igTreeGrid( "rowById", childComponent.nodeId);
 
-    var currentRowClassList = currentComponentCell.classList;
-    var hasChild = false;
-    for (var i = 0; i < currentRowClassList.length; i++) {
-        var styleClass = currentRowClassList[i];
-        if (styleClass.includes("jsgrid")) {
-            continue;
-        }
-
-        hasChild = true;
-        if (styleToCheck == "") {
-            styleToCheck = styleClass;
+        if (checkBoxState === "on") {
+            $(containerDiv).igTreeGridSelection("selectRowById", childComponent.nodeId);
         }
         else {
-            styleToCheck += " " + styleClass;
+            $(containerDiv).igTreeGridSelection("deselectRowById", childComponent.nodeId);
         }
+
+        this.HandleSelectFormCheckBox(childRow[0], checkBoxState, childComponent, containerDiv);
     }
 
-    // select the child component rows
-    if (hasChild) {
-        for (var i = 0; i < currentTable.rows.length; i++) {
+   
+    // /////////////
+    // var currentTable = currentRow.parentElement;
+    // if (currentTable.tagName.toLowerCase() !== 'tbody') {
+    //     return;
+    // }
 
-            var row = currentTable.rows[i];
-            if (row === currentRow) {
-                continue;
-            }
+    // var currentComponentCell = currentRow.cells[1];
 
-            var rowClassList = row.classList;
-            var rowStyleCheck = "";
-            for (var j = 0; j < rowClassList.length; j++) {
-                var styleClass = rowClassList[j];
-                if (styleClass.includes("jsgrid")) {
-                    continue;
-                }
+    // var currentClassList = currentRow.classList;
+    // var styleToCheck = "";
+    // for (var i = 0; i < currentClassList.length; i++) {
+    //     var styleClass = currentClassList[i];
+    //     if (styleClass.includes("jsgrid")) {
+    //         continue;
+    //     }
 
-                if (rowStyleCheck == "") {
-                    rowStyleCheck = styleClass;
-                }
-                else {
-                    rowStyleCheck += " " + styleClass;
-                }
-            }
+    //     if (styleToCheck == "") {
+    //         styleToCheck = styleClass;
+    //     }
+    //     else {
+    //         styleToCheck += " " + styleClass;
+    //     }
+    // }
 
-            // if (row.className === styleToCheck) {
-            if (rowStyleCheck === styleToCheck) {
+    // var currentRowClassList = currentComponentCell.classList;
+    // var hasChild = false;
+    // for (var i = 0; i < currentRowClassList.length; i++) {
+    //     var styleClass = currentRowClassList[i];
+    //     if (styleClass.includes("jsgrid")) {
+    //         continue;
+    //     }
 
-                var checkBox = row.cells[0].children[0];
-                if (checkBox.checked === currentCheckBox.checked) {
-                    continue;
-                }
+    //     hasChild = true;
+    //     if (styleToCheck == "") {
+    //         styleToCheck = styleClass;
+    //     }
+    //     else {
+    //         styleToCheck += " " + styleClass;
+    //     }
+    // }
 
-                checkBox.checked = currentCheckBox.checked;
-                this.HandleSelectFormCheckBox(checkBox);
+    // // select the child component rows
+    // if (hasChild) {
+    //     for (var i = 0; i < currentTable.rows.length; i++) {
 
-                if (checkBox.checked) {
-                    // highlight selected row
-                    this.ApplyHighlightColor(row);
-                }
-                else {
-                    // unhighlight selected row
-                    this.RemoveHighlightColor(row);
-                }
-            }
-        }
-    }
+    //         var row = currentTable.rows[i];
+    //         if (row === currentRow) {
+    //             continue;
+    //         }
+
+    //         var rowClassList = row.classList;
+    //         var rowStyleCheck = "";
+    //         for (var j = 0; j < rowClassList.length; j++) {
+    //             var styleClass = rowClassList[j];
+    //             if (styleClass.includes("jsgrid")) {
+    //                 continue;
+    //             }
+
+    //             if (rowStyleCheck == "") {
+    //                 rowStyleCheck = styleClass;
+    //             }
+    //             else {
+    //                 rowStyleCheck += " " + styleClass;
+    //             }
+    //         }
+
+    //         // if (row.className === styleToCheck) {
+    //         if (rowStyleCheck === styleToCheck) {
+
+    //             var checkBox = row.cells[0].children[0];
+    //             if (checkBox.checked === currentCheckBox.checked) {
+    //                 continue;
+    //             }
+
+    //             checkBox.checked = currentCheckBox.checked;
+    //             this.HandleSelectFormCheckBox(checkBox);
+
+    //             if (checkBox.checked) {
+    //                 // highlight selected row
+    //                 this.ApplyHighlightColor(row);
+    //             }
+    //             else {
+    //                 // unhighlight selected row
+    //                 this.RemoveHighlightColor(row);
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 /* 
    This function checks if component corresponding to input row in model browser is selected or not
 */
-SCSelectionManager.prototype.SelectedCompoentExists = function (componentRow) {
+SCSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-            component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-            component['ComponentClass'] === componentRow.cells[3].textContent.trim()) {
+        if (component['Name'] === componentData.component &&
+            component['MainComponentClass'] === componentData.mainClass &&
+            component['ComponentClass'] === componentData.subClass) {
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
+                if (component["NodeId"] === componentData.nodeId) {
                     return true;
                 }
             }
@@ -190,15 +228,15 @@ SCSelectionManager.prototype.SelectedCompoentExists = function (componentRow) {
 /* 
    This function removes selected component from selected components list
 */
-SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentRow) {
+SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-            component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-            component['ComponentClass'] === componentRow.cells[3].textContent.trim()) {
+        if (component['Name'] === componentData.component &&
+            component['MainComponentClass'] === componentData.mainClass &&
+            component['ComponentClass'] === componentData.subClass) {
 
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentRow.cells[4].textContent.trim()) {
+                if (component["NodeId"] === componentData.nodeId) {
                     this.SelectedCompoents.splice(i, 1);
                 }
             }
@@ -209,7 +247,7 @@ SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentRo
             // this.selectedCompoents.splice(i, 1);
             break;
         }
-    }
+    }  
 }
 
 /* 
@@ -236,8 +274,7 @@ SCSelectionManager.prototype.ClearSelectedComponent = function () {
 /* 
    This function 
 */
-SCSelectionManager.prototype.HandleRowSelect = function (row, viewer) {
-    //var row = args.event.currentTarget;
+SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId) {
 
     // check if row is already highlighted
     if (this.HighlightedComponentRow === row) {
@@ -251,42 +288,46 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer) {
     }
 
     // highlight new row  
-    if(!this.SelectedComponentRows.includes(row))  
-    {
-        this.ApplyHighlightColor(row);
+    if (!this.SelectedComponentRows.includes(row)) {
+        this.ApplyHighlightColor(row);        
     }
     this.HighlightedComponentRow = row;
-
-
-    if (viewer) {
-        var nodeId = row.cells[modelBrowserNodeIdColumn].innerText
-        if (nodeId !== undefined) {
-            this.BrowserItemClick(nodeId, viewer);
-        }
+     
+    if (viewer && nodeId) {
+        // var nodeId = row.cells[ModelBrowserColumns3D.NodeId].innerText
+        // if (nodeId !== undefined) {
+        this.BrowserItemClick(nodeId);
+        // }
     }
 }
 
 /* 
    This function 
 */
-SCSelectionManager.prototype.BrowserItemClick = function (nodeId, viewer) {
-    if (!viewer) {
+SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
+    
+    if(!(currentTabId in SourceManagers))
+    {
         return;
     }
+    var sourceManager = SourceManagers[currentTabId];
 
     var nodeID = parseInt(nodeId)
     if (isNaN(nodeID)) {
         return;
-    }
-
+    }   
+   
     // keep track of graphically selected node
-    if (viewer._params.containerId === "visualizerA") {
-        sourceManager1.SelectedNodeId = nodeID;
-    }
-    else if (viewer._params.containerId === "visualizerB") {
-        sourceManager2.SelectedNodeId = nodeID;
-    }
+    sourceManager.SelectedNodeId = nodeID;
+    sourceManager.Webviewer.selectPart(nodeID);
+    sourceManager.Webviewer.view.fitNodes([nodeID]);
+    // if (viewer._params.containerId === "visualizerA") {
+    //     sourceManager1.SelectedNodeId = nodeID;
+    // }
+    // else if (viewer._params.containerId === "visualizerB") {
+    //     sourceManager2.SelectedNodeId = nodeID;
+    // }
 
-    viewer.selectPart(nodeID);
-    viewer.view.fitNodes([nodeID]);
+    // viewer.selectPart(nodeID);
+    // viewer.view.fitNodes([nodeID]);
 };

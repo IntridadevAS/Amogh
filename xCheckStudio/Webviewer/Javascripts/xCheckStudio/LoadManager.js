@@ -38,16 +38,15 @@ let LoadManager = {
 
                             var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
                             // if (viewerContainer === "viewerContainer1") {
-                            var sourceManager = createSourceManager(fileExtension,
+                            var sourceManager = createSourceManager(fileName,
+                                fileExtension,
                                 viewerContainer,
                                 modelTreeContainer,
                                 uri);
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData().then(function (result) {
-
-                            });
-
-                            return resolve(true);
+                                return resolve(true);
+                            });                            
                         }
                         else {
                             if (formId) {
@@ -69,7 +68,7 @@ let LoadManager = {
 
             });
 
-            return resolve(true);
+            //return resolve(true);
         });
     },
 
@@ -78,97 +77,98 @@ let LoadManager = {
         sourceId,
         viewerContainer,
         modelTreeContainer) {
+        return new Promise((resolve) => {
+            // var fileExtensionA;
+            // var fileExtensionB;
 
-        // var fileExtensionA;
-        // var fileExtensionB;
+            // fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
+            // if (sourceBFileName !== undefined) {
+            //     fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
+            // }
 
-        // fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-        // if (sourceBFileName !== undefined) {
-        //     fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-        // }
+            // if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
+            //     var sourceAType;
+            //     var sourceBType;
+            //     for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
+            //         var checkType = checkCaseManager.CheckCase.CheckTypes[i];
+            //         if (checkType.Name.toLowerCase() === "comparison") {
+            //             sourceAType = checkType.SourceAType;
+            //             sourceBType = checkType.SourceBType;
+            //             break;
+            //         }
+            //         else if (checkType.Name.toLowerCase() === "compliance") {
+            //             sourceAType = checkType.SourceAType;
+            //             break;
+            //         }
+            //     }
 
-        // if (checkCaseManager && checkCaseManager.CheckCase && checkCaseSelected) {
-        //     var sourceAType;
-        //     var sourceBType;
-        //     for (var i = 0; i < checkCaseManager.CheckCase.CheckTypes.length; i++) {
-        //         var checkType = checkCaseManager.CheckCase.CheckTypes[i];
-        //         if (checkType.Name.toLowerCase() === "comparison") {
-        //             sourceAType = checkType.SourceAType;
-        //             sourceBType = checkType.SourceBType;
-        //             break;
-        //         }
-        //         else if (checkType.Name.toLowerCase() === "compliance") {
-        //             sourceAType = checkType.SourceAType;
-        //             break;
-        //         }
-        //     }
+            //     if (viewerContainer === "viewerContainer1") {
+            //         if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+            //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+            //                 sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
+            //                 alert("Data source type doesn't match with check case.");
+            //                 return false;
+            //             }
+            //         }
+            //         else {
+            //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+            //                 alert("Data source type doesn't match with check case.");
+            //                 return false;
+            //             }
+            //         }
 
-        //     if (viewerContainer === "viewerContainer1") {
-        //         if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-        //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-        //                 sourceBType.toLowerCase() !== fileExtension.toLowerCase()) {
-        //                 alert("Data source type doesn't match with check case.");
-        //                 return false;
-        //             }
-        //         }
-        //         else {
-        //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-        //                 alert("Data source type doesn't match with check case.");
-        //                 return false;
-        //             }
-        //         }
+            //     }
+            //     else if (viewerContainer === "viewerContainer2") {
+            //         if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
+            //             if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
+            //                 sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
+            //                 alert("Data source type doesn't match with check case.");
+            //                 return false;
+            //             }
+            //             else if (fileExtensionA == fileExtensionB && sourceAType !== sourceBType) {
+            //                 if (sourceAType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionA.toLowerCase()) {
+            //                     alert("Data source type doesn't match with check case.");
+            //                     return false;
+            //                 }
+            //                 else if (sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
+            //                     alert("Data source type doesn't match with check case.");
+            //                     return false;
+            //                 }
+            //             }
+            //             else if (sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
+            //                 alert("Data source type doesn't match with check case.");
+            //                 return false;
+            //             }
+            //         }
+            //         else {
+            //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
+            //                 alert("Data source type doesn't match with check case.");
+            //                 return false;
+            //             }
+            //         }
+            //     }
+            // }
+            // else if (checkCaseManager && !checkCaseSelected) {
+            //     getCheckCase(fileExtension, viewerContainer);
 
-        //     }
-        //     else if (viewerContainer === "viewerContainer2") {
-        //         if (checkType.Name.toLowerCase() === "comparison" && (sourceAType || sourceBType)) {
-        //             if ((sourceAType.toLowerCase() !== sourceBType.toLowerCase()) && (sourceAType.toLowerCase() !== fileExtension.toLowerCase() &&
-        //                 sourceBType.toLowerCase() !== fileExtension.toLowerCase())) {
-        //                 alert("Data source type doesn't match with check case.");
-        //                 return false;
-        //             }
-        //             else if (fileExtensionA == fileExtensionB && sourceAType !== sourceBType) {
-        //                 if (sourceAType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionA.toLowerCase()) {
-        //                     alert("Data source type doesn't match with check case.");
-        //                     return false;
-        //                 }
-        //                 else if (sourceBType.toLowerCase() == fileExtensionA.toLowerCase() && fileExtension == fileExtensionB.toLowerCase()) {
-        //                     alert("Data source type doesn't match with check case.");
-        //                     return false;
-        //                 }
-        //             }
-        //             else if (sourceAType == sourceBType && fileExtensionA !== fileExtensionB) {
-        //                 alert("Data source type doesn't match with check case.");
-        //                 return false;
-        //             }
-        //         }
-        //         else {
-        //             if (sourceAType.toLowerCase() !== fileExtension.toLowerCase()) {
-        //                 alert("Data source type doesn't match with check case.");
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        // }
-        // else if (checkCaseManager && !checkCaseSelected) {
-        //     getCheckCase(fileExtension, viewerContainer);
+            // }   
 
-        // }   
+            // read and load data
+            var file = files[0];
+            let fileName = file.name;
+            var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-        // read and load data
-        var file = files[0];
-        let fileName = file.name;
-        var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
+            var sourceManager = createSourceManager(fileName, fileExtension, viewerContainer, modelTreeContainer);
+            SourceManagers[sourceId] = sourceManager;
+            sourceManager.LoadData(file).then(function (result) {
+                return resolve(true);
+            });
 
-        var sourceManager = createSourceManager(fileExtension, viewerContainer, modelTreeContainer);
-        SourceManagers[sourceId] = sourceManager;
-        sourceManager.LoadData(file).then(function (result) {
-
+            // readExcelDataSource(file[0],
+            //                     viewerContainer,
+            //                     modelTreeContainer);
+            //return true;
         });
-
-        // readExcelDataSource(file[0],
-        //                     viewerContainer,
-        //                     modelTreeContainer);
-        return true;
     },
 
     loadDBModel: function (fileExtension,
@@ -278,7 +278,7 @@ let LoadManager = {
                        
                         if (success) {
                             
-                            var sourceManager = createSourceManager(fileExtension, viewerContainer, modelTreeContainer);
+                            var sourceManager = createSourceManager(fileName, fileExtension, viewerContainer, modelTreeContainer);
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData(uri).then(function (result) {
                           

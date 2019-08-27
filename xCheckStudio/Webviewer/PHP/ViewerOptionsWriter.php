@@ -37,13 +37,12 @@
             $dbh->exec($command);
 
             $command = 'CREATE TABLE '.$viewerOptionsTable.'(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
-                        containerId TEXT,
+                        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                                        
                         endpointUri TEXT)';            
             $dbh->exec($command);  
 
-            $insertQuery = 'INSERT INTO '.$viewerOptionsTable.'(containerId, endpointUri) VALUES(?,?) ';                                        
-            $values = array( $viewerOptions[0],  $viewerOptions[1]);          
+            $insertQuery = 'INSERT INTO '.$viewerOptionsTable.'(endpointUri) VALUES(?) ';                                        
+            $values = array(  $viewerOptions[0]);          
          
             $insertStmt = $dbh->prepare($insertQuery);           
             $insertStmt->execute($values);  
