@@ -889,11 +889,11 @@ let deleteItems = {
     let message = document.getElementById("deleteMsg");
     let cancel = document.getElementById("deleteCancel");
     let delType = document.getElementById("deleteType");
-    this.deleteBox.classList.add("deleteOpen");
+    this.deleteBox.classList.add("deleteOpen");    
 
     let deleteBtn = document.getElementById("deleteBtn");
-    this.id = id;
-    this.type = type;
+    deleteBtn.elementid = id;
+    deleteBtn.itemtype = type;
 
     delType.innerHTML = this.type;
 
@@ -914,15 +914,15 @@ let deleteItems = {
     } else if (type == "review") {
       message.innerHTML = "Review?";
     }
-    this.deleteItem();
+    //this.deleteItem();
   },
 
   deleteItem: function () {
-    if (this.type == "project") {
-      controller.deleteProject(this.id);
+    if (this.itemtype == "project") {
+      controller.deleteProject(this.elementid);
       deleteItems.closeDeleteItems();
-    } else if (this.type == "check") {
-      controller.deleteCheck(this.id);
+    } else if (this.itemtype == "check") {
+      controller.deleteCheck(this.elementid);
       deleteItems.closeDeleteItems();
     }
   },
