@@ -24,7 +24,7 @@
     <div id="background" class="background">
       <p class="splashtext" id="username">Hi</p>
     </div>
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+    <script src="Javascripts/jquery/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="src/scripts/launchPage.js"></script>
     <script>
       window.onload = function () {
@@ -37,8 +37,7 @@
         }, 2000);
     }
     function newPage(){
-      window.location.replace("landingpage.html");
-        //window.location.href = "landingpage.html";
+      window.location.replace("landingpage.html"); // used replace here as we don't want splashscreen page when user hits browser back button
     }
   </script>
   </body>
