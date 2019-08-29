@@ -234,3 +234,35 @@ let grabBars = document.getElementsByClassName("grabBar");
 for (grabBar of grabBars){
   grabBarControl(grabBar);
 }
+
+function cancelReturnHome()
+{
+    var overlay = document.getElementById("returnHomeOverlay");
+    var popup = document.getElementById("returnHomePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+function returnHome()
+{
+    window.location = "landingPage.html";
+}
+function onHomeClick() {
+
+    var overlay = document.getElementById("returnHomeOverlay");
+    var popup = document.getElementById("returnHomePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width ="581px";
+    popup.style.height ="155px";
+    popup.style.overflow = "hidden";
+    //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
+
+    // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+    //     window.location = "landingPage.html";
+    //   }
+}
+
+

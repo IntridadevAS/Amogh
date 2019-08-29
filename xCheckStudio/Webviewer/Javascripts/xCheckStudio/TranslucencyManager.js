@@ -223,40 +223,40 @@ function TranslucencyManager(viewers,
 
 
 
-// function startTranslucency() {
-//     if (!currentViewer ||
-//         !activateTranslucencyInCurrentViewer()) {
-//         alert("Can't activate translucency.");
-//         return;
-//     }
+function startTranslucency() {
+    if (!currentViewer ||
+        !activateTranslucencyInCurrentViewer()) {
+        alert("Can't activate translucency.");
+        return;
+    }
 
-//     if (explodeActive()) {
-//         alert("Please stop explode before activating translucency.");
-//         return;
-//     }
+    if (explodeActive()) {
+        alert("Please stop explode before activating translucency.");
+        return;
+    }
 
-//     // get slider id
-//     var sliderId = getSliderId(currentViewer._params.containerId);
-//     if (!sliderId) {
-//         return;
-//     }
+    // get slider id
+    var sliderId = getSliderId(currentViewer._params.containerId);
+    if (!sliderId) {
+        return;
+    }
 
-//     var translucencyManager = new TranslucencyManager([currentViewer], undefined, sliderId);
-//     translucencyManager.Start();
+    var translucencyManager = new TranslucencyManager([currentViewer], undefined, sliderId);
+    translucencyManager.Start();
 
-//     translucencyManagers[currentViewer._params.containerId] = translucencyManager;
-// }
+    translucencyManagers[currentViewer._params.containerId] = translucencyManager;
+}
 
-// function stopTranslucency() {
+function stopTranslucency() {
 
-//     if (!currentViewer ||
-//         !(currentViewer._params.containerId in translucencyManagers)) {
-//         return;
-//     }
+    if (!currentViewer ||
+        !(currentViewer._params.containerId in translucencyManagers)) {
+        return;
+    }
 
-//     translucencyManagers[currentViewer._params.containerId].Stop();
-//     delete translucencyManagers[currentViewer._params.containerId];
-// }
+    translucencyManagers[currentViewer._params.containerId].Stop();
+    delete translucencyManagers[currentViewer._params.containerId];
+}
 
 function translucencyActive() {
     if (Object.keys(translucencyManagers).length > 0) {

@@ -30,14 +30,15 @@
       window.onload = function () {
         var userinfo = JSON.parse(localStorage.getItem('userinfo'));
         var str1 = "Hi ";
-        var str2 = userinfo.username;;
+        var str2 = userinfo.alias;;
         document.getElementById("username").innerHTML = str1.concat(str2);
         setTimeout(function () {
-          $('body').fadeOut(1000,newPage);// will be executed after the specified time
+          //$('body').fadeOut(1000,newPage);// will be executed after the specified time
+          newPage();
         }, 2000);
     }
-    function newPage(){
-      window.location.replace("landingpage.html"); // used replace here as we don't want splashscreen page when user hits browser back button
+    function newPage(){      
+       window.location.replace("landingpage.html"); // used replace here as we don't want splashscreen page when user hits browser back button
     }
   </script>
   </body>

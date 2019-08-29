@@ -25,7 +25,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 
     $("#ComparisonMainReviewTbody").contextMenu({
         className: 'contextMenu_style',
-        selector: '.jsgrid-row, .jsgrid-alt-row',
+        selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -141,7 +141,7 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
     var _this = this;
     $("#ComparisonDetailedReviewTbody").contextMenu({
         className: 'contextMenu_style',
-        selector: '.jsgrid-row, .jsgrid-alt-row',
+        selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;

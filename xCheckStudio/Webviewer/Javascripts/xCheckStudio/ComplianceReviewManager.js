@@ -68,7 +68,7 @@ ComplianceReviewManager.prototype.loadDatasource = function () {
 
         this.ReviewModuleViewerInterface.setupViewer(550, 300);
 
-        var viewerContainer = document.getElementById(this.ViewerData[0]);
+        var viewerContainer = document.getElementById(containerId);
         viewerContainer.style.height = "405px";
         viewerContainer.style.top = "70px";
     }

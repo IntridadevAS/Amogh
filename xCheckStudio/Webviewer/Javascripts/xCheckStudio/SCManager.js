@@ -16,6 +16,8 @@ function SCManager(sourceName,
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
     this.NodeIdvsComponentIdList = {};
+
+    this.CheckViewerContextMenu;
 }
 
 // inherit from parent
@@ -87,8 +89,8 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 // }
 
                 //activate context menu
-                var checkViewerContextMenu = new CheckViewerContextMenu(viewer);
-                checkViewerContextMenu.Init();
+                _this.CheckViewerContextMenu = new CheckViewerContextMenu(viewer);
+                _this.CheckViewerContextMenu.Init();
 
                 return resolve(true);
 

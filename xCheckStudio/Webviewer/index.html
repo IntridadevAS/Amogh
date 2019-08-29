@@ -1,73 +1,96 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Check Studio</title>
-    <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/launchPage.css">
-    <link rel="stylesheet" href="src/css/fonts.css">
-  </head>
-  <body>
-    <header>
-      <button type="button" class="dropDownMenu" >
-      </button>
-      <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
-      <div class="userInfo">
-        <div class="programCntrls">
-          <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
-          <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
-          <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program"></button>
-        </div>
-      </div>
-    </header>
-    <div id="background" class="background">
-      <form class="langSelect" action="index.html" method="post">
-        <label for="language">Language:</label>
-        <!-- All languages to be present in options. "Selected" value for language picked when installed -->
-        <!-- Will self-post after being changed -->
-        <select name="language" onchange="this.form.submit();">
-          <option value="english" selected>{{English}}</option>
-          <option value="chinese">{{Chinese}}</option>
-          <option value="german">{{German}}</option>
-        </select>
-      </form>
-      <div id="loginInfo" class="loginInfo">
-        <form class="loginForm" action="index.html" method="post">
-          <input type="text" name="userName" value="" placeholder="USERNAME" id="usernametext">
-          <input type="password" name="password" value="" placeholder="PASSWORD" id="passwordtext">
-          <!-- Error message - only display when returned with an error -->
-          <div class="errorMsgContainer" id="errorMsgContainer">
-            <!--Error Type  -->
-            <p>Incorrect Username or password</p><hr>
-            <!--Error further information  -->
-            <p>For assistance with user name or password reset contact your administrator</p>
-          </div>
-          <button type="button" class="submitBtn" name="login" id="submitBtn" onclick="OnSubmitButtonClicked()">ENTER</button>
-        </form>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check Studio</title>
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/launchPage.css">
+  <link rel="stylesheet" href="src/css/fonts.css">
+</head>
+
+<body>
+  <header>
+    <button type="button" class="dropDownMenu">
+    </button>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
+    <div class="userInfo">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program"></button>
       </div>
     </div>
-    <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
-    <script type="text/javascript" src="src/scripts/launchPage.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
-    <script>
-      function OnSubmitButtonClicked(){;
-        validateLogindetails("LoginStatus"); //call the aysnchronous function with callback function name as argument -- Rahul K
-      }
-      function LoginStatus(value)
-      {
-        if(value === 1)
-        {
-          document.getElementById("errorMsgContainer").style.display="block";
-        }
-        else{
-          $('body').fadeOut(900,newPage);
-        }
-      }
+  </header>
+  <div id="background" class="background">
+    <form class="langSelect" action="index.html" method="post">
+      <label for="language">Language:</label>
+      <!-- All languages to be present in options. "Selected" value for language picked when installed -->
+      <!-- Will self-post after being changed -->
+      <select name="language" onchange="this.form.submit();">
+        <option value="english" selected>{{English}}</option>
+        <option value="chinese">{{Chinese}}</option>
+        <option value="german">{{German}}</option>
+      </select>
+    </form>
+    <div id="loginInfo" class="loginInfo">
+      <form class="loginForm" action="index.html" method="post">
+        <input type="text" name="userName" value="" placeholder="USERNAME" id="usernametext">
+        <input type="password" name="password" value="" placeholder="PASSWORD" id="passwordtext">
+        <!-- Error message - only display when returned with an error -->
+        <div class="errorMsgContainer" id="errorMsgContainer">
+          <!--Error Type  -->
+          <p>Incorrect Username or password</p>
+          <hr>
+          <!--Error further information  -->
+          <p>For assistance with user name or password reset contact your administrator</p>
+        </div>
+        <button type="button" class="submitBtn" name="login" id="submitBtn"
+          onclick="OnSubmitButtonClicked()">ENTER</button>
+      </form>
+    </div>
+    <div id="userNameDiv" class="background" style="display: none">
+      <p class="splashtext" id="username"></p>
+    </div>
 
-      function newPage(){
-        window.location.href = "splashscreen.html";
+  </div>
+  <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+  <script type="text/javascript" src="src/scripts/launchPage.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
+  <script>
+    function OnSubmitButtonClicked() {
+      ;
+      validateLogindetails("LoginStatus"); //call the aysnchronous function with callback function name as argument -- Rahul K
+    }
+    function LoginStatus(value) {
+      if (value === 1) {
+        document.getElementById("errorMsgContainer").style.display = "block";
       }
+      else {
+        //$('body').fadeOut(900,newPage);
+        newPage();
+      }
+    }
+
+    function newPage() {
+
+      document.getElementById("loginInfo").style.display = "none";
+      document.getElementById("userNameDiv").style.display = "block";      
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      var str1 = "Hi ";
+      var str2 = userinfo.alias;;
+      document.getElementById("username").innerHTML = str1.concat(str2);
+      setTimeout(function () {
+        //$('body').fadeOut(1000,newPage);// will be executed after the specified time
+        window.location.href = "landingpage.html";
+        newPage();
+      }, 2000);
+
+      //window.location.href = "splashscreen.html";
+    }
   </script>
-  </body>
+</body>
+
 </html>
