@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>new large analytics dashboard</title>
+<link rel="stylesheet" type="text/css" id="applicationStylesheet" href="CSS/analyticsFullModule.css"/>
+<script id="applicationScript">
+///////////////////////////////////////
+// INITIALIZATION
+///////////////////////////////////////
+
+/**
+ * Functionality for scaling, showing by media query, and navigation between multiple pages on a single page. 
+ * Code subject to change.
+ **/
+
+if (window.console==null) { window["console"] = { log : function() {} } }; // some browsers do not set
+
+var Application = function() {
+	// event constants
+	this.NAVIGATION_CHANGE = "viewChange";
+	this.VIEW_NOT_FOUND = "viewNotFound";
+	this.STATE_NOT_FOUND = "stateNotFound";
+	this.APPLICATION_COMPLETE = "applicationComplete";
+	this.SIZE_STATE_NAME = "data-is-view-scaled";
+
+	this.currentQuery = {index: 0, rule: null, mediaText: null, id: null};
+	this.inclusionQuery = "(min-width: 0px)";
+	this.exclusionQuery = "none and (min-width: 99999px)";
+	this.LastModifiedDateLabelName = "LastModifiedDateLabel";
+	this.viewScaleSliderId = "ViewScaleSliderInput";
+	this.pageRefreshedName = "showPageRefreshedNotification";
+	this.prefix = "--web-";
+	this.applicationStylesheet = null;
+	this.mediaQueryDictionary = {};
+	this.statesDictionary = {};
+	this.states = [];
+	this.views = {};
+	this.viewIds = [];
+	this.viewQueries = {};
+	this.numberOfViews = 0;
+	this.verticalPadding = 0;
+	this.horizontalPadding = 0;
+	this.stateName = null;
+	this.viewScale = 1;
+	this.viewLeft = 0;
+	this.viewTop = 0;
+
+	// view settings
+	this.showUpdateNotification = false;
+	this.showNavigationControls = false;
+	this.scaleViewsToFit = false;
+	this.scaleToFitOnDoubleClick = false;
+	this.actualSizeOnDoubleClick = false;
+	this.scaleViewsOnResize = false;
+	this.navigationOnKeypress = false;
+	this.showViewName = false;
+	this.enableDeepLinking = true;
+	this.refreshPageForChanges = false;
+	this.showRefreshNotifications = true;
+
+	// view controls
+	this.scaleViewSlider = null;
+	this.lastModifiedLabel = null;
+	this.supportsPopState = false; // window.history.pushState!=null;
+	this.initialized = false;
+
+	// refresh properties
+	this.refreshDuration = 250; // 2000;
+	this.lastModifiedDate = null;
+	this.refreshRequest = null;
+	this.refreshInterval = null;
+	this.refreshContent = null;
+	this.refreshContentSize = null;
+	this.refreshCheckContent = false;
+	this.refreshCheckContentSize = false;
+
+	var self = this;
+
+	self.initialize = function(event) {
+		var view = self.getVisibleView();
+		self.collectViews();
+		self.collectMediaQueries();
+		self.setViewOptions(view);
+
+		
+		// sometimes the body size is 0 so we call this now and again later
+		if (self.initialized) {
+			window.addEventListener(self.NAVIGATION_CHANGE, self.viewChangeHandler);
+			window.addEventListener("keyup", self.keypressHandler);
+			window.addEventListener("keypress", self.keypressHandler);
+			window.addEventListener("resize", self.resizeHandler);
+			window.document.addEventListener("dblclick", self.doubleClickHandler);
+
+			if (self.supportsPopState) {
+				window.addEventListener('popstate', self.popStateHandler);
+			}
+			else {
+				window.addEventListener('hashchange', self.hashChangeHandler);
+			}
+
+			// we are ready to go
+			window.dispatchEvent(new Event(self.APPLICATION_COMPLETE));
+		}
+
+		if (self.initialized==false) {
+			if (self.showNavigationControls || self.singlePageApplication) {
+				self.syncronizeViewToURL();
+			}
+	
+			if (self.refreshPageForChanges) {
+				self.setupRefreshForChanges();
+			}
+	
+			self.initialized = true;
+		}
+		
+		if (self.scaleViewsToFit) {
+			self.viewScale = self.scaleViewToFit(view);
+			
+			if (self.viewScale<0) {
+				setTimeout(self.scaleViewToFit, 500, view);
+			}
+		}
+		else if (view) {
+			self.viewScale = self.getViewScaleValue(view);
+			self.updateSliderValue(self.viewScale);
+		}
+		else {
+			// no view found
+		}
+	
+		if (self.showUpdateNotification) {
+			self.showNotification();
+		}
+	
+		//"addEventListener" in window ? null : window.addEventListener = window.attachEvent;
+		//"addEventListener" in document ? null : document.addEventListener = document.attachEvent;
+	}
+
+
+	///////////////////////////////////////
+	// AUTO REFRESH 
+	///////////////////////////////////////
+
+	self.setupRefreshForChanges = function() {
+		self.refreshRequest = new XMLHttpRequest();
+
+		if (!self.refreshRequest) {
+			return false;
+		}
+
+		// get document start values immediately
+		self.requestRefreshUpdate();
+	}
+
+	/**
+	 * Attempt to check the last modified date by the headers 
+	 * or the last modified property from the byte array (experimental)
+	 **/
+	self.requestRefreshUpdate = function() {
+		var url = document.location.href;
+		var protocol = window.location.protocol;
+		var method;
+		
+		try {
+
+			if (self.refreshCheckContentSize) {
+				self.refreshRequest.open('HEAD', url, true);
+			}
+			else if (self.refreshCheckContent) {
+				self.refreshContent = document.documentElement.outerHTML;
+				self.refreshRequest.open('GET', url, true);
+				self.refreshRequest.responseType = "text";
+			}
+			else {
+
+				// get page last modified date for the first call to compare to later
+				if (self.lastModifiedDate==null) {
+
+					// File system does not send headers in FF so get blob if possible
+					if (protocol=="file:") {
+						self.refreshRequest.open("GET", url, true);
+						self.refreshRequest.responseType = "blob";
+					}
+					else {
+						self.refreshRequest.open("HEAD", url, true);
+						self.refreshRequest.responseType = "blob";
+					}
+
+					self.refreshRequest.onload = self.refreshOnLoadOnceHandler;
+
+					// In some browsers (Chrome & Safari) this error occurs at send: 
+					// 
+					// Chrome - Access to XMLHttpRequest at 'file:///index.html' from origin 'null' 
+					// has been blocked by CORS policy: 
+					// Cross origin requests are only supported for protocol schemes: 
+					// http, data, chrome, chrome-extension, https.
+					// 
+					// Safari - XMLHttpRequest cannot load file:///Users/user/Public/index.html. Cross origin requests are only supported for HTTP.
+					// 
+					// Solution is to run a local server, set local permissions or test in another browser
+					self.refreshRequest.send(null);
+
+					// In MS browsers the following behavior occurs possibly due to an AJAX call to check last modified date: 
+					// 
+					// DOM7011: The code on this page disabled back and forward caching.
+
+				}
+				else {
+					self.refreshRequest = new XMLHttpRequest();
+					self.refreshRequest.onreadystatechange = self.refreshHandler;
+					self.refreshRequest.ontimeout = function() {
+						console.log("Couldn't find page to check for updates");
+					}
+					
+					var method;
+					if (protocol=="file:") {
+						method = "GET";
+					}
+					else {
+						method = "HEAD";
+					}
+
+					//refreshRequest.open('HEAD', url, true);
+					self.refreshRequest.open(method, url, true);
+					self.refreshRequest.responseType = "blob";
+					self.refreshRequest.send(null);
+				}
+			}
+		}
+		catch (error) {
+			console.log("Refresh failed for the following reason:")
+			console.log(error);
+		}
+	}
+
+	self.refreshHandler = function() {
+		var contentSize;
+
+		try {
+
+			if (self.refreshRequest.readyState === XMLHttpRequest.DONE) {
+				
+				if (self.refreshRequest.status === 2 || 
+					self.refreshRequest.status === 200) {
+					var pageChanged = false;
+
+					self.updateLastModifiedLabel();
+
+					if (self.refreshCheckContentSize) {
+						var lastModifiedHeader = self.refreshRequest.getResponseHeader("Last-Modified");
+						contentSize = self.refreshRequest.getResponseHeader("Content-Length");
+						//lastModifiedDate = refreshRequest.getResponseHeader("Last-Modified");
+						var headers = self.refreshRequest.getAllResponseHeaders();
+						var hasContentHeader = headers.indexOf("Content-Length")!=-1;
+						
+						if (hasContentHeader) {
+							contentSize = self.refreshRequest.getResponseHeader("Content-Length");
+
+							// size has not been set yet
+							if (self.refreshContentSize==null) {
+								self.refreshContentSize = contentSize;
+								// exit and let interval call this method again
+								return;
+							}
+
+							if (contentSize!=self.refreshContentSize) {
+								pageChanged = true;
+							}
+						}
+					}
+					else if (self.refreshCheckContent) {
+
+						if (self.refreshRequest.responseText!=self.refreshContent) {
+							pageChanged = true;
+						}
+					}
+					else {
+						lastModifiedHeader = self.getLastModified(self.refreshRequest);
+
+						if (self.lastModifiedDate!=lastModifiedHeader) {
+							pageChanged = true;
+						}
+
+					}
+
+					
+					if (pageChanged) {
+						clearInterval(self.refreshInterval);
+						self.refreshUpdatedPage();
+						return;
+					}
+
+				}
+				else {
+					console.log('There was a problem with the request.');
+				}
+
+			}
+		}
+		catch( error ) {
+			//console.log('Caught Exception: ' + error);
+		}
+	}
+
+	self.refreshOnLoadOnceHandler = function(event) {
+
+		// get the last modified date
+		if (self.refreshRequest.response) {
+			self.lastModifiedDate = self.getLastModified(self.refreshRequest);
+
+			if (self.lastModifiedDate!=null) {
+
+				if (self.refreshInterval==null) {
+					self.refreshInterval = setInterval(self.requestRefreshUpdate, self.refreshDuration);
+				}
+			}
+			else {
+				console.log("Could not get last modified date from the server");
+			}
+		}
+	}
+
+	self.refreshUpdatedPage = function() {
+		if (self.showRefreshNotifications) {
+			var date = new Date().setTime((new Date().getTime()+10000));
+			document.cookie = encodeURIComponent(self.pageRefreshedName) + "=true" + "; max-age=6000;" + " path=/";
+		}
+
+		document.location.reload(true);
+	}
+
+	self.showNotification = function(duration) {
+		var notificationID = self.pageRefreshedName+"ID";
+		var notification = document.getElementById(notificationID);
+		if (duration==null) duration = 4000;
+
+		if (notification!=null) {return;}
+
+		notification = document.createElement("div");
+		notification.id = notificationID;
+		notification.textContent = "PAGE UPDATED";
+		var styleRule = ""
+		styleRule = "position: fixed; padding: 7px 16px 6px 16px; font-family: Arial, sans-serif; font-size: 10px; font-weight: bold; left: 50%;";
+		styleRule += "top: 20px; background-color: rgba(0,0,0,.5); border-radius: 12px; color:rgb(235, 235, 235); transition: all 2s linear;";
+		styleRule += "transform: translateX(-50%); letter-spacing: .5px; filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, .1))";
+		notification.setAttribute("style", styleRule);
+
+		notification.className= "PageRefreshedClass";
+		
+		document.body.appendChild(notification);
+
+		setTimeout(function() {
+			notification.style.opacity = "0";
+			notification.style.filter = "drop-shadow( 0px 0px 0px rgba(0,0,0, .5))";
+			setTimeout(function() {
+				notification.parentNode.removeChild(notification);
+			}, duration)
+		}, duration);
+
+		document.cookie = encodeURIComponent(self.pageRefreshedName) + "=; max-age=1; path=/";
+	}
+
+	/**
+	 * Get the last modified date from the header 
+	 * or file object after request has been received
+	 **/
+	self.getLastModified = function(request) {
+		var date;
+
+		// file protocol - FILE object with last modified property
+		if (request.response && request.response.lastModified) {
+			date = request.response.lastModified;
+		}
+		
+		// http protocol - check headers
+		if (date==null) {
+			date = request.getResponseHeader("Last-Modified");
+		}
+
+		return date;
+	}
+
+	self.updateLastModifiedLabel = function() {
+		var labelValue = "";
+		
+		if (self.lastModifiedLabel==null) {
+			self.lastModifiedLabel = document.getElementById("LastModifiedLabel");
+		}
+
+		if (self.lastModifiedLabel) {
+			var seconds = parseInt(((new Date().getTime() - Date.parse(document.lastModified)) / 1000 / 60) * 100 + "");
+			var minutes = 0;
+			var hours = 0;
+
+			if (seconds < 60) {
+				seconds = Math.floor(seconds/10)*10;
+				labelValue = seconds + " seconds";
+			}
+			else {
+				minutes = parseInt((seconds/60) + "");
+
+				if (minutes>60) {
+					hours = parseInt((seconds/60/60) +"");
+					labelValue += hours==1 ? " hour" : " hours";
+				}
+				else {
+					labelValue = minutes+"";
+					labelValue += minutes==1 ? " minute" : " minutes";
+				}
+			}
+			
+			if (seconds<10) {
+				labelValue = "Updated now";
+			}
+			else {
+				labelValue = "Updated " + labelValue + " ago";
+			}
+
+			if (self.lastModifiedLabel.firstElementChild) {
+				self.lastModifiedLabel.firstElementChild.textContent = labelValue;
+
+			}
+			else if ("textContent" in self.lastModifiedLabel) {
+				self.lastModifiedLabel.textContent = labelValue;
+			}
+		}
+	}
+
+	self.getShortString = function(string, length) {
+		if (length==null) length = 30;
+		string = string!=null ? string.substr(0, length).replace(/\n/g, "") : "[String is null]";
+		return string;
+	}
+
+	self.getShortNumber = function(value, places) {
+		if (places==null || places<1) places = 4;
+		value = Math.round(value * Math.pow(10,places)) / Math.pow(10, places);
+		return value;
+	}
+
+	///////////////////////////////////////
+	// NAVIGATION CONTROLS
+	///////////////////////////////////////
+
+	self.updateViewLabel = function() {
+		var viewNavigationLabel = document.getElementById("ViewNavigationLabel");
+		var view = self.getVisibleView();
+		var viewIndex = view ? self.getViewIndex(view) : -1;
+		var viewName = view ? self.getViewPreferenceValue(view, self.prefix + "view-name") : null;
+		var viewId = view ? view.id : null;
+
+		if (viewNavigationLabel && view) {
+			if (viewName && viewName.indexOf('"')!=-1) {
+				viewName = viewName.replace(/"/g, "");
+			}
+
+			if (self.showViewName) {
+				viewNavigationLabel.textContent = viewName;
+				self.setTooltip(viewNavigationLabel, viewIndex + 1 + " of " + self.numberOfViews);
+			}
+			else {
+				viewNavigationLabel.textContent = viewIndex + 1 + " of " + self.numberOfViews;
+				self.setTooltip(viewNavigationLabel, viewName);
+			}
+
+		}
+	}
+
+	self.updateURL = function(view) {
+		view = view == null ? self.getVisibleView() : view;
+		var viewId = view ? view.id : null
+		var viewFragment = view ? "#"+ viewId : null;
+
+		if (viewId && self.viewIds.length>1 && self.enableDeepLinking) {
+
+			if (self.supportsPopState==false) {
+				self.setFragment(viewId);
+			}
+			else {
+				if (viewFragment!=window.location.hash) {
+
+					if (window.location.hash==null) {
+						window.history.replaceState({name:viewId}, null, viewFragment);
+					}
+					else {
+						window.history.pushState({name:viewId}, null, viewFragment);
+					}
+				}
+			}
+		}
+	}
+
+	self.setFragment = function(value) {
+		window.location.hash = "#" + value;
+	}
+
+	self.setTooltip = function(element, value) {
+		// setting the tooltip in edge causes a page crash on hover
+		if (/Edge/.test(navigator.userAgent)) { return; }
+
+		if ("title" in element) {
+			element.title = value;
+		}
+	}
+
+	self.getStylesheetRules = function(styleSheet) {
+		try {
+			if (styleSheet) return styleSheet.cssRules || styleSheet.rules;
+	
+			return document.styleSheets[0]["cssRules"] || document.styleSheets[0]["rules"];
+		}
+		catch (error) {
+			// ERRORS:
+			// SecurityError: The operation is insecure.
+			// Errors happen when script loads before stylesheet or loading an external css locally
+
+			// InvalidAccessError: A parameter or an operation is not supported by the underlying object
+			// Place script after stylesheet
+
+			console.log(error);
+			if (error.toString().indexOf("The operation is insecure")!=-1) {
+				console.log("Load the stylesheet before the script or load the stylesheet inline until it can be loaded on a server")
+			}
+			return [];
+		}
+	}
+
+	/**
+	 * If single page application hide all of the views except first
+	 **/
+	self.hideViews = function(selectIndex) {
+		var rules = self.getStylesheetRules();
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+
+			if (rule.media!=null) {
+
+				if (queryIndex==selectIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = selectIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+				
+				queryIndex++;
+			}
+		}
+
+		self.numberOfViews = queryIndex;
+		self.updateViewLabel();
+		self.updateURL();
+
+		self.dispatchViewChange();
+
+		var view = self.getVisibleView();
+		var viewIndex = view ? self.getViewIndex(view) : -1;
+
+		return viewIndex==selectIndex ? view : null;
+	}
+
+	self.showView = function(view) {
+		var id = view ? view.id : null;
+		var query = id ? self.mediaQueryDictionary[id] : null;
+		var display = null;
+
+		if (query) {
+			self.enableMediaQuery(query);
+			if (view==null) view =self.getVisibleView();
+			self.setViewOptions(view);
+		}
+		else if (id) {
+			display = window.getComputedStyle(view).getPropertyValue("display");
+			if (display=="" ||  display=="none") {
+				view.style.display = "block";
+			}
+		}
+	}
+
+	self.setViewOptions = function(view) {
+
+		if (view) {
+			self.minimumScale = self.getViewPreferenceValue(view, self.prefix + "minimum-scale");
+			self.scaleViewsToFit = self.getViewPreferenceBoolean(view, self.prefix + "scale-to-fit");
+			self.scaleToFitType = self.getViewPreferenceValue(view, self.prefix + "scale-to-fit-type");
+			self.scaleToFitOnDoubleClick = self.getViewPreferenceBoolean(view, self.prefix + "scale-on-double-click");
+			self.actualSizeOnDoubleClick = self.getViewPreferenceBoolean(view, self.prefix + "actual-size-on-double-click");
+			self.scaleViewsOnResize = self.getViewPreferenceBoolean(view, self.prefix + "scale-on-resize");
+			self.enableScaleUp = self.getViewPreferenceBoolean(view, self.prefix + "enable-scale-up");
+			self.centerHorizontally = self.getViewPreferenceBoolean(view, self.prefix + "center-horizontally");
+			self.centerVertically = self.getViewPreferenceBoolean(view, self.prefix + "center-vertically");
+			self.navigationOnKeypress = self.getViewPreferenceBoolean(view, self.prefix + "navigate-on-keypress");
+			self.showViewName = self.getViewPreferenceBoolean(view, self.prefix + "show-view-name");
+			self.refreshPageForChanges = self.getViewPreferenceBoolean(view, self.prefix + "refresh-for-changes");
+			self.showNavigationControls = self.getViewPreferenceBoolean(view, self.prefix + "show-navigation-controls");
+			self.scaleViewSlider = self.getViewPreferenceBoolean(view, self.prefix + "show-scale-controls");
+			self.enableDeepLinking = self.getViewPreferenceBoolean(view, self.prefix + "enable-deep-linking");
+			self.singlePageApplication = self.getViewPreferenceBoolean(view, self.prefix + "application");
+			self.showUpdateNotification = document.cookie!="" ? document.cookie.indexOf(self.pageRefreshedName)!=-1 : false;
+			self.imageComparisonDuration = self.getViewPreferenceValue(view, self.prefix + "image-comparison-duration");
+
+			if (self.scaleViewsToFit) {
+				var newScaleValue = self.scaleViewToFit(view);
+				
+				if (newScaleValue<0) {
+					setTimeout(self.scaleViewToFit, 500, view);
+				}
+			}
+			else {
+				self.viewScale = self.getViewScaleValue(view);
+				self.updateSliderValue(self.viewScale);
+			}
+
+			if (self.imageComparisonDuration!=null) {
+				// todo
+			}
+		}
+	}
+
+	self.previousView = function(event) {
+		var rules = self.getStylesheetRules();
+		var view = self.getVisibleView()
+		var index = view ? self.getViewIndex(view) : -1;
+		var prevQueryIndex = index!=-1 ? index-1 : self.currentQuery.index-1;
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+
+		if (event) {
+			event.stopImmediatePropagation();
+		}
+
+		if (prevQueryIndex<0) {
+			return;
+		}
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+			
+			if (rule.media!=null) {
+
+				if (queryIndex==prevQueryIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = prevQueryIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+					self.updateViewLabel();
+					self.updateURL();
+					self.dispatchViewChange();
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+
+				queryIndex++;
+			}
+		}
+	}
+
+	self.nextView = function(event) {
+		var rules = self.getStylesheetRules();
+		var view = self.getVisibleView();
+		var index = view ? self.getViewIndex(view) : -1;
+		var nextQueryIndex = index!=-1 ? index+1 : self.currentQuery.index+1;
+		var queryIndex = 0;
+		var numberOfRules = rules!=null ? rules.length : 0;
+		var numberOfMediaQueries = self.getNumberOfMediaRules();
+
+		if (event) {
+			event.stopImmediatePropagation();
+		}
+
+		if (nextQueryIndex>=numberOfMediaQueries) {
+			return;
+		}
+
+		// loop through rules and hide media queries except selected
+		for (var i=0;i<numberOfRules;i++) {
+			var rule = rules[i];
+			
+			if (rule.media!=null) {
+
+				if (queryIndex==nextQueryIndex) {
+					self.currentQuery.mediaText = rule.conditionText;
+					self.currentQuery.index = nextQueryIndex;
+					self.currentQuery.rule = rule;
+					self.enableMediaQuery(rule);
+					self.updateViewLabel();
+					self.updateURL();
+					self.dispatchViewChange();
+				}
+				else {
+					self.disableMediaQuery(rule);
+				}
+
+				queryIndex++;
+			}
+		}
+	}
+
+	self.enableMediaQuery = function(rule) {
+
+		try {
+			rule.media.mediaText = self.inclusionQuery;
+		}
+		catch(error) {
+			//self.log(error);
+			rule.conditionText = self.inclusionQuery;
+		}
+	}
+
+	self.disableMediaQuery = function(rule) {
+
+		try {
+			rule.media.mediaText = self.exclusionQuery;
+		}
+		catch(error) {
+			rule.conditionText = self.exclusionQuery;
+		}
+	}
+
+	self.dispatchViewChange = function() {
+		try {
+			var event = new Event(self.NAVIGATION_CHANGE);
+			window.dispatchEvent(event);
+		}
+		catch (error) {
+			// In IE 11: Object doesn't support this action
+		}
+	}
+
+	self.getNumberOfMediaRules = function() {
+		var rules = self.getStylesheetRules();
+		var numberOfRules = rules ? rules.length : 0;
+		var numberOfQueries = 0;
+
+		for (var i=0;i<numberOfRules;i++) {
+			if (rules[i].media!=null) { numberOfQueries++; }
+		}
+		return numberOfQueries;
+	}
+
+	/////////////////////////////////////////
+	// VIEW SCALE 
+	/////////////////////////////////////////
+
+	self.sliderChangeHandler = function(event) {
+		var value = self.getShortNumber(event.currentTarget.value/100);
+		var view = self.getVisibleView();
+		self.setViewScaleValue(view, false, value, true);
+	}
+
+	self.updateSliderValue = function(scale) {
+		var slider = document.getElementById(self.viewScaleSliderId);
+		var tooltip = parseInt(scale * 100 + "") + "%";
+		var inputType;
+		var inputValue;
+		
+		if (slider) {
+			inputValue = self.getShortNumber(scale * 100);
+			if (inputValue!=slider["value"]) {
+				slider["value"] = inputValue;
+			}
+			inputType = slider.getAttributeNS(null, "type");
+
+			if (inputType!="range") {
+				// input range is not supported
+				slider.style.display = "none";
+			}
+
+			self.setTooltip(slider, tooltip);
+		}
+	}
+
+	self.viewChangeHandler = function(event) {
+		var view = self.getVisibleView();
+		var matrix = view ? getComputedStyle(view).transform : null;
+		
+		if (matrix) {
+			self.viewScale = self.getViewScaleValue(view);
+			
+			var scaleNeededToFit = self.getViewFitToViewportScale(view);
+			var isViewLargerThanViewport = scaleNeededToFit<1;
+			
+			// scale large view to fit if scale to fit is enabled
+			if (self.scaleViewsToFit) {
+				self.scaleViewToFit(view);
+			}
+			else {
+				self.updateSliderValue(self.viewScale);
+			}
+		}
+	}
+
+	self.getViewScaleValue = function(view) {
+		var matrix = getComputedStyle(view).transform;
+
+		if (matrix) {
+			var matrixArray = matrix.replace("matrix(", "").split(",");
+			var scaleX = parseFloat(matrixArray[0]);
+			var scaleY = parseFloat(matrixArray[3]);
+			var scale = Math.min(scaleX, scaleY);
+		}
+
+		return scale;
+	}
+
+	self.getViewTranslateYValue = function(view) {
+		var matrix = getComputedStyle(view).transform;
+
+		if (matrix) {
+			var matrixArray = matrix.replace("matrix(", "").split(",");
+			var translateY = parseFloat(matrixArray[5]);
+		}
+
+		return translateY;
+	}
+
+	self.getViewTop = function(view) {
+		var top = getComputedStyle(view).top;
+
+		return top;
+	}
+
+	/**
+	 * Scales view to scale. 
+	 * @param {Object} view view to scale. views are in views array
+	 * @param {Boolean} scaleToFit set to true to scale to fit. set false to use desired scale value
+	 * @param {Number} desiredScale scale to define. not used if scale to fit is false
+	 * @param {Boolean} isSliderChange indicates if slider is callee
+	 */
+	self.setViewScaleValue = function(view, scaleToFit, desiredScale, isSliderChange) {
+		var enableScaleUp = self.enableScaleUp;
+		var scaleToFitType = self.scaleToFitType;
+		var minimumScale = self.minimumScale;
+		var hasMinimumScale = !isNaN(minimumScale) && minimumScale!=""
+		var scaleNeededToFit = self.getViewFitToViewportScale(view, enableScaleUp);
+		var scaleNeededToFitWidth = self.getViewFitToViewportWidthScale(view, enableScaleUp);
+		var scaleNeededToFitHeight = self.getViewFitToViewportHeightScale(view, enableScaleUp);
+		var scaleToFitFull = self.getViewFitToViewportScale(view, true);
+		var scaleToFitFullWidth = self.getViewFitToViewportWidthScale(view, true);
+		var scaleToFitFullHeight = self.getViewFitToViewportHeightScale(view, true);
+		var scaleToWidth = scaleToFitType=="width";
+		var scaleToHeight = scaleToFitType=="height";
+		var shrunkToFit = false;
+		var topPosition = null;
+		var leftPosition = null;
+		var translateY = null;
+		var translateX = null;
+		var transformValue = "";
+		var canCenterVertically = true;
+		var canCenterHorizontally = true;
+
+		//console.log("height:"+scaleNeededToFitHeight+",width:"+scaleNeededToFitWidth+",fit:"+scaleNeededToFit,"desired:"+desiredScale);
+
+		if (scaleToFit && isSliderChange!=true) {
+			if (scaleToFitType=="fit") {
+				desiredScale = scaleNeededToFit;
+			}
+			else if (scaleToFitType=="width") {
+				desiredScale = scaleNeededToFitWidth;
+			}
+			else if (scaleToFitType=="height") {
+				desiredScale = scaleNeededToFitHeight;
+			}
+		}
+		else {
+			if (isNaN(desiredScale)) {
+				desiredScale = 1;
+			}
+		}
+
+		self.updateSliderValue(desiredScale);
+		
+		// scale to fit width
+		if (scaleToWidth && scaleToHeight==false) {
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			canCenterHorizontally = scaleNeededToFitWidth>=1 && enableScaleUp==false;
+
+			if (isSliderChange) {
+				canCenterHorizontally = desiredScale<scaleToFitFullWidth;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFitWidth;
+			}
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			//desiredScale = self.getShortNumber(desiredScale);
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (desiredScale>1 && (enableScaleUp || isSliderChange)) {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+			else if (desiredScale>=1 && enableScaleUp==false) {
+				transformValue = "scale(" + 1 + ")";
+			}
+			else {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			return desiredScale;
+		}
+
+		// scale to fit height
+		if (scaleToHeight && scaleToWidth==false) {
+			//canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			//canCenterHorizontally = scaleNeededToFitHeight<=scaleNeededToFitWidth && enableScaleUp==false;
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			canCenterHorizontally = scaleNeededToFitWidth>=1 && enableScaleUp==false;
+			
+			if (isSliderChange) {
+				canCenterHorizontally = desiredScale<scaleToFitFullHeight;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFitHeight;
+			}
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (desiredScale>1 && (enableScaleUp || isSliderChange)) {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+			else if (desiredScale>=1 && enableScaleUp==false) {
+				transformValue = "scale(" + 1 + ")";
+			}
+			else {
+				transformValue = "scale(" + desiredScale + ")";
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			return scaleNeededToFitHeight;
+		}
+
+		if (scaleToFitType=="fit") {
+			//canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFitWidth;
+			//canCenterHorizontally = scaleNeededToFitWidth>=scaleNeededToFitHeight;
+			canCenterVertically = scaleNeededToFitHeight>=scaleNeededToFit;
+			canCenterHorizontally = scaleNeededToFitWidth>=scaleNeededToFit;
+
+			if (hasMinimumScale) {
+				desiredScale = Math.max(desiredScale, Number(minimumScale));
+			}
+
+			desiredScale = self.getShortNumber(desiredScale);
+
+			if (isSliderChange || scaleToFit==false) {
+				canCenterVertically = scaleToFitFullHeight>=desiredScale;
+				canCenterHorizontally = desiredScale<scaleToFitFullWidth;
+			}
+			else if (scaleToFit) {
+				desiredScale = scaleNeededToFit;
+			}
+
+			transformValue = "scale(" + desiredScale + ")";
+
+			if (self.centerVertically) {
+				if (canCenterVertically) {
+					translateY = "-50%";
+					topPosition = "50%";
+				}
+				else {
+					translateY = "0";
+					topPosition = "0";
+				}
+				
+				if (view.style.top != topPosition) {
+					view.style.top = topPosition + "";
+				}
+
+				if (canCenterVertically) {
+					transformValue += " translateY(" + translateY+ ")";
+				}
+			}
+
+			if (self.centerHorizontally) {
+				if (canCenterHorizontally) {
+					translateX = "-50%";
+					leftPosition = "50%";
+				}
+				else {
+					translateX = "0";
+					leftPosition = "0";
+				}
+
+				if (view.style.left != leftPosition) {
+					view.style.left = leftPosition + "";
+				}
+
+				if (canCenterHorizontally) {
+					transformValue += " translateX(" + translateX+ ")";
+				}
+			}
+
+			view.style.transformOrigin = "0 0";
+			view.style.transform = transformValue;
+
+			self.viewScale = desiredScale;
+			self.viewLeft = leftPosition;
+			self.viewTop = topPosition;
+
+			self.updateSliderValue(desiredScale);
+			
+			return desiredScale;
+		}
+	}
+
+	self.getViewFitToViewportScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var availableHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var elementWidth = parseFloat(getComputedStyle(view, "style").width);
+		var elementHeight = parseFloat(getComputedStyle(view, "style").height);
+		var newScale = 1;
+
+		availableWidth -= self.horizontalPadding;
+		availableHeight -= self.verticalPadding;
+
+		if (enableScaleUp) {
+			newScale = Math.min(availableHeight/elementHeight, availableWidth/elementWidth);
+		}
+		else if (elementWidth > availableWidth || elementHeight > availableHeight) {
+			newScale = Math.min(availableHeight/elementHeight, availableWidth/elementWidth);
+		}
+		
+		return newScale;
+	}
+
+	self.getViewFitToViewportWidthScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var elementWidth = parseFloat(getComputedStyle(view, "style").width);
+		var newScale = 1;
+
+		availableWidth -= self.horizontalPadding;
+
+		if (enableScaleUp) {
+			newScale = availableWidth/elementWidth;
+		}
+		else if (elementWidth > availableWidth) {
+			newScale = availableWidth/elementWidth;
+		}
+		
+		return newScale;
+	}
+
+	self.getViewFitToViewportHeightScale = function(view, scaleUp) {
+		var enableScaleUp = scaleUp;
+		var availableHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var elementHeight = parseFloat(getComputedStyle(view, "style").height);
+		var newScale = 1;
+
+		availableHeight -= self.verticalPadding;
+
+		if (enableScaleUp) {
+			newScale = availableHeight/elementHeight;
+		}
+		else if (elementHeight > availableHeight) {
+			newScale = availableHeight/elementHeight;
+		}
+		
+		return newScale;
+	}
+
+	self.keypressHandler = function(event) {
+		var rightKey = 39;
+		var leftKey = 37;
+		
+		// listen for both events 
+		if (event.type=="keypress") {
+			window.removeEventListener("keyup", self.keypressHandler);
+		}
+		else {
+			window.removeEventListener("keypress", self.keypressHandler);
+		}
+		
+		if (self.showNavigationControls) {
+			if (self.navigationOnKeypress) {
+				if (event.keyCode==rightKey) {
+					self.nextView();
+				}
+				if (event.keyCode==leftKey) {
+					self.previousView();
+				}
+			}
+		}
+		else if (self.navigationOnKeypress) {
+			if (event.keyCode==rightKey) {
+				self.nextView();
+			}
+			if (event.keyCode==leftKey) {
+				self.previousView();
+			}
+		}
+	}
+
+	///////////////////////////////////
+	// GENERAL FUNCTIONS
+	///////////////////////////////////
+
+	self.getViewById = function(id) {
+		id = id ? id.replace("#", "") : "";
+		var view = self.viewIds.indexOf(id)!=-1 && document.getElementById(id);
+		return view;
+	}
+
+	self.getViewIds = function() {
+		var viewIds = self.getViewPreferenceValue(document.body, self.prefix + "view-ids");
+		var viewId = null;
+
+		viewIds = viewIds!=null && viewIds!="" ? viewIds.split(",") : [];
+
+		if (viewIds.length==0) {
+			viewId = self.getViewPreferenceValue(document.body, self.prefix + "view-id");
+			viewIds = viewId ? [viewId] : [];
+		}
+
+		return viewIds;
+	}
+
+	self.getApplicationStylesheet = function() {
+		var stylesheetId = self.getViewPreferenceValue(document.body, self.prefix + "stylesheet-id");
+		self.applicationStylesheet = document.getElementById("applicationStylesheet");
+		return self.applicationStylesheet.sheet;
+	}
+
+	self.getViewQueries = function() {
+		var stylesheetId = self.getViewPreferenceValue(document.body, self.prefix + "stylesheet-id");
+		var viewIds = self.getViewIds();
+	}
+
+	self.getVisibleView = function() {
+		var viewIds = self.getViewIds();
+
+		try {
+			// to do 
+		}
+		catch(error) {
+			console.log("For the page functionality to work the first two style declarations must be the generated ones.");
+			return;
+		}
+		
+		for (var i=0;i<viewIds.length;i++) {
+			var viewId = viewIds[i].replace(/[\#?\.?](.*)/, "$" + "1");
+			var view = document.getElementById(viewId);
+			var postName = "_Class";
+
+			if (view==null && viewId && viewId.lastIndexOf(postName)!=-1) {
+				view = document.getElementById(viewId.replace(postName, ""));
+			}
+			
+			if (view) {
+				var display = window.getComputedStyle(view).display;
+		
+				if (display=="block") {
+					return view;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	self.getViewIndex = function(view) {
+		var viewIds = self.getViewIds();
+		var id = view ? view.id : null;
+		var index = id && viewIds ? viewIds.indexOf(id) : -1;
+
+		return index;
+	}
+
+	self.syncronizeViewToURL = function() {
+		var fragment = window.location.hash;
+		var view = self.getViewById(fragment);
+		var index = view ? self.getViewIndex(view) : 0;
+		if (index==-1) index = 0;
+		var currentView = self.hideViews(index);
+
+		if (self.supportsPopState && currentView) {
+
+			if (fragment==null) {
+				window.history.replaceState({name:currentView.id}, null, "#"+ currentView.id);
+			}
+			else {
+				window.history.pushState({name:currentView.id}, null, "#"+ currentView.id);
+			}
+		}
+		return view;
+	}
+
+	self.getViewPreferenceBoolean = function(view, property) {
+		var value = window.getComputedStyle(view).getPropertyValue(property);
+		var type = typeof value;
+		
+		if (value=="true" || (type=="string" && value.indexOf("true")!=-1)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	self.getViewPreferenceValue = function(view, property, defaultValue) {
+		var value = window.getComputedStyle(view).getPropertyValue(property);
+
+		if (value===undefined) {
+			return defaultValue;
+		}
+		
+		value = value.replace(/^[\s\"]*/, "");
+		value = value.replace(/[\s\"]*$/, "");
+		value = value.replace(/^[\s"]*(.*?)[\s"]*$/, function (match, capture) { 
+			return capture;
+		});
+
+		return value;
+	}
+
+	self.getStyleRuleValue = function(cssRule, property) {
+		var value = cssRule ? cssRule.style.getPropertyValue(property) : null;
+
+		if (value===undefined) {
+			return null;
+		}
+		
+		value = value.replace(/^[\s\"]*/, "");
+		value = value.replace(/[\s\"]*$/, "");
+		value = value.replace(/^[\s"]*(.*?)[\s"]*$/, function (match, capture) { 
+			return capture;
+		});
+
+		return value;
+	}
+
+	self.getCSSPropertyValueForElement = function(id, property) {
+		var styleSheets = document.styleSheets;
+		var numOfStylesheets = styleSheets.length;
+		var values = [];
+		var selectorIDText = "#" + id;
+		var selectorClassText = "." + id + "_Class";
+		var value;
+
+		for(var i=0;i<numOfStylesheets;i++) {
+			var styleSheet = styleSheets[i];
+			var cssRules = self.getStylesheetRules(styleSheet);
+			var numOfCSSRules = cssRules.length;
+			var cssRule;
+			
+			for (var j=0;j<numOfCSSRules;j++) {
+				cssRule = cssRules[j];
+				
+				if (cssRule.media) {
+					var mediaRules = cssRule.cssRules;
+					var numOfMediaRules = mediaRules ? mediaRules.length : 0;
+					
+					for(var k=0;k<numOfMediaRules;k++) {
+						var mediaRule = mediaRules[k];
+						
+						if (mediaRule.selectorText==selectorIDText || mediaRule.selectorText==selectorClassText) {
+							
+							if (mediaRule.style && property in mediaRule.style) {
+								value = mediaRule.style.getPropertyValue(property);
+								//console.log(property+":" + value);
+								values.push(value);
+							}
+						}
+					}
+				}
+				else {
+
+					if (cssRule.selectorText==selectorIDText || cssRule.selectorText==selectorClassText) {
+						if (cssRule.style && property in cssRule.style) {
+							value = cssRule.style.getPropertyValue(property);
+							//console.log(property+":" + value);
+							values.push(value);
+						}
+					}
+				}
+			}
+		}
+		
+		return values.pop();
+	}
+
+	self.collectViews = function() {
+		var viewIds = self.getViewIds();
+
+		for (let index = 0; index < viewIds.length; index++) {
+			const id = viewIds[index];
+			const view = self.getViewById(id);
+			self.views[id] = view;
+		}
+		
+		self.viewIds = viewIds;
+	}
+
+	self.collectMediaQueries = function() {
+		var viewIds = self.getViewIds();
+		var styleSheet = self.getApplicationStylesheet();
+		var cssRules = self.getStylesheetRules(styleSheet);
+		var numOfCSSRules = cssRules ? cssRules.length : 0;
+		var cssRule;
+		var id = viewIds.length ? viewIds[0]: ""; // single view
+		var selectorIDText = "#" + id;
+		var selectorClassText = "." + id + "_Class";
+		var viewsNotFound = viewIds.slice();
+		var viewsFound = [];
+		var selectorText = null;
+		var property = self.prefix + "view-id";
+		
+		for (var j=0;j<numOfCSSRules;j++) {
+			cssRule = cssRules[j];
+			
+			if (cssRule.media) {
+				var mediaRules = cssRule.cssRules;
+				var numOfMediaRules = mediaRules ? mediaRules.length : 0;
+				
+				for(var k=0;k<numOfMediaRules;k++) {
+					var mediaRule = mediaRules[k];
+					var mediaId = null;
+
+					selectorText = mediaRule.selectorText;
+					
+					if (selectorText==".mediaViewInfo") {
+
+						mediaId = self.getStyleRuleValue(mediaRule, property);
+
+						self.mediaQueryDictionary[mediaId] = cssRule;
+						self.addState(mediaId, cssRule);
+						viewsFound.push(mediaId);
+
+						if (viewsNotFound.indexOf(mediaId)!=-1) {
+							viewsNotFound.splice(viewsNotFound.indexOf(mediaId));
+						}
+
+						break;
+					}
+				}
+			}
+			else {
+				selectorText = cssRule.selectorText.replace(/[#|\s|*]?/g, "");
+
+				if (viewIds.indexOf(selectorText)!=-1) {
+					self.mediaQueryDictionary[selectorText] = cssRule;
+					self.addState(selectorText, cssRule);
+					if (viewsNotFound.indexOf(selectorText)!=-1) {
+						viewsNotFound.splice(viewsNotFound.indexOf(selectorText));
+					}
+					break;
+				}
+			}
+		}
+
+		if (viewsNotFound.length) {
+			console.log("Could not find the following views:" + viewsNotFound.join(",") + "");
+			console.log("Views found:" + viewsFound.join(",") + "");
+		}
+	}
+
+	self.addState = function(name, cssRule) {
+		var state = {name:name, rule:cssRule};
+		self.states.push(name);
+		self.statesDictionary[name] = state;
+	}
+
+	self.hasState = function(name) {
+		
+		if (self.states.indexOf(name)!=-1) {
+			return true;
+		}
+		return false;
+	}
+
+	self.goToState = function(name, maintainPreviousState) {
+		var state = self.statesDictionary[name];
+
+		if (state) {
+			if (maintainPreviousState==false || maintainPreviousState==null) {
+				self.hideViews();
+			}
+			self.enableMediaQuery(state.rule);
+			self.updateViewLabel();
+			self.updateURL();
+		}
+		else {
+			var event = new Event(self.STATE_NOT_FOUND);
+			self.stateName = name;
+			window.dispatchEvent(event);
+		}
+	}
+
+	self.resizeHandler = function(event) {
+		if (self.scaleViewsOnResize) {
+			var view = self.getVisibleView();
+			var isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME)=="false" ? false : true;
+
+			if (isViewScaled) {
+				self.scaleViewToFit(view, true);
+			}
+			else {
+				self.scaleViewToActualSize(view);
+			}
+		}
+	}
+
+	self.preventDoubleClick = function(event) {
+		event.stopImmediatePropagation();
+	}
+
+	self.hashChangeHandler = function(event) {
+		var fragment = window.location.hash ? window.location.hash.replace("#", "") : "";
+		var view = self.getViewById(fragment);
+
+		if (view) {
+			self.hideViews();
+			self.showView(view);
+			self.updateViewLabel();
+		}
+		else {
+			window.dispatchEvent(new Event(self.VIEW_NOT_FOUND));
+		}
+	}
+
+	self.popStateHandler = function(event) {
+		var state = event.state;
+		var fragment = state ? state.name : window.location.hash;
+		var view = self.getViewById(fragment);
+
+		if (view) {
+			self.hideViews();
+			self.showView(view);
+			self.updateViewLabel();
+		}
+		else {
+			window.dispatchEvent(new Event(self.VIEW_NOT_FOUND));
+		}
+	}
+
+	self.doubleClickHandler = function(event) {
+		var view = self.getVisibleView();
+		var scaleValue = view ? self.getViewScaleValue(view) : 1;
+		var scaleNeededToFit = view ? self.getViewFitToViewportScale(view) : 1;
+		var scaleNeededToFitWidth = view ? self.getViewFitToViewportWidthScale(view) : 1;
+		var scaleNeededToFitHeight = view ? self.getViewFitToViewportHeightScale(view) : 1;
+		var scaleToFitType = self.scaleToFitType;
+
+		// Three scenarios
+		// - scale to fit on double click
+		// - set scale to actual size on double click
+		// - switch between scale to fit and actual page size
+
+		if (scaleToFitType=="width") {
+			scaleNeededToFit = scaleNeededToFitWidth;
+		}
+		else if (scaleToFitType=="height") {
+			scaleNeededToFit = scaleNeededToFitHeight;
+		}
+
+		// if scale and actual size enabled then switch between
+		if (self.scaleToFitOnDoubleClick && self.actualSizeOnDoubleClick) {
+			var isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME);
+			var isScaled = false;
+			
+			// if scale is not 1 then view needs scaling
+			if (scaleNeededToFit!=1) {
+
+				// if current scale is at 1 it is at actual size
+				// scale it to fit
+				if (scaleValue==1) {
+					self.scaleViewToFit(view);
+					isScaled = true;
+				}
+				else {
+					// scale is not at 1 so switch to actual size
+					self.scaleViewToActualSize(view);
+					isScaled = false;
+				}
+			}
+			else {
+				// view is smaller than viewport 
+				// so scale to fit() is scale actual size
+				// actual size and scaled size are the same
+				// but call scale to fit to retain centering
+				self.scaleViewToFit(view);
+				isScaled = false;
+			}
+			
+			view.setAttributeNS(null, self.SIZE_STATE_NAME, isScaled+"");
+			isViewScaled = view.getAttributeNS(null, self.SIZE_STATE_NAME);
+		}
+		else if (self.scaleToFitOnDoubleClick) {
+			self.scaleViewToFit(view);
+		}
+		else if (self.actualSizeOnDoubleClick) {
+			self.scaleViewToActualSize(view);
+		}
+
+	}
+
+	self.scaleViewToFit = function(view) {
+		return self.setViewScaleValue(view, true);
+	}
+
+	self.scaleViewToActualSize = function(view) {
+		self.setViewScaleValue(view, false, 1);
+	}
+
+	self.onloadHandler = function(event) {
+		self.initialize();
+	}
+
+	self.getStackArray = function(error) {
+		var value = "";
+		
+		if (error==null) {
+		  try {
+			 error = new Error("Stack");
+		  }
+		  catch (e) {
+			 
+		  }
+		}
+		
+		if ("stack" in error) {
+		  value = error.stack;
+		  var methods = value.match(/\\n/gm);
+	 
+		  var newArray = methods ? methods.map(function (value, index, array) {
+			 value = value.replace("at ","");
+			 return value;
+		  }) : null;
+	 
+		  if (newArray && newArray[0]=="getStackTrace") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="getStackArray") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="getFunctionName") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="object") {
+			 newArray.shift();
+		  }
+		  if (newArray && newArray[0]=="log") {
+			 newArray.shift();
+		  }
+	 
+			return newArray;
+		}
+		
+		return null;
+	}
+
+	this.log = function(value) {
+		console.log.apply(this, [value]);
+	}
+	
+	// initialize on load
+	// sometimes the body size is 0 so we call this now and again later
+	window.addEventListener("load", self.onloadHandler);
+	window.document.addEventListener("DOMContentLoaded", self.onloadHandler);
+}
+
+window.application = new Application();
+</script>
+</head>
+<body>
+<div id="Large___1">
+	<div id="Group_1">
+		<div id="compare">
+			<svg class="bg">
+				<rect fill="rgba(41,46,77,1)" id="bg" rx="16" ry="16" x="0" y="0" width="904" height="397">
+				</rect>
+			</svg>
+			<div id="header">
+				<svg class="line">
+					<rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="904" height="4">
+					</rect>
+				</svg>
+				<div id="type_2">
+					<div id="bar">
+						<svg class="bg_A3_Rectangle_3">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_3" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							</rect>
+						</svg>
+						<div id="btn">
+							<svg class="icon_32_bar_chart" viewBox="0 0 32 32">
+								<path fill="rgba(255,255,255,1)" id="icon_32_bar_chart" d="M 24.00030136108398 32.00040054321289 L 24.00030136108398 8.000100135803223 L 32.00040054321289 8.000100135803223 L 32.00040054321289 32.00040054321289 L 24.00030136108398 32.00040054321289 Z M 11.99970054626465 32.00040054321289 L 11.99970054626465 0 L 19.99979972839355 0 L 19.99979972839355 32.00040054321289 L 11.99970054626465 32.00040054321289 Z M 0 32.00040054321289 L 0 18.99990081787109 L 8.000100135803223 18.99990081787109 L 8.000100135803223 32.00040054321289 L 0 32.00040054321289 Z">
+								</path>
+							</svg>
+							<div id="Bar_chart">
+								<span>Bar chart</span>
+							</div>
+						</div>
+					</div>
+					<div id="pie">
+						<svg class="bg_A3_Rectangle_4">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_4" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							</rect>
+						</svg>
+						<div id="btn_A3_Group_8">
+							<svg class="icon_32_pie_chart" viewBox="0 0 32 32">
+								<path fill="rgba(255,255,255,1)" id="icon_32_pie_chart" d="M 0 17.65530014038086 L 7.267500400543213 17.65530014038086 C 8.04419994354248 21.73859977722168 11.63700008392334 24.82740020751953 15.95700073242188 24.82740020751953 C 17.80200004577637 24.82740020751953 19.51290130615234 24.26399993896484 20.93130111694336 23.30100059509277 L 26.06490135192871 28.42200088500977 C 23.30640029907227 30.65850067138672 19.79010009765625 32.00040054321289 15.95700073242188 32.00040054321289 C 7.658100128173828 32.00040054321289 0.8307000398635864 25.71390151977539 0 17.65530014038086 Z M 23.27760124206543 20.96100044250488 C 24.24330139160156 19.54619979858398 24.80850028991699 17.83979988098145 24.80850028991699 16.00020027160645 C 24.80850028991699 14.16060066223145 24.24330139160156 12.45330047607422 23.27850151062012 11.03940010070801 L 28.41209983825684 5.919300079345703 C 30.6549015045166 8.670599937438965 32.00040054321289 12.17790031433105 32.00040054321289 16.00020027160645 C 32.00040054321289 19.82159996032715 30.65400123596191 23.32979965209961 28.41209983825684 26.08110046386719 L 23.27760124206543 20.96100044250488 Z M 0 14.34510040283203 C 0.8307000398635864 6.285600185394287 7.658100128173828 0 15.95700073242188 0 C 19.78919982910156 0 23.30640029907227 1.341899991035461 26.06490135192871 3.578400135040283 L 20.93130111694336 8.699399948120117 C 19.51290130615234 7.736400127410889 17.80200004577637 7.172100067138672 15.95700073242188 7.172100067138672 C 11.63700008392334 7.172100067138672 8.04419994354248 10.26179981231689 7.267500400543213 14.34510040283203 L 0 14.34510040283203 Z">
+								</path>
+							</svg>
+							<div id="Pie_chart">
+								<span>Pie chart</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="type_1">
+					<div id="bar_A3_Group_10">
+						<svg class="bg_A3_Rectangle_5">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_5" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							</rect>
+						</svg>
+						<div id="btn_A3_Group_11">
+							<svg class="icon_32_Compliance" viewBox="0 0 31.993 26.401">
+								<path fill="rgba(255,255,255,1)" id="icon_32_Compliance" d="M 26.19103813171387 0 L 11.3929328918457 14.79804706573486 L 5.801558971405029 9.206615447998047 L 0 15.00811672210693 L 5.591431617736816 20.59960746765137 L 11.3929328918457 26.40093231201172 L 17.19431686401367 20.59960746765137 L 31.99259757995605 5.801384449005127 L 26.19103813171387 0 Z">
+								</path>
+							</svg>
+							<div id="Compliance">
+								<span>Compliance</span>
+							</div>
+						</div>
+					</div>
+					<div id="pie_A3_Group_12">
+						<svg class="bg_A3_Rectangle_6">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_6" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							</rect>
+						</svg>
+						<div id="btn_A3_Group_13">
+							<svg class="icon_32_Comparison" viewBox="0 0 32 32">
+								<path fill="rgba(255,255,255,1)" id="icon_32_Comparison" d="M 9 25.00020027160645 C 9 21.1338005065918 12.1338005065918 18 16.00020027160645 18 C 19.86569976806641 18 23.00040054321289 21.1338005065918 23.00040054321289 25.00020027160645 C 23.00040054321289 28.86569976806641 19.86569976806641 32.00040054321289 16.00020027160645 32.00040054321289 C 12.1338005065918 32.00040054321289 9 28.86569976806641 9 25.00020027160645 Z M 18 7.000200271606445 C 18 3.133800029754639 21.1338005065918 0 25.00020027160645 0 C 28.86569976806641 0 32.00040054321289 3.133800029754639 32.00040054321289 7.000200271606445 C 32.00040054321289 10.86570072174072 28.86569976806641 14.00040054321289 25.00020027160645 14.00040054321289 C 21.1338005065918 14.00040054321289 18 10.86570072174072 18 7.000200271606445 Z M 0 7.000200271606445 C 0 3.133800029754639 3.133800029754639 0 7.000200271606445 0 C 10.86570072174072 0 14.00040054321289 3.133800029754639 14.00040054321289 7.000200271606445 C 14.00040054321289 10.86570072174072 10.86570072174072 14.00040054321289 7.000200271606445 14.00040054321289 C 3.133800029754639 14.00040054321289 0 10.86570072174072 0 7.000200271606445 Z">
+								</path>
+							</svg>
+							<div id="Compare">
+								<span>Compare</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<svg class="line_A3_Rectangle_7">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_7" rx="0" ry="0" x="0" y="0" width="904" height="4">
+				</rect>
+			</svg>
+			<div id="severity">
+				<div id="Severity">
+					<span>Severity</span>
+				</div>
+				<div id="Page_1">
+					<div id="Small">
+						<svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+							<path fill="rgba(255,72,71,1)" id="icon_32_Severity" d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+							</path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<div id="info">
+				<svg class="icon_32_Info" viewBox="0 0 32 32">
+					<path fill="rgba(255,255,255,1)" id="icon_32_Info" d="M 15.99930000305176 32.00040054321289 C 11.7262601852417 32.00040054321289 7.708600044250488 30.33575057983398 4.686410427093506 27.31308937072754 C 1.664330244064331 24.29054069519043 2.716064386731887e-07 20.27256011962891 2.716064386731887e-07 15.99930000305176 C 2.716064386731887e-07 11.72615051269531 1.664330244064331 7.708490371704102 4.686410427093506 4.686410427093506 C 7.708490371704102 1.664330244064331 11.72615051269531 2.716064386731887e-07 15.99930000305176 2.716064386731887e-07 C 20.27256011962891 2.716064386731887e-07 24.29054069519043 1.664330244064331 27.31308937072754 4.686410427093506 C 30.33575057983398 7.708600044250488 32.00040054321289 11.7262601852417 32.00040054321289 15.99930000305176 C 32.00040054321289 20.2724494934082 30.33575057983398 24.29043006896973 27.31308937072754 27.31308937072754 C 24.29043006896973 30.33575057983398 20.2724494934082 32.00040054321289 15.99930000305176 32.00040054321289 Z M 12.7224006652832 14.56110000610352 C 13.2699499130249 14.56110000610352 13.63029003143311 14.65001010894775 13.82400035858154 14.83290004730225 C 14.01451015472412 15.01531028747559 14.11110019683838 15.34204006195068 14.11110019683838 15.80399990081787 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32089996337891 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21369934082031 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54932975769043 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.36499977111816 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630004882813 C 19.45536994934082 23.74575996398926 19.2244701385498 23.82290077209473 18.9197998046875 23.90670013427734 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60223960876465 16.62750053405762 23.27066993713379 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416007995605 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55278968811035 16.87120056152344 21.22690010070801 16.95330047607422 20.94479942321777 L 17.97840118408203 17.31419944763184 C 18.07889938354492 16.97829055786133 18.14824104309082 16.6088695526123 18.18449974060059 16.21619987487793 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53355979919434 18.23940086364746 15.38010025024414 C 18.23940086364746 14.62067985534668 17.96869087219238 13.99357032775879 17.43480110168457 13.51620006561279 C 16.89764976501465 13.04022979736328 16.12671089172363 12.79890060424805 15.14340019226074 12.79890060424805 C 14.59355068206787 12.79890060424805 14.0055103302002 12.89822006225586 13.39560031890869 13.09409999847412 C 12.77694034576416 13.29036998748779 12.12530994415283 13.52777004241943 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821018218994 11.90340042114258 14.6826000213623 C 12.1759204864502 14.60198020935059 12.45147037506104 14.56110000610352 12.7224006652832 14.56110000610352 Z M 17.42130088806152 6.153300285339355 C 16.75091934204102 6.153300285339355 16.16772079467773 6.379800319671631 15.68790054321289 6.826500415802002 C 15.20895004272461 7.275680065155029 14.96610069274902 7.820720195770264 14.96610069274902 8.446499824523926 C 14.96610069274902 9.075160026550293 15.20895004272461 9.618989944458008 15.68790054321289 10.06290054321289 C 16.16835975646973 10.50481986999512 16.75156021118164 10.72889995574951 17.42130088806152 10.72889995574951 C 18.09134101867676 10.72889995574951 18.67242050170898 10.50481986999512 19.14839935302734 10.06290054321289 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075710296630859 19.86660003662109 8.446499824523926 C 19.86660003662109 7.818490505218506 19.62495994567871 7.273440361022949 19.14839935302734 6.826500415802002 C 18.67394065856934 6.379800319671631 18.09287071228027 6.153300285339355 17.42130088806152 6.153300285339355 Z">
+					</path>
+				</svg>
+				<div id="Info">
+					<span>Info</span>
+				</div>
+			</div>
+			<div id="charts">
+				<div id="error">
+					<svg class="base">
+						<ellipse fill="transparent" stroke="rgba(255,255,255,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="base" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<svg class="data">
+						<ellipse fill="transparent" stroke="rgba(255,72,71,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="266 850" stroke-dashoffset="0" stroke-miterlimit="10" shape-rendering="auto" id="data" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<div id="Group">
+						<div id="ID40_">
+							<span>40%</span>
+						</div>
+						<div id="Errors">
+							<span>Errors</span>
+						</div>
+					</div>
+				</div>
+				<div id="warning">
+					<svg class="base_A3_Ellipse_3">
+						<ellipse fill="transparent" stroke="rgba(255,255,255,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="base_A3_Ellipse_3" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<svg class="data_A3_Ellipse_4">
+						<ellipse fill="transparent" stroke="rgba(255,234,15,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="226 850" stroke-dashoffset="0" stroke-miterlimit="10" shape-rendering="auto" id="data_A3_Ellipse_4" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<div id="Group_A3_Group_22">
+						<div id="ID30_">
+							<span>30%</span>
+						</div>
+						<div id="Warnings">
+							<span>Warnings</span>
+						</div>
+					</div>
+				</div>
+				<div id="ok">
+					<svg class="base_A3_Ellipse_5">
+						<ellipse fill="transparent" stroke="rgba(255,255,255,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="base_A3_Ellipse_5" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<svg class="data_A3_Ellipse_6">
+						<ellipse fill="transparent" stroke="rgba(15,255,114,1)" stroke-width="24px" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="80 850" stroke-dashoffset="0" stroke-miterlimit="10" shape-rendering="auto" id="data_A3_Ellipse_6" rx="106" ry="106" cx="106" cy="106">
+						</ellipse>
+					</svg>
+					<div id="Group_A3_Group_24">
+						<div id="ID10_">
+							<span>10%</span>
+						</div>
+						<div id="OK">
+							<span>OK</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="compare_A3_Group_25">
+			<svg class="bg_A3_Rectangle_8">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_8" rx="16" ry="16" x="0" y="0" width="1832" height="461">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_9">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_9" rx="0" ry="0" x="0" y="0" width="1750" height="4">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_10">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_10" rx="0" ry="0" x="0" y="0" width="1750" height="2">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_11">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_11" rx="0" ry="0" x="0" y="0" width="1750" height="2">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_12">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_12" rx="0" ry="0" x="0" y="0" width="1750" height="2">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_13">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_13" rx="0" ry="0" x="0" y="0" width="1750" height="2">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_14">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_14" rx="0" ry="0" x="0" y="0" width="1750" height="2">
+				</rect>
+			</svg>
+			<div id="ID10">
+				<span>10</span>
+			</div>
+			<div id="ID0">
+				<span>0</span>
+			</div>
+			<div id="Group_10">
+				<div id="Check_1">
+					<span>Check 1</span>
+				</div>
+				<svg class="Oval">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_8">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_8" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_9">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_9" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_27">
+				<div id="Check_2">
+					<span>Check 2</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_10">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_10" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_11">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_11" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_12">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_12" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_28">
+				<div id="Check_3">
+					<span>Check 3</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_13">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_13" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_14">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_14" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_15">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_15" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_29">
+				<div id="Check_4">
+					<span>Check 4</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_16">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_16" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_17">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_17" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_18">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_18" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_30">
+				<div id="Check_5">
+					<span>Check 5</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_19">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_19" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_20">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_20" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_21">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_21" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_31">
+				<div id="Check_6">
+					<span>Check 6</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_22">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_22" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_23">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_23" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_24">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_24" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_32">
+				<div id="Check_7">
+					<span>Check 7</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_25">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_25" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_26">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_26" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_27">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_27" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="Group_10_A3_Group_33">
+				<div id="Check_8">
+					<span>Check 8</span>
+				</div>
+				<svg class="Oval_A3_Ellipse_28">
+					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_28" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_29">
+					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_29" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+				<svg class="Oval_A3_Ellipse_30">
+					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_30" rx="8" ry="8" cx="8" cy="8">
+					</ellipse>
+				</svg>
+			</div>
+			<div id="ID20">
+				<span>20</span>
+			</div>
+			<div id="ID30">
+				<span>30</span>
+			</div>
+			<div id="ID40">
+				<span>40</span>
+			</div>
+			<div id="ID50">
+				<span>50</span>
+			</div>
+			<svg class="line_A3_Rectangle_15">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_15" rx="0" ry="0" x="0" y="0" width="1832" height="4">
+				</rect>
+			</svg>
+			<div id="Project_health">
+				<span>Check progress</span>
+			</div>
+			<svg class="Path_2" viewBox="0 0 1532 184.5">
+				<path fill="transparent" stroke="rgba(15,255,114,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_2" d="M 0 184.5 L 219 159.5 L 438 138.5 L 657.5 91 L 875 66.5 L 1094 47.5 L 1313 23.5 L 1532 0">
+				</path>
+			</svg>
+			<svg class="Path_3" viewBox="0 0 1532 140">
+				<path fill="transparent" stroke="rgba(255,72,71,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_3" d="M 0 0 L 219 43.5 L 438 44.5 L 666 91 L 875 140 L 1094 89 L 1312.5 109.5 L 1532 137">
+				</path>
+			</svg>
+			<svg class="Path_4" viewBox="0 0 1532 218.5">
+				<path fill="transparent" stroke="rgba(255,234,15,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_4" d="M -7.123208273229764e-15 0 L 219 46 L 438 167.5 L 649 139 L 874.5 139.5 L 1094 189.5 L 1313 201.5 L 1532 218.5">
+				</path>
+			</svg>
+		</div>
+		<div id="details">
+			<svg class="bg_A3_Rectangle_16">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_16" rx="16" ry="16" x="0" y="0" width="440" height="397">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_17">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_17" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_18">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_18" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				</rect>
+			</svg>
+			<div id="Details">
+				<span>Details</span>
+			</div>
+			<div id="Group_5">
+				<div id="Data_source_1">
+					<span>Data source 1</span>
+				</div>
+				<div id="ABC123">
+					<span>ABC123</span>
+				</div>
+			</div>
+			<div id="Group_6">
+				<div id="Data_type">
+					<span>Data source 2</span>
+				</div>
+				<div id="ABC123_A3_Text_32">
+					<span>ABC123</span>
+				</div>
+			</div>
+			<svg class="line_A3_Rectangle_19">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_19" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				</rect>
+			</svg>
+			<div id="Group_7">
+				<div id="Data_source_2">
+					<span>Data source 3</span>
+				</div>
+				<div id="ABC123_A3_Text_34">
+					<span>ABC123</span>
+				</div>
+			</div>
+			<div id="Group_8">
+				<div id="ABC123_A3_Text_35">
+					<span>ABC123</span>
+				</div>
+				<div id="Data_type_A3_Text_36">
+					<span>Data source 4</span>
+				</div>
+			</div>
+			<div id="Group_9">
+				<div id="Check_case">
+					<span>Check case</span>
+				</div>
+				<div id="xml_2_xls">
+					<span>xml-2-xls</span>
+				</div>
+			</div>
+		</div>
+		<div id="compare_A3_Group_40">
+			<svg class="bg_A3_Rectangle_20">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_20" rx="16" ry="16" x="0" y="0" width="440" height="397">
+				</rect>
+			</svg>
+			<svg class="line_A3_Rectangle_21">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_21" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				</rect>
+			</svg>
+			<div id="Summary">
+				<span>Summary</span>
+			</div>
+			<svg class="icon_32_Summary" viewBox="5 5 21 22">
+				<path fill="rgba(255,255,255,1)" id="icon_32_Summary" d="M 5.000400066375732 24.00030136108398 C 5.000400066375732 22.3434009552002 6.343200206756592 20.99970054626465 8.000100135803223 20.99970054626465 C 9.657000541687012 20.99970054626465 10.99980068206787 22.3434009552002 10.99980068206787 24.00030136108398 C 10.99980068206787 25.65719985961914 9.657000541687012 27 8.000100135803223 27 C 6.343200206756592 27 5.000400066375732 25.65719985961914 5.000400066375732 24.00030136108398 Z M 15.00030040740967 26.00010108947754 C 13.89510059356689 26.00010108947754 12.99960041046143 25.10460090637207 12.99960041046143 24.00030136108398 C 12.99960041046143 22.89509963989258 13.89510059356689 21.99960136413574 15.00030040740967 21.99960136413574 L 24.00030136108398 21.99960136413574 C 25.10460090637207 21.99960136413574 26.00010108947754 22.89509963989258 26.00010108947754 24.00030136108398 C 26.00010108947754 25.10460090637207 25.10460090637207 26.00010108947754 24.00030136108398 26.00010108947754 L 15.00030040740967 26.00010108947754 Z M 5.000400066375732 16.00020027160645 C 5.000400066375732 14.34330081939697 6.343200206756592 12.99960041046143 8.000100135803223 12.99960041046143 C 9.657000541687012 12.99960041046143 10.99980068206787 14.34330081939697 10.99980068206787 16.00020027160645 C 10.99980068206787 17.65710067749023 9.657000541687012 18.99990081787109 8.000100135803223 18.99990081787109 C 6.343200206756592 18.99990081787109 5.000400066375732 17.65710067749023 5.000400066375732 16.00020027160645 Z M 15.00030040740967 18 C 13.89510059356689 18 12.99960041046143 17.10449981689453 12.99960041046143 16.00020027160645 C 12.99960041046143 14.89500045776367 13.89510059356689 14.00040054321289 15.00030040740967 14.00040054321289 L 19.99979972839355 14.00040054321289 C 21.10500144958496 14.00040054321289 21.99960136413574 14.89500045776367 21.99960136413574 16.00020027160645 C 21.99960136413574 17.10449981689453 21.10500144958496 18 19.99979972839355 18 L 15.00030040740967 18 Z M 5.000400066375732 8.000100135803223 C 5.000400066375732 6.343200206756592 6.343200206756592 5.000400066375732 8.000100135803223 5.000400066375732 C 9.657000541687012 5.000400066375732 10.99980068206787 6.343200206756592 10.99980068206787 8.000100135803223 C 10.99980068206787 9.657000541687012 9.657000541687012 10.99980068206787 8.000100135803223 10.99980068206787 C 6.343200206756592 10.99980068206787 5.000400066375732 9.657000541687012 5.000400066375732 8.000100135803223 Z M 15.00030040740967 9.999899864196777 C 13.89510059356689 9.999899864196777 12.99960041046143 9.104400634765625 12.99960041046143 8.000100135803223 C 12.99960041046143 6.895800113677979 13.89510059356689 6.00029993057251 15.00030040740967 6.00029993057251 L 21.99960136413574 6.00029993057251 C 23.10480117797852 6.00029993057251 24.00030136108398 6.895800113677979 24.00030136108398 8.000100135803223 C 24.00030136108398 9.104400634765625 23.10480117797852 9.999899864196777 21.99960136413574 9.999899864196777 L 15.00030040740967 9.999899864196777 Z">
+				</path>
+			</svg>
+			<div id="Group_A3_Group_41">
+				<div id="ID37">
+					<span>37</span>
+				</div>
+				<div id="Total_items_checked">
+					<span>Total items checked</span>
+				</div>
+			</div>
+			<div id="Group_2">
+				<div id="Items_with_errors">
+					<span>Items with errors</span>
+				</div>
+				<div id="ID18">
+					<span>18</span>
+				</div>
+			</div>
+			<div id="Group_3">
+				<div id="Items_with_warnings">
+					<span>Items with warnings</span>
+				</div>
+				<div id="ID13">
+					<span>13</span>
+				</div>
+			</div>
+			<div id="Group_4">
+				<div id="Items__OK_">
+					<span>Items ‘OK (T) / (A)’</span>
+				</div>
+				<div id="ID6">
+					<span>8</span>
+				</div>
+			</div>
+			<div id="Group_4_A3_Group_45">
+				<div id="Items__OK__A3_Text_48">
+					<span>Items ‘OK’</span>
+				</div>
+				<div id="ID6_A3_Text_49">
+					<span>6</span>
+				</div>
+			</div>
+			<div id="Group_A3_Group_46">
+				<div id="ID37_A3_Text_50">
+					<span>37</span>
+				</div>
+				<div id="Total_items_checked_A3_Text_51">
+					<span>Total items matched</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

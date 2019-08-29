@@ -54,7 +54,7 @@
     <script type="text/javascript" src="Javascripts\xCheckStudio\GoogleLoaderCharts.js"></script>
     <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\PDFExporter.js"></script> -->
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager1.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ReferenceManager.js"></script>
 
     <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
@@ -735,7 +735,7 @@
             <div id="maximizeViewerContainer" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content" id="maximizeViewerContainer-content"
-                    style="width: 750px; height: 740px; margin-left: 280px; margin-top: 5px;">
+                    style="width: 60%; height: 100%; margin-left: 280px; margin-top: 5px;">
 
                 </div>
             </div>
@@ -826,7 +826,7 @@
 
 
                     // load analytics data
-                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';            
+                    document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsTotalCheckModule.html" style="height: 100%; width: 100%" ></object>';            
                 },
                 error: function (error) {
                     //alert('error; ' + eval(error));
@@ -1264,15 +1264,16 @@
                 resizeHoopsViewerCanvas();
             }
             else if (document.getElementById("AnalyticsViewTab").style.backgroundColor === "rgb(243, 240, 244)") {
-                var analyticsContainerElement = document.getElementById("analyticsContainer");
+                // var analyticsContainerElement = document.getElementById("analyticsContainer");
                 var modalViewer = document.getElementById("maximizeViewerContainer-content");
-                modalViewer.innerHTML = "";
-                modalViewer.appendChild(analyticsContainerElement);
+                document.getElementById("maximizeViewerContainer-content").innerHTML='<object type="text/html" data="analyticsFullModule.html" ></object>';
+                // modalViewer.innerHTML = "";
+                // modalViewer.appendChild(analyticsContainerElement);
                 modalViewer.style.marginLeft = "20px";
                 modalViewer.style.marginTop = "10px";
-                modalViewer.style.height = "750px";
+                modalViewer.style.height = "100%";
                 var modalAnalyticsContainer = modalViewer.children[0]//modalViewer.getElementById("analyticsContainer");
-                modalAnalyticsContainer.style.height = "743px";
+                modalAnalyticsContainer.style.height = "100%";
                 modalAnalyticsContainer.style.width = "165%";
                 modalAnalyticsContainer.style.marginTop = "0px";
             }

@@ -83,18 +83,18 @@
         try
         {  
             //session_start();
-            if(!isset($_SESSION['LoadProject'] ))
-            {
-               echo "fail";
-               return NULL;                
-            }
-            $loadProjectString = $_SESSION['LoadProject'];
+            // if(!isset($_SESSION['LoadProject'] ))
+            // {
+            //    echo "fail";
+            //    return NULL;                
+            // }
+            // $loadProjectString = $_SESSION['LoadProject'];
 
-            $loadProject = false;
-            if(strtolower($loadProjectString) === 'true')
-            {
-                $loadProject = true;   
-            }           
+            // $loadProject = false;
+            // if(strtolower($loadProjectString) === 'true')
+            // {
+            //     $loadProject = true;   
+            // }           
 
             // open database
             $mainDbPath = getCheckDatabasePath($projectName, $checkName);
