@@ -101,11 +101,11 @@ var ReviewModuleViewerInterface = function (viewerOptions,
         _this.selectedComponentId = undefined;
         // highlight corresponding component in another viewer
         if (_this.ViewerOptions[0] === "viewerContainer1") {
-            if (_this.ReviewManager.SourceBReviewModuleViewerInterface !== undefined) {
-                _this.ReviewManager.SourceBReviewModuleViewerInterface.unHighlightComponent();
+            if (_this.ReviewManager.SourceBReviewViewerInterface !== undefined) {
+                _this.ReviewManager.SourceBReviewViewerInterface.unHighlightComponent();
 
-                _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedNodeId = undefined;
-                _this.ReviewManager.SourceBReviewModuleViewerInterface.selectedComponentId = undefined;
+                _this.ReviewManager.SourceBReviewViewerInterface.selectedNodeId = undefined;
+                _this.ReviewManager.SourceBReviewViewerInterface.selectedComponentId = undefined;
             }
             else if (_this.ReviewManager.SelectedComponentRowFromSheetB !== undefined) {
                 // reset color of row
@@ -117,11 +117,11 @@ var ReviewModuleViewerInterface = function (viewerOptions,
             }
         }
         else if (_this.ViewerOptions[0] === "viewerContainer2") {
-            if (_this.ReviewManager.SourceAReviewModuleViewerInterface !== undefined) {
-                _this.ReviewManager.SourceAReviewModuleViewerInterface.unHighlightComponent();
+            if (_this.ReviewManager.SourceAReviewViewerInterface !== undefined) {
+                _this.ReviewManager.SourceAReviewViewerInterface.unHighlightComponent();
 
-                _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedNodeId = undefined;
-                _this.ReviewManager.SourceAReviewModuleViewerInterface.selectedComponentId = undefined;
+                _this.ReviewManager.SourceAReviewViewerInterface.selectedNodeId = undefined;
+                _this.ReviewManager.SourceAReviewViewerInterface.selectedComponentId = undefined;
             }
             else if (_this.ReviewManager.SelectedComponentRowFromSheetA !== undefined) {
                 // reset color of row

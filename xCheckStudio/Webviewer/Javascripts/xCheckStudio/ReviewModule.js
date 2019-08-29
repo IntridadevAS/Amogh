@@ -195,7 +195,7 @@ function loadSourceAComplianceData(complianceCheckGroups,
          sourceAComplianceHierarchy);
 
     // populate review table
-    sourceAComplianceReviewManager.populateReviewTable();
+    // sourceAComplianceReviewManager.populateReviewTable();
 }
 
 function loadSourceBComplianceData(complianceCheckGroups,
@@ -213,7 +213,7 @@ function loadSourceBComplianceData(complianceCheckGroups,
 
 
     // populate review table
-    sourceBComplianceReviewManager.populateReviewTable(); 
+    // sourceBComplianceReviewManager.populateReviewTable(); 
 
 }
 
@@ -235,8 +235,6 @@ function loadComparisonData(comparisonCheckGroups,
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
 
-    // populate review table
-    comparisonReviewManager.populateReviewTable();
 }
 
 function onHomeClick() {

@@ -6,10 +6,10 @@
     <link href="CSS/Dropdown.css" rel="stylesheet" type="text/css" />
     <link href="CSS/ReferenceListStyle.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModule.js"></script>
-
     <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
     <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
+    <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
+    <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
 
     <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
     <link href="images/UIPackage/favicon.png" rel="shortcut icon" />
@@ -18,22 +18,31 @@
     <link href="CSS/module2.css" rel="stylesheet" type="text/css" />
     <meta content="Launchpad by Anima" name="author">
     </meta>
-    <!-- <script type="text/javascript" src="Javascripts\jquery\jquery-1.7.1.min.js"></script> -->
-    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+
+    <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+    <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModule.js"></script>
     <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
 
     <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
     <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>    
+    <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script> 
+    <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\Review1DViewerDataManager.js"></script>    -->
     <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
 
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleViewerInterface.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerInterface.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>    
-    <link href="CSS\analytics.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleStringCollection.js"></script>   
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckResultsTable.js"></script>
+    <script type="text/javascript" src="src\Infragistics\infragistics.core.js"></script>
+    <script type="text/javascript" src="src\Infragistics\infragistics.lob.js"></script>
+    
+
+    <!-- <link href="CSS\analytics.css" rel="stylesheet" type="text/css" /> -->
     <link rel="stylesheet" href="CSS\ViewStyle.css" type="text/css" />
     <!-- <link rel="stylesheet" href="CSS\Tablestyle.css" type="text/css" /> -->
 
@@ -236,6 +245,16 @@
             overflow: hidden;
         }
     </style>
+
+    <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: gray; 
+        border-radius: 6px;
+    }
+  </style>
 </head>
 
 <body style="margin: 0;
@@ -429,19 +448,15 @@
                 </div>
                 <div id="ComparisonDetailedReviewTbody" class="table"
                     style='height:202px;display:none; width: 579px;display:block;'>
-                    <!-- <div class="bg3">
-                        </div> -->
                     <div class="comments">
                     </div>
                     <div class="adescriptionvalue">
                     </div>
-                    <div id="ComparisonDetailedReviewCell" style="border:none; width: 579px; height: 150px"></div>
+                    <div id="ComparisonDetailedReviewCell" style="border:none; width: 579px; height: 200px;"></div>
                     <div id="ComparisonDetailedReviewComment"
                         style="border:none; width: 579px; height:20px; font-size: 10px"></div>
                 </div>
                 <div id="ComplianceADetailedReviewTbody" class="table" style='height:202px;display:none;'>
-                    <!-- <div class="bg3">
-                            </div> -->
                     <div class="comments">
                     </div>
                     <div class="adescriptionvalue">
@@ -452,8 +467,6 @@
                         style="border:none; width: 579px; height:20px; font-size: 10px"></div>
                 </div>
                 <div id="ComplianceBDetailedReviewTbody" class="table" style='height:202px;display:none;'>
-                    <!-- <div class="bg3">
-                        </div> -->
                     <div class="comments">
                     </div>
                     <div class="adescriptionvalue">
@@ -502,26 +515,7 @@
                                                 </div>
 
                                                 <div class="example-canvas-tiny" id="viewerContainer1"
-                                                    style="width: 550px; height: 270px; min-width: 200px; border-style: none;">
-
-                                                    <!-- explode slider
-                                                                                        <div id="explodeOverlay1" class="sliderOverlay">
-                                                                                            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                                                                                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
-                                                                                                <p><span id="explodeValue1"></span></p>
-                                                                                            </div>
-                                                                                        </div> -->
-
-                                                    <!-- Translucency slider -->
-                                                    <!-- <div id="translucencyOverlay1" class="sliderOverlay">
-                                                                                            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                                                                                <input type="range" min="0" max="1" value="1" step="0.1" class="slider"
-                                                                                                    id="translucencySlider1">
-                                                                                                <p> <span id="translucencyValue1"></span></p>
-                                                                                            </div>
-                                                                                        </div> -->
-
-                                                </div>
+                                                    style="width: 550px; height: 270px; min-width: 200px; border-style: none;"></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -550,25 +544,7 @@
                                                 </div>
 
                                                 <div class="example-canvas-tiny" id="viewerContainer2"
-                                                    style="width: 550px; height: 270px; min-width: 200px; border-style: none;">
-
-                                                    <!-- explode slider -->
-                                                    <!-- <div id="explodeOverlay2" class="sliderOverlay">
-                                                    <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                                        <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
-                                                        <p> <span id="explodeValue2"></span></p>
-                                                    </div>
-                                                </div> -->
-
-                                                    <!-- Translucency slider -->
-                                                    <!-- <div id="translucencyOverlay2" class="sliderOverlay">
-                                                    <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                                                        <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
-                                                        <p> <span id="translucencyValue2"></span></p>
-                                                    </div>
-                                                </div> -->
-
-                                                </div>
+                                                    style="width: 550px; height: 270px; min-width: 200px; border-style: none;"></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -963,12 +939,11 @@
             }
 
             document.getElementById(tabName).style.display = "block";
-
             // // clear all contents of checksViewTable
             //var checksViewTable = document.getElementById("checksViewTable");
 
-            var viewerContainer1 = document.getElementById("viewerContainer1");
-            viewerContainer1.innerHTML = ""
+            // var viewerContainer1 = document.getElementById("viewerContainer1");
+            // viewerContainer1.innerHTML = ""
             // for (var i = 0; i < viewerContainer1.children.length; i++) {
             //     var childElement = viewerContainer1.children[i];
             //     if (childElement.id !== "explodeOverlay1") {
@@ -981,8 +956,8 @@
             //     }
             // }
 
-            var viewerContainer2 = document.getElementById("viewerContainer2");
-            viewerContainer2.innerHTML = ""
+            // var viewerContainer2 = document.getElementById("viewerContainer2");
+            // viewerContainer2.innerHTML = ""
             // for (var i = 0; i < viewerContainer2.children.length; i++) {
             //     var childElement = viewerContainer2.children[i];
             //     if (childElement.id !== "explodeOverlay2") {
@@ -994,6 +969,36 @@
             //         document.getElementById("explodeSlider2").value = 0;
             //     }
             // }
+
+            // if(!$("#viewerContainer1").is(':empty') ) {
+                if ($("#viewerContainer1").data("igGrid") !=null) {
+                    $("#viewerContainer1").igGrid("destroy");
+                }
+            // }
+
+            // if(!$("#viewerContainer2").is(':empty') ) {
+                if ($("#viewerContainer2").data("igGrid") !=null) {
+                    $("#viewerContainer2").igGrid("destroy");
+                }
+            // }
+
+            if(!$("#ComparisonDetailedReviewCell").is(':empty') ) {
+                if ($("#ComparisonDetailedReviewCell").data("igGrid") !=null) {
+                    $("#ComparisonDetailedReviewCell").igGrid("destroy");
+                }
+            }
+
+            if(!$("#SourceAComplianceDetailedReviewCell").is(':empty') ) {
+                if ($("#SourceAComplianceDetailedReviewCell").data("igGrid") !=null) {
+                    $("#SourceAComplianceDetailedReviewCell").igGrid("destroy");
+                }
+            }
+
+            if(!$("#SourceBComplianceDetailedReviewCell").is(':empty') ) {
+                if ($("#SourceBComplianceDetailedReviewCell").data("igGrid") !=null) {
+                    $("#SourceBComplianceDetailedReviewCell").igGrid("destroy");
+                }
+            }
 
             if (tabName === "ComparisonTabPage") {
                 currentlyOpenedTab = "ComparisonTabPage";
@@ -1078,6 +1083,9 @@
                     if (sourceAComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow) {
                         sourceAComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceAComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
+                    if(sourceAComplianceReviewManager.SourceAViewerCurrentSheetLoaded !== undefined) {
+                        sourceAComplianceReviewManager.SourceAViewerCurrentSheetLoaded = undefined;
+                    }       
                 }
             }
             else if (tabName === "SourceBComplianceTabPage") {
@@ -1114,21 +1122,24 @@
                     if (sourceBComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow) {
                         sourceBComplianceReviewManager.SelectionManager.RemoveHighlightColor(sourceBComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow);
                     }
+                    if(sourceBComplianceReviewManager.SourceBViewerCurrentSheetLoaded !== undefined) {
+                        sourceBComplianceReviewManager.SourceBViewerCurrentSheetLoaded = undefined;
+                    } 
                 }
             }
 
             // clear views before loading models into viewers
             if (typeof comparisonReviewManager !== 'undefined') {
                 // clear viewer for XMl data source
-                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
+                if (comparisonReviewManager.SourceAReviewViewerInterface &&
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer) {
 
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.model.clear();
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer.model.clear();
                 }
 
-                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.model.clear();
+                if (comparisonReviewManager.SourceBReviewViewerInterface &&
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer.model.clear();
                 }
 
             }
@@ -1270,13 +1281,13 @@
         function resizeHoopsViewerCanvas() {
             if (document.getElementById("ComparisonDetailedReviewTbody").style.display === "block" &&
                 comparisonReviewManager !== undefined) {
-                if (comparisonReviewManager.SourceAReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceAReviewModuleViewerInterface.Viewer.resizeCanvas();
+                if (comparisonReviewManager.SourceAReviewViewerInterface &&
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceAReviewViewerInterface.Viewer.resizeCanvas();
                 }
-                if (comparisonReviewManager.SourceBReviewModuleViewerInterface &&
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer) {
-                    comparisonReviewManager.SourceBReviewModuleViewerInterface.Viewer.resizeCanvas();
+                if (comparisonReviewManager.SourceBReviewViewerInterface &&
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer) {
+                    comparisonReviewManager.SourceBReviewViewerInterface.Viewer.resizeCanvas();
                 }
             }
             else if (document.getElementById("ComplianceADetailedReviewTbody").style.display === "block" &&

@@ -26,19 +26,21 @@ const ComparisonColumnNames = {
 // comparison property table
 // indices
 const ComparisonPropertyColumns = {
-    SourceAName: 0,
-    SourceAValue: 1,
-    SourceBValue: 2,
-    SourceBName: 3,
-    Status: 4
+    Select: 0,
+    SourceAName: 1,
+    SourceAValue: 2,
+    SourceBValue: 3,
+    SourceBName: 4,
+    Status: 5
 }
 
 // column names
 const ComparisonPropertyColumnNames = {
-    SourceAName: "A_Property",
-    SourceAValue: "A_Value",
-    SourceBValue: "B_Value",
-    SourceBName: "B_Property",
+    Select: "Select",
+    SourceAName: "PropertyA",
+    SourceAValue: "ValueA",
+    SourceBValue: "ValueB",
+    SourceBName: "PropertyB",
     Status: "Status"
 }
 
@@ -51,6 +53,13 @@ const ComplianceColumns = {
     NodeId: 3,
     ResultId: 4,
     GroupId: 5
+
+    // // Select: 0,
+    // SourceName: 0,
+    // Status: 1,
+    // NodeId: 2,
+    // ResultId: 3,
+    // GroupId: 4
 }
 
 // Compliance main review column names
@@ -64,13 +73,15 @@ const ComplianceColumnNames = {
 }
 
 const CompliancePropertyColumns = {
-    PropertyName: 0,
-    PropertyValue: 1,
-    Status: 2
+    Select: 0,
+    PropertyName: 1,
+    PropertyValue: 2,
+    Status: 3
 }
 
 // column names
 const CompliancePropertyColumnNames = {
+    Select: "Select",
     PropertyName: "Property",
     PropertyValue: "Value",
     Status: "Status"
