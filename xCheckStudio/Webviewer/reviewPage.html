@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check Studio</title>
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/reviewPage.css">
+  <link rel="stylesheet" href="src/css/fonts.css">
+</head>
+
+<body>
+  <header>
+    <button type="button" class="dropDownMenu">
+    </button>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
+    <div class="userInfo">
+      <p class="userName"> User Name </p>
+      <img id="userImg" src="public/notAUserImg.jpg" alt="">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+      </div>
+    </div>
+
+  </header>
+  <div class="background">
+    <div class="tabButtonContainer" id="tabsContainer">
+      <div id="tabContainer" class="tabContainer">
+        <div id="comparisonTab" class="tab" data-id="comparison">
+          Comparison
+          <img id="comparisonArrow" class="arrow" src="public/symbols/ChevronDn.svg">
+          <!-- onClick="viewTabs.populateComparisons(this)" -->
+        </div>
+        <div id="complianceTab" class="tab" data-id="compliance">
+          Compliance
+          <img id="complianceArrow" class="arrow" src="public/symbols/ChevronDn.svg">
+          <!--onClick="viewTabs.populateCompliances(this)"-->
+        </div>
+      </div>
+      <div class="buttonContainer">
+        <div class="buttonGroup">
+          <button id="isolate" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Isolate"></span>
+            <img src="public/symbols/XD_Isolate.svg" alt="">
+          </button>
+          <button id="show" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Show"></span>
+            <img src="public/symbols/XD_Show.svg" alt="">
+          </button>
+          <button id="hide" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Hide"></span>
+            <img src="public/symbols/XD_Hide.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="properties" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Properties"></span>
+            <img src="public/symbols/XD_Properties.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="clearData" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Clear Data"></span>
+            <img src="public/symbols/XD_ClearData.svg" alt="">
+          </button>
+          <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Save Progress"></span>
+            <img src="public/symbols/XD_SaveData.svg" alt="">
+          </button>
+        </div>
+        <div class="buttonGroup">
+          <button id="history" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="History"></span>
+            <img src="public/symbols/XD_HistoryVersion.svg" alt="">
+          </button>
+          <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
+            <span class="tooltip" data-tooltip="Check Info"></span>
+            <img src="public/symbols/XD_Checkinfo.svg" alt="">
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="viewsContainer" id="viewsContainer">
+      <div id="selectFiles" class="selectFilesContainer">
+      </div>
+
+      <div id="viewPanelComparison" class="viewPanel">
+        <div id="tableDataComparison" class="tableContainer">
+          <div id="comparisonMainContainer" class="tablesArea">
+            <!-- <table id="comparisonMainTable"> </table> -->            
+
+          </div>
+          <div class="infoArea">
+            <div class="infoAreaHeader">
+              <img src="public/symbols/InfoMenu.svg" alt="">
+              <p>Detail Info</p>              
+              <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
+            </div>
+            <div id="comparisonDetailInfoContainer">
+            
+          </div>
+          </div>
+        </div>
+        <div id="center" class="grabBar"></div>
+        <div id="visualizerA" class="visualizerContainer visualizer4">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="compare1" class="comparePanel"></div>
+          <div id="compare2" class="comparePanel"></div>
+          <div id="compare3" class="comparePanel"></div>
+          <div id="compare4" class="comparePanel"></div>
+        </div>
+      </div>
+      <div id="viewPanelCompliance" class="viewPanel hide">
+        <div id="tableDataCompliance" class="tableContainer">
+          <div class="tablesArea">           
+          </div>
+          <div class="infoArea">
+            <div class="infoAreaHeader">
+              <img src="public/symbols/InfoMenu.svg" alt="">
+              <p>Detail Info</p>
+              <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
+            </div>
+
+            <table id="comparisonDetailedTable"> </table>
+          </div>
+        </div>
+        <div id="center" class="grabBar"></div>
+        <div id="visualizerA" class="visualizerContainer">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          Compliance
+        </div>
+      </div>
+      <div class="projectName">
+        <p>Example Project Name / Example Check Name</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+  
+    .ui-iggrid tbody td {
+      white-space: nowrap;
+    }
+  
+    .content {
+      padding: 0 18px;
+      display: none;
+      overflow: hidden;
+      background-color: #f1f1f1;
+    }
+  
+    .scrollable {
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+  </style>
+
+  <script type="text/javascript" src="src/scripts/reviewPage.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Review.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerInterface.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewSelectionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonSelectionManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComplianceSelectionManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
+
+  <link rel="stylesheet" href="CSS\collapsibleButton.css" type="text/css" />
+
+  <!-- JQuery dependencies -->
+  <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+  <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+
+  <!-- infragistics dependencies -->
+  <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
+  <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
+  <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
+  <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
+
+  <script>
+
+    window.onload = function () {
+      initReviewModule();
+    }
+
+  </script>
+</body>
+
+</html>

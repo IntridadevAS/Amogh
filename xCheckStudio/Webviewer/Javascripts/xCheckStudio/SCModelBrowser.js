@@ -321,7 +321,14 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             //autoCommit: true,
             height: "100%",
             width: "100%",
-            initialExpandDepth: 0,          
+            initialExpandDepth: 0,
+            rendered: function (evt, ui) {
+                //return reference to igTreeGrid
+                //ui.owner;
+                // initialize the context menu
+                var modelBrowserContextMenu = new ModelBrowserContextMenu();
+                modelBrowserContextMenu.Init(_this);
+            },      
             features: [
                 {
                     name: "Sorting",

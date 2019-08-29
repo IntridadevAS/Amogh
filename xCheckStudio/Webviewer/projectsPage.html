@@ -25,7 +25,7 @@
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
-      <p class="userName"> User Name </p>
+      <p id="userName" class="userName"></p>
       <img id="userImg" src="public/notAUserImg.jpg" alt="">
       <div class="programCntrls">
         <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
@@ -393,6 +393,15 @@
 
     <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
     <script>
+      window.onload = function () {
+        setUserName();
+      }
+
+      function setUserName() {
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+        document.getElementById("userName").innerHTML = userinfo.alias;
+      }
+
       function OnCreateProject() {
         var projectname = document.getElementById("inputprojectname").value;
         if (projectname === undefined || projectname === "") {
@@ -425,10 +434,10 @@
         }*/
 
         //setProjectSessionData(projectname).then(function () {
-          // create project database
-          //createProject(projectname, descriptionText, functionText, projectScope);
-          localStorage.setItem("loadSavedProject",false);
-          controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
+        // create project database
+        //createProject(projectname, descriptionText, functionText, projectScope);
+        localStorage.setItem("loadSavedProject", false);
+        controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
         //});
 
       }
@@ -462,7 +471,7 @@
         checkspace["checkdate"] = xCheckStudio.Util.getCurrentDateTime();
         checkspace["checkisfavourite"] = document.getElementById('favoriteCheck').value;
         if (checkspace.checkName !== '') {
-            newCheckView.createNewCheck(checkspace);
+          newCheckView.createNewCheck(checkspace);
         }
       }
     </script>

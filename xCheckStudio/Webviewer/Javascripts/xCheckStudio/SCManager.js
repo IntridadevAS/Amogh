@@ -86,6 +86,10 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 //     }
                 // }
 
+                //activate context menu
+                var checkViewerContextMenu = new CheckViewerContextMenu(viewer);
+                checkViewerContextMenu.Init();
+
                 return resolve(true);
 
             },
@@ -127,13 +131,13 @@ SCManager.prototype.BindEvents = function (viewer) {
                 }
             }
         },
-        contextMenu: function (position) {
-            if (currentViewer === undefined) {
-                currentViewer = viewer;
-            }
+        // contextMenu: function (position) {
+        //     if (currentViewer === undefined) {
+        //         currentViewer = viewer;
+        //     }
 
-            _this.menu(event.clientX, event.clientY);
-        }
+        //     _this.menu(event.clientX, event.clientY);
+        // }
     });
 };
 

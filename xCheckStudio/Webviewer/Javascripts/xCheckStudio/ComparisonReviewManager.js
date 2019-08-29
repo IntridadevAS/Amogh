@@ -66,7 +66,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
     }
 
     if (this.SourceAViewerData !== undefined) {
-        this.SourceAReviewViewerInterface = new Review3DViewerInterface(this.SourceAViewerData,
+        this.SourceAReviewViewerInterface = new Review3DViewerInterface(["viewerContainer1", this.SourceAViewerData[0]],
             this.SourceAComponentIdVsComponentData,
             this.SourceANodeIdVsComponentData,
             this);
@@ -75,7 +75,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
     }
 
     if (this.SourceBViewerData !== undefined) {
-        this.SourceBReviewViewerInterface = new Review3DViewerInterface(this.SourceBViewerData,
+        this.SourceBReviewViewerInterface = new Review3DViewerInterface(["viewerContainer2", this.SourceBViewerData[0]],
             this.SourceBComponentIdVsComponentData,
             this.SourceBNodeIdVsComponentData,
             this);

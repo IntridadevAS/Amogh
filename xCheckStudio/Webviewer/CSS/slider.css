@@ -3,7 +3,7 @@
   position: absolute; /* Sit on top of the page content */
   display: none; /* Hidden by default */
   width: 5%; /* Full width (cover the whole page) */
-  height: 25%; /* Full height (cover the whole page) */
+  /*height: 25%;*/ /* Full height (cover the whole page) */
   /* top: 30px; 
   left: 20px; */
   right: 0;
@@ -20,7 +20,7 @@
 .slider {
   -webkit-appearance: slider-vertical;
   width: 8px;
-  height: 25%;
+  /* height: 25%; */
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;

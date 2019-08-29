@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
   <header>
     <div id="mainMenu" class="dropDownMenu">
       <img src=" " alt="">
@@ -19,8 +20,9 @@
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
-      <p id="userName" class="userName"> User Name </p>
-      <img id="userImg" src="public/symbols/XD_Person.svg" alt="">
+      <p id="userName" class="userName"></p>
+      <!-- <img id="userImg" src="public/symbols/XD_Person.svg" alt=""> -->
+      <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
         <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
         <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
@@ -29,6 +31,7 @@
     </div>
 
   </header>
+
   <div class="background">
 
     <div class="tabButtonContainer" id="tabsContainer">
@@ -111,28 +114,67 @@
           </form>
         </div>
       </div>
+
       <div id="viewPanelA" class="viewPanel">
         <div class="tableContainer">
           <!-- tableA           -->
-          <table id="tableDataA"> </table>
+          <table id="tableDataA"></table>
         </div>
         <div id="center" class="grabBar"></div>
-        <div  id="visualizerA" class="visualizerContainer" >
+        <div class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-          <!-- visualizerA -->          
+          <!-- visualizerA -->
+
+          <!-- explode slider -->
+          <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+              <p> <span id="explodeValue1"></span></p>
+            </div>
+          </div>
+
+          <!-- Translucency slider -->
+          <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+              <p> <span id="translucencyValue1" style="color: grey"></span></p>
+            </div>
+          </div>
+
+          <div id="visualizerA" class="tempContainer"> </div>
+
         </div>
       </div>
       <div id="viewPanelB" class="viewPanel hide">
         <div class="tableContainer">
           <!-- tableB -->
-           <!-- tableA           -->
-           <table id="tableDataB"> </table>
+          <!-- tableA           -->
+          <table id="tableDataB"> </table>
         </div>
         <div class="grabBar"></div>
-        <div id="visualizerB" class="visualizerContainer">
+        <div class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerB -->
+          <!-- explode slider -->
+          <div id="explodeOverlay2" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
+              <p> <span id="explodeValue2"></span></p>
+            </div>
+          </div>
+
+          <!-- Translucency slider -->
+          <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
+              <p> <span id="translucencyValue2" style="color: grey"></span></p>
+            </div>
+          </div>
+
+          <div id="visualizerB" class="tempContainer"> </div>
+
         </div>
+
       </div>
       <div id="viewPanelC" class="viewPanel hide">
         <div class="tableContainer">
@@ -140,9 +182,27 @@
           <table id="tableDataC"> </table>
         </div>
         <div class="grabBar"></div>
-        <div id="visualizerC" class="visualizerContainer">
+        <div class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerC -->
+          <!-- explode slider -->
+          <div id="explodeOverlay3" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider3">
+              <p> <span id="explodeValue3"></span></p>
+            </div>
+          </div>
+        
+          <!-- Translucency slider -->
+          <div id="translucencyOverlay3" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider3">
+              <p> <span id="translucencyValue3" style="color: grey"></span></p>
+            </div>
+          </div>
+        
+          <div id="visualizerC" class="tempContainer"> </div>
+
         </div>
       </div>
       <div id="viewPanelD" class="viewPanel hide">
@@ -151,9 +211,26 @@
           <table id="tableDataD"> </table>
         </div>
         <div class="grabBar"></div>
-        <div id="visualizerD" class="visualizerContainer">
+        <div class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerD -->
+           <!-- explode slider -->
+           <div id="explodeOverlay4" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider4">
+              <p> <span id="explodeValue4"></span></p>
+            </div>
+          </div>
+        
+          <!-- Translucency slider -->
+          <div id="translucencyOverlay4" class="sliderOverlay" style="display: none">
+            <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+              <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider4">
+              <p> <span id="translucencyValue4" style="color: grey"></span></p>
+            </div>
+          </div>
+
+          <div id="visualizerD" class="tempContainer"> </div>
         </div>
       </div>
 
@@ -169,7 +246,7 @@
         <button id="checkButton" type="submit" name="button"></button>
       </div>
       <div class="checkName">
-        <p>Example Project Name / Example Check Name</p>
+        <p id="checkSpaceName"></p>
       </div>
     </div>
   </div>
@@ -180,9 +257,16 @@
     }
 
     .ui-iggrid tbody td {
-
       white-space: nowrap;
+    }
 
+    .tempContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: auto;
     }
   </style>
   <!-- JQuery dependencies -->
@@ -209,6 +293,7 @@
   <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
   <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
   <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
+  <script type="text/javascript" src="src\infragistics\infragistics.dv.js"></script>
 
   <!-- Excel reader dependencies -->
   <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
@@ -241,7 +326,8 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\GenericProperties.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ContextMenuManager.js"></script>
-  <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowserContextMenuManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowserContextMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckViewerContextMenu.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelReader.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DBReader.js"></script>
@@ -255,18 +341,27 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckManager.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\Save.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
+
+  <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
+
   <script>
 
     window.onload = function () {
+
       loadCheckCases();
 
       var checkButton = document.getElementById("checkButton");
       checkButton.onclick = function () {
-       
+
         // show busy loader
         onCheckButtonClick();
       };
     }
+
 
   </script>
 </body>
