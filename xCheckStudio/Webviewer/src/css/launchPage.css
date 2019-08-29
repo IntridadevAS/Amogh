@@ -22,6 +22,18 @@ footer {
   z-index: 1;
 }
 
+.splashtext {
+  height: 280px;
+  width: 500px;
+  position: absolute;
+  top: 15%;
+  left: 40%;
+  justify-content: flex-end;
+  font-family: 'Montserrat';
+  font-size: 80px;
+
+}
+
 .loginInfo {
   height: 280px;
   width: 500px;

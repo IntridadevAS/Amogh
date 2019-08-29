@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check Studio</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="src/css/launchPage.css">
+    <link rel="stylesheet" href="src/css/fonts.css">
+  </head>
+  <body>
+    <header>
+      <button type="button" class="dropDownMenu" >
+      </button>
+      <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
+      <div class="userInfo">
+        <div class="programCntrls">
+          <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
+          <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
+          <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program"></button>
+        </div>
+      </div>
+    </header>
+    <div id="background" class="background">
+      <p class="splashtext" id="username">Hi</p>
+    </div>
+    <script type="text/javascript" src="Javascripts\jquery\jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="src/scripts/launchPage.js"></script>
+    <script>
+      window.onload = function () {
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+        var str1 = "Hi ";
+        var str2 = userinfo.username;;
+        document.getElementById("username").innerHTML = str1.concat(str2);
+        setTimeout(function () {
+          $('body').fadeOut(1000,newPage);// will be executed after the specified time
+        }, 2000);
+    }
+    function newPage(){
+      window.location.replace("landingpage.html");
+        //window.location.href = "landingpage.html";
+    }
+  </script>
+  </body>
+</html>

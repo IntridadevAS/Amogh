@@ -61,8 +61,12 @@
           document.getElementById("errorMsgContainer").style.display="block";
         }
         else{
-          window.location.href = "landingpage.html";
+          $('body').fadeOut(900,newPage);
         }
+      }
+
+      function newPage(){
+        window.location.href = "splashscreen.html";
       }
   </script>
   </body>
