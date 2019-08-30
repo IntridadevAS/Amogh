@@ -1,4 +1,4 @@
-function ModelBrowserContextMenuManager() {
+function ModelBrowserContextMenu() {
       // call super constructor
       ContextMenuManager.call(this);
 
@@ -9,17 +9,46 @@ function ModelBrowserContextMenuManager() {
 }
 
 // inherit from parent
-ModelBrowserContextMenuManager.prototype = Object.create(ContextMenuManager.prototype);
-ModelBrowserContextMenuManager.prototype.constructor = ModelBrowserContextMenuManager;
+ModelBrowserContextMenu.prototype = Object.create(ContextMenuManager.prototype);
+ModelBrowserContextMenu.prototype.constructor = ModelBrowserContextMenu;
 
-ModelBrowserContextMenuManager.prototype.Init = function (modelBrowser) {
+// ModelBrowserContextMenu.prototype.Init = function (x,y) {
+
+//       var radialMenuParent = document.getElementById("radialMenuParent");
+//       radialMenuParent.style.left = x;
+//       radialMenuParent.style.left = y;
+
+//       // create the radial menu
+//       $("#radialMenu").igRadialMenu({
+//             width: "300px",
+//             height: "300px",
+//             items:
+//                   [
+//                         {
+//                               name: "button1",
+//                               header: "Bold",
+//                               //iconUri: "http://igniteui.com/images/samples/radial-menu/Bold.png",
+//                               click: function () { toggleBold(); }
+//                         },
+//                         {
+//                               name: "button2",
+//                               header: "Italic",
+//                               //iconUri: "http://igniteui.com/images/samples/radial-menu/Italic.png",
+//                               click: function () { toggleItalic(); }
+//                         },
+//                   ]
+//       });
+// }
+
+ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
       var _this = this;
       this.ModelBrowser = modelBrowser;
 
       $("#" + this.ModelBrowser.ModelBrowserContainer).contextMenu({
             className: 'contextMenu_style',
-            selector: '.jsgrid-row, .jsgrid-alt-row',
+            selector: 'tr',
+            // selector: '.jsgrid-row, .jsgrid-alt-row',
             build: function ($triggerElement, e) {
                   return {
                         callback: function (key, options) {
@@ -72,7 +101,7 @@ ModelBrowserContextMenuManager.prototype.Init = function (modelBrowser) {
       });
 }
 
-ModelBrowserContextMenuManager.prototype.HaveSCOperations = function () {
+ModelBrowserContextMenu.prototype.HaveSCOperations = function () {
       if (!this.ModelBrowser ||
             !this.ModelBrowser.Webviewer ||
             !this.ModelBrowser.SelectionManager) {
@@ -82,7 +111,7 @@ ModelBrowserContextMenuManager.prototype.HaveSCOperations = function () {
       return true;
 }
 
-ModelBrowserContextMenuManager.prototype.OnMenuItemClicked = function (key, options) {
+ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       if (key.toLowerCase() === "isolate") {
             this.OnIsolateClicked();
       }
@@ -97,7 +126,7 @@ ModelBrowserContextMenuManager.prototype.OnMenuItemClicked = function (key, opti
       }
 }
 
-ModelBrowserContextMenuManager.prototype.OnIsolateClicked = function () {
+ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       if (!this.ModelBrowser ||
           !this.ModelBrowser.Webviewer) {
             return;
@@ -116,7 +145,7 @@ ModelBrowserContextMenuManager.prototype.OnIsolateClicked = function () {
       });
 }
 
-ModelBrowserContextMenuManager.prototype.OnShowAllClicked = function () {
+ModelBrowserContextMenu.prototype.OnShowAllClicked = function () {
       if (!this.ModelBrowser ||
             !this.ModelBrowser.Webviewer ||
             !this.IsolateManager ||
@@ -134,7 +163,7 @@ ModelBrowserContextMenuManager.prototype.OnShowAllClicked = function () {
       });
 }
 
-ModelBrowserContextMenuManager.prototype.OnStartTranslucencyClicked = function () {
+ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
       if (!this.ModelBrowser ||
             !this.ModelBrowser.Webviewer) {
             return;
@@ -148,11 +177,17 @@ ModelBrowserContextMenuManager.prototype.OnStartTranslucencyClicked = function (
 
       var sliderId;
       var viewer = this.ModelBrowser.Webviewer;
-      if (viewer._params.containerId === "viewerContainer1") {
+      if (viewer._params.containerId === "visualizerA") {
             sliderId = "translucencySlider1";
       }
-      else if (viewer._params.containerId === "viewerContainer2") {
+      else if (viewer._params.containerId === "visualizerB") {
             sliderId = "translucencySlider2";
+      }
+      else if (viewer._params.containerId === "visualizerC") {
+            sliderId = "translucencySlider3";
+      }
+      else if (viewer._params.containerId === "visualizerD") {
+            sliderId = "translucencySlider4";
       }
       if (!sliderId) {
             return;
@@ -166,7 +201,7 @@ ModelBrowserContextMenuManager.prototype.OnStartTranslucencyClicked = function (
       translucencyManagers[viewer._params.containerId] = translucencyManager;
 }
 
-ModelBrowserContextMenuManager.prototype.OnStopTranslucencyClicked = function () {
+ModelBrowserContextMenu.prototype.OnStopTranslucencyClicked = function () {
       var viewer = this.ModelBrowser.Webviewer;
       var viewerId = viewer._params.containerId
       if (!(viewerId in translucencyManagers))
@@ -178,7 +213,7 @@ ModelBrowserContextMenuManager.prototype.OnStopTranslucencyClicked = function ()
       delete translucencyManagers[viewerId]; 
 }
 
-ModelBrowserContextMenuManager.prototype.GetSelectedNodes = function () {
+ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
       if (!this.ModelBrowser ||            
           !this.ModelBrowser.SelectionManager) {
             return;
@@ -192,7 +227,7 @@ ModelBrowserContextMenuManager.prototype.GetSelectedNodes = function () {
       for (var i = 0; i < browserSelectionManager.SelectedComponentRows.length; i++) {
 
             var selectedComponentRow = browserSelectionManager.SelectedComponentRows[i];
-            var nodeId = Number(selectedComponentRow.cells[modelBrowserNodeIdColumn].textContent.trim());
+            var nodeId = Number(selectedComponentRow.cells[ModelBrowserColumns3D.NodeId].textContent.trim());
 
             if (nodeId !== NaN) {
                   nodeIds.push(nodeId);

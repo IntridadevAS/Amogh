@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="31" viewBox="0 0 30 31">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="31" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="XD_Units" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" transform="translate(0 1)" fill="#323132" stroke="#15b9f9" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <text id="u" transform="translate(6)" fill="#15b9f9" font-size="20" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="2.13" y="19">u</tspan></text>
+    <g id="Group_274" data-name="Group 274" transform="translate(-1559 -54)">
+      <rect id="Rectangle_4" data-name="Rectangle 4" width="3" height="2" transform="translate(1576 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_5" data-name="Rectangle 5" width="3" height="2" transform="translate(1579 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="3" height="2" transform="translate(1582 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_1251" data-name="Rectangle 1251" width="3" height="2" transform="translate(1573 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_1252" data-name="Rectangle 1252" width="3" height="2" transform="translate(1570 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_1253" data-name="Rectangle 1253" width="3" height="2" transform="translate(1567 80) rotate(-90)" fill="#fff"/>
+      <rect id="Rectangle_1254" data-name="Rectangle 1254" width="3" height="2" transform="translate(1564 80) rotate(-90)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

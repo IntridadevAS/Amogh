@@ -1,10 +1,10 @@
 var translucencyManagers = {};
-function TranslucencyManager(viewers,   
+function TranslucencyManager(viewers,
     selectedNodes,
     sliderId) {
     this.ChangedComponents = {};
     this.Viewers = viewers;
-    
+
     this.SelectedNodes = selectedNodes;
     this.SliderId = sliderId;
     /* this iscomparison argument is valid, only when the translucency is activated for components selected in 
@@ -20,15 +20,23 @@ function TranslucencyManager(viewers,
         var outputFiled;
         var overlayField;
 
-        if (this.SliderId === "translucencySlider1") {          
+        if (this.SliderId === "translucencySlider1") {
             outputFiled = document.getElementById("translucencyValue1");
             overlayField = document.getElementById("translucencyOverlay1");
         }
-        else if (this.SliderId === "translucencySlider2") {            
+        else if (this.SliderId === "translucencySlider2") {
             outputFiled = document.getElementById("translucencyValue2");
             overlayField = document.getElementById("translucencyOverlay2");
         }
-        
+        else if (this.SliderId === "translucencySlider3") {
+            outputFiled = document.getElementById("translucencyValue3");
+            overlayField = document.getElementById("translucencyOverlay3");
+        }
+        else if (this.SliderId === "translucencySlider4") {
+            outputFiled = document.getElementById("translucencyValue4");
+            overlayField = document.getElementById("translucencyOverlay4");
+        }
+
         slider = document.getElementById(this.SliderId);
         if (!slider ||
             !outputFiled ||
@@ -36,8 +44,8 @@ function TranslucencyManager(viewers,
             return;
         }
 
-        overlayField.style.right = "10px";
-        overlayField.style.bottom = "45%";
+        //overlayField.style.right = "10px";
+        //overlayField.style.bottom = "45%";
         overlayField.style.display = "block";
         outputFiled.innerHTML = slider.value;
 
@@ -49,15 +57,21 @@ function TranslucencyManager(viewers,
 
             }
         }
-    }  
+    }
 
     TranslucencyManager.prototype.ShowTranslucencyValue = function (viewer, value) {
         var outputFiled;
-        if (this.SliderId === "translucencySlider1") {          
+        if (this.SliderId === "translucencySlider1") {
             outputFiled = document.getElementById("translucencyValue1");
         }
-        else if (this.SliderId === "translucencySlider2") {          
+        else if (this.SliderId === "translucencySlider2") {
             outputFiled = document.getElementById("translucencyValue2");
+        }
+        else if (this.SliderId === "translucencySlider3") {
+            outputFiled = document.getElementById("translucencyValue3");
+        }
+        else if (this.SliderId === "translucencySlider4") {
+            outputFiled = document.getElementById("translucencyValue4");
         }
         if (!outputFiled) {
             return;
@@ -84,7 +98,7 @@ function TranslucencyManager(viewers,
                     if (selectionItem.isNodeSelection()) {
                         selectedNodes.push(selectionItem._nodeId);
                     }
-                });                
+                });
             }
 
             // maintain changed components
@@ -114,16 +128,21 @@ function TranslucencyManager(viewers,
             var slider;
             var overlayField;
 
-                if (this.SliderId === "translucencySlider1")
-                {
-                    overlayField = document.getElementById("translucencyOverlay1");
-                }
-                else  if (this.SliderId === "translucencySlider2")
-                {
-                    overlayField = document.getElementById("translucencyOverlay2");
-                }
-                slider = document.getElementById(this.SliderId);
-                
+            if (this.SliderId === "translucencySlider1") {
+                overlayField = document.getElementById("translucencyOverlay1");
+            }
+            else if (this.SliderId === "translucencySlider2") {
+                overlayField = document.getElementById("translucencyOverlay2");
+            }
+            else if (this.SliderId === "translucencySlider3") {
+                overlayField = document.getElementById("translucencyOverlay3");
+            }
+            else if (this.SliderId === "translucencySlider4") {
+                overlayField = document.getElementById("translucencyOverlay4");
+            }
+
+            slider = document.getElementById(this.SliderId);
+
 
             if (!slider || !overlayField) {
                 return;
@@ -167,15 +186,20 @@ function TranslucencyManager(viewers,
         }
 
         var slider;
-        var outputFiled;    
-        if (this.SliderId === "translucencySlider1")
-        {
+        var outputFiled;
+        if (this.SliderId === "translucencySlider1") {
             outputFiled = document.getElementById("translucencyValue1");
         }
-        else  if (this.SliderId === "translucencySlider2")
-        {
-            outputFiled = document.getElementById("translucencyValue1");
+        else if (this.SliderId === "translucencySlider2") {
+            outputFiled = document.getElementById("translucencyValue2");
         }
+        else if (this.SliderId === "translucencySlider3") {
+            outputFiled = document.getElementById("translucencyValue3");
+        }
+        else if (this.SliderId === "translucencySlider4") {
+            outputFiled = document.getElementById("translucencyValue4");
+        }
+
         slider = document.getElementById(this.SliderId);
 
         if (!slider ||
@@ -213,8 +237,7 @@ function startTranslucency() {
 
     // get slider id
     var sliderId = getSliderId(currentViewer._params.containerId);
-    if(!sliderId)
-    {
+    if (!sliderId) {
         return;
     }
 
@@ -232,7 +255,7 @@ function stopTranslucency() {
     }
 
     translucencyManagers[currentViewer._params.containerId].Stop();
-    delete translucencyManagers[currentViewer._params.containerId];    
+    delete translucencyManagers[currentViewer._params.containerId];
 }
 
 function translucencyActive() {
@@ -261,13 +284,12 @@ function stopAllTranslucency() {
     }
 }
 
-function getSliderId(viewerContainerId)
-{
-    if (viewerContainerId === "viewerContainer1") {
-      return "translucencySlider1";        
+function getSliderId(viewerContainerId) {
+    if (viewerContainerId === "visualizerA") {
+        return "translucencySlider1";
     }
-    else if (viewerContainerId === "viewerContainer2") {
-        return "translucencySlider2";      
+    else if (viewerContainerId === "visualizerB") {
+        return "translucencySlider2";
     }
 
     return undefined;

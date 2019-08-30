@@ -13,7 +13,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="STEP_Compliance">
+<CheckCase name="STEP_Compliance" sourceA="STEP">
 	<Check type="Compliance"  sourceType="STEP" > 	  
 		<ComponentGroup>
 		  <ComponentClass>

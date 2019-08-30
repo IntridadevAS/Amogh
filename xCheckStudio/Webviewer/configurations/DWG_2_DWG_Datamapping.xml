@@ -1,4 +1,4 @@
-<CheckCase name="DWG_2_DWG">
+<CheckCase name="DWG_2_DWG"  sourceA="DWG" sourceB="DWG">
 
 	<Check type="Comparison" sourceAType="DWG" sourceBType="DWG">
 	</Check>

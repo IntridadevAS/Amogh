@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="30" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Component_2" data-name="Component 2" clip-path="url(#clip-path)">
+    <g id="Path_289" data-name="Path 289" fill="#323132">
+      <path d="M 25 29.5 L 5 29.5 C 2.51869010925293 29.5 0.5 27.48130989074707 0.5 25 L 0.5 5 C 0.5 2.51869010925293 2.51869010925293 0.5 5 0.5 L 25 0.5 C 27.48130989074707 0.5 29.5 2.51869010925293 29.5 5 L 29.5 25 C 29.5 27.48130989074707 27.48130989074707 29.5 25 29.5 Z" stroke="none"/>
+      <path d="M 5 1 C 2.794389724731445 1 1 2.794389724731445 1 5 L 1 25 C 1 27.20561027526855 2.794389724731445 29 5 29 L 25 29 C 27.20561027526855 29 29 27.20561027526855 29 25 L 29 5 C 29 2.794389724731445 27.20561027526855 1 25 1 L 5 1 M 5 0 L 25 0 C 27.76141929626465 0 30 2.238580703735352 30 5 L 30 25 C 30 27.76141929626465 27.76141929626465 30 25 30 L 5 30 C 2.238580703735352 30 0 27.76141929626465 0 25 L 0 5 C 0 2.238580703735352 2.238580703735352 0 5 0 Z" stroke="none" fill="#8a8a8a"/>
+    </g>
+    <path id="Path_292" data-name="Path 292" d="M9205.868-3262.539h7v-7" transform="translate(9217.869 -3257.539) rotate(180)" fill="none" stroke="#f2f3f4" stroke-width="3"/>
+    <path id="Path_293" data-name="Path 293" d="M9205.868-3262.539h7v-7" transform="translate(3287.539 9217.868) rotate(-90)" fill="none" stroke="#f2f3f4" stroke-width="3"/>
+    <path id="Path_294" data-name="Path 294" d="M9205.868-3262.539h7v-7" transform="translate(-3257.539 -9187.868) rotate(90)" fill="none" stroke="#f2f3f4" stroke-width="3"/>
+    <path id="Path_295" data-name="Path 295" d="M9205.868-3262.539h7v-7" transform="translate(-9187.868 3287.539)" fill="none" stroke="#f2f3f4" stroke-width="3"/>
+  </g>
+</svg>

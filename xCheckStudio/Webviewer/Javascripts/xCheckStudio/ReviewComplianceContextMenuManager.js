@@ -32,7 +32,7 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
     var mainReviewTableDiv = "#" + this.MainReviewTableDiv ;
     $(mainReviewTableDiv).contextMenu({
         className: 'contextMenu_style',
-        selector: '.jsgrid-row, .jsgrid-alt-row',
+        selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;

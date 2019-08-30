@@ -1,4 +1,4 @@
-<CheckCase name="SLDPRT_2_SLDPRT">
+<CheckCase name="SLDPRT_2_SLDPRT" sourceA="SLDPRT" sourceB="SLDPRT">
 
 	<Check type="Comparison" sourceAType="SLDPRT" sourceBType="SLDPRT">
 	       	    <ComponentGroup sourceAGroupName="Equipment"  sourceBGroupName="Equipment">

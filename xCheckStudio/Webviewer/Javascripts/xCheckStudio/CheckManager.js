@@ -31,8 +31,7 @@ function CheckManager(name) {
 
     }
 
-    CheckManager.prototype.performCheck = function (
-        checkCaseType,
+    CheckManager.prototype.performCheck = function (checkCaseType,
         comparisonCheck,
         interfaceObject,
         orderMaintained) {
@@ -40,10 +39,23 @@ function CheckManager(name) {
             // var $this = this;
         if (comparisonCheck) {           
 
-           var sourceASelectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();             
-           var sourceBSelectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();              
+          var sourceManagerA = SourceManagers["a"];
+          var sourceManagerB =SourceManagers["b"];
+           var sourceASelectedCompoents = sourceManagerA.ModelTree.GetSelectedComponents();             
+           var sourceBSelectedCompoents = sourceManagerB.ModelTree.GetSelectedComponents();
            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            var dataSourceOrderMaintained = "true";
+            if (!orderMaintained) {
+                dataSourceOrderMaintained = "false";
+            }
+            // var orderMaintained = true;
+            // if (sourceManagerA.SourceType.toLowerCase() === checkCaseType.SourceBType.toLowerCase() &&
+            //     sourceManagerB.SourceType.toLowerCase() === checkCaseType.SourceAType.toLowerCase()) {
+            //     orderMaintained = false;
+            // }                 
+            
             $.ajax({
                 url: 'PHP/checkDataSourceForComparison.php',
                 type: "POST",
@@ -52,7 +64,7 @@ function CheckManager(name) {
                     "CheckCaseType": JSON.stringify(checkCaseType),                  
                     "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
                     "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
-                    "orderMaintained" : orderMaintained,
+                    "orderMaintained" : dataSourceOrderMaintained,
                     "ProjectName": projectinfo.projectname,
                     'CheckName': checkinfo.checkname
                 },

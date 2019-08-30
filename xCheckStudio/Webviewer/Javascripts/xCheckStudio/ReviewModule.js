@@ -87,7 +87,7 @@ function populateCheckResults(comparisonCheckGroups,
 
             var sourceAViewerOptions = undefined;
             var sourceAClassWiseComponents = undefined;
-            if (viewerOptions['SourceAContainerId'] === undefined ||
+            if (/*viewerOptions['SourceAContainerId'] === undefined ||*/
                 viewerOptions['SourceAEndPointUri'] === undefined) {
                 // this ajax call is synchronous
 
@@ -110,12 +110,12 @@ function populateCheckResults(comparisonCheckGroups,
                 });
             }
             else {
-                sourceAViewerOptions = [viewerOptions['SourceAContainerId'], viewerOptions['SourceAEndPointUri']];
+                sourceAViewerOptions = [/*viewerOptions['SourceAContainerId'],*/ viewerOptions['SourceAEndPointUri']];
             }
 
             var sourceBViewerOptions = undefined;
             var sourceBClassWiseComponents = undefined;
-            if (viewerOptions['SourceBContainerId'] === undefined ||
+            if (/*viewerOptions['SourceBContainerId'] === undefined ||*/
                 viewerOptions['SourceBEndPointUri'] === undefined) {
                 // this ajax call is synchronous
 
@@ -137,7 +137,7 @@ function populateCheckResults(comparisonCheckGroups,
                 });
             }
             else {
-                sourceBViewerOptions = [viewerOptions['SourceBContainerId'], viewerOptions['SourceBEndPointUri']];
+                sourceBViewerOptions = [/*viewerOptions['SourceBContainerId'],*/ viewerOptions['SourceBEndPointUri']];
             }
 
 
@@ -237,10 +237,34 @@ function loadComparisonData(comparisonCheckGroups,
 
 }
 
+function cancelReturnHome()
+{
+    var overlay = document.getElementById("returnHomeOverlay");
+    var popup = document.getElementById("returnHomePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+function returnHome()
+{
+    window.location = "landingPage.html";
+}
 function onHomeClick() {
-    if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-        window.location = "landingPage.html";
-      }
+
+    var overlay = document.getElementById("returnHomeOverlay");
+    var popup = document.getElementById("returnHomePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width ="581px";
+    popup.style.height ="155px";
+    popup.style.overflow = "hidden";
+    //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
+
+    // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+    //     window.location = "landingPage.html";
+    //   }
 }
 
 function onSaveProject(event) {

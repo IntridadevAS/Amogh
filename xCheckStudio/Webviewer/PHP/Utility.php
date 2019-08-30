@@ -35,6 +35,16 @@
         return $dbPath;
     }
 
+    function getCheckSourceCPath($projectName, $checkName) {
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/SourceC";
+        return $dbPath;
+    }
+
+    function getCheckSourceDPath($projectName, $checkName){
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/SourceD";
+        return $dbPath;
+    }
+
     function tableExists($dbh, $tableName) {
         $results = $dbh->query("SELECT * FROM $tableName;");
         if($results) 

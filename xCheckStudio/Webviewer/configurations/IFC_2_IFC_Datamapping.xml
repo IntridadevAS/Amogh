@@ -20,7 +20,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="IFC_2_IFC"> 
+<CheckCase name="IFC_2_IFC" sourceA="IFC" sourceB="IFC"> 
     <Check type="Comparison" sourceAType="IFC" sourceBType="IFC">
 		<ComponentGroup sourceAGroupName="IFCPROJECT" sourceBGroupName="IFCPROJECT">
 		  <ComponentClass sourceAComponentClass="IFCPROJECT"  sourceBComponentClass="IFCPROJECT">

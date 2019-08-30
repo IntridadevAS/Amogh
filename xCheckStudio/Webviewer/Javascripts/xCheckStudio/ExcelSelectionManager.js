@@ -146,9 +146,8 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row) {
      if (!this.SelectedComponentRows.includes(row)) {
           this.ApplyHighlightColor(row);
      }
-     this.HighlightedComponentRow = row;
-
-     //this.ShowSelectedSheetData(row)     
+     
+     this.HighlightedComponentRow = row;    
 }
 
 /* 
@@ -163,10 +162,10 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow, mod
 
      var viewerContainerData;
      if (modelBrowserContainer === "modelTree1") {
-          viewerContainerData = document.getElementById("viewerContainer1")
+          viewerContainerData = document.getElementById("visualizerA")
      }
      else if (modelBrowserContainer === "modelTree2") {
-          viewerContainerData = document.getElementById("viewerContainer2")
+          viewerContainerData = document.getElementById("visualizerB")
      }
 
      if (!viewerContainerData) {

@@ -9,12 +9,13 @@ function DBReader() {
             $.ajax({
                 url: 'PHP/PDOConnectionForDatabases.php',
                 type: 'POST',
-                dataType: 'JSON',
+                // dataType: 'JSON',
                 data: ({ uri: uri }),
                 async: false,
                 success: function (data) {
 
-                    var sourceProperties = _this.ProcessDBData(data);
+                    var sourceData = JSON.parse(data);
+                    var sourceProperties = _this.ProcessDBData(sourceData);
 
                     return resolve(sourceProperties);
 

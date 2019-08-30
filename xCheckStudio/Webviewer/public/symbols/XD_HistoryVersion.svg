@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="31" height="30" viewBox="0 0 31 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="31" height="30" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect width="30.5" height="26" fill="none"/>
+    </clipPath>
+    <filter id="Path_290" x="4.5" y="3.5" width="26" height="26" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Line_53" x="14.5" y="8" width="5" height="11.5" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur-2"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Line_54" x="14.5" y="15" width="10" height="5" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur-3"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Component_8" data-name="Component 8" clip-path="url(#clip-path)">
+    <g id="Group_240" data-name="Group 240" transform="translate(-1354.5 -55)">
+      <g id="Rectangle_1177" data-name="Rectangle 1177" transform="translate(1355.5 55)" fill="#323132" stroke="#8a8a8a" stroke-width="1">
+        <rect width="30" height="30" rx="5" stroke="none"/>
+        <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+      </g>
+    </g>
+    <g id="Component_1" data-name="Component 1" transform="translate(0 3.5)" clip-path="url(#clip-path-2)">
+      <g transform="matrix(1, 0, 0, 1, 0, -3.5)" filter="url(#Path_290)">
+        <g id="Path_290-2" data-name="Path 290" transform="translate(5 4)" fill="none">
+          <path d="M11.5,0A11.5,11.5,0,1,0,23,11.5,11.5,11.5,0,0,0,11.5,0Z" stroke="none"/>
+          <path d="M 11.49995517730713 2 C 6.261655807495117 2 1.999994277954102 6.261680603027344 1.999994277954102 11.5 C 1.999994277954102 16.73831939697266 6.261655807495117 21 11.49995517730713 21 C 16.73824501037598 21 20.99990463256836 16.73831939697266 20.99990463256836 11.5 C 20.99990463256836 6.261680603027344 16.73824501037598 2 11.49995517730713 2 M 11.49995517730713 0 C 17.85120582580566 0 22.99990463256836 5.14872932434082 22.99990463256836 11.5 C 22.99990463256836 17.85127067565918 17.85120582580566 23 11.49995517730713 23 C 5.148704528808594 23 -5.7220458984375e-06 17.85127067565918 -5.7220458984375e-06 11.5 C -5.7220458984375e-06 5.14872932434082 5.148704528808594 0 11.49995517730713 0 Z" stroke="none" fill="#15b9f9"/>
+        </g>
+      </g>
+      <rect id="Rectangle_1240" data-name="Rectangle 1240" width="5" height="5" rx="2.5" transform="translate(4 10.192)" fill="#323132"/>
+      <path id="Path_291" data-name="Path 291" d="M0,0,5,5,0,10" transform="translate(12.106 9.571) rotate(135)" fill="none" stroke="#15b9f9" stroke-width="2"/>
+      <g transform="matrix(1, 0, 0, 1, 0, -3.5)" filter="url(#Line_53)">
+        <line id="Line_53-2" data-name="Line 53" y2="8.5" transform="translate(16 8.5)" fill="none" stroke="#f2f3f4" stroke-width="2"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, 0, -3.5)" filter="url(#Line_54)">
+        <line id="Line_54-2" data-name="Line 54" x1="7" transform="translate(15 16.5)" fill="none" stroke="#f2f3f4" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+</svg>

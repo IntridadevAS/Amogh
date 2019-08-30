@@ -18,10 +18,10 @@ let controller = {
     projectView.init();
     this.permissions();
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if(userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
-        model.currentModule = "check";
+    if (userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
+      model.currentModule = "check";
     else
-        model.currentModule = "review";
+      model.currentModule = "review";
   },
 
   permissions: function () {
@@ -565,7 +565,8 @@ let checkView = {
     controller.setCurrentCheck(subject.id);
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
-    window.location.href = "checkModule.html";
+    //window.location.href = "checkModule.html";
+    window.location.href = "checkPage.html";
     //localStorage.setItem("loadSavedProject",true);
   },
 
@@ -621,11 +622,11 @@ let checkView = {
     }
   },
 
-  reviewClicked: function(subject){
+  reviewClicked: function (subject) {
     controller.setCurrentReview(subject.id);
     var currentProj = controller.getCurrentProj();
     var currentReview = controller.getCurrentReview();
-  
+
     $.ajax({
       data: {
         'InvokeFunction': 'CreateTempCheckSpaceDBByCopy',
@@ -933,3 +934,31 @@ let deleteItems = {
 }
 
 controller.init();
+
+function cancelReturnHome() {
+  var overlay = document.getElementById("returnHomeOverlay");
+  var popup = document.getElementById("returnHomePopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+function returnHome() {
+  window.location = "landingPage.html";
+}
+function onHomeClick() {
+
+  var overlay = document.getElementById("returnHomeOverlay");
+  var popup = document.getElementById("returnHomePopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+  //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
+
+  // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+  //     window.location = "landingPage.html";
+  //   }
+}

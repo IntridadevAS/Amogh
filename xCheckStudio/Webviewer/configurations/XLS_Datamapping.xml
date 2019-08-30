@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<CheckCase name="XLS_Compliance">
+<CheckCase name="XLS_Compliance" sourceA="XLS">
 <Check type="Compliance" sourceType="XLS" >
    <ComponentGroup name="PipeLine" >
       <ComponentClass name="PipeLine">

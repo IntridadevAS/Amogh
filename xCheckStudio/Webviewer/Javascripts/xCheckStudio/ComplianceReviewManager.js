@@ -52,7 +52,15 @@ function ComplianceReviewManager(complianceCheckManager,
 
 ComplianceReviewManager.prototype.loadDatasource = function () {
     if (this.ViewerData !== undefined) {
-        this.ReviewModuleViewerInterface = new Review3DViewerInterface(this.ViewerData,
+        var containerId;
+        if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
+            containerId = "viewerContainer1";
+        }
+        else if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
+            containerId = "viewerContainer2";
+        }
+
+        this.ReviewModuleViewerInterface = new Review3DViewerInterface([containerId, this.ViewerData[0]],
             this.ComponentIdVsComponentData,
             this.NodeIdVsComponentData,
             this);
@@ -60,16 +68,16 @@ ComplianceReviewManager.prototype.loadDatasource = function () {
 
         this.ReviewModuleViewerInterface.setupViewer(550, 300);
 
-        var viewerContainer = document.getElementById(this.ViewerData[0]);
+        var viewerContainer = document.getElementById(containerId);
         viewerContainer.style.height = "405px";
         viewerContainer.style.top = "70px";
     }
 
-    if(this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
+    if (this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
         this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceComponents, undefined);
     }
 
-    if(this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
+    if (this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
         this.SheetDataViewer = new Review1DViewerInterface(this, undefined, this.SourceComponents);
     }
 }

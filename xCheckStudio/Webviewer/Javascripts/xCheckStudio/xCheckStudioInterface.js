@@ -1,5 +1,6 @@
 
-function createSourceManager(sourceType,
+function createSourceManager(fileName,
+    sourceType,
     viewerContainer,
     modelTreeContainer,
     uri) {
@@ -12,7 +13,7 @@ function createSourceManager(sourceType,
             modelTree: modelTreeContainer
         };
 
-        sourceManager = new XMLSourceManager(sourceType, viewerOptions);
+        sourceManager = new XMLSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "rvm") {
         viewerOptions = {
@@ -20,7 +21,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new RVMSourceManager(sourceType, viewerOptions);
+        sourceManager = new RVMSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "sldasm" ||
         sourceType.toLowerCase() === "sldprt") {
@@ -29,7 +30,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new SolidWorksSourceManager(sourceType, viewerOptions);
+        sourceManager = new SolidWorksSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "dwg") {
         viewerOptions = {
@@ -37,7 +38,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new DWGSourceManager(sourceType, viewerOptions);
+        sourceManager = new DWGSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "rvt" ||
         sourceType.toLowerCase() === "rfa") {
@@ -46,7 +47,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new RVTSourceManager(sourceType, viewerOptions);
+        sourceManager = new RVTSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "ifc") {
         viewerOptions = {
@@ -54,7 +55,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new IFCSourceManager(sourceType, viewerOptions);
+        sourceManager = new IFCSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "step" ||
         sourceType.toLowerCase() === "stp" ||
@@ -64,7 +65,7 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new STEPSourceManager(sourceType, viewerOptions);
+        sourceManager = new STEPSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "igs") {
         viewerOptions = {
@@ -72,13 +73,13 @@ function createSourceManager(sourceType,
             endpointUri: uri,
             modelTree: modelTreeContainer
         };
-        sourceManager = new IGSSourceManager(sourceType, viewerOptions);
+        sourceManager = new IGSSourceManager(fileName, sourceType, viewerOptions);
     }
     else if (sourceType.toLowerCase() === "json") {
-        sourceManager = new DBSourceManager(sourceType, viewerContainer, modelTreeContainer);
+        sourceManager = new DBSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
     }
     else if (sourceType.toLowerCase() === "xls") {
-        sourceManager = new ExcelSourceManager(sourceType, viewerContainer, modelTreeContainer);
+        sourceManager = new ExcelSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
     }
 
     return sourceManager;

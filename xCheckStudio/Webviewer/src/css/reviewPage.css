@@ -1,0 +1,362 @@
+ .background {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  top: 50px;
+  padding: 0 10px 10px 10px;
+  background-color: var(--xCheckDarkGrey);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 42px auto;
+  z-index: 1;
+}
+
+.flexContent {
+  display: flex;
+}
+
+.addFileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.plusButton {
+  margin-top: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--xCheckMedGrey);
+}
+
+
+.checkContainer{
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.checkContentContainer{
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto
+}
+
+.tabButtonContainer{
+    height: 42px;
+    display: grid;
+    grid-template-columns: auto 600px;
+    grid-template-areas: "tabs buttons"
+}
+
+.tabContainer {
+  height: 30px;
+  align-self: end;
+  display: flex;
+  color: var(--xCheckWhite);
+  justify-content: flex-start;
+  position: relative;
+}
+
+.tab {
+  position: relative;
+  background-color: var(--xCheckDarkGrey);
+  margin-right: 5px;
+  border: 1px solid var(--xCheckMedGrey);
+  border-bottom: none;
+  border-radius: var(--borderRadiusVal) var(--borderRadiusVal) 0 0;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 15px;
+}
+
+.tab .arrow{
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+
+.arrow{
+  width: 15px;
+  height: 15px;
+}
+
+.arrow:hover {
+  border: solid 1px var(--intridaBlue);
+  cursor: pointer;
+}
+
+.addTab {
+  width: 30px;
+  background-color: var(--xCheckDarkGrey);
+  border: 1px solid var(--xCheckMedGrey);
+  border-bottom: none;
+  border-radius: var(--borderRadiusVal) var(--borderRadiusVal) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectedTab {
+  background-color: var(--xCheckMedGrey);
+}
+
+.tab:hover, .addTab:hover {
+  border-color: var(--intridaBlue);
+  border-bottom: 1px solid var(--intridaBlue);
+  cursor: pointer;
+}
+
+.tab:last-child {
+  margin-right: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  height: 30px;
+  align-items: center;
+  align-self: center;
+}
+
+.buttonGroup {
+  display: flex;
+  padding: 0 5px;
+  align-items: center;
+}
+
+.buttonGroup + .buttonGroup {
+  border-left: 1px var(--xCheckMedGrey) solid;
+}
+
+.buttonGroup:last-of-type{
+  padding: 0 0 0 5px;
+}
+
+button + button {
+  margin-left: 5px;
+}
+
+.checkCase {
+  width: 200px;
+  height: 30px;
+  background-color: var(--xCheckBlack);
+  border: 1px var(--xCheckMedGrey) solid;
+  border-radius: var(--borderRadiusVal);
+  padding-left: 5px;
+}
+
+.checkCase option {
+  font-size: 12px;
+}
+
+.viewsContainer {
+  background-color: var(--xCheckMedGrey);
+  border-radius: 0 var(--borderRadiusVal) var(--borderRadiusVal) var(--borderRadiusVal);
+  padding: 10px 10px 5px 10px;
+  display: grid;
+  grid-template-rows: auto 30px;
+  grid-row-gap: 10px;
+  grid-template-areas:
+    "viewPanel"
+    "buttons";
+  position: relative;
+}
+
+.viewPanel{
+  position: relative;
+  display: flex;
+  grid-area: viewPanel;
+}
+
+.grabBar {
+  cursor: ew-resize;
+  width: 10px;
+}
+
+.tableContainer {
+  position: relative;
+  color: white;
+  width: 400px;
+  min-width: 15%;
+  max-width: 85%;
+  display: grid;
+  grid-template-rows: auto 40px;
+  grid-row-gap: 10px;
+}
+
+.showDetailInfo{
+  grid-template-rows: calc(50% - 5px) auto;
+}
+
+.openInfoArea{
+  grid-template-rows: auto 300px;
+}
+
+.tablesArea{
+  background-color: black;
+}
+
+.infoArea{
+  background-color: black;
+  position: relative;
+}
+
+.infoAreaHeader {
+  display: flex;
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  right: 5px;
+}
+
+.infoAreaHeader img:first-child {
+  width: 25px;
+  height: 25px;
+  color: white;
+  margin-right: 5px;
+}
+.infoAreaHeader .arrow {
+  position: absolute;
+  top: 3px;
+  right: 0;
+}
+
+.invert {
+  transform: rotate(180deg);
+}
+
+.visualizerContainer {
+  position: relative;
+  background-color: black;
+  color: white;
+  flex-grow: 1;
+}
+
+#viewPanelComparison .visualizerContainer {
+  background-color: var(--xCheckMedGrey);
+  display: grid;
+  grid-gap: 5px;
+  grid-template-rows: auto auto;
+}
+
+.visualizer3 {
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    "compare1 compare2"
+    "compare3 compare3"
+}
+
+.visualizer4 {
+  grid-template-columns: auto auto;
+}
+
+.comparePanel {
+  background-color: black;
+  position: relative;
+}
+
+.maximize {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+}
+
+.viewport {
+  position: absolute;
+  top: 50px;
+  bottom: 5px;
+  right: 5px;
+  left: 5px;
+  background-color: white;
+}
+
+.projectName {
+  position: absolute;
+  width: 400px;
+  height: 25px;
+  border-radius: 400px 400px 0 0;
+  bottom: 0;
+  left: calc(50% - 200px);
+  background-color: var(--xCheckBlack);
+  text-align: center;
+  z-index: 2;
+}
+
+.maxMinBtn{
+  background-color: var(--xCheckDarkGrey);
+  background-image: url(../../public/symbols/XD_Maximise.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  height: 30px;
+  width: 30px;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  z-index: 1;
+  cursor: pointer;
+}
+
+.maximize .maxMinBtn {
+  background-image: url(../../public/symbols/XD_Minimise.svg);
+}
+
+.selectFilesContainer{
+  background-color: var(--xCheckDarkGrey);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  height: 0;
+  box-sizing: border-box;
+  z-index: 3;
+  transition: height .1s ease-in;
+  padding: 10px;
+}
+
+.selectFilesContainerOpen{
+  height: auto;
+  display: flex;
+}
+
+.fileCard {
+  box-sizing: border-box;
+  background-color: var(--xCheckBlack);
+  color: var(--xCheckWhite);
+  height: 90px;
+  width: 160px;
+  padding: 5px;
+  margin-right: 5px;
+  border: var(--xCheckMedGrey) solid var(--borderWidth);
+  border-radius: var(--borderRadiusVal);
+  z-index: 4;
+}
+
+.enterBtn{
+  box-sizing: border-box;
+  background-color: var(--xCheckBlack);
+  height: 90px;
+  width: 30px;
+  border: var(--xCheckMedGrey) solid var(--borderWidth);
+  border-radius: var(--borderRadiusVal);
+  z-index: 4;
+}
+
+.fileCard:hover{
+  border-color: var(--intridaBlue);
+}
+
+.hide {
+  display: none;
+}
