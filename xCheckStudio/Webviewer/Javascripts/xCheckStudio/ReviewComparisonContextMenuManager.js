@@ -5,6 +5,7 @@ function ReviewComparisonContextMenuManager(comparisonReviewManager) {
     this.ComparisonReviewManager = comparisonReviewManager;
 
     this.ComponentTableContainer;
+    this.PropertyTableContainer;
 }
 
 // assign parent's method to this class
@@ -40,7 +41,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             _this.HighlightSelectedRowOnRightClick(selectedRow);
             return {
                 callback: function (key, options) {
-                    _this.ExecuteContextMenuClicked(key, options, this);
+                    _this.ExecuteContextMenuClicked(key, options, this, "component");
                 },
                 items: {
                     "acceptComponent":
@@ -140,9 +141,11 @@ ReviewComparisonContextMenuManager.prototype.HaveSCOperations = function () {
     return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = function () {
+ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = function (propertyTableContainer) {
     var _this = this;
-    $("#ComparisonDetailedReviewTbody").contextMenu({
+    this.PropertyTableContainer = propertyTableContainer;
+
+    $(propertyTableContainer).contextMenu({
         className: 'contextMenu_style',
         selector: 'tr',
         build: function ($triggerElement, e) {
@@ -155,7 +158,7 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function (key, options) {
-                    _this.ExecuteContextMenuClicked(key, options, this);
+                    _this.ExecuteContextMenuClicked(key, options, this, "property");
                 },
                 items: {
                     "acceptProperty":
@@ -212,7 +215,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function (key, options) {
-                    _this.ExecuteContextMenuClicked(key, options, this);
+                    _this.ExecuteContextMenuClicked(key, options, this, group);
                 },
                 items: {
                     "acceptGroup":
@@ -303,7 +306,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
-    if (selectedRow.cells[4].innerHTML.includes('(T)')) {
+    if (selectedRow.cells[5].innerHTML.includes('(T)')) {
         return false;
     }
 
@@ -311,7 +314,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
-    if (selectedRow.cells[4].innerHTML == "ACCEPTED") {
+    if (selectedRow.cells[5].innerHTML == "ACCEPTED") {
         return false;
     }
 
@@ -372,7 +375,8 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForGroup
 
 ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = function (key,
     options,
-    selectedRow) {
+    selectedRow,
+    source) {
 
     if (key === "acceptComponent") {
         if (options.items[key].name == "Accept") {
@@ -400,12 +404,12 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     }
     else if (key === "restoreItem") {
         if (options.items[key].name == "Restore") {
-            this.OnRestoreTranspose(selectedRow);
+            this.OnRestoreTranspose(selectedRow, source);
         }
     }
     else if (key === "lefttoright" ||
         key === "righttoleft") {
-        this.OnTransposeClick(key, selectedRow);
+        this.OnTransposeClick(key, selectedRow, source);
     }
     else if (key === "freeze") {
     }
@@ -438,7 +442,22 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowCl
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
-    comparisonReviewManager.updateStatusForProperty(rowClicked);
+
+    var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
+    if(!highlightedRow)
+    {
+        return;
+    }
+
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[highlightedRow.rowIndex];
+    
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
+    comparisonReviewManager.updateStatusForProperty(rowClicked, this.PropertyTableContainer, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
@@ -446,46 +465,117 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
-    comparisonReviewManager.UnAcceptComponent(rowClicked);
+    // var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
+    // if(!highlightedRow)
+    // {
+    //     return;
+    // }
+
+    // var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[rowClicked[0].rowIndex];
+    
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
+    comparisonReviewManager.UnAcceptComponent(rowClicked, 
+                                              this.ComponentTableContainer, 
+                                              componentId, 
+                                              groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
-    comparisonReviewManager.UnAcceptProperty(rowClicked);
+    var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
+    if(!highlightedRow)
+    {
+        return;
+    }
+
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[rowClicked[0].rowIndex];
+    
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
+    comparisonReviewManager.UnAcceptProperty(rowClicked, 
+                                              this.PropertyTableContainer, 
+                                              componentId, 
+                                              groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClicked) {
     comparisonReviewManager.UnAcceptCategory(rowClicked[0]);
 }
 
-ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow) {
-    if (selectedRow[0].nodeName == "BUTTON") {
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
+ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
+
+    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[selectedRow[0].rowIndex];
+
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
+    if (source.toLowerCase() === "group") {
+        comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0], 
+            this.ComponentTableContainer,
+            componentId,
+            groupId);
     }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if (typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.RestoreComponentTranspose(selectedRow);
-        }
-        else if (typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.RestorePropertyTranspose(selectedRow, comparisonReviewManager);
-        }
+    else if (source.toLowerCase() === "component") {
+        comparisonReviewManager.RestoreComponentTranspose(selectedRow,
+            this.ComponentTableContainer,
+            componentId,
+            groupId);
     }
+    else if (source.toLowerCase() === "property") {
+        comparisonReviewManager.RestorePropertyTranspose(selectedRow, comparisonReviewManager);
+    }
+    // if (selectedRow[0].nodeName == "BUTTON") {
+
+    //     comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
+    // }
+    // else {
+    //     var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+    //     if (typeOfRow == "ComparisonMainReviewTbody") {
+    //         comparisonReviewManager.RestoreComponentTranspose(selectedRow);
+    //     }
+    //     else if (typeOfRow == "ComparisonDetailedReviewTbody") {
+    //         comparisonReviewManager.RestorePropertyTranspose(selectedRow, comparisonReviewManager);
+    //     }
+    // }
 }
 
-ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow) {
-    if (selectedRow[0].nodeName == "BUTTON") {
-        var typeOfRow = selectedRow[0].offsetParent.id;
-        comparisonReviewManager.TransposeCategory(key, selectedRow[0]);
+ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
+    // if (selectedRow[0].nodeName == "BUTTON") {
+    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[selectedRow[0].rowIndex];
+
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
+    if (source.toLowerCase() === "group") {
+        comparisonReviewManager.TransposeCategory(key,
+            selectedRow[0],
+            this.ComponentTableContainer,
+            componentId,
+            groupId);
     }
-    else {
-        var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-        if (typeOfRow == "ComparisonMainReviewTbody") {
-            comparisonReviewManager.TransposeComponent(key, selectedRow);
-        }
-        else if (typeOfRow == "ComparisonDetailedReviewTbody") {
-            comparisonReviewManager.TransposeProperty(key, selectedRow);
-        }
+    else if (source.toLowerCase() === "component") {
+        comparisonReviewManager.TransposeComponent(key,
+            selectedRow,
+            this.ComponentTableContainer,
+            componentId,
+            groupId);
+    }
+    else if (source.toLowerCase() === "property") {
+        comparisonReviewManager.TransposeProperty(key,
+            selectedRow,
+            this.ComponentTableContainer,
+            componentId,
+            groupId);
     }
 }
 
@@ -553,21 +643,24 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         return undefined;
     }
 
+    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+
     var sourceANodeIds = [];
     var sourceBNodeIds = [];
     for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
         var selectedRow = selectionManager.SelectedCheckComponentRows[i];
 
+        var rowData = rowsData[selectedRow.rowIndex];
         // source A
-        var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
-        if (sourceANodeIdCell.innerText !== "") {
-            sourceANodeIds.push(Number(sourceANodeIdCell.innerText));
+        //var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
+        if (rowData.SourceANodeId !== "") {
+            sourceANodeIds.push(Number(rowData.SourceANodeId));
         }
 
         // source B
-        var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
-        if (sourceBNodeIdCell.innerText !== "") {
-            sourceBNodeIds.push(Number(sourceBNodeIdCell.innerText));
+        //var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
+        if (rowData.SourceBNodeId !== "") {
+            sourceBNodeIds.push(Number(rowData.SourceBNodeId));
         }
     }
 

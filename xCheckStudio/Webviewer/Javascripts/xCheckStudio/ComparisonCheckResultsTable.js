@@ -3,7 +3,9 @@ function ComparisonCheckResultsTable(reviewManager,
 
     
     this.MainReviewTableContainer = mainReviewTableContainer;
-    this.ReviewManager = reviewManager;
+    this.ReviewManager = reviewManager;   
+
+    //this.ReviewComparisonContextMenuManagers = {};
 }
 
 ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function(groupId, componentClass)
@@ -215,10 +217,11 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             responseDataKey: "results",
             fixedHeaders : true,
             autoCommit: true,            
-            rendered: function (evt, ui) {
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.ReviewManager);
+            rendered: function (evt, ui) {                
                 //reviewComparisonContextMenuManager.Init();
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.ReviewManager);
                 reviewComparisonContextMenuManager.InitComponentLevelContextMenu(containerDiv);
+                // ReviewComparisonContextMenuManagers[containerDiv] = reviewComparisonContextMenuManager;
             },  
             features: [
                 {
@@ -419,11 +422,11 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties,
 
         if (property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
-            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.SourceAValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.SourceAValue;
         }
         else if (property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
-            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.SourceBValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.SourceBValue;
         }
 
         this.ReviewManager.detailedReviewRowComments[Object.keys(this.ReviewManager.detailedReviewRowComments).length] = property.Description;
@@ -478,6 +481,11 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             dataSource : tableData,
             responseDataKey: "results",
             fixedHeaders : true,
+            rendered: function (evt, ui) {                
+                //reviewComparisonContextMenuManager.Init();
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager( _this.ReviewManager);
+                reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
+            },  
             features: [
                 {
                     name: 'MultiColumnHeaders'
