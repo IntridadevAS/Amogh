@@ -380,11 +380,13 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
     }
 }
 
-ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedRow) {
+ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedRow, tableContainer, componentId, groupId) {
 
     var _this = this;
-    var componentId = this.GetComparisonResultId(selectedRow[0]);
-    var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    // var componentId = this.GetComparisonResultId(selectedRow[0]);
+    // var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     try {
         $.ajax({
@@ -415,33 +417,54 @@ ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedR
                         }
                     }
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status);
             }
         });
     }
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.updateReviewComponentGridData = function (selectedRow, groupId, changedStatus) {
+ComparisonReviewManager.prototype.updateReviewComponentGridData = function (selectedRow, tableContainer, groupId, changedStatus) {
 
-    var gridId = '#' + this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-    var _this = this;
 
-    var editedItem = {
-        "SourceA": selectedRow.cells[ComparisonColumns.SourceAName].innerText,
-        "SourceB": selectedRow.cells[ComparisonColumns.SourceBName].innerText,
-        "Status": changedStatus,
-        "SourceANodeId": selectedRow.cells[ComparisonColumns.SourceANodeId].innerText,
-        "SourceBNodeId": selectedRow.cells[ComparisonColumns.SourceBNodeId].innerText,
-        "ID": this.GetComparisonResultId(selectedRow),
-        "groupId": this.GetComparisonResultGroupId(selectedRow)
-    };
+    //$(tableContainer).igGridUpdating("updateRow", selectedRow.rowIndex, {Status: changedStatus});
+    //$(tableContainer).igGridUpdating("updateRow", selectedRow.getAttribute("data-id"), {Status: changedStatus});
+    var data = $(tableContainer).data("igGrid").dataSource.dataView();
+    var rowData = data[selectedRow.rowIndex];
+    rowData.Status = changedStatus;
 
-    $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
-        _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
-        _this.populateDetailedReviewTable(selectedRow);
-        $(gridId).jsGrid("refresh");
-    });
+    selectedRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+
+   // $(tableContainer).igGrid("dataBind");
+
+    // var headers = this.CheckResultsTable.CreateMainTableHeaders();
+    // this.CheckResultsTable.LoadReviewTableData(headers, data, tableContainer);
+
+    // // highlight table rows as per their severity status
+    // var id = tableContainer.replace('#','');
+    // this.CheckResultsTable.highlightMainReviewTableFromCheckStatus(id);
+
+    // // Add category check results count 
+    // this.CheckResultsTable.ReviewManager.AddTableContentCount(id);
+
+    // var gridId = '#' + this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
+    // var _this = this;
+
+    // var editedItem = {
+    //     "SourceA": selectedRow.cells[ComparisonColumns.SourceAName].innerText,
+    //     "SourceB": selectedRow.cells[ComparisonColumns.SourceBName].innerText,
+    //     "Status": changedStatus,
+    //     "SourceANodeId": selectedRow.cells[ComparisonColumns.SourceANodeId].innerText,
+    //     "SourceBNodeId": selectedRow.cells[ComparisonColumns.SourceBNodeId].innerText,
+    //     "ID": this.GetComparisonResultId(selectedRow),
+    //     "groupId": this.GetComparisonResultGroupId(selectedRow)
+    // };
+
+    // $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
+    //     _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+    //     _this.populateDetailedReviewTable(selectedRow);
+    //     $(gridId).jsGrid("refresh");
+    // });
 }
 
 ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (tabletoupdate) {

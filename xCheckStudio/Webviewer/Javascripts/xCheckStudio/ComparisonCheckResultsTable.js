@@ -198,7 +198,9 @@ ComparisonCheckResultsTable.prototype.RestoreBackgroundColorOfFilteredRows = fun
     }
 }
 
-ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
+ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders, 
+                                                                      tableData, 
+                                                                      containerDiv) {
     var _this = this;
     
     $(function () {
@@ -215,7 +217,8 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             autoCommit: true,            
             rendered: function (evt, ui) {
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.ReviewManager);
-                reviewComparisonContextMenuManager.Init();
+                //reviewComparisonContextMenuManager.Init();
+                reviewComparisonContextMenuManager.InitComponentLevelContextMenu(containerDiv);
             },  
             features: [
                 {
