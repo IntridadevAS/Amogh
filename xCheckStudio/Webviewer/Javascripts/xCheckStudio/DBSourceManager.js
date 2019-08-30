@@ -1,4 +1,5 @@
-function DBSourceManager(sourceType,
+function DBSourceManager(sourceName, 
+  sourceType,
   viewerContainer,
   modelBrowsercontainer) {
 
@@ -6,7 +7,7 @@ function DBSourceManager(sourceType,
   this.ViewerContainer = viewerContainer;
 
   // call super constructor
-  SourceManager.call(this, sourceType);
+  SourceManager.call(this,sourceName, sourceType);
 }
 
 // assign SourceManager's method to this class
@@ -36,18 +37,18 @@ DBSourceManager.prototype.LoadData = function (uri) {
       _this.ModelTree = new DBModelBrowser(_this.ModelBrowsercontainer, dbReader.DBData);
       _this.ModelTree.CreateModelBrowserTable();     
 
-      if (checkCaseSelected) {
-        checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-      }
+      // if (checkCaseSelected) {
+      //   checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
+      // }
 
-      // hide view data graphics text on viewer conatainer
-      var dbViewerContainer = document.getElementById("dataSourceViewer");
-      for (var i = 0; i < dbViewerContainer.childElementCount; i++) {
-        var currentChild = dbViewerContainer.children[i];
-        if (currentChild.className === "viewdatagraphics") {
-          currentChild.style.display = "none";
-        }
-      }
+      // // hide view data graphics text on viewer conatainer
+      // var dbViewerContainer = document.getElementById("dataSourceViewer");
+      // for (var i = 0; i < dbViewerContainer.childElementCount; i++) {
+      //   var currentChild = dbViewerContainer.children[i];
+      //   if (currentChild.className === "viewdatagraphics") {
+      //     currentChild.style.display = "none";
+      //   }
+      // }
 
       return resolve(true);
     });
@@ -69,10 +70,10 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
 DBSourceManager.prototype.AddComponentsToDB = function () {
 
   var source = undefined;
-  if (this.ViewerContainer.toLowerCase() == "viewercontainer1") {
+  if (this.ViewerContainer.toLowerCase() == "visualizera") {
     source = "SourceA"
   }
-  else if (this.ViewerContainer.toLowerCase() == "viewercontainer2") {
+  else if (this.ViewerContainer.toLowerCase() == "visualizerb") {
     source = "SourceB"
   }
   
@@ -91,9 +92,9 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
   }).done(function (data) {
     console.log(data);
     // remove busy spinner
-    var busySpinner = document.getElementById("divLoading");
-    if (busySpinner.classList.contains('show'))
-      busySpinner.classList.remove('show')
+    // var busySpinner = document.getElementById("divLoading");
+    // if (busySpinner.classList.contains('show'))
+    //   busySpinner.classList.remove('show')
   });
 
 }

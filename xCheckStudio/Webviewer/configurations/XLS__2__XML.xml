@@ -1,4 +1,4 @@
-<CheckCase name="XLS2XML">
+<CheckCase name="XLS2XML" sourceA="XLS" sourceB="XML">
 
 	<Check type="Comparison" sourceAType="XLS" sourceBType="XML">
 		<ComponentGroup sourceAGroupName="Equipment" sourceBGroupName="Equipment">

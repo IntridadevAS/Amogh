@@ -24,17 +24,27 @@
                                                            'SourceBComplianceCheckComponents',
                                                            'SourceBComplianceCheckProperties');
 
+        $results = array();
+
         $data = readDataSourceInfo();
-        
+        if($data != NULL)
+        {
+            $results['sourceInfo'] = $data;
+        }
        // getSourceComponents();
 
         // var_dump($sourceBComponents);
 
-        $results = array();
+        
         if($comparisonResult != NULL)
-        {
+        {            
             $results['Comparison'] = $comparisonResult;
-            
+            // $results['Comparisons'] = array();
+            // $comparison = array();
+            // $comparison["sources"] = array($data["sourceAFileName"],$data["sourceBFileName"]);
+            // $comparison["results"] = $comparisonResult;
+            // array_push($results['Comparisons'], $comparison);
+
             // create component hierarchy
             createComparisonComponentsHierarchy();            
             if($sourceAComparisonComponentsHierarchy !== null) {

@@ -34,7 +34,7 @@
                 {
                     while ($viewerOptions = $sourceAViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        $sourceViewerOptions['SourceAContainerId'] = $viewerOptions['containerId'];
+                        // $sourceViewerOptions['SourceAContainerId'] = $viewerOptions['containerId'];
                         $sourceViewerOptions['SourceAEndPointUri'] = $viewerOptions['endpointUri'];
                         break;
                     }
@@ -50,7 +50,7 @@
                  {
                     while ($viewerOptions = $sourceBViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        $sourceViewerOptions['SourceBContainerId'] = $viewerOptions['containerId'];
+                        //$sourceViewerOptions['SourceBContainerId'] = $viewerOptions['containerId'];
                         $sourceViewerOptions['SourceBEndPointUri'] = $viewerOptions['endpointUri'];
                         break;
                     }

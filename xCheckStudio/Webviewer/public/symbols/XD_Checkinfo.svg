@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="33" height="30" viewBox="0 0 33 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="33" height="30" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect width="16" height="14" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="SymCheckMenuButton" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" transform="translate(3)" fill="#323132" stroke="#15b9f9" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <text id="i" transform="translate(0 4)" fill="#15b9f9" font-size="20" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="5.99" y="19">i</tspan></text>
+    <g id="Menu" transform="translate(13.5 7.5)" clip-path="url(#clip-path-2)">
+      <path id="Menu-2" data-name="Menu" d="M0,14V12H10v2ZM0,8V6H16V8ZM0,2V0H16V2Z" fill="#fff"/>
+    </g>
+  </g>
+</svg>

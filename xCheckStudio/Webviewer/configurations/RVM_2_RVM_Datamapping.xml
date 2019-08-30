@@ -20,7 +20,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
- <CheckCase name="RVM_2_RVM">
+ <CheckCase name="RVM_2_RVM" sourceA="RVM" sourceB="RVM">
  
         <Check type="Comparison" sourceAType="RVM" sourceBType="RVM">
 

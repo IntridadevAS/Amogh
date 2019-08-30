@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32.621" height="30" viewBox="0 0 32.621 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="32.621" height="30" fill="none"/>
+    </clipPath>
+    <filter id="Path_321" x="6.5" y="2.5" width="21" height="21" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Path_322" x="17.5" y="2.5" width="14.5" height="14.5" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur-2"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Component_6" data-name="Component 6" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" fill="#323132" stroke="#8a8a8a" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <g id="Rectangle_1208" data-name="Rectangle 1208" transform="translate(3 10)" fill="#8a8a8a" stroke="#f2f3f4" stroke-width="1">
+      <path d="M0,0H24a0,0,0,0,1,0,0V15a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V0A0,0,0,0,1,0,0Z" stroke="none"/>
+      <path d="M1,.5H23a.5.5,0,0,1,.5.5V15A1.5,1.5,0,0,1,22,16.5H2A1.5,1.5,0,0,1,.5,15V1A.5.5,0,0,1,1,.5Z" fill="none"/>
+    </g>
+    <path id="Rectangle_1218" data-name="Rectangle 1218" d="M1,0H7A1,1,0,0,1,8,1V3A0,0,0,0,1,8,3H0A0,0,0,0,1,0,3V1A1,1,0,0,1,1,0Z" transform="translate(3 7)" fill="#fff"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Path_321)">
+      <g id="Path_321-2" data-name="Path 321" transform="translate(7 3)" fill="none">
+        <path d="M9,0A9,9,0,1,1,0,9,9,9,0,0,1,9,0Z" stroke="none"/>
+        <path d="M 9 2 C 5.140190124511719 2 2 5.140190124511719 2 9 C 2 12.85980987548828 5.140190124511719 16 9 16 C 12.85980987548828 16 16 12.85980987548828 16 9 C 16 5.140190124511719 12.85980987548828 2 9 2 M 9 0 C 13.97056007385254 0 18 4.029439926147461 18 9 C 18 13.97056007385254 13.97056007385254 18 9 18 C 4.029439926147461 18 0 13.97056007385254 0 9 C 0 4.029439926147461 4.029439926147461 0 9 0 Z" stroke="none" fill="#ed1c24"/>
+      </g>
+    </g>
+    <path id="Rectangle_1255" data-name="Rectangle 1255" d="M3,0H5A0,0,0,0,1,5,0V5A0,0,0,0,1,5,5H0A0,0,0,0,1,0,5V3A3,3,0,0,1,3,0Z" transform="translate(21 10)" fill="#8a8a8a"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Path_322)">
+      <path id="Path_322-2" data-name="Path 322" d="M.243,8.243,4.485,4,.243-.243" transform="translate(24.66 4) rotate(45)" fill="none" stroke="#ed1c24" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

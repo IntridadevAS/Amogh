@@ -20,7 +20,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
- <CheckCase name="XML_2_XML">
+ <CheckCase name="XML_2_XML" sourceA="XML" sourceB="XML">
  
          <Check type="Comparison" sourceAType="XML" sourceBType="XML">
 

@@ -17,6 +17,10 @@ ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function(groupId,
     var t = document.createTextNode(componentClass);       // Create a text node
     btn.appendChild(t);
 
+    // var btn = document.createElement("BUTTON");
+    // btn.className = "accordion";
+    // var t = document.createTextNode(componentClass);       // Create a text node
+    // btn.appendChild(t);
     return btn;
 }
 
@@ -194,7 +198,9 @@ ComparisonCheckResultsTable.prototype.RestoreBackgroundColorOfFilteredRows = fun
     }
 }
 
-ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
+ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders, 
+                                                                      tableData, 
+                                                                      containerDiv) {
     var _this = this;
     
     $(function () {
@@ -208,7 +214,12 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             dataSource : tableData,
             responseDataKey: "results",
             fixedHeaders : true,
-            autoCommit: true,
+            autoCommit: true,            
+            rendered: function (evt, ui) {
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this.ReviewManager);
+                //reviewComparisonContextMenuManager.Init();
+                reviewComparisonContextMenuManager.InitComponentLevelContextMenu(containerDiv);
+            },  
             features: [
                 {
                     name: "Sorting",

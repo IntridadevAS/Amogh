@@ -1,4 +1,4 @@
-<CheckCase name="Excel(.xls) - 3D(.rvm)">
+<CheckCase name="Excel(.xls) - 3D(.rvm)"  sourceA="XLS" sourceB="RVM">
 
 	<Check type="Comparison" sourceAType="XLS" sourceBType="RVM">
 	    <ComponentGroup sourceAGroupName="PipeLine" sourceBGroupName="PIPE">

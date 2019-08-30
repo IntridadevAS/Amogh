@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<CheckCase name="DB_Compliance">
+<CheckCase name="DB_Compliance"  sourceA="JSON">
 <Check type="Compliance" sourceType="JSON" >
    <ComponentGroup name="PipeLine" >
       <ComponentClass name="PipeLine">

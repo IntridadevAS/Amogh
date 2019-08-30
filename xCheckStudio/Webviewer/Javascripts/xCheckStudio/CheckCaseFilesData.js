@@ -99,20 +99,41 @@ var CheckCaseFilesData = function () {
 
         var checkCaseElement = checkCaseElements[0];
         var checkCaseName = checkCaseElement.getAttribute("name");
-        var checkType = checkCaseElement.getElementsByTagName("Check");
-        for(var type = 0; type < checkType.length; type++) { 
-            if(checkType[type].getAttribute("sourceAType") && checkType[type].getAttribute("sourceBType"))
-            {
-                sourceTypes.push(checkType[type].getAttribute("sourceAType").toLowerCase());
-                sourceTypes.push(checkType[type].getAttribute("sourceBType").toLowerCase());
-            }
-            if(checkType[type].getAttribute("sourceType")) {
-                var sourceType = checkType[type].getAttribute("sourceType");
-                if(!sourceTypes.includes(sourceType.toLowerCase())) {
-                    sourceTypes.push(sourceType.toLowerCase());
-                }
-            }
+        if(checkCaseElement.hasAttribute("sourceA"))
+        {
+            var sourceType = checkCaseElement.getAttribute("sourceA");
+            sourceTypes.push(sourceType.toLowerCase());
         }
+        if(checkCaseElement.hasAttribute("sourceB"))
+        {
+            var sourceType = checkCaseElement.getAttribute("sourceB");
+            sourceTypes.push(sourceType.toLowerCase());
+        }
+        if(checkCaseElement.hasAttribute("sourceC"))
+        {
+            var sourceType = checkCaseElement.getAttribute("sourceC");
+            sourceTypes.push(sourceType.toLowerCase());
+        }
+        if(checkCaseElement.hasAttribute("sourceD"))
+        {
+            var sourceType = checkCaseElement.getAttribute("sourceD");
+            sourceTypes.push(sourceType.toLowerCase());
+        }
+
+        // var checkType = checkCaseElement.getElementsByTagName("Check");
+        // for(var type = 0; type < checkType.length; type++) { 
+        //     if(checkType[type].getAttribute("sourceAType") && checkType[type].getAttribute("sourceBType"))
+        //     {
+        //         sourceTypes.push(checkType[type].getAttribute("sourceAType").toLowerCase());
+        //         sourceTypes.push(checkType[type].getAttribute("sourceBType").toLowerCase());
+        //     }
+        //     if(checkType[type].getAttribute("sourceType")) {
+        //         var sourceType = checkType[type].getAttribute("sourceType");
+        //         if(!sourceTypes.includes(sourceType.toLowerCase())) {
+        //             sourceTypes.push(sourceType.toLowerCase());
+        //         }
+        //     }
+        // }
 
         return [checkCaseName, sourceTypes]
     }

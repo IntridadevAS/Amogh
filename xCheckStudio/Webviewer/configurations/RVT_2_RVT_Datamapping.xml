@@ -13,7 +13,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="RVT_2_RVT">
+<CheckCase name="RVT_2_RVT" sourceA="RVT" sourceB="RVT">
 	<Check type="Comparison"  sourceAType="RVT" sourceBType="RVT"> 	  
 		<ComponentGroup sourceAGroupName="IFCSITE" sourceBGroupName="IFCSITE">
 		  <ComponentClass sourceAComponentClass="IFCSITE" sourceBComponentClass="IFCSITE">

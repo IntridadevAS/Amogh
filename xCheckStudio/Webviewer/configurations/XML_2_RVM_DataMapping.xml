@@ -1,4 +1,4 @@
-<CheckCase name="P&amp;ID(.xml) - 3D(.rvm)-C">
+<CheckCase name="P&amp;ID(.xml) - 3D(.rvm)-C" sourceA="XML" sourceB="RVM">
 
 	<Check type="Comparison" sourceAType="XML" sourceBType="RVM">
 	    <ComponentGroup sourceAGroupName="PipingNetworkSystem" sourceBGroupName="PIPE">

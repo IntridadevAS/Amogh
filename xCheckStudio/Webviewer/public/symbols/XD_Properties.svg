@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_275" data-name="Group 275" transform="translate(-198 -120)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" transform="translate(198 120)" fill="#323132" stroke="#8a8a8a" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <line id="Line_45" data-name="Line 45" x2="14.5" transform="translate(207.5 144.5)" fill="none" stroke="#51e0dc" stroke-width="2"/>
+    <line id="Line_46" data-name="Line 46" x2="14.5" transform="translate(207.5 138.5)" fill="none" stroke="#51e0dc" stroke-width="2"/>
+    <line id="Line_47" data-name="Line 47" x2="8.5" transform="translate(213.5 132.5)" fill="none" stroke="#51e0dc" stroke-width="2"/>
+    <path id="Path_208" data-name="Path 208" d="M12,10.943,9.509,8.453a5.167,5.167,0,0,0,1.057-3.17A5.251,5.251,0,0,0,5.283,0,5.251,5.251,0,0,0,0,5.283a5.251,5.251,0,0,0,5.283,5.283,5.167,5.167,0,0,0,3.17-1.057L10.943,12ZM1.509,5.283A3.737,3.737,0,0,1,5.283,1.509,3.737,3.737,0,0,1,9.057,5.283,3.737,3.737,0,0,1,5.283,9.057,3.737,3.737,0,0,1,1.509,5.283Z" transform="translate(201 124)" fill="#f2f3f4"/>
+    <line id="Line_48" data-name="Line 48" x2="8.5" transform="translate(213.5 126.5)" fill="none" stroke="#51e0dc" stroke-width="2"/>
+    <line id="Line_49" data-name="Line 49" x1="2" transform="translate(202.5 138.5)" fill="none" stroke="#51e0dc" stroke-linecap="round" stroke-width="2"/>
+    <line id="Line_50" data-name="Line 50" x1="2" transform="translate(202.5 144.5)" fill="none" stroke="#51e0dc" stroke-linecap="round" stroke-width="2"/>
+  </g>
+</svg>

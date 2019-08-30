@@ -12,15 +12,17 @@
 </head>
 
 <body>
+
   <header>
     <button type="button" class="dropDownMenu">
       <img src="public/symbols/infomenu.svg" alt="">
     </button>
-    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
-        alt=""></a>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo"
+        src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
-      <p class="userName"> User Name </p>
-      <img id="userImg" src="public/notAUserImg.jpg" alt="">
+      <p id="userName" class="userName"> </p>
+      <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
+      <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
         <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
         <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
@@ -41,6 +43,16 @@
   </div>
 
   <script>
+
+    window.onload = function () {
+      setUserName();
+    }
+
+    function setUserName() {
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      document.getElementById("userName").innerHTML = userinfo.alias;
+    }
+
     function OnCheckClick() {
       // set local storage variable to know where did it come from to
       // createProject.html i.e. Check tile click or Review tile click
@@ -54,7 +66,8 @@
       // createProject.html i.e. Check tile click or Review tile click
       localStorage.setItem("FromCheckClick", false);
       window.location.assign("projectsPage.html");
-    }
+    }   
+
   </script>
   <script type="text/javascript" src="src/scripts/landingpage.js"></script>
 </body>

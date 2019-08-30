@@ -38,7 +38,25 @@ $checkCaseElement = $checkCaseElements[0];
 // CheckCase object
 $checkcaseName = $checkCaseElement->getAttribute('name');
 
-$checkCase = new CheckCase($checkcaseName);
+$sourceTypes = array();
+if($checkCaseElement->hasAttribute ("sourceA"))
+{
+    $sourceTypes["sourceA"] = $checkCaseElement->getAttribute('sourceA');   
+}
+if($checkCaseElement->hasAttribute ("sourceB"))
+{
+    $sourceTypes["sourceB"] = $checkCaseElement->getAttribute('sourceB');       
+}
+if($checkCaseElement->hasAttribute ("sourceC"))
+{
+    $sourceTypes["sourceC"] = $checkCaseElement->getAttribute('sourceC');   
+}
+if($checkCaseElement->hasAttribute ("sourceD"))
+{
+    $sourceTypes["sourceD"] = $checkCaseElement->getAttribute('sourceD');   
+}
+
+$checkCase = new CheckCase($checkcaseName, $sourceTypes);
 
 $CheckCase ;
 //children of checkCaseElement i.e. checks
@@ -149,11 +167,13 @@ echo json_encode($CheckCase);
 
 class CheckCase{
     var $Name;
+    var $SourceTypes = array();
     var $CheckTypes ;
 
-    function __construct( $name) 
+    function __construct( $name, $sourceTypes) 
         {
             $this->Name = $name;
+            $this->SourceTypes = $sourceTypes;
             $this->CheckTypes = array();
         }
 

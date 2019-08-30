@@ -13,7 +13,7 @@
 	   Note: These keywords are not case sensitive.
 -->
 
-<CheckCase name="IFC_Compliance">
+<CheckCase name="IFC_Compliance" sourceA="IFC">
 	<Check type="Compliance"  sourceType="IFC" > 	  
 		<ComponentGroup name="IFCPROJECT">
 		  <ComponentClass name="IFCPROJECT">
