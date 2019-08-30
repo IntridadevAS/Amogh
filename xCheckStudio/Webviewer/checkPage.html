@@ -11,6 +11,7 @@
 
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
+  <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -304,6 +305,40 @@
       </div>
     </div>
   </div>
+  <div id="Check_Complete">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Check_Complete_A57_Text_1">
+        <span>Check Complete</span>
+      </div>
+      <div id="Check_complete__View_results__">
+        <span>Check complete. View results? </span>
+      </div>
+      <div id="Component_16">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310" d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK" onclick="reviewResults()">
+          <span>OK</span>
+        </div>
+      </div>
+      <div id="Component_30">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" onclick="cancelCheckResults()">
+          <span>CANCEL</span>
+        </div>
+      </div>
+    </div>
 
   <style>
     ::-webkit-scrollbar {
