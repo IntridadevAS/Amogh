@@ -1,0 +1,231 @@
+.mediaViewInfo {
+	--web-view-name: Summary;
+	--web-view-id: Summary;
+	--web-scale-on-resize: true;
+	--web-center-horizontally: true;
+	--web-center-vertically: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Summary;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+#SummaryInfo {
+	display: none;
+	position: absolute;
+	box-sizing: border-box;
+	transform: translateX(-50%) translateY(-50%);
+	left: 50%;
+	top: 50%;
+	/*background: #E5E5E5;*/
+	width: 440px;
+	height: 397px;
+	/* background-color: rgba(255,255,255,1); */
+	overflow: hidden;
+	margin: 0;
+	z-index: 2;
+	padding: 0;
+	--web-view-name: Summary;
+	--web-view-id: Summary;
+	--web-scale-on-resize: true;
+	--web-center-horizontally: true;
+	--web-center-vertically: true;
+	--web-enable-deep-linking: true;
+}
+#compareInfo {
+	position: absolute;
+	width: 440px;
+	height: 397px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.bgInfo {
+	position: absolute;
+	overflow: visible;
+	width: 440px;
+	height: 397px;
+	left: 0px;
+	top: 0px;
+}
+#lineInfo {
+	opacity: 0.1;
+}
+.lineInfo {
+	position: absolute;
+	overflow: visible;
+	width: 440px;
+	height: 4px;
+	left: 0px;
+	top: 77px;
+}
+#Summary_A3_Text_1Info {
+	position: absolute;
+	left: 64px;
+	top: 27px;
+	overflow: visible;
+	width: 103px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}
+.icon_32_SummaryInfo {
+	overflow: visible;
+	position: absolute;
+	top: 28px;
+	left: 29px;
+	width: 21px;
+	height: 22px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#itemsChecked {
+	position: absolute;
+	width: 303px;
+	height: 49px;
+	left: 24px;
+	top: 101px;
+	overflow: visible;
+}
+#checkedItemCount {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+	width: 69px;
+	height: 49px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: rgba(255,255,255,1);
+}
+#Total_items_checked_1 {
+	position: absolute;
+	left: 92px;
+	top: 7px;
+	overflow: visible;
+	width: 212px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}
+#Group_2_1 {
+	position: absolute;
+	width: 272px;
+	height: 49px;
+	left: 24px;
+	top: 195px;
+	overflow: visible;
+}
+#Items_with_No_Match {
+	position: absolute;
+	left: 92px;
+	top: 7px;
+	overflow: visible;
+	width: 181px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}
+#count_no_match {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+	width: 69px;
+	height: 49px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: rgba(255,72,71,1);
+}
+#Group_3_1 {
+	position: absolute;
+	width: 307px;
+	height: 49px;
+	left: 24px;
+	top: 241px;
+	overflow: visible;
+}
+#Items_undefined {
+	position: absolute;
+	left: 92px;
+	top: 8px;
+	overflow: visible;
+	width: 216px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}
+#count_undefined {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+	width: 69px;
+	height: 49px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: rgba(255,234,15,1);
+}
+#Group_A3_Group_7_1 {
+	position: absolute;
+	width: 307px;
+	height: 49px;
+	left: 24px;
+	top: 148px;
+	overflow: visible;
+}
+#ID37_A3_Text_12_1 {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+	width: 69px;
+	height: 49px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: rgba(255,255,255,1);
+}
+#Total_items_not_checked {
+	position: absolute;
+	left: 92px;
+	top: 7px;
+	overflow: visible;
+	width: 216px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(255,255,255,1);
+}

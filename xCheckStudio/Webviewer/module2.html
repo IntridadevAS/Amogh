@@ -735,7 +735,7 @@
             <div id="maximizeViewerContainer" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content" id="maximizeViewerContainer-content"
-                    style="width: 60%; height: 100%; margin-left: 280px; margin-top: 5px;">
+                    style="width: 60%; height: 100%; margin-left: 280px; margin-top: 5px; overflow: auto;">
 
                 </div>
             </div>
@@ -1272,6 +1272,8 @@
                 modalViewer.style.marginLeft = "20px";
                 modalViewer.style.marginTop = "10px";
                 modalViewer.style.height = "100%";
+                modalViewer.style.width = "100%";
+                
                 var modalAnalyticsContainer = modalViewer.children[0]//modalViewer.getElementById("analyticsContainer");
                 modalAnalyticsContainer.style.height = "100%";
                 modalAnalyticsContainer.style.width = "165%";

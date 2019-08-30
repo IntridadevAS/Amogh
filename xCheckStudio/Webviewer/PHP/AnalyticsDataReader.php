@@ -208,6 +208,41 @@
                             $oks = $okResults->fetchColumn();
                         }
 
+                        // OK(A) components
+
+                        $okAs = 0;
+                        $okAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)';");       
+                        if( $okAResults)
+                        {
+                            $okAs = $okAResults->fetchColumn();
+                        }
+
+                        // OK(T) components
+                        $okTs = 0;
+                        $okTResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)';");       
+                        if( $okTResults)
+                        {
+                            $okTs = $okTResults->fetchColumn();
+                        }
+
+                        // OK(T)(A) components
+                        $okTAs = 0;
+                        $okTAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)(A)';");       
+                        if( $okTAResults)
+                        {
+                            $okTAs = $okTAResults->fetchColumn();
+                        }
+
+                        // OK(A)(T) components
+                        // OK(T) components
+                        $okATs = 0;
+                        $okATResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)(T)';");       
+                        if( $okATResults)
+                        {
+                            $okATs = $okATResults->fetchColumn();
+                        }
+
+ 
                          // Error components
                          $errors = 0;
                          $errorResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Error';");       
@@ -313,6 +348,9 @@
                         "errorCount" =>$errorCount,
                         "warningCount" =>$warningCount,
                         "nomatchCount" =>$nomatchCount,
+                        "okACount" =>$okAs,
+                        "okTCount" =>$okTs,
+                        "okATCount" => $okATs + $okTAs,
                         "undefinedCount" =>$undefinedCount,
                         "sourceASelectedCount" =>$sourceASelectedCount,
                         "sourceBSelectedCount" =>$sourceBSelectedCount,
