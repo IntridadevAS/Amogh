@@ -1,7 +1,9 @@
 function AnalyticsManager1(comparisonCheckGroups, 
     sourceAComplianceCheckGroups, 
-    sourceBComplianceCheckGroups) {
+    sourceBComplianceCheckGroups,
+    container) {
 
+    this.Container = container;
     this.ComparisonCheckGroups = comparisonCheckGroups;
     this.SourceAComplianceCheckGroups = sourceAComplianceCheckGroups;
     this.SourceBComplianceCheckGroups = sourceBComplianceCheckGroups;
@@ -15,6 +17,7 @@ function AnalyticsManager1(comparisonCheckGroups,
     var ComparisonTotalItemsNotChecked = 0;
     var ComparisonNoMatchCount = 0;
     var ComparisonUndefinedCount = 0;
+    var ComparisonOKATCount = 0;
     var TotalItemsLoaded = 0;
 
     var SourceAComplianceTotalItemsChecked = 0;
@@ -24,7 +27,8 @@ function AnalyticsManager1(comparisonCheckGroups,
     var SourceAComplianceUndefinedCount = 0;
     var SourceAComplianceTotalItemsLoaded = 0;
     var SourceANotSelectedComps = 0;
-    var SourceATotalItemsLoaded = 0
+    var SourceATotalItemsLoaded = 0;
+    var SourceAOKATCount = 0;
 
     var SourceBComplianceTotalItemsChecked = 0;
     var SourceBComplianceErrorsCount = 0;
@@ -34,6 +38,7 @@ function AnalyticsManager1(comparisonCheckGroups,
     var SourceBComplianceTotalItemsLoaded = 0;
     var SourceBNotSelectedComps = 0;
     var SourceBTotalItemsLoaded = 0
+    var SourceBOKATCount = 0;
 }
 
 AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
@@ -58,6 +63,9 @@ AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
                 var errorsCount = 0;
                 var warningsCount = 0;
                 var okCount = 0;
+                var okACount = 0;
+                var okTCount = 0;
+                var OkATCount = 0;
                 var noMatchCount = 0;
                 var undefinedCount = 0;
                 var sourceASelectedCount = 0;
@@ -71,6 +79,18 @@ AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
 
                 if ("okCount" in checkResults) {
                     okCount = parseInt(checkResults["okCount"]);
+                }
+
+                if ("okACount" in checkResults) {
+                    okACount = parseInt(checkResults["okACount"]);
+                }
+
+                if ("okTCount" in checkResults) {
+                    okTCount = parseInt(checkResults["okTCount"]);
+                }
+
+                if ("okATCount" in checkResults) {
+                    OkATCount = parseInt(checkResults["okATCount"]);
                 }
 
                 if ("errorCount" in checkResults) {
@@ -119,6 +139,7 @@ AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
                 totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
                 totalItemsLoaded = sourceATotalComponentsCount + sourceBTotalComponentsCount
                 totalItemsNotChecked = totalItemsLoaded - totalItemsChecked;
+                _this.ComparisonOKATCount = okACount + okTCount + OkATCount;
 
                 _this.ComparisonTotalItemsChecked = totalItemsChecked;
                 _this.ComparisonErrorsCount = errorsCount;
@@ -205,7 +226,9 @@ AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function ()
                 var okCount = 0;
                 var undefinedCount = 0;
                 var noMatchCount = 0;
-               
+                var okACount = 0;
+                var okTCount = 0;
+                var OkATCount = 0;
                 var sourceASelectedCount = 0;                  
                 var sourceATotalComponentsCount = 0;                  
                 var checkGroupsInfo = 0;
@@ -214,6 +237,18 @@ AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function ()
 
                 if ("okCount" in checkResults) {
                     okCount = parseInt(checkResults["okCount"]);
+                }
+
+                if ("okACount" in checkResults) {
+                    okACount = parseInt(checkResults["okACount"]);
+                }
+
+                if ("okTCount" in checkResults) {
+                    okTCount = parseInt(checkResults["okTCount"]);
+                }
+
+                if ("okATCount" in checkResults) {
+                    OkATCount = parseInt(checkResults["okATCount"]);
                 }
 
                 if ("errorCount" in checkResults) {
@@ -251,8 +286,9 @@ AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function ()
                 _this.SourceAComplianceWarningsCount= warningsCount;
                 _this.SourceAComplianceOKCount  = okCount;
                 _this.SourceAComplianceUndefinedCount = undefinedCount;
-                _this.SourceANotSelectedComps = sourceANotSelectedComponents;
+                _this.SourceANotSelectedComps = sourceATotalComponentsCount - totalItemsChecked;
                 _this.SourceATotalItemsLoaded = sourceATotalComponentsCount;
+                _this.SourceAOKATCount = okACount + okTCount + OkATCount;
 
                   // //add data to summary
                 //   if (! _this.ComparisonCheckGroups) 
@@ -314,7 +350,9 @@ AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function ()
                 var okCount = 0;
                 var noMatchCount = 0;
                 var undefinedCount = 0;
-
+                var okACount = 0;
+                var okTCount = 0;
+                var OkATCount = 0;
                 var sourceBSelectedCount = 0;
                 var checkGroupsInfo = 0;
                 var sourceBTotalComponentsCount = 0;         
@@ -322,6 +360,18 @@ AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function ()
 
                 if ("okCount" in checkResults) {
                     okCount = parseInt(checkResults["okCount"]);
+                }
+
+                if ("okACount" in checkResults) {
+                    okACount = parseInt(checkResults["okACount"]);
+                }
+
+                if ("okTCount" in checkResults) {
+                    okTCount = parseInt(checkResults["okTCount"]);
+                }
+
+                if ("okATCount" in checkResults) {
+                    OkATCount = parseInt(checkResults["okATCount"]);
                 }
 
                 if ("errorCount" in checkResults) {
@@ -361,17 +411,9 @@ AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function ()
                 _this.SourceBComplianceWarningsCount  = warningsCount;
                 _this.SourceBComplianceOKCount = okCount;
                 _this.SourceBComplianceUndefinedCount = undefinedCount;
-                _this.SourceBNotSelectedComps = sourceBNotSelectedComponents;
+                _this.SourceBNotSelectedComps = sourceBTotalComponentsCount - totalItemsChecked;
                 _this.SourceBTotalItemsLoaded = sourceBTotalComponentsCount;
-
-
-
-                //add data to summary
-                // if (!_this.ComparisonCheckGroups &&
-                //     !_this.SourceAComplianceCheckGroups) {
-                //     _this.setSeveritySummary('SourceBCompliance');
-                // }                 
-
+                _this.SourceBOKATCount = okACount + okTCount + OkATCount;       
 
                 // draw pie charts
 
@@ -484,7 +526,6 @@ AnalyticsManager1.prototype.drawCompliancePieCharts = function (okCount,
 
 }
 
-
 AnalyticsManager1.prototype.drawComparisonPieCharts = function (okCount,
     warningsCount,
     errorsCount,
@@ -494,61 +535,65 @@ AnalyticsManager1.prototype.drawComparisonPieCharts = function (okCount,
     totalItemsChecked,
     totalItemsLoaded) {
 
-    // draw pie chart for Errors 
-    var colorsArray = ["#F43742", "#EDEDED"];
-    this.drawPieChart("Error",
-        errorsCount,
-        totalItemsChecked,
-        '#baseError',
-        colorsArray,
-        "errorPercentage");
+    // if(this.Container == "AnalyticsContainer") {
+        // draw pie chart for Errors 
+        var colorsArray = ["#F43742", "#EDEDED"];
+        this.drawPieChart("Error",
+            errorsCount,
+            totalItemsChecked,
+            '#baseError',
+            colorsArray,
+            "errorPercentage");
 
-    // draw pie chart for Warnings
-    colorsArray = ["#F8C13B", "#EDEDED"];
-    this.drawPieChart("Warning",
-        warningsCount,
-        totalItemsChecked,
-        '#baseWarning',
-        colorsArray,
-        'warningPercentage');
+        // draw pie chart for Warnings
+        colorsArray = ["#F8C13B", "#EDEDED"];
+        this.drawPieChart("Warning",
+            warningsCount,
+            totalItemsChecked,
+            '#baseWarning',
+            colorsArray,
+            'warningPercentage');
 
-    // draw pie chart for Oks
-    colorsArray = ["#0FFF72", "#EDEDED"];
-    this.drawPieChart("OK",
-        okCount,
-        totalItemsChecked,
-        '#baseOk',
-        colorsArray,
-        'okPercentage');
+        // draw pie chart for Oks
+        colorsArray = ["#0FFF72", "#EDEDED"];
+        this.drawPieChart("OK",
+            okCount,
+            totalItemsChecked,
+            '#baseOk',
+            colorsArray,
+            'okPercentage');
 
-    // draw pie chart for not checked
-    colorsArray = ["#0febee", "#EDEDED"];
-    this.drawPieChart("Not Checked",
-        totalItemsNotChecked,
-        totalItemsLoaded,
-        '#baseNotChecked',
-        colorsArray,
-        'notCheckedPercentage');
+        // draw pie chart for not checked
+        colorsArray = ["#0febee", "#EDEDED"];
+        this.drawPieChart("Not Checked",
+            totalItemsNotChecked,
+            totalItemsLoaded,
+            '#baseNotChecked',
+            colorsArray,
+            'notCheckedPercentage');
 
-    // draw pie chart for No Match
-    var colorsArray = ["#0febee", "#EDEDED"];
-    this.drawPieChart("No Match",
-        noMatchCount,
-        totalItemsLoaded,
-        '#baseNoMatch',
-        colorsArray,
-        'noMatchPercentage');
+        // draw pie chart for No Match
+        var colorsArray = ["#0febee", "#EDEDED"];
+        this.drawPieChart("No Match",
+            noMatchCount,
+            totalItemsLoaded,
+            '#baseNoMatch',
+            colorsArray,
+            'noMatchPercentage');
 
-    // draw pie chart for Undefined
-    colorsArray = ["#0febee", "#EDEDED"];
-    this.drawPieChart("Undefined",
-        undefinedCount,
-        totalItemsLoaded,
-        '#baseUndefined',
-        colorsArray,
-        'undefinedPercentage');
+        // draw pie chart for Undefined
+        colorsArray = ["#0febee", "#EDEDED"];
+        this.drawPieChart("Undefined",
+            undefinedCount,
+            totalItemsLoaded,
+            '#baseUndefined',
+            colorsArray,
+            'undefinedPercentage');
+    // }
+    // else if(this.Container == "MaximizedAnalytics") {
 
-
+    // }
+    
 }
 
 AnalyticsManager1.prototype.drawPieChart = function (mainChartItem,
@@ -605,13 +650,71 @@ AnalyticsManager1.prototype.drawPieChart = function (mainChartItem,
     errorDiv.innerHTML = fixedPercent + "%";
 }
 
-AnalyticsManager1.prototype.getSeverityInfo = function(checkType) {
+AnalyticsManager1.prototype.getSeveritySummary = function(checkType) {
+
+    var TotalItemsChecked = 0;
+    var TotalItemsMatched = 0;
+    var ErrorsCount = 0;
+    var OKCount = 0;
+    var WarningsCount = 0;
+    var OkATCount = 0;
     if (checkType.toLowerCase() == "comparison") {
-        comparisonTotalItemsChecked = this.ComparisonTotalItemsChecked;
-        comparisonErrorsCount = this.ComparisonErrorsCount;
-        comparisonOKCount = this.ComparisonOKCount;
-        comparisonWarningsCount = this.ComparisonWarningsCount;    
+        TotalItemsChecked = this.ComparisonTotalItemsChecked;
+        ErrorsCount = this.ComparisonErrorsCount;
+        OKCount = this.ComparisonOKCount;
+        WarningsCount = this.ComparisonWarningsCount;    
+        TotalItemsMatched = this.ComparisonErrorsCount + this.ComparisonOKCount + this.ComparisonWarningsCount;
+        OkATCount = this.ComparisonOKATCount;
    }
+   else if(checkType.toLowerCase() == "compliancea") {
+        TotalItemsChecked = this.SourceAComplianceTotalItemsChecked;
+        ErrorsCount = this.SourceAComplianceErrorsCount;
+        OKCount = this.SourceAComplianceOKCount;
+        WarningsCount = this.SourceAComplianceWarningsCount;    
+        TotalItemsMatched = this.SourceAComplianceErrorsCount + this.SourceAComplianceOKCount + this.SourceAComplianceWarningsCount;
+        OkATCount = this.SourceAOKATCount;
+   }
+   else if(checkType.toLowerCase() == "complianceb") {
+        TotalItemsChecked = this.SourceBComplianceTotalItemsChecked;
+        ErrorsCount = this.SourceBComplianceErrorsCount;
+        OKCount = this.SourceBComplianceOKCount;
+        WarningsCount = this.SourceBComplianceWarningsCount;    
+        TotalItemsMatched = this.SourceBComplianceErrorsCount + this.SourceBComplianceOKCount + this.SourceBComplianceWarningsCount;
+        OkATCount = this.SourceBOKATCount;
+    }
+
+    return {"TotalItemsChecked" : TotalItemsChecked, "ErrorsCount" : ErrorsCount, "OKCount" : OKCount,
+             "WarningCount": WarningsCount, "TotalItemsMatched" : TotalItemsMatched, "oKATCount": OkATCount}
+}
+
+AnalyticsManager1.prototype.getInfoSummary = function(checkType) {
+
+    var TotalItemsLoaded = 0;
+    var TotalItemsNotChecked = 0;
+    var noMatchCount = 0;
+    var undefinedCount = 0;
+
+    if (checkType.toLowerCase() == "comparison") {
+        TotalItemsLoaded = this.TotalItemsLoaded;
+        TotalItemsNotChecked = this.ComparisonTotalItemsNotChecked;
+        noMatchCount = this.ComparisonNoMatchCount;
+        undefinedCount = this.ComparisonUndefinedCount;
+   }
+   else if(checkType.toLowerCase() == "compliancea") {
+        TotalItemsLoaded = this.SourceATotalItemsLoaded;
+        TotalItemsNotChecked = this.SourceANotSelectedComps;
+        noMatchCount = 0;
+        undefinedCount = this.SourceAComplianceUndefinedCount;
+   }
+   else if(checkType.toLowerCase() == "complianceb") {
+        TotalItemsLoaded = this.SourceBTotalItemsLoaded;
+        TotalItemsNotChecked = this.SourceBNotSelectedComps;
+        noMatchCount = 0;
+        undefinedCount = this.SourceBComplianceUndefinedCount;
+    }
+
+    return {"TotalItemsLoaded" : TotalItemsLoaded, "TotalItemsNotChecked" : TotalItemsNotChecked, "noMatchCount" : noMatchCount,
+             "undefinedCount": undefinedCount}
 }
 
 AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) {
@@ -638,7 +741,6 @@ AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) 
 
     xAxis = { name: "xAxis", type: "categoryX", label: "category", gap: 0.5,  };
     yAxis = { name: "yAxis", type: "numericY", title: "Severity" };
-    $("#BarChart").css('background-color', 'rgba(0,0,0,0)');
     $("#BarChart").igDataChart({
         dataSource: Severitydata,
         height: "50%",
@@ -661,6 +763,16 @@ AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) 
                 _this.CreateStackedFragment("Warning"),
             ]
         }], 
+        refreshCompleted: function () {
+            var context,
+            canvas = document.querySelector("canvas"),
+            h = parseInt(canvas.getAttribute("height")),
+            w = parseInt(canvas.getAttribute("width"));
+            
+            context = canvas.getContext('2d');
+            context.fillStyle = "#292E4D";
+            context.fillRect(0, 0, w, h);
+        }
     });
 }
 
@@ -682,7 +794,6 @@ AnalyticsManager1.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
     }
 
     var colorsArray = ["#dddbff", "#e7d7fa"]
-    $("#BarChart").css('background-color', 'rgba(0,0,0,0)');
     $("#BarChart").igDataChart({
         dataSource: Infodata,
         height: "50%",
@@ -704,6 +815,16 @@ AnalyticsManager1.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
                 _this.CreateStackedFragment("undefined")
             ]
         }], 
+        refreshCompleted: function () {
+            var context,
+            canvas = document.querySelector("canvas"),
+            h = parseInt(canvas.getAttribute("height")),
+            w = parseInt(canvas.getAttribute("width"));
+            
+            context = canvas.getContext('2d');
+            context.fillStyle = "#292E4D";
+            context.fillRect(0, 0, w, h);
+        }
     });
 }
 

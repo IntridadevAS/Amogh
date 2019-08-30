@@ -1,4 +1,4 @@
-function populateAnalyticsData(checkResults) {
+function populateAnalyticsData(checkResults, container) {
     for (var key in checkResults) {
 
         if (!checkResults.hasOwnProperty(key)) {
@@ -18,19 +18,23 @@ function populateAnalyticsData(checkResults) {
 
     analyticsManager = new AnalyticsManager1(comparisonCheckGroups, 
                                             sourceAComplianceCheckGroups, 
-                                            sourceBComplianceCheckGroups);
+                                            sourceBComplianceCheckGroups,
+                                            container);
 
     // draw pie and bar charts 
     if (comparisonCheckGroups) {
         analyticsManager.populateComparisonAnalyticsData();
+        activeResultType = "comparison";
     }
 
     else if (sourceAComplianceCheckGroups) {
         analyticsManager.populateSourceAComplianceAnalyticsData();
+        activeResultType = "complianceA";
     }
 
     else if (sourceBComplianceCheckGroups) {
         analyticsManager.populateSourceBComplianceAnalyticsData();
+        activeResultType = "complianceB"
     }
 
     //load severity line chart 
@@ -71,10 +75,53 @@ function PopulateComparisonChartData()
 function ShowSeveritySummary() {
     var summary = document.getElementById("Summary");
     summary.style.display = "block";
+    var summaryData = analyticsManager.getSeveritySummary(activeResultType);
+
+    var Total_items_checked_div = document.getElementById("ID37");
+    Total_items_checked_div.innerHTML = summaryData.TotalItemsChecked;
+
+    var Items_with_errors_div = document.getElementById("ID18");
+    Items_with_errors_div.innerHTML = summaryData.ErrorsCount;
+
+    var Items_with_warnings_div = document.getElementById("ID13");
+    Items_with_warnings_div.innerHTML = summaryData.WarningCount;
+
+    var Items_OK_div = document.getElementById("ID6_A3_Text_11");
+    Items_OK_div.innerHTML = summaryData.OKCount;
+
+    var Total_items_matched_div = document.getElementById("ID37_A3_Text_12");
+    Total_items_matched_div.innerHTML = summaryData.TotalItemsMatched;
+
+    var ok_A_T_Count_div = document.getElementById("ID6");
+    ok_A_T_Count_div.innerHTML = summaryData.oKATCount;
 }
 
-function RemoveSummaryOverlay() {
-    var infoSummary = document.getElementById("Summary");
+function ShowInfoSummary() {
+    var summary = document.getElementById("SummaryInfo");
+    summary.style.display = "block";
+
+    var infoSummary = analyticsManager.getInfoSummary(activeResultType);
+
+    var Total_items_loaded_div = document.getElementById("checkedItemCount");
+    Total_items_loaded_div.innerHTML = infoSummary.TotalItemsLoaded;
+
+    var Items_with_nomatch_div = document.getElementById("count_no_match");
+    Items_with_nomatch_div.innerHTML = infoSummary.noMatchCount;
+
+    var Items_with_undefined_div = document.getElementById("count_undefined");
+    Items_with_undefined_div.innerHTML = infoSummary.undefinedCount;
+
+    var Items_notChecked_div = document.getElementById("ID37_A3_Text_12_1");
+    Items_notChecked_div.innerHTML = infoSummary.TotalItemsNotChecked;
+}
+
+function RemoveSeveritySummaryOverlay() {
+    var Summary = document.getElementById("Summary");
+    Summary.style.display = "none";
+}
+
+function RemoveInfoSummaryOverlay() {
+    var infoSummary = document.getElementById("SummaryInfo");
     infoSummary.style.display = "none";
 }
 

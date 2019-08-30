@@ -7,6 +7,7 @@
 
 <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
 <link rel="stylesheet" href="CSS/Summary.css" type="text/css" />
+<link rel="stylesheet" href="CSS/SummaryInfo.css" type="text/css" />
 <link rel="stylesheet" href="CSS/Compliance_DataSet_Selection.css" type="text/css"/>
 <link rel="stylesheet" href="src\Infragistics\charts\infragistics.ui.chart.css" type="text/css" />
 
@@ -768,7 +769,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="Summary" onclick="RemoveSummaryOverlay()">
+	<div id="Summary" onclick="RemoveSeveritySummaryOverlay()">
 		<div id="compare">
 			<svg class="bgq">
 				<rect fill="rgba(41,46,77,1)" stroke="rgba(15,255,238,1)" stroke-width="4px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="16" ry="16" x="0" y="0" width="440" height="397">
@@ -817,20 +818,71 @@
 					<span>8</span>
 				</div>
 			</div>
-			<div id="Group_4_A2_Group_6">
-				<div id="Items__OK__A2_Text_10">
+			<div id="Group_4_A3_Group_6">
+				<div id="Items__OK__A3_Text_10">
 					<span>Items ‘OK’</span>
 				</div>
-				<div id="ID6_A2_Text_11">
+				<div id="ID6_A3_Text_11">
 					<span>6</span>
 				</div>
 			</div>
-			<div id="Group_A2_Group_7">
-				<div id="ID37_A2_Text_12">
+			<div id="Group_A3_Group_7">
+				<div id="ID37_A3_Text_12">
 					<span>37</span>
 				</div>
-				<div id="Total_items_checked_A2_Text_13">
+				<div id="Total_items_checked_A3_Text_13">
 					<span>Total items matched</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="SummaryInfo" onclick="RemoveInfoSummaryOverlay()">
+		<div id="compareInfo">
+			<svg class="bgInfo">
+				<rect fill="rgba(41,46,77,1)" stroke="rgba(15,255,238,1)" stroke-width="4px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="16" ry="16" x="0" y="0" width="440" height="397">
+				</rect>
+			</svg>
+			<svg class="lineInfo">
+				<rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				</rect>
+			</svg>
+			<div id="Summary_A3_Text_1Info">
+				<span>Summary</span>
+			</div>
+			<svg class="icon_32_SummaryInfo" viewBox="5 5 21 22">
+				<path fill="rgba(255,255,255,1)" id="icon_32_Summary" d="M 5.000400066375732 24.00030136108398 C 5.000400066375732 22.3434009552002 6.343200206756592 20.99970054626465 8.000100135803223 20.99970054626465 C 9.657000541687012 20.99970054626465 10.99980068206787 22.3434009552002 10.99980068206787 24.00030136108398 C 10.99980068206787 25.65719985961914 9.657000541687012 27 8.000100135803223 27 C 6.343200206756592 27 5.000400066375732 25.65719985961914 5.000400066375732 24.00030136108398 Z M 15.00030040740967 26.00010108947754 C 13.89510059356689 26.00010108947754 12.99960041046143 25.10460090637207 12.99960041046143 24.00030136108398 C 12.99960041046143 22.89509963989258 13.89510059356689 21.99960136413574 15.00030040740967 21.99960136413574 L 24.00030136108398 21.99960136413574 C 25.10460090637207 21.99960136413574 26.00010108947754 22.89509963989258 26.00010108947754 24.00030136108398 C 26.00010108947754 25.10460090637207 25.10460090637207 26.00010108947754 24.00030136108398 26.00010108947754 L 15.00030040740967 26.00010108947754 Z M 5.000400066375732 16.00020027160645 C 5.000400066375732 14.34330081939697 6.343200206756592 12.99960041046143 8.000100135803223 12.99960041046143 C 9.657000541687012 12.99960041046143 10.99980068206787 14.34330081939697 10.99980068206787 16.00020027160645 C 10.99980068206787 17.65710067749023 9.657000541687012 18.99990081787109 8.000100135803223 18.99990081787109 C 6.343200206756592 18.99990081787109 5.000400066375732 17.65710067749023 5.000400066375732 16.00020027160645 Z M 15.00030040740967 18 C 13.89510059356689 18 12.99960041046143 17.10449981689453 12.99960041046143 16.00020027160645 C 12.99960041046143 14.89500045776367 13.89510059356689 14.00040054321289 15.00030040740967 14.00040054321289 L 19.99979972839355 14.00040054321289 C 21.10500144958496 14.00040054321289 21.99960136413574 14.89500045776367 21.99960136413574 16.00020027160645 C 21.99960136413574 17.10449981689453 21.10500144958496 18 19.99979972839355 18 L 15.00030040740967 18 Z M 5.000400066375732 8.000100135803223 C 5.000400066375732 6.343200206756592 6.343200206756592 5.000400066375732 8.000100135803223 5.000400066375732 C 9.657000541687012 5.000400066375732 10.99980068206787 6.343200206756592 10.99980068206787 8.000100135803223 C 10.99980068206787 9.657000541687012 9.657000541687012 10.99980068206787 8.000100135803223 10.99980068206787 C 6.343200206756592 10.99980068206787 5.000400066375732 9.657000541687012 5.000400066375732 8.000100135803223 Z M 15.00030040740967 9.999899864196777 C 13.89510059356689 9.999899864196777 12.99960041046143 9.104400634765625 12.99960041046143 8.000100135803223 C 12.99960041046143 6.895800113677979 13.89510059356689 6.00029993057251 15.00030040740967 6.00029993057251 L 21.99960136413574 6.00029993057251 C 23.10480117797852 6.00029993057251 24.00030136108398 6.895800113677979 24.00030136108398 8.000100135803223 C 24.00030136108398 9.104400634765625 23.10480117797852 9.999899864196777 21.99960136413574 9.999899864196777 L 15.00030040740967 9.999899864196777 Z">
+				</path>
+			</svg>
+			<div id="itemsChecked">
+				<div id="checkedItemCount">
+					<span>37</span>
+				</div>
+				<div id="Total_items_checked_1">
+					<span>Total items Loaded</span>
+				</div>
+			</div>
+			<div id="Group_2_1">
+				<div id="Items_with_No_Match">
+					<span>Items with No Match</span>
+				</div>
+				<div id="count_no_match">
+					<span>18</span>
+				</div>
+			</div>
+			<div id="Group_3_1">
+				<div id="Items_undefined">
+					<span>Undefined Items</span>
+				</div>
+				<div id="count_undefined">
+					<span>13</span>
+				</div>
+			</div>
+			<div id="Group_A3_Group_7_1">
+				<div id="ID37_A3_Text_12_1">
+					<span>37</span>
+				</div>
+				<div id="Total_items_not_checked">
+					<span>Total items not checked</span>
 				</div>
 			</div>
 		</div>
@@ -1136,7 +1188,7 @@
 				{
 					var checkResults = JSON.parse(msg);                      
 					
-					populateAnalyticsData(checkResults);                    
+					populateAnalyticsData(checkResults, "AnalyticsContainer");                    
 				}
 			});            
 	}     
