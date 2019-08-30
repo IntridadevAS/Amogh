@@ -1,0 +1,142 @@
+.mediaViewInfo {
+	--web-view-name: Check Complete;
+	--web-view-id: Check_Complete;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Check_Complete;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+#Check_Complete {
+	display: none;
+	position: absolute;
+	box-sizing: border-box;
+	/* background: #E5E5E5; */
+	z-index: 2;
+	width: 581px;
+	height: 820px;
+	/* background-color: rgba(255,255,255,1); */
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	top: 40%;
+	left: 40%;
+	--web-view-name: Check Complete;
+	--web-view-id: Check_Complete;
+	/* --web-scale-on-resize: true;
+	--web-center-horizontally: true;
+	--web-center-vertically: true;
+	--web-enable-deep-linking: true; */
+}
+#Rectangle_1204 {
+	filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.502));
+}
+.Rectangle_1204 {
+	position: absolute;
+	overflow: visible;
+	width: 617px;
+	height: 191px;
+	left: 0px;
+	top: 0px;
+}
+.Rectangle_1215 {
+	position: absolute;
+	overflow: visible;
+	width: 575px;
+	height: 55px;
+	left: 3px;
+	top: 3px;
+}
+#Check_Complete_A57_Text_1 {
+	position: absolute;
+	left: 15px;
+	top: 15px;
+	overflow: hidden;
+	width: 469px;
+	height: 30px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 25px;
+	color: rgba(242,243,244,1);
+}
+#Check_complete__View_results__ {
+	position: absolute;
+	left: 15px;
+	top: 76px;
+	overflow: hidden;
+	width: 551px;
+	height: 25px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+#Component_16 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 478px;
+	top: 112px;
+	overflow: visible;
+}
+.Path_310 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 90px;
+	height: 30px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#OK {
+	position: absolute;
+	left: 16px;
+	top: 3px;
+	overflow: hidden;
+	width: 60px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_30 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 382px;
+	top: 112px;
+	overflow: visible;
+}
+.Rectangle_1242 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#CANCEL {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
