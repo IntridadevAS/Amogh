@@ -279,27 +279,29 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 };
 
 ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function(rowIndex, containerDiv) {
-    var rowData = {};
-    var rowIndex = rowIndex;
-    $(function () {
+    // var rowData = {};
+    // var rowIndex = rowIndex;
+    // $(function () {
+    // var data = $(containerDiv).data("igGrid").dataSource.dataView();
+    // var ResultId = data[rowIndex].ID;
+    // var GroupId = data[rowIndex].groupId;
+    // var SourceANodeId = data[rowIndex].SourceANodeId;
+    // var SourceBNodeId = data[rowIndex].SourceBNodeId;
+    // var Status = data[rowIndex].Status;
+    // var SourceBName = data[rowIndex].SourceB;
+    // var SourceAName = data[rowIndex].SourceA;
+
+    // rowData['Status'] = Status;
+    // rowData['SourceBName'] = SourceBName;
+    // rowData['SourceAName'] = SourceAName;
+    // rowData['ResultId'] = ResultId;
+    // rowData['GroupId'] = GroupId;
+    // rowData['SourceANodeId'] = SourceANodeId;
+    // rowData['SourceBNodeId'] = SourceBNodeId;
+    // });
+
     var data = $(containerDiv).data("igGrid").dataSource.dataView();
-    var ResultId = data[rowIndex].ID;
-    var GroupId = data[rowIndex].groupId;
-    var SourceANodeId = data[rowIndex].SourceANodeId;
-    var SourceBNodeId = data[rowIndex].SourceBNodeId;
-    var Status = data[rowIndex].Status;
-    var SourceBName = data[rowIndex].SourceB;
-    var SourceAName = data[rowIndex].SourceA;
-
-    rowData['Status'] = Status;
-    rowData['SourceBName'] = SourceBName;
-    rowData['SourceAName'] = SourceAName;
-    rowData['ResultId'] = ResultId;
-    rowData['GroupId'] = GroupId;
-    rowData['SourceANodeId'] = SourceANodeId;
-    rowData['SourceBNodeId'] = SourceBNodeId;
-    });
-
+    var rowData = data[rowIndex];
     return rowData;
 }
 
@@ -441,8 +443,8 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     var tableData = [];
     var columnHeaders = [];
 
-    var componentId = rowData.ResultId;
-    var groupId = rowData.GroupId;
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
 
     for (var componentsGroupID in this.ReviewManager.ComparisonCheckManager) {
 

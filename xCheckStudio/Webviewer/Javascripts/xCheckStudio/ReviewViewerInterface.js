@@ -334,7 +334,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewRow = this.GetReviewComponentRow(checkComponentData);
+       var reviewRow = this.GetReviewComponentRow(checkComponentData);
     if(!reviewRow)
     {
         this.unHighlightComponent();
@@ -345,7 +345,11 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
     // component group id which is container div for check components table of given row
     var containerDiv = this.ReviewManager.GetReviewTableId(reviewRow);
-    this.ReviewManager.OnCheckComponentRowClicked(reviewRow, containerDiv); 
+
+    var data = $("#" + containerDiv).data("igGrid").dataSource.dataView();
+    var rowData = data[reviewRow.rowIndex];
+
+    this.ReviewManager.OnCheckComponentRowClicked(rowData, containerDiv); 
 
     var reviewTable = this.ReviewManager.GetReviewTable(reviewRow);
     this.ReviewManager.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, 
@@ -416,6 +420,123 @@ Review3DViewerInterface.prototype.highlightComponent = function (nodeIdString) {
 
     this.highlightManager.highlightNodeInViewer(nodeId);
 };
+
+Review3DViewerInterface.prototype.SelectValidNode = function () {
+    if (this.IsNodeInCheckResults(this.selectedNodeId)) {
+        return;
+    }
+
+    var model = this.Viewer.model;
+    while (this.selectedNodeId) {
+        this.selectedNodeId = model.getNodeParent(this.selectedNodeId);
+
+        if (this.IsNodeInCheckResults(this.selectedNodeId)) {
+            this.highlightManager.highlightNodeInViewer(this.selectedNodeId);
+            break;
+        }
+    }
+}
+
+Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
+
+    var nodeIdvsCheckComponent;
+    // if comparison
+    if (this.ViewerOptions[0] === "viewerContainer1") {
+        nodeIdvsCheckComponent = this.ReviewManager.SourceANodeIdvsCheckComponent;
+    }
+    else if (this.ViewerOptions[0] === "viewerContainer2") {
+        nodeIdvsCheckComponent = this.ReviewManager.SourceBNodeIdvsCheckComponent;
+    }
+
+    // if compliance
+    if (!nodeIdvsCheckComponent &&
+        this.ReviewManager.SourceNodeIdvsCheckComponent) {
+        nodeIdvsCheckComponent = this.ReviewManager.SourceNodeIdvsCheckComponent;
+    }
+
+    if (!nodeIdvsCheckComponent) {
+        return false;
+    }
+
+    if (node in nodeIdvsCheckComponent) {
+        return true;
+    }
+
+    return false;
+}
+
+/* This function returns the comparison check 
+    component row for given check component data */
+Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcComponentData) {
+    var componentsGroupName = checkcComponentData["MainClass"];
+    var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
+    if (!mainReviewTableContainer) {
+        return undefined;
+    }
+
+    var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
+    for (var i = 0; i < doc.length; i++) {
+
+        if (doc[i].innerHTML !== componentsGroupName) {
+            continue;
+        }
+        var nextSibling = doc[i].nextSibling;
+
+        var siblingCount = nextSibling.childElementCount;
+        for (var j = 0; j < siblingCount; j++) {
+            var child = doc[i].nextSibling.children[j];
+            var childRows = child.getElementsByTagName("tr");
+            for (var k = 2; k < childRows.length; k++) {
+
+                var childRow = childRows[k];
+                var childRowColumns = childRow.getElementsByTagName("td");
+                var data = $("#" + componentsGroupName).data("igGrid").dataSource.dataView();
+                var rowData = data[childRow.rowIndex];
+                var checkComponentId;
+
+                checkComponentId = rowData.ID;
+                // if (childRowColumns.length === Object.keys(ComparisonColumns).length) {
+                //     checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                // }
+                // else if (childRowColumns.length === Object.keys(ComplianceColumns).length) {
+                //     checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
+                // }
+                // else {
+                //     continue;
+                // }
+
+                //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
+                if (checkComponentId == checkcComponentData["Id"]) {
+
+                    // // open collapsible area
+                    // if (nextSibling.style.display != "block") {
+                    //     nextSibling.style.display = "block";
+                    // }
+
+                    // if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
+                    //     this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
+                    // }
+
+                    // // highlight selected row
+                    // this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
+                    // this.ReviewManager.populateDetailedReviewTable(childRow);
+                    // this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
+
+                    // // scroll to row                           
+                    // var reviewTable = this.ReviewManager.GetReviewTable(childRow);
+                    // reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
+                    // reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
+
+                    //break;
+                    return childRow;
+                }
+            }
+        }
+        //}
+    }
+
+    return undefined;
+}
 
 function Review1DViewerInterface(reviewManager, 
     sourceAComponents, 

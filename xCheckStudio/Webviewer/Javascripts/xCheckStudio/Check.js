@@ -96,13 +96,13 @@ function onCheckButtonClick() {
         return;
     }
 
-    if (confirm("Check complete. View results?")) {
-        reviewResults();
-    }
-    else {
-        cancelCheckResults();
-    }
-    //document.getElementById("checkcompletealert").style.display = "block";
+    // if (confirm("Check complete. View results?")) {
+    //     reviewResults();
+    // }
+    // else {
+    //     cancelCheckResults();
+    // }
+    document.getElementById("Check_Complete").style.display = "block";
 }
 
 function performComparisonCheck(comparisonCB, checkcase, dataSourceOrderMaintained) {
@@ -283,7 +283,7 @@ function cancelCheckResults() {
     sourceBComplianceCheckManager = undefined;
     comparisonCheckManager = undefined;
 
-    //document.getElementById("checkcompletealert").style.display = "none";
+    document.getElementById("Check_Complete").style.display = "none";
 }
 
 function reviewResults() {
