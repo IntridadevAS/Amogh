@@ -8,8 +8,7 @@ let host = null;
 let win;
 function createWindow()
 {
-
-    win = new BrowserWindow({title:'xCheckStudio', show: false});
+    win = new BrowserWindow({title:'xCheckStudio', frame:false,  show: false});
     win.maximize();
     win.show();
     

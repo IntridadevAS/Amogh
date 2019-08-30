@@ -18,9 +18,9 @@
         alt=""></a>
     <div class="userInfo">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program" onclick="onclosewindow()"></button>
       </div>
     </div>
   </header>
@@ -89,6 +89,28 @@
       }, 2000);
 
       //window.location.href = "splashscreen.html";
+    }
+
+    function onclosewindow(){
+      const remote = require('electron').remote;
+      var window = remote.getCurrentWindow();
+      window.close();
+    }
+
+    function onminimizewindow(){
+        const remote = require('electron').remote;
+        var window = remote.getCurrentWindow();
+        window.minimize();
+    }
+
+    function onmaximizewindow(){
+      const remote = require('electron').remote;
+      var window = remote.getCurrentWindow();
+      if (!window.isMaximized()) {
+           window.maximize();          
+      } else {
+         window.unmaximize();
+      }
     }
   </script>
 </body>
