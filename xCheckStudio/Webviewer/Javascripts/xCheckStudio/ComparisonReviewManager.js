@@ -313,11 +313,13 @@ ComparisonReviewManager.prototype.GetComparisonResultGroupId = function (selecte
     return selectedRow.cells[ComparisonColumns.GroupId].innerHTML;
 }
 
-ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRow) {
+ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRow, tableContainer, componentId, groupId)  {
     var _this = this;
 
-    var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
@@ -371,7 +373,7 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
                     }
 
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -417,14 +419,19 @@ ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedR
                         }
                     }
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true,  ComparisonColumns.Status);
             }
         });
     }
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.updateReviewComponentGridData = function (selectedRow, tableContainer, groupId, changedStatus) {
+ComparisonReviewManager.prototype.updateReviewComponentGridData = function (selectedRow, 
+                                                                            tableContainer, 
+                                                                            groupId, 
+                                                                            changedStatus,
+                                                                            populateDetailedTable,
+                                                                            statusColumnId) {
 
 
     //$(tableContainer).igGridUpdating("updateRow", selectedRow.rowIndex, {Status: changedStatus});
@@ -433,22 +440,10 @@ ComparisonReviewManager.prototype.updateReviewComponentGridData = function (sele
     var rowData = data[selectedRow.rowIndex];
     rowData.Status = changedStatus;
 
-    selectedRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+    selectedRow.cells[statusColumnId].innerText = changedStatus;
 
-   // $(tableContainer).igGrid("dataBind");
+    //var gridId = '#' + this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
 
-    // var headers = this.CheckResultsTable.CreateMainTableHeaders();
-    // this.CheckResultsTable.LoadReviewTableData(headers, data, tableContainer);
-
-    // // highlight table rows as per their severity status
-    // var id = tableContainer.replace('#','');
-    // this.CheckResultsTable.highlightMainReviewTableFromCheckStatus(id);
-
-    // // Add category check results count 
-    // this.CheckResultsTable.ReviewManager.AddTableContentCount(id);
-
-    // var gridId = '#' + this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-    // var _this = this;
 
     // var editedItem = {
     //     "SourceA": selectedRow.cells[ComparisonColumns.SourceAName].innerText,
@@ -460,11 +455,21 @@ ComparisonReviewManager.prototype.updateReviewComponentGridData = function (sele
     //     "groupId": this.GetComparisonResultGroupId(selectedRow)
     // };
 
-    // $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
-    //     _this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
-    //     _this.populateDetailedReviewTable(selectedRow);
-    //     $(gridId).jsGrid("refresh");
-    // });
+    //var _this = this;
+    //$(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {    
+    if(populateDetailedTable)
+    {
+        this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    }
+    else
+    {
+        if(this.SelectionManager.HighlightedCheckComponentRow)
+        {
+            this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+        }
+    }
+    //$(gridId).jsGrid("refresh");
+    //});
 }
 
 ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (tabletoupdate) {
@@ -594,10 +599,12 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (button) {
     }
 }
 
-ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow) {
+ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tableContainer, componentId, groupId){
     var _this = this;
-    var componentId = this.GetComparisonResultId(selectedRow[0]);
-    var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    // var componentId = this.GetComparisonResultId(selectedRow[0]);
+    // var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     try {
         $.ajax({
@@ -638,18 +645,20 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow) {
                     }
                     index++;
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
             }
         });
     }
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow) {
+ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
 
-    var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
@@ -695,10 +704,14 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow) {
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
                         properties[i]["Severity"] = status[1];
+
+                        selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
+                        _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], status[1]);
+                        
                     }
 
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -817,12 +830,15 @@ ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
     }
 }
 
-ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow) {
+ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
     var transposeType = key;
 
-    var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
     try {
@@ -900,7 +916,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                         }
                     }
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -965,7 +981,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
 
                 component["Status"] = changedStatus;
                 component["transpose"] = null;
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus, false, ComparisonColumns.Status);
             }
 
         });
@@ -973,10 +989,12 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selectedRow) {
+ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
-    var componentId = this.GetComparisonResultId(selectedRow[0]);
-    var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    // var componentId = this.GetComparisonResultId(selectedRow[0]);
+    // var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     try {
         $.ajax({
@@ -1011,18 +1029,20 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                     }
                     index++;
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
             }
         });
     }
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRow) {
+ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
-
-    var componentId = this.GetComparisonResultId(selectedRow[0]);
-    var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
+    
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // var componentId = this.GetComparisonResultId(selectedRow[0]);
+    // var groupId = this.GetComparisonResultGroupId(selectedRow[0]);
     var transposeType = key;
 
     try {
@@ -1062,7 +1082,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                     }
 
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
             },
         });
     }
@@ -1242,7 +1262,7 @@ ComparisonReviewManager.prototype.getStatusFromMainReviewRow = function (row) {
 
 ComparisonReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = function (row) {
     return {
-        SourceAName: row.cells[ComparisonPropertyColumns.SourceAName].innerText,
-        SourceBName: row.cells[ComparisonPropertyColumns.SourceBName].innerText
+        SourceAName: row.cells[ComparisonPropertyColumns.SourceAName].innerText.trim(),
+        SourceBName: row.cells[ComparisonPropertyColumns.SourceBName].innerText.trim()
     }
 }
