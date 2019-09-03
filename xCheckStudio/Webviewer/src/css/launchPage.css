@@ -31,7 +31,17 @@ footer {
   justify-content: flex-end;
   font-family: 'Montserrat';
   font-size: 80px;
+}
 
+.electronchecktext {
+  height: 280px;
+  width: 700px;
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  justify-content: flex-end;
+  font-family: 'Montserrat';
+  font-size: 30px;
 }
 
 .loginInfo {

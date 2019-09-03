@@ -437,7 +437,7 @@
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script> 
-
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
   <script>
 
     window.onload = function () {
@@ -454,29 +454,6 @@
       // enable menu options
       enableMenuOptions();
     }
-
-    function onclosewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      window.close();
-    }
-
-    function onminimizewindow(){
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.minimize();
-    }
-
-    function onmaximizewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      if (!window.isMaximized()) {
-           window.maximize();          
-      } else {
-         window.unmaximize();
-      }
-    }
-
   </script>
 </body>
 

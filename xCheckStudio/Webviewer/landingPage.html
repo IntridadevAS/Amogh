@@ -66,31 +66,10 @@
       // createProject.html i.e. Check tile click or Review tile click
       localStorage.setItem("FromCheckClick", false);
       window.location.assign("projectsPage.html");
-    }   
-
-    function onclosewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      window.close();
-    }
-
-    function onminimizewindow(){
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.minimize();
-    }
-
-    function onmaximizewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      if (!window.isMaximized()) {
-           window.maximize();          
-      } else {
-         window.unmaximize();
-      }
     }
   </script>
   <script type="text/javascript" src="src/scripts/landingpage.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
 </body>
 
 </html>

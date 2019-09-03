@@ -448,6 +448,7 @@
     </section>
 
     <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
+    <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
     <script>
       window.onload = function () {
         setUserName();
@@ -530,29 +531,6 @@
           newCheckView.createNewCheck(checkspace);
         }
       }
-
-      function onclosewindow(){
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.close();
-      }
-
-      function onminimizewindow(){
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.minimize();
-      }
-
-      function onmaximizewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      if (!window.isMaximized()) {
-           window.maximize();          
-      } else {
-         window.unmaximize();
-      }
-    }
-
     </script>
 </body>
 

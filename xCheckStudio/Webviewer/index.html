@@ -54,28 +54,34 @@
     <div id="userNameDiv" class="background" style="display: none">
       <p class="splashtext" id="username"></p>
     </div>
+    <div id="electroncheckDiv" class="background" style="display: none">
+      <p class="electronchecktext" id="electroncheck"></p>
+    </div>
 
   </div>
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
   <script type="text/javascript" src="src/scripts/launchPage.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
   <script>
+    window.onload = function () {
+      isElectron();
+    }
+
     function OnSubmitButtonClicked() {
-      ;
       validateLogindetails("LoginStatus"); //call the aysnchronous function with callback function name as argument -- Rahul K
     }
+    
     function LoginStatus(value) {
       if (value === 1) {
         document.getElementById("errorMsgContainer").style.display = "block";
       }
       else {
-        //$('body').fadeOut(900,newPage);
         newPage();
       }
     }
 
     function newPage() {
-
       document.getElementById("loginInfo").style.display = "none";
       document.getElementById("userNameDiv").style.display = "block";      
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -83,34 +89,9 @@
       var str2 = userinfo.alias;;
       document.getElementById("username").innerHTML = str1.concat(str2);
       setTimeout(function () {
-        //$('body').fadeOut(1000,newPage);// will be executed after the specified time
         window.location.href = "landingpage.html";
         newPage();
       }, 2000);
-
-      //window.location.href = "splashscreen.html";
-    }
-
-    function onclosewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      window.close();
-    }
-
-    function onminimizewindow(){
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.minimize();
-    }
-
-    function onmaximizewindow(){
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      if (!window.isMaximized()) {
-           window.maximize();          
-      } else {
-         window.unmaximize();
-      }
     }
   </script>
 </body>
