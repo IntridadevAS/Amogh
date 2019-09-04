@@ -359,16 +359,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                             return false;
                         }
 
-                    },
-                    // rowSelectionChanged: function (evt, ui) {
-                    //     if (isFiredFromCheckbox) {
-                    //         isFiredFromCheckbox = false;
-                    //     } else {                            
-                    //         var rowData = _this.GetDataFromSelectedRow(ui.row.id, containerDiv, false);
-                    //         _this.SelectionManager.HandleRowSelect(ui.row.element[0], _this.Webviewer, rowData["nodeId"]);
-                    //         return false;
-                    //     }
-                    // }
+                    },                   
                 },
                 {
                     name: "RowSelectors",
@@ -381,10 +372,33 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     },
                     checkBoxStateChanged: function (evt, ui) {
 
-                        var rowKey = parseInt(ui.rowKey);
-                        var rowData = _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
+                        if (ui.isHeader) {
+                            
+                            var data = $(containerDiv).data("igTreeGrid").dataSource.dataView();
+                            if (data.length === 0) {
+                                return;
+                            }
+                            
+                            for (var rowIndex in data) {
+                                var record = data[rowIndex];
+                                
+                                var rowKey = parseInt(record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')]);                                
+                                if(rowKey === NaN)
+                                {
+                                    continue;
+                                }
+                                var rowData =  _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
+                                var row = $(containerDiv).igTreeGrid("rowById", rowKey);
 
-                        _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData, containerDiv);
+                                _this.SelectionManager.HandleSelectFormCheckBox(row[0], ui.state, rowData, containerDiv);
+                            }
+                        }
+                        else {
+                            var rowKey = parseInt(ui.rowKey);
+                            var rowData = _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
+
+                            _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData, containerDiv);
+                        }
                     }
                 },
                 // {
@@ -906,7 +920,7 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
 SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
                                                             containerDiv,
                                                             iterateChilds) {
-
+                                                                
     var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
 
     var rowData = {};
