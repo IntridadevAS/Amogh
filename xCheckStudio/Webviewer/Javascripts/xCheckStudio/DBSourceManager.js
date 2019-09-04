@@ -34,7 +34,10 @@ DBSourceManager.prototype.LoadData = function (uri) {
       _this.AddComponentsToDB(_this.ViewerContainer);
 
       //add model Browser Table
-      _this.ModelTree = new DBModelBrowser(_this.ModelBrowsercontainer, dbReader.DBData);
+      _this.ModelTree = new DBModelBrowser(_this.ModelBrowsercontainer, 
+        _this.ViewerContainer,
+        dbReader.DBData);
+        
       _this.ModelTree.CreateModelBrowserTable();     
 
       // if (checkCaseSelected) {

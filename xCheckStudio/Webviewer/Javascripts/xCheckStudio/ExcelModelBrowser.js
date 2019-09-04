@@ -7,55 +7,55 @@ function ExcelModeBrowser(modelBrowserContainer,
     ModelBrowser.call(this, modelBrowserContainer);
 
     this.ViewerContainer = viewerContainer;
-    this.SheetData = sheetData;     
-        
+    this.SheetData = sheetData;
+
     // selectiion manager
     this.SelectionManager = new ExcelSelectionManager(selectedComponents);
+
+    this.LoadedSheet;
 }
 
 // assign ModelBrowser's method to this class
 ExcelModeBrowser.prototype = Object.create(ModelBrowser.prototype);
 ExcelModeBrowser.prototype.constructor = ExcelModeBrowser;
 
-ExcelModeBrowser.prototype.CreateHeaders = function()
-    {
-        var columnHeaders = [];
-        for (var i = 0; i < Object.keys(ModelBrowserColumns1D).length; i++) {
-            columnHeader = {};
-            var headerText;
-            if (i === ModelBrowserColumns1D.Select) {
-                continue;
-            }
-            else if (i === ModelBrowserColumns1D.Component) {
-                headerText = ModelBrowserColumnNames1D.Component;
-                key = ModelBrowserColumnNames1D.Component.replace(/\s/g,'');
-                width = "25%";
-            }
-            else if (i === ModelBrowserColumns1D.MainClass) {
-                headerText = ModelBrowserColumnNames1D.MainClass;
-                key = ModelBrowserColumnNames1D.MainClass.replace(/\s/g,'');
-                width = "25%";
-            }
-            else if (i === ModelBrowserColumns1D.SubClass) {
-                headerText = ModelBrowserColumnNames1D.SubClass;
-                key = ModelBrowserColumnNames1D.SubClass.replace(/\s/g,'');
-                width = "25%";
-            }
-            else if (i === ModelBrowserColumns1D.Description) 
-            {
-                headerText = ModelBrowserColumnNames1D.Description;
-                key = ModelBrowserColumnNames1D.Description.replace(/\s/g,'');
-                width = "25%";
-            }            
-
-            columnHeader["headerText"] = headerText;
-            columnHeader["key"] = key;
-            columnHeader["dataType"] = "string";
-            columnHeader["width"] = width;
-            columnHeaders.push(columnHeader);
+ExcelModeBrowser.prototype.CreateHeaders = function () {
+    var columnHeaders = [];
+    for (var i = 0; i < Object.keys(ModelBrowserColumns1D).length; i++) {
+        columnHeader = {};
+        var headerText;
+        if (i === ModelBrowserColumns1D.Select) {
+            continue;
+        }
+        else if (i === ModelBrowserColumns1D.Component) {
+            headerText = ModelBrowserColumnNames1D.Component;
+            key = ModelBrowserColumnNames1D.Component.replace(/\s/g, '');
+            width = "25%";
+        }
+        else if (i === ModelBrowserColumns1D.MainClass) {
+            headerText = ModelBrowserColumnNames1D.MainClass;
+            key = ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '');
+            width = "25%";
+        }
+        else if (i === ModelBrowserColumns1D.SubClass) {
+            headerText = ModelBrowserColumnNames1D.SubClass;
+            key = ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '');
+            width = "25%";
+        }
+        else if (i === ModelBrowserColumns1D.Description) {
+            headerText = ModelBrowserColumnNames1D.Description;
+            key = ModelBrowserColumnNames1D.Description.replace(/\s/g, '');
+            width = "25%";
         }
 
-        return columnHeaders;
+        columnHeader["headerText"] = headerText;
+        columnHeader["key"] = key;
+        columnHeader["dataType"] = "string";
+        columnHeader["width"] = width;
+        columnHeaders.push(columnHeader);
+    }
+
+    return columnHeaders;
 }
 
 ExcelModeBrowser.prototype.CreateModelBrowser = function () {
@@ -64,43 +64,6 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
 
 
         var columnHeaders = this.CreateHeaders();
-
-        // for (var i = 0; i < 4; i++) {
-        //     columnHeader = {};
-        //     var temp = {};
-        //     if (i === 0) {
-        //         temp["title"] = "";
-        //         temp["name"] = "checkbox";
-        //         temp["width"] = "20";
-        //         columnHeaders.push(temp);
-        //     }
-        //     var title;
-        //     if (i === 0) {
-        //         name = "Name";
-        //         title = "Item";
-        //         width = "40";
-        //     }
-        //     else if (i === 1) {
-        //         name = "Category";
-        //         title = "Category";
-        //         width = "100";
-        //     }
-        //     else if (i === 2) {
-        //         name = "ComponentClass";
-        //         title = "Item Class";
-        //         width = "100";
-        //     }
-        //     else if (i === 3) {
-        //         name = "Description";
-        //         title = "Description";
-        //         width = "100";
-        //     }
-        //     columnHeader["name"] = name;
-        //     columnHeader["title"] = title;
-        //     columnHeader["type"] = "text";
-        //     columnHeader["width"] = width;
-        //     columnHeaders.push(columnHeader);
-        // }
 
         tableData = [];
 
@@ -111,7 +74,7 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
             var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
             var styleList = undefined;
             var componentStyleClass = this.getComponentstyleClass(mainComponentStyleClass);
-          
+
             //add sheet names as 1st parent(collapsible row)
             // this.addComponentRow(styleList, componentStyleClass, rowData);
             var parentMainClassStyleList = componentStyleClass;
@@ -139,7 +102,7 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
                     //var rowData = [];
 
                     //if component name or main component class is undefined then only add compoment row to model browser
-                    if (name !== undefined && 
+                    if (name !== undefined &&
                         mainComponentClass !== undefined) {
 
                         tableRowContent = {};
@@ -154,9 +117,9 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
                         // }
 
                         //tableRowContent[columnHeaders[0].name] = checkBox;
-                        tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g,'')] = name;
-                        tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g,'')] = mainComponentClass;
-                        tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g,'')] = subComponentClass;
+                        tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
+                        tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
+                        tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
 
                         var description = "";
                         for (var j = 0; j < child.properties.length; j++) {
@@ -167,20 +130,20 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
                                 break;
                             }
                         }
-                        tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g,'')] = description;
+                        tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
                         tableData.push(tableRowContent);
                     }
                 }
             }
         }
-        
+
         this.LoadModelBrowserTable(this, columnHeaders, tableData);
 
         // // maintain first row as selected row by default
         // var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
         // this.SelectionManager.HighlightBrowserRow(modelBrowserTableRows[0]);
         // this.ShowSelectedSheetData(modelBrowserTableRows[0]);       
-         
+
         // var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
         // modelBrowserHeaderTable.style.position = "fixed"
         // modelBrowserHeaderTable.style.width = "543px";
@@ -193,22 +156,19 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
 
 };
 
-ExcelModeBrowser.prototype.GetModelBrowserHeaderTable = function()
-{
+ExcelModeBrowser.prototype.GetModelBrowserHeaderTable = function () {
     var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
     return modelBrowserData.children[0];
 }
 
-ExcelModeBrowser.prototype.GetModelBrowserDataTable = function()
-{
+ExcelModeBrowser.prototype.GetModelBrowserDataTable = function () {
     var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
     return modelBrowserData.children[1];
 }
 
-ExcelModeBrowser.prototype.GetModelBrowserDataRows = function()
-{   
+ExcelModeBrowser.prototype.GetModelBrowserDataRows = function () {
     var modelBrowserDataTable = this.GetModelBrowserDataTable();
-    
+
     return modelBrowserDataTable.getElementsByTagName("tr");
 }
 
@@ -262,70 +222,70 @@ ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
 
 ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData) {
     var _this = this;
-    var containerDiv = "#" + _this.ModelBrowserContainer;  
-        $(function () {
-            //var table = JSON.stringify(tableData);
-            var isFiredFromCheckbox = false;
-            $(containerDiv).igGrid({
-                columns: columnHeaders,
-                autofitLastColumn: false,
-                autoGenerateColumns: false,
-                dataSource : tableData,              
-                responseDataKey: "results",
-                autoCommit: true,
-                height: "100%",
-                width: "100%",
-                features: [
-                    {
-                        name: "Sorting",
-                        sortingDialogContainment: "window"
-                    },
-                    {
-                        name: "Filtering",
-                        type: "local",
-                        dataFiltered: function (evt, ui) {
-                            //  var filteredData = evt.target.rows;
-                            // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-                        }
-                    },
-                    {
-                        name: "Selection",
-                        mode: 'row',
-                        multipleSelection: true,
-                        activation: true,
-                        rowSelectionChanging : function(evt, ui) {
-                            
-                            if (isFiredFromCheckbox) {
-                                isFiredFromCheckbox = false;
-                            } else {                                
-
-                                  //_this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);              
-                                  _this.ShowSelectedSheetData(ui.row.element[0]);    
-
-                                   return false;
-                            }
-                            
-                        }
-                    },
-                    {
-                        name: "RowSelectors",
-                        enableCheckBoxes: true,
-                        enableRowNumbering: false,
-                        enableSelectAllForPaging: true, // this option is true by default
-                        checkBoxStateChanging: function (evt, ui) {
-                            //we use this variable as a flag whether the selection is coming from a checkbox
-                            isFiredFromCheckbox = true;                          
-                        },
-                        checkBoxStateChanged: function (evt, ui) {
-                            //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
-                        }
-                    },
-                    {
-                        name: "Resizing"
+    var containerDiv = "#" + _this.ModelBrowserContainer;
+    $(function () {
+        //var table = JSON.stringify(tableData);
+        var isFiredFromCheckbox = false;
+        $(containerDiv).igGrid({
+            columns: columnHeaders,
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: tableData,
+            responseDataKey: "results",
+            autoCommit: true,
+            height: "100%",
+            width: "100%",
+            alternateRowStyles: false,
+            features: [
+                {
+                    name: "Sorting",
+                    sortingDialogContainment: "window"
+                },
+                {
+                    name: "Filtering",
+                    type: "local",
+                    dataFiltered: function (evt, ui) {
+                        //  var filteredData = evt.target.rows;
+                        // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
                     }
-                ]    
-            });
+                },
+                {
+                    name: "Selection",
+                    mode: 'row',
+                    multipleSelection: true,
+                    activation: true,
+                    rowSelectionChanging: function (evt, ui) {
+
+                        if (isFiredFromCheckbox) {
+                            isFiredFromCheckbox = false;
+                        } else {
+
+                            _this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);
+                            _this.ShowSelectedSheetData(ui.row.element[0]);
+
+                            return false;
+                        }
+                    }
+                },
+                {
+                    name: "RowSelectors",
+                    enableCheckBoxes: true,
+                    enableRowNumbering: false,
+                    enableSelectAllForPaging: true, // this option is true by default
+                    checkBoxStateChanging: function (evt, ui) {
+                        //we use this variable as a flag whether the selection is coming from a checkbox
+                        isFiredFromCheckbox = true;
+                    },
+                    checkBoxStateChanged: function (evt, ui) {
+                        //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                    }
+                },
+                {
+                    name: "Resizing"
+                }
+            ]
         });
+    });
 }
 
 // ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData, viewerContainer) {
@@ -402,63 +362,67 @@ ExcelModeBrowser.prototype.AddTableContentCount = function (containerId) {
 }
 
 
-ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, 
+ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
     tableData) {
-      
-        var _this = this;              
-      
-        var containerDiv = "#" + this.ViewerContainer;  
 
-            $(function () {
-                //var table = JSON.stringify(tableData);
-                //var isFiredFromCheckbox = false;
-                $(containerDiv).igGrid({
-                    columns: columnHeaders,
-                    autofitLastColumn: false,
-                    autoGenerateColumns: false,
-                    dataSource : tableData,              
-                    responseDataKey: "results",
-                    autoCommit: true,
-                    height: "100%",
-                    width: "100%",
-                    features: [                        
-                        {
-                            name: "Selection",
-                            mode: 'row',
-                            multipleSelection: true,
-                            activation: true,
-                            rowSelectionChanging : function(evt, ui) {
-                                
-                                // if (isFiredFromCheckbox) {
-                                //     isFiredFromCheckbox = false;
-                                // } else {
-                                //     // var id = containerDiv.replace("#", "");
-                                //     // _this.ReviewManager.OnCheckComponentRowClicked(ui.row.element[0], id)
-                                //     // return false;
-                                // }
-                                
-                            }
-                        },
-                        {
-                            name: "RowSelectors",
-                            enableCheckBoxes: false,
-                            enableRowNumbering: false,
-                            enableSelectAllForPaging: true, // this option is true by default
-                            // checkBoxStateChanging: function (evt, ui) {
-                            //     //we use this variable as a flag whether the selection is coming from a checkbox
-                            //     isFiredFromCheckbox = true;                          
-                            // },
-                            // checkBoxStateChanged: function (evt, ui) {
-                            //     //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
-                            // }
-                        },
-                        {
-                            name: "Resizing"
-                        }
-                    ]    
-                });
-            });
+    var _this = this;
+
+    var containerDiv = "#" + this.ViewerContainer;
+
+    if ($(containerDiv).data("igGrid") != null) {
+        $(containerDiv).igGrid("destroy");
     }
+
+    $(function () {
+        //var table = JSON.stringify(tableData);
+        //var isFiredFromCheckbox = false;
+        $(containerDiv).igGrid({
+            columns: columnHeaders,
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: tableData,
+            responseDataKey: "results",
+            autoCommit: true,
+            height: "100%",
+            width: "100%",
+            alternateRowStyles: false,
+            features: [
+                {
+                    name: "Selection",
+                    mode: 'row',
+                    multipleSelection: true,
+                    activation: true,
+                    rowSelectionChanging: function (evt, ui) {
+
+                        // if (isFiredFromCheckbox) {
+                        //     isFiredFromCheckbox = false;
+                        // } else {
+                        _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0], _this.ModelBrowserContainer, _this.ViewerContainer);
+                        return false;
+                        // }
+
+                    }
+                },
+                {
+                    name: "RowSelectors",
+                    enableCheckBoxes: false,
+                    enableRowNumbering: false,
+                    enableSelectAllForPaging: true, // this option is true by default
+                    // checkBoxStateChanging: function (evt, ui) {
+                    //     //we use this variable as a flag whether the selection is coming from a checkbox
+                    //     isFiredFromCheckbox = true;                          
+                    // },
+                    // checkBoxStateChanged: function (evt, ui) {
+                    //     //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                    // }
+                },
+                {
+                    name: "Resizing"
+                }
+            ]
+        });
+    });
+}
 
 // ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, 
 //                                                           tableData, 
@@ -500,55 +464,122 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
 
 ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
     var viewerContainerData;
-    if (this.ModelBrowserContainer === "modelTree1") {
-        viewerContainerData = document.getElementById("visualizera")
+    // if (this.ModelBrowserContainer === "modelTree1") {
+    //     viewerContainerData = document.getElementById("visualizera")
+    // }
+    // else if (this.ModelBrowserContainer === "modelTree2") {
+    //     viewerContainerData = document.getElementById("visualizerb")
+    // }
+    var data = $("#" + this.ViewerContainer).data("igGrid").dataSource.dataView();
+    if (data.length === 0) {
+        return;
     }
-    else if (this.ModelBrowserContainer === "modelTree2") {
-        viewerContainerData = document.getElementById("visualizerb")
-    }
-    if (viewerContainerData != undefined) {
-        var containerChildren = viewerContainerData.children;
-        var sheetHeadersTable = containerChildren[0].getElementsByTagName("table")[0];
-        var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
 
-        var columnHeaders = sheetHeadersTable.getElementsByTagName("th");
-        var dataRows = sheetDataTable.getElementsByTagName("tr");
-        var identifierColumns = {};
-        for (var i = 0; i < columnHeaders.length; i++) {
-            columnHeader = columnHeaders[i];
-            if (columnHeader.innerHTML.trim() === "Component Class" ||
-                columnHeader.innerHTML.trim() === "Name" ||
-                columnHeader.innerHTML.trim() === "Tagnumber" ||
-                columnHeader.innerHTML.trim() === "Description") {
-                identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
-            }
-            if (Object.keys(identifierColumns).length === 3) {
-                break;
-            }
+    // get identifier column names
+    var identifierColumns = {};
+
+    var firstRow = data[0];
+
+    for (var column in firstRow) {
+        if (column.toLowerCase() === "component class" ||
+            column.toLowerCase() === "componentclass") {
+            identifierColumns["componentClass"] = column;
         }
-        for (var i = 0; i < dataRows.length; i++) {
-            var dataRow = dataRows[i];
+        else if (column.toLowerCase() === "name") {
+            identifierColumns["name"] = column;
+        }
+        else if (column.toLowerCase() === "tagnumber" &&
+            !("name" in identifierColumns)) {
+            identifierColumns["name"] = column;
+        }
+        else if (column.toLowerCase() === "description") {
+            identifierColumns["description"] = column;
+        }
 
-            var nameColumnIndex;
-            if (identifierColumns.Name !== undefined) {
-                nameColumnIndex = identifierColumns.Name;
-            }
-            else if (identifierColumns.Tagnumber !== undefined) {
-                nameColumnIndex = identifierColumns.Tagnumber;
-            }
-            if (thisRow.cells[1].innerText === dataRow.cells[nameColumnIndex].innerText &&
-                thisRow.cells[3].innerText === dataRow.cells[identifierColumns.ComponentClass].innerText) {
-      
-                if (this.SelectionManager.HighlightSheetRow(dataRow)) {
-                    // scroll to selected row
-                    sheetDataTable.focus();
-                    sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
-                }
+        // if (identifierColumns.length === 3) {
+        //     break;
+        // }
+    }
 
-                break;
+    if (identifierColumns.name === undefined ||
+        identifierColumns.componentClass === undefined) {
+        return;
+    }
+
+    // find the row to be highlighted in viewer
+    var name = thisRow.cells[ModelBrowserColumns1D.Component].innerText.trim();
+    //var mainClass = thisRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
+    var subClass = thisRow.cells[ModelBrowserColumns1D.SubClass].innerText.trim();
+
+    for (var i = 0; i < data.length; i++) {
+        var dataRow = data[i];
+        // var nameColumnIndex;
+        // if (identifierColumns.Name !== undefined) {
+        //     nameColumnIndex = identifierColumns.Name;
+        // }
+        // else if (identifierColumns.Tagnumber !== undefined) {
+        //     nameColumnIndex = identifierColumns.Tagnumber;
+        // }
+        if (name === dataRow[identifierColumns.name] &&
+            subClass === dataRow[identifierColumns.componentClass]) {
+
+            var row = $("#" + this.ViewerContainer).igGrid("rowAt", i);
+
+            if (this.SelectionManager.HighlightSheetRow(row)) {
+                // scroll to selected row
+                // sheetDataTable.focus();
+                // sheetDataTable.parentNode.parentNode.scrollTop = row.offsetTop - row.offsetHeight;
             }
+
+            break;
         }
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // if (viewerContainerData != undefined) {
+    //     var containerChildren = viewerContainerData.children;
+    //     var sheetHeadersTable = containerChildren[0].getElementsByTagName("table")[0];
+    //     var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
+
+    //     var columnHeaders = sheetHeadersTable.getElementsByTagName("th");
+    //     var dataRows = sheetDataTable.getElementsByTagName("tr");
+    //     var identifierColumns = {};
+    //     for (var i = 0; i < columnHeaders.length; i++) {
+    //         columnHeader = columnHeaders[i];
+    //         if (columnHeader.innerHTML.trim() === "Component Class" ||
+    //             columnHeader.innerHTML.trim() === "Name" ||
+    //             columnHeader.innerHTML.trim() === "Tagnumber" ||
+    //             columnHeader.innerHTML.trim() === "Description") {
+    //             identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
+    //         }
+    //         if (Object.keys(identifierColumns).length === 3) {
+    //             break;
+    //         }
+    //     }
+    //     for (var i = 0; i < dataRows.length; i++) {
+    //         var dataRow = dataRows[i];
+
+    //         var nameColumnIndex;
+    //         if (identifierColumns.Name !== undefined) {
+    //             nameColumnIndex = identifierColumns.Name;
+    //         }
+    //         else if (identifierColumns.Tagnumber !== undefined) {
+    //             nameColumnIndex = identifierColumns.Tagnumber;
+    //         }
+    //         if (thisRow.cells[1].innerText === dataRow.cells[nameColumnIndex].innerText &&
+    //             thisRow.cells[3].innerText === dataRow.cells[identifierColumns.ComponentClass].innerText) {
+
+    //             if (this.SelectionManager.HighlightSheetRow(dataRow)) {
+    //                 // scroll to selected row
+    //                 sheetDataTable.focus();
+    //                 sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
+    //             }
+
+    //             break;
+    //         }
+    //     }
+    // }
 }
 
 ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
@@ -570,7 +601,7 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
 
     // if (viewerContainerData.childElementCount > 1 && 
     //     viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
-        
+
     //     this.HighlightRowInSheetData(browserRow);
     //     return;
     // }
@@ -601,79 +632,83 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
             components.length === 0) {
             return;
         }
-           
-            // var sheetProperties;
-            // if (mainComponentClasseData[currentSheetName] !== undefined) {
-            //     sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
+
+        // var sheetProperties;
+        // if (mainComponentClasseData[currentSheetName] !== undefined) {
+        //     sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
+        // }
+        // else {
+        //     for (var subComponent in mainComponentClasseData) {
+        //         if (mainComponentClasseData[subComponent][0].Name === browserRow.cells[1].innerText.trim()) {
+        //             sheetProperties = mainComponentClasseData[subComponent][0].properties;
+        //         }
+        //         if (sheetProperties === undefined) {
+        //             for (var j = 0; j < mainComponentClasseData[subComponent].length; j++) {
+        //                 if (mainComponentClasseData[subComponent][j].Name === browserRow.cells[1].innerText.trim()) {
+        //                     sheetProperties = mainComponentClasseData[subComponent][0].properties;
+        //                 }
+        //             }
+
+        //         }
+        //     }
+        // }
+
+        //var column = {};
+        var columnHeaders = [];
+        var firstComponent = components[0];
+        var firstComponentProperties = firstComponent.properties;
+        for (var i = 0; i < firstComponentProperties.length; i++) {
+            columnHeader = {};
+            // if (sheetProperties[i].Name === "ComponentClass") {
+            //     columnHeader["title"] = "Component Class";
             // }
             // else {
-            //     for (var subComponent in mainComponentClasseData) {
-            //         if (mainComponentClasseData[subComponent][0].Name === browserRow.cells[1].innerText.trim()) {
-            //             sheetProperties = mainComponentClasseData[subComponent][0].properties;
-            //         }
-            //         if (sheetProperties === undefined) {
-            //             for (var j = 0; j < mainComponentClasseData[subComponent].length; j++) {
-            //                 if (mainComponentClasseData[subComponent][j].Name === browserRow.cells[1].innerText.trim()) {
-            //                     sheetProperties = mainComponentClasseData[subComponent][0].properties;
-            //                 }
-            //             }
+            //     columnHeader["title"] = sheetProperties[i].Name;
+            // }
 
-            //         }
+            columnHeader["headerText"] = firstComponentProperties[i].Name;
+            columnHeader["key"] = firstComponentProperties[i].Name.replace(/\s/g, '');
+            columnHeader["dataType"] = "string";
+            columnHeader["width"] = "100px";
+
+            columnHeaders.push(columnHeader);
+            // if (Object.keys(column).length <= 3) {
+            //     if (sheetProperties[i].Name === "ComponentClass" || 
+            //         sheetProperties[i].Name === "Name" ||
+            //          sheetProperties[i].Name === "Description") {
+            //         column[sheetProperties[i].Name] = i;
             //     }
             // }
+        }
 
-            //var column = {};
-            var columnHeaders = [];
-            var firstComponent = components[0];
-            var firstComponentProperties = firstComponent.properties;
-            for (var i = 0; i < firstComponentProperties.length; i++) {
-                columnHeader = {};
-                // if (sheetProperties[i].Name === "ComponentClass") {
-                //     columnHeader["title"] = "Component Class";
-                // }
-                // else {
-                //     columnHeader["title"] = sheetProperties[i].Name;
-                // }
+        var tableData = [];
+        for (var i = 0; i < components.length; i++) {
 
-                columnHeader["headerText"] = firstComponentProperties[i].Name;
-                columnHeader["key"] = firstComponentProperties[i].Name.replace(/\s/g,'');
-                columnHeader["dataType"] = "string";
-                columnHeader["width"] = "100px";
+            var component = components[i];
+            var tableRowContent = {};
+            var properties = component.properties;
 
-                columnHeaders.push(columnHeader);
-                // if (Object.keys(column).length <= 3) {
-                //     if (sheetProperties[i].Name === "ComponentClass" || 
-                //         sheetProperties[i].Name === "Name" ||
-                //          sheetProperties[i].Name === "Description") {
-                //         column[sheetProperties[i].Name] = i;
-                //     }
-                // }
+            for (var j = 0; j < properties.length; j++) {
+                tableRowContent[columnHeaders[j].key] = properties[j].Value;
             }
-
-            var tableData = [];
-            for (var i = 0; i < components.length; i++) {
-
-                var component = components[0];
-                var tableRowContent = {};
-                var properties = component.properties;
-               
-                for (var j = 0; j < properties.length; j++) {
-                    tableRowContent[columnHeaders[j].key] = properties[j].Value;
-                }
-                tableData.push(tableRowContent);
-            }
+            tableData.push(tableRowContent);
+        }
 
 
-            // if (this.ModelBrowserContainer === "modelTree1") {
-            //     _this = this;
-                this.LoadSheetDataTable(columnHeaders, tableData);
-                this.HighlightRowInSheetData(browserRow);
-            // }
-            // else if (this.ModelBrowserContainer === "modelTree2") {
-            //     _this = this;
-            //     _this.LoadSheetDataTable(columnHeaders, tableData, "#visualizerB");
-            //     _this.HighlightRowInSheetData(browserRow);
-            // }
+        // if (this.ModelBrowserContainer === "modelTree1") {
+        //     _this = this;
+        if (this.LoadedSheet !== currentSheetName) {
+            this.LoadSheetDataTable(columnHeaders, tableData);
+            this.LoadedSheet = currentSheetName;
+        }
+
+        this.HighlightRowInSheetData(browserRow);
+        // }
+        // else if (this.ModelBrowserContainer === "modelTree2") {
+        //     _this = this;
+        //     _this.LoadSheetDataTable(columnHeaders, tableData, "#visualizerB");
+        //     _this.HighlightRowInSheetData(browserRow);
+        // }
         //}
     }
 }

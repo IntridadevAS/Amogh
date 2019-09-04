@@ -146,79 +146,157 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row) {
      if (!this.SelectedComponentRows.includes(row)) {
           this.ApplyHighlightColor(row);
      }
-     
-     this.HighlightedComponentRow = row;    
+
+     this.HighlightedComponentRow = row;
 }
 
 /* 
   This function 
 */
-ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow, modelBrowserContainer) {
+ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
+     modelBrowserContainer,
+     viewerContainer) {
 
-     if(!this.HighlightSheetRow(thisRow))
-     {
+     if (!this.HighlightSheetRow(thisRow)) {
           return;
      }
 
-     var viewerContainerData;
-     if (modelBrowserContainer === "modelTree1") {
-          viewerContainerData = document.getElementById("visualizerA")
-     }
-     else if (modelBrowserContainer === "modelTree2") {
-          viewerContainerData = document.getElementById("visualizerB")
+     var sheetData = $("#" + viewerContainer).data("igGrid").dataSource.dataView();
+     if (sheetData.length === 0) {
+          return;
      }
 
-     if (!viewerContainerData) {
-          return
-     }
-
-     var containerChildren = viewerContainerData.children;
-     var columnHeaders = containerChildren[0].getElementsByTagName("th");
-
-     // get identifier property names
+     // get identifier column names
      var identifierColumns = {};
-     for (var i = 0; i < columnHeaders.length; i++) {
-          columnHeader = columnHeaders[i];
-          if (columnHeader.innerHTML.trim() === "Component Class" ||
-               columnHeader.innerHTML.trim() === "Name" ||
-               columnHeader.innerHTML.trim() === "Tagnumber" ||
-               columnHeader.innerHTML.trim() === "Description") {
-               identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
+
+     var firstRow = sheetData[0];
+     for (var column in firstRow) {
+          if (column.toLowerCase() === "component class" ||
+               column.toLowerCase() === "componentclass") {
+               identifierColumns["componentClass"] = column;
           }
-          if (Object.keys(identifierColumns).length === 3) {
+          else if (column.toLowerCase() === "name") {
+               identifierColumns["name"] = column;
+          }
+          else if (column.toLowerCase() === "tagnumber" &&
+               !("name" in identifierColumns)) {
+               identifierColumns["name"] = column;
+          }
+          else if (column.toLowerCase() === "description") {
+               identifierColumns["description"] = column;
+          }
+
+          // if (identifierColumns.length === 3) {
+          //     break;
+          // }
+     }
+
+     if (!identifierColumns.name === undefined ||
+          identifierColumns.componentClass === undefined) {
+          return;
+     }
+
+
+     // get model browser all rows data
+     var modelBrowserData = $("#" + modelBrowserContainer).data("igGrid").dataSource.dataView();
+     if (modelBrowserData.length === 0) {
+          return;
+     }
+
+     //        // find the row to be highlighted in viewer
+     var selectedRowData = sheetData[thisRow.rowIndex];
+     var name = selectedRowData[identifierColumns.name];
+     var subClass = selectedRowData[identifierColumns.componentClass];
+
+     //     var name = thisRow.cells[ModelBrowserColumns1D.Component].innerText.trim();
+     //     //var mainClass = thisRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
+     //     var subClass = thisRow.cells[ModelBrowserColumns1D.SubClass].innerText.trim();
+
+     for (var i = 0; i < modelBrowserData.length; i++) {
+          var rowData = modelBrowserData[i];
+          // var nameColumnIndex;
+          // if (identifierColumns.Name !== undefined) {
+          //     nameColumnIndex = identifierColumns.Name;
+          // }
+          // else if (identifierColumns.Tagnumber !== undefined) {
+          //     nameColumnIndex = identifierColumns.Tagnumber;
+          // }
+          if (name === rowData[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] &&
+               subClass === rowData[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')]) {
+
+               var row = $("#" + modelBrowserContainer).igGrid("rowAt", i);
+
+               // highlight row in model browser     
+               this.HighlightBrowserRow(row);
+
+               //    // scroll to selected row    
+               //    modelBrowserTable.focus();
+               //    modelBrowserTable.parentNode.parentNode.scrollTop = row.offsetTop - row.offsetHeight;
+
                break;
           }
      }
 
-     var modelBrowserData = document.getElementById(modelBrowserContainer);
-     var modelBrowserTable = modelBrowserData.children[1].getElementsByTagName("table")[0];;
-     var modelBrowserRowsData = modelBrowserTable.getElementsByTagName("tr");
+     // //////////////////////////////
+     // var viewerContainerData;
+     // if (modelBrowserContainer === "modelTree1") {
+     //      viewerContainerData = document.getElementById("visualizerA")
+     // }
+     // else if (modelBrowserContainer === "modelTree2") {
+     //      viewerContainerData = document.getElementById("visualizerB")
+     // }
 
-     for (var i = 0; i < modelBrowserRowsData.length; i++) {
-          rowData = modelBrowserRowsData[i];
+     // if (!viewerContainerData) {
+     //      return
+     // }
 
-          if (rowData.cells.length > 1) {
-               var nameColumnIndex;
-               if (identifierColumns.Name !== undefined) {
-                    nameColumnIndex = identifierColumns.Name;
-               }
-               else if (identifierColumns.Tagnumber !== undefined) {
-                    nameColumnIndex = identifierColumns.Tagnumber;
-               }
+     // var containerChildren = viewerContainerData.children;
+     // var columnHeaders = containerChildren[0].getElementsByTagName("th");
 
-               if (thisRow.cells[nameColumnIndex].innerText === rowData.cells[1].innerText &&
-                    thisRow.cells[identifierColumns.ComponentClass].innerText === rowData.cells[3].innerText) {
+     // // get identifier property names
+     // var identifierColumns = {};
+     // for (var i = 0; i < columnHeaders.length; i++) {
+     //      columnHeader = columnHeaders[i];
+     //      if (columnHeader.innerHTML.trim() === "Component Class" ||
+     //           columnHeader.innerHTML.trim() === "Name" ||
+     //           columnHeader.innerHTML.trim() === "Tagnumber" ||
+     //           columnHeader.innerHTML.trim() === "Description") {
+     //           identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
+     //      }
+     //      if (Object.keys(identifierColumns).length === 3) {
+     //           break;
+     //      }
+     // }
 
-                    // highlight row in model browser     
-                    this.HighlightBrowserRow(rowData);                   
+     // var modelBrowserData = document.getElementById(modelBrowserContainer);
+     // var modelBrowserTable = modelBrowserData.children[1].getElementsByTagName("table")[0];;
+     // var modelBrowserRowsData = modelBrowserTable.getElementsByTagName("tr");
 
-                    // scroll to selected row    
-                    modelBrowserTable.focus();
-                    modelBrowserTable.parentNode.parentNode.scrollTop = rowData.offsetTop - rowData.offsetHeight;
+     // for (var i = 0; i < modelBrowserRowsData.length; i++) {
+     //      rowData = modelBrowserRowsData[i];
 
-               }
-          }
-     }
+     //      if (rowData.cells.length > 1) {
+     //           var nameColumnIndex;
+     //           if (identifierColumns.Name !== undefined) {
+     //                nameColumnIndex = identifierColumns.Name;
+     //           }
+     //           else if (identifierColumns.Tagnumber !== undefined) {
+     //                nameColumnIndex = identifierColumns.Tagnumber;
+     //           }
+
+     //           if (thisRow.cells[nameColumnIndex].innerText === rowData.cells[1].innerText &&
+     //                thisRow.cells[identifierColumns.ComponentClass].innerText === rowData.cells[3].innerText) {
+
+     //                // highlight row in model browser     
+     //                this.HighlightBrowserRow(rowData);                   
+
+     //                // scroll to selected row    
+     //                modelBrowserTable.focus();
+     //                modelBrowserTable.parentNode.parentNode.scrollTop = rowData.offsetTop - rowData.offsetHeight;
+
+     //           }
+     //      }
+     // }
 }
 
 ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {
@@ -233,9 +311,10 @@ ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {
           }
      }
 
+     //row.style.backgroundColor = "#B2BABB";
      for (var j = 0; j < row.cells.length; j++) {
           cell = row.cells[j];
-          cell.style.backgroundColor = "#B2BABB"
+          cell.style.backgroundColor = "#B2BABB";
      }
 
      this.SelectedSheetRow = row;

@@ -322,6 +322,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             height: "100%",
             width: "100%",
             initialExpandDepth: 0,
+            alternateRowStyles : false,
             rendered: function (evt, ui) {
                 //return reference to igTreeGrid
                 //ui.owner;
