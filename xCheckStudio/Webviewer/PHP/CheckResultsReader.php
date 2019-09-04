@@ -38,12 +38,12 @@
         
         if($comparisonResult != NULL)
         {            
-            $results['Comparison'] = $comparisonResult;
-            // $results['Comparisons'] = array();
-            // $comparison = array();
-            // $comparison["sources"] = array($data["sourceAFileName"],$data["sourceBFileName"]);
-            // $comparison["results"] = $comparisonResult;
-            // array_push($results['Comparisons'], $comparison);
+            //$results['Comparison'] = $comparisonResult;
+            $results['Comparisons'] = array();
+            $comparison = array();
+            $comparison["sources"] = array($data["sourceAFileName"],$data["sourceBFileName"]);
+            $comparison["results"] = $comparisonResult;
+            array_push($results['Comparisons'], $comparison);
 
             // create component hierarchy
             createComparisonComponentsHierarchy();            

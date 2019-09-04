@@ -256,7 +256,7 @@ function loadComparisonData(comparisonCheckGroups,
         sourceBClassWiseComponents,
         //"comparisonMainTable",
         "comparisonMainContainer",
-        "comparisonDetailedTable",
+        "comparisonDetailInfoContainer",
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
 

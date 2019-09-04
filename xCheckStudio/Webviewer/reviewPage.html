@@ -92,19 +92,17 @@
 
       <div id="viewPanelComparison" class="viewPanel">
         <div id="tableDataComparison" class="tableContainer">
-          <div id="comparisonMainContainer" class="tablesArea">
-            <!-- <table id="comparisonMainTable"> </table> -->            
+          <div class="tablesArea">
+            <div id="comparisonMainContainer" class="tempContainer">
 
+            </div>
           </div>
           <div class="infoArea">
             <div class="infoAreaHeader">
               <img src="public/symbols/InfoMenu.svg" alt="">
-              <p>Detail Info</p>              
+              <p>Detail Info</p>
               <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
-            <div id="comparisonDetailInfoContainer">
-            
-          </div>
           </div>
         </div>
         <div id="center" class="grabBar"></div>
@@ -118,7 +116,7 @@
       </div>
       <div id="viewPanelCompliance" class="viewPanel hide">
         <div id="tableDataCompliance" class="tableContainer">
-          <div class="tablesArea">           
+          <div class="tablesArea">
           </div>
           <div class="infoArea">
             <div class="infoAreaHeader">
@@ -126,8 +124,6 @@
               <p>Detail Info</p>
               <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
-
-            <table id="comparisonDetailedTable"> </table>
           </div>
         </div>
         <div id="center" class="grabBar"></div>
@@ -146,18 +142,18 @@
     ::-webkit-scrollbar {
       width: 6px;
     }
-  
+
     .ui-iggrid tbody td {
       white-space: nowrap;
     }
-  
+
     .content {
       padding: 0 18px;
       display: none;
       overflow: hidden;
       background-color: #f1f1f1;
     }
-  
+
     .scrollable {
       overflow-x: auto;
       overflow-y: auto;
@@ -178,9 +174,14 @@
   
   <link rel="stylesheet" href="CSS\collapsibleButton.css" type="text/css" />
 
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonContextMenuManager.js"></script>
+
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
   <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
 
   <!-- infragistics dependencies -->
   <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />

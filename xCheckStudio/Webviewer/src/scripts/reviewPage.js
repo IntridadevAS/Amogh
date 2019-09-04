@@ -265,8 +265,12 @@ let viewPanels = {
   },
 
   toggleDetailInfo: function (element) {
-    let tableContainer = element.closest(".tableContainer");
-    tableContainer.classList.toggle("showDetailInfo");
+    // let tableContainer = element.closest(".tableContainer");
+    // tableContainer.classList.toggle("showDetailInfo");
+    // element.classList.toggle("invert");
+
+    let tableContainer = element.closest(".infoArea");
+    tableContainer.classList.toggle("openInfoArea");
     element.classList.toggle("invert");
   },
 
@@ -297,10 +301,10 @@ controller.init();
 let grabBarControl = function (element) {
   var m_pos;
   function resize(event) {
-    // var previous = element.previousElementSibling;
-    // var dx = m_pos - event.x;
-    // m_pos = event.x;
-    // previous.style.width = previous.offsetWidth - dx + "px";
+    var previous = element.previousElementSibling;
+    var dx = m_pos - event.x;
+    m_pos = event.x;
+    previous.style.width = previous.offsetWidth - dx + "px";
 
   }
 

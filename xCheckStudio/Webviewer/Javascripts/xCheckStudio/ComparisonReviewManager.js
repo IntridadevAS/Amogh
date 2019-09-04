@@ -114,25 +114,25 @@ ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) 
 
 ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (component, mainClass) {
     // maintain track of check components
-    if (component.SourceANodeId) {
-        this.SourceANodeIdvsCheckComponent[component.SourceANodeId] = {
-            "Id": component.ID,
-            "SourceAName": component.SourceAName,
-            "SourceBName": component.SourceBName,
+    if (component.sourceANodeId) {
+        this.SourceANodeIdvsCheckComponent[component.sourceANodeId] = {
+            "Id": component.id,
+            "SourceAName": component.sourceAName,
+            "SourceBName": component.sourceBName,
             "MainClass": mainClass,
-            "SourceANodeId": component.SourceANodeId,
-            "SourceBNodeId": component.SourceBNodeId,
+            "SourceANodeId": component.sourceANodeId,
+            "SourceBNodeId": component.sourceBNodeId,
         };
         // this.SourceAComponentIdvsNodeId[component.ID] = component.SourceANodeId;
     }
-    if (component.SourceBNodeId) {
-        this.SourceBNodeIdvsCheckComponent[component.SourceBNodeId] = {
-            "Id": component.ID,
-            "SourceAName": component.SourceAName,
-            "SourceBName": component.SourceBName,
+    if (component.sourceBNodeId) {
+        this.SourceBNodeIdvsCheckComponent[component.sourceBNodeId] = {
+            "Id": component.id,
+            "SourceAName": component.sourceAName,
+            "SourceBName": component.sourceBName,
             "MainClass": mainClass,
-            "SourceANodeId": component.SourceANodeId,
-            "SourceBNodeId": component.SourceBNodeId,
+            "SourceANodeId": component.sourceANodeId,
+            "SourceBNodeId": component.sourceBNodeId,
         };
         // this.SourceBComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
     }

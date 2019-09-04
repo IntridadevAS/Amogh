@@ -234,8 +234,8 @@ function cancelCheckResults() {
 
 function reviewResults() {
     saveData();
-    window.location = "module2.html";
-    //window.location = "reviewPage.html";
+    //window.location = "module2.html";
+    window.location = "reviewPage.html";
 }
 
 function deleteCheckResultsFromDB(checkType) {
