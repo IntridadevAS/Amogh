@@ -277,12 +277,33 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                         isFiredFromCheckbox = true;
                     },
                     checkBoxStateChanged: function (evt, ui) {
-                        
-                        var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
-                        _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
+                        if (ui.isHeader) {
+                            var data = $(containerDiv).data("igGrid").dataSource.dataView();
+                            if (data.length === 0) {
+                                return;
+                            }
 
-                        // load corresponding sheet in viewr and highlight corrsponding row
-                        _this.ShowSelectedSheetData(ui.row[0]);
+                            for (var rowIndex in data) {
+                               // var record = data[rowIndex];
+                                
+                                var index = parseInt(rowIndex);
+                                if(index === NaN)
+                                {
+                                    continue;
+                                }
+                                //var rowKey = record.ig_pk;
+                                var rowData =  _this.GetDataFromSelectedRow(rowIndex, containerDiv);
+                                var row = $(containerDiv).igGrid("rowAt", index);
+                                _this.SelectionManager.HandleSelectFormCheckBox(row, ui.state, rowData);
+                            }
+                        }
+                        else {
+                            var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
+                            _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
+
+                            // load corresponding sheet in viewr and highlight corrsponding row
+                            _this.ShowSelectedSheetData(ui.row[0]);
+                        }
                     }
                 },
                 {
