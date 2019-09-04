@@ -290,7 +290,11 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                                 isFiredFromCheckbox = true;                          
                             },
                             checkBoxStateChanged: function (evt, ui) {
-                                //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                                var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
+                                _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
+
+                                // load corresponding sheet in viewr and highlight corrsponding row
+                                _this.ShowSelectedDBData(ui.row[0]);
                             }
                         },
                         {
@@ -737,3 +741,21 @@ DBModelBrowser.prototype.ClearSelectedComponent = function () {
     this.SelectionManager.ClearSelectedComponent();
 }
 
+DBModelBrowser.prototype.GetDataFromSelectedRow = function (rowIndex,
+    containerDiv) {
+
+
+    var data = $(containerDiv).data("igGrid").dataSource.dataView();
+    if (data.length === 0) {
+        return;
+    }
+    var record = data[rowIndex];
+   
+    var rowData = {};
+    rowData['component'] = record[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')];
+    rowData['mainClass'] = record[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')];
+    rowData['subClass'] = record[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')];
+    rowData['description'] = record[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')];
+
+    return rowData;
+}

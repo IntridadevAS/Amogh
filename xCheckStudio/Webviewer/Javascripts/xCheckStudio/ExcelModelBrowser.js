@@ -277,7 +277,12 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                         isFiredFromCheckbox = true;
                     },
                     checkBoxStateChanged: function (evt, ui) {
-                        //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                        
+                        var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
+                        _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
+
+                        // load corresponding sheet in viewr and highlight corrsponding row
+                        _this.ShowSelectedSheetData(ui.row[0]);
                     }
                 },
                 {
@@ -407,14 +412,7 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                     name: "RowSelectors",
                     enableCheckBoxes: false,
                     enableRowNumbering: false,
-                    enableSelectAllForPaging: true, // this option is true by default
-                    // checkBoxStateChanging: function (evt, ui) {
-                    //     //we use this variable as a flag whether the selection is coming from a checkbox
-                    //     isFiredFromCheckbox = true;                          
-                    // },
-                    // checkBoxStateChanged: function (evt, ui) {
-                    //     //_this.ReviewManager.SelectionManager.HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
-                    // }
+                    enableSelectAllForPaging: true, // this option is true by default                   
                 },
                 {
                     name: "Resizing"
@@ -711,4 +709,23 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
         // }
         //}
     }
+}
+
+ExcelModeBrowser.prototype.GetDataFromSelectedRow = function (rowIndex,
+    containerDiv) {
+
+
+    var data = $(containerDiv).data("igGrid").dataSource.dataView();
+    if (data.length === 0) {
+        return;
+    }
+    var record = data[rowIndex];
+   
+    var rowData = {};
+    rowData['component'] = record[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')];
+    rowData['mainClass'] = record[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')];
+    rowData['subClass'] = record[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')];
+    rowData['description'] = record[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')];
+
+    return rowData;
 }

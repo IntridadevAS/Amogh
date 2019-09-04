@@ -11,29 +11,37 @@ function ExcelSelectionManager(selectedComponents) {
 ExcelSelectionManager.prototype = Object.create(SelectionManager.prototype);
 ExcelSelectionManager.prototype.constructor = ExcelSelectionManager;
 
-ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBox) {
+ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow, 
+     checkBoxState, 
+     componentData) {
 
-     var currentCell = currentCheckBox.parentElement;
-     if (currentCell.tagName.toLowerCase() !== 'td') {
-          return;
-     }
+     // var currentCell = currentCheckBox.parentElement;
+     // if (currentCell.tagName.toLowerCase() !== 'td') {
+     //      return;
+     // }
 
-     var currentRow = currentCell.parentElement;
-     if (currentRow.tagName.toLowerCase() !== 'tr' ||
-          currentRow.cells.length < 2) {
-          return;
-     }
+     // var currentRow = currentCell.parentElement;
+     // if (currentRow.tagName.toLowerCase() !== 'tr' ||
+     //      currentRow.cells.length < 2) {
+     //      return;
+     // }
 
      // maintain track of selected/deselected components
-     if (currentCheckBox.checked &&
-          !this.SelectedCompoentExists(currentRow)) {
+     if (checkBoxState === "on" &&
+          !this.SelectedCompoentExists(componentData)) {
 
-          var checkedComponent = {
-               'Name': currentRow.cells[1].textContent.trim(),
-               'MainComponentClass': currentRow.cells[2].textContent.trim(),
-               'ComponentClass': currentRow.cells[3].textContent.trim(),
-               'Description': currentRow.cells[4].textContent.trim()
-          };
+          var checkedComponent = {};
+          checkedComponent['Name'] = componentData.component;
+          checkedComponent['MainComponentClass'] = componentData.mainClass;
+          checkedComponent['ComponentClass'] = componentData.subClass;
+          checkedComponent['Description'] = componentData.description;
+
+          // var checkedComponent = {
+          //      'Name': currentRow.cells[1].textContent.trim(),
+          //      'MainComponentClass': currentRow.cells[2].textContent.trim(),
+          //      'ComponentClass': currentRow.cells[3].textContent.trim(),
+          //      'Description': currentRow.cells[4].textContent.trim()
+          // };
 
           this.SelectedCompoents.push(checkedComponent);
 
@@ -45,8 +53,8 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentChec
                this.SelectedComponentRows.push(currentRow);
           }
      }
-     else if (this.SelectedCompoentExists(currentRow)) {
-          this.RemoveFromselectedCompoents(currentRow);
+     else if (this.SelectedCompoentExists(componentData)) {
+          this.RemoveFromselectedCompoents(componentData);
 
           // restore color
           this.RemoveHighlightColor(currentRow);
@@ -61,13 +69,13 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentChec
      }
 }
 
-ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentRow) {
+ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-               component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-               component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
-               component['Description'] == componentRow.cells[4].textContent.trim()) {
+          if (component['Name'] === componentData.component &&
+               component['MainComponentClass'] === componentData.mainClass &&
+               component['ComponentClass'] === componentData.subClass &&
+               component['Description'] == componentData.description) {
                return true;
           }
      }
@@ -75,13 +83,13 @@ ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentRow)
      return false;
 }
 
-ExcelSelectionManager.prototype.RemoveFromselectedCompoents = function (componentRow) {
+ExcelSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentRow.cells[1].textContent.trim() &&
-               component['MainComponentClass'] === componentRow.cells[2].textContent.trim() &&
-               component['ComponentClass'] === componentRow.cells[3].textContent.trim() &&
-               component['Description'] === componentRow.cells[4].textContent.trim()) {
+          if (component['Name'] === componentData.component &&
+               component['MainComponentClass'] === componentData.mainClass &&
+               component['ComponentClass'] === componentData.subClass  &&
+               component['Description'] === componentData.description) {
 
                this.SelectedCompoents.splice(i, 1);
                break;
