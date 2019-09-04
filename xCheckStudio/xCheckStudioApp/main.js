@@ -8,7 +8,7 @@ let host = null;
 let win;
 function createWindow()
 {
-    win = new BrowserWindow({title:'xCheckStudio', frame:false,  show: false});
+    win = new BrowserWindow({title:'xCheckStudio', frame:false,  show: false, icon: 'public/symbols/XcheckLogoIcon.png'});
     win.maximize();
     win.show();
     

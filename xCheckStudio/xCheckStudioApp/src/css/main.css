@@ -1,0 +1,368 @@
+:root {
+  --intridaBlue: #15b9f9;
+  --intridaGreen: #51e0dc;
+  --xCheckWhite: #f2f3f4;
+  --xCheckMedGrey: #696969;
+  --xCheckDarkGrey: #474747;
+  --xCheckBlack: #323132;
+  --xCheckOrange: #f05a28;
+  --xCheckRed: #ed1c24;
+  --xCheckGradient: linear-gradient(to right, #f05a28, #ed1c24);
+  --xCheckHeaderGradient: linear-gradient(to right, #f2f3f480, #f05a2880, #ee2e2580, #32313280);
+  --checkSpaceGradient: linear-gradient(to bottom, #47474780, #15b9f980);
+  --reviewSpaceGradient: linear-gradient(to bottom, #47474780, #ed1c2480);
+  --borderRadiusVal: 5px;
+  --borderWidth: 1px;
+  --borderWidthHilite: 3px;
+  }
+
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: Montserrat;
+}
+
+h1, h2, h3, p, select, option, textarea, input, li, textarea {
+  color: var(--xCheckWhite);
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 2px;
+  font-weight: normal;
+}
+
+p, input, select, option, textarea {
+  font-size: 15px;
+  margin: 2px;
+  font-weight: normal;
+}
+
+.smallScript {
+  font-size: 12px;
+}
+
+.symbol {
+  width: 18px;
+  height: 18px;
+}
+
+.horizContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* scrollbar information */
+::-webkit-scrollbar {
+  width: 20px;
+  margin-right: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--xCheckDarkGrey);
+  /* border-radius: 10px; */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--xCheckWhite);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}
+/* End scrollbar information */
+
+/*  header CSS */
+header {
+  background-color: var(--xCheckBlack);
+  background-image: var(--xCheckHeaderGradient);
+  position: fixed;
+  top: 0px;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.btnSymbol {
+  background: var(--xCheckBlack);
+  border: 1px solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnSymbol:hover {
+  border: 1px solid var(--intridaBlue);
+}
+
+.dropDownMenu {
+  box-sizing: border-box;
+  height: 40px;
+  width: 40px;
+  background-color: var(--xCheckMedGrey);
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: solid 1px var(--xCheckWhite);
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu {
+  background-color: var(--xCheckBlack);
+  background: url("../public/symbols/infoMenu.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--xCheckWhite);
+  border-radius: 50%
+  position: absolute;
+  color: var(--xCheckWhite);
+  list-style-type: none;
+  padding: 0 5px;
+  text-indent: 15px;
+  /* display: none; */
+  flex-direction: column;
+  z-index: 2;
+  transition: top 2s, height 2s;
+}
+
+.menu a {
+  margin: 7px 0;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  z-index: 3;
+}
+
+.menu a:hover {
+  color: var(--intridaBlue);
+}
+
+.menuContainer + .menuContainer {
+  border-top: 1px solid var(--xCheckWhite);
+}
+
+.menuOpen {
+  top: 0;
+  padding-top: 50px;
+  display: flex;
+  height: auto;
+}
+
+.homeLink {
+  position: absolute;
+  margin-left: auto;
+  left: 50%;
+  margin-left: -28px;
+  margin-top: 1px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.userInfo {
+  position: absolute;
+  right: 0;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.userName {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: var(--xCheckWhite);
+}
+
+#userImg {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  border: 1px var(--xCheckWhite);
+  color: var(--xCheckWhite);
+  margin-left: 5px;
+}
+
+.searchForm {
+  border: 2px solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  height: 30px;
+  width: 400px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.searchBox {
+  background: none;
+  border-style: none;
+  font-family: inherit;
+  margin-left: 5px;
+}
+
+.searchBox::placeholder {
+  color: var(--xCheckWhite);
+  color: var(--xCheckWhite);
+  font-family: inherit;
+}
+
+.programCntrls {
+  display: flex;
+}
+
+.programCntrls{
+  padding-right: 10px;
+}
+
+.programCntrls button {
+  background: none;
+  border: none;
+
+}
+/* End header css */
+/*Page content container  */
+.content {
+  background-color: var(--xCheckBlack);
+  box-sizing: border-box;
+  color: var(--xCheckWhite);
+  padding-top: 50px;
+}
+
+/* End page content container */
+/* Toggle sliders */
+
+.toggleContainer {
+  position: relative;
+  box-sizing: border-box;
+  width: 145px;
+  height: 30px;
+  background-color: var(--xCheckBlack);
+  border: 1px solid var(--xCheckWhite);
+  border-radius: 15px;
+  font-size: 15px;
+  display: block;
+  color: var(--xCheckWhite);
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.toggleCheckBox{
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider{
+  cursor: pointer;
+  height: 22px;
+  width: 38px;
+  background-color: var(--xCheckMedGrey);
+  border: 1px solid var(--xCheckDarkGrey);
+  transition: .4s;
+  border-radius: 12px;
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+}
+
+.toggleSlider:before{
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--xCheckWhite);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggleSlider:before{
+  transform: translateX(16px);
+}
+
+input:checked + .toggleSlider {
+  background-color: var(--intridaGreen);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--intridaGreen);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+.slider.round {
+  border-radius: 34px;
+}
+/* End Toggle Sliders */
+
+/* Start tooltips */
+.tooltip {
+  padding: 0px 5px;
+  position: absolute;
+  background: #FFBB99;
+  display: none;
+  cursor: pointer;
+  left: 50%;
+  margin-left: -5px;
+  max-width: 40px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  top: 15px;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 1.5em;
+  font-size: 1em;
+  padding: 1px 5px;
+  color: white;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 4px;
+  transition: opacity 0.1s ease-out;
+  z-index: 99;
+  text-align: left;
+}
+
+.tooltipHov:hover .tooltip{
+  display: flex;
+}
+
+.tooltipHov {
+  position: relative;
+}
+
+
+/* End Tooltips */

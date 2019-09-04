@@ -4,9 +4,9 @@ window.onload = function () {
     var submitButton = document.getElementById('submitButton');
 
     submitButton.onclick = function () {
+        event.preventDefault();
         var host = document.getElementById("hostInput").value;
         var port = document.getElementById("portInput").value;
-
         var url = "http://" + host + ":" + port ;
 
         try {
@@ -19,8 +19,13 @@ window.onload = function () {
                         window.location = url;
                     }
                     else {
-                        alert("'" + url + "' does not exist.");
+                        //alert("'" + url + "' does not exist.");
+                        document.getElementById("errorMsgContainer").style.display = "block";
                     }
+                }
+                else {
+                    //alert("'" + url + "' does not exist.");
+                    document.getElementById("errorMsgContainer").style.display = "block";
                 }
             };
 
@@ -30,8 +35,7 @@ window.onload = function () {
 
             document.getElementById("hostInput").value = "";
             document.getElementById("portInput").value = "";
-
-            alert("'" + url + "' Invalid Host and Port");
+            document.getElementById("errorMsgContainer").style.display = "block";
         }
     };
 }

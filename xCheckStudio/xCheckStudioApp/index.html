@@ -1,78 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <script type="text/javascript" src="ServerDetailsInputPage.js"></script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>xCheckStudio</title>
-
-    <style>
-        .serverDetails-page {           
-            height: 360px;        
-            padding: 8% 0 0;
-            margin: auto;
-        }
-
-        .form {
-            position: relative;
-            z-index: 1;
-            background: #FFFFFF;
-            max-width: 360px;
-            margin: 0 auto 100px;
-            padding: 45px;
-            text-align: center;
-            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);           
-        }
-
-        .form input {
-            font-family: "Roboto", sans-serif;
-            outline: 0;
-            background: #f2f2f2;
-            width: 100%;
-            border: 0;
-            margin: 0 0 15px;
-            padding: 15px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .form button {
-            font-family: "Roboto", sans-serif;
-            text-transform: uppercase;
-            outline: 0;
-            background: #4CAF50;
-            width: 100%;
-            border: 0;
-            padding: 15px;
-            color: #FFFFFF;
-            font-size: 14px;           
-            transition: all 0.3 ease;
-            cursor: pointer;
-        }
-  
-        body {
-            background: #76b852;           
-            font-family: "Roboto", sans-serif;
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <div class="serverDetails-page">
-        <div class="form">         
-            <form>
-                <input type="text" placeholder="Host" id="hostInput" />
-                <input type="text" placeholder="Port" id="portInput" />
-                <button id="submitButton">Submit</button>              
-            </form>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check Studio</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="src/css/setupPage.css">
+    <link rel="stylesheet" href="src/css/fonts.css">
+  </head>
+  <body>
+    <header>
+      <button type="button" class="dropDownMenu" >
+      </button>
+      <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
+      <div class="userInfo">
+        <div class="programCntrls">
+          <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
+          <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
+          <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program" onclick="onclosewindow()"></button>
         </div>
-    </div>  
+      </div>
 
+    </header>
+    <div id="background" class="background">
+      <div id="loginInfo" class="loginInfo">
+        <form class="loginForm" action="index.html">
+          <input type="text" name="host" value="" placeholder="HOST" id="hostInput">
+          <input type="text" name="port" value="" placeholder="PORT" id="portInput">
+          <!-- Error message - only display when returned with an error -->
+          <div class="errorMsgContainer" id="errorMsgContainer">
+            <!--Error Type  -->
+            <p>Error 404</p><hr>
+            <!--Error further information  -->
+            <p>Could not find xCheck Studio server at that location </p>
+          </div>
+          <!--<div class="langSelect">
+            <label for="language">Default language:</label>-->
+            <!-- All languages to be present in options. "Selected" value for language picked when installed -->
+            <!-- Will self-post after being changed -->
+            <!--<select name="language">
+              <option value="english" selected>{{English}}</option>
+              <option value="chinese">{{Chinese}}</option>
+              <option value="german">{{German}}</option>
+            </select>
+          </div>-->
+          <button class="submitBtn" id="submitButton">ENTER</button>
+        </form>
+      </div>
+    </div>
+    <script type="text/javascript" src="src/scripts/ElectronCheck.js"></script>
+    <script type="text/javascript" src="ServerDetailsInputPage.js"></script>
 </body>
-
 </html>

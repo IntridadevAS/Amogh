@@ -1,0 +1,107 @@
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 170px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  height: calc(100% - 50px);
+  background-image: url("../../public/imgs/xs_gradient_black.svg"), url("../../public/imgs/launchPageBackground.svg");
+  background-size:  90%, cover;
+  background-repeat: no-repeat;
+  background-position: 50% 42% , center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.loginInfo {
+  height: 280px;
+  width: 500px;
+  position: absolute;
+  top: 60%;
+  right: 50px;
+  justify-content: flex-end;
+}
+
+.loginInfo input, .loginInfo button {
+  box-sizing: border-box;
+  width: 400px;
+  height: 30px;
+  margin: 0 0 10px 0;
+  font-family: 'Montserrat';
+  border-radius: var(--borderRadiusVal);
+  color: var(--xCheckWhite);
+  text-align: center;
+  background-color: #323132;
+  border: var(--borderWidth) solid #707070;
+}
+
+.loginInfo button {
+  width: 90px;
+  font-size: 20px;
+  text-align: center;
+}
+
+
+.loginInfo input:focus{
+  border-color: var(--xCheckWhite);
+  border-width: medium;
+  outline: 0px;
+}
+
+.loginInfo input::placeholder {
+  color: inherit;
+  text-align: center;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.errorMsgContainer {
+  background-color: #ed1c2480;
+  border: var(--borderWidth) solid var(--xCheckRed);
+  border-radius: var(--borderRadiusVal);
+  box-sizing: border-box;
+  width: 400px;
+  margin-bottom: 10px;
+  display: none;
+}
+
+.errorMsgContainer hr {
+  border-style: solid;
+  color: var(--xCheckRed);
+}
+
+.errorMsgContainer p {
+  margin: 5px 8px;
+}
+
+.langSelect {
+  color: var(--xCheckWhite);
+}
+
+.langSelect select {
+  border: none;
+  background-color: var(--xCheckBlack);
+  background: none;
+  color: inherit;
+  margin-bottom: 10px;
+}
+
+option {
+  background-color: var(--xCheckBlack);
+}
