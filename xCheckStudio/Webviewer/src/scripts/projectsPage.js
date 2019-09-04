@@ -885,6 +885,7 @@ let editReviewView = {
 
 let deleteItems = {
   init: function (type, id) {
+    event.stopPropagation();
     this.deleteBox = document.getElementById("delete");
     let closeDelete = document.getElementById("deleteCancel");
     let message = document.getElementById("deleteMsg");
@@ -895,9 +896,7 @@ let deleteItems = {
     let deleteBtn = document.getElementById("deleteBtn");
     deleteBtn.elementid = id;
     deleteBtn.itemtype = type;
-
-    delType.innerHTML = this.type;
-
+    delType.innerHTML = type;
     deleteBtn.onclick = this.deleteItem;
 
     if (type == "project") {
