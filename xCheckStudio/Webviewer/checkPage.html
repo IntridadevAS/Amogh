@@ -37,14 +37,17 @@
   </header>
 
   <div class="background">
+    
+    <div id="busyIndicator"  class="LockOn">
+    </div> 
 
     <div id="returnHomeOverlay" class="overlay"></div>
     <div id="returnHomePopup" class="popup">
       <div id="Return_to_Home_Page">
         <svg class="Rectangle_1204">
           <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-            y="0" width="581" height="155">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
           </rect>
         </svg>
         <svg class="Rectangle_1215">
@@ -68,7 +71,7 @@
             <span>Cancel</span>
           </div>
         </div>
-
+    
         <div id="symYesButton___10" onclick="returnHome()">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -86,7 +89,7 @@
           </path>
         </svg>
       </div>
-
+    
     </div>
 
     <div class="tabButtonContainer" id="tabsContainer">
@@ -438,9 +441,17 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script> 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
+
+  <link href="CSS\BusySpinner.css" rel="stylesheet" type="text/css" />
+
   <script>
+    // // show busy spinner
+    // document.getElementById("busyIndicator").style.display = "block";
 
     window.onload = function () {
+
+      // // hide busy spinner
+      // document.getElementById("busyIndicator").style.display = "none";
 
       loadCheckCases();
 
