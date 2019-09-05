@@ -37,14 +37,19 @@
   </header>
 
   <div class="background">
+    
+    <div id="busyIndicatorOverlay" class="overlay" style="display: block"></div>
+    <div id="busyIndicatorPopup" class="popup"  style="display: block; width: 311px; height: 308px; top:50%; left: 50%; margin-left: -155px; margin-top: -154px">
+      <img src="images/busySpinner.gif">
+    </div>   
 
     <div id="returnHomeOverlay" class="overlay"></div>
     <div id="returnHomePopup" class="popup">
       <div id="Return_to_Home_Page">
         <svg class="Rectangle_1204">
           <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-            y="0" width="581" height="155">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
           </rect>
         </svg>
         <svg class="Rectangle_1215">
@@ -68,7 +73,7 @@
             <span>Cancel</span>
           </div>
         </div>
-
+    
         <div id="symYesButton___10" onclick="returnHome()">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -86,7 +91,7 @@
           </path>
         </svg>
       </div>
-
+    
     </div>
 
     <div class="tabButtonContainer" id="tabsContainer">
@@ -438,9 +443,10 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script> 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
+    
   <script>
-
-    window.onload = function () {
+   
+    window.onload = function () {            
 
       loadCheckCases();
 
@@ -453,6 +459,9 @@
 
       // enable menu options
       enableMenuOptions();
+
+      // hide spinner
+      hideBusyIndicator();
     }
   </script>
 </body>

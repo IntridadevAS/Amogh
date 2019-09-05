@@ -3,9 +3,9 @@ let UploadManager = {
         dataSource,
         formId) {
 
-        // var modal = document.getElementById('projectselectiondialogModal');
-        // modal.style.display = "none";
-
+        //show busy spinner
+        showBusyIndicator();
+        
         let selectedFiles = document.getElementById(dataSource).files;
         let selectedFilesCount = selectedFiles.length;
         if (selectedFilesCount == 0) {
@@ -32,14 +32,7 @@ let UploadManager = {
                 UploadManager.upload(fileName,
                     formId,
                     addedSource,
-                    event.target.files);
-                // uploadAndLoadModel(fileExtension,
-                //     data.target.response,
-                //     viewerContainer,
-                //     modelTreeContainer,
-                //     dataSource,
-                //     formId,
-                //     event.target.files);
+                    event.target.files);              
             }
         };
         var formData = new FormData(document.getElementById(formId));
@@ -51,10 +44,7 @@ let UploadManager = {
         formId,
         addedSource,
         files) {
-        var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
-
-        // var busySpinner = document.getElementById("divLoading");
-        // busySpinner.className = 'show';
+        var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();                
 
         if (xCheckStudio.Util.isSource3D(fileExtension) ||
             xCheckStudio.Util.isSourceDB(fileExtension)) {
@@ -71,6 +61,9 @@ let UploadManager = {
                         formId).then(function () {
                             // filter check case
                             filterCheckCases(fileExtension);
+
+                            //hide busy spinner
+                            hideBusyIndicator();
                         });
                 }
                 else if (xCheckStudio.Util.isSourceDB(fileExtension)) {
@@ -81,37 +74,12 @@ let UploadManager = {
                         addedSource.tableData.id).then(function () {
                             // filter check case
                             filterCheckCases(fileExtension);
+
+                            //hide busy spinner
+                            hideBusyIndicator();
                         });
                 }
             });
-
-            // var xhr = new XMLHttpRequest();
-            // xhr.open("POST", "PHP/UploadSource.php", true);
-            // xhr.onload = function (event) {
-            //     if (event.target.response !== "fail") {
-
-            //         // load model
-            //         LoadManager.load3DModel(fileName,
-            //             addedSource.id,
-            //             addedSource.visualizer.id,
-            //             addedSource.tableData.id,
-            //             formId).then(function () {
-
-            //             });
-            //     }
-
-            //     // busySpinner.classList.remove('show')
-            // };
-            // var formData = new FormData(document.getElementById(formId));
-            // formData.append('Source', addedSource.id);
-
-            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-            // formData.append('ProjectName', projectinfo.projectname);
-            // formData.append('CheckName', checkinfo.checkname);
-            // formData.append('ConvertToSCS', "true");
-
-            // xhr.send(formData);
         }
         else if (xCheckStudio.Util.isSource1D(fileExtension)) {
 
@@ -123,12 +91,11 @@ let UploadManager = {
                     addedSource.tableData.id).then(function () {
                         // filter check case
                         filterCheckCases(fileExtension);
+
+                        //hide busy spinner
+                        hideBusyIndicator();
                     });
             }
-            // else if(xCheckStudio.Util.isSourceDB(fileExtension))
-            // {
-
-            // }
         }
     },
 

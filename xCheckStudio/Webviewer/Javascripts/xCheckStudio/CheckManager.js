@@ -36,72 +36,68 @@ function CheckManager(name) {
         interfaceObject,
         orderMaintained) {
 
+        return new Promise((resolve) => {
             // var $this = this;
-        if (comparisonCheck) {           
+            if (comparisonCheck) {
 
-          var sourceManagerA = SourceManagers["a"];
-          var sourceManagerB =SourceManagers["b"];
-           var sourceASelectedCompoents = sourceManagerA.ModelTree.GetSelectedComponents();             
-           var sourceBSelectedCompoents = sourceManagerB.ModelTree.GetSelectedComponents();
-           var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-           var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                var sourceManagerA = SourceManagers["a"];
+                var sourceManagerB = SourceManagers["b"];
+                var sourceASelectedCompoents = sourceManagerA.ModelTree.GetSelectedComponents();
+                var sourceBSelectedCompoents = sourceManagerB.ModelTree.GetSelectedComponents();
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-            var dataSourceOrderMaintained = "true";
-            if (!orderMaintained) {
-                dataSourceOrderMaintained = "false";
+                var dataSourceOrderMaintained = "true";
+                if (!orderMaintained) {
+                    dataSourceOrderMaintained = "false";
+                }                      
+
+                $.ajax({
+                    url: 'PHP/checkDataSourceForComparison.php',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        "CheckCaseType": JSON.stringify(checkCaseType),
+                        "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
+                        "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
+                        "orderMaintained": dataSourceOrderMaintained,
+                        "ProjectName": projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
+                    },
+                    success: function (data) {
+                        return resolve(true);
+
+                    },
+                    error: function (error) {                        
+                        alert('error; ' + eval(error));
+                        return resolve(false);
+                    }
+                });
             }
-            // var orderMaintained = true;
-            // if (sourceManagerA.SourceType.toLowerCase() === checkCaseType.SourceBType.toLowerCase() &&
-            //     sourceManagerB.SourceType.toLowerCase() === checkCaseType.SourceAType.toLowerCase()) {
-            //     orderMaintained = false;
-            // }                 
-            
-            $.ajax({
-                url: 'PHP/checkDataSourceForComparison.php',
-                type: "POST",
-                async: false,
-                data: {                    
-                    "CheckCaseType": JSON.stringify(checkCaseType),                  
-                    "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
-                    "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
-                    "orderMaintained" : dataSourceOrderMaintained,
-                    "ProjectName": projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (data) {
-                    // alert("success");
-                    //$this.CheckComponentsGroupsData = data;
+            else {
 
-                },
-                error: function (error) {
-                    alert('error; ' + eval(error));
-                }
-            });
-        }
-        else {
-
-            var SelectedCompoents = interfaceObject.ModelTree.GetSelectedComponents();
-            var containerID = interfaceObject.GetViewerContainerID();            
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-            $.ajax({
-                url: 'PHP/checkDataSourceForCompliance.php',
-                type: "POST",
-                async: false,
-                data: { 
-                        "CheckCaseType": JSON.stringify(checkCaseType),                       
+                var SelectedCompoents = interfaceObject.ModelTree.GetSelectedComponents();
+                var containerID = interfaceObject.GetViewerContainerID();
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                $.ajax({
+                    url: 'PHP/checkDataSourceForCompliance.php',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        "CheckCaseType": JSON.stringify(checkCaseType),
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
                         "ContainerId": containerID,
                         'ProjectName': projectinfo.projectname,
-                        'CheckName': checkinfo.checkname                     
-                },
-                success: function (data) {
-                    // alert("success");
-                   //$this.CheckComponentsGroups = JSON.parse(data);
-                }
-            });
-            
-        }
+                        'CheckName': checkinfo.checkname
+                    },
+                    success: function (data) {
+                        return resolve(true);
+                    }
+                });
+
+            }
+        });
     }   
 }
 
