@@ -589,75 +589,12 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
 
             if (this.SelectionManager.HighlightDBRow(row)) {
                 // scroll to selected row
-                // sheetDataTable.focus();
-                // sheetDataTable.parentNode.parentNode.scrollTop = row.offsetTop - row.offsetHeight;
+                document.getElementById(this.ViewerContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
             }
 
             break;
         }
     }
-
-    // var viewerContainerData;
-    // if (this.ModelBrowserContainer === "modelTree1") {
-    //     viewerContainerData = document.getElementById("viewerContainer1")
-    // }
-    // else if (this.ModelBrowserContainer === "modelTree2") {
-    //     viewerContainerData = document.getElementById("viewerContainer2")
-    // }
-    //if (viewerContainerData != undefined) {
-        // var containerChildren = viewerContainerData.children;
-        // var sheetHeadersTable = containerChildren[0].getElementsByTagName("table")[0];
-        // var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
-
-        // var columnHeaders = sheetHeadersTable.getElementsByTagName("th");
-        // var dataRows = sheetDataTable.getElementsByTagName("tr");
-        // var identifierColumns = {};
-        // for (var i = 0; i < columnHeaders.length; i++) {
-        //     columnHeader = columnHeaders[i];
-        //     if (columnHeader.innerHTML.trim() === "Component Class" ||
-        //         columnHeader.innerHTML.trim() === "Name" ||
-        //         columnHeader.innerHTML.trim() === "Tagnumber" ||
-        //         columnHeader.innerHTML.trim() === "Description") {
-        //         identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
-        //     }
-        //     if (Object.keys(identifierColumns).length === 3) {
-        //         break;
-        //     }
-        // }
-        // for (var i = 0; i < dataRows.length; i++) {
-        //     var dataRow = dataRows[i];
-
-        //     var nameColumnIndex;
-        //     if (identifierColumns.Name !== undefined) {
-        //         nameColumnIndex = identifierColumns.Name;
-        //     }
-        //     else if (identifierColumns.Tagnumber !== undefined) {
-        //         nameColumnIndex = identifierColumns.Tagnumber;
-        //     }
-        //     if (thisRow.cells[1].innerText === dataRow.cells[nameColumnIndex].innerText &&
-        //         thisRow.cells[3].innerText === dataRow.cells[identifierColumns.ComponentClass].innerText) {
-        //         if (this.SelectedComponentRowFromDB) {
-        //             for (var j = 0; j < this.SelectedComponentRowFromDB.cells.length; j++) {
-        //                 cell = this.SelectedComponentRowFromDB.cells[j];
-        //                 cell.style.backgroundColor = "#ffffff"
-        //             }
-        //         }
-
-        //         for (var j = 0; j < dataRow.cells.length; j++) {
-        //             cell = dataRow.cells[j];
-        //             cell.style.backgroundColor = "#B2BABB"
-        //         }
-
-        //         this.SelectedComponentRowFromDB = dataRow;
-
-        //         // scroll to selected row
-        //         sheetDataTable.focus();
-        //         sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
-
-        //         break;
-        //     }
-        // }
-    //}
 }
 
 DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,

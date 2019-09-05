@@ -138,22 +138,7 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function () {
         }
 
         this.LoadModelBrowserTable(this, columnHeaders, tableData);
-
-        // // maintain first row as selected row by default
-        // var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
-        // this.SelectionManager.HighlightBrowserRow(modelBrowserTableRows[0]);
-        // this.ShowSelectedSheetData(modelBrowserTableRows[0]);       
-
-        // var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
-        // modelBrowserHeaderTable.style.position = "fixed"
-        // modelBrowserHeaderTable.style.width = "543px";
-
-        // var modelBrowserDataTable = this.GetModelBrowserDataTable();
-        // modelBrowserDataTable.style.position = "static"
-        // modelBrowserDataTable.style.width = "556px";
-        // modelBrowserDataTable.style.margin = "47px 0px 0px 0px"
     }
-
 };
 
 ExcelModeBrowser.prototype.GetModelBrowserHeaderTable = function () {
@@ -314,64 +299,6 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
     });
 }
 
-// ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData, viewerContainer) {
-
-//     $(function () {
-//         var db = {
-//             loadData: filter => {
-//                 console.debug("Filter: ", filter);
-//                 let ComponentClass = (filter.ComponentClass || "").toLowerCase();
-//                 let name = (filter.Name || "").toLowerCase();
-//                 let Category = (filter.MainComponentClass || "").toLowerCase();
-//                 let Description = (filter.Description || "").toLowerCase();
-//                 let dmy = parseInt(filter.dummy, 10);
-//                 this.recalculateTotals = true;
-//                 return $.grep(tableData, row => {
-//                     return (!ComponentClass || row.ComponentClass.toLowerCase().indexOf(ComponentClass) >= 0)
-//                         && (!name || row.Name.toLowerCase().indexOf(name) >= 0)
-//                         && (!Category || row.MainComponentClass.toLowerCase().indexOf(Category) >= 0)
-//                         && (!Description || row.Description.toLowerCase().indexOf(Description) >= 0)
-//                         && (isNaN(dmy) || row.dummy === dmy);
-//                 });
-//             }
-//         };
-
-//         $(viewerContainer).jsGrid({
-//             height: "364px",
-//             width: "556px",
-//             filtering: true,
-//             sorting: true,
-//             autoload: true,
-//             controller: db,
-//             data: tableData,
-//             fields: columnHeaders,
-//             margin: "0px",
-//             checked: true,
-//             onRefreshed: function (config) {
-//                 _this.AddTableContentCount(this._container.context.id);
-
-//             },
-//             onDataLoaded: function (args) {
-//             },
-//             rowClick: function (args) {
-
-//                 _this.SelectionManager.HighlightBrowserRow(args.event.currentTarget);              
-
-//                 _this.ShowSelectedSheetData(args.event.currentTarget);               
-//             }
-//         });
-
-//     });
-
-//     var container = document.getElementById(viewerContainer.replace("#", ""));
-//     container.style.width = "556px"
-//     container.style.height = "364px"
-//     container.style.margin = "0px"
-//     container.style.overflowX = "hide";
-//     container.style.overflowY = "scroll";
-//     container.style.padding = "0";
-// };
-
 ExcelModeBrowser.prototype.AddTableContentCount = function (containerId) {
     var modelBrowserData = document.getElementById(containerId);
     var modelBrowserDataTable = modelBrowserData.children[1];
@@ -420,13 +347,8 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                     activation: true,
                     rowSelectionChanging: function (evt, ui) {
 
-                        // if (isFiredFromCheckbox) {
-                        //     isFiredFromCheckbox = false;
-                        // } else {
                         _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0], _this.ModelBrowserContainer, _this.ViewerContainer);
-                        return false;
-                        // }
-
+                        return false;                       
                     }
                 },
                 {
@@ -443,52 +365,7 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
     });
 }
 
-// ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders, 
-//                                                           tableData, 
-//                                                           viewerContainer) {
-//     var _this = this;
-
-//     $(function () {
-
-//         $(viewerContainer).jsGrid({
-//             width: "570px",
-//             height: "380px",
-//             sorting: true,
-//             autoload: true,
-//             data: tableData,
-//             fields: columnHeaders,
-//             margin: "0px",
-//             onRefreshed: function (config) {
-//                 // var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-//                 // for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-//                 //     currentChild = excelSheetParentContainer.children[i];
-//                 //     if (currentChild.className === "viewdatagraphics") {
-//                 //         currentChild.style.display = "none";
-//                 //     }
-//                 // }
-//             },
-//             rowClick: function (args) {
-//                 _this.SelectionManager.HandleRowSelectInViewer(args.event.currentTarget, _this.ModelBrowserContainer);
-//             }
-//         });
-
-//     });
-
-//     var container = document.getElementById(viewerContainer.replace("#", ""));
-//     container.style.width = "570px"
-//     container.style.height = "380px"
-//     container.style.overflowX = "scroll";
-//     container.style.overflowY = "scroll";
-// };
-
-ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
-    var viewerContainerData;
-    // if (this.ModelBrowserContainer === "modelTree1") {
-    //     viewerContainerData = document.getElementById("visualizera")
-    // }
-    // else if (this.ModelBrowserContainer === "modelTree2") {
-    //     viewerContainerData = document.getElementById("visualizerb")
-    // }
+ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {   
     var data = $("#" + this.ViewerContainer).data("igGrid").dataSource.dataView();
     if (data.length === 0) {
         return;
@@ -514,10 +391,6 @@ ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
         else if (column.toLowerCase() === "description") {
             identifierColumns["description"] = column;
         }
-
-        // if (identifierColumns.length === 3) {
-        //     break;
-        // }
     }
 
     if (identifierColumns.name === undefined ||
@@ -532,116 +405,28 @@ ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
 
     for (var i = 0; i < data.length; i++) {
         var dataRow = data[i];
-        // var nameColumnIndex;
-        // if (identifierColumns.Name !== undefined) {
-        //     nameColumnIndex = identifierColumns.Name;
-        // }
-        // else if (identifierColumns.Tagnumber !== undefined) {
-        //     nameColumnIndex = identifierColumns.Tagnumber;
-        // }
         if (name === dataRow[identifierColumns.name] &&
             subClass === dataRow[identifierColumns.componentClass]) {
 
             var row = $("#" + this.ViewerContainer).igGrid("rowAt", i);
 
             if (this.SelectionManager.HighlightSheetRow(row)) {
-                // scroll to selected row
-                // sheetDataTable.focus();
-                // sheetDataTable.parentNode.parentNode.scrollTop = row.offsetTop - row.offsetHeight;
+                document.getElementById(this.ViewerContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
             }
 
             break;
         }
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // if (viewerContainerData != undefined) {
-    //     var containerChildren = viewerContainerData.children;
-    //     var sheetHeadersTable = containerChildren[0].getElementsByTagName("table")[0];
-    //     var sheetDataTable = containerChildren[1].getElementsByTagName("table")[0];
-
-    //     var columnHeaders = sheetHeadersTable.getElementsByTagName("th");
-    //     var dataRows = sheetDataTable.getElementsByTagName("tr");
-    //     var identifierColumns = {};
-    //     for (var i = 0; i < columnHeaders.length; i++) {
-    //         columnHeader = columnHeaders[i];
-    //         if (columnHeader.innerHTML.trim() === "Component Class" ||
-    //             columnHeader.innerHTML.trim() === "Name" ||
-    //             columnHeader.innerHTML.trim() === "Tagnumber" ||
-    //             columnHeader.innerHTML.trim() === "Description") {
-    //             identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
-    //         }
-    //         if (Object.keys(identifierColumns).length === 3) {
-    //             break;
-    //         }
-    //     }
-    //     for (var i = 0; i < dataRows.length; i++) {
-    //         var dataRow = dataRows[i];
-
-    //         var nameColumnIndex;
-    //         if (identifierColumns.Name !== undefined) {
-    //             nameColumnIndex = identifierColumns.Name;
-    //         }
-    //         else if (identifierColumns.Tagnumber !== undefined) {
-    //             nameColumnIndex = identifierColumns.Tagnumber;
-    //         }
-    //         if (thisRow.cells[1].innerText === dataRow.cells[nameColumnIndex].innerText &&
-    //             thisRow.cells[3].innerText === dataRow.cells[identifierColumns.ComponentClass].innerText) {
-
-    //             if (this.SelectionManager.HighlightSheetRow(dataRow)) {
-    //                 // scroll to selected row
-    //                 sheetDataTable.focus();
-    //                 sheetDataTable.parentNode.parentNode.scrollTop = dataRow.offsetTop - dataRow.offsetHeight;
-    //             }
-
-    //             break;
-    //         }
-    //     }
-    // }
 }
 
 ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
 
     var currentSheetName = browserRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
-    //var mainComponentClasses = Object.keys(this.SheetData);
-
-    // if (mainComponentClasses.indexOf(currentSheetName) === -1) {
-    //     currentSheetName = browserRow.cells[1].innerText.trim();
-    // }
-
-    // var viewerContainerData;
-    // if (this.ModelBrowserContainer === "modelTree1") {
-    //     viewerContainerData = document.getElementById("visualizerA")
-    // }
-    // else if (this.ModelBrowserContainer === "modelTree2") {
-    //     viewerContainerData = document.getElementById("visualizerB")
-    // }
-
-    // if (viewerContainerData.childElementCount > 1 && 
-    //     viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === currentSheetName) {
-
-    //     this.HighlightRowInSheetData(browserRow);
-    //     return;
-    // }
 
     var mainComponentClasseData = this.SheetData[currentSheetName];
     var components = [];
 
-    // if (Object.keys(mainComponentClasseData).length > 0) {
-    //     if (viewerContainerData.childElementCount > 1) {
-    //         for (var subComponentClass in mainComponentClasseData) {
-    //             if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
-    //                 this.HighlightRowInSheetData(browserRow);
-    //                 return;
-    //             }
-    //         }
-    //     }
-    // }
-
-    if (mainComponentClasseData !== {}) {
-        // if (browserRow.cells[1].innerText !== "" && 
-        //     browserRow.cells[2].innerText !== "") {
+    if (mainComponentClasseData !== {}) {       
         for (var subComponentClass in mainComponentClasseData) {
             for (var i = 0; i < mainComponentClasseData[subComponentClass].length; i++) {
                 components.push(mainComponentClasseData[subComponentClass][i]);
@@ -651,53 +436,19 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
             components.length === 0) {
             return;
         }
-
-        // var sheetProperties;
-        // if (mainComponentClasseData[currentSheetName] !== undefined) {
-        //     sheetProperties = mainComponentClasseData[currentSheetName][0]["properties"];
-        // }
-        // else {
-        //     for (var subComponent in mainComponentClasseData) {
-        //         if (mainComponentClasseData[subComponent][0].Name === browserRow.cells[1].innerText.trim()) {
-        //             sheetProperties = mainComponentClasseData[subComponent][0].properties;
-        //         }
-        //         if (sheetProperties === undefined) {
-        //             for (var j = 0; j < mainComponentClasseData[subComponent].length; j++) {
-        //                 if (mainComponentClasseData[subComponent][j].Name === browserRow.cells[1].innerText.trim()) {
-        //                     sheetProperties = mainComponentClasseData[subComponent][0].properties;
-        //                 }
-        //             }
-
-        //         }
-        //     }
-        // }
-
-        //var column = {};
+       
         var columnHeaders = [];
         var firstComponent = components[0];
         var firstComponentProperties = firstComponent.properties;
         for (var i = 0; i < firstComponentProperties.length; i++) {
             columnHeader = {};
-            // if (sheetProperties[i].Name === "ComponentClass") {
-            //     columnHeader["title"] = "Component Class";
-            // }
-            // else {
-            //     columnHeader["title"] = sheetProperties[i].Name;
-            // }
-
+            
             columnHeader["headerText"] = firstComponentProperties[i].Name;
             columnHeader["key"] = firstComponentProperties[i].Name.replace(/\s/g, '');
             columnHeader["dataType"] = "string";
             columnHeader["width"] = "100px";
 
-            columnHeaders.push(columnHeader);
-            // if (Object.keys(column).length <= 3) {
-            //     if (sheetProperties[i].Name === "ComponentClass" || 
-            //         sheetProperties[i].Name === "Name" ||
-            //          sheetProperties[i].Name === "Description") {
-            //         column[sheetProperties[i].Name] = i;
-            //     }
-            // }
+            columnHeaders.push(columnHeader);            
         }
 
         var tableData = [];
@@ -713,22 +464,13 @@ ExcelModeBrowser.prototype.ShowSelectedSheetData = function (browserRow) {
             tableData.push(tableRowContent);
         }
 
-
-        // if (this.ModelBrowserContainer === "modelTree1") {
-        //     _this = this;
+     
         if (this.LoadedSheet !== currentSheetName) {
             this.LoadSheetDataTable(columnHeaders, tableData);
             this.LoadedSheet = currentSheetName;
         }
 
-        this.HighlightRowInSheetData(browserRow);
-        // }
-        // else if (this.ModelBrowserContainer === "modelTree2") {
-        //     _this = this;
-        //     _this.LoadSheetDataTable(columnHeaders, tableData, "#visualizerB");
-        //     _this.HighlightRowInSheetData(browserRow);
-        // }
-        //}
+        this.HighlightRowInSheetData(browserRow);      
     }
 }
 

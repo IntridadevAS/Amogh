@@ -193,10 +193,6 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           else if (column.toLowerCase() === "description") {
                identifierColumns["description"] = column;
           }
-
-          // if (identifierColumns.length === 3) {
-          //     break;
-          // }
      }
 
      if (!identifierColumns.name === undefined ||
@@ -216,19 +212,10 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
      var name = selectedRowData[identifierColumns.name];
      var subClass = selectedRowData[identifierColumns.componentClass];
 
-     //     var name = thisRow.cells[ModelBrowserColumns1D.Component].innerText.trim();
-     //     //var mainClass = thisRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
-     //     var subClass = thisRow.cells[ModelBrowserColumns1D.SubClass].innerText.trim();
 
      for (var i = 0; i < modelBrowserData.length; i++) {
           var rowData = modelBrowserData[i];
-          // var nameColumnIndex;
-          // if (identifierColumns.Name !== undefined) {
-          //     nameColumnIndex = identifierColumns.Name;
-          // }
-          // else if (identifierColumns.Tagnumber !== undefined) {
-          //     nameColumnIndex = identifierColumns.Tagnumber;
-          // }
+
           if (name === rowData[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] &&
                subClass === rowData[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')]) {
 
@@ -237,9 +224,8 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
                // highlight row in model browser     
                this.HighlightBrowserRow(row);
 
-               //    // scroll to selected row    
-               //    modelBrowserTable.focus();
-               //    modelBrowserTable.parentNode.parentNode.scrollTop = row.offsetTop - row.offsetHeight;
+               // scroll to selected row                   
+               document.getElementById(modelBrowserContainer+"_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
 
                break;
           }
