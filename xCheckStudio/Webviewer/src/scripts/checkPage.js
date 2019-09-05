@@ -5,32 +5,32 @@ let model = {
   selectedTab: [],
   currentView: null,
   views: {
-    a:{
-      id:"a",
+    a: {
+      id: "a",
       used: false,
       viewPanel: document.getElementById("viewPanelA"),
       tableData: document.getElementById("tableDataA"),
       visualizer: document.getElementById("visualizerA"),
       fileName: ""
     },
-    b:{
-      id:"b",
+    b: {
+      id: "b",
       used: false,
       viewPanel: document.getElementById("viewPanelB"),
       tableData: document.getElementById("tableDataB"),
       visualizer: document.getElementById("visualizerB"),
       fileName: ""
     },
-    c:{
-      id:"c",
+    c: {
+      id: "c",
       used: false,
       viewPanel: document.getElementById("viewPanelC"),
       tableData: document.getElementById("tableDataC"),
       visualizer: document.getElementById("visualizerC"),
       fileName: ""
     },
-    d:{
-      id:"d",
+    d: {
+      id: "d",
       used: false,
       viewPanel: document.getElementById("viewPanelD"),
       tableData: document.getElementById("tableDataD"),
@@ -41,15 +41,15 @@ let model = {
 }
 
 let controller = {
-  init: function(){
+  init: function () {
     viewTabs.init();
     viewPanels.init();
   },
 
-//Finds first available view that is not used.
-  nextAvailableView: function(){
+  //Finds first available view that is not used.
+  nextAvailableView: function () {
     let views = Object.values(model.views);
-    for(view of views){
+    for (view of views) {
       if (view.used == false) {
         return view.id;
       }
@@ -57,13 +57,13 @@ let controller = {
   },
 
 
-// NOTE FOR PROTOTECH - run this after file is loaded.
-//It will find the first available "panel", create a tab for it, and select both.
-  addNewFile: function(fileName){
+  // NOTE FOR PROTOTECH - run this after file is loaded.
+  //It will find the first available "panel", create a tab for it, and select both.
+  addNewFile: function (fileName) {
     const addedFile = model.views[this.nextAvailableView()];
     const table = addedFile.tableData; //NOTE FOR PROTOTECH - This will select the 'table' for this particular panel
     const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
-    model.activeTabs ++;
+    model.activeTabs++;
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
     addedFile.fileName = fileName;
     // SET FILENAME FOR TAB ABOVE
@@ -71,48 +71,48 @@ let controller = {
     addedFile.used = true;
     viewTabs.createTab(addedFile);
     viewPanels.showPanel(addedFile.viewPanel);
-    if (model.activeTabs >= 4){
+    if (model.activeTabs >= 4) {
       viewTabs.hideAddTab();
     }
 
     return addedFile;
   },
 
-//clears data from deleted tab
-//NOTE TO PROTOTECH - MAY BE USED TO REMOVE MORE DATA FROM THE MODEL.VIEW IF PROVIDED IN addNewFile
-  deleteTabData: function(id){
+  //clears data from deleted tab
+  //NOTE TO PROTOTECH - MAY BE USED TO REMOVE MORE DATA FROM THE MODEL.VIEW IF PROVIDED IN addNewFile
+  deleteTabData: function (id) {
     let tab = model.views[id];
     tab.fileName = "";
     tab.used = false;
   },
 
-  selectView: function(id){
+  selectView: function (id) {
     let changeViewTo = model.views[id];
     viewPanels.showPanel(changeViewTo.viewPanel);
   }
 }
 
 let viewTabs = {
-  init: function(){
+  init: function () {
     this.container = document.getElementById("tabContainer");
     this.addTab = document.getElementById("addTab");
     this.tabs = document.getElementsByClassName("tab");
 
-    this.container.addEventListener("click", function(){
+    this.container.addEventListener("click", function () {
       let deleteTab = event.target.closest('.deleteTab');
       let changeTab = event.target.closest('.tab');
-      if (deleteTab){
+      if (deleteTab) {
         viewTabs.deleteTab(deleteTab.parentNode);
-      } else if (changeTab){
+      } else if (changeTab) {
         viewTabs.selectTab(changeTab);
         controller.selectView(changeTab.dataset.id);
-      } else {return};
+      } else { return };
     })
 
     this.addTab.addEventListener("click", viewPanels.showAddPanel);
   },
 
-  createTab: function(view) {
+  createTab: function (view) {
     let newNode = document.createElement("div");
     newNode.classList.add("tab");
     newNode.setAttribute("data-id", view.id);
@@ -124,7 +124,7 @@ let viewTabs = {
     this.selectTab(document.querySelector(`[data-id = ${view.id}]`));
   },
 
-  deleteTab: function(tabItem){
+  deleteTab: function (tabItem) {
     let tabID = tabItem.dataset.id;
     controller.deleteTabData(tabID);
     tabItem.previousElementSibling.click();
@@ -132,7 +132,7 @@ let viewTabs = {
     viewTabs.showAddTab();
   },
 
-  selectTab: function(selectedTab){
+  selectTab: function (selectedTab) {
     let tabID = selectedTab.dataset.id; //get relevant ID from data-id in tab element
     this.unselectAllTabs();
     selectedTab.classList.add("selectedTab");
@@ -141,39 +141,39 @@ let viewTabs = {
     currentTabId = tabID;
   },
 
-  unselectAllTabs: function(){
-    for (tab of this.tabs){
+  unselectAllTabs: function () {
+    for (tab of this.tabs) {
       tab.classList.remove("selectedTab");
     }
   },
 
-  hideAddTab: function(){
+  hideAddTab: function () {
     this.addTab.classList.add("hide");
   },
 
-  showAddTab: function(){
+  showAddTab: function () {
     this.addTab.classList.remove("hide");
   }
 }
 
 let viewPanels = {
-  init: function(){
+  init: function () {
     this.addFilesPanel = document.getElementById("addFiles");
     this.panels = document.getElementsByClassName("viewPanel");
   },
 
-  showAddPanel: function(){
+  showAddPanel: function () {
     viewPanels.addFilesPanel.classList.remove("hide");
   },
 
-  hideAddPanel: function(){
+  hideAddPanel: function () {
     var senderElement = event.target;
-    if($(senderElement).is("input")) {
+    if ($(senderElement).is("input")) {
       return;
     }
 
     document.getElementById("fileInput").click();
-   
+
     this.addFilesPanel.classList.add("hide");
   },
 
@@ -220,49 +220,76 @@ let grabBarControl = function (element) {
     }
   }
 
-  element.addEventListener("mousedown", function(event){
+  element.addEventListener("mousedown", function (event) {
     m_pos = event.x;
     document.addEventListener("mousemove", resize, false);
   }, false);
-  document.addEventListener("mouseup", function(){
-    document.removeEventListener("mousemove", resize, false), false}
+  document.addEventListener("mouseup", function () {
+    document.removeEventListener("mousemove", resize, false), false
+  }
   );
 }
 
 let grabBars = document.getElementsByClassName("grabBar");
 
-for (grabBar of grabBars){
-  grabBarControl(grabBar);
+ for (grabBar of grabBars){
+   grabBarControl(grabBar);
 }
 
-function cancelReturnHome()
-{
-    var overlay = document.getElementById("returnHomeOverlay");
-    var popup = document.getElementById("returnHomePopup");
+function cancelReturnHome() {
+  var overlay = document.getElementById("returnHomeOverlay");
+  var popup = document.getElementById("returnHomePopup");
 
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
 }
-function returnHome()
-{
-    window.location = "landingPage.html";
+function returnHome() {
+  window.location = "landingPage.html";
 }
 function onHomeClick() {
 
-    var overlay = document.getElementById("returnHomeOverlay");
-    var popup = document.getElementById("returnHomePopup");
+  var overlay = document.getElementById("returnHomeOverlay");
+  var popup = document.getElementById("returnHomePopup");
 
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
 
-    popup.style.width ="581px";
-    popup.style.height ="155px";
-    popup.style.overflow = "hidden";
-    //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+  //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
 
-    // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-    //     window.location = "landingPage.html";
-    //   }
+  // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
+  //     window.location = "landingPage.html";
+  //   }
 }
 
+function showBusyIndicator() {
+  //document.getElementById("busyIndicator").style.display = "block";
+  // show busy loader
+  //  var busySpinner = document.getElementById("divLoading");
+  //  if (busySpinner !== undefined) {
+  //      busySpinner.className = 'show';
+  //  }
 
+  var overlay = document.getElementById("busyIndicatorOverlay");
+  var popup = document.getElementById("busyIndicatorPopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+  
+  popup.style.width ="311px";
+  popup.style.height ="308px";
+}
+
+function hideBusyIndicator() {
+  // var busySpinner = document.getElementById("divLoading");
+  // busySpinner.classList.remove('show');
+  //document.getElementById("busyIndicator").style.display = "none";
+
+  var overlay = document.getElementById("busyIndicatorOverlay");
+  var popup = document.getElementById("busyIndicatorPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}

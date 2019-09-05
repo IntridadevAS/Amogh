@@ -38,8 +38,10 @@
 
   <div class="background">
     
-    <div id="busyIndicator"  class="LockOn">
-    </div> 
+    <div id="busyIndicatorOverlay" class="overlay" style="display: block"></div>
+    <div id="busyIndicatorPopup" class="popup"  style="display: block; width: 311px; height: 308px; top:50%; left: 50%; margin-left: -155px; margin-top: -154px">
+      <img src="images/busySpinner.gif">
+    </div>   
 
     <div id="returnHomeOverlay" class="overlay"></div>
     <div id="returnHomePopup" class="popup">
@@ -441,17 +443,10 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script> 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
-
-  <link href="CSS\BusySpinner.css" rel="stylesheet" type="text/css" />
-
+    
   <script>
-    // // show busy spinner
-    // document.getElementById("busyIndicator").style.display = "block";
-
-    window.onload = function () {
-
-      // // hide busy spinner
-      // document.getElementById("busyIndicator").style.display = "none";
+   
+    window.onload = function () {            
 
       loadCheckCases();
 
@@ -464,6 +459,9 @@
 
       // enable menu options
       enableMenuOptions();
+
+      // hide spinner
+      hideBusyIndicator();
     }
   </script>
 </body>

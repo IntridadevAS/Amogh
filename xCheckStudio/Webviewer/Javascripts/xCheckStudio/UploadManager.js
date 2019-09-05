@@ -3,8 +3,8 @@ let UploadManager = {
         dataSource,
         formId) {
 
-        // //show busy spinner
-        // document.getElementById("busyIndicator").style.display = "block";
+        //show busy spinner
+        showBusyIndicator();
         
         let selectedFiles = document.getElementById(dataSource).files;
         let selectedFilesCount = selectedFiles.length;
@@ -44,10 +44,7 @@ let UploadManager = {
         formId,
         addedSource,
         files) {
-        var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
-
-        // var busySpinner = document.getElementById("divLoading");
-        // busySpinner.className = 'show';
+        var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();                
 
         if (xCheckStudio.Util.isSource3D(fileExtension) ||
             xCheckStudio.Util.isSourceDB(fileExtension)) {
@@ -66,7 +63,7 @@ let UploadManager = {
                             filterCheckCases(fileExtension);
 
                             //hide busy spinner
-                            // document.getElementById("busyIndicator").style.display = "none";
+                            hideBusyIndicator();
                         });
                 }
                 else if (xCheckStudio.Util.isSourceDB(fileExtension)) {
@@ -79,7 +76,7 @@ let UploadManager = {
                             filterCheckCases(fileExtension);
 
                             //hide busy spinner
-                            // document.getElementById("busyIndicator").style.display = "none";
+                            hideBusyIndicator();
                         });
                 }
             });
@@ -96,7 +93,7 @@ let UploadManager = {
                         filterCheckCases(fileExtension);
 
                         //hide busy spinner
-                        // document.getElementById("busyIndicator").style.display = "none";
+                        hideBusyIndicator();
                     });
             }
         }
