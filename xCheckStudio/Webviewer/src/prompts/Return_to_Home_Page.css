@@ -1,4 +1,4 @@
-.mediaViewInfo {
+/* .mediaViewInfo {
 	--web-view-name: Return to Home Page;
 	--web-view-id: Return_to_Home_Page;
 	--web-scale-on-resize: true;
@@ -6,12 +6,12 @@
 }
 :root {
 	--web-view-ids: Return_to_Home_Page;
-}
+} */
 * {
 	margin: 0;
 	padding: 0;
 }
-#Return_to_Home_Page {
+/* .mainPromptDiv{
 	position: absolute;
 	box-sizing: border-box;
 	background: #E5E5E5;
@@ -21,11 +21,11 @@
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
-	--web-view-name: Return to Home Page;
+	 --web-view-name: Return to Home Page;
 	--web-view-id: Return_to_Home_Page;
 	--web-scale-on-resize: true;
-	--web-enable-deep-linking: true;
-}
+	--web-enable-deep-linking: true; 
+} */
 #Rectangle_1204 {
 	filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.502));
 }
@@ -59,7 +59,7 @@
 	font-size: 25px;
 	color: rgba(242,243,244,1);
 }
-#Return_to_Home_Page_ {
+.promptMessageDiv {
 	position: absolute;
 	left: 15px;
 	top: 76px;
