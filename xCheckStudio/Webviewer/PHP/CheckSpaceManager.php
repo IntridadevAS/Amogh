@@ -31,7 +31,7 @@ function CreateCheckSpace(){
     $CheckConfiguration = $obj['config'];
     $CheckDescription = $obj['checkDescription'];
     $CheckComments = $obj['checkComments'];
-    $CheckIsFavourite = $obj['checkisfavourite'];
+    $CheckIsFavourite = $obj['favoriteCheck'];
     $CheckCreateDate = $obj['checkdate'];
     if (CheckIfCheckSpaceExists($projectName , $CheckName) == false)
     {
@@ -51,7 +51,7 @@ function CreateCheckSpace(){
                 "checkconfiguration" => $CheckConfiguration,
                 "checkdescription" => $CheckDescription,
                 "checkcomments" => $CheckComments,
-                "checkisfavourite" => $CheckIsFavourite,
+                "favoriteCheck" => $CheckIsFavourite,
                 "checkdate" => $CheckCreateDate,
                 "projectid" => $ProjectId,
                 "userid" => $UserId
@@ -174,7 +174,7 @@ function CreateCheckSpaceSchemaIfNot($dbh){
                 checkconfiguration	TEXT,
                 checkdescription	TEXT,
                 checkcomments	TEXT,
-                checkisfavourite	TEXT,
+                checkisfavourite	NUMBER,
                 checkdate	TEXT NOT NULL,
                 projectid	INTEGER NOT NULL,
                 userid	INTEGER NOT NULL)";       

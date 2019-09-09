@@ -443,7 +443,7 @@ let projectView = {
     newDiv.classList.add('card');
     newDiv.setAttribute("onmouseenter", "projectView.hoverProject(this);");
     newDiv.setAttribute("onmouseleave", "projectView.leaveProject(this);");
-    if (project.favorite) {
+    if (project.IsFavourite === "1") {
       newDiv.classList.add('favorite');
     }
     newDiv.setAttribute("id", project.projectid);
@@ -593,7 +593,7 @@ let checkView = {
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
       newDiv.setAttribute("onclick", "checkView.checkClicked(this)");
-      if (project.favorite) {
+      if (check.checkisfavourite === "1") {
         newDiv.classList.add('favorite');
       }
       let htmlInner = `<div class="checkCardInfo">`

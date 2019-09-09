@@ -483,12 +483,11 @@
           //Do something if user does not enter project status
         }
 
-        var projectIsFavorite = 1;
-        //Don't forget to implement Favorite option
-        /*var projectIsFavorite = document.getElementById("inputprojectisfavorite").value;
-        if (projectIsFavorite === undefined || projectIsFavorite === "") {
+        var projectIsFavorite = 0;
+        if (document.getElementById("favoriteProject").checked === true) {
            //Do something if user does not enter project type
-        }*/
+          projectIsFavorite = 1;
+        }
 
         //setProjectSessionData(projectname).then(function () {
         // create project database
@@ -526,7 +525,12 @@
           checkspace[queryString[i].name] = queryString[i].value;
         }
         checkspace["checkdate"] = xCheckStudio.Util.getCurrentDateTime();
-        checkspace["checkisfavourite"] = document.getElementById('favoriteCheck').value;
+        var checkIsFavorite = 0;
+        if (document.getElementById('favoriteCheck').checked === true) {
+           checkIsFavorite = 1;
+        }
+
+        checkspace["favoriteCheck"] = checkIsFavorite;
         if (checkspace.checkName !== '') {
           newCheckView.createNewCheck(checkspace);
         }
