@@ -26,24 +26,10 @@ function onclosewindow() {
         localStorage.clear();
         window.close();
     }
-    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    $.ajax({
-        data: {
-            userid: userinfo.userid,
-        },
-        type: "POST",
-        url: "PHP/logout.php",
-        success: function(msg) {
-            if (msg === "Success") {
-                localStorage.clear();
-                window.close();
-            }
-            else if (msg === "Failed") {
 
-            }
-        }, 
-        error: function() {
-            console.log("Failed to logout");
+    onLogoutUser().then(function (status) {
+        if (status) {
+            window.close();
         }
     });
 }

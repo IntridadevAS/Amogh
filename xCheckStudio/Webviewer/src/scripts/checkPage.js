@@ -394,8 +394,11 @@ function cancelSignOut() {
 }
 
 function signOut() {
-  localStorage.removeItem("userinfo");
-  window.location.href = "index.html";
+  onLogoutUser().then(function (status) {
+    if (status) {
+      window.location.href = "index.html";
+    }
+  });
 }
 
 function showLoadDataForm() {
