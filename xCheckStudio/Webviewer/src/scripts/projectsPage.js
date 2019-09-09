@@ -3,8 +3,8 @@ let model = {
   currentProject: null,
   myProjects: [],
   publicProjects: [],
-  sortBy: "alpha",
-  sortChecksBy: "alpha",
+  sortBy: "name",
+  sortChecksBy: "name",
   currentCheck: null,
   currentReview: null,
   projectReviews: [],
@@ -58,6 +58,109 @@ let controller = {
     model.sortChecksBy = sortByValue;
     this.fetchProjectChecks();
   },
+
+  sortProjects: function () {
+    if (model.sortBy === "name") {
+      model.myProjects.sort(function (a, b) {
+        var nameA = a.projectname.toLowerCase(), nameB = b.projectname.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+
+      /***********Sort Public Probjects*************/
+      model.publicProjects.sort(function (a, b) {
+        var nameA = a.projectname.toLowerCase(), nameB = b.projectname.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortBy === "nameReverse") {
+      model.myProjects.sort(function (a, b) {
+        var nameA = a.projectname.toLowerCase(), nameB = b.projectname.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+
+      model.publicProjects.sort(function (a, b) {
+        var nameA = a.projectname.toLowerCase(), nameB = b.projectname.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    if (model.sortBy === "status") {
+      model.myProjects.sort(function (a, b) {
+        var nameA = a.status.toLowerCase(), nameB = b.status.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+
+      model.publicProjects.sort(function (a, b) {
+        var nameA = a.status.toLowerCase(), nameB = b.status.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortBy === "statusReverse") {
+      model.myProjects.sort(function (a, b) {
+        var nameA = a.status.toLowerCase(), nameB = b.status.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+
+      model.publicProjects.sort(function (a, b) {
+        var nameA = a.status.toLowerCase(), nameB = b.status.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortBy === "date") {
+      model.myProjects.sort(function (a, b) {
+        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime() 
+      })
+
+      model.publicProjects.sort(function (a, b) {
+        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime() 
+      })
+    }
+    else if (model.sortBy === "dateReverse") {
+      model.myProjects.sort(function (a, b) {
+        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime() 
+      })
+
+      model.publicProjects.sort(function (a, b) {
+        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime() 
+      })
+    }
+  },
+
+  sortChecks: function () {
+
+  },
+
 
   getCurrentProj: function () {
     return model.currentProject;
@@ -182,6 +285,7 @@ let controller = {
         else
           model.publicProjects.push(object[i]);
       }
+      controller.sortProjects();
       projectView.renderProjects();
     });
     /*fetch('../tests/allProjects.json', {
@@ -891,7 +995,7 @@ let deleteItems = {
     let message = document.getElementById("deleteMsg");
     let cancel = document.getElementById("deleteCancel");
     let delType = document.getElementById("deleteType");
-    this.deleteBox.classList.add("deleteOpen");    
+    this.deleteBox.classList.add("deleteOpen");
 
     let deleteBtn = document.getElementById("deleteBtn");
     deleteBtn.elementid = id;
@@ -954,5 +1058,5 @@ function onHomeClick() {
 
   popup.style.width = "581px";
   popup.style.height = "155px";
-  popup.style.overflow = "hidden";  
+  popup.style.overflow = "hidden";
 }
