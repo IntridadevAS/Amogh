@@ -4,8 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Check Studio</title>
-
+  <title>Project Center</title>
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
 
@@ -26,6 +25,7 @@
   <header>
     <button type="button" class="dropDownMenu">
     </button>
+    <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton" href="#" onclick="onHomeClick()"><img class="headerLogo"
         src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
@@ -448,16 +448,9 @@
     </section>
 
     <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
+    <script type="text/javascript" src="src/scripts/main.js"></script>
     <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
     <script>
-      window.onload = function () {
-        setUserName();
-      }
-
-      function setUserName() {
-        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-        document.getElementById("userName").innerHTML = userinfo.alias;
-      }
 
       function OnCreateProject() {
         var projectname = document.getElementById("inputprojectname").value;

@@ -10,8 +10,7 @@
 // // let userImage = document.getElementById("userImg");
 // // userImage.src = localStorage.getItem("userImage");
 
-// let pageName = document.getElementById("pageName");
-// pageName.innerHTML = document.title;
+setPageTitle();
 setUserName();
 setCheckSpaceName();
 
@@ -22,6 +21,13 @@ function setUserName() {
 
 function setCheckSpaceName() {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
+    if(projectinfo !== null){
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
+    }
+}
+
+function setPageTitle(){
+    let pageName = document.getElementById("pageName");
+    pageName.innerHTML = document.title;
 }
