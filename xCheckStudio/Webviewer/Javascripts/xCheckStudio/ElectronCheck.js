@@ -20,7 +20,32 @@ function isElectron() {
 function onclosewindow() {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
-    window.close();
+    var sPath = window.getURL();
+    var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+    if(sPage === ""){
+        localStorage.clear();
+        window.close();
+    }
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    $.ajax({
+        data: {
+            userid: userinfo.userid,
+        },
+        type: "POST",
+        url: "PHP/logout.php",
+        success: function(msg) {
+            if (msg === "Success") {
+                localStorage.clear();
+                window.close();
+            }
+            else if (msg === "Failed") {
+
+            }
+        }, 
+        error: function() {
+            console.log("Failed to logout");
+        }
+    });
 }
 
 function onminimizewindow() {

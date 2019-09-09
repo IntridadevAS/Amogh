@@ -10,6 +10,9 @@ function validateLogindetails(callbackfunction){
             if (msg === "Failed") {
                 window[callbackfunction](1);
             }
+            else if(msg === "Locked"){
+                alert('User is already logged in some other session.');
+            }
             else {
                 var object = JSON.parse(msg);
                 localStorage.setItem('userinfo', JSON.stringify(object));
