@@ -232,8 +232,8 @@ let grabBarControl = function (element) {
 
 let grabBars = document.getElementsByClassName("grabBar");
 
- for (grabBar of grabBars){
-   grabBarControl(grabBar);
+for (grabBar of grabBars) {
+  grabBarControl(grabBar);
 }
 
 function cancelReturnHome() {
@@ -243,9 +243,11 @@ function cancelReturnHome() {
   overlay.style.display = 'none';
   popup.style.display = 'none';
 }
+
 function returnHome() {
   window.location = "landingPage.html";
 }
+
 function onHomeClick() {
 
   var overlay = document.getElementById("returnHomeOverlay");
@@ -257,11 +259,6 @@ function onHomeClick() {
   popup.style.width = "581px";
   popup.style.height = "155px";
   popup.style.overflow = "hidden";
-  //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
-
-  // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-  //     window.location = "landingPage.html";
-  //   }
 }
 
 function showBusyIndicator() {
@@ -277,9 +274,9 @@ function showBusyIndicator() {
 
   overlay.style.display = 'block';
   popup.style.display = 'block';
-  
-  popup.style.width ="311px";
-  popup.style.height ="308px";
+
+  popup.style.width = "311px";
+  popup.style.height = "308px";
 }
 
 function hideBusyIndicator() {
@@ -292,4 +289,110 @@ function hideBusyIndicator() {
 
   overlay.style.display = 'none';
   popup.style.display = 'none';
+}
+
+
+let menu = {
+
+  onProjectsClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+
+    var overlay = document.getElementById("returnProjectCenterOverlay");
+    var popup = document.getElementById("returnProjectCenterPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+  },
+
+  onCheckClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+  },
+
+  onPREPClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+
+    var overlay = document.getElementById("returnPREPOverlay");
+    var popup = document.getElementById("returnPREPPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+  },
+
+  onHelpClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+  },
+
+  onSettingsClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+  },
+
+  onSignOutClicked: function () {
+    var menu = document.getElementById("menuList");
+    menu.style.display = "none";
+
+    var overlay = document.getElementById("signOutOverlay");
+    var popup = document.getElementById("signOutPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+    // if (confirm("You will be signed out.\nAre you sure?")) {
+    //    localStorage.removeItem("userinfo");
+    //    window.location.href = "index.html";
+    // }
+  }
+}
+
+function cancelReturnProjectCenter() {
+  var overlay = document.getElementById("returnProjectCenterOverlay");
+  var popup = document.getElementById("returnProjectCenterPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function returnProjectCenter() {
+  window.location = "projectsPage.html";
+}
+
+function cancelReturnPREP() {
+  var overlay = document.getElementById("signOutOverlay");
+  var popup = document.getElementById("signOutPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function returnToPREP() {
+  window.location = "prephomepage.html";
+}
+
+
+function cancelSignOut() {
+  var overlay = document.getElementById("returnPREPOverlay");
+  var popup = document.getElementById("returnPREPPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function signOut() {
+  localStorage.removeItem("userinfo");
+  window.location.href = "index.html";
 }

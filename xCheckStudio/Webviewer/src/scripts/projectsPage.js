@@ -954,10 +954,5 @@ function onHomeClick() {
 
   popup.style.width = "581px";
   popup.style.height = "155px";
-  popup.style.overflow = "hidden";
-  //popup.innerHTML = '<object type="text/html" data="src/prompts/Return_to_Home_Page.html" style="height: 155px; width: 581px" ></object>';
-
-  // if (confirm("You will be redirected to the Home page.\nAre you sure?")) {
-  //     window.location = "landingPage.html";
-  //   }
+  popup.style.overflow = "hidden";  
 }

@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="src/css/fonts.css">
 
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
+  <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
+
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
   <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
 </head>
@@ -17,9 +19,121 @@
 <body>
 
   <header>
-    <div id="mainMenu" class="dropDownMenu">
-      <img src=" " alt="">
+    <div id="mainMenu" class="dropDownMenu" onclick="showMenu()">
+      <img src=" " alt="" class="srcImg">
     </div>
+
+    <div id="menuList" style="display:none; position: absolute; top:45px; left:20px;">
+      <!-- <div id="content-container" > -->
+      <!-- <div id="_bg__menubarleft"  ></div> -->
+      <div id="rectangle_459" style="position: absolute;"></div>
+      <div id="rectangle_1143" style="position: absolute;"></div>
+
+      <div id="group_133" style="position: absolute;">
+        <div id="projects" style="position: absolute;" onclick="menu.onProjectsClicked()">
+          Projects
+        </div>
+
+        <div id="symprojects" style="position: absolute;">
+          <div id="rectangle_1109" style="position: absolute;"></div>
+          <div id="h_" style="position: absolute;">
+            h.
+          </div>
+
+        </div>
+
+      </div>
+      <div id="check" style="position: absolute;" onclick="menu.onCheckClicked()">
+        Check
+      </div>
+
+      <div id="symprep" style="position: absolute;">
+        <div id="rectangle_1109_ek1" style="position: absolute;"></div>
+        <div id="p_" style="position: absolute;">
+          P.
+        </div>
+
+      </div>
+      <div id="prep" style="position: absolute;" onclick="menu.onPREPClicked()">
+        Prep
+      </div>
+      <div id="settings" style="position: absolute;" onclick="menu.onSettingsClicked()">
+        Settings
+      </div>
+      <div id="sign_out" style="position: absolute;" onclick="menu.onSignOutClicked()">
+        Sign Out
+      </div>
+
+      <div id="group_99" style="position: absolute;">
+
+        <div id="group_69" style="position: absolute;">
+          <div id="rectangle_1067" style="position: absolute;"></div>
+
+          <div id="group_68" style="position: absolute;">
+
+          </div>
+
+        </div>
+
+        <div id="group_70" style="position: absolute;">
+          <div id="__" style="position: absolute;">
+            ?
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- <div id="backward_arrow"  > -->
+      <!-- <div id="ellipse_232"  ></div> -->
+
+      <!-- <div id="symbol_83"  > -->
+      <!-- <img src="skins/path_10.png" id="path_10" /> -->
+
+      <!-- </div> -->
+
+      <!-- </div> -->
+
+      <div id="group_98" style="position: absolute;">
+        <div id="rectangle_1109_ek2" style="position: absolute;"></div>
+        <div id="s_" style="position: absolute;">
+          s.
+        </div>
+
+      </div>
+
+      <div id="group_97" style="position: absolute;">
+        <img src="src/prompts/skins/path_220.png" id="path_220" class="srcImg" />
+        <div id="o_" style="position: absolute;">
+          o.
+        </div>
+
+      </div>
+
+      <div id="group_96" style="position: absolute;">
+        <div id="help" style="position: absolute;" onclick="menu.onHelpClicked()">
+          HELP
+        </div>
+
+      </div>
+
+      <div id="cheveron" style="position: absolute;">
+        <img src="src/prompts/skins/path_212.png" id="path_212" class="srcImg" />
+        <img src="src/prompts/skins/path_213.png" id="path_213" class="srcImg" />
+
+      </div>
+
+      <div id="symcheck" style="position: absolute;">
+        <div id="rectangle_1109_ek3" style="position: absolute;"></div>
+        <div id="c_" style="position: absolute;">
+          C.
+        </div>
+
+      </div>
+
+      <!-- </div> -->
+    </div>
+
     <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton" href="#" onclick="onHomeClick()"><img class="headerLogo"
         src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
@@ -28,32 +142,36 @@
       <!-- <img id="userImg" src="public/symbols/XD_Person.svg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program" onclick="onclosewindow()"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
+            onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
+            onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
+            onclick="onclosewindow()"></button>
       </div>
     </div>
 
   </header>
 
   <div class="background">
-    
-    <div id='contextMenu' style="z-index: 1">     
+
+    <div id='contextMenu' style="z-index: 1">
     </div>
-    
+
     <div id="busyIndicatorOverlay" class="overlay" style="display: block"></div>
     <div id="busyIndicatorPopup" class="popup"
       style="display: block; width: 311px; height: 308px; top:50%; left: 50%; margin-left: -155px; margin-top: -154px">
       <img src="images/busySpinner.gif">
     </div>
 
+    <!-- Return to home page overlay -->
     <div id="returnHomeOverlay" class="overlay"></div>
     <div id="returnHomePopup" class="popup">
       <div id="Return_to_Home_Page">
         <svg class="Rectangle_1204">
           <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-            width="581" height="155">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+            y="0" width="581" height="155">
           </rect>
         </svg>
         <svg class="Rectangle_1215">
@@ -63,7 +181,7 @@
         <div id="Info">
           <span>Info</span>
         </div>
-        <div id="Return_to_Home_Page_">
+        <div id="Return_to_Home_Page_" class="promptMessageDiv">
           <span></span><span style="font-style:normal;font-weight:normal;">Return to Home Page?</span>
         </div>
         <div id="symNoButton___10" onclick="cancelReturnHome()">
@@ -77,7 +195,7 @@
             <span>Cancel</span>
           </div>
         </div>
-    
+
         <div id="symYesButton___10" onclick="returnHome()">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -95,7 +213,160 @@
           </path>
         </svg>
       </div>
-    
+    </div>
+
+    <!-- Return to project center overlay -->
+    <div id="returnProjectCenterOverlay" class="overlay"></div>
+    <div id="returnProjectCenterPopup" class="popup">
+      <div id="returnToProjects">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+            y="0" width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info">
+          <span>Info</span>
+        </div>
+        <div id="Return_to_Project_Centre__" class="promptMessageDiv">
+          <span></span><span style="font-style:normal;font-weight:normal;">Return to Project Centre?</span>
+        </div>
+        <div id="symNoButton___10" onclick="cancelReturnProjectCenter()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+
+        <div id="symYesButton___10" onclick="returnProjectCenter()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+        <svg class="icon_32_Info" viewBox="0 1 32 32">
+          <path fill="rgba(123,168,219,1)" id="icon_32_Info"
+            d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+          </path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Return to PREP overlay -->
+    <div id="returnPREPOverlay" class="overlay"></div>
+    <div id="returnPREPPopup" class="popup">
+      <div id="returnToPREP">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+            y="0" width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info">
+          <span>Info</span>
+        </div>
+        <div class="promptMessageDiv">
+          <span></span><span style="font-style:normal;font-weight:normal;">Return to PREP?</span>
+        </div>
+        <div id="symNoButton___10" onclick="cancelReturnPREP()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+
+        <div id="symYesButton___10" onclick="returnToPREP()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+        <svg class="icon_32_Info" viewBox="0 1 32 32">
+          <path fill="rgba(123,168,219,1)" id="icon_32_Info"
+            d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+          </path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Return to PREP overlay -->
+    <div id="signOutOverlay" class="overlay"></div>
+    <div id="signOutPopup" class="popup">
+      <div id="signOut">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+            y="0" width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info">
+          <span>Info</span>
+        </div>
+        <div class="promptMessageDiv">
+          <span></span><span style="font-style:normal;font-weight:normal;">You will be signed out. Are you
+            sure?</span>
+        </div>
+        <div id="symNoButton___10" onclick="cancelSignOut()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+
+        <div id="symYesButton___10" onclick="signOut()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+        <svg class="icon_32_Info" viewBox="0 1 32 32">
+          <path fill="rgba(123,168,219,1)" id="icon_32_Info"
+            d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+          </path>
+        </svg>
+      </div>
     </div>
 
     <div class="tabButtonContainer" id="tabsContainer">
@@ -315,39 +586,58 @@
     </div>
   </div>
   <div id="Check_Complete">
-      <svg class="Rectangle_1204">
-        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="581" height="155">
-        </rect>
+    <svg class="Rectangle_1204">
+      <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+        stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+        width="581" height="155">
+      </rect>
+    </svg>
+    <svg class="Rectangle_1215">
+      <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+      </rect>
+    </svg>
+    <div id="Check_Complete_A57_Text_1">
+      <span>Check Complete</span>
+    </div>
+    <div id="Check_complete__View_results__">
+      <span>Check complete. View results? </span>
+    </div>
+    <div id="Component_16">
+      <svg class="Path_310" viewBox="0 0 90 30">
+        <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+          d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+        </path>
       </svg>
-      <svg class="Rectangle_1215">
-        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-        </rect>
-      </svg>
-      <div id="Check_Complete_A57_Text_1">
-        <span>Check Complete</span>
-      </div>
-      <div id="Check_complete__View_results__">
-        <span>Check complete. View results? </span>
-      </div>
-      <div id="Component_16">
-        <svg class="Path_310" viewBox="0 0 90 30">
-          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310" d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-          </path>
-        </svg>
-        <div id="OK" onclick="reviewResults()">
-          <span>OK</span>
-        </div>
-      </div>
-      <div id="Component_30">
-        <svg class="Rectangle_1242">
-          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
-          </rect>
-        </svg>
-        <div id="CANCEL" onclick="cancelCheckResults()">
-          <span>CANCEL</span>
-        </div>
+      <div id="OK" onclick="reviewResults()">
+        <span>OK</span>
       </div>
     </div>
+    <div id="Component_30">
+      <svg class="Rectangle_1242">
+        <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+          y="0" width="90" height="30">
+        </rect>
+      </svg>
+      <div id="CANCEL" onclick="cancelCheckResults()">
+        <span>CANCEL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div id="menuList" style="top:45px; left:20px;">
+      <a href="#projects" onclick="menu.onProjectsClicked()">
+        <img src="images/hide.png" /> Projects
+        <span>Ctrl + P</span>
+      </a>
+      <a href="#check" onclick="menu.onCheckClicked()">Check</a>
+      <a href="#prep" onclick="menu.onPREPClicked()">PREP</a>
+      <a href="#help" onclick="menu.onHelpClicked()">Help</a>
+      <a href="#settings" onclick="menu.onSettingsClicked()">Settings</a>
+      <a href="#signout" onclick="menu.onSignOutClicked()">Sign Out</a>
+  </div>  -->
+
 
   <style>
     ::-webkit-scrollbar {
@@ -391,7 +681,7 @@
   <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
   <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
   <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
-  
+
   <!-- Excel reader dependencies -->
   <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
 
@@ -445,14 +735,15 @@
 
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 
-  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script> 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckModuleMenuOptions.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
 
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
-    
+  <link rel="stylesheet" href="CSS\Menu.css" type="text/css" />
+
   <script>
-   
-    window.onload = function () {            
+
+    window.onload = function () {
 
       loadCheckCases();
 
@@ -469,6 +760,17 @@
       // hide spinner
       hideBusyIndicator();
     }
+
+    function showMenu() {
+      var menu = document.getElementById("menuList");
+      if (menu.style.display === "none") {
+        menu.style.display = "block";
+      }
+      else {
+        menu.style.display = "none";
+      }
+    }
+
   </script>
 </body>
 
