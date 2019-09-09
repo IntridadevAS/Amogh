@@ -22,9 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if($password == $row[2])
             {
              // set session variables   
-             session_start();
-             $_SESSION['Name']= $name;
-             $_SESSION['UserId']= $row[0];
+             //session_start();
+            //  $_SESSION['Name']= $name;
+            //  $_SESSION['UserId']= $row[0];
              $array = array(
                 "userid" => $row[0],
                 "username" => $row[1],
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     catch(Exception $e) {
         echo 'Message: ' .$e->getMessage();
         return;
-      } 
+      }
   
 }
 ?>
