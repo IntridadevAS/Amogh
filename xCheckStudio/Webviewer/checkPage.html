@@ -11,7 +11,8 @@
 
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
-
+  <link rel="stylesheet" href="src/prompts/Load_Data.css" type="text/css" />
+  
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
   <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
 </head>
@@ -272,8 +273,8 @@
       <div id="returnToPREP">
         <svg class="Rectangle_1204">
           <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-            y="0" width="581" height="155">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
           </rect>
         </svg>
         <svg class="Rectangle_1215">
@@ -297,7 +298,7 @@
             <span>Cancel</span>
           </div>
         </div>
-
+    
         <div id="symYesButton___10" onclick="returnToPREP()">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -316,15 +317,97 @@
         </svg>
       </div>
     </div>
-
+    
     <!-- Return to PREP overlay -->
+    <div id="loadDataOverlay" class="overlay"></div>
+    <div id="loadDataPopup" class="popup">
+      <div id="Load_Data">
+        <svg class="LoadData_Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="LoadData_Rectangle_1204" rx="5" ry="5"
+            x="0" y="0" width="581" height="277">
+          </rect>
+        </svg>
+        <svg class="LoadData_Path_350" viewBox="0 0 575 55">
+          <path fill="rgba(71,71,71,1)" id="LoadData_Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
+          </path>
+        </svg>
+        <div id="Load_Data_A52_Text_1">
+          <span>Load Data</span>
+        </div>
+        <div id="Browse">
+          <span>Browse</span>
+        </div>
+        <svg class="Load_Data_Line_39">
+          <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Load_Data_Line_39" d="M 0 0 L 0 150">
+          </path>
+        </svg>
+        <svg class="Load_Data_Path_259" viewBox="7432.354 -8028.479 18 18" onclick="closeLoadDataForm()">
+          <path fill="rgba(255,255,255,1)" id="Load_Data_Path_259"
+            d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+          </path>
+        </svg>
+        <div id="Load_Data_MenuRound" onclick="loadDataSet()">
+          <div id="Load_Data_Group_331">
+            <svg class="Load_Data_Ellipse_232">
+              <ellipse fill="rgba(105,105,105,1)" stroke="rgba(240,243,246,1)" stroke-width="2px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Load_Data_Ellipse_232" rx="35.5"
+                ry="35.5" cx="35.5" cy="35.5">
+              </ellipse>
+            </svg>
+            <div id="Load_Data______">
+              <span>. . .</span>
+            </div>
+          </div>
+        </div>
+        <div id="Load_Data_Connect_to_Data_Source">
+          <span>Connect to Data Source</span>
+        </div>
+        <div id="Load_Data_Component_12">
+          <svg class="Load_Data_Rectangle_1242">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Load_Data_Rectangle_1242" rx="5" ry="5"
+              x="0" y="0" width="90" height="30">
+            </rect>
+          </svg>
+          <div id="Load_Data_SQL">
+            <span>SQL</span>
+          </div>
+        </div>
+        <div id="Load_Data_Component_13">
+          <svg class="Load_Data_Rectangle_1242_A52_Rectangle_3">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto"
+              id="Load_Data_Rectangle_1242_A52_Rectangle_3" rx="5" ry="5" x="0" y="0" width="106.505" height="30">
+            </rect>
+          </svg>
+          <div id="Load_Data_DropBox">
+            <span>DropBox</span>
+          </div>
+        </div>
+        <div id="Load_Data_Component_14">
+          <svg class="Load_Data_Rectangle_1242_A52_Rectangle_4">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto"
+              id="Load_Data_Rectangle_1242_A52_Rectangle_4" rx="5" ry="5" x="0" y="0" width="90" height="30">
+            </rect>
+          </svg>
+          <div id="Load_Data_Oracle">
+            <span>Oracle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!--Sign out overlay -->
     <div id="signOutOverlay" class="overlay"></div>
     <div id="signOutPopup" class="popup">
       <div id="signOut">
         <svg class="Rectangle_1204">
           <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-            y="0" width="581" height="155">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
           </rect>
         </svg>
         <svg class="Rectangle_1215">
@@ -349,7 +432,7 @@
             <span>Cancel</span>
           </div>
         </div>
-
+    
         <div id="symYesButton___10" onclick="signOut()">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"

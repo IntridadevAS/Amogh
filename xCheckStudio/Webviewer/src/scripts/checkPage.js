@@ -172,9 +172,10 @@ let viewPanels = {
       return;
     }
 
-    document.getElementById("fileInput").click();
+    showLoadDataForm();
+    //document.getElementById("fileInput").click();
 
-    this.addFilesPanel.classList.add("hide");
+    //this.addFilesPanel.classList.add("hide");
   },
 
   hideAllPanels: function () {
@@ -395,4 +396,33 @@ function cancelSignOut() {
 function signOut() {
   localStorage.removeItem("userinfo");
   window.location.href = "index.html";
+}
+
+function showLoadDataForm() {
+  var overlay = document.getElementById("loadDataOverlay");
+  var popup = document.getElementById("loadDataPopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "278px";
+  // popup.style.overflow = "hidden";
+}
+
+function closeLoadDataForm()
+{
+    var overlay = document.getElementById("loadDataOverlay");
+    var popup = document.getElementById("loadDataPopup");
+  
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function loadDataSet() {
+  closeLoadDataForm();
+
+  document.getElementById("fileInput").click();
+
+  viewPanels.addFilesPanel.classList.add("hide");
 }
