@@ -65,6 +65,16 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
+                              "hide": {
+                                    name: "Hide",
+                                    visible: function () {
+                                          if (_this.HaveSCOperations()) {
+                                                return true;
+                                          }
+
+                                          return false;
+                                    }
+                              },
                               "showAll": {
                                     name: "Show All",
                                     visible: function () {
@@ -115,6 +125,9 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       if (key.toLowerCase() === "isolate") {
             this.OnIsolateClicked();
       }
+      else if (key.toLowerCase() === "hide") {
+            this.OnHideClicked();
+      }
       else if (key.toLowerCase() === "showall") {
             this.OnShowAllClicked();
       }
@@ -128,13 +141,13 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
 
 ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       if (!this.ModelBrowser ||
-          !this.ModelBrowser.Webviewer) {
+            !this.ModelBrowser.Webviewer) {
             return;
-      }    
+      }
 
-      var nodeIds = this.GetSelectedNodes();    
+      var nodeIds = this.GetSelectedNodes();
       if (!nodeIds ||
-          nodeIds.length === 0) {
+            nodeIds.length === 0) {
             return;
       }
 
@@ -143,6 +156,27 @@ ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       this.IsolateManager.Isolate(nodeIds).then(function (affectedNodes) {
 
       });
+}
+
+ModelBrowserContextMenu.prototype.OnHideClicked = function () {
+      if (!this.ModelBrowser ||
+            !this.ModelBrowser.Webviewer) {
+            return;
+      }
+
+      var nodeIds = this.GetSelectedNodes();
+      if (!nodeIds ||
+            nodeIds.length === 0) {
+            return;
+      }
+
+      var map = {};
+      for (var i = 0; i < nodeIds.length; i++) {
+            var nodeId = nodeIds[i];
+            map[nodeId] = false;
+      }
+
+      this.ModelBrowser.Webviewer.model.setNodesVisibilities(map);
 }
 
 ModelBrowserContextMenu.prototype.OnShowAllClicked = function () {
