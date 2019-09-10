@@ -597,6 +597,11 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
     }
 }
 
+DBModelBrowser.prototype.Clear = function () {   
+    var containerDiv = "#" + this.ModelBrowserContainer;
+    $(containerDiv).igGrid("destroy");
+}
+
 DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
     tableData) {
 

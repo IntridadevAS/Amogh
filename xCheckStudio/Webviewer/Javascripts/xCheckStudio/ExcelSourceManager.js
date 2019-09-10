@@ -75,7 +75,15 @@ ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, select
     this.ModelTree.CreateModelBrowser();
 }
 
+ExcelSourceManager.prototype.ClearSource = function () {
+  this.ModelTree.Clear();
 
+  // clear viewer
+  var containerDiv = "#" + this.ViewerContainer;
+  if ($(containerDiv).data("igGrid") != null) {
+    $(containerDiv).igGrid("destroy");
+  }
+}
 
 ExcelSourceManager.prototype.AddComponentsToDB = function () {
 

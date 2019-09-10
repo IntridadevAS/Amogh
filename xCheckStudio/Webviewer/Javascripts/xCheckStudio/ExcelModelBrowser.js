@@ -204,6 +204,10 @@ ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
     }
 }
 
+ExcelModeBrowser.prototype.Clear = function () {   
+    var containerDiv = "#" + this.ModelBrowserContainer;
+    $(containerDiv).igGrid("destroy");
+}
 
 ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData) {
     var _this = this;
