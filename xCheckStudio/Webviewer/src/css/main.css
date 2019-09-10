@@ -15,7 +15,7 @@
   --borderWidth: 1px;
   --borderWidthHilite: 3px;
   }
-
+  
 body {
   padding: 0px;
   margin: 0px;
@@ -89,6 +89,7 @@ header {
   display: flex;
   align-items: center;
   z-index: 2;
+  -webkit-app-region: drag;
 }
 
 button {
@@ -101,6 +102,7 @@ button {
   background: none;
   border: none;
   padding: 0;
+  -webkit-app-region: no-drag;
 }
 
 .btnSymbol {
@@ -139,7 +141,7 @@ button {
   width: 30px;
   height: 30px;
   border: 1px solid var(--xCheckWhite);
-  border-radius: 50%
+  border-radius: 50%;
   position: absolute;
   color: var(--xCheckWhite);
   list-style-type: none;
