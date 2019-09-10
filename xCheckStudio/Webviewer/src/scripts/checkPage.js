@@ -141,6 +141,8 @@ let viewTabs = {
     // remove source manager
      SourceManagers[tabID].ClearSource();
      delete SourceManagers[tabID];
+
+     model.activeTabs--;
   },
 
   selectTab: function (selectedTab) {
