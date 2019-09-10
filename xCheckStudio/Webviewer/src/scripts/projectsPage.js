@@ -138,20 +138,20 @@ let controller = {
     }
     else if (model.sortBy === "date") {
       model.myProjects.sort(function (a, b) {
-        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime() 
+        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime()
       })
 
       model.publicProjects.sort(function (a, b) {
-        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime() 
+        return new Date(a.createddate).getTime() - new Date(b.createddate).getTime()
       })
     }
     else if (model.sortBy === "dateReverse") {
       model.myProjects.sort(function (a, b) {
-        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime() 
+        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime()
       })
 
       model.publicProjects.sort(function (a, b) {
-        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime() 
+        return new Date(b.createddate).getTime() - new Date(a.createddate).getTime()
       })
     }
   },
@@ -199,12 +199,12 @@ let controller = {
     }
     else if (model.sortChecksBy === "date") {
       model.projectChecks.sort(function (a, b) {
-        return new Date(a.checkdate).getTime() - new Date(b.checkdate).getTime() 
+        return new Date(a.checkdate).getTime() - new Date(b.checkdate).getTime()
       })
     }
     else if (model.sortChecksBy === "dateReverse") {
       model.projectChecks.sort(function (a, b) {
-        return new Date(b.checkdate).getTime() - new Date(a.checkdate).getTime() 
+        return new Date(b.checkdate).getTime() - new Date(a.checkdate).getTime()
       })
     }
   },
@@ -884,9 +884,11 @@ let checkView = {
 let newProjectView = {
   init: function () {
     this.newProjectOverlay = document.getElementById("newProject");
+    document.getElementById("overlaymy").style.display = "block";
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
   },
   closeNewProject: function () {
+    document.getElementById("overlaymy").style.display = "none";
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
   }
 }
@@ -896,10 +898,12 @@ let newCheckView = {
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
     this.newCheckOverlay = document.getElementById("newCheck");
+    document.getElementById("overlaymy").style.display = "block";
     this.newCheckOverlay.classList.add("projectOverlaysOpen");
 
   },
   closeNewCheck: function () {
+    document.getElementById("overlaymy").style.display = "none";
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
   },
 
@@ -943,9 +947,9 @@ let editProjectView = {
     let editComments = document.getElementById("editComments");
     let editProjectForm = document.getElementById("editProjectForm");
     let editProjectStatus = document.getElementById("editProjectStatus");
-    let editProjectType = document.getElementById("editProjectType"); 
+    let editProjectType = document.getElementById("editProjectType");
     editProjectWin.classList.add("projectOverlaysOpen");
-
+    document.getElementById("overlaymy").style.display = "block";
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
 
     this.currentProject = controller.getCurrentProj();
@@ -962,6 +966,7 @@ let editProjectView = {
 
   closeEditProject: function () {
     //document.getElementById("editProjectForm").submit();
+    document.getElementById("overlaymy").style.display = "none";
     this.editProjectOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjects();
   }
@@ -977,9 +982,10 @@ let editCheckView = {
     let editCheckConfig = document.getElementById("editCheckConfig");
     let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
+
+    document.getElementById("overlaymy").style.display = "block";
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
-    this.editCheckOverlay.classList.add("projectOverlaysOpen");
-    
+
     this.currentCheck = controller.getCurrentCheck();
     console.log(this.currentProject);
     currentCheckName.innerHTML = this.currentCheck.checkname;
@@ -999,6 +1005,7 @@ let editCheckView = {
 
   closeEditCheck: function () {
     //document.getElementById("editCheckForm").submit();
+    document.getElementById("overlaymy").style.display = "none";
     this.editCheckOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectChecks();
   }
@@ -1071,7 +1078,6 @@ let deleteItems = {
     } else if (type == "review") {
       message.innerHTML = "Review?";
     }
-    //this.deleteItem();
   },
 
   deleteItem: function () {
@@ -1098,9 +1104,11 @@ function cancelReturnHome() {
   overlay.style.display = 'none';
   popup.style.display = 'none';
 }
+
 function returnHome() {
   window.location = "landingPage.html";
 }
+
 function onHomeClick() {
 
   var overlay = document.getElementById("returnHomeOverlay");

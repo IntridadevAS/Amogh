@@ -33,9 +33,12 @@
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program" onclick="onclosewindow()"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
+            onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
+            onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
+            onclick="onclosewindow()"></button>
       </div>
     </div>
 
@@ -94,6 +97,7 @@
 
   <!-- My Projects -->
   <div class="content">
+    <div id="overlaymy"></div>
     <section id="myProjects" class="catagoryContainer">
       <div class="horizContainer">
         <img class="dropDownProjects" id="dropDownMyProj" src="public/symbols/chevronDN.svg" alt="">
@@ -353,12 +357,12 @@
             </div>
           </div>
           <div class="projectParametersContainer">
-              <label>Configuration: <br>
-                <select class="" name="config" id="editCheckConfig">
-                  <option value="config1">Config1</option>
-                  <option value="config2">Config2</option>
-                </select>
-              </label>
+            <label>Configuration: <br>
+              <select class="" name="config" id="editCheckConfig">
+                <option value="config1">Config1</option>
+                <option value="config2">Config2</option>
+              </select>
+            </label>
           </div>
           <div class="projectParametersContainer">
             <p>Creator:<span id="editCheckCreator"></span></p>
@@ -446,90 +450,90 @@
         </div>
       </div>
     </section>
+  </div>
 
-    <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
-    <script type="text/javascript" src="src/scripts/main.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
-    <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
-    <script>
-
-      function OnCreateProject() {
-        var projectname = document.getElementById("inputprojectname").value;
-        if (projectname === undefined || projectname === "") {
-          //Do something if user does not enter project name
-        }
-        var projectDescription = document.getElementById("inputprojectdescription").value;
-        if (projectDescription === undefined || projectDescription === "") {
-          //Do something if user does not enter project description
-        }
-        var projectComments = document.getElementById("inputprojectcomments").value;
-        if (projectComments === undefined || projectComments === "") {
-          //Do something if user does not enter project comments
-        }
-
-        var projectType = document.getElementById("inputprojecttype").value;
-        if (projectType === undefined || projectType === "") {
-          //Do something if user does not enter project type
-        }
-
-        var projectStatus = document.getElementById("inputprojectstatus").value;
-        if (projectStatus === undefined || projectStatus === "") {
-          //Do something if user does not enter project status
-        }
-
-        var projectIsFavorite = 0;
-        if (document.getElementById("favoriteProject").checked === true) {
-           //Do something if user does not enter project type
-          projectIsFavorite = 1;
-        }
-
-        //setProjectSessionData(projectname).then(function () {
-        // create project database
-        //createProject(projectname, descriptionText, functionText, projectScope);
-        localStorage.setItem("loadSavedProject", false);
-        controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
-        //});
-
+  <script type="text/javascript" src="src/scripts/projectsPage.js"></script>
+  <script type="text/javascript" src="src/scripts/main.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
+  <script>
+    function OnCreateProject() {
+      var projectname = document.getElementById("inputprojectname").value;
+      if (projectname === undefined || projectname === "") {
+        //Do something if user does not enter project name
+      }
+      var projectDescription = document.getElementById("inputprojectdescription").value;
+      if (projectDescription === undefined || projectDescription === "") {
+        //Do something if user does not enter project description
+      }
+      var projectComments = document.getElementById("inputprojectcomments").value;
+      if (projectComments === undefined || projectComments === "") {
+        //Do something if user does not enter project comments
       }
 
-      function setProjectSessionData(projectName) {
-        return new Promise((resolve) => {
-          $.ajax({
-            data: {
-              'InvokeFunction': 'CreateProjectSession',
-              'projectName': projectName,
-              'projectId': "",   // for now send the empty project ID, 
-              // later in  AddProjectToMainDB() overwrite it                       
-              'loadProject': 'FALSE',
-              'sourceAPath': "Projects/" + projectName + "/SourceA",
-              'sourceBPath': "Projects/" + projectName + "/SourceB"
-            },
-            type: "POST",
-            url: "PHP/ProjectManager.php"
-          }).done(function (msg) {
-            return resolve(true);
-          });
+      var projectType = document.getElementById("inputprojecttype").value;
+      if (projectType === undefined || projectType === "") {
+        //Do something if user does not enter project type
+      }
+
+      var projectStatus = document.getElementById("inputprojectstatus").value;
+      if (projectStatus === undefined || projectStatus === "") {
+        //Do something if user does not enter project status
+      }
+
+      var projectIsFavorite = 0;
+      if (document.getElementById("favoriteProject").checked === true) {
+        //Do something if user does not enter project type
+        projectIsFavorite = 1;
+      }
+
+      //setProjectSessionData(projectname).then(function () {
+      // create project database
+      //createProject(projectname, descriptionText, functionText, projectScope);
+      localStorage.setItem("loadSavedProject", false);
+      controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
+      //});
+
+    }
+
+    function setProjectSessionData(projectName) {
+      return new Promise((resolve) => {
+        $.ajax({
+          data: {
+            'InvokeFunction': 'CreateProjectSession',
+            'projectName': projectName,
+            'projectId': "",   // for now send the empty project ID, 
+            // later in  AddProjectToMainDB() overwrite it                       
+            'loadProject': 'FALSE',
+            'sourceAPath': "Projects/" + projectName + "/SourceA",
+            'sourceBPath': "Projects/" + projectName + "/SourceB"
+          },
+          type: "POST",
+          url: "PHP/ProjectManager.php"
+        }).done(function (msg) {
+          return resolve(true);
         });
+      });
+    }
+
+    function OnCreateNewCheckCase() {
+      var queryString = $('#checkCaseform').serializeArray();
+      var checkspace = {};
+      for (var i in queryString) {
+        checkspace[queryString[i].name] = queryString[i].value;
+      }
+      checkspace["checkdate"] = xCheckStudio.Util.getCurrentDateTime();
+      var checkIsFavorite = 0;
+      if (document.getElementById('favoriteCheck').checked === true) {
+        checkIsFavorite = 1;
       }
 
-      function OnCreateNewCheckCase() {
-        var queryString = $('#checkCaseform').serializeArray();
-        var checkspace = {};
-        for (var i in queryString) {
-          checkspace[queryString[i].name] = queryString[i].value;
-        }
-        checkspace["checkdate"] = xCheckStudio.Util.getCurrentDateTime();
-        var checkIsFavorite = 0;
-        if (document.getElementById('favoriteCheck').checked === true) {
-           checkIsFavorite = 1;
-        }
-
-        checkspace["favoriteCheck"] = checkIsFavorite;
-        if (checkspace.checkName !== '') {
-          newCheckView.createNewCheck(checkspace);
-        }
+      checkspace["favoriteCheck"] = checkIsFavorite;
+      if (checkspace.checkName !== '') {
+        newCheckView.createNewCheck(checkspace);
       }
-    </script>
+    }
+  </script>
 </body>
 
 </html>
