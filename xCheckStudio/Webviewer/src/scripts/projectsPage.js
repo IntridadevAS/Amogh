@@ -942,7 +942,8 @@ let editProjectView = {
     let editProjectWin = document.getElementById("editProject");
     let editComments = document.getElementById("editComments");
     let editProjectForm = document.getElementById("editProjectForm");
-
+    let editProjectStatus = document.getElementById("editProjectStatus");
+    let editProjectType = document.getElementById("editProjectType"); 
     editProjectWin.classList.add("projectOverlaysOpen");
 
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
@@ -955,6 +956,8 @@ let editProjectView = {
     editDateCreated.innerHTML = this.currentProject.createddate;
     editProjectDescription.innerHTML = this.currentProject.description;
     editComments.value = this.currentProject.comments;
+    editProjectStatus.value = this.currentProject.status.toLowerCase();
+    editProjectType.value = this.currentProject.type.toLowerCase();
   },
 
   closeEditProject: function () {
@@ -969,14 +972,14 @@ let editCheckView = {
     this.editCheckOverlay = document.getElementById("editCheck");
     let currentCheckName = document.getElementById("currentCheckName");
     let editCheckName = document.getElementById("editCheckName");
-    let editCreator = document.getElementById("editCreator");
-    let editDateCreated = document.getElementById("editDateCreated");
+    let editCreator = document.getElementById("editCheckCreator");
+    let editDateCreated = document.getElementById("editCheckDateCreated");
+    let editCheckConfig = document.getElementById("editCheckConfig");
+    let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
-
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
-
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
-
+    
     this.currentCheck = controller.getCurrentCheck();
     console.log(this.currentProject);
     currentCheckName.innerHTML = this.currentCheck.checkname;
@@ -984,8 +987,9 @@ let editCheckView = {
     editCreator.innerHTML = this.currentCheck.creator;
     editDateCreated.innerHTML = this.currentCheck.checkdate;
     editCheckDescription.innerHTML = this.currentCheck.checkdescription;
-    editComments.value = this.currentCheck.checkcomments;
-
+    editCheckComments.value = this.currentCheck.checkcomments;
+    editCheckConfig.value = this.currentCheck.checkconfiguration;
+    editCheckStatus.value = this.currentCheck.checkstatus;
   },
 
   // switchChecksReviews: function(){

@@ -300,7 +300,7 @@
             </div>
             <div class="projectName">
               <input id="editProjectName" type="text" name="projectName" value="">
-              <select class="" name="status">
+              <select class="" name="status" id="editProjectStatus">
                 <option value="active">Active</option>
                 <option value="finished">Finished</option>
                 <option value="archived">Archived</option>
@@ -309,7 +309,7 @@
           </div>
           <div class="projectParametersContainer">
             <label>Type:
-              <select class="" name="type">
+              <select class="" name="type" id="editProjectType">
                 <option value="private">Private</option>
                 <option value="public">Public</option>
               </select>
@@ -345,7 +345,7 @@
             <div class="checkCardInfo"></div>
             <div class="projectName">
               <input id="editCheckName" type="text" name="checkName" value="">
-              <select class="" name="status">
+              <select class="" name="status" id="editCheckStatus">
                 <option value="active">Active</option>
                 <option value="finished">Finished</option>
                 <option value="archived">Archived</option>
@@ -353,16 +353,16 @@
             </div>
           </div>
           <div class="projectParametersContainer">
-            <label>Type:
-              <select class="" name="type">
-                <option value="private">Private</option>
-                <option value="public">Public</option>
-              </select>
-            </label>
+              <label>Configuration: <br>
+                <select class="" name="config" id="editCheckConfig">
+                  <option value="config1">Config1</option>
+                  <option value="config2">Config2</option>
+                </select>
+              </label>
           </div>
           <div class="projectParametersContainer">
-            <p>Creator:<span id="editCreator"></span></p>
-            <p>Date Created:<span id="editDateCreated"> </p>
+            <p>Creator:<span id="editCheckCreator"></span></p>
+            <p>Date Created:<span id="editCheckDateCreated"></p>
           </div>
           <div class="projectDescriptionContainer">
             <label for="checkDescription">Check Description:</label>
