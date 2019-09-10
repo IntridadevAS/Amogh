@@ -55,25 +55,25 @@ SCModelBrowser.prototype.CreateHeaders = function () {
             headerText = ModelBrowserColumnNames3D.Component;
             key = ModelBrowserColumnNames3D.Component.replace(/\s/g, '');
             width = "40%";
-            dataType="string";
+            dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.MainClass) {
             headerText = ModelBrowserColumnNames3D.MainClass;
             key = ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '');
             width = "30%";
-            dataType="string";
+            dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.SubClass) {
             headerText = ModelBrowserColumnNames3D.SubClass;
             key = ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '');
             width = "30%";
-            dataType="string";
+            dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.NodeId) {
             headerText = ModelBrowserColumnNames3D.NodeId;
             key = ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '');
             width = "0%";
-            dataType="number";
+            dataType = "number";
         }
 
         columnHeader["headerText"] = headerText;
@@ -115,13 +115,12 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     if (!(nodeId in this.Components)) {
         return;
     }
-    
-    if(!this.ModelBrowserAddedNodes.includes(parentNode))
-    {
+
+    if (!this.ModelBrowserAddedNodes.includes(parentNode)) {
         parentNode = -1;
     }
     this.ModelBrowserAddedNodes.push(nodeId);
-    
+
     this.NodeParentList[nodeId] = parentNode;
     // if (styleList !== undefined) {
     //     this.NodeIdVsRowClassList[nodeId] = styleList;
@@ -129,11 +128,11 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
 
     //add node properties to model browser table
     var nodeData = this.Components[nodeId];
-    
+
 
     tableRowContent = {};
-   
-    tableRowContent[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')] = nodeData.Name;   
+
+    tableRowContent[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')] = nodeData.Name;
     tableRowContent[ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
     tableRowContent[ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
     tableRowContent[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
@@ -188,13 +187,16 @@ SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode
 
 };
 
-SCModelBrowser.prototype.Clear = function () {   
+SCModelBrowser.prototype.Clear = function () {
     var containerDiv = "#" + this.ModelBrowserContainer;
     $(containerDiv).igTreeGrid("destroy");
+
+    // clear count
+    this.GetItemCountDiv().innerHTML = "";
 }
 
-SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {   
-   
+SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
+
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
     $(function () {
@@ -206,21 +208,23 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             primaryKey: ModelBrowserColumnNames3D.NodeId.replace(/\s/g, ''),
             foreignKey: "parent",
             autofitLastColumn: true,
-            autoGenerateColumns: false,            
+            autoGenerateColumns: false,
             // dataSourceType: "json",
             //responseDataKey: "results",
             //autoCommit: true,
-            height: "100%",
+            height: "96%",
             width: "100%",
             initialExpandDepth: 0,
-            alternateRowStyles : false,
+            alternateRowStyles: false,
             rendered: function (evt, ui) {
                 //return reference to igTreeGrid
                 //ui.owner;
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 modelBrowserContextMenu.Init(_this);
-            },      
+
+                _this.ShowItemCount(_this.modelTreeRowData.length);
+            },
             features: [
                 {
                     name: "Sorting",
@@ -250,7 +254,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                             return false;
                         }
 
-                    },                   
+                    },
                 },
                 {
                     name: "RowSelectors",
@@ -259,26 +263,25 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     //enableSelectAllForPaging: true, // this option is true by default
                     checkBoxStateChanging: function (evt, ui) {
                         //we use this variable as a flag whether the selection is coming from a checkbox
-                        isFiredFromCheckbox = true;                        
+                        isFiredFromCheckbox = true;
                     },
                     checkBoxStateChanged: function (evt, ui) {
 
                         if (ui.isHeader) {
-                            
+
                             var data = $(containerDiv).data("igTreeGrid").dataSource.dataView();
                             if (data.length === 0) {
                                 return;
                             }
-                            
+
                             for (var rowIndex in data) {
                                 var record = data[rowIndex];
-                                
-                                var rowKey = parseInt(record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')]);                                
-                                if(rowKey === NaN)
-                                {
+
+                                var rowKey = parseInt(record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')]);
+                                if (rowKey === NaN) {
                                     continue;
                                 }
-                                var rowData =  _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
+                                var rowData = _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
                                 var row = $(containerDiv).igTreeGrid("rowById", rowKey);
 
                                 _this.SelectionManager.HandleSelectFormCheckBox(row[0], ui.state, rowData, containerDiv);
@@ -456,15 +459,15 @@ SCModelBrowser.prototype.HighlightModelBrowserRow = function (selectedNodeId) {
     //     return;
     // }
 
-    this.OpenHighlightedRow(path);   
+    this.OpenHighlightedRow(path);
 
     var row = this.GetBrowserRowFromNodeId(selectedNodeId, this.ModelBrowserContainer);
     if (!row) {
         return;
     }
 
-     // scroll to that row
-     document.getElementById(this.ModelBrowserContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
+    // scroll to that row
+    document.getElementById(this.ModelBrowserContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
 
     this.SelectionManager.HandleRowSelect(row, undefined);
 }
@@ -483,8 +486,7 @@ SCModelBrowser.prototype.ClearSelectedComponent = function (checkedComponent) {
 
 SCModelBrowser.prototype.OpenHighlightedRow = function (path) {
 
-    if(!('path' in path))
-    {
+    if (!('path' in path)) {
         return;
     }
     var nodeList = path['path'];
@@ -500,7 +502,7 @@ SCModelBrowser.prototype.OpenHighlightedRow = function (path) {
 
     // // expand current row
     // $(containerDiv).igTreeGrid( "expandRow", componentHierarchy.nodeId, function(){
-        
+
     // });
 
     // // traverse children
@@ -588,7 +590,7 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
     }
 
     //return undefined;
-    
+
     // var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
 
     // var rowData = {};
@@ -600,7 +602,7 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
     // if (record.parent !== -1) {
     //     var result = this.GetHierarchyToRow(record.parent,
     //         containerDiv);
-        
+
     //     if (result) {
     //         result['children'].push(rowData);
     //         return result;
@@ -611,9 +613,9 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
 }
 
 SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
-                                                            containerDiv,
-                                                            iterateChilds) {
-                                                                
+    containerDiv,
+    iterateChilds) {
+
     var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
 
     var rowData = {};
@@ -659,10 +661,10 @@ SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, con
 
     //var dataSource = $("#"+containerDiv).data("igTreeGrid").dataSource.dataView();
     //var selectedRecord = $("#"+containerDiv).igTreeGrid("findRecordByKey", selectedNodeId);
-   
+
     var browserTable = document.getElementById(containerDiv);
     var rows = browserTable.getElementsByTagName("tr");
-    
+
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
 
@@ -670,11 +672,11 @@ SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, con
         if (columns.length === 0) {
             continue;
         }
-               
+
         var nodeIdString = columns[ModelBrowserColumns3D.NodeId].innerHTML;
         //var nodeIdString = dataSource[row.rowIndex].NodeId;
         // var nodeIdString = selectedRecord.NodeId;
-         var nodeId = parseInt(nodeIdString.trim());
+        var nodeId = parseInt(nodeIdString.trim());
 
         if (selectedNodeId === nodeId) {
 
@@ -692,4 +694,3 @@ SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, con
 
     return undefined;
 }
-
