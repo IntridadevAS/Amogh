@@ -207,6 +207,9 @@ ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
 ExcelModeBrowser.prototype.Clear = function () {   
     var containerDiv = "#" + this.ModelBrowserContainer;
     $(containerDiv).igGrid("destroy");
+
+     // clear count
+     this.GetItemCountDiv().innerHTML = "";
 }
 
 ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData) {
@@ -222,9 +225,12 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             dataSource: tableData,
             responseDataKey: "results",
             autoCommit: true,
-            height: "100%",
+            height: "96%",
             width: "100%",
             alternateRowStyles: false,
+            rendered: function (evt, ui) {
+                _this.ShowItemCount(tableData.length);
+            },
             features: [
                 {
                     name: "Sorting",
@@ -496,3 +502,4 @@ ExcelModeBrowser.prototype.GetDataFromSelectedRow = function (rowIndex,
 
     return rowData;
 }
+
