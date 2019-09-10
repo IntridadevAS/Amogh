@@ -65,8 +65,18 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
-                              "showAll": {
-                                    name: "Show All",
+                              "hide": {
+                                    name: "Hide",
+                                    visible: function () {
+                                          if (_this.HaveSCOperations()) {
+                                                return true;
+                                          }
+
+                                          return false;
+                                    }
+                              },
+                              "show": {
+                                    name: "Show",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -115,8 +125,11 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       if (key.toLowerCase() === "isolate") {
             this.OnIsolateClicked();
       }
-      else if (key.toLowerCase() === "showall") {
-            this.OnShowAllClicked();
+      else if (key.toLowerCase() === "hide") {
+            this.OnHideClicked();
+      }
+      else if (key.toLowerCase() === "show") {
+            this.OnShowClicked();
       }
       else if (key.toLowerCase() === "starttranslucency") {
             this.OnStartTranslucencyClicked();
@@ -128,13 +141,13 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
 
 ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       if (!this.ModelBrowser ||
-          !this.ModelBrowser.Webviewer) {
+            !this.ModelBrowser.Webviewer) {
             return;
-      }    
+      }
 
-      var nodeIds = this.GetSelectedNodes();    
+      var nodeIds = this.GetSelectedNodes();
       if (!nodeIds ||
-          nodeIds.length === 0) {
+            nodeIds.length === 0) {
             return;
       }
 
@@ -145,22 +158,57 @@ ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       });
 }
 
-ModelBrowserContextMenu.prototype.OnShowAllClicked = function () {
+ModelBrowserContextMenu.prototype.OnHideClicked = function () {
       if (!this.ModelBrowser ||
-            !this.ModelBrowser.Webviewer ||
-            !this.IsolateManager ||
-            this.IsolateManager.length === 0) {
+            !this.ModelBrowser.Webviewer) {
             return;
       }
 
-      var _this = this;
+      var nodeIds = this.GetSelectedNodes();
+      if (!nodeIds ||
+            nodeIds.length === 0) {
+            return;
+      }
 
-      var model = this.ModelBrowser.Webviewer.model;
-      model.setNodesVisibility([model.getAbsoluteRootNode()], true).then(function () {
-            _this.ModelBrowser.Webviewer.view.fitWorld();
+      this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, false);      
+}
 
-            _this.IsolateManager.IsolatedNodes = [];
-      });
+ModelBrowserContextMenu.prototype.SetNodesVisibility = function (viewer, nodeIds, visible) {
+      var map = {};
+      for (var i = 0; i < nodeIds.length; i++) {
+            var nodeId = nodeIds[i];
+            map[nodeId] = visible;
+      }
+
+      viewer.model.setNodesVisibilities(map);
+}
+
+ModelBrowserContextMenu.prototype.OnShowClicked = function () {
+      if (!this.ModelBrowser ||
+            !this.ModelBrowser.Webviewer) {
+            return;
+      }
+      
+      if (this.IsolateManager &&
+            this.IsolateManager.IsolatedNodes.length > 0) {
+            var model = this.ModelBrowser.Webviewer.model;
+            
+            var _this = this;
+            model.setNodesVisibility([model.getAbsoluteRootNode()], true).then(function () {
+                  _this.ModelBrowser.Webviewer.view.fitWorld();
+
+                  _this.IsolateManager.IsolatedNodes = [];
+            });
+      }
+      else {
+            var nodeIds = this.GetSelectedNodes();
+            if (!nodeIds ||
+                  nodeIds.length === 0) {
+                  return;
+            }
+
+            this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, true);
+      }
 }
 
 ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
