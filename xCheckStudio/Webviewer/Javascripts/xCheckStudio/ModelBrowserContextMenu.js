@@ -188,27 +188,18 @@ ModelBrowserContextMenu.prototype.OnShowClicked = function () {
             !this.ModelBrowser.Webviewer) {
             return;
       }
-      
-      if (this.IsolateManager &&
-            this.IsolateManager.IsolatedNodes.length > 0) {
-            var model = this.ModelBrowser.Webviewer.model;
-            
-            var _this = this;
-            model.setNodesVisibility([model.getAbsoluteRootNode()], true).then(function () {
-                  _this.ModelBrowser.Webviewer.view.fitWorld();
 
-                  _this.IsolateManager.IsolatedNodes = [];
-            });
-      }
-      else {
-            var nodeIds = this.GetSelectedNodes();
-            if (!nodeIds ||
-                  nodeIds.length === 0) {
-                  return;
-            }
 
-            this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, true);
+      var nodeIds = this.GetSelectedNodes();
+      if (!nodeIds ||
+            nodeIds.length === 0) {
+            return;
       }
+
+      this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, true);
+      if (this.IsolateManager) {
+            _this.IsolateManager.IsolatedNodes = [];
+      }     
 }
 
 ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
