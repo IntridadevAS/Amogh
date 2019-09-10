@@ -78,16 +78,7 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
                 _this.ReadProperties(rootNodeId, identifierProperties, undefined);
-
-                // // hide view data graphics text on viewer conatainer
-                // var scViewerContainer = document.getElementById("dataSourceViewer");
-                // for (var i = 0; i < scViewerContainer.childElementCount; i++) {
-                //     var currentChild = scViewerContainer.children[i];
-                //     if (currentChild.className === "viewdatagraphics") {
-                //         currentChild.style.display = "none";
-                //     }
-                // }
-
+               
                 //activate context menu
                 _this.CheckViewerContextMenu = new CheckViewerContextMenu(viewer);
                 _this.CheckViewerContextMenu.Init();
@@ -101,6 +92,14 @@ SCManager.prototype.LoadData = function (selectedComponents) {
         });
     });
 };
+
+SCManager.prototype.ClearSource = function () {
+    
+    this.ModelTree.Clear();
+
+    // clear viewer
+    document.getElementById(this.GetViewerContainerID()).innerHTML = "";
+}
 
 SCManager.prototype.SetViewerBackgroundColor = function () {
     var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
@@ -133,13 +132,6 @@ SCManager.prototype.BindEvents = function (viewer) {
                 }
             }
         },
-        // contextMenu: function (position) {
-        //     if (currentViewer === undefined) {
-        //         currentViewer = viewer;
-        //     }
-
-        //     _this.menu(event.clientX, event.clientY);
-        // }
     });
 };
 
