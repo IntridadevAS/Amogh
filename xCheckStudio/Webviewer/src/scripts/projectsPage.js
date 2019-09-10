@@ -70,7 +70,6 @@ let controller = {
         return 0 //default return value (no sorting)
       })
 
-      /***********Sort Public Probjects*************/
       model.publicProjects.sort(function (a, b) {
         var nameA = a.projectname.toLowerCase(), nameB = b.projectname.toLowerCase()
         if (nameA < nameB) //sort string ascending
@@ -158,7 +157,56 @@ let controller = {
   },
 
   sortChecks: function () {
-
+    if (model.sortChecksBy === "name") {
+      model.projectChecks.sort(function (a, b) {
+        var nameA = a.checkname.toLowerCase(), nameB = b.checkname.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "nameReverse") {
+      model.projectChecks.sort(function (a, b) {
+        var nameA = a.checkname.toLowerCase(), nameB = b.checkname.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    if (model.sortChecksBy === "status") {
+      model.projectChecks.sort(function (a, b) {
+        var nameA = a.checkstatus.toLowerCase(), nameB = b.checkstatus.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "statusReverse") {
+      model.projectChecks.sort(function (a, b) {
+        var nameA = a.checkstatus.toLowerCase(), nameB = b.checkstatus.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "date") {
+      model.projectChecks.sort(function (a, b) {
+        return new Date(a.checkdate).getTime() - new Date(b.checkdate).getTime() 
+      })
+    }
+    else if (model.sortChecksBy === "dateReverse") {
+      model.projectChecks.sort(function (a, b) {
+        return new Date(b.checkdate).getTime() - new Date(a.checkdate).getTime() 
+      })
+    }
   },
 
 
@@ -334,6 +382,7 @@ let controller = {
     }).done(function (msg) {
       var objectArray = JSON.parse(msg);
       model.projectChecks = [...objectArray];
+      controller.sortChecks();
       checkView.init()
     });
   },
