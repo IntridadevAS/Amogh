@@ -18,6 +18,16 @@ DBSourceManager.prototype.IsDBSource = function () {
   return true;
 };
 
+DBSourceManager.prototype.ClearSource = function () {
+  this.ModelTree.Clear();
+
+  // clear viewer
+  var containerDiv = "#" + this.ViewerContainer;
+  if ($(containerDiv).data("igGrid") != null) {
+    $(containerDiv).igGrid("destroy");
+  }
+}
+
 DBSourceManager.prototype.LoadData = function (uri) {
   var _this = this;
   return new Promise((resolve) => {

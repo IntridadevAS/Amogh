@@ -188,6 +188,11 @@ SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode
 
 };
 
+SCModelBrowser.prototype.Clear = function () {   
+    var containerDiv = "#" + this.ModelBrowserContainer;
+    $(containerDiv).igTreeGrid("destroy");
+}
+
 SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {   
    
     var _this = this;

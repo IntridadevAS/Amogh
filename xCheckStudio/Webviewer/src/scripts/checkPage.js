@@ -83,7 +83,7 @@ let controller = {
   deleteTabData: function (id) {
     let tab = model.views[id];
     tab.fileName = "";
-    tab.used = false;
+    tab.used = false;    
   },
 
   selectView: function (id) {
@@ -127,9 +127,20 @@ let viewTabs = {
   deleteTab: function (tabItem) {
     let tabID = tabItem.dataset.id;
     controller.deleteTabData(tabID);
-    tabItem.previousElementSibling.click();
+
+    if (tabItem.previousElementSibling) {
+      tabItem.previousElementSibling.click();
+    }
+    else {
+      this.addTab.click();
+    }
+
     tabItem.remove();
     viewTabs.showAddTab();
+
+    // remove source manager
+     SourceManagers[tabID].ClearSource();
+     delete SourceManagers[tabID];
   },
 
   selectTab: function (selectedTab) {
@@ -424,6 +435,8 @@ function closeLoadDataForm()
 
 function loadDataSet() {
   closeLoadDataForm();
+
+  document.getElementById("uploadDatasourceForm").reset();
 
   document.getElementById("fileInput").click();
 
