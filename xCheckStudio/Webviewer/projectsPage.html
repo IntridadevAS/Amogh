@@ -184,7 +184,7 @@
           <img src="public/symbols/closeWin.svg" alt="">
         </button>
       </div>
-      <form class="newProjectForm" action="index.html" method="post">
+      <form class="newProjectForm" id="newProjectForm" action="index.html" method="post">
         <div class="projectInfo">
           <div class="projectCardAE">
             <div class="projectButtons">
@@ -491,6 +491,7 @@
       // create project database
       //createProject(projectname, descriptionText, functionText, projectScope);
       localStorage.setItem("loadSavedProject", false);
+      document.getElementById('newProjectForm').reset();
       controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
       //});
 
@@ -527,8 +528,8 @@
       if (document.getElementById('favoriteCheck').checked === true) {
         checkIsFavorite = 1;
       }
-
       checkspace["favoriteCheck"] = checkIsFavorite;
+      document.getElementById('checkCaseform').reset();
       if (checkspace.checkName !== '') {
         newCheckView.createNewCheck(checkspace);
       }
