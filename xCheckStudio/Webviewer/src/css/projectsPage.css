@@ -592,13 +592,18 @@ input[type=checkbox] + label {
 
 .projectName input, .projectName select, .projectType select, .projectType option, .projectParametersContainer select, .projectParametersContainer select {
   margin: 0;
-  background: none;
+  background: transparent;
   border: none;
   font-family: inherit;
 }
 
+.projectParametersContainer select, .projectType select, .projectName select {
+  background: var(--xCheckDarkGrey);
+  color: white;
+}
+
 .projectName input::placeholder {
-  color: inherit;
+  color:var(--xCheckMedGrey);
 }
 
 .projectName input {
