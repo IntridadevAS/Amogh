@@ -26,7 +26,8 @@ const ModelBrowserColumns3D = {
     Component: 1,
     MainClass: 2,
     SubClass: 3,
-    NodeId: 4
+    NodeId: 4,
+    Parent: 5
 }
 
 // column names
@@ -35,7 +36,8 @@ const ModelBrowserColumnNames3D = {
     Component: "Item",
     MainClass: "Category",
     SubClass: "Item Class",
-    NodeId: "NodeId"
+    NodeId: "NodeId",
+    Parent: "parent"
 }
 
 // 1D Model browser
@@ -45,7 +47,8 @@ const ModelBrowserColumns1D = {
     Component: 1,
     MainClass: 2,
     SubClass: 3,
-    Description: 4
+    Description: 4,
+    RowKey: 5
 }
 
 // column names
@@ -54,5 +57,6 @@ const ModelBrowserColumnNames1D = {
     Component: "Item",
     MainClass: "Category",
     SubClass: "Item Class",
-    Description: "Description"
+    Description: "Description",
+    RowKey: "RowKey"
 }

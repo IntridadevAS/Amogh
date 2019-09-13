@@ -303,15 +303,15 @@ ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
             return;
       }
       var browserSelectionManager = this.ModelBrowser.SelectionManager;
-      if (browserSelectionManager.SelectedComponentRows.length === 0) {
+      if (browserSelectionManager.SelectedComponentNodeIds.length === 0) {
             return;
       }
 
       var nodeIds = [];
-      for (var i = 0; i < browserSelectionManager.SelectedComponentRows.length; i++) {
+      for (var i = 0; i < browserSelectionManager.SelectedComponentNodeIds.length; i++) {
 
-            var selectedComponentRow = browserSelectionManager.SelectedComponentRows[i];
-            var nodeId = Number(selectedComponentRow.cells[ModelBrowserColumns3D.NodeId].textContent.trim());
+            // var selectedComponentRow = browserSelectionManager.SelectedComponentNodeIds[i];
+            var nodeId = Number(browserSelectionManager.SelectedComponentNodeIds[i]);
 
             if (nodeId !== NaN) {
                   nodeIds.push(nodeId);

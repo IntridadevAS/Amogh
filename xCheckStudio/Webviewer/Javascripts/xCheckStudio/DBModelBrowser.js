@@ -268,7 +268,7 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                         if (isFiredFromCheckbox) {
                             isFiredFromCheckbox = false;
                         } else {
-                            _this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);
+                            // _this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);
                             _this.ShowSelectedDBData(ui.row.element[0]);
                             return false;
                         }

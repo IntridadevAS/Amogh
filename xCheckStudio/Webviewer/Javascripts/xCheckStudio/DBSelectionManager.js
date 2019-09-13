@@ -49,9 +49,9 @@ DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.ApplyHighlightColor(currentRow);
 
           // maintain selected rows
-          if (!this.SelectedComponentRows.includes(currentRow)) {
-               this.SelectedComponentRows.push(currentRow);
-          }
+          // if (!this.SelectedComponentRows.includes(currentRow)) {
+          //      this.SelectedComponentRows.push(currentRow);
+          // }
      }
      else if (this.SelectedCompoentExists(componentData)) {
           this.RemoveFromselectedCompoents(componentData);
@@ -60,12 +60,12 @@ DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.RemoveHighlightColor(currentRow);
 
           // maintain selected rows
-          if (this.SelectedComponentRows.includes(currentRow)) {
-               var index = this.SelectedComponentRows.indexOf(currentRow);
-               if (index !== -1) {
-                    this.SelectedComponentRows.splice(index, 1);
-               }
-          }
+          // if (this.SelectedComponentRows.includes(currentRow)) {
+          //      var index = this.SelectedComponentRows.indexOf(currentRow);
+          //      if (index !== -1) {
+          //           this.SelectedComponentRows.splice(index, 1);
+          //      }
+          // }
      }
 }
 
@@ -247,7 +247,7 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
                var row = $("#" + modelBrowserContainer).igGrid("rowAt", i);
 
                // highlight row in model browser     
-               this.HighlightBrowserRow(row);
+               // this.HighlightBrowserRow(row);
 
                // scroll to selected row
                document.getElementById(modelBrowserContainer+"_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;              
