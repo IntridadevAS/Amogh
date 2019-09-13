@@ -407,29 +407,29 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function(
     return columnHeaders;
 }
 
-ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties, columnHeaders) {
+ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties) {
 
     var property;
     var tableData = [];
     for (var propertyId in properties) {
         property = properties[propertyId];
         tableRowContent = {};
-        tableRowContent[ComparisonPropertyColumnNames.SourceAName] = property.SourceAName;
-        tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.SourceAValue;
-        tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.SourceBValue;
-        tableRowContent[ComparisonPropertyColumnNames.SourceBName] = property.SourceBName;
-        tableRowContent[ComparisonPropertyColumnNames.Status] = property.Severity;
+        tableRowContent[ComparisonPropertyColumnNames.SourceAName] = property.sourceAName;
+        tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceAValue;
+        tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceBValue;
+        tableRowContent[ComparisonPropertyColumnNames.SourceBName] = property.sourceBName;
+        tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
 
-        if (property.transpose == 'lefttoright' && property.Severity !== 'No Value') {
+        if (property.transpose == 'lefttoright' && property.severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
-            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.SourceAValue;
+            tableRowContent[ComparisonPropertyColumnNames.sourceBValue] = property.sourceAValue;
         }
-        else if (property.transpose == 'righttoleft' && property.Severity !== 'No Value') {
+        else if (property.transpose == 'righttoleft' && property.severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
-            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.SourceBValue;
+            tableRowContent[ComparisonPropertyColumnNames.sourceAValue] = property.sourceBValue;
         }
 
-        this.ReviewManager.detailedReviewRowComments[Object.keys(this.ReviewManager.detailedReviewRowComments).length] = property.Description;
+        this.ReviewManager.detailedReviewRowComments[Object.keys(this.ReviewManager.detailedReviewRowComments).length] = property.description;
 
         tableData.push(tableRowContent);
     }
@@ -449,38 +449,43 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    for (var componentsGroupID in this.ReviewManager.ComparisonCheckManager) {
-
-        // get the componentgroupd corresponding to selected component 
-        var componentsGroupList = this.ReviewManager.ComparisonCheckManager[componentsGroupID];
-
-        if (componentsGroupList && componentsGroupID != "restore") {
-            var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-            var columnHeaders = this.CreatePropertiesTableHeader();
-
-            // show component class name as property in detailed review table    
-            var tableData = this.CreateTableData(component.properties, columnHeaders);
-          
-            this.LoadDetailedReviewTableData(columnHeaders, tableData);
-            this.highlightDetailedReviewTableFromCheckStatus("ComparisonDetailedReviewCell")
-        }
+    var results = this.ReviewManager.ComparisonCheckManager["results"];
+    if (!(groupId in results)) {
+        return;
     }
+
+    // get the componentgroupd corresponding to selected component 
+    var componentsGroup = results[groupId];
+    if (!(componentId in componentsGroup.components)) {
+        return;
+    }
+
+    var component = componentsGroup.components[componentId];
+
+    var columnHeaders = this.CreatePropertiesTableHeader();
+
+    // show component class name as property in detailed review table    
+    var tableData = this.CreateTableData(component.properties);
+
+    this.LoadDetailedReviewTableData(columnHeaders, tableData);
+    this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
+
 }
 
 ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData) {
-    var viewerContainer = "#ComparisonDetailedReviewCell";
+    var viewerContainer = "#" + this.DetailedReviewTableContainer;
     var _this = this;
 
     $(function () {
         $(viewerContainer).igGrid({
-            width: "100%",
-            height : "190px",
+            // width: "100%",
+            height : "100%",
             columns: columnHeaders,
             autoGenerateColumns: false,
             dataSource : tableData,
             responseDataKey: "results",
             fixedHeaders : true,
+            autofitLastColumn: true,
             rendered: function (evt, ui) {                
                 //reviewComparisonContextMenuManager.Init();
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager( _this.ReviewManager);
@@ -533,8 +538,8 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
         });
     });
 
-    var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.margin = "0px";
+    // var container = document.getElementById(viewerContainer.replace("#", ""));
+    // container.style.margin = "0px";
 };
 
 ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {
@@ -560,6 +565,6 @@ ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
 }
 
 ComparisonCheckPropertiesTable.prototype.SetComment = function (comment) {
-    var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-    commentDiv.innerHTML = comment;
+    // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+    // commentDiv.innerHTML = comment;
 }

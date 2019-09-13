@@ -3,74 +3,74 @@ function ReviewViewerInterface(viewerOptions,
     nodeIdVsComponentData,
     reviewManager) {
 
-        this.ViewerOptions = viewerOptions;
-        this.selectedNodeId = null;
-        this.selectedComponentId = null;
-    
-        this.ComponentIdVsComponentData = componentIdVsComponentData;
-        this.NodeIdVsComponentData = nodeIdVsComponentData;
-        this.NodeIdStatusData = {};
-    
-        this.ReviewManager = reviewManager;
-        this.SelectedComponentRowFromSheetA;
-        this.SelectedComponentRowFromSheetB;
+    this.ViewerOptions = viewerOptions;
+    this.selectedNodeId = null;
+    this.selectedComponentId = null;
 
-        this.DontColorComponents = {
-            "centerline": {
-                "mainClass": "component",
-                "parentMainClass": "pipingnetworksegment"
-            }
-        };
+    this.ComponentIdVsComponentData = componentIdVsComponentData;
+    this.NodeIdVsComponentData = nodeIdVsComponentData;
+    this.NodeIdStatusData = {};
 
-        this.OverrideSeverityColorComponents = {
-            "pipingnetworksystem": ["pipingnetworksegment"],
-            "pipe": ["bran"],
-            "hvac": ["bran"],
-            "equi": ["cone", "cyli", "dish"]
-        };
+    this.ReviewManager = reviewManager;
+    this.SelectedComponentRowFromSheetA;
+    this.SelectedComponentRowFromSheetB;
+
+    this.DontColorComponents = {
+        "centerline": {
+            "mainClass": "component",
+            "parentMainClass": "pipingnetworksegment"
+        }
+    };
+
+    this.OverrideSeverityColorComponents = {
+        "pipingnetworksystem": ["pipingnetworksegment"],
+        "pipe": ["bran"],
+        "hvac": ["bran"],
+        "equi": ["cone", "cyli", "dish"]
+    };
 }
 
-ReviewViewerInterface.prototype.Is3DViewer = function() {
+ReviewViewerInterface.prototype.Is3DViewer = function () {
     return false;
 }
 
-ReviewViewerInterface.prototype.Is1DViewer = function() {
+ReviewViewerInterface.prototype.Is1DViewer = function () {
     return false;
 }
 
-ReviewViewerInterface.prototype.bindEvents = function() {}
+ReviewViewerInterface.prototype.bindEvents = function () { }
 
-ReviewViewerInterface.prototype.setViewerBackgroundColor = function() {}
+ReviewViewerInterface.prototype.setViewerBackgroundColor = function () { }
 
-ReviewViewerInterface.prototype.highlightComponentsfromResult = function() {}
+ReviewViewerInterface.prototype.highlightComponentsfromResult = function () { }
 
-ReviewViewerInterface.prototype.unHighlightAll = function () {}
+ReviewViewerInterface.prototype.unHighlightAll = function () { }
 
-ReviewViewerInterface.prototype.onSelection = function (selectionEvent) {}
+ReviewViewerInterface.prototype.onSelection = function (selectionEvent) { }
 
-ReviewViewerInterface.prototype.unHighlightComponent = function () {}
+ReviewViewerInterface.prototype.unHighlightComponent = function () { }
 
-ReviewViewerInterface.prototype.menu = function (x, y) {}
+ReviewViewerInterface.prototype.menu = function (x, y) { }
 
-ReviewViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) {}
+ReviewViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) { }
 
-ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) {}
+ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) { }
 
-ReviewViewerInterface.prototype.IsComparisonReviewManager = function() {
-    if(this.ReviewManager.MainReviewTableContainer == "ComparisonMainReviewCell") {
+ReviewViewerInterface.prototype.IsComparisonReviewManager = function () {
+    if (this.ReviewManager.MainReviewTableContainer == "ComparisonMainReviewCell") {
         return true;
     }
     return false;
 }
 
-ReviewViewerInterface.prototype.IsComplianceReviewManager = function() {
-    if(this.ReviewManager.MainReviewTableContainer.includes("Compliance")) {
+ReviewViewerInterface.prototype.IsComplianceReviewManager = function () {
+    if (this.ReviewManager.MainReviewTableContainer.includes("Compliance")) {
         return true;
     }
     return false;
 }
 
-ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function(reviewTableRow) {
+ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (reviewTableRow) {
     var _this = this;
     var SourceA = reviewTableRow.cells[ComparisonColumns.SourceAName].innerText;
     var SourceB = reviewTableRow.cells[ComparisonColumns.SourceBName].innerText;
@@ -78,11 +78,9 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function(revie
     var ContainerDiv = this.ReviewManager.GetReviewTableId(reviewTableRow);
     $(function () {
         var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
-        for (var id in data)
-        {
-            if(data[id].SourceA.trim() == SourceA.trim() && 
-            data[id].SourceB.trim() == SourceB.trim())
-            {        
+        for (var id in data) {
+            if (data[id].SourceA.trim() == SourceA.trim() &&
+                data[id].SourceB.trim() == SourceB.trim()) {
                 rowData['Status'] = data[id].Status;
                 rowData['SourceBName'] = data[id].SourceB;
                 rowData['SourceAName'] = data[id].SourceA;
@@ -97,15 +95,14 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function(revie
     return rowData;
 }
 
-ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function(reviewTableRow) {
+ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow) {
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
     var rowData = {};
     var ContainerDiv = this.ReviewManager.GetReviewTableId(reviewTableRow);
     $(function () {
         var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
-        for (var id in data)
-        {
-            if(data[id].SourceA.trim() == SourceA.trim()) {
+        for (var id in data) {
+            if (data[id].SourceA.trim() == SourceA.trim()) {
                 rowData['Status'] = data[id].Status;
                 rowData['SourceName'] = data[id].SourceA;
                 rowData['ResultId'] = data[id].ID;
@@ -118,6 +115,10 @@ ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function(revie
     return rowData;
 }
 
+ReviewViewerInterface.prototype.ResizeViewer = function () {    
+}
+
+/* 3D viewer interface */
 function Review3DViewerInterface(viewerOptions,
     componentIdVsComponentData,
     nodeIdVsComponentData,
@@ -164,6 +165,7 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
     viewer.setCallbacks({
         firstModelLoaded: function () {
             viewer.view.fitWorld();
+            viewer.resizeCanvas();
 
             // create nav cube
             showNavigationCube(viewer);
@@ -196,7 +198,15 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
             _this.menu(event.clientX, event.clientY);
         },
     });
+
+    window.onresize = function () {
+        viewer.resizeCanvas();
+    };
 };
+
+Review3DViewerInterface.prototype.ResizeViewer = function () {
+    this.Viewer.resizeCanvas();
+}
 
 Review3DViewerInterface.prototype.setViewerBackgroundColor = function () {
     var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");

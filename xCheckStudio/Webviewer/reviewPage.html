@@ -18,7 +18,7 @@
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
-      <p class="userName"> User Name </p>
+      <p id="userName" class="userName"> User Name </p>
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
@@ -103,6 +103,11 @@
               <p>Detail Info</p>
               <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
+
+            <div id="comparisonDetailInfoContainer" class="detailInfoContainer">
+              <div id="comparisonDetailInfo"></div>
+            </div>
+
           </div>
         </div>
         <div id="center" class="grabBar"></div>
@@ -133,7 +138,7 @@
         </div>
       </div>
       <div class="projectName">
-        <p>Example Project Name / Example Check Name</p>
+        <p id="checkSpaceName">Example Project Name / Example Check Name</p>
       </div>
     </div>
   </div>
@@ -171,7 +176,9 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
-  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
+
   <link rel="stylesheet" href="CSS\collapsibleButton.css" type="text/css" />
 
 
@@ -189,11 +196,20 @@
   <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
   <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
 
+  <!-- HOOPS Communicator dependencies -->
+  <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
+  <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+
   <script>
 
     window.onload = function () {
-      initReviewModule();
-    }
+
+        setPageTitle();
+        setUserName();
+        setCheckSpaceName();
+
+        initReviewModule();
+      }
 
   </script>
 </body>

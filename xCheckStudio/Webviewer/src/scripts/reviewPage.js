@@ -1,7 +1,7 @@
 let model = {
   selectedComparisons: [],
   selectedCompliance: "",
-  defaultView: "compliance",
+  //defaultView: "compliance",
   currentView: null,
   files: {
     // for testing only, delete below after controller.populateFiles is complete
@@ -257,11 +257,17 @@ let viewPanels = {
   showComparison: function () {
     this.comparison.classList.remove("hide");
     this.compliance.classList.add("hide");
+
+    // set current view
+    model.currentView  = comparisonReviewManager;
   },
 
   showCompliance: function () {
     this.compliance.classList.remove("hide");
     this.comparison.classList.add("hide");
+
+    // set current view
+    model.currentView  = complianceReviewManager;
   },
 
   toggleDetailInfo: function (element) {
@@ -271,7 +277,16 @@ let viewPanels = {
 
     let tableContainer = element.closest(".infoArea");
     tableContainer.classList.toggle("openInfoArea");
+    // tableContainer.classList.toggle("closeInfoArea");
     element.classList.toggle("invert");
+
+    //document.getElementById("comparisonDetailInfoContainer").classList.toggle("closeDetailInfo"); 
+    if (tableContainer.classList.contains("openInfoArea")) {
+      tableContainer.style.height = tableContainer.offsetParent.offsetHeight / 2 + "px";
+    }
+    else {
+      tableContainer.style.height = "40px";
+    }
   },
 
   hideAllPanels: function () {
@@ -292,6 +307,11 @@ let viewPanels = {
     } else {
       parent.classList.add("maximize");
     }
+
+    // resize 3D viewer
+    if (model.currentView) {
+      model.currentView.ResizeViewers();
+    }
   }
 }
 
@@ -306,6 +326,10 @@ let grabBarControl = function (element) {
     m_pos = event.x;
     previous.style.width = previous.offsetWidth - dx + "px";
 
+    // resize 3D viewer
+    if (model.currentView) {
+      model.currentView.ResizeViewers();
+    }
   }
 
   element.addEventListener("mousedown", function (event) {

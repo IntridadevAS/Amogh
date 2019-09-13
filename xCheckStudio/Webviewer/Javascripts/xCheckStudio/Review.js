@@ -7,6 +7,10 @@ var sourceBComparisonHierarchy = undefined;
 var sourceAComplianceHierarchy = undefined;
 var sourceBComplianceHierarchy = undefined;
 
+
+var comparisonReviewManager;
+var complianceReviewManager;
+
 function initReviewModule() {
     // // set project name
     // setProjectName();
@@ -256,10 +260,13 @@ function loadComparisonData(comparisonCheckGroups,
         sourceBClassWiseComponents,
         //"comparisonMainTable",
         "comparisonMainContainer",
-        "comparisonDetailInfoContainer",
+        "comparisonDetailInfo",
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
+    
+    comparisonReviewManager.loadDatasources();
 
+    model.currentView  = comparisonReviewManager;
 }
 
 function setButtonsCollapsible() {

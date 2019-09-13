@@ -50,23 +50,23 @@ function ComparisonReviewManager(comparisonCheckManager,
 }
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
-    var modal = document.getElementById('maximizeViewerContainer');
+    //var modal = document.getElementById('maximizeViewerContainer');
 
-    var viewer1 = document.getElementById("viewerContainer1");
-    viewer1.style.height = "270px";
-    viewer1.style.top = "0px";
+    // var viewer1 = document.getElementById("compare1");
+    // viewer1.style.height = "270px";
+    // viewer1.style.top = "0px";
 
-    var viewer2 = document.getElementById("viewerContainer2");
-    viewer2.style.height = "270px";
-    viewer2.style.top = "0px";
+    // var viewer2 = document.getElementById("compare2");
+    // viewer2.style.height = "270px";
+    // viewer2.style.top = "0px";
 
-    if (modal.style.display === "block") {
-        viewer1.style.height = "405px";
-        viewer2.style.height = "405px";
-    }
+    // if (modal.style.display === "block") {
+    //     viewer1.style.height = "405px";
+    //     viewer2.style.height = "405px";
+    // }
 
     if (this.SourceAViewerData !== undefined) {
-        this.SourceAReviewViewerInterface = new Review3DViewerInterface(["viewerContainer1", this.SourceAViewerData[0]],
+        this.SourceAReviewViewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData[0]],
             this.SourceAComponentIdVsComponentData,
             this.SourceANodeIdVsComponentData,
             this);
@@ -75,7 +75,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
     }
 
     if (this.SourceBViewerData !== undefined) {
-        this.SourceBReviewViewerInterface = new Review3DViewerInterface(["viewerContainer2", this.SourceBViewerData[0]],
+        this.SourceBReviewViewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData[0]],
             this.SourceBComponentIdVsComponentData,
             this.SourceBNodeIdVsComponentData,
             this);
@@ -1264,5 +1264,14 @@ ComparisonReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
     return {
         SourceAName: row.cells[ComparisonPropertyColumns.SourceAName].innerText.trim(),
         SourceBName: row.cells[ComparisonPropertyColumns.SourceBName].innerText.trim()
+    }
+}
+
+ComparisonReviewManager.prototype.ResizeViewers = function () {
+    if (this.SourceAReviewViewerInterface) {
+        this.SourceAReviewViewerInterface.ResizeViewer();
+    }
+    if (this.SourceBReviewViewerInterface) {
+        this.SourceBReviewViewerInterface.ResizeViewer();
     }
 }

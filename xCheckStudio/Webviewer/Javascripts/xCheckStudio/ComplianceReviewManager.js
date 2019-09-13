@@ -44,7 +44,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
     this.SelectionManager = new ReviewComplianceSelectionManager();
 
-    this.CheckResultsTable = new ComplianceCheckResultsTable(this, mainReviewTableContainer);   
+    this.CheckResultsTable = new ComplianceCheckResultsTable(this, mainReviewTableContainer);
     this.CheckResultsTable.populateReviewTable();
 
     this.CheckPropertiesTable = new ComplianceCheckPropertiesTable(this, detailedReviewTableContainer)
@@ -1260,4 +1260,10 @@ ComplianceReviewManager.prototype.getStatusFromMainReviewRow = function (row) {
 
 ComplianceReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = function (row) {
     return row.cells[CompliancePropertyColumns.PropertyName].innerText;
+}
+
+ComplianceReviewManager.prototype.ResizeViewers = function () {
+    if (this.ReviewModuleViewerInterface) {
+        this.ReviewModuleViewerInterface.ResizeViewer();
+    }
 }
