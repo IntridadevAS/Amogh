@@ -1,8 +1,28 @@
 let model = {
   selectedComparisons: [],
   selectedCompliance: "",
-  defaultView: "compliance",
+  //defaultView: "compliance",
   currentView: null,
+  currentCheck : "comparison",
+  checks :  {
+    "comparison" :{
+      reviewManager : null,
+      reviewTable : null,
+      detailedInfoTable : null,
+      sourceAViewer : null,
+      sourceBViewer : null,
+      sourceCViewer : null,
+      sourceDViewer : null,
+      selectionManager : null
+    },
+    "compliance" :{
+      reviewManager : null,
+      reviewTable : null,
+      detailedInfoTable : null,
+      viewer : null,
+      selectionManager : null
+    }
+  },
   files: {
     // for testing only, delete below after controller.populateFiles is complete
     // a:{
@@ -26,7 +46,14 @@ let model = {
     //   fileName: "exampleD.wtvr"
     // }
     // for testing only, delete above after controller.populateFiles is complete
-  }
+  },
+
+  getCurrentReviewManager: function () {
+    return this.checks[this.currentCheck]["reviewManager"];
+  },
+  getCurrentSelectionManager: function () {
+    return this.checks[this.currentCheck]["selectionManager"];
+  },
 }
 
 let controller = {
@@ -257,17 +284,38 @@ let viewPanels = {
   showComparison: function () {
     this.comparison.classList.remove("hide");
     this.compliance.classList.add("hide");
+
+    // set current view
+    model.currentView = comparisonReviewManager;
+    model.currentCheck = "comparison";
   },
 
   showCompliance: function () {
     this.compliance.classList.remove("hide");
     this.comparison.classList.add("hide");
+
+    // set current view
+    model.currentView = complianceReviewManager;
+    model.currentCheck = "compliance";
   },
 
   toggleDetailInfo: function (element) {
-    let tableContainer = element.closest(".tableContainer");
-    tableContainer.classList.toggle("showDetailInfo");
+    // let tableContainer = element.closest(".tableContainer");
+    // tableContainer.classList.toggle("showDetailInfo");
+    // element.classList.toggle("invert");
+
+    let tableContainer = element.closest(".infoArea");
+    tableContainer.classList.toggle("openInfoArea");
+    // tableContainer.classList.toggle("closeInfoArea");
     element.classList.toggle("invert");
+
+    //document.getElementById("comparisonDetailInfoContainer").classList.toggle("closeDetailInfo"); 
+    if (tableContainer.classList.contains("openInfoArea")) {
+      tableContainer.style.height = tableContainer.offsetParent.offsetHeight / 2 + "px";
+    }
+    else {
+      tableContainer.style.height = "40px";
+    }
   },
 
   hideAllPanels: function () {
@@ -288,6 +336,11 @@ let viewPanels = {
     } else {
       parent.classList.add("maximize");
     }
+
+    // resize 3D viewer
+    if (model.currentView) {
+      model.currentView.ResizeViewers();
+    }
   }
 }
 
@@ -297,11 +350,15 @@ controller.init();
 let grabBarControl = function (element) {
   var m_pos;
   function resize(event) {
-    // var previous = element.previousElementSibling;
-    // var dx = m_pos - event.x;
-    // m_pos = event.x;
-    // previous.style.width = previous.offsetWidth - dx + "px";
+    var previous = element.previousElementSibling;
+    var dx = m_pos - event.x;
+    m_pos = event.x;
+    previous.style.width = previous.offsetWidth - dx + "px";
 
+    // resize 3D viewer
+    if (model.currentView) {
+      model.currentView.ResizeViewers();
+    }
   }
 
   element.addEventListener("mousedown", function (event) {

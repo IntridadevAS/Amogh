@@ -7,6 +7,10 @@ var sourceBComparisonHierarchy = undefined;
 var sourceAComplianceHierarchy = undefined;
 var sourceBComplianceHierarchy = undefined;
 
+
+var comparisonReviewManager;
+var complianceReviewManager;
+
 function initReviewModule() {
     // // set project name
     // setProjectName();
@@ -256,10 +260,36 @@ function loadComparisonData(comparisonCheckGroups,
         sourceBClassWiseComponents,
         //"comparisonMainTable",
         "comparisonMainContainer",
-        "comparisonDetailedTable",
+        "comparisonDetailInfo",
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
+    
+    comparisonReviewManager.loadDatasources();
 
+    // set current view
+    model.currentView  = comparisonReviewManager;
+    
+    // set comparison data
+
+    // review manager
+    var comparisonData = model.checks["comparison"];
+    comparisonData["reviewManager"]  = comparisonReviewManager;
+    
+    // selection manager
+    var selectionManager = new ReviewComparisonSelectionManager();
+    comparisonData["selectionManager"]  = selectionManager;
+    
+    // comparison main table    
+    var checkResultsTable = new ComparisonCheckResultsTable("comparisonMainContainer");   
+    checkResultsTable.populateReviewTable();
+    comparisonData["reviewTable"]  = checkResultsTable;
+
+    // comparison detailed info table
+    var checkPropertiesTable = new ComparisonCheckPropertiesTable("comparisonDetailInfo")
+    comparisonData["detailedInfoTable"]  = checkPropertiesTable;      
+    
+    // comparisonData["reviewManager"]  = comparisonReviewManager;
+    // comparisonData["reviewManager"]  = comparisonReviewManager;
 }
 
 function setButtonsCollapsible() {

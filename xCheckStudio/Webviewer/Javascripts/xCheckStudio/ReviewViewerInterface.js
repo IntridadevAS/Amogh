@@ -1,88 +1,86 @@
 function ReviewViewerInterface(viewerOptions,
     componentIdVsComponentData,
-    nodeIdVsComponentData,
-    reviewManager) {
+    nodeIdVsComponentData) {
 
-        this.ViewerOptions = viewerOptions;
-        this.selectedNodeId = null;
-        this.selectedComponentId = null;
-    
-        this.ComponentIdVsComponentData = componentIdVsComponentData;
-        this.NodeIdVsComponentData = nodeIdVsComponentData;
-        this.NodeIdStatusData = {};
-    
-        this.ReviewManager = reviewManager;
-        this.SelectedComponentRowFromSheetA;
-        this.SelectedComponentRowFromSheetB;
+    this.ViewerOptions = viewerOptions;
+    this.selectedNodeId = null;
+    this.selectedComponentId = null;
 
-        this.DontColorComponents = {
-            "centerline": {
-                "mainClass": "component",
-                "parentMainClass": "pipingnetworksegment"
-            }
-        };
+    this.ComponentIdVsComponentData = componentIdVsComponentData;
+    this.NodeIdVsComponentData = nodeIdVsComponentData;
+    this.NodeIdStatusData = {};
 
-        this.OverrideSeverityColorComponents = {
-            "pipingnetworksystem": ["pipingnetworksegment"],
-            "pipe": ["bran"],
-            "hvac": ["bran"],
-            "equi": ["cone", "cyli", "dish"]
-        };
+    // this.ReviewManager = reviewManager;
+    this.SelectedComponentRowFromSheetA;
+    this.SelectedComponentRowFromSheetB;
+
+    this.DontColorComponents = {
+        "centerline": {
+            "mainClass": "component",
+            "parentMainClass": "pipingnetworksegment"
+        }
+    };
+
+    this.OverrideSeverityColorComponents = {
+        "pipingnetworksystem": ["pipingnetworksegment"],
+        "pipe": ["bran"],
+        "hvac": ["bran"],
+        "equi": ["cone", "cyli", "dish"]
+    };
 }
 
-ReviewViewerInterface.prototype.Is3DViewer = function() {
+ReviewViewerInterface.prototype.Is3DViewer = function () {
     return false;
 }
 
-ReviewViewerInterface.prototype.Is1DViewer = function() {
+ReviewViewerInterface.prototype.Is1DViewer = function () {
     return false;
 }
 
-ReviewViewerInterface.prototype.bindEvents = function() {}
+ReviewViewerInterface.prototype.bindEvents = function () { }
 
-ReviewViewerInterface.prototype.setViewerBackgroundColor = function() {}
+ReviewViewerInterface.prototype.setViewerBackgroundColor = function () { }
 
-ReviewViewerInterface.prototype.highlightComponentsfromResult = function() {}
+ReviewViewerInterface.prototype.highlightComponentsfromResult = function () { }
 
-ReviewViewerInterface.prototype.unHighlightAll = function () {}
+ReviewViewerInterface.prototype.unHighlightAll = function () { }
 
-ReviewViewerInterface.prototype.onSelection = function (selectionEvent) {}
+ReviewViewerInterface.prototype.onSelection = function (selectionEvent) { }
 
-ReviewViewerInterface.prototype.unHighlightComponent = function () {}
+ReviewViewerInterface.prototype.unHighlightComponent = function () { }
 
-ReviewViewerInterface.prototype.menu = function (x, y) {}
+ReviewViewerInterface.prototype.menu = function (x, y) { }
 
-ReviewViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) {}
+ReviewViewerInterface.prototype.ChangeComponentColor = function (component, override, parentComponent) { }
 
-ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) {}
+ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) { }
 
-ReviewViewerInterface.prototype.IsComparisonReviewManager = function() {
-    if(this.ReviewManager.MainReviewTableContainer == "ComparisonMainReviewCell") {
-        return true;
-    }
-    return false;
-}
+// ReviewViewerInterface.prototype.IsComparisonReviewManager = function () {
+//     if (this.ReviewManager.MainReviewTableContainer == "ComparisonMainReviewCell") {
+//         return true;
+//     }
+//     return false;
+// }
 
-ReviewViewerInterface.prototype.IsComplianceReviewManager = function() {
-    if(this.ReviewManager.MainReviewTableContainer.includes("Compliance")) {
-        return true;
-    }
-    return false;
-}
+// ReviewViewerInterface.prototype.IsComplianceReviewManager = function () {
+//     if (this.ReviewManager.MainReviewTableContainer.includes("Compliance")) {
+//         return true;
+//     }
+//     return false;
+// }
 
-ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function(reviewTableRow) {
+ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (reviewTableRow) {
     var _this = this;
     var SourceA = reviewTableRow.cells[ComparisonColumns.SourceAName].innerText;
     var SourceB = reviewTableRow.cells[ComparisonColumns.SourceBName].innerText;
     var rowData = {};
-    var ContainerDiv = this.ReviewManager.GetReviewTableId(reviewTableRow);
+    
+    var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
     $(function () {
         var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
-        for (var id in data)
-        {
-            if(data[id].SourceA.trim() == SourceA.trim() && 
-            data[id].SourceB.trim() == SourceB.trim())
-            {        
+        for (var id in data) {
+            if (data[id].SourceA.trim() == SourceA.trim() &&
+                data[id].SourceB.trim() == SourceB.trim()) {
                 rowData['Status'] = data[id].Status;
                 rowData['SourceBName'] = data[id].SourceB;
                 rowData['SourceAName'] = data[id].SourceA;
@@ -97,15 +95,14 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function(revie
     return rowData;
 }
 
-ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function(reviewTableRow) {
+ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow) {
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
     var rowData = {};
-    var ContainerDiv = this.ReviewManager.GetReviewTableId(reviewTableRow);
+    var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
     $(function () {
         var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
-        for (var id in data)
-        {
-            if(data[id].SourceA.trim() == SourceA.trim()) {
+        for (var id in data) {
+            if (data[id].SourceA.trim() == SourceA.trim()) {
                 rowData['Status'] = data[id].Status;
                 rowData['SourceName'] = data[id].SourceA;
                 rowData['ResultId'] = data[id].ID;
@@ -118,15 +115,17 @@ ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function(revie
     return rowData;
 }
 
+ReviewViewerInterface.prototype.ResizeViewer = function () {    
+}
+
+/* 3D viewer interface */
 function Review3DViewerInterface(viewerOptions,
     componentIdVsComponentData,
-    nodeIdVsComponentData,
-    reviewManager) {
+    nodeIdVsComponentData) {
     // call super constructor
     ReviewViewerInterface.call(this, viewerOptions,
         componentIdVsComponentData,
-        nodeIdVsComponentData,
-        reviewManager);
+        nodeIdVsComponentData);
 }
 // assign SelectionManager's method to this class
 Review3DViewerInterface.prototype = Object.create(ReviewViewerInterface.prototype);
@@ -164,6 +163,7 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
     viewer.setCallbacks({
         firstModelLoaded: function () {
             viewer.view.fitWorld();
+            viewer.resizeCanvas();
 
             // create nav cube
             showNavigationCube(viewer);
@@ -179,14 +179,14 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
 
             for (var i = 0; i < selections.length; i++) {
                 var selection = selections[i];
-                var sel = selection.getSelection();
+                //var sel = selection.getSelection();
 
                 _this.onSelection(selection);
 
-                // if translucency control is on
-                if (viewer._params.containerId in translucencyManagers) {
-                    translucencyManagers[viewer._params.containerId].ComponentSelected(_this.selectedNodeId);
-                }
+                // // if translucency control is on
+                // if (viewer._params.containerId in translucencyManagers) {
+                //     translucencyManagers[viewer._params.containerId].ComponentSelected(_this.selectedNodeId);
+                // }
             }
         },
 
@@ -196,7 +196,15 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
             _this.menu(event.clientX, event.clientY);
         },
     });
+
+    window.onresize = function () {
+        viewer.resizeCanvas();
+    };
 };
+
+Review3DViewerInterface.prototype.ResizeViewer = function () {
+    this.Viewer.resizeCanvas();
+}
 
 Review3DViewerInterface.prototype.setViewerBackgroundColor = function () {
     var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
@@ -217,54 +225,62 @@ Review3DViewerInterface.prototype.highlightComponentsfromResult = function () {
 }
 
 Review3DViewerInterface.prototype.unHighlightAll = function () {
-    var _this = this;
+    //var _this = this;
 
+    var reviewManager = model.getCurrentReviewManager();
     //_this.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
-    _this.selectedNodeId = undefined;
-    _this.selectedComponentId = undefined;
-    // highlight corresponding component in another viewer
-    if (_this.ViewerOptions[0] === "viewerContainer1") {
-        if (_this.ReviewManager.SourceBReviewViewerInterface !== undefined) {
-            _this.ReviewManager.SourceBReviewViewerInterface.unHighlightComponent();
+    this.selectedNodeId = undefined;
+    this.selectedComponentId = undefined;
 
-            _this.ReviewManager.SourceBReviewViewerInterface.selectedNodeId = undefined;
-            _this.ReviewManager.SourceBReviewViewerInterface.selectedComponentId = undefined;
+    var sourceAReviewViewerInterface = model.checks["comparison"]["sourceAViewer"];    
+    var sourceBReviewViewerInterface = model.checks["comparison"]["sourceBViewer"];
+
+    // highlight corresponding component in another viewer
+    if (this.ViewerOptions[0] === ViewerAContainer) {
+        if (sourceBReviewViewerInterface !== undefined) {
+            sourceBReviewViewerInterface.unHighlightComponent();
+
+            sourceBReviewViewerInterface.selectedNodeId = undefined;
+            sourceBReviewViewerInterface.selectedComponentId = undefined;
         }
-        else if (_this.SelectedComponentRowFromSheetB !== undefined) {
+        else if (this.SelectedComponentRowFromSheetB !== undefined) {
             // reset color of row
-            var rowIndex = _this.SelectedComponentRowFromSheetB.rowIndex;
-            obj = Object.keys(_this.ReviewManager.checkStatusArrayB)
-            var status = _this.ReviewManager.checkStatusArrayB[obj[0]][rowIndex]
-            _this.ReviewManager.SelectionManager.ChangeBackgroundColor(_this.SelectedComponentRowFromSheetB, status);
-            _this.SelectedComponentRowFromSheetB = undefined;
+            var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+            obj = Object.keys(reviewManager.checkStatusArrayB)
+            var status = reviewManager.checkStatusArrayB[obj[0]][rowIndex]
+            model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedComponentRowFromSheetB, status);
+            this.SelectedComponentRowFromSheetB = undefined;
         }
     }
-    else if (_this.ViewerOptions[0] === "viewerContainer2") {
-        if (_this.ReviewManager.SourceAReviewViewerInterface !== undefined) {
-            _this.ReviewManager.SourceAReviewViewerInterface.unHighlightComponent();
+    else if (this.ViewerOptions[0] === ViewerBContainer) {
+        if (sourceAReviewViewerInterface !== undefined) {
+            sourceAReviewViewerInterface.unHighlightComponent();
 
-            _this.ReviewManager.SourceAReviewViewerInterface.selectedNodeId = undefined;
-            _this.ReviewManager.SourceAReviewViewerInterface.selectedComponentId = undefined;
+            sourceAReviewViewerInterface.selectedNodeId = undefined;
+            sourceAReviewViewerInterface.selectedComponentId = undefined;
         }
-        else if (_this.SelectedComponentRowFromSheetA !== undefined) {
+        else if (this.SelectedComponentRowFromSheetA !== undefined) {
+            
             // reset color of row
-            var rowIndex = _this.SelectedComponentRowFromSheetA.rowIndex;
-            obj = Object.keys(_this.ReviewManager.checkStatusArrayA)
-            var status = _this.ReviewManager.checkStatusArrayA[obj[0]][rowIndex]
-            _this.ReviewManager.SelectionManager.ChangeBackgroundColor(_this.SelectedComponentRowFromSheetA, status);
-            _this.SelectedComponentRowFromSheetA = undefined;
+            var rowIndex = this.SelectedComponentRowFromSheetA.rowIndex;
+            obj = Object.keys(reviewManager.checkStatusArrayA)
+            var status = reviewManager.checkStatusArrayA[obj[0]][rowIndex]
+            model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedComponentRowFromSheetA, status);
+            this.SelectedComponentRowFromSheetA = undefined;
         }
     }
 
     // restore highlightcolor of selected row in main review table
-    if (_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-        _this.ReviewManager.SelectionManager.RemoveHighlightColor(_this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
-        _this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = undefined;
+    if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+        model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+        model.getCurrentSelectionManager().HighlightedCheckComponentRow = undefined;
 
-        var parentTable = document.getElementById(_this.ReviewManager.DetailedReviewTableContainer);
-        if (parentTable !== undefined) {
-            parentTable.innerHTML = '';
-        }
+        // clear detailed info table
+        var viewerContainer = "#" + reviewManager.DetailedReviewTableContainer;       
+        // clear previous grid
+        if ($(viewerContainer).data("igGrid") != null) {
+            $(viewerContainer).igGrid("destroy");
+        }       
     }
 }
 
@@ -277,8 +293,8 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     }
 
     this.selectedNodeId = selection.getNodeId();
-    var model = this.Viewer.model;
-    if (!model.isNodeLoaded(this.selectedNodeId)) {
+    var model3D = this.Viewer.model;
+    if (!model3D.isNodeLoaded(this.selectedNodeId)) {
         this.unHighlightComponent();
         this.unHighlightAll();
 
@@ -289,44 +305,34 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     this.SelectValidNode();
 
     if (!this.selectedNodeId ||
-        model.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance ||
-        model.getNodeType(this.selectedNodeId) === Communicator.NodeType.Unknown) {
+        model3D.getNodeType(this.selectedNodeId) === Communicator.NodeType.BodyInstance ||
+        model3D.getNodeType(this.selectedNodeId) === Communicator.NodeType.Unknown) {
         return;
     }
 
+    var reviewManager = model.getCurrentReviewManager();
+
     // get check component id
     var checkComponentData = undefined;
-    if (this.ViewerOptions[0] === "viewerContainer1") {
+    if (this.ViewerOptions[0] === ViewerAContainer) {
 
-        if (this.ReviewManager.SourceANodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in this.ReviewManager.SourceANodeIdvsCheckComponent) {
-            checkComponentData = this.ReviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
-
-            // // highlight component in second viewer
-            // if (this.ReviewManager.SourceBReviewModuleViewerInterface &&
-            //     checkComponentData['SourceBNodeId'] in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
-            //     this.ReviewManager.SourceBReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceBNodeId']);
-            // }
+        if (reviewManager.SourceANodeIdvsCheckComponent !== undefined &&
+            this.selectedNodeId in reviewManager.SourceANodeIdvsCheckComponent) {
+            checkComponentData = reviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
         }
-        else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
-            checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
+        else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+            this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
+            checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
         }
     }
-    else if (this.ViewerOptions[0] === "viewerContainer2") {
-        if (this.ReviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in this.ReviewManager.SourceBNodeIdvsCheckComponent) {
-            checkComponentData = this.ReviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];
-
-            // // highlight component in first viewer
-            // if (this.ReviewManager.SourceAReviewModuleViewerInterface &&
-            //     checkComponentData['SourceANodeId'] in this.ReviewManager.SourceANodeIdvsCheckComponent) {
-            //     this.ReviewManager.SourceAReviewModuleViewerInterface.highlightComponent(checkComponentData['SourceANodeId']);
-            // }
+    else if (this.ViewerOptions[0] === ViewerBContainer) {
+        if (reviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
+            this.selectedNodeId in reviewManager.SourceBNodeIdvsCheckComponent) {
+            checkComponentData = reviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];          
         }
-        else if (this.ReviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in this.ReviewManager.SourceNodeIdvsCheckComponent) {
-            checkComponentData = this.ReviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
+        else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+            this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
+            checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
         }
     }
 
@@ -334,9 +340,8 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-       var reviewRow = this.GetReviewComponentRow(checkComponentData);
-    if(!reviewRow)
-    {
+    var reviewRow = this.GetReviewComponentRow(checkComponentData);
+    if (!reviewRow) {
         this.unHighlightComponent();
         this.unHighlightAll();
 
@@ -344,17 +349,17 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     }
 
     // component group id which is container div for check components table of given row
-    var containerDiv = this.ReviewManager.GetReviewTableId(reviewRow);
+    var containerDiv = reviewManager.GetReviewTableId(reviewRow);
 
     var data = $("#" + containerDiv).data("igGrid").dataSource.dataView();
     var rowData = data[reviewRow.rowIndex];
 
-    this.ReviewManager.OnCheckComponentRowClicked(rowData, containerDiv); 
+    reviewManager.OnCheckComponentRowClicked(rowData, containerDiv); 
 
-    var reviewTable = this.ReviewManager.GetReviewTable(reviewRow);
-    this.ReviewManager.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, 
+    var reviewTable = reviewManager.GetReviewTable(reviewRow);
+    model.getCurrentSelectionManager().ScrollToHighlightedCheckComponentRow(reviewTable, 
                                                                              reviewRow, 
-                                                                             this.ReviewManager.MainReviewTableContainer);          
+                                                                             reviewManager.MainReviewTableContainer);          
 };
 
 ReviewViewerInterface.prototype.unHighlightComponent = function () {
@@ -441,17 +446,17 @@ Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
     var nodeIdvsCheckComponent;
     // if comparison
-    if (this.ViewerOptions[0] === "viewerContainer1") {
-        nodeIdvsCheckComponent = this.ReviewManager.SourceANodeIdvsCheckComponent;
+    if (this.ViewerOptions[0] === ViewerAContainer) {
+        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceANodeIdvsCheckComponent;
     }
-    else if (this.ViewerOptions[0] === "viewerContainer2") {
-        nodeIdvsCheckComponent = this.ReviewManager.SourceBNodeIdvsCheckComponent;
+    else if (this.ViewerOptions[0] === ViewerBContainer) {
+        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceBNodeIdvsCheckComponent;
     }
 
     // if compliance
     if (!nodeIdvsCheckComponent &&
-        this.ReviewManager.SourceNodeIdvsCheckComponent) {
-        nodeIdvsCheckComponent = this.ReviewManager.SourceNodeIdvsCheckComponent;
+        model.getCurrentReviewManager().SourceNodeIdvsCheckComponent) {
+        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceNodeIdvsCheckComponent;
     }
 
     if (!nodeIdvsCheckComponent) {
@@ -469,12 +474,13 @@ Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
     component row for given check component data */
 Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcComponentData) {
     var componentsGroupName = checkcComponentData["MainClass"];
-    var mainReviewTableContainer = document.getElementById(this.ReviewManager.MainReviewTableContainer);
+    var mainReviewTableContainer = document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer);
     if (!mainReviewTableContainer) {
         return undefined;
     }
 
-    var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
+    //var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
+    var doc = mainReviewTableContainer.getElementsByClassName("accordion");    
     for (var i = 0; i < doc.length; i++) {
 
         if (doc[i].innerHTML !== componentsGroupName) {
@@ -489,7 +495,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
             for (var k = 2; k < childRows.length; k++) {
 
                 var childRow = childRows[k];
-                var childRowColumns = childRow.getElementsByTagName("td");
+                // var childRowColumns = childRow.getElementsByTagName("td");
                 var data = $("#" + componentsGroupName).data("igGrid").dataSource.dataView();
                 var rowData = data[childRow.rowIndex];
                 var checkComponentId;
@@ -508,24 +514,21 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                 //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
                 if (checkComponentId == checkcComponentData["Id"]) {
 
-                    // // open collapsible area
-                    // if (nextSibling.style.display != "block") {
-                    //     nextSibling.style.display = "block";
-                    // }
+                    // open collapsible area
+                    if (nextSibling.style.display != "block") {
+                        nextSibling.style.display = "block";
+                    }
 
-                    // if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-                    //     this.ReviewManager.SelectionManager.RemoveHighlightColor(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow);
-                    // }
+                    if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+                        model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                    }
 
-                    // // highlight selected row
-                    // this.ReviewManager.SelectionManager.ApplyHighlightColor(childRow)
-                    // this.ReviewManager.populateDetailedReviewTable(childRow);
-                    // this.ReviewManager.SelectionManager.HighlightedCheckComponentRow = childRow;
+                    // highlight selected row
+                    model.getCurrentSelectionManager().ApplyHighlightColor(childRow)                   
+                    model.getCurrentSelectionManager().HighlightedCheckComponentRow = childRow;
 
-                    // // scroll to row                           
-                    // var reviewTable = this.ReviewManager.GetReviewTable(childRow);
-                    // reviewTable.scrollTop = childRow.offsetTop - childRow.offsetHeight;
-                    // reviewTable.parentElement.parentElement.scrollTop = reviewTable.offsetTop;
+                    // scroll to table
+                    mainReviewTableContainer.scrollTop =  doc[i].offsetTop;                  
 
                     //break;
                     return childRow;
@@ -549,8 +552,8 @@ function Review1DViewerInterface(reviewManager,
     this.checkStatusArrayA = {};
     this.checkStatusArrayB = {};
 
-    if(this.ReviewManager.ComparisonCheckManager) {
-        this.CheckManager = this.ReviewManager.ComparisonCheckManager
+    if(model.getCurrentReviewManager().ComparisonCheckManager) {
+        this.CheckManager = model.getCurrentReviewManager().ComparisonCheckManager
     } 
     else {
         this.CheckManager = this.ReviewManager.ComplianceCheckManager
@@ -568,14 +571,14 @@ Review1DViewerInterface.prototype.Is1DViewer = function() {
 }
 
 Review1DViewerInterface.prototype.IsFirstViewer = function (viewerContainer) {
-    if (viewerContainer === "#viewerContainer1") {
+    if (viewerContainer === "#compare1") {
         return true;
     }
 
     return false;
 }
 Review1DViewerInterface.prototype.IsSecondViewer = function (viewerContainer) {
-    if (viewerContainer === "#viewerContainer2") {
+    if (viewerContainer === "#compare2") {
         return true;
     }
 
@@ -583,7 +586,7 @@ Review1DViewerInterface.prototype.IsSecondViewer = function (viewerContainer) {
 }
 
 Review1DViewerInterface.prototype.FirstViewerExists = function () {
-    if (document.getElementById("viewerContainer1").innerHTML !== "") {
+    if (document.getElementById("compare1").innerHTML !== "") {
         return true;
     }
 
@@ -609,7 +612,7 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
     //check if sheet is already loaded       
     if (sheetName === currentlyLoadedSheet) {
         if (this.ComparisonManager && CurrentReviewTableRowData.Status === "No Match") {
-            if (viewerContainer === "viewerContainer1" &&
+            if (viewerContainer === ViewerAContainer &&
             CurrentReviewTableRowData.SourceAName === "") {
                 if (this.SelectedComponentRowFromSheetA) {
                     this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA,
@@ -618,7 +621,7 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
 
                 return;
             }
-            else if (viewerContainer === "viewerContainer2" &&
+            else if (viewerContainer === ViewerBContainer &&
             CurrentReviewTableRowData.SourceBName === "") {
 
                 if (this.SelectedComponentRowFromSheetB) {
@@ -701,25 +704,25 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
         //     return;
         // }
 
-        if (viewerContainer === "viewerContainer1") {
+        if (viewerContainer === ViewerAContainer) {
             this.checkStatusArrayA = {};
             this.SelectedComponentRowFromSheetA = undefined;
 
-            this.LoadSheetTableData(columnHeaders, tableData, "#viewerContainer1", CurrentReviewTableRowData, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRowData, "viewerContainer1");
+            this.LoadSheetTableData(columnHeaders, tableData, "#"+ViewerAContainer, CurrentReviewTableRowData, column, sheetName);
+            this.HighlightRowInSheetData(CurrentReviewTableRowData, ViewerAContainer);
 
             // keep track of currently loaded sheet data
-            this.ReviewManager.SourceAViewerCurrentSheetLoaded = sheetName;
+            model.getCurrentReviewManager().SourceAViewerCurrentSheetLoaded = sheetName;
         }
-        else if (viewerContainer === "viewerContainer2") {
+        else if (viewerContainer === ViewerBContainer) {
             this.checkStatusArrayB = {};
             this.SelectedComponentRowFromSheetB = undefined;
 
-            this.LoadSheetTableData(columnHeaders, tableData, "#viewerContainer2", CurrentReviewTableRowData, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRowData, "viewerContainer2");
+            this.LoadSheetTableData(columnHeaders, tableData, "#" + ViewerBContainer, CurrentReviewTableRowData, column, sheetName);
+            this.HighlightRowInSheetData(CurrentReviewTableRowData, ViewerBContainer);
 
             // keep track of currently loaded sheet data
-            this.ReviewManager.SourceBViewerCurrentSheetLoaded = sheetName;
+            model.getCurrentReviewManager().SourceBViewerCurrentSheetLoaded = sheetName;
         }
     }
 };
@@ -808,7 +811,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
             }
 
             if (sourceComponentNames.SourceAName !== "" && sourceComponentNames.SourceAName === componentName) {
-                var color = this.ReviewManager.SelectionManager.GetRowHighlightColor(CurrentReviewTableRowData.Status);
+                var color = model.getCurrentSelectionManager().GetRowHighlightColor(CurrentReviewTableRowData.Status);
                 for (var j = 0; j < currentSheetRow.cells.length; j++) {
                     cell = currentSheetRow.cells[j];
                     cell.style.backgroundColor = color;
@@ -817,7 +820,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                 break;
             }
             else if (sourceComponentNames.SourceBName !== "" && sourceComponentNames.SourceBName === componentName) {
-                var color = this.ReviewManager.SelectionManager.GetRowHighlightColor(CurrentReviewTableRowData.Status);
+                var color = model.getCurrentSelectionManager().GetRowHighlightColor(CurrentReviewTableRowData.Status);
                 for (var j = 0; j < currentSheetRow.cells.length; j++) {
                     cell = currentSheetRow.cells[j];
                     cell.style.backgroundColor = color;
@@ -848,59 +851,10 @@ Review1DViewerInterface.prototype.OnViewerRowClicked = function (row, viewerCont
     }
 
     // highlight sheet data row
-    this.ReviewManager.SelectionManager.ApplyHighlightColor(row);
+    model.getCurrentSelectionManager().ApplyHighlightColor(row);
 
     // highlight check result component row
     this.HighlightRowInMainReviewTable(row, viewerContainer);
-
-    // highlight corresponding component data in another viewer
-    // if (this.ReviewManager.IsFirstViewer(viewerContainer)) {
-
-    //     if (this.ReviewManager.SecondViewerExists() &&
-    //         this.ReviewManager.SourceBComponentExists(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)) {
-    //         if (this.SourceBComponents !== undefined) {
-    //             this.HighlightRowInSheetData(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow, "viewerContainer2");
-    //         }
-    //         else if (this.SourceBViewerData !== undefined) {
-    //             this.HighlightComponentInGraphicsViewer(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)
-    //         }
-    //     }
-
-    //     //for "no match" case unhighlight component 
-    //     if (!this.ReviewManager.SourceBComponentExists(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)) {
-
-    //         if (this.ReviewManager.SourceBReviewViewerInterface) {
-    //             this.ReviewManager.SourceBReviewViewerInterface.unHighlightComponent();
-    //         }
-    //         if (this.ReviewManager.SelectedComponentRowFromSheetB) {
-    //             this.unhighlightSelectedSheetRowInviewer(this.ReviewManager.checkStatusArrayB, this.ReviewManager.SelectedComponentRowFromSheetB)
-    //         }
-
-    //     }
-    // }
-    // else if (this.ReviewManager.IsSecondViewer(viewerContainer)) {
-    //     if (this.ReviewManager.FirstViewerExists() &&
-    //         this.ReviewManager.SourceAComponentExists(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)) {
-
-    //         if (this.SourceAComponents !== undefined) {
-    //             this.HighlightRowInSheetData(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow, "viewerContainer1");
-    //         }
-    //         else if (this.SourceAViewerData !== undefined) {
-    //             this.HighlightComponentInGraphicsViewer(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)
-    //         }
-    //     }
-    //     //for "no match" case unhighlight component 
-    //     if (!this.ReviewManager.SourceAComponentExists(this.ReviewManager.SelectionManager.HighlightedCheckComponentRow)) {
-    //         if (this.ReviewManager.SourceAReviewViewerInterface) {
-    //             this.ReviewManager.SourceAReviewViewerInterface.unHighlightComponent();
-    //         }
-
-    //         if (this.ReviewManager.SelectionManager.HighlightedCheckComponentRow) {
-    //             this.unhighlightSelectedSheetRowInviewer(this.ReviewManager.checkStatusArrayA, this.ReviewManager.SelectedComponentRowFromSheetA)
-    //         }
-    //     }
-
-    // }
 }
 
 /* This method returns the corresponding comparison 
@@ -991,8 +945,10 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
         return;
     }
 
+    var reviewManager = model.getCurrentReviewManager();
+
     // component group id which is container div for check components table of given row
-    var containerDiv = this.ReviewManager.GetReviewTableId(reviewTableRow);
+    var containerDiv = reviewManager.GetReviewTableId(reviewTableRow);
     var rowData;
     if(this.ComparisonManager) {
         rowData = this.GetComparisonCheckComponentData(reviewTableRow);
@@ -1001,20 +957,20 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
         rowData = this.GetComplianceCheckComponentData(reviewTableRow);
     }
 
-    this.ReviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
-    this.ReviewManager.SelectionManager.MaintainHighlightedRow(reviewTableRow);
+    reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
+    model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow);
 
-    var reviewTable = this.ReviewManager.GetReviewTable(reviewTableRow);
-    this.ReviewManager.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, this.ReviewManager.MainReviewTableContainer);
+    var reviewTable = reviewManager.GetReviewTable(reviewTableRow);
+    model.getCurrentSelectionManager().ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, reviewManager.MainReviewTableContainer);
 }
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (viewerContainer, sheetName) {
 
-    if (viewerContainer === "viewerContainer1" &&
+    if (viewerContainer === ViewerAContainer &&
         sheetName in this.SourceAComponents) {
         return this.SourceAComponents[sheetName];
     }
-    else if (viewerContainer === "viewerContainer2" &&
+    else if (viewerContainer === ViewerBContainer &&
         sheetName in this.SourceBComponents) {
         return this.SourceBComponents[sheetName];
 
@@ -1025,11 +981,12 @@ Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (
 
 Review1DViewerInterface.prototype.GetCurrentSheetInViewer = function (viewerContainer) {
 
-    if (viewerContainer === "viewerContainer1") {
-        return this.ReviewManager.SourceAViewerCurrentSheetLoaded;
+    var reviewManager = model.getCurrentReviewManager();
+    if (viewerContainer === ViewerAContainer) {
+        return reviewManager.SourceAViewerCurrentSheetLoaded;
     }
-    else if (viewerContainer === "viewerContainer2") {
-        return this.ReviewManager.SourceBViewerCurrentSheetLoaded;
+    else if (viewerContainer === ViewerBContainer) {
+        return reviewManager.SourceBViewerCurrentSheetLoaded;
     }
 
     return undefined;
@@ -1041,7 +998,7 @@ Review1DViewerInterface.prototype.unhighlightSelectedSheetRowInviewer = function
     obj = Object.keys(checkStatusArray)
     var status = checkStatusArray[obj[0]][rowIndex]
     if (status !== undefined) {
-        this.ReviewManager.SelectionManager.ChangeBackgroundColor(currentRow, status);
+        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
     }
     else {
         color = "#fffff"
@@ -1101,46 +1058,12 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (CurrentRev
                     break;
                 }
             }          
-
-            // if (CurrentReviewTableRowData.SourceAName === componentName ||
-            //     CurrentReviewTableRowData.SourceBName === componentName) {
-            //     if (containerId === "viewerContainer1") {
-            //         if (this.SelectedComponentRowFromSheetA) {
-            //             this.ReviewManager.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, 
-            //                 this.SelectedComponentRowFromSheetA);
-            //         }
-
-            //         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
-
-            //         this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
-
-            //         var sheetDataTable1 = containerChildren[0];
-            //         sheetDataTable1.focus();
-            //         sheetDataTable1.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
-            //     }
-            //     if (containerId === "viewerContainer2") {
-
-            //         if (this.SelectedComponentRowFromSheetB) {
-            //             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
-            //         }
-
-            //         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
-
-            //         this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
-
-            //         var sheetDataTable2 = containerChildren[0];
-            //         sheetDataTable2.focus();
-            //         sheetDataTable2.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
-            //     }
-
-            //     break;
-            // }
         }
     }
 }
 
 Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = function(containerId, currentRowInSourceTable, containerChildren) {
-    if (containerId === "viewerContainer1") {
+    if (containerId === ViewerAContainer) {
         if (this.SelectedComponentRowFromSheetA) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, 
                 this.SelectedComponentRowFromSheetA);
@@ -1148,13 +1071,13 @@ Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = functi
 
         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
 
-        this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
+        model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
 
         var sheetDataTable1 = containerChildren[0];
         sheetDataTable1.focus();
         sheetDataTable1.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
     }
-    if (containerId === "viewerContainer2") {
+    if (containerId === ViewerBContainer) {
 
         if (this.SelectedComponentRowFromSheetB) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
@@ -1162,7 +1085,7 @@ Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = functi
 
         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
 
-        this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
+        model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
 
         var sheetDataTable2 = containerChildren[0];
         sheetDataTable2.focus();
@@ -1171,26 +1094,22 @@ Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = functi
 }
 
 Review1DViewerInterface.prototype.HighlightComplianceViewerSheetDataRow = function(containerId, currentRowInSourceTable, containerChildren) {
-    if (containerId === "viewerContainer1") {
+    if (containerId === ViewerAContainer) {
         if (this.SelectedComponentRowFromSheetA) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, 
                 this.SelectedComponentRowFromSheetA);
         }
         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
-        this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
+        model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
     }
-    else if (containerId === "viewerContainer2") {
+    else if (containerId === ViewerBContainer) {
         if (this.SelectedComponentRowFromSheetB) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, 
                 this.SelectedComponentRowFromSheetB);
         }
         this.SelectedComponentRowFromSheetB = currentRowInSourceTable;
-        this.ReviewManager.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
-    }
-
-    // if (!this.ReviewManager.SelectionManager.MaintainHighlightedRow(currentRowInSourceTable)) {
-    //     return;
-    // }
+        model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
+    }    
 
     var sheetDataTable = containerChildren[0];
     sheetDataTable.focus();

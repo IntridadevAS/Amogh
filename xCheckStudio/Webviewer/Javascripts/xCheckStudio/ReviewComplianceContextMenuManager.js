@@ -383,7 +383,7 @@ ReviewComplianceContextMenuManager.prototype.OnShowAllClick = function () {
 }
 
 ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
-    var selectionManager = this.ComplianceReviewManager.SelectionManager;
+    var selectionManager = model.getCurrentSelectionManager();
     if (selectionManager.SelectedCheckComponentRows.length === 0) {
         return undefined;
     }

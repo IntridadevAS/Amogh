@@ -60,11 +60,11 @@ ReviewSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function
     var top = (reviewRow.offsetTop - reviewRow.offsetHeight);
 
     var ContainerId = reviewTable.parentElement.id;
-    $(function () {
-        $("#" + ContainerId + "table_scroll").scrollTop = top;
-    });
-
-    var mainReviewTableContainer = document.getElementById("#" + ContainerId + "table_scroll");
+    // $(function () {
+    //$("#" + ContainerId + "_table_scroll").scrollTop = top;
+    // });
+    document.getElementById(ContainerId + "_table_scroll").scrollTop = top;    
+    // var mainReviewTableContainer = document.getElementById("#" + ContainerId + "table_scroll");
     // if (!mainReviewTableContainer) {
     //     return;
     // }

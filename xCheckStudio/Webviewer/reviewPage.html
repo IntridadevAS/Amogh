@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="src/css/main.css">
   <link rel="stylesheet" href="src/css/reviewPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
+  
+  <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -18,7 +20,7 @@
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
-      <p class="userName"> User Name </p>
+      <p id="userName" class="userName"> User Name </p>
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
@@ -92,33 +94,10 @@
 
       <div id="viewPanelComparison" class="viewPanel">
         <div id="tableDataComparison" class="tableContainer">
-          <div id="comparisonMainContainer" class="tablesArea">
-            <!-- <table id="comparisonMainTable"> </table> -->            
+          <div class="tablesArea">
+            <div id="comparisonMainContainer" class="tempContainer">
 
-          </div>
-          <div class="infoArea">
-            <div class="infoAreaHeader">
-              <img src="public/symbols/InfoMenu.svg" alt="">
-              <p>Detail Info</p>              
-              <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
-            <div id="comparisonDetailInfoContainer">
-            
-          </div>
-          </div>
-        </div>
-        <div id="center" class="grabBar"></div>
-        <div id="visualizerA" class="visualizerContainer visualizer4">
-          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-          <div id="compare1" class="comparePanel"></div>
-          <div id="compare2" class="comparePanel"></div>
-          <div id="compare3" class="comparePanel"></div>
-          <div id="compare4" class="comparePanel"></div>
-        </div>
-      </div>
-      <div id="viewPanelCompliance" class="viewPanel hide">
-        <div id="tableDataCompliance" class="tableContainer">
-          <div class="tablesArea">           
           </div>
           <div class="infoArea">
             <div class="infoAreaHeader">
@@ -127,7 +106,71 @@
               <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
 
-            <table id="comparisonDetailedTable"> </table>
+            <div id="comparisonDetailInfoContainer" class="detailInfoContainer">
+              <div id="comparisonDetailInfo"></div>
+            </div>
+
+          </div>
+        </div>
+        <div id="center" class="grabBar"></div>
+        <div id="visualizerA" class="visualizerContainer visualizer4">
+          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="compare1" class="comparePanel">
+           
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+                <p> <span id="translucencyValue1" style="color: grey"></span></p>
+              </div>
+            </div>
+
+          </div>
+          <div id="compare2" class="comparePanel">
+            
+            <!-- Translucency slider -->
+             <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
+                <p> <span id="translucencyValue2" style="color: grey"></span></p>
+              </div>
+            </div>
+
+          </div>
+          <div id="compare3" class="comparePanel">
+          
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay3" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider3">
+                <p> <span id="translucencyValue3" style="color: grey"></span></p>
+              </div>
+            </div>
+          
+          </div>
+          <div id="compare4" class="comparePanel">
+          
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay4" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider4">
+                <p> <span id="translucencyValue4" style="color: grey"></span></p>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      </div>
+      <div id="viewPanelCompliance" class="viewPanel hide">
+        <div id="tableDataCompliance" class="tableContainer">
+          <div class="tablesArea">
+          </div>
+          <div class="infoArea">
+            <div class="infoAreaHeader">
+              <img src="public/symbols/InfoMenu.svg" alt="">
+              <p>Detail Info</p>
+              <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
+            </div>
           </div>
         </div>
         <div id="center" class="grabBar"></div>
@@ -137,7 +180,7 @@
         </div>
       </div>
       <div class="projectName">
-        <p>Example Project Name / Example Check Name</p>
+        <p id="checkSpaceName">Example Project Name / Example Check Name</p>
       </div>
     </div>
   </div>
@@ -146,18 +189,18 @@
     ::-webkit-scrollbar {
       width: 6px;
     }
-  
+
     .ui-iggrid tbody td {
       white-space: nowrap;
     }
-  
+
     .content {
       padding: 0 18px;
       display: none;
       overflow: hidden;
       background-color: #f1f1f1;
     }
-  
+
     .scrollable {
       overflow-x: auto;
       overflow-y: auto;
@@ -175,12 +218,24 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
-  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\NavCubeManager.js"></script>
+
   <link rel="stylesheet" href="CSS\collapsibleButton.css" type="text/css" />
+
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonContextMenuManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>  
 
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
   <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
+  <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
 
   <!-- infragistics dependencies -->
   <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
@@ -188,11 +243,20 @@
   <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
   <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
 
+  <!-- HOOPS Communicator dependencies -->
+  <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
+  <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
+
   <script>
 
     window.onload = function () {
-      initReviewModule();
-    }
+
+        setPageTitle();
+        setUserName();
+        setCheckSpaceName();
+
+        initReviewModule();
+      }
 
   </script>
 </body>

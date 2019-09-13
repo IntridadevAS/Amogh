@@ -10,10 +10,6 @@
 // // let userImage = document.getElementById("userImg");
 // // userImage.src = localStorage.getItem("userImage");
 
-setPageTitle();
-setUserName();
-setCheckSpaceName();
-
 function setUserName() {
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     document.getElementById("userName").innerHTML = userinfo.alias;

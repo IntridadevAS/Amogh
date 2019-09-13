@@ -133,8 +133,8 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 }
 
 ReviewComparisonContextMenuManager.prototype.HaveSCOperations = function () {
-    if (this.ComparisonReviewManager.SourceAReviewViewerInterface ||
-        this.ComparisonReviewManager.SourceBReviewViewerInterface) {
+    if (model.checks["comparison"]["sourceAViewer"] ||
+        model.checks["comparison"]["sourceBViewer"]) {
         return true;
     }
 
@@ -262,14 +262,9 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
     var rowData = rowsData[selectedRow.rowIndex];
     
     var componentId = rowData.ID;
-    var groupId = rowData.groupId;
-    // var componentId = selectedRow.cells[ComparisonColumns.ResultId].innerHTML;
-    // var groupId = selectedRow.cells[ComparisonColumns.GroupId].innerHTML;
-
-    var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
-    var checkComponents = checkGroup["CheckComponents"];
-    var component = checkComponents[componentId];
-
+    var groupId = rowData.groupId;    
+    var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
+   
     if (component.transpose !== null ||
         rowData.Status == 'OK(A)(T)') {
         return false;
@@ -443,7 +438,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowCl
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
 
-    var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
+    var highlightedRow = model.checks["comparison"]["selectionManager"].HighlightedCheckComponentRow;
     if(!highlightedRow)
     {
         return;
@@ -465,14 +460,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
-    // var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
-    // if(!highlightedRow)
-    // {
-    //     return;
-    // }
-
-    // var componentTableId = highlightedRow.offsetParent.id;
-
+   
     var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
     var rowData = rowsData[rowClicked[0].rowIndex];
     
@@ -486,7 +474,7 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (row
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
-    var highlightedRow = this.ComparisonReviewManager.SelectionManager.HighlightedCheckComponentRow;
+    var highlightedRow = model.checks["comparison"]["selectionManager"].HighlightedCheckComponentRow;
     if(!highlightedRow)
     {
         return;
@@ -590,7 +578,7 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
 
     // source a isolate
     var sourceANodeIds = nodes["SourceA"];
-    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewViewerInterface;
+    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
 
     if (sourceANodeIds.length > 0 &&
         sourceAViewerInterface) {
@@ -605,7 +593,7 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
 
     // source b isolate
     var sourceBNodeIds = nodes["SourceB"];
-    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewViewerInterface;
+    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
 
     if (sourceBNodeIds.length > 0 &&
         sourceBViewerInterface) {
@@ -620,7 +608,7 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
 
 ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
     // source A
-    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewViewerInterface;
+    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
     if (sourceAViewerInterface) {
         sourceAViewerInterface.Viewer.model.setNodesVisibility([sourceAViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
             sourceAViewerInterface.Viewer.view.fitWorld();
@@ -628,7 +616,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
     }
 
     // source b
-    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewViewerInterface;
+    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
     if (sourceBViewerInterface) {
         sourceBViewerInterface.Viewer.model.setNodesVisibility([sourceBViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
             sourceBViewerInterface.Viewer.view.fitWorld();
@@ -638,7 +626,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
 
 
 ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
-    var selectionManager = this.ComparisonReviewManager.SelectionManager;
+    var selectionManager = model.checks["comparison"]["selectionManager"];
     if (selectionManager.SelectedCheckComponentRows.length === 0) {
         return undefined;
     }
@@ -687,8 +675,8 @@ ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
     // activate translucency
     var sourceANodeIds = nodes["SourceA"];
     var sourceBNodeIds = nodes["SourceB"];
-    var sourceAViewerInterface = this.ComparisonReviewManager.SourceAReviewViewerInterface;
-    var sourceBViewerInterface = this.ComparisonReviewManager.SourceBReviewViewerInterface;
+    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
+    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
 
     var viewers = [];
     var selectedNodes = {};

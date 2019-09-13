@@ -4,22 +4,16 @@ function ReviewModuleContextMenuManager()
 }
 
 ReviewModuleContextMenuManager.prototype.HighlightSelectedRowOnRightClick = function(selectedRow) {
-    var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-    if(typeOfRow == "ComparisonMainReviewTbody") { 
-        comparisonReviewManager.SelectionManager.MaintainHighlightedRow(selectedRow[0]);
-        // comparisonReviewManager.SelectionManager.HighlightedCheckComponentRow = selectedRow[0];
-        // comparisonReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
-    }
-    else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
-        sourceAComplianceReviewManager.SelectionManager.MaintainHighlightedRow(selectedRow[0]);
-        // sourceAComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow = selectedRow[0];
-        // sourceAComplianceReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
-    }
-    else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
-        sourceBComplianceReviewManager.SelectionManager.MaintainHighlightedRow(selectedRow[0]);
-        // sourceBComplianceReviewManager.SelectionManager.HighlightedCheckComponentRow = selectedRow[0];
-        // sourceBComplianceReviewManager.SelectionManager.ApplyHighlightColor(selectedRow[0]);
-    }
+    // var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
+    // if(typeOfRow == "ComparisonMainReviewTbody") { 
+        model.getCurrentSelectionManager().MaintainHighlightedRow(selectedRow[0]);       
+    // }
+    // else if(typeOfRow == "SourceAComplianceMainReviewTbody") {
+    //     model.getCurrentSelectionManager().MaintainHighlightedRow(selectedRow[0]);
+    // }
+    // else if(typeOfRow == "SourceBComplianceMainReviewTbody") {
+    //     model.getCurrentSelectionManager().MaintainHighlightedRow(selectedRow[0]);
+    // }
 }
 
 ReviewModuleContextMenuManager.prototype.DisableContextMenuAccept= function(selectedRow) {
