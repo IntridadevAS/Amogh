@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="src/css/main.css">
   <link rel="stylesheet" href="src/css/reviewPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
+  
+  <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -113,10 +115,50 @@
         <div id="center" class="grabBar"></div>
         <div id="visualizerA" class="visualizerContainer visualizer4">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-          <div id="compare1" class="comparePanel"></div>
-          <div id="compare2" class="comparePanel"></div>
-          <div id="compare3" class="comparePanel"></div>
-          <div id="compare4" class="comparePanel"></div>
+          <div id="compare1" class="comparePanel">
+           
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+                <p> <span id="translucencyValue1" style="color: grey"></span></p>
+              </div>
+            </div>
+
+          </div>
+          <div id="compare2" class="comparePanel">
+            
+            <!-- Translucency slider -->
+             <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
+                <p> <span id="translucencyValue2" style="color: grey"></span></p>
+              </div>
+            </div>
+
+          </div>
+          <div id="compare3" class="comparePanel">
+          
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay3" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider3">
+                <p> <span id="translucencyValue3" style="color: grey"></span></p>
+              </div>
+            </div>
+          
+          </div>
+          <div id="compare4" class="comparePanel">
+          
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay4" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider4">
+                <p> <span id="translucencyValue4" style="color: grey"></span></p>
+              </div>
+            </div>
+          
+          </div>
         </div>
       </div>
       <div id="viewPanelCompliance" class="viewPanel hide">
@@ -185,10 +227,15 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonContextMenuManager.js"></script>
 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>  
+
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
   <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
   <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
+  <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
 
   <!-- infragistics dependencies -->
   <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />

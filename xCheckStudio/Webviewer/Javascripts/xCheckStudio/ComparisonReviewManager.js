@@ -33,57 +33,48 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SourceAViewerCurrentSheetLoaded = undefined;
     this.SourceBViewerCurrentSheetLoaded = undefined;
 
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-    this.SelectionManager = new ReviewComparisonSelectionManager();
+    // this.SelectionManager = new ReviewComparisonSelectionManager();
 
-    // populate review table
-    this.CheckResultsTable = new ComparisonCheckResultsTable(this, mainReviewTableContainer);   
-    this.CheckResultsTable.populateReviewTable();
+    // // populate review table
+    // this.CheckResultsTable = new ComparisonCheckResultsTable(this, mainReviewTableContainer);   
+    // this.CheckResultsTable.populateReviewTable();
+    // model.checks["comparison"]["reviewTable"]  = this.CheckResultsTable;
 
-    this.CheckPropertiesTable = new ComparisonCheckPropertiesTable(this, detailedReviewTableContainer)
+    // this.CheckPropertiesTable = new ComparisonCheckPropertiesTable(this, detailedReviewTableContainer)
+    // model.checks["comparison"]["detailedInfoTable"]  = this.CheckPropertiesTable;
 
-    this.SourceAReviewViewerInterface;
-    this.SourceBReviewViewerInterface;
+    // this.SourceAReviewViewerInterface;
+    // this.SourceBReviewViewerInterface;
     this.SheetDataViewer;
 }
 
-ComparisonReviewManager.prototype.loadDatasources = function () {
-    //var modal = document.getElementById('maximizeViewerContainer');
-
-    // var viewer1 = document.getElementById("compare1");
-    // viewer1.style.height = "270px";
-    // viewer1.style.top = "0px";
-
-    // var viewer2 = document.getElementById("compare2");
-    // viewer2.style.height = "270px";
-    // viewer2.style.top = "0px";
-
-    // if (modal.style.display === "block") {
-    //     viewer1.style.height = "405px";
-    //     viewer2.style.height = "405px";
-    // }
+ComparisonReviewManager.prototype.loadDatasources = function () { 
 
     if (this.SourceAViewerData !== undefined) {
-        this.SourceAReviewViewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData[0]],
+        var viewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData[0]],
             this.SourceAComponentIdVsComponentData,
-            this.SourceANodeIdVsComponentData,
-            this);
-        this.SourceAReviewViewerInterface.NodeIdStatusData = this.SourceANodeIdVsStatus;
-        this.SourceAReviewViewerInterface.setupViewer(550, 280);
+            this.SourceANodeIdVsComponentData);
+        viewerInterface.NodeIdStatusData = this.SourceANodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceAViewer"] = viewerInterface;
     }
 
     if (this.SourceBViewerData !== undefined) {
-        this.SourceBReviewViewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData[0]],
+        var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData[0]],
             this.SourceBComponentIdVsComponentData,
-            this.SourceBNodeIdVsComponentData,
-            this);
-        this.SourceBReviewViewerInterface.NodeIdStatusData = this.SourceBNodeIdVsStatus;
-        this.SourceBReviewViewerInterface.setupViewer(550, 280);
+            this.SourceBNodeIdVsComponentData);
+        viewerInterface.NodeIdStatusData = this.SourceBNodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceBViewer"] = viewerInterface;
     }
 
-    if(this.SourceAComponents !== undefined || this.SourceBComponents !== undefined) {
+    if(this.SourceAComponents !== undefined || 
+       this.SourceBComponents !== undefined) {
         this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceAComponents, this.SourceBComponents);
     }
 }
@@ -139,7 +130,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
 }
 
 ComparisonReviewManager.prototype.SecondViewerExists = function () {
-    if (document.getElementById("viewerContainer2").innerHTML !== "") {
+    if (document.getElementById(ViewerBContainer).innerHTML !== "") {
         return true;
     }
 
@@ -243,11 +234,10 @@ ComparisonReviewManager.prototype.SourceBComponentExists = function (row) {
 // };
 
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
-    //maintain highlighted row
-    // this.SelectionManager.MaintainHighlightedRow(row);
-
+    
     // populate property table
-    this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+    //this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
     
     var sheetName = containerDiv.replace("#", "");
 
@@ -257,18 +247,16 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceAName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer(ViewerAContainer, result[0], rowData);
         }
-        else {
-            // document.getElementById("viewerContainer1").innerHTML = "";
+        else {           
             this.SourceAViewerCurrentSheetLoaded = undefined;
         }
 
         if (rowData.SourceBName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer(ViewerBContainer, result[1], rowData);
         }
-        else {
-            // document.getElementById("viewerContainer2").innerHTML = "";
+        else {           
             this.SourceBViewerCurrentSheetLoaded = undefined;
         }
     }
@@ -281,9 +269,8 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceAName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer1", result[0], rowData);
-        } else {
-            // document.getElementById("viewerContainer1").innerHTML = "";
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer(ViewerAContainer, result[0], rowData);
+        } else {           
             this.SourceAViewerCurrentSheetLoaded = undefined;
         }
 
@@ -294,10 +281,9 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         var result = sheetName.split('-');
 
         if (rowData.SourceBName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer("viewerContainer2", result[1], rowData);
+            this.SheetDataViewer.LoadSelectedSheetDataInViewer(ViewerBContainer, result[1], rowData);
         }
-        else {
-            // document.getElementById("viewerContainer2").innerHTML = "";
+        else {            
             this.SourceBViewerCurrentSheetLoaded = undefined;
         }
 
@@ -315,9 +301,7 @@ ComparisonReviewManager.prototype.GetComparisonResultGroupId = function (selecte
 
 ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRow, tableContainer, componentId, groupId)  {
     var _this = this;
-
-    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+ 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
@@ -337,7 +321,7 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var originalstatus = _this.getStatusFromMainReviewRow(_this.SelectionManager.HighlightedCheckComponentRow);
+                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
                 var changedStatus = originalstatus;
                 if (!originalstatus.includes("(A)")) {
                     changedStatus = originalstatus + "(A)";
@@ -368,12 +352,12 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
                         selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
-                        _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                         properties[i]["Severity"] = "ACCEPTED";
                     }
 
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -401,21 +385,21 @@ ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedR
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
-            success: function (msg) {
-                var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+            success: function (msg) {                
+                var component = _this.GetCheckComponent(groupId, componentId);
                 component.status = "OK(A)";
-                _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], component.status);
+                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
-                    if (property.Severity !== "OK" && property.Severity !== "No Value") {
+                    if (property.severity !== "OK" && property.severity !== "No Value") {
                         if ((property.transpose == 'lefttoright' || property.transpose == 'righttoleft')
-                            && property.Severity !== 'No Value') {
-                            component.properties[propertyId].Severity = 'ACCEPTED';
+                            && property.severity !== 'No Value') {
+                            component.properties[propertyId].severity = 'ACCEPTED';
                             component.status = "OK(A)(T)";
                             component.properties[propertyId].transpose = property.transpose;
                         }
                         else {
-                            component.properties[propertyId].Severity = 'ACCEPTED';
+                            component.properties[propertyId].severity = 'ACCEPTED';
                         }
                     }
                 }
@@ -457,15 +441,13 @@ ComparisonReviewManager.prototype.updateReviewComponentGridData = function (sele
 
     //var _this = this;
     //$(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {    
-    if(populateDetailedTable)
-    {
-        this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    if (populateDetailedTable) {
+        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+        //this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
     }
-    else
-    {
-        if(this.SelectionManager.HighlightedCheckComponentRow)
-        {
-            this.SelectionManager.HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
+    else {
+        if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+            model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
         }
     }
     //$(gridId).jsGrid("refresh");
@@ -622,26 +604,26 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                 var status = new Array();
                 status = msg;
                 var properties = status[1];
-
-                var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                
+                var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);;
                 component.status = status[0];
                 if (component.transpose != null) {
                     if (!status[0].includes("(T)"))
                         component.status = status[0] + "(T)";
                 }
 
-                _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], component.status);
+                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
 
                 var index = 0;
                 for (var propertyId in properties) {
                     property = properties[propertyId];
                     if ((property.transpose == 'lefttoright' || property.transpose == 'righttoleft')
                         && property.severity !== 'No Value') {
-                        component.properties[index].Severity = 'OK(T)';
+                        component.properties[index].severity = 'OK(T)';
                         component.properties[index].transpose = property.transpose;
                     }
                     else {
-                        component.properties[index].Severity = property.severity;
+                        component.properties[index].severity = property.severity;
                     }
                     index++;
                 }
@@ -655,8 +637,6 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
 ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
 
-    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
@@ -706,12 +686,12 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
                         properties[i]["Severity"] = status[1];
 
                         selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
-                        _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], status[1]);
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                         
                     }
 
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -811,21 +791,21 @@ ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
     // highlight component in graphics view in both viewer
     if (this.SourceAViewerData != undefined) {
         if (sourceANodeId !== undefined && sourceANodeId !== "") {
-            this.SourceAReviewViewerInterface.highlightComponent(sourceANodeId);
+            model.checks["comparison"]["sourceAViewer"].highlightComponent(sourceANodeId);
         }
         else {
             // unhighlight previous component
-            this.SourceAReviewViewerInterface.unHighlightComponent();
+            model.checks["comparison"]["sourceAViewer"].unHighlightComponent();
         }
     }
     if (this.SourceBViewerData != undefined) {
 
         if (sourceBNodeId !== undefined && sourceBNodeId !== "") {
-            this.SourceBReviewViewerInterface.highlightComponent(sourceBNodeId);
+            model.checks["comparison"]["sourceBViewer"].highlightComponent(sourceBNodeId);
         }
         else {
             // unhighlight previous component
-            this.SourceBReviewViewerInterface.unHighlightComponent();
+            model.checks["comparison"]["sourceBViewer"].unHighlightComponent();
         }
     }
 }
@@ -837,8 +817,6 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-    // var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    // var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
     try {
@@ -856,7 +834,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var originalstatus = _this.getStatusFromMainReviewRow(_this.SelectionManager.HighlightedCheckComponentRow);
+                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
                 var changedStatus = originalstatus;
 
                 var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
@@ -874,12 +852,12 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                     component.transpose = transposeType;
                 }
 
-                _this.SelectionManager.ChangeBackgroundColor(_this.SelectionManager.HighlightedCheckComponentRow, changedStatus);
+                model.getCurrentSelectionManager().ChangeBackgroundColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow, changedStatus);
 
                 var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML;
                 var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML;
 
-                _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], 'OK(T)');
+                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
 
                 var propertiesLen = properties.length;
 
@@ -916,7 +894,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                         }
                     }
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, tableContainer, groupId, changedStatus, false, ComparisonColumns.Status);
             }
         });
     }
@@ -927,8 +905,8 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
     var _this = this;
     var transposeType = 'restoreProperty';
 
-    var componentId = this.GetComparisonResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComparisonResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var componentId = this.GetComparisonResultId(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+    var groupId = this.GetComparisonResultGroupId(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
 
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
     try {
@@ -981,7 +959,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
 
                 component["Status"] = changedStatus;
                 component["transpose"] = null;
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus, false, ComparisonColumns.Status);
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, groupId, changedStatus, false, ComparisonColumns.Status);
             }
 
         });
@@ -1012,15 +990,15 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
             success: function (msg) {
                 var status = new Array();
                 status = msg;
-                var properties = status[1];
-                var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+                var properties = status[1];                
+                var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
                 component.status = status[0];
                 component.transpose = null;
                 var index = 0;
                 for (var propertyId in properties) {
                     property = properties[propertyId];
                     if (property.accepted == 'false') {
-                        component.properties[index].Severity = property.severity;
+                        component.properties[index].severity = property.severity;
                         component.properties[index].transpose = null;
                     }
                     else if (property.accepted == 'true') {
@@ -1057,23 +1035,23 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
-            success: function (msg) {
-                var component = _this.ComparisonCheckManager["CheckGroups"][groupId]["CheckComponents"][componentId];
+            success: function (msg) {                
+                var component =model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
                 component.transpose = transposeType;
                 component.status = 'OK(T)';
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
-                    if (property.Severity !== "OK" && property.Severity !== "No Value") {
-                        if (property.Severity == 'ACCEPTED') {
+                    if (property.severity !== "OK" && property.severity !== "No Value") {
+                        if (property.severity == 'ACCEPTED') {
                             component.status = 'OK(A)(T)';
                         }
                         else if ((transposeType == 'lefttoright' || transposeType == 'righttoleft')
                             && (property.SourceAName !== "" && property.SourceBName !== "")) {
-                            property.Severity = 'OK(T)';
+                            property.severity = 'OK(T)';
                             property.transpose = transposeType;
                         }
                         else {
-                            if ((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null &&
+                            if ((property.severity == 'Error' || property.severity == 'No Match') && property.transpose == null &&
                                 component.status == 'OK(T)') {
                                 if (!(component.Status).includes('(T)'))
                                     component.status = component.Status + "(T)";
@@ -1268,10 +1246,17 @@ ComparisonReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
 }
 
 ComparisonReviewManager.prototype.ResizeViewers = function () {
-    if (this.SourceAReviewViewerInterface) {
-        this.SourceAReviewViewerInterface.ResizeViewer();
+    if (model.checks["comparison"]["sourceAViewer"]) {
+        model.checks["comparison"]["sourceAViewer"].ResizeViewer();
     }
-    if (this.SourceBReviewViewerInterface) {
-        this.SourceBReviewViewerInterface.ResizeViewer();
+    if (model.checks["comparison"]["sourceBViewer"]) {
+        model.checks["comparison"]["sourceBViewer"].ResizeViewer();
     }
+}
+
+ComparisonReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
+    var checkGroup = this.ComparisonCheckManager.results[groupId];   
+    var component = checkGroup.components[componentId];
+
+    return component;
 }

@@ -3,6 +3,26 @@ let model = {
   selectedCompliance: "",
   //defaultView: "compliance",
   currentView: null,
+  currentCheck : "comparison",
+  checks :  {
+    "comparison" :{
+      reviewManager : null,
+      reviewTable : null,
+      detailedInfoTable : null,
+      sourceAViewer : null,
+      sourceBViewer : null,
+      sourceCViewer : null,
+      sourceDViewer : null,
+      selectionManager : null
+    },
+    "compliance" :{
+      reviewManager : null,
+      reviewTable : null,
+      detailedInfoTable : null,
+      viewer : null,
+      selectionManager : null
+    }
+  },
   files: {
     // for testing only, delete below after controller.populateFiles is complete
     // a:{
@@ -26,7 +46,14 @@ let model = {
     //   fileName: "exampleD.wtvr"
     // }
     // for testing only, delete above after controller.populateFiles is complete
-  }
+  },
+
+  getCurrentReviewManager: function () {
+    return this.checks[this.currentCheck]["reviewManager"];
+  },
+  getCurrentSelectionManager: function () {
+    return this.checks[this.currentCheck]["selectionManager"];
+  },
 }
 
 let controller = {
@@ -259,7 +286,8 @@ let viewPanels = {
     this.compliance.classList.add("hide");
 
     // set current view
-    model.currentView  = comparisonReviewManager;
+    model.currentView = comparisonReviewManager;
+    model.currentCheck = "comparison";
   },
 
   showCompliance: function () {
@@ -267,7 +295,8 @@ let viewPanels = {
     this.comparison.classList.add("hide");
 
     // set current view
-    model.currentView  = complianceReviewManager;
+    model.currentView = complianceReviewManager;
+    model.currentCheck = "compliance";
   },
 
   toggleDetailInfo: function (element) {

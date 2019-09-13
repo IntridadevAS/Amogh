@@ -87,3 +87,8 @@ const CompliancePropertyColumnNames = {
     Status: "Status"
 }
 
+
+const ViewerAContainer = "compare1";
+const ViewerBContainer = "compare2";
+const ViewerCContainer = "compare3";
+const ViewerDContainer = "compare4";

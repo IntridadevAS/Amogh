@@ -266,7 +266,30 @@ function loadComparisonData(comparisonCheckGroups,
     
     comparisonReviewManager.loadDatasources();
 
+    // set current view
     model.currentView  = comparisonReviewManager;
+    
+    // set comparison data
+
+    // review manager
+    var comparisonData = model.checks["comparison"];
+    comparisonData["reviewManager"]  = comparisonReviewManager;
+    
+    // selection manager
+    var selectionManager = new ReviewComparisonSelectionManager();
+    comparisonData["selectionManager"]  = selectionManager;
+    
+    // comparison main table    
+    var checkResultsTable = new ComparisonCheckResultsTable("comparisonMainContainer");   
+    checkResultsTable.populateReviewTable();
+    comparisonData["reviewTable"]  = checkResultsTable;
+
+    // comparison detailed info table
+    var checkPropertiesTable = new ComparisonCheckPropertiesTable("comparisonDetailInfo")
+    comparisonData["detailedInfoTable"]  = checkPropertiesTable;      
+    
+    // comparisonData["reviewManager"]  = comparisonReviewManager;
+    // comparisonData["reviewManager"]  = comparisonReviewManager;
 }
 
 function setButtonsCollapsible() {
