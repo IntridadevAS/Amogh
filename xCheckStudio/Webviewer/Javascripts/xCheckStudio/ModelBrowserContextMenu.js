@@ -1,6 +1,6 @@
 function ModelBrowserContextMenu() {
-      // call super constructor
-      ContextMenuManager.call(this);
+      // // call super constructor
+      // ContextMenuManager.call(this);
 
       this.ModelBrowser;
 
@@ -8,9 +8,9 @@ function ModelBrowserContextMenu() {
       this.IsolateManager;
 }
 
-// inherit from parent
-ModelBrowserContextMenu.prototype = Object.create(ContextMenuManager.prototype);
-ModelBrowserContextMenu.prototype.constructor = ModelBrowserContextMenu;
+// // inherit from parent
+// ModelBrowserContextMenu.prototype = Object.create(ContextMenuManager.prototype);
+// ModelBrowserContextMenu.prototype.constructor = ModelBrowserContextMenu;
 
 // ModelBrowserContextMenu.prototype.Init = function (x,y) {
 
@@ -198,7 +198,7 @@ ModelBrowserContextMenu.prototype.OnShowClicked = function () {
 
       this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, true);
       if (this.IsolateManager) {
-            _this.IsolateManager.IsolatedNodes = [];
+            this.IsolateManager.IsolatedNodes = [];
       }     
 }
 
@@ -212,33 +212,78 @@ ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
       if (!nodeIds ||
             nodeIds.length === 0) {
             return;
-      }
-
-      var sliderId;
-      var viewer = this.ModelBrowser.Webviewer;
-      if (viewer._params.containerId === "visualizerA") {
-            sliderId = "translucencySlider1";
-      }
-      else if (viewer._params.containerId === "visualizerB") {
-            sliderId = "translucencySlider2";
-      }
-      else if (viewer._params.containerId === "visualizerC") {
-            sliderId = "translucencySlider3";
-      }
-      else if (viewer._params.containerId === "visualizerD") {
-            sliderId = "translucencySlider4";
-      }
-      if (!sliderId) {
-            return;
-      }
+      }      
       
       var selectedNodes = {};
-      selectedNodes[viewer._params.containerId] = nodeIds;   
-      var translucencyManager = new TranslucencyManager([viewer], selectedNodes, sliderId);
+      selectedNodes[this.ModelBrowser.Webviewer._params.containerId] = nodeIds;   
+
+      var ids = this.GetControlIds();
+
+      var translucencyManager = new TranslucencyManager([this.ModelBrowser.Webviewer], selectedNodes, ids["translucency"]);
       translucencyManager.Start();
       
-      translucencyManagers[viewer._params.containerId] = translucencyManager;
+      translucencyManagers[this.ModelBrowser.Webviewer._params.containerId] = translucencyManager;
 }
+
+ModelBrowserContextMenu.prototype.GetControlIds = function () {
+      var ids = {};
+      if (this.ModelBrowser.Webviewer._params.containerId === "visualizerA") {
+          
+          var explode = {};
+          explode["slider"] = "explodeSlider1"
+          explode["output"] = "explodeValue1";
+          explode["overlay"] = "explodeOverlay1";
+          ids["explode"] = explode;
+  
+          var translucency = {};
+          translucency["slider"] = "translucencySlider1"
+          translucency["output"] = "translucencyValue1";
+          translucency["overlay"] = "translucencyOverlay1";
+          ids["translucency"] = translucency;        
+      }
+      else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerB") {
+          
+          var explode = {};
+          explode["slider"] = "explodeSlider2"
+          explode["output"] = "explodeValue2";
+          explode["overlay"] = "explodeOverlay2";
+          ids["explode"] = explode;   
+          
+          var translucency = {};
+          translucency["slider"] = "translucencySlider2"
+          translucency["output"] = "translucencyValue2";
+          translucency["overlay"] = "translucencyOverlay2";
+          ids["translucency"] = translucency;
+      }
+      else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerC") {
+          var explode = {};
+          explode["slider"] = "explodeSlider3"
+          explode["output"] = "explodeValue3";
+          explode["overlay"] = "explodeOverlay3";
+          ids["explode"] = explode;      
+  
+          var translucency = {};
+          translucency["slider"] = "translucencySlider3"
+          translucency["output"] = "translucencyValue3";
+          translucency["overlay"] = "translucencyOverlay3";
+          ids["translucency"] = translucency;
+      }
+      else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerD") {
+          var explode = {};
+          explode["slider"] = "explodeSlider4"
+          explode["output"] = "explodeValue4";
+          explode["overlay"] = "explodeOverlay4";
+          ids["explode"] = explode;
+  
+          var translucency = {};
+          translucency["slider"] = "translucencySlider4"
+          translucency["output"] = "translucencyValue4";
+          translucency["overlay"] = "translucencyOverlay4";
+          ids["translucency"] = translucency;
+      }
+  
+      return ids;
+  }
 
 ModelBrowserContextMenu.prototype.OnStopTranslucencyClicked = function () {
       var viewer = this.ModelBrowser.Webviewer;

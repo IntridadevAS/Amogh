@@ -27,6 +27,8 @@ function ReviewViewerInterface(viewerOptions,
         "hvac": ["bran"],
         "equi": ["cone", "cyli", "dish"]
     };
+
+    this.ReviewViewerContextMenu;
 }
 
 ReviewViewerInterface.prototype.Is3DViewer = function () {
@@ -169,6 +171,12 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
             showNavigationCube(viewer);
 
             _this.highlightComponentsfromResult();
+
+            //activate context menu            
+             var ids = _this.GetControlIds();
+
+            _this.ReviewViewerContextMenu = new ViewerContextMenu(viewer, ids);
+            _this.ReviewViewerContextMenu.Init();
         },
         selectionArray: function (selections) {
             if (selections.length === 0
@@ -181,19 +189,8 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
                 var selection = selections[i];
                 //var sel = selection.getSelection();
 
-                _this.onSelection(selection);
-
-                // // if translucency control is on
-                // if (viewer._params.containerId in translucencyManagers) {
-                //     translucencyManagers[viewer._params.containerId].ComponentSelected(_this.selectedNodeId);
-                // }
+                _this.onSelection(selection);              
             }
-        },
-
-        contextMenu: function (position) {
-
-            currentViewer = viewer;
-            _this.menu(event.clientX, event.clientY);
         },
     });
 
@@ -201,6 +198,66 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
         viewer.resizeCanvas();
     };
 };
+
+Review3DViewerInterface.prototype.GetControlIds = function () {
+    var ids = {};
+    if (this.Viewer._params.containerId === "compare1") {
+        
+        var explode = {};
+        explode["slider"] = "explodeSlider1"
+        explode["output"] = "explodeValue1";
+        explode["overlay"] = "explodeOverlay1";
+        ids["explode"] = explode;
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider1"
+        translucency["output"] = "translucencyValue1";
+        translucency["overlay"] = "translucencyOverlay1";
+        ids["translucency"] = translucency;        
+    }
+    else if (this.Viewer._params.containerId === "compare2") {
+        
+        var explode = {};
+        explode["slider"] = "explodeSlider2"
+        explode["output"] = "explodeValue2";
+        explode["overlay"] = "explodeOverlay2";
+        ids["explode"] = explode;   
+        
+        var translucency = {};
+        translucency["slider"] = "translucencySlider2"
+        translucency["output"] = "translucencyValue2";
+        translucency["overlay"] = "translucencyOverlay2";
+        ids["translucency"] = translucency;
+    }
+    else if (this.Viewer._params.containerId === "compare3") {
+        var explode = {};
+        explode["slider"] = "explodeSlider3"
+        explode["output"] = "explodeValue3";
+        explode["overlay"] = "explodeOverlay3";
+        ids["explode"] = explode;      
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider3"
+        translucency["output"] = "translucencyValue3";
+        translucency["overlay"] = "translucencyOverlay3";
+        ids["translucency"] = translucency;
+    }
+    else if (this.Viewer._params.containerId === "compare4") {
+        var explode = {};
+        explode["slider"] = "explodeSlider4"
+        explode["output"] = "explodeValue4";
+        explode["overlay"] = "explodeOverlay4";
+        ids["explode"] = explode;
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider4"
+        translucency["output"] = "translucencyValue4";
+        translucency["overlay"] = "translucencyOverlay4";
+        ids["translucency"] = translucency;
+    }
+
+    return ids;
+}
 
 Review3DViewerInterface.prototype.ResizeViewer = function () {
     this.Viewer.resizeCanvas();
