@@ -79,8 +79,10 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
                 _this.ReadProperties(rootNodeId, identifierProperties, undefined);
                
-                //activate context menu
-                _this.CheckViewerContextMenu = new CheckViewerContextMenu(viewer);
+                //activate context menu            
+                var ids = _this.GetControlIds();
+
+                _this.CheckViewerContextMenu = new ViewerContextMenu(viewer, ids);
                 _this.CheckViewerContextMenu.Init();
 
                 return resolve(true);
@@ -92,6 +94,66 @@ SCManager.prototype.LoadData = function (selectedComponents) {
         });
     });
 };
+
+SCManager.prototype.GetControlIds = function () {
+    var ids = {};
+    if (this.Webviewer._params.containerId === "visualizerA") {
+        
+        var explode = {};
+        explode["slider"] = "explodeSlider1"
+        explode["output"] = "explodeValue1";
+        explode["overlay"] = "explodeOverlay1";
+        ids["explode"] = explode;
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider1"
+        translucency["output"] = "translucencyValue1";
+        translucency["overlay"] = "translucencyOverlay1";
+        ids["translucency"] = translucency;        
+    }
+    else if (this.Webviewer._params.containerId === "visualizerB") {
+        
+        var explode = {};
+        explode["slider"] = "explodeSlider2"
+        explode["output"] = "explodeValue2";
+        explode["overlay"] = "explodeOverlay2";
+        ids["explode"] = explode;   
+        
+        var translucency = {};
+        translucency["slider"] = "translucencySlider2"
+        translucency["output"] = "translucencyValue2";
+        translucency["overlay"] = "translucencyOverlay2";
+        ids["translucency"] = translucency;
+    }
+    else if (this.Webviewer._params.containerId === "visualizerC") {
+        var explode = {};
+        explode["slider"] = "explodeSlider3"
+        explode["output"] = "explodeValue3";
+        explode["overlay"] = "explodeOverlay3";
+        ids["explode"] = explode;      
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider3"
+        translucency["output"] = "translucencyValue3";
+        translucency["overlay"] = "translucencyOverlay3";
+        ids["translucency"] = translucency;
+    }
+    else if (this.Webviewer._params.containerId === "visualizerD") {
+        var explode = {};
+        explode["slider"] = "explodeSlider4"
+        explode["output"] = "explodeValue4";
+        explode["overlay"] = "explodeOverlay4";
+        ids["explode"] = explode;
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider4"
+        translucency["output"] = "translucencyValue4";
+        translucency["overlay"] = "translucencyOverlay4";
+        ids["translucency"] = translucency;
+    }
+
+    return ids;
+}
 
 SCManager.prototype.ClearSource = function () {
     
@@ -124,11 +186,6 @@ SCManager.prototype.BindEvents = function (viewer) {
 
                 if (_this.SelectedNodeId !== sel.getNodeId()) {
                     _this.OnSelection(selection);
-
-                    // if translucency control is on
-                    // if (viewer._params.containerId in translucencyManagers) {
-                    //     translucencyManagers[viewer._params.containerId].ComponentSelected(this.SelectedNodeId);
-                    // }
                 }
             }
         },

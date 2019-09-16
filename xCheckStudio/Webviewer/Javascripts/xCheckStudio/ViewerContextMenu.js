@@ -1,20 +1,15 @@
-function CheckViewerContextMenu(webViewer) {
-    // call super constructor
-    ContextMenuManager.call(this);
+function ViewerContextMenu(webViewer, ids) {
 
     this.WebViewer = webViewer;
+    this.Controls = ids;
 
     this.TranslucencyManager;
     this.ExplodeManager;
-    
+
     this.NavCubeVisible = true;
 }
 
-// inherit from parent
-CheckViewerContextMenu.prototype = Object.create(ContextMenuManager.prototype);
-CheckViewerContextMenu.prototype.constructor = CheckViewerContextMenu;
-
-CheckViewerContextMenu.prototype.ShowMenu = function (x, y) {
+ViewerContextMenu.prototype.ShowMenu = function (x, y) {
 
     var _this = this;
 
@@ -145,109 +140,21 @@ CheckViewerContextMenu.prototype.ShowMenu = function (x, y) {
         if (e.target.id !== 'contextMenu') {            
             contextMenuDiv.style.display = 'none';
         }
-    };
+    };  
    
-    //document.body.appendChild(contextMenuDiv);
-    // var i = document.getElementById("contextMenu").style;
-    // i.top = y + "px";
-    // i.left = x + "px";
-    // i.visibility = "visible";
-    // i.opacity = "1";
 }
 
-CheckViewerContextMenu.prototype.Init = function () {
+ViewerContextMenu.prototype.Init = function () {
 
     var _this = this;
     this.WebViewer.setCallbacks({
-        contextMenu: function (position) {
-            // if (currentViewer === undefined) {
-            //     currentViewer = viewer;
-            // }
-
+        contextMenu: function (position) {          
             _this.ShowMenu(event.clientX, event.clientY);
         }
     });
-
-    /////////////////
-    // var viewerContainer = document.getElementById(this.WebViewer._params.containerId);    
-    // var _this = this;
-    // // this.ModelBrowser = modelBrowser;
-    // container = "#" + this.WebViewer._params.containerId;
-
-    // $(container).contextMenu({
-    //     className: 'contextMenu_style',
-    //     selector: 'div',
-    //     // selector: '.jsgrid-row, .jsgrid-alt-row',
-    //     build: function ($triggerElement, e) {
-    //         return {
-    //             callback: function (key, options) {
-    //                 _this.OnMenuItemClicked(key, options);
-    //             },
-    //             items: {
-    //                 "hide": {
-    //                     name: "Hide"
-    //                 },
-    //                 "isolate": {
-    //                     name: "Isolate"
-    //                 },
-    //                 "showAll": {
-    //                     name: "Show All"
-    //                 },
-    //                 "showNavigationCube": {
-    //                     name: "Show Navigation Cube"
-    //                 },
-    //                 "hideNavigationCube": {
-    //                     name: "Hide Navigation Cube"
-    //                 },
-    //                 "startExplode": {
-    //                     name: "Start Explode"
-    //                 },
-    //                 "stopExplode": {
-    //                     name: "Stop Explode"
-    //                 },
-    //                 "startTranslucency": {
-    //                     name: "Start Translucency"
-    //                 },
-    //                 "stopTranslucency": {
-    //                     name: "Stop Translucency"
-    //                 },                   
-    //             }
-    //         };
-    //     }
-    // });
 }
 
-// CheckViewerContextMenu.prototype.OnMenuItemClicked = function (key, options) {
-//     if (key.toLowerCase() === "hide") {
-//         this.OnHideClicked();
-//     }
-//     else if (key.toLowerCase() === "shownavigationcube") {
-//         showNavigationCube(this.WebViewer);
-//     }
-//     else if (key.toLowerCase() === "hidenavigationcube") {
-//         hideNavigationCube(this.WebViewer);
-//     }
-//     else if (key.toLowerCase() === "startexplode") {
-//         this.OnStartExplodeClicked();
-//     }
-//     else if (key.toLowerCase() === "stopexplode") {
-//         this.OnStopExplodeClicked();
-//     }
-//     else if (key.toLowerCase() === "isolate") {
-//         this.OnIsolateClicked();
-//     }
-//     else if (key.toLowerCase() === "showall") {
-//         this.OnShowAllClicked();
-//     }
-//     else if (key.toLowerCase() === "starttranslucency") {
-//         this.OnStartTranslucencyClicked();
-//     }
-//     else if (key.toLowerCase() === "stoptranslucency") {
-//         this.OnStopTranslucencyClicked();
-//     }
-// }
-
-CheckViewerContextMenu.prototype.OnStartExplodeClicked = function () {
+ViewerContextMenu.prototype.OnStartExplodeClicked = function () {
     if (!this.WebViewer) {
         return;
     }
@@ -257,13 +164,11 @@ CheckViewerContextMenu.prototype.OnStartExplodeClicked = function () {
         return;
     }
 
-    this.ExplodeManager = new ExplodeManager(this.WebViewer);
-    this.ExplodeManager.Start();
-
-    //explodeManagers[currentViewer._params.containerId] = explodeManager;
+    this.ExplodeManager = new ExplodeManager(this.WebViewer, this.Controls["explode"]);
+    this.ExplodeManager.Start();    
 }
 
-CheckViewerContextMenu.prototype.OnStopExplodeClicked = function () {
+ViewerContextMenu.prototype.OnStopExplodeClicked = function () {
 
     if (!this.WebViewer ||
         !this.ExplodeManager) {
@@ -274,7 +179,7 @@ CheckViewerContextMenu.prototype.OnStopExplodeClicked = function () {
     this.ExplodeManager = undefined;
 }
 
-CheckViewerContextMenu.prototype.OnHideClicked = function () {
+ViewerContextMenu.prototype.OnHideClicked = function () {
     if (this.WebViewer) {
 
         var results = this.WebViewer.selectionManager.getResults();
@@ -289,7 +194,7 @@ CheckViewerContextMenu.prototype.OnHideClicked = function () {
     }
 }
 
-CheckViewerContextMenu.prototype.OnIsolateClicked = function () {
+ViewerContextMenu.prototype.OnIsolateClicked = function () {
     if (!this.WebViewer) {
         return;
     }
@@ -311,7 +216,7 @@ CheckViewerContextMenu.prototype.OnIsolateClicked = function () {
 }
 
 
-CheckViewerContextMenu.prototype.OnShowAllClicked = function () {
+ViewerContextMenu.prototype.OnShowAllClicked = function () {
     if (!this.WebViewer) {
         return;
     }
@@ -323,7 +228,7 @@ CheckViewerContextMenu.prototype.OnShowAllClicked = function () {
 }
 
 
-CheckViewerContextMenu.prototype.OnStartTranslucencyClicked = function () {
+ViewerContextMenu.prototype.OnStartTranslucencyClicked = function () {
     if (!this.WebViewer ||
         !this.ActivateTranslucency()) {
         alert("Can't activate translucency.");
@@ -336,18 +241,16 @@ CheckViewerContextMenu.prototype.OnStartTranslucencyClicked = function () {
     }
 
     // get slider id
-    var sliderId = getSliderId(this.WebViewer._params.containerId);
-    if (!sliderId) {
-        return;
-    }
+    // var sliderId = getSliderId(this.WebViewer._params.containerId);
+    // if (!sliderId) {
+    //     return;
+    // }
 
-    this.TranslucencyManager = new TranslucencyManager([this.WebViewer], undefined, sliderId);
+    this.TranslucencyManager = new TranslucencyManager([this.WebViewer], undefined, this.Controls["translucency"]);
     this.TranslucencyManager.Start();
-
-    //translucencyManagers[currentViewer._params.containerId] = translucencyManager;
 }
 
-CheckViewerContextMenu.prototype.OnStopTranslucencyClicked = function () {
+ViewerContextMenu.prototype.OnStopTranslucencyClicked = function () {
     if (!this.WebViewer ||
         !this.TranslucencyManager) {
         return;
@@ -358,7 +261,7 @@ CheckViewerContextMenu.prototype.OnStopTranslucencyClicked = function () {
     this.TranslucencyManager = undefined;
 }
 
-CheckViewerContextMenu.prototype.ActivateTranslucency = function () {
+ViewerContextMenu.prototype.ActivateTranslucency = function () {
     if (!this.TranslucencyManager) {
         return true;
     }
@@ -366,7 +269,7 @@ CheckViewerContextMenu.prototype.ActivateTranslucency = function () {
     return false;
 }
 
-CheckViewerContextMenu.prototype.ExplodeActive = function () {
+ViewerContextMenu.prototype.ExplodeActive = function () {
     if (this.ExplodeManager) {
         return true;
     }

@@ -32,6 +32,10 @@
 
   </header>
   <div class="background">
+  
+    <div id='contextMenu' style="z-index: 1; position: absolute;">
+    </div>
+  
     <div class="tabButtonContainer" id="tabsContainer">
       <div id="tabContainer" class="tabContainer">
         <div id="comparisonTab" class="tab" data-id="comparison">
@@ -125,6 +129,15 @@
               </div>
             </div>
 
+            <!-- explode slider -->
+             <div id="explodeOverlay1" class="sliderOverlay">
+                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                    <input type="range" min="0" max="10" value="0" step="0.5"
+                        class="slider" id="explodeSlider1">
+                    <p><span id="explodeValue1"></span></p>
+                </div>
+            </div>
+
           </div>
           <div id="compare2" class="comparePanel">
             
@@ -136,6 +149,15 @@
               </div>
             </div>
 
+            <!-- explode slider -->
+            <div id="explodeOverlay2" class="sliderOverlay">
+                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                    <input type="range" min="0" max="10" value="0" step="0.5"
+                        class="slider" id="explodeSlider2">
+                    <p><span id="explodeValue2"></span></p>
+                </div>
+            </div>
+
           </div>
           <div id="compare3" class="comparePanel">
           
@@ -144,6 +166,14 @@
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
                 <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider3">
                 <p> <span id="translucencyValue3" style="color: grey"></span></p>
+              </div>
+            </div>
+          
+            <!-- explode slider -->
+            <div id="explodeOverlay3" class="sliderOverlay">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider3">
+                <p><span id="explodeValue3"></span></p>
               </div>
             </div>
           
@@ -158,8 +188,16 @@
               </div>
             </div>
           
+            <!-- explode slider -->
+            <div id="explodeOverlay4" class="sliderOverlay">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider4">
+                <p><span id="explodeValue4"></span></p>
+              </div>
+            </div>
+          
           </div>
-        </div>
+          </div>
       </div>
       <div id="viewPanelCompliance" class="viewPanel hide">
         <div id="tableDataCompliance" class="tableContainer">
@@ -223,13 +261,17 @@
 
   <link rel="stylesheet" href="CSS\collapsibleButton.css" type="text/css" />
 
-
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleContextMenuManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonContextMenuManager.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>  
+
+  <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerContextMenu.js"></script>   -->
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ViewerContextMenu.js"></script>
+
+  <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
