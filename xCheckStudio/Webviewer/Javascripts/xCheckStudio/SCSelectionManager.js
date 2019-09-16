@@ -200,7 +200,7 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
         else {
             var treeList = $("#" + containerDiv).dxTreeList("instance");
             var selectedRows = treeList.getSelectedRowKeys("all");
-            if(!selectedRows.includes(nodeId)) {
+            if(!selectedRows.includes(this.HighlightedComponentRowKey)) {
                 this.RemoveHighlightColor(this.HighlightedComponentRow);
             }
         }
@@ -218,6 +218,7 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
         }
     }
     this.HighlightedComponentRow = row;
+    this.HighlightedComponentRowKey = nodeId;
      
     if (viewer && nodeId) {
         // var nodeId = row.cells[ModelBrowserColumns3D.NodeId].innerText

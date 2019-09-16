@@ -221,8 +221,21 @@ ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
 
 ExcelModeBrowser.prototype.Clear = function () {   
     var containerDiv = "#" + this.ModelBrowserContainer;
-    $(containerDiv).igGrid("destroy");
 
+    var browserContainer = document.getElementById(this.ModelBrowserContainer);
+    var parent = browserContainer.parentElement;
+
+    //remove html element which holds grid
+    $(containerDiv).remove();
+
+    //Create and add div with same id to add grid again
+    var browserContainerDiv = document.createElement("div")
+    browserContainerDiv.id = this.ModelBrowserContainer;
+    var styleRule = ""
+    styleRule = "position: absolute";
+    browserContainerDiv.setAttribute("style", styleRule);
+    parent.appendChild(browserContainerDiv);
+    
      // clear count
      this.GetItemCountDiv().innerHTML = "";
 }
@@ -230,11 +243,11 @@ ExcelModeBrowser.prototype.Clear = function () {
 ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData) {
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
+
     $(function () {
         $(containerDiv).dxDataGrid({
             dataSource: tableData,
             keyExpr: "RowKey",
-            // parentIdExpr: "parent",
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: true,
@@ -243,7 +256,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             height: "96%",
             width: "100%",
             allowColumnResizing : true,
-            focusedRowEnabled: true,
+            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -252,16 +265,10 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                 showCheckBoxesMode: "always",
                 recursive: true
             }, 
-            scrolling: {
-                mode: "standard"
-            },
             paging: { enabled: false },
-            // onInitialized: function(e) {
-            //     // initialize the context menu
-            //     var modelBrowserContextMenu = new ModelBrowserContextMenu();
-            //     modelBrowserContextMenu.Init(_this);
-            //     _this.ShowItemCount(_this.modelTreeRowData.length);
-            // },
+            onInitialized: function(e) {
+                _this.ShowItemCount(tableData.length);
+            },
             onSelectionChanged: function (e) {
                 if(e.currentSelectedRowKeys.length > 0) {
                     for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
@@ -281,107 +288,10 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                 }
             },
             onRowClick: function(e) {
-                // console.log(e)
                 _this.SelectionManager.HighlightBrowserRow(e, e.key, _this.ModelBrowserContainer);
                 _this.ShowSelectedSheetData(e.rowElement[0]);
             },
-            // onRowExpanded: function(e) {
-            //     console.log(e)
-            // },
-            // onRowPrepared: function(e) {
-            //     console.log(e);
-            // }
         });
-        //var table = JSON.stringify(tableData);
-        // var isFiredFromCheckbox = false;
-        // $(containerDiv).igGrid({
-        //     columns: columnHeaders,
-        //     autofitLastColumn: false,
-        //     autoGenerateColumns: false,
-        //     dataSource: tableData,
-        //     responseDataKey: "results",
-        //     autoCommit: true,
-        //     height: "96%",
-        //     width: "100%",
-        //     alternateRowStyles: false,
-        //     rendered: function (evt, ui) {
-        //         _this.ShowItemCount(tableData.length);
-        //     },
-        //     features: [
-        //         {
-        //             name: "Sorting",
-        //             sortingDialogContainment: "window"
-        //         },
-        //         {
-        //             name: "Filtering",
-        //             type: "local",
-        //             dataFiltered: function (evt, ui) {
-        //                 //  var filteredData = evt.target.rows;
-        //                 // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-        //             }
-        //         },
-        //         {
-        //             name: "Selection",
-        //             mode: 'row',
-        //             multipleSelection: true,
-        //             activation: true,
-        //             rowSelectionChanging: function (evt, ui) {
-
-        //                 if (isFiredFromCheckbox) {
-        //                     isFiredFromCheckbox = false;
-        //                 } else {
-
-        //                     // _this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);
-        //                     _this.ShowSelectedSheetData(ui.row.element[0]);
-
-        //                     return false;
-        //                 }
-        //             }
-        //         },
-        //         {
-        //             name: "RowSelectors",
-        //             enableCheckBoxes: true,
-        //             enableRowNumbering: false,
-        //             enableSelectAllForPaging: true, // this option is true by default
-        //             checkBoxStateChanging: function (evt, ui) {
-        //                 //we use this variable as a flag whether the selection is coming from a checkbox
-        //                 isFiredFromCheckbox = true;
-        //             },
-        //             checkBoxStateChanged: function (evt, ui) {
-        //                 if (ui.isHeader) {
-        //                     var data = $(containerDiv).data("igGrid").dataSource.dataView();
-        //                     if (data.length === 0) {
-        //                         return;
-        //                     }
-
-        //                     for (var rowIndex in data) {
-        //                        // var record = data[rowIndex];
-                                
-        //                         var index = parseInt(rowIndex);
-        //                         if(index === NaN)
-        //                         {
-        //                             continue;
-        //                         }
-        //                         //var rowKey = record.ig_pk;
-        //                         var rowData =  _this.GetDataFromSelectedRow(rowIndex, containerDiv);
-        //                         var row = $(containerDiv).igGrid("rowAt", index);
-        //                         _this.SelectionManager.HandleSelectFormCheckBox(row, ui.state, rowData);
-        //                     }
-        //                 }
-        //                 else {
-        //                     var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
-        //                     _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
-
-        //                     // load corresponding sheet in viewr and highlight corrsponding row
-        //                     _this.ShowSelectedSheetData(ui.row[0]);
-        //                 }
-        //             }
-        //         },
-        //         {
-        //             name: "Resizing"
-        //         }
-        //     ]
-        // });
     });
 }
 
@@ -408,11 +318,6 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
 
     var containerDiv = "#" + this.ViewerContainer;
 
-    // if ($(containerDiv).data("igGrid") != null) {
-    //     $(containerDiv).igGrid("destroy");
-    // }
-
-    // $(containerDiv).remove();
     return new Promise(function (resolve) {
         $(function () {
 
@@ -421,8 +326,6 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                 columns: columnHeaders,
                 showBorders: true,
                 showRowLines: true,
-                // columnAutoWidth: true,
-                // wordWrapEnabled: true,
                 allowColumnResizing : true,
                 height: "100%",
                 width: "100%",
@@ -438,41 +341,6 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                 }
 
             });
-            //var table = JSON.stringify(tableData);
-            //var isFiredFromCheckbox = false;
-            // $(containerDiv).igGrid({
-            //     columns: columnHeaders,
-            //     autofitLastColumn: false,
-            //     autoGenerateColumns: false,
-            //     dataSource: tableData,
-            //     responseDataKey: "results",
-            //     autoCommit: true,
-            //     height: "100%",
-            //     width: "100%",
-            //     alternateRowStyles: false,
-            //     features: [
-            //         {
-            //             name: "Selection",
-            //             mode: 'row',
-            //             multipleSelection: true,
-            //             activation: true,
-            //             rowSelectionChanging: function (evt, ui) {
-
-            //                 _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0], _this.ModelBrowserContainer, _this.ViewerContainer);
-            //                 return false;                       
-            //             }
-            //         },
-            //         {
-            //             name: "RowSelectors",
-            //             enableCheckBoxes: false,
-            //             enableRowNumbering: false,
-            //             enableSelectAllForPaging: true, // this option is true by default                   
-            //         },
-            //         {
-            //             name: "Resizing"
-            //         }
-            //     ]
-            // });
         });
     
     });

@@ -150,9 +150,9 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row, key, contai
           if(this.HighlightedComponentRow.rowElement)
                this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
           else {
-               var treeList = $("#" + containerDiv).dxDataGrid("instance");
-               var selectedRows = treeList.getSelectedRowKeys("all");
-               if(!selectedRows.includes(key)) {
+               var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+               var selectedRows = dataGrid.getSelectedRowKeys("all");
+               if(!selectedRows.includes(this.HighlightedComponentRowKey)) {
                    this.RemoveHighlightColor(this.HighlightedComponentRow);
                }
            }
@@ -163,14 +163,15 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row, key, contai
           this.ApplyHighlightColor(row.rowElement[0]);        
       }
       else {
-          var treeList = $("#" + containerDiv).dxDataGrid("instance");
-          var selectedRows = treeList.getSelectedRowKeys("all");
+          var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+          var selectedRows = dataGrid.getSelectedRowKeys("all");
           if(!selectedRows.includes(key)) {
               this.ApplyHighlightColor(row);
           }
       }
 
      this.HighlightedComponentRow = row;
+     this.HighlightedComponentRowKey = key;
 }
 
 /* 

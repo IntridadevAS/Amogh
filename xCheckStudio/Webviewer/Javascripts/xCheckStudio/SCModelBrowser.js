@@ -202,8 +202,20 @@ SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode
 
 SCModelBrowser.prototype.Clear = function () {
     var containerDiv = "#" + this.ModelBrowserContainer;
-    $(containerDiv).igTreeGrid("destroy");
 
+    var browserContainer = document.getElementById(this.ModelBrowserContainer);
+    var parent = browserContainer.parentElement;
+
+    //remove html element which holds grid
+    $(containerDiv).remove();
+
+    //Create and add div with same id to add grid again
+    var browserContainerDiv = document.createElement("div")
+    browserContainerDiv.id = this.ModelBrowserContainer;
+    var styleRule = ""
+    styleRule = "position: absolute";
+    browserContainerDiv.setAttribute("style", styleRule);
+    parent.appendChild(browserContainerDiv);
     // clear count
     this.GetItemCountDiv().innerHTML = "";
 }
@@ -212,6 +224,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
+    // this.Clear();
     $(function () {
         $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
@@ -254,12 +267,6 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             onRowClick: function(e) {
                 _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
             },
-            // onRowExpanded: function(e) {
-            //     console.log(e)
-            // },
-            // onRowPrepared: function(e) {
-            //     console.log(e);
-            // }
         });
     });
 }

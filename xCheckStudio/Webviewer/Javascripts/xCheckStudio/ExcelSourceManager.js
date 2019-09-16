@@ -80,9 +80,7 @@ ExcelSourceManager.prototype.ClearSource = function () {
 
   // clear viewer
   var containerDiv = "#" + this.ViewerContainer;
-  if ($(containerDiv).data("igGrid") != null) {
-    $(containerDiv).igGrid("destroy");
-  }
+  $(containerDiv).html(""); 
 }
 
 ExcelSourceManager.prototype.AddComponentsToDB = function () {

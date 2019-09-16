@@ -24,35 +24,47 @@ DBModelBrowser.prototype.CreateHeaders = function () {
     var columnHeaders = [];
     for (var i = 0; i < Object.keys(ModelBrowserColumns1D).length; i++) {
         columnHeader = {};
-        var headerText;
+        var caption;
+        var visible = true;
+        var dataField;
+        var width;
         if (i === ModelBrowserColumns1D.Select) {
             continue;
         }
         else if (i === ModelBrowserColumns1D.Component) {
-            headerText = ModelBrowserColumnNames1D.Component;
-            key = ModelBrowserColumnNames1D.Component.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames1D.Component;
+            dataField = ModelBrowserColumnNames1D.Component.replace(/\s/g, '');
             width = "25%";
         }
         else if (i === ModelBrowserColumns1D.MainClass) {
-            headerText = ModelBrowserColumnNames1D.MainClass;
-            key = ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames1D.MainClass;
+            dataField = ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '');
             width = "25%";
         }
         else if (i === ModelBrowserColumns1D.SubClass) {
-            headerText = ModelBrowserColumnNames1D.SubClass;
-            key = ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames1D.SubClass;
+            dataField = ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '');
             width = "25%";
         }
         else if (i === ModelBrowserColumns1D.Description) {
-            headerText = ModelBrowserColumnNames1D.Description;
-            key = ModelBrowserColumnNames1D.Description.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames1D.Description;
+            dataField = ModelBrowserColumnNames1D.Description.replace(/\s/g, '');
             width = "25%";
         }
+        else if(i == ModelBrowserColumns1D.RowKey) {
+            caption = ModelBrowserColumnNames1D.RowKey;
+            dataField = ModelBrowserColumnNames1D.RowKey.replace(/\s/g, '');
+            width = "0%";
+            visible =  false;
+        }
 
-        columnHeader["headerText"] = headerText;
-        columnHeader["key"] = key;
-        columnHeader["dataType"] = "string";
+        columnHeader["caption"] = caption;
+        columnHeader["dataField"] = dataField;
+        // columnHeader["dataType"] = "string";
         columnHeader["width"] = width;
+        if(visible == false) {
+            columnHeader["visible"] = visible;
+        }
         columnHeaders.push(columnHeader);
     }
 
@@ -68,47 +80,11 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
 
     var columnHeaders = this.CreateHeaders();
 
-    // for (var i = 0; i < 4; i++) {
-    //     columnHeader = {};
-    //     var temp = {};
-    //     if (i === 0) {
-    //         temp["title"] = "";
-    //         temp["name"] = "checkbox";
-    //         temp["width"] = "20";
-    //         columnHeaders.push(temp);
-    //     }
-    //     var title;
-    //     if (i === 0) {
-    //         name = "Name";
-    //         title = "Item";
-    //         width = "40";
-    //     }
-    //     else if (i === 1) {
-    //         name = "Category";
-    //         title = "Category";
-    //         width = "100";
-    //     }
-    //     else if (i === 2) {
-    //         name = "ComponentClass";
-    //         title = "Item Class";
-    //         width = "100";
-    //     }
-    //     else if (i === 3) {
-    //         name = "Description";
-    //         title = "Description";
-    //         width = "100";
-    //     }
-    //     columnHeader["name"] = name;
-    //     columnHeader["title"] = title;
-    //     columnHeader["type"] = "text";
-    //     columnHeader["width"] = width;
-    //     columnHeaders.push(columnHeader);
-    // }
-
     tableData = [];
     //add each sheet to model browser 
     // iterate over sheets from excel file
     // filename.split('.')[0]
+    var rowKey = 1;
     for (var component in this.DBData) {
         var mainComponentClass = component;
         var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
@@ -150,17 +126,6 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
                 if (name !== undefined && mainComponentClass !== undefined) {
 
                     tableRowContent = {};
-                    // var checkBox = document.createElement("INPUT");
-                    // checkBox.setAttribute("type", "checkbox");
-                    // //checkBox.checked = false;
-                    // checkBox.checked = this.SelectionManager.IsComponentChecked(name, 
-                    //                                                              mainComponentClass, 
-                    //                                                              subComponentClass);
-                    // checkBox.onchange = function () {
-                    //     this.SelectionManager.HandleSelectFormCheckBox(this);                        
-                    // }
-
-                    //tableRowContent[columnHeaders[0].name] = checkBox;
                     tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
                     tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
                     tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
@@ -176,28 +141,15 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function () {
                         }
                     }
                     tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
+                    tableRowContent[ModelBrowserColumnNames1D.RowKey.replace(/\s/g, '')] = rowKey;
                     tableData.push(tableRowContent);
+                    rowKey++;
                 }
             }
         }
     }
 
     this.LoadModelBrowserTable(columnHeaders, tableData);
-
-    // // maintain first row as selected row by default
-    // var modelBrowserTableRows = this.GetModelBrowserDataRows();;                
-    // this.SelectionManager.HandleRowSelect(modelBrowserTableRows[0]);
-    // this.ShowSelectedDBData(modelBrowserTableRows[0]);   
-
-
-    // var modelBrowserHeaderTable = this.GetModelBrowserHeaderTable();
-    // modelBrowserHeaderTable.style.position = "fixed"
-    // modelBrowserHeaderTable.style.width = "543px";
-
-    // var modelBrowserDataTable = this.GetModelBrowserDataTable();
-    // modelBrowserDataTable.style.position = "static"
-    // modelBrowserDataTable.style.width = "556px";
-    // modelBrowserDataTable.style.margin = "47px 0px 0px 0px"  
 }
 
 DBModelBrowser.prototype.GetModelBrowserHeaderTable = function () {
@@ -231,160 +183,57 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
     var _this = this;
 
     var containerDiv = "#" + this.ModelBrowserContainer;
-
     $(function () {
-        //var table = JSON.stringify(tableData);
-        var isFiredFromCheckbox = false;
-        $(containerDiv).igGrid({
-            columns: columnHeaders,
-            autofitLastColumn: false,
-            autoGenerateColumns: false,
+        $(containerDiv).dxDataGrid({
             dataSource: tableData,
-            responseDataKey: "results",
-            autoCommit: true,
+            keyExpr: "RowKey",
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            showBorders: true,
+            showRowLines: true,
             height: "96%",
             width: "100%",
-            alternateRowStyles: false,
-            features: [
-                {
-                    name: "Sorting",
-                    sortingDialogContainment: "window"
-                },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    dataFiltered: function (evt, ui) {
-                        //  var filteredData = evt.target.rows;
-                        // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
+            allowColumnResizing : true,
+            // focusedRowEnabled: true,
+            filterRow: {
+                visible: true
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                recursive: true
+            }, 
+            paging: { enabled: false },
+            onInitialized: function(e) {
+                _this.ShowItemCount(tableData.length);
+            },
+            onSelectionChanged: function (e) {
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        rows = e.component.getVisibleRows();
+                        var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
+                        var  row = e.component.getRowElement(rowIndex);
+                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "on", rows[rowIndex].data);
                     }
-                },
-                {
-                    name: "Selection",
-                    mode: 'row',
-                    multipleSelection: true,
-                    activation: true,
-                    rowSelectionChanging: function (evt, ui) {
-
-                        if (isFiredFromCheckbox) {
-                            isFiredFromCheckbox = false;
-                        } else {
-                            // _this.SelectionManager.HighlightBrowserRow(ui.row.element[0]);
-                            _this.ShowSelectedDBData(ui.row.element[0]);
-                            return false;
-                        }
-
-                    }
-                },
-                {
-                    name: "RowSelectors",
-                    enableCheckBoxes: true,
-                    enableRowNumbering: false,
-                    enableSelectAllForPaging: true, // this option is true by default
-                    checkBoxStateChanging: function (evt, ui) {
-                        //we use this variable as a flag whether the selection is coming from a checkbox
-                        isFiredFromCheckbox = true;
-                    },
-                    checkBoxStateChanged: function (evt, ui) {
-
-                        if (ui.isHeader) {
-
-                            var data = $(containerDiv).data("igGrid").dataSource.dataView();
-                            if (data.length === 0) {
-                                return;
-                            }
-
-                            for (var rowIndex in data) {
-                                // var record = data[rowIndex];
-
-                                var index = parseInt(rowIndex);
-                                if (index === NaN) {
-                                    continue;
-                                }
-                                //var rowKey = record.ig_pk;
-                                var rowData = _this.GetDataFromSelectedRow(rowIndex, containerDiv);
-                                var row = $(containerDiv).igGrid("rowAt", index);
-                                _this.SelectionManager.HandleSelectFormCheckBox(row, ui.state, rowData);
-                            }
-                        }
-                        else {
-                            var rowData = _this.GetDataFromSelectedRow(ui.rowIndex, containerDiv);
-                            _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData);
-
-                            // load corresponding sheet in viewr and highlight corrsponding row
-                            _this.ShowSelectedDBData(ui.row[0]);
-                        }
-                    }
-                },
-                {
-                    name: "Resizing"
                 }
-            ]
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        rows = e.component.getVisibleRows();
+                        var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
+                        var  row = e.component.getRowElement(rowIndex);
+                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "off", rows[rowIndex].data);
+                    }
+                }
+            },
+            onRowClick: function(e) {
+                // console.log(e)
+                _this.SelectionManager.HighlightBrowserRow(e, e.key, _this.ModelBrowserContainer);
+                _this.ShowSelectedDBData(e.rowElement[0]);
+            },
         });
     });
 }
-
-// DBModelBrowser.prototype.LoadModelBrowserTable = function (_this,
-//     columnHeaders,
-//     tableData,
-//     viewerContainer) {
-
-//     $(function () {
-//         var db = {
-//             loadData: filter => {
-//                 console.debug("Filter: ", filter);
-//                 let ComponentClass = (filter.ComponentClass || "").toLowerCase();
-//                 let name = (filter.Name || "").toLowerCase();
-//                 let Category = (filter.MainComponentClass || "").toLowerCase();
-//                 let Description = (filter.Description || "").toLowerCase();
-//                 let dmy = parseInt(filter.dummy, 10);
-//                 // this.recalculateTotals = true;
-//                 return $.grep(tableData, row => {
-//                     return (!ComponentClass || row.ComponentClass.toLowerCase().indexOf(ComponentClass) >= 0)
-//                         && (!name || row.Name.toLowerCase().indexOf(name) >= 0)
-//                         && (!Category || row.MainComponentClass.toLowerCase().indexOf(Category) >= 0)
-//                         && (!Description || row.Description.toLowerCase().indexOf(Description) >= 0)
-//                         && (isNaN(dmy) || row.dummy === dmy);
-//                 });
-//             }
-//         };
-
-//         $(viewerContainer).jsGrid({
-//             height: "364px",
-//             width: "556px",
-//             filtering: true,
-//             sorting: true,
-//             autoload: true,
-//             controller: db,
-//             data: tableData,
-//             fields: columnHeaders,
-//             margin: "0px",
-//             checked: true,
-//             onRefreshed: function (config) {
-//                 _this.AddTableContentCount(this._container.context.id);
-
-//             },
-//             rowClick: function (args) {
-
-//                 _this.SelectionManager.HandleRowSelect(args.event.currentTarget);  
-//                 _this.ShowSelectedDBData(args.event.currentTarget);                
-//             }
-//         });
-
-//     });
-
-//     //add all rows to this.selectedComponents array
-//     // this.addselectedRowsToArray(viewerContainer)
-
-
-//     var container = document.getElementById(viewerContainer.replace("#", ""));
-//     container.style.width = "556px"
-//     container.style.height = "364px"
-//     container.style.margin = "0px"
-//     container.style.overflowX = "hide";
-//     container.style.overflowY = "scroll";
-//     container.style.padding = "0";
-// }
-
 
 DBModelBrowser.prototype.AddTableContentCount = function (containerId) {
     var modelBrowserData = document.getElementById(containerId);
@@ -402,61 +251,18 @@ DBModelBrowser.prototype.AddTableContentCount = function (containerId) {
 }
 
 DBModelBrowser.prototype.ShowSelectedDBData = function (browserRow) {
+    var _this = this;
     var mainclassname = browserRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
-    // var SubClassName = browserRow.cells[3].innerText.trim()
-    // var viewerContainerData;
-    // if (this.ModelBrowserContainer === "modelTree1") {
-    //     viewerContainerData = document.getElementById("viewerContainer1")
-    // }
-    // else if (this.ModelBrowserContainer === "modelTree2") {
-    //     viewerContainerData = document.getElementById("viewerContainer2")
-    // }
-
-    // if (viewerContainerData.childElementCount > 1 && 
-    //     viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === mainclassname) {
-    //     this.HighlightRowInDBData(browserRow);
-    //     return;
-    // }
-
     var mainComponentClassData = this.DBData[mainclassname];
     var components = [];
 
-    // if (Object.keys(mainComponentClassData).length > 0) {
-    //     if (viewerContainerData.childElementCount > 1) {
-    //         for (var subComponentClass in mainComponentClassData) {
-    //             if (viewerContainerData.children[1].getElementsByTagName("td")[0].innerText === subComponentClass) {
-    //                 this.HighlightRowInDBData(browserRow);
-    //                 return;
-    //             }
-    //         }
-    //     }
-    // }
-
+    
     if (mainComponentClassData !== {}) {
-        // if (browserRow.cells[1].innerText !== "" && 
-        //     browserRow.cells[2].innerText !== "") {
         for (var subComponentClass in mainComponentClassData) {
             for (var i = 0; i < mainComponentClassData[subComponentClass].length; i++) {
                 components.push(mainComponentClassData[subComponentClass][i]);
             }
         }
-
-        // var sheetProperties;
-        // {
-        //     for (var subComponent in mainComponentClassData) {
-        //         if (mainComponentClassData[subComponent][0].Name === browserRow.cells[1].innerText.trim()) {
-        //             sheetProperties = mainComponentClassData[subComponent][0].properties;
-        //         }
-        //         if (sheetProperties === undefined) {
-        //             for (var j = 0; j < mainComponentClassData[subComponent].length; j++) {
-        //                 if (mainComponentClassData[subComponent][j].Name === browserRow.cells[1].innerText.trim()) {
-        //                     sheetProperties = mainComponentClassData[subComponent][0].properties;
-        //                 }
-        //             }
-
-        //         }
-        //     }
-        // }
 
         var columnHeaders = [];
         var firstComponent = components[0];
@@ -465,32 +271,13 @@ DBModelBrowser.prototype.ShowSelectedDBData = function (browserRow) {
         //var column = {};
         for (var i = 0; i < firstComponentProperties.length; i++) {
             var columnHeader = {};
-
-
-            columnHeader["headerText"] = firstComponentProperties[i].Name;
-            columnHeader["key"] = firstComponentProperties[i].Name.replace(/\s/g, '');
+            columnHeader["caption"] = firstComponentProperties[i].Name;
+            columnHeader["dataField"] = firstComponentProperties[i].Name.replace(/\s/g, '');
             columnHeader["dataType"] = "string";
             columnHeader["width"] = "100px";
 
             columnHeaders.push(columnHeader);
 
-            // if (firstComponentProperties[i].Name === "ComponentClass") {
-            //     columnHeader["title"] = "Component Class";
-            // }
-            // else {
-            //     columnHeader["title"] = firstComponentProperties[i].Name;
-            // }
-
-            // columnHeader["name"] = firstComponentProperties[i].Name;
-
-            // columnHeader["type"] = "text";
-            // columnHeader["width"] = "100";
-            // columnHeaders.push(columnHeader);
-            // if (Object.keys(column).length <= 3) {
-            //     if (sheetProperties[i].Name === "ComponentClass" || sheetProperties[i].Name === "Name" || sheetProperties[i].Name === "Description") {
-            //         column[sheetProperties[i].Name] = i;
-            //     }
-            // }
         }
 
         var tableData = [];
@@ -501,26 +288,20 @@ DBModelBrowser.prototype.ShowSelectedDBData = function (browserRow) {
             var property = component.properties;
 
             for (var j = 0; j < property.length; j++) {
-                tableRowContent[columnHeaders[j].key] = property[j].Value;
+                tableRowContent[columnHeaders[j].dataField] = property[j].Value;
             }
             tableData.push(tableRowContent);
         }
 
-
-        // if (this.ModelBrowserContainer === "modelTree1") {
-        // _this = this;
         if (this.LoadedComponentClass !== mainclassname) {
-            this.LoadDBDataTable(columnHeaders, tableData);
+            this.LoadDBDataTable(columnHeaders, tableData).then(function() {
+                _this.HighlightRowInDBData(browserRow);  
+            });;
             this.LoadedComponentClass = mainclassname;
         }
-        this.HighlightRowInDBData(browserRow);
-        // }
-        // else if (this.ModelBrowserContainer === "modelTree2") {
-        //     _this = this;
-        //     _this.LoadDBDataTable(_this, columnHeaders, tableData, "#viewerContainer2");
-        //     _this.HighlightRowInDBData(browserRow);
-        // }
-        //}
+        else {
+            this.HighlightRowInDBData(browserRow);
+        }    
     }
 }
 
@@ -534,7 +315,9 @@ DBModelBrowser.prototype.RemoveHighlightColor = function (row) {
 
 DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
 
-    var data = $("#" + this.ViewerContainer).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + this.ViewerContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();  
+    
     if (data.length === 0) {
         return;
     }
@@ -580,11 +363,10 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
         if (name === dataRow[identifierColumns.name] &&
             subClass === dataRow[identifierColumns.componentClass]) {
 
-            var row = $("#" + this.ViewerContainer).igGrid("rowAt", i);
+            var row = dataGrid.getRowElement(i);
 
-            if (this.SelectionManager.HighlightDBRow(row)) {
-                // scroll to selected row
-                document.getElementById(this.ViewerContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
+            if (this.SelectionManager.HighlightDBRow(row[0])) {
+                dataGrid.getScrollable().scrollToElement(row[0])
             }
 
             break;
@@ -594,7 +376,20 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
 
 DBModelBrowser.prototype.Clear = function () {
     var containerDiv = "#" + this.ModelBrowserContainer;
-    $(containerDiv).igGrid("destroy");
+
+    var browserContainer = document.getElementById(this.ModelBrowserContainer);
+    var parent = browserContainer.parentElement;
+
+    //remove html element which holds grid
+    $(containerDiv).remove();
+
+    //Create and add div with same id to add grid again
+    var browserContainerDiv = document.createElement("div")
+    browserContainerDiv.id = this.ModelBrowserContainer;
+    var styleRule = ""
+    styleRule = "position: absolute";
+    browserContainerDiv.setAttribute("style", styleRule);
+    parent.appendChild(browserContainerDiv);
 
     // clear count
     this.GetItemCountDiv().innerHTML = "";
@@ -603,92 +398,106 @@ DBModelBrowser.prototype.Clear = function () {
 DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
     tableData) {
 
-    var _this = this;
-
     var containerDiv = "#" + this.ViewerContainer;
-    if ($(containerDiv).data("igGrid") != null) {
-        $(containerDiv).igGrid("destroy");
-    }
-
-
-    $(containerDiv).igGrid({
-        columns: columnHeaders,
-        autofitLastColumn: false,
-        autoGenerateColumns: false,
-        dataSource: tableData,
-        responseDataKey: "results",
-        autoCommit: true,
-        height: "100%",
-        width: "100%",
-        alternateRowStyles: false,
-        rendered: function (evt, ui) {
-            _this.ShowItemCount(tableData.length);
-        },
-        features: [
-            {
-                name: "Selection",
-                mode: 'row',
-                multipleSelection: true,
-                activation: true,
-                rowSelectionChanging: function (evt, ui) {
-
-                    // if (isFiredFromCheckbox) {
-                    //     isFiredFromCheckbox = false;
-                    // } else {
-                    _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0],
-                        _this.ModelBrowserContainer,
-                        _this.ViewerContainer);
-                    return false;
-                    // }
-
-                }
-            },
-            {
-                name: "RowSelectors",
-                enableCheckBoxes: false,
-                enableRowNumbering: false,
-                enableSelectAllForPaging: true, // this option is true by default              
-            },
-            {
-                name: "Resizing"
-            }
-        ]
+    var _this = this;
+    return new Promise(function (resolve) {
+        $(function () {
+            $(containerDiv).dxDataGrid({
+                dataSource: tableData,
+                columns: columnHeaders,
+                showBorders: true,
+                showRowLines: true,
+                allowColumnResizing : true,
+                height: "100%",
+                width: "100%",
+                // focusedRowEnabled: true,
+                filterRow: {
+                    visible: true
+                },
+                onContentReady: function(e) {
+                    return resolve(true);
+                },
+                selection: {
+                    mode: "multiple",
+                    showCheckBoxesMode: "always",
+                    recursive: true
+                }, 
+                paging: { enabled: false },
+                // onInitialized: function(e) {
+                //     // initialize the context menu
+                //     var modelBrowserContextMenu = new ModelBrowserContextMenu();
+                //     modelBrowserContextMenu.Init(_this);
+                //     _this.ShowItemCount(_this.modelTreeRowData.length);
+                // },
+                // onSelectionChanged: function (e) {
+                //     if(e.currentSelectedRowKeys.length > 0) {
+                //         for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                //             rows = e.component.getVisibleRows();
+                //             var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
+                //             var  row = e.component.getRowElement(rowIndex);
+                //             _this.SelectionManager.HandleSelectFormCheckBox(row[0], "on", rows[rowIndex].data);
+                //         }
+                //     }
+                //     else {
+                //         for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                //             rows = e.component.getVisibleRows();
+                //             var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
+                //             var  row = e.component.getRowElement(rowIndex);
+                //             _this.SelectionManager.HandleSelectFormCheckBox(row[0], "off", rows[rowIndex].data);
+                //         }
+                //     }
+                // },
+                onRowClick: function(e) {
+                    // console.log(e)
+                    _this.SelectionManager.HandleRowSelectInViewer(e.rowElement[0], _this.ModelBrowserContainer, _this.ViewerContainer);
+                },
+            });
+        });
     });
 
-    // $(function () {
+    // $(containerDiv).igGrid({
+    //     columns: columnHeaders,
+    //     autofitLastColumn: false,
+    //     autoGenerateColumns: false,
+    //     dataSource: tableData,
+    //     responseDataKey: "results",
+    //     autoCommit: true,
+    //     height: "100%",
+    //     width: "100%",
+    //     alternateRowStyles: false,
+    //     rendered: function (evt, ui) {
+    //         _this.ShowItemCount(tableData.length);
+    //     },
+    //     features: [
+    //         {
+    //             name: "Selection",
+    //             mode: 'row',
+    //             multipleSelection: true,
+    //             activation: true,
+    //             rowSelectionChanging: function (evt, ui) {
 
-    //     $(containerDiv).jsGrid({
-    //         // width: "570px",
-    //         // height: "380px",
-    //         height: "100%",
-    //         width: "100%",
-    //         alternateRowStyles: false,
-    //         sorting: true,
-    //         autoload: true,
-    //         data: tableData,
-    //         fields: columnHeaders,
-    //         margin: "0px",
-    //         onRefreshed: function (config) {
-    //             // var excelSheetParentContainer = document.getElementById("dataSourceViewer");
-    //             // for (var i = 0; i < excelSheetParentContainer.childElementCount; i++) {
-    //             //     currentChild = excelSheetParentContainer.children[i];
-    //             //     if (currentChild.className === "viewdatagraphics") {
-    //             //         currentChild.style.display = "none";
-    //             //     }
-    //             // }
+    //                 // if (isFiredFromCheckbox) {
+    //                 //     isFiredFromCheckbox = false;
+    //                 // } else {
+    //                 _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0],
+    //                     _this.ModelBrowserContainer,
+    //                     _this.ViewerContainer);
+    //                 return false;
+    //                 // }
+
+    //             }
     //         },
-    //         rowClick: function (args) {
-    //             _this.HighlightRowInModelBrowser(args.event.currentTarget)
+    //         {
+    //             name: "RowSelectors",
+    //             enableCheckBoxes: false,
+    //             enableRowNumbering: false,
+    //             enableSelectAllForPaging: true, // this option is true by default              
+    //         },
+    //         {
+    //             name: "Resizing"
     //         }
-    //     });
-
+    //     ]
     // });
-
-    // var container = document.getElementById(viewerContainer.replace("#", ""));
-    // container.style.width = "570px"
-    // container.style.height = "380px"
-    // container.style.overflowX = "scroll";
-    // container.style.overflowY = "scroll";
 }
 
 DBModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
