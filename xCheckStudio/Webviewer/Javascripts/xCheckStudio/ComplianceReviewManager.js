@@ -9,9 +9,7 @@ function ComplianceReviewManager(complianceCheckManager,
 
     this.ViewerData = viewerData;
 
-    this.SourceComponents = sourceComponents;
-
-    // this.ReviewModuleViewerInterface;
+    this.SourceComponents = sourceComponents;    
 
     this.ComplianceCheckManager = complianceCheckManager;
 
@@ -150,55 +148,55 @@ ComplianceReviewManager.prototype.CreateMainTableHeaders = function () {
     return columnHeaders;
 }
 
-ComplianceReviewManager.prototype.CreateTableData = function (CheckComponents,
-    groupId,
-    mainClass) {
+// ComplianceReviewManager.prototype.CreateTableData = function (CheckComponents,
+//     groupId,
+//     mainClass) {
 
-    var _this = this;
-    var tableData = [];
+//     var _this = this;
+//     var tableData = [];
 
-    for (var componentId in CheckComponents) {
-        if (!CheckComponents.hasOwnProperty(componentId)) {
-            continue;
-        }
-        // for (var j = 0; j < componentsGroup.CheckComponents.length; j++) {
+//     for (var componentId in CheckComponents) {
+//         if (!CheckComponents.hasOwnProperty(componentId)) {
+//             continue;
+//         }
+//         // for (var j = 0; j < componentsGroup.CheckComponents.length; j++) {
 
-        component = CheckComponents[componentId];
-        //var component = componentsGroup.Components[j];
+//         component = CheckComponents[componentId];
+//         //var component = componentsGroup.Components[j];
 
-        tableRowContent = {};
+//         tableRowContent = {};
 
-        var checkBox = document.createElement("INPUT");
-        checkBox.setAttribute("type", "checkbox");
-        checkBox.checked = false;
-        // select component check box state change event
-        checkBox.onchange = function () {
-            _this.SelectionManager.HandleCheckComponentSelectFormCheckBox(this);
-        }
+//         var checkBox = document.createElement("INPUT");
+//         checkBox.setAttribute("type", "checkbox");
+//         checkBox.checked = false;
+//         // select component check box state change event
+//         checkBox.onchange = function () {
+//             _this.SelectionManager.HandleCheckComponentSelectFormCheckBox(this);
+//         }
 
-        tableRowContent[ComplianceColumnNames.Select] = checkBox;
-        tableRowContent[ComplianceColumnNames.SourceName] = component.SourceAName;
-        tableRowContent[ComplianceColumnNames.Status] = component.Status;
-        tableRowContent[ComplianceColumnNames.NodeId] = component.SourceANodeId;
-        tableRowContent[ComplianceColumnNames.ResultId] = component.ID;
-        tableRowContent[ComplianceColumnNames.GroupId] = groupId;
+//         tableRowContent[ComplianceColumnNames.Select] = checkBox;
+//         tableRowContent[ComplianceColumnNames.SourceName] = component.SourceAName;
+//         tableRowContent[ComplianceColumnNames.Status] = component.Status;
+//         tableRowContent[ComplianceColumnNames.NodeId] = component.SourceANodeId;
+//         tableRowContent[ComplianceColumnNames.ResultId] = component.ID;
+//         tableRowContent[ComplianceColumnNames.GroupId] = groupId;
 
-        tableData.push(tableRowContent);
+//         tableData.push(tableRowContent);
 
-        // maintain track of check components
-        if (component.SourceANodeId) {
-            this.SourceNodeIdvsCheckComponent[component.SourceANodeId] = {
-                "Id": component.ID,
-                "SourceAName": component.SourceAName,
-                "MainClass": mainClass,
-                "SourceANodeId": component.SourceANodeId
-            };
+//         // maintain track of check components
+//         if (component.SourceANodeId) {
+//             this.SourceNodeIdvsCheckComponent[component.SourceANodeId] = {
+//                 "Id": component.ID,
+//                 "SourceAName": component.SourceAName,
+//                 "MainClass": mainClass,
+//                 "SourceANodeId": component.SourceANodeId
+//             };
 
-            this.SourceComponentIdvsNodeId[component.ID] = component.SourceANodeId;
-        }
-    }
-    return tableData;
-}
+//             this.SourceComponentIdvsNodeId[component.ID] = component.SourceANodeId;
+//         }
+//     }
+//     return tableData;
+// }
 
 ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, componentClass) {
 
@@ -266,14 +264,15 @@ ComplianceReviewManager.prototype.GetComplianceResultGroupId = function (selecte
     return selectedRow.cells[ComplianceColumns.GroupId].innerHTML;
 }
 
-ComplianceReviewManager.prototype.UpdateStatusForComponent = function (selectedRow, tableToUpdate) {
+ComplianceReviewManager.prototype.AcceptComponent = function (selectedRow, tableContainer, tableToUpdate, componentId, groupId) {
     var _this = this;
-    var tableToUpdate = tableToUpdate;
-    var componentId = this.GetComplianceResultId(selectedRow[0]);
-    var groupId = this.GetComplianceResultGroupId(selectedRow[0]);
+        
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -283,17 +282,23 @@ ComplianceReviewManager.prototype.UpdateStatusForComponent = function (selectedR
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
-                var Properties = checkResultComponent["properties"];
-                checkResultComponent.Status = "OK(A)";
+                // var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                // var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
+                var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
-                for (var propertyId in Properties) {
-                    property = Properties[propertyId];
-                    if (property.Severity !== "OK")
-                        property.Severity = 'ACCEPTED';
+                var properties = checkResultComponent["properties"];
+                checkResultComponent.status = "OK(A)";
+
+                for (var propertyId in properties) {
+                    property = properties[propertyId];
+                    if (property.severity !== "OK")
+                        property.severity = 'ACCEPTED';
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, checkResultComponent.Status);
+                _this.updateReviewComponentGridData(selectedRow[0], 
+                                                   tableContainer, 
+                                                   checkResultComponent.status, 
+                                                   true, 
+                                                   ComplianceColumns.Status);
             }
         });
     }
@@ -309,7 +314,7 @@ ComplianceReviewManager.prototype.UpdateStatusForProperty = function (selectedRo
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -359,24 +364,45 @@ ComplianceReviewManager.prototype.UpdateStatusForProperty = function (selectedRo
     }
 }
 
-ComplianceReviewManager.prototype.updateReviewComponentGridData = function (selectedRow, groupId, changedStatus) {
-    var row = selectedRow;
-    var gridId = '#' + this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + this.MainReviewTableContainer;
-    var _this = this;
+ComplianceReviewManager.prototype.updateReviewComponentGridData = function (selectedRow,
+    tableContainer,    
+    changedStatus,
+    populateDetailedTable,
+    statusColumnId) {
 
-    var editedItem = {
-        "SourceA": selectedRow.cells[ComplianceColumns.SourceName].innerText,
-        "Status": changedStatus,
-        "NodeId": selectedRow.cells[ComplianceColumns.NodeId].innerText,
-        "ID": selectedRow.cells[ComplianceColumns.ResultId].innerText,
-        "groupId": selectedRow.cells[ComplianceColumns.GroupId].innerText
-    };
+    var data = $(tableContainer).data("igGrid").dataSource.dataView();
+    var rowData = data[selectedRow.rowIndex];
+    rowData.Status = changedStatus;
+    
+    selectedRow.cells[statusColumnId].innerText = changedStatus;
+    if (populateDetailedTable) {
+        model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
+    }
+    else
+    {
+        if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+            model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerText = changedStatus;
+        }
+    }
 
-    $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
-        _this.SelectionManager.HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerHTML = changedStatus;
-        _this.populateDetailedReviewTable(selectedRow);
-        $(gridId).jsGrid("refresh");
-    });
+    // var row = selectedRow;
+
+    // var gridId = '#' + this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + this.MainReviewTableContainer;
+    // var _this = this;
+
+    // var editedItem = {
+    //     "SourceA": selectedRow.cells[ComplianceColumns.SourceName].innerText,
+    //     "Status": changedStatus,
+    //     "NodeId": selectedRow.cells[ComplianceColumns.NodeId].innerText,
+    //     "ID": selectedRow.cells[ComplianceColumns.ResultId].innerText,
+    //     "groupId": selectedRow.cells[ComplianceColumns.GroupId].innerText
+    // };
+
+    // $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
+    //     _this.SelectionManager.HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerHTML = changedStatus;
+    //     _this.populateDetailedReviewTable(selectedRow);
+    //     $(gridId).jsGrid("refresh");
+    // });
 }
 
 ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tableToUpdate) {
@@ -388,7 +414,7 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tab
     var tableToUpdate = tableToUpdate;
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -446,7 +472,7 @@ ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function (
     var tabletoupdate = tabletoupdate;
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -516,14 +542,21 @@ ComplianceReviewManager.prototype.toggleAcceptAllComparedComponents = function (
     }
 }
 
-ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow, tableToUpdate) {
+ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow, 
+                                                                tableToUpdate,
+                                                                tableContainer, 
+                                                                componentId, 
+                                                                groupId) {
     var _this = this;
-    var componentId = this.GetComplianceResultId(selectedRow[0]);
-    var groupId = this.GetComplianceResultGroupId(selectedRow[0]);
-    var tableToUpdate = tableToUpdate;
+    // var componentId = this.GetComplianceResultId(selectedRow[0]);
+    // var groupId = this.GetComplianceResultGroupId(selectedRow[0]);
+    // var tableToUpdate = tableToUpdate;
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             dataType: 'JSON',
             async: true,
@@ -537,15 +570,21 @@ ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                 var status = new Array();
                 status = msg;
                 var properties = status[1];
-                var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
-                checkResultComponent.Status = status[0];
+                
+                var checkResultComponent = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);;               
+                checkResultComponent.status = status[0];
                 var index = 0;
+               
                 for (var propertyId in properties) {
-                    checkResultComponent.properties[index].Severity = properties[propertyId]["severity"];
+                    checkResultComponent.properties[index].severity = properties[propertyId]["severity"];
                     index++;
-                }
-                _this.updateReviewComponentGridData(selectedRow[0], groupId, checkResultComponent.Status);
+                }               
+                
+                _this.updateReviewComponentGridData(selectedRow[0], 
+                    tableContainer, 
+                    checkResultComponent.status, 
+                    true, 
+                    ComplianceColumns.Status);
             }
         });
     }
@@ -560,7 +599,7 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             dataType: 'JSON',
@@ -610,7 +649,7 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (button, tableToUp
     var tableToUpdate = tableToUpdate;
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             dataType: 'JSON',
@@ -1284,4 +1323,15 @@ ComplianceReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewe
     }
 
     return checkComponentData;
+}
+
+ComplianceReviewManager.prototype.GetFileName = function () {
+    return this.ComplianceCheckManager.source;
+}
+
+ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
+    var checkGroup = this.ComplianceCheckManager.results[groupId];
+    var component = checkGroup.components[componentId];
+
+    return component;
 }

@@ -29,19 +29,19 @@ ReviewComplianceSelectionManager.prototype.ChangeBackgroundColor =  function(row
     }
 }
 
-ReviewComplianceSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentCheckBox) {
-    var currentCell = currentCheckBox.parentElement;
-    if (currentCell.tagName.toLowerCase() !== 'td') {
-        return;
-    }
+ReviewComplianceSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, checkBoxState) {
+    // var currentCell = currentCheckBox.parentElement;
+    // if (currentCell.tagName.toLowerCase() !== 'td') {
+    //     return;
+    // }
 
-    var currentRow = currentCell.parentElement;
-    if (currentRow.tagName.toLowerCase() !== 'tr' ||
-        currentRow.cells.length < Object.keys(ComplianceColumns).length) {
-        return;
-    }
+    // var currentRow = currentCell.parentElement;
+    // if (currentRow.tagName.toLowerCase() !== 'tr' ||
+    //     currentRow.cells.length < Object.keys(ComplianceColumns).length) {
+    //     return;
+    // }
 
-    if (currentCheckBox.checked &&
+    if (checkBoxState == "on" &&
         !this.SelectedCheckComponentRows.includes(currentRow)) {
         // if check component is selected and and selected 
         // component row doesn't exist already

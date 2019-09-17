@@ -255,6 +255,19 @@ Review3DViewerInterface.prototype.GetControlIds = function () {
         translucency["overlay"] = "translucencyOverlay4";
         ids["translucency"] = translucency;
     }
+    else if (this.Viewer._params.containerId === "compliance1") {
+        var explode = {};
+        explode["slider"] = "explodeSlider5"
+        explode["output"] = "explodeValue5";
+        explode["overlay"] = "explodeOverlay5";
+        ids["explode"] = explode;
+
+        var translucency = {};
+        translucency["slider"] = "translucencySlider5"
+        translucency["output"] = "translucencyValue5";
+        translucency["overlay"] = "translucencyOverlay5";
+        ids["translucency"] = translucency;
+    }
 
     return ids;
 }
