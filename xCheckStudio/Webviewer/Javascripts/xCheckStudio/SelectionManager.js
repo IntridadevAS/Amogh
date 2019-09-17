@@ -1,8 +1,9 @@
 function SelectionManager()
 {
     // maintain selected and highlighted component rows
-    this.SelectedComponentRows = [];
-    this.HighlightedComponentRow;    
+    this.SelectedComponentNodeIds = [];
+    this.HighlightedComponentRow; 
+    this.HighlightedComponentRowKey;   
 }
 
 SelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBox) {   

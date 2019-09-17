@@ -44,42 +44,55 @@ SCModelBrowser.prototype.CreateHeaders = function () {
     var columnHeaders = [];
     for (var i = 0; i < Object.keys(ModelBrowserColumns3D).length; i++) {
         var columnHeader = {};
-        var headerText;
-        var key;
+        var caption;
+        var dataField;
         var width;
         var dataType;
+        var visible = true
         if (i === ModelBrowserColumns3D.Select) {
             continue;
         }
         else if (i === ModelBrowserColumns3D.Component) {
-            headerText = ModelBrowserColumnNames3D.Component;
-            key = ModelBrowserColumnNames3D.Component.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames3D.Component;
+            dataField = ModelBrowserColumnNames3D.Component.replace(/\s/g, '');
             width = "40%";
-            dataType = "string";
+            // dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.MainClass) {
-            headerText = ModelBrowserColumnNames3D.MainClass;
-            key = ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames3D.MainClass;
+            dataField = ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '');
             width = "30%";
-            dataType = "string";
+            // dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.SubClass) {
-            headerText = ModelBrowserColumnNames3D.SubClass;
-            key = ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames3D.SubClass;
+            dataField = ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '');
             width = "30%";
-            dataType = "string";
+            // dataType = "string";
         }
         else if (i === ModelBrowserColumns3D.NodeId) {
-            headerText = ModelBrowserColumnNames3D.NodeId;
-            key = ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '');
+            caption = ModelBrowserColumnNames3D.NodeId;
+            dataField = ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '');
             width = "0%";
-            dataType = "number";
+            visible = false;
+            // dataType = "number";
+        }
+        else if (i === ModelBrowserColumns3D.Parent) {
+            caption = ModelBrowserColumnNames3D.Parent;
+            dataField = ModelBrowserColumnNames3D.Parent.replace(/\s/g, '');
+            width = "0%";
+            visible = false;
+            // dataType = "number";
         }
 
-        columnHeader["headerText"] = headerText;
-        columnHeader["key"] = key;
-        columnHeader["dataType"] = dataType;
+        columnHeader["caption"] = caption;
+        columnHeader["dataField"] = dataField;
+        // columnHeader["dataType"] = dataType;
         columnHeader["width"] = width;
+
+        if(visible == false) {
+            columnHeader["visible"] = visible;
+        }
         columnHeaders.push(columnHeader);
     }
 
@@ -117,7 +130,7 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     }
 
     if (!this.ModelBrowserAddedNodes.includes(parentNode)) {
-        parentNode = -1;
+        parentNode = 0;
     }
     this.ModelBrowserAddedNodes.push(nodeId);
 
@@ -189,8 +202,20 @@ SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode
 
 SCModelBrowser.prototype.Clear = function () {
     var containerDiv = "#" + this.ModelBrowserContainer;
-    $(containerDiv).igTreeGrid("destroy");
 
+    var browserContainer = document.getElementById(this.ModelBrowserContainer);
+    var parent = browserContainer.parentElement;
+
+    //remove html element which holds grid
+    $(containerDiv).remove();
+
+    //Create and add div with same id to add grid again
+    var browserContainerDiv = document.createElement("div")
+    browserContainerDiv.id = this.ModelBrowserContainer;
+    var styleRule = ""
+    styleRule = "position: absolute";
+    browserContainerDiv.setAttribute("style", styleRule);
+    parent.appendChild(browserContainerDiv);
     // clear count
     this.GetItemCountDiv().innerHTML = "";
 }
@@ -199,129 +224,91 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
+    // this.Clear();
     $(function () {
-        //var table = JSON.stringify(_this.modelTreeRowData);
-        var isFiredFromCheckbox = false;
-        $(containerDiv).igTreeGrid({
-            columns: columnHeaders,
+        $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
-            primaryKey: ModelBrowserColumnNames3D.NodeId.replace(/\s/g, ''),
-            foreignKey: "parent",
-            autofitLastColumn: true,
-            autoGenerateColumns: false,
-            // dataSourceType: "json",
-            //responseDataKey: "results",
-            //autoCommit: true,
+            keyExpr: "NodeId",
+            parentIdExpr: "parent",
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            showBorders: true,
             height: "96%",
             width: "100%",
-            initialExpandDepth: 0,
-            alternateRowStyles: false,
-            rendered: function (evt, ui) {
-                //return reference to igTreeGrid
-                //ui.owner;
+            allowColumnResizing : true,
+            // focusedRowEnabled: true,
+            filterRow: {
+                visible: true
+            },
+            selection: {
+                mode: "multiple",
+                recursive: true
+            },  
+            onInitialized: function(e) {
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 modelBrowserContextMenu.Init(_this);
-
                 _this.ShowItemCount(_this.modelTreeRowData.length);
             },
-            features: [
-                {
-                    name: "Sorting",
-                    sortingDialogContainment: "window"
-                },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    dataFiltered: function (evt, ui) {
-                        //  var filteredData = evt.target.rows;
-                        // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-                    }
-                },
-                {
-                    name: "Selection",
-                    mode: 'row',
-                    multipleSelection: true,
-                    activation: true,
-                    rowSelectionChanging: function (evt, ui) {
-
-                        if (isFiredFromCheckbox) {
-                            isFiredFromCheckbox = false;
-                        } else {
-
-                            var rowData = _this.GetDataFromSelectedRow(ui.row.id, containerDiv);
-                            _this.SelectionManager.HandleRowSelect(ui.row.element[0], _this.Webviewer, rowData["nodeId"]);
-                            return false;
-                        }
-
-                    },
-                },
-                {
-                    name: "RowSelectors",
-                    enableCheckBoxes: true,
-                    enableRowNumbering: false,
-                    //enableSelectAllForPaging: true, // this option is true by default
-                    checkBoxStateChanging: function (evt, ui) {
-                        //we use this variable as a flag whether the selection is coming from a checkbox
-                        isFiredFromCheckbox = true;
-                    },
-                    checkBoxStateChanged: function (evt, ui) {
-
-                        if (ui.isHeader) {
-
-                            var data = $(containerDiv).data("igTreeGrid").dataSource.dataView();
-                            if (data.length === 0) {
-                                return;
-                            }
-
-                            for (var rowIndex in data) {
-                                var record = data[rowIndex];
-
-                                var rowKey = parseInt(record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')]);
-                                if (rowKey === NaN) {
-                                    continue;
-                                }
-                                var rowData = _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
-                                var row = $(containerDiv).igTreeGrid("rowById", rowKey);
-
-                                _this.SelectionManager.HandleSelectFormCheckBox(row[0], ui.state, rowData, containerDiv);
-                            }
-                        }
-                        else {
-                            var rowKey = parseInt(ui.rowKey);
-                            var rowData = _this.GetDataFromSelectedRow(rowKey, containerDiv, true);
-
-                            _this.SelectionManager.HandleSelectFormCheckBox(ui.row[0], ui.state, rowData, containerDiv);
-                        }
-                    }
-                },
-                // {
-                //     name: "Resizing"
-                // },
-                {
-                    name: 'Hiding',
-                    columnSettings: [
-                        { columnKey: ModelBrowserColumns3D.NodeId, allowHiding: true, hidden: true },
-                    ]
-                },
-            ]
+            onSelectionChanged: function (e) {
+                var checkBoxStatus;
+                var clickedCheckBoxRowKeys;
+                if(e.currentSelectedRowKeys.length > 0) {
+                    checkBoxStatus  = "on";
+                    clickedCheckBoxRowKeys = e.currentSelectedRowKeys;
+                }
+                else {
+                    checkBoxStatus = "off";
+                    clickedCheckBoxRowKeys = e.currentDeselectedRowKeys;
+                }
+                _this.UpdateSelectionComponentFromCheckBox(clickedCheckBoxRowKeys, checkBoxStatus, e.component, containerDiv);
+            },
+            onRowClick: function(e) {
+                _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+            },
+            onRowPrepared: function(e) {
+                if(e.isSelected) {
+                    _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
+                }
+            }
         });
     });
 }
 
-SCModelBrowser.prototype.AddTableContentCount = function (containerId) {
-    // var modelBrowserData = document.getElementById(containerId);
-    // var modelBrowserDataTable = modelBrowserData.children[1];
-    // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+SCModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function(clickedCheckBoxRowKeys, 
+                                                                        checkBoxStatus,
+                                                                        componentObj, 
+                                                                        containerDiv) {
 
-    // var countBox;
-    // if (containerId === "modelTree1") {
-    //     countBox = document.getElementById("SourceAComponentCount");
-    // }
-    // if (containerId === "modelTree2") {
-    //     countBox = document.getElementById("SourceBComponentCount");
-    // }
-    // countBox.innerText = "Count: " + modelBrowserTableRows.length;
+    for(var i = 0; i < clickedCheckBoxRowKeys.length; i++) {
+        // componentObj.expandRow(clickedCheckBoxRowKeys[i]);
+        var nodeObj = componentObj.getNodeByKey(clickedCheckBoxRowKeys[i]);
+        var  row = componentObj.getRowElement(componentObj.getRowIndexByKey(nodeObj.key));
+        this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, nodeObj.data, containerDiv);
+        if(nodeObj.hasChildren) {
+            var children = this.GetSelectedChildren(componentObj, nodeObj);
+            for(var j = 0; j < children.length; j++) {
+                row = componentObj.getRowElement(componentObj.getRowIndexByKey(children[j].key));
+                this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, children[j].data, containerDiv);
+            }
+        }
+    }
+}
+
+SCModelBrowser.prototype.GetSelectedChildren = function(componentObj, node) {
+    var children = []
+    for(var i = 0; i < node.children.length; i++) {
+        var child = node.children[i];
+        if(child.hasChildren){
+            var ChildrenComponents = this.GetSelectedChildren(componentObj, child);
+            for(var j = 0; j < ChildrenComponents.length; j++) {
+                children.push(ChildrenComponents[j]);
+            }
+        }
+        children.push(child);
+    }
+    return children;
 }
 
 SCModelBrowser.prototype.isAssemblyNode = function (nodeId) {
@@ -459,17 +446,8 @@ SCModelBrowser.prototype.HighlightModelBrowserRow = function (selectedNodeId) {
     //     return;
     // }
 
-    this.OpenHighlightedRow(path);
+    this.OpenHighlightedRow(path, selectedNodeId);
 
-    var row = this.GetBrowserRowFromNodeId(selectedNodeId, this.ModelBrowserContainer);
-    if (!row) {
-        return;
-    }
-
-    // scroll to that row
-    document.getElementById(this.ModelBrowserContainer + "_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
-
-    this.SelectionManager.HandleRowSelect(row, undefined);
 }
 
 SCModelBrowser.prototype.GetSelectedComponents = function () {
@@ -484,88 +462,34 @@ SCModelBrowser.prototype.ClearSelectedComponent = function (checkedComponent) {
     this.SelectionManager.ClearSelectedComponent();
 }
 
-SCModelBrowser.prototype.OpenHighlightedRow = function (path) {
+SCModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {
 
+    _this = this;
     if (!('path' in path)) {
         return;
     }
     var nodeList = path['path'];
     nodeList = nodeList.reverse();
 
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance")
+
+
+    // expand tree if not expanded else select row using key
     for (var i = 0; i < nodeList.length; i++) {
         var node = nodeList[i];
-        // expand current row
-        $("#" + this.ModelBrowserContainer).igTreeGrid("expandRow", node, function () {
 
-        });
+        if (!treeList.isRowExpanded(node)) {
+                treeList.expandRow(node).done(function () {
+                _this.GetBrowserRowFromNodeId(selectedNodeId, _this.ModelBrowserContainer);
+            });
+        }
+        else {
+            if(i == nodeList.length-1) {
+               this.GetBrowserRowFromNodeId(selectedNodeId, this.ModelBrowserContainer);
+            }
+        }
+        
     }
-
-    // // expand current row
-    // $(containerDiv).igTreeGrid( "expandRow", componentHierarchy.nodeId, function(){
-
-    // });
-
-    // // traverse children
-    // for(var i = 0; i < componentData.children.length; i++)
-    // {
-    //     var childComponent = componentData.children[i];     
-    //     this.OpenHighlightedRow(childComponent);
-    // }
-
-    // var componentHierarchy = this.GetHierarchyToRow(selectedNodeId);
-    // $(currentRow).show();
-
-    // var currentClassName = currentRow.className;
-
-    // // remove first class-name i.e. "jsgrid-row" or "jsgrid-alt-row " 
-    // var secondClassNameindex = currentClassName.indexOf(" ");
-    // var inheritedStyle = currentClassName.substr(secondClassNameindex + 1);
-
-    // var lastClassNameindex = inheritedStyle.lastIndexOf(" ");
-
-    // // get parent's own style name
-    // var parentsStyle = inheritedStyle.substr(lastClassNameindex + 1);
-
-    // // remove last class name
-    // inheritedStyle = inheritedStyle.substr(0, lastClassNameindex);
-
-    // parentsStyle = "jsgrid-cell " + parentsStyle;
-    // var rows = document.getElementsByClassName("jsgrid-row " + inheritedStyle);
-
-    // for (var i = 0; i < rows.length; i++) {
-    //     if (parentsStyle === rows[i].cells[ModelBrowserColumns3D.Component].className) {
-    //         if (rows[i].cells[ModelBrowserColumns3D.Component].children.length > 0 &&
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].localName === "img" &&
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.contains('button_closed')) {
-    //             // remove colsed button and add opened button image
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.remove("button_closed");
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.add("button_open");
-    //         }
-
-    //         $(rows[i]).show();
-    //         rows[i].cells[ModelBrowserColumns3D.Component].children[0].local
-    //         this.OpenHighlightedRow(rows[i]);
-    //         return;
-    //     }
-    // }
-
-    // // if not found check in alternate rows
-    // rows = document.getElementsByClassName("jsgrid-alt-row " + inheritedStyle);
-    // for (var i = 0; i < rows.length; i++) {
-    //     if (parentsStyle === rows[i].cells[ModelBrowserColumns3D.Component].className) {
-    //         if (rows[i].cells[ModelBrowserColumns3D.Component].children.length > 0 &&
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].localName === "img" &&
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.contains('button_closed')) {
-    //             // remove colsed button and add opened button image
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.remove("button_closed");
-    //             rows[i].cells[ModelBrowserColumns3D.Component].children[0].classList.add("button_open");
-    //         }
-
-    //         $(rows[i]).show();
-    //         this.OpenHighlightedRow(rows[i]);
-    //         return;
-    //     }
-    // }
 }
 
 SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
@@ -577,7 +501,7 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
 
     if (rowKey in this.NodeParentList) {
 
-        if (this.NodeParentList[rowKey] === -1) {
+        if (this.NodeParentList[rowKey] === 0) {
             return;
         }
         path['path'].push(this.NodeParentList[rowKey])
@@ -588,28 +512,6 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
         //         return rowKey;
         // }        
     }
-
-    //return undefined;
-
-    // var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
-
-    // var rowData = {};
-    // rowData['component'] = record[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')];
-    // rowData['mainClass'] = record[ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')];
-    // rowData['subClass'] = record[ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')];
-    // rowData['nodeId'] = record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')];
-
-    // if (record.parent !== -1) {
-    //     var result = this.GetHierarchyToRow(record.parent,
-    //         containerDiv);
-
-    //     if (result) {
-    //         result['children'].push(rowData);
-    //         return result;
-    //     }
-    // }
-
-    // return rowData;
 }
 
 SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
@@ -638,59 +540,18 @@ SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
             }
         }
     }
-    // $(function () {
-
-    //     var data = $(containerDiv).data("igTreeGrid").dataSource.dataView();
-    //     var component = data[rowIndex][ModelBrowserColumnNames3D.Component.replace(/\s/g, '')];
-    //     var mainClass = data[rowIndex][ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')];
-    //     var subClass = data[rowIndex][ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')];
-    //     var nodeId = data[rowIndex][ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')];
-
-
-    //     rowData['component'] = component;
-    //     rowData['mainClass'] = mainClass;
-    //     rowData['subClass'] = subClass;
-    //     rowData['nodeId'] = nodeId;
-
-    // });
 
     return rowData;
 }
 
 SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
 
-    //var dataSource = $("#"+containerDiv).data("igTreeGrid").dataSource.dataView();
-    //var selectedRecord = $("#"+containerDiv).igTreeGrid("findRecordByKey", selectedNodeId);
+    var treeList = $("#" + containerDiv).dxTreeList("instance");
 
-    var browserTable = document.getElementById(containerDiv);
-    var rows = browserTable.getElementsByTagName("tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
-
-        var columns = row.cells;
-        if (columns.length === 0) {
-            continue;
-        }
-
-        var nodeIdString = columns[ModelBrowserColumns3D.NodeId].innerHTML;
-        //var nodeIdString = dataSource[row.rowIndex].NodeId;
-        // var nodeIdString = selectedRecord.NodeId;
-        var nodeId = parseInt(nodeIdString.trim());
-
-        if (selectedNodeId === nodeId) {
-
-            return row;
-            // this.SelectionManager.HandleRowSelect(row, undefined);
-
-            // this.OpenHighlightedRow(childRow);
-
-            // // scroll to selected row
-            // browserTable.parentElement.parentElement.focus();
-            // browserTable.parentElement.parentElement.scrollTop = childRow.offsetTop - childRow.offsetHeight;
-            // break;
-        }
-    }
-
-    return undefined;
+    //navigate scrollbar to specified row using key
+    treeList.navigateToRow(selectedNodeId).done(function () {
+        var rowIndex = treeList.getRowIndexByKey(selectedNodeId);
+        row = treeList.getRowElement(rowIndex);
+        _this.SelectionManager.HandleRowSelect(row[0], undefined, selectedNodeId, _this.ModelBrowserContainer);
+    });
 }

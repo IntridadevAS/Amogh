@@ -31,31 +31,16 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
                                                                   componentData,
                                                                   containerDiv) {
 
-    // var currentCell = currentCheckBox.parentElement;
-    // if (currentCell.tagName.toLowerCase() !== 'td') {
-    //     return;
-    // }
-
-    // var currentRow = currentCell.parentElement;
-    // if (currentRow.tagName.toLowerCase() !== 'tr' ||
-    //     currentRow.cells.length < 2) {
-    //     return;
-    // }
-
     // maintain track of selected/deselected components
     if (checkBoxState === "on" &&
          !this.SelectedCompoentExists(componentData)) {
 
         var checkedComponent = {};
-        // checkedComponent['Name'] = currentRow.cells[modelBrowserComponentColumn].textContent.trim();
-        // checkedComponent['MainComponentClass'] = currentRow.cells[modelBrowserMainClassColumn].textContent.trim();
-        // checkedComponent['ComponentClass'] = currentRow.cells[modelBrowserSubClassColumn].textContent.trim();
-        // checkedComponent["NodeId"] = currentRow.cells[modelBrowserNodeIdColumn].textContent.trim();
 
-        checkedComponent['Name'] = componentData.component;
-        checkedComponent['MainComponentClass'] = componentData.mainClass;
-        checkedComponent['ComponentClass'] = componentData.subClass;
-        checkedComponent['NodeId'] = componentData.nodeId;
+        checkedComponent['Name'] = componentData.Item;
+        checkedComponent['MainComponentClass'] = componentData.Category;
+        checkedComponent['ComponentClass'] = componentData.ItemClass;
+        checkedComponent['NodeId'] = componentData.NodeId;
 
         this.SelectedCompoents.push(checkedComponent);
 
@@ -63,8 +48,8 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
          this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
-        if (!this.SelectedComponentRows.includes(currentRow)) {
-            this.SelectedComponentRows.push(currentRow);
+        if (!this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
+            this.SelectedComponentNodeIds.push(componentData.NodeId);
         }
     }
     else if (this.SelectedCompoentExists(componentData)) {
@@ -74,132 +59,13 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
          this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
-        if (this.SelectedComponentRows.includes(currentRow)) {
-            var index = this.SelectedComponentRows.indexOf(currentRow);
+        if (this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
+            var index = this.SelectedComponentNodeIds.indexOf(componentData.NodeId);
             if (index !== -1) {
-                this.SelectedComponentRows.splice(index, 1);
+                this.SelectedComponentNodeIds.splice(index, 1);
             }
         }
     }
-   
-    if(!componentData.children ||
-        componentData.children.length === 0)
-    {
-        return;
-    }
-
-    // expand current row
-    $(containerDiv).igTreeGrid( "expandRow", componentData.nodeId, function(){
-        
-    });
-
-    // traverse children
-    for(var i = 0; i < componentData.children.length; i++)
-    {
-        var childComponent = componentData.children[i];      
-        
-
-        var childRow = $(containerDiv).igTreeGrid( "rowById", childComponent.nodeId);
-
-        if (checkBoxState === "on") {
-            $(containerDiv).igTreeGridSelection("selectRowById", childComponent.nodeId);
-        }
-        else {
-            $(containerDiv).igTreeGridSelection("deselectRowById", childComponent.nodeId);
-        }
-
-        this.HandleSelectFormCheckBox(childRow[0], checkBoxState, childComponent, containerDiv);
-    }
-
-   
-    // /////////////
-    // var currentTable = currentRow.parentElement;
-    // if (currentTable.tagName.toLowerCase() !== 'tbody') {
-    //     return;
-    // }
-
-    // var currentComponentCell = currentRow.cells[1];
-
-    // var currentClassList = currentRow.classList;
-    // var styleToCheck = "";
-    // for (var i = 0; i < currentClassList.length; i++) {
-    //     var styleClass = currentClassList[i];
-    //     if (styleClass.includes("jsgrid")) {
-    //         continue;
-    //     }
-
-    //     if (styleToCheck == "") {
-    //         styleToCheck = styleClass;
-    //     }
-    //     else {
-    //         styleToCheck += " " + styleClass;
-    //     }
-    // }
-
-    // var currentRowClassList = currentComponentCell.classList;
-    // var hasChild = false;
-    // for (var i = 0; i < currentRowClassList.length; i++) {
-    //     var styleClass = currentRowClassList[i];
-    //     if (styleClass.includes("jsgrid")) {
-    //         continue;
-    //     }
-
-    //     hasChild = true;
-    //     if (styleToCheck == "") {
-    //         styleToCheck = styleClass;
-    //     }
-    //     else {
-    //         styleToCheck += " " + styleClass;
-    //     }
-    // }
-
-    // // select the child component rows
-    // if (hasChild) {
-    //     for (var i = 0; i < currentTable.rows.length; i++) {
-
-    //         var row = currentTable.rows[i];
-    //         if (row === currentRow) {
-    //             continue;
-    //         }
-
-    //         var rowClassList = row.classList;
-    //         var rowStyleCheck = "";
-    //         for (var j = 0; j < rowClassList.length; j++) {
-    //             var styleClass = rowClassList[j];
-    //             if (styleClass.includes("jsgrid")) {
-    //                 continue;
-    //             }
-
-    //             if (rowStyleCheck == "") {
-    //                 rowStyleCheck = styleClass;
-    //             }
-    //             else {
-    //                 rowStyleCheck += " " + styleClass;
-    //             }
-    //         }
-
-    //         // if (row.className === styleToCheck) {
-    //         if (rowStyleCheck === styleToCheck) {
-
-    //             var checkBox = row.cells[0].children[0];
-    //             if (checkBox.checked === currentCheckBox.checked) {
-    //                 continue;
-    //             }
-
-    //             checkBox.checked = currentCheckBox.checked;
-    //             this.HandleSelectFormCheckBox(checkBox);
-
-    //             if (checkBox.checked) {
-    //                 // highlight selected row
-    //                 this.ApplyHighlightColor(row);
-    //             }
-    //             else {
-    //                 // unhighlight selected row
-    //                 this.RemoveHighlightColor(row);
-    //             }
-    //         }
-    //     }
-    // }
 }
 
 /* 
@@ -208,11 +74,11 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 SCSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentData.component &&
-            component['MainComponentClass'] === componentData.mainClass &&
-            component['ComponentClass'] === componentData.subClass) {
+        if (component['Name'] === componentData.Item &&
+            component['MainComponentClass'] === componentData.Category &&
+            component['ComponentClass'] === componentData.ItemClass) {
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentData.nodeId) {
+                if (component["NodeId"] === componentData.NodeId) {
                     return true;
                 }
             }
@@ -231,12 +97,12 @@ SCSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
 SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentData.component &&
-            component['MainComponentClass'] === componentData.mainClass &&
-            component['ComponentClass'] === componentData.subClass) {
+        if (component['Name'] === componentData.Item &&
+            component['MainComponentClass'] === componentData.Category &&
+            component['ComponentClass'] === componentData.ItemClass) {
 
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentData.nodeId) {
+                if (component["NodeId"] === componentData.NodeId) {
                     this.SelectedCompoents.splice(i, 1);
                 }
             }
@@ -274,7 +140,7 @@ SCSelectionManager.prototype.ClearSelectedComponent = function () {
 /* 
    This function 
 */
-SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId) {
+SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, containerDiv) {
 
     // check if row is already highlighted
     if (this.HighlightedComponentRow === row) {
@@ -282,16 +148,28 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId) {
     }
 
     // unhighlight old row
+    var treeList = $("#" + containerDiv).dxTreeList("instance");
+    var selectedRows = treeList.getSelectedRowKeys("all");
+
     if (this.HighlightedComponentRow &&
-        !this.SelectedComponentRows.includes(this.HighlightedComponentRow)) {
-        this.RemoveHighlightColor(this.HighlightedComponentRow);
+        !selectedRows.includes(this.HighlightedComponentRowKey)) {
+        if(this.HighlightedComponentRow.rowElement)
+            this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
+        else {
+            this.RemoveHighlightColor(this.HighlightedComponentRow);
+        }
     }
 
     // highlight new row  
-    if (!this.SelectedComponentRows.includes(row)) {
-        this.ApplyHighlightColor(row);        
-    }
+    if(!selectedRows.includes(nodeId)) {
+        if(row.rowElement)
+            this.ApplyHighlightColor(row.rowElement[0]);
+        else {
+             this.ApplyHighlightColor(row);
+        }
+   }
     this.HighlightedComponentRow = row;
+    this.HighlightedComponentRowKey = nodeId;
      
     if (viewer && nodeId) {
         // var nodeId = row.cells[ModelBrowserColumns3D.NodeId].innerText

@@ -15,33 +15,16 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
      checkBoxState, 
      componentData) {
 
-     // var currentCell = currentCheckBox.parentElement;
-     // if (currentCell.tagName.toLowerCase() !== 'td') {
-     //      return;
-     // }
-
-     // var currentRow = currentCell.parentElement;
-     // if (currentRow.tagName.toLowerCase() !== 'tr' ||
-     //      currentRow.cells.length < 2) {
-     //      return;
-     // }
-
      // maintain track of selected/deselected components
      if (checkBoxState === "on" &&
           !this.SelectedCompoentExists(componentData)) {
 
           var checkedComponent = {};
-          checkedComponent['Name'] = componentData.component;
-          checkedComponent['MainComponentClass'] = componentData.mainClass;
-          checkedComponent['ComponentClass'] = componentData.subClass;
-          checkedComponent['Description'] = componentData.description;
+          checkedComponent['Name'] = componentData.Item;
+          checkedComponent['MainComponentClass'] = componentData.Category;
+          checkedComponent['ComponentClass'] = componentData.ItemClass;
+          checkedComponent['Description'] = componentData.Description;
 
-          // var checkedComponent = {
-          //      'Name': currentRow.cells[1].textContent.trim(),
-          //      'MainComponentClass': currentRow.cells[2].textContent.trim(),
-          //      'ComponentClass': currentRow.cells[3].textContent.trim(),
-          //      'Description': currentRow.cells[4].textContent.trim()
-          // };
 
           this.SelectedCompoents.push(checkedComponent);
 
@@ -49,8 +32,8 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.ApplyHighlightColor(currentRow);
 
           // maintain selected rows
-          if (!this.SelectedComponentRows.includes(currentRow)) {
-               this.SelectedComponentRows.push(currentRow);
+          if (!this.SelectedComponentNodeIds.includes(componentData.RowKey)) {
+               this.SelectedComponentNodeIds.push(componentData.RowKey);
           }
      }
      else if (this.SelectedCompoentExists(componentData)) {
@@ -60,10 +43,10 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.RemoveHighlightColor(currentRow);
 
           // maintain selected rows
-          if (this.SelectedComponentRows.includes(currentRow)) {
-               var index = this.SelectedComponentRows.indexOf(currentRow);
+          if (this.SelectedComponentNodeIds.includes(componentData.RowKey)) {
+               var index = this.SelectedComponentNodeIds.indexOf(componentData.RowKey);
                if (index !== -1) {
-                    this.SelectedComponentRows.splice(index, 1);
+                    this.SelectedComponentNodeIds.splice(index, 1);
                }
           }
      }
@@ -72,10 +55,10 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.component &&
-               component['MainComponentClass'] === componentData.mainClass &&
-               component['ComponentClass'] === componentData.subClass &&
-               component['Description'] == componentData.description) {
+          if (component['Name'] === componentData.Item &&
+               component['MainComponentClass'] === componentData.Category &&
+               component['ComponentClass'] === componentData.ItemClass &&
+               component['Description'] == componentData.Description) {
                return true;
           }
      }
@@ -86,10 +69,10 @@ ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData
 ExcelSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.component &&
-               component['MainComponentClass'] === componentData.mainClass &&
-               component['ComponentClass'] === componentData.subClass  &&
-               component['Description'] === componentData.description) {
+          if (component['Name'] === componentData.Item &&
+               component['MainComponentClass'] === componentData.Category &&
+               component['ComponentClass'] === componentData.ItemClass  &&
+               component['Description'] === componentData.Description) {
 
                this.SelectedCompoents.splice(i, 1);
                break;
@@ -140,22 +123,34 @@ ExcelSelectionManager.prototype.IsComponentChecked = function (componentName,
      return false;
 }
 
-ExcelSelectionManager.prototype.HighlightBrowserRow = function (row) {
+ExcelSelectionManager.prototype.HighlightBrowserRow = function (row, key, containerDiv) {
      if (this.HighlightedComponentRow === row) {
           return;
      }
 
+     var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+     var selectedRows = dataGrid.getSelectedRowKeys("all");
+
      if (this.HighlightedComponentRow &&
-          !this.SelectedComponentRows.includes(this.HighlightedComponentRow)) {
-          this.RemoveHighlightColor(this.HighlightedComponentRow);
+          !selectedRows.includes(this.HighlightedComponentRowKey)) {
+          if(this.HighlightedComponentRow.rowElement)
+               this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
+          else {
+               this.RemoveHighlightColor(this.HighlightedComponentRow);
+          }
      }
 
      // highlight new row  
-     if (!this.SelectedComponentRows.includes(row)) {
-          this.ApplyHighlightColor(row);
+     if(!selectedRows.includes(key)) {
+          if(row.rowElement)
+               this.ApplyHighlightColor(row.rowElement[0]);
+          else {
+               this.ApplyHighlightColor(row);
+          }
      }
 
      this.HighlightedComponentRow = row;
+     this.HighlightedComponentRowKey = key;
 }
 
 /* 
@@ -169,10 +164,8 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           return;
      }
 
-     var sheetData = $("#" + viewerContainer).data("igGrid").dataSource.dataView();
-     if (sheetData.length === 0) {
-          return;
-     }
+    var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
+    var sheetData = dataGrid.getDataSource().items();  
 
      // get identifier column names
      var identifierColumns = {};
@@ -202,7 +195,8 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
 
 
      // get model browser all rows data
-     var modelBrowserData = $("#" + modelBrowserContainer).data("igGrid").dataSource.dataView();
+     var modelBrowserDataGrid = $("#" + modelBrowserContainer).dxDataGrid("instance");
+     var modelBrowserData = modelBrowserDataGrid.getDataSource().items();
      if (modelBrowserData.length === 0) {
           return;
      }
@@ -219,13 +213,13 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           if (name === rowData[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] &&
                subClass === rowData[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')]) {
 
-               var row = $("#" + modelBrowserContainer).igGrid("rowAt", i);
-
+               var row = modelBrowserDataGrid.getRowElement(i);
+               var key = modelBrowserDataGrid.getKeyByRowIndex(i);
                // highlight row in model browser     
-               this.HighlightBrowserRow(row);
+               this.HighlightBrowserRow(row[0], key, modelBrowserContainer);
 
-               // scroll to selected row                   
-               document.getElementById(modelBrowserContainer+"_table_scroll").scrollTop = row.offsetTop - row.offsetHeight;
+               // scroll to selected row                 
+               modelBrowserDataGrid.getScrollable().scrollToElement(row[0])
 
                break;
           }
