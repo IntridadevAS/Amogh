@@ -80,7 +80,21 @@ ExcelSourceManager.prototype.ClearSource = function () {
 
   // clear viewer
   var containerDiv = "#" + this.ViewerContainer;
-  $(containerDiv).html(""); 
+
+  var viewerContainer = document.getElementById(this.ViewerContainer);
+  var parent = viewerContainer.parentElement;
+
+  //remove html element which holds grid
+  $(containerDiv).remove();
+
+  //Create and add div with same id to add grid again
+  var viewerContainerDiv = document.createElement("div")
+  viewerContainerDiv.id = this.ViewerContainer;
+  viewerContainerDiv.className = "tempContainer";
+  var styleRule = ""
+  styleRule = "position: absolute";
+  viewerContainerDiv.setAttribute("style", styleRule);
+  parent.appendChild(viewerContainerDiv); 
 }
 
 ExcelSourceManager.prototype.AddComponentsToDB = function () {

@@ -28,32 +28,24 @@ DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.SelectedCompoents.push(checkedComponent);
 
           // highlight selected row
-          // this.ApplyHighlightColor(currentRow);
+          this.ApplyHighlightColor(currentRow);
 
      }
      else if (this.SelectedCompoentExists(componentData)) {
           this.RemoveFromselectedCompoents(componentData);
 
           // restore color
-          // this.RemoveHighlightColor(currentRow);
-
-          // maintain selected rows
-          // if (this.SelectedComponentRows.includes(currentRow)) {
-          //      var index = this.SelectedComponentRows.indexOf(currentRow);
-          //      if (index !== -1) {
-          //           this.SelectedComponentRows.splice(index, 1);
-          //      }
-          // }
+          this.RemoveHighlightColor(currentRow);
      }
 }
 
 DBSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.component &&
-               component['MainComponentClass'] === componentData.mainClass &&
-               component['ComponentClass'] === componentData.subClass &&
-               component['Description'] == componentData.description) {
+          if (component['Name'] === componentData.Item &&
+          component['MainComponentClass'] === componentData.Category &&
+          component['ComponentClass'] === componentData.ItemClass &&
+          component['Description'] == componentData.Description) {
                return true;
           }
      }
@@ -64,10 +56,10 @@ DBSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
 DBSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.component &&
-               component['MainComponentClass'] === componentData.mainClass &&
-               component['ComponentClass'] === componentData.subClass  &&
-               component['Description'] === componentData.description) {
+          if (component['Name'] === componentData.Item &&
+          component['MainComponentClass'] === componentData.Category &&
+          component['ComponentClass'] === componentData.ItemClass &&
+          component['Description'] == componentData.Description) {
 
                this.SelectedCompoents.splice(i, 1);
                break;
@@ -123,30 +115,27 @@ DBSelectionManager.prototype.HighlightBrowserRow = function (row, key, container
           return;
      }
 
-     if (this.HighlightedComponentRow &&
-          !this.HighlightedComponentRow.isSelected) {
-          if(this.HighlightedComponentRow.rowElement)
-               this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
-          else {
-               var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
-               var selectedRows = dataGrid.getSelectedRowKeys("all");
-               if(!selectedRows.includes(this.HighlightedComponentRowKey)) {
-                   this.RemoveHighlightColor(this.HighlightedComponentRow);
-               }
-           }
-     }
+     var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+     var selectedRows = dataGrid.getSelectedRowKeys("all");
+
+    if (this.HighlightedComponentRow &&
+        !selectedRows.includes(this.HighlightedComponentRowKey)) {
+        if(this.HighlightedComponentRow.rowElement)
+            this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
+        else {
+            this.RemoveHighlightColor(this.HighlightedComponentRow);
+        }
+    }
 
      // highlight new row  
-     if (row.isSelected !== undefined && row.isSelected ==  false) {
-          this.ApplyHighlightColor(row.rowElement[0]);        
-      }
-      else {
-          var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
-          var selectedRows = dataGrid.getSelectedRowKeys("all");
-          if(!selectedRows.includes(key)) {
-              this.ApplyHighlightColor(row);
+    
+     if(!selectedRows.includes(key)) {
+          if(row.rowElement)
+               this.ApplyHighlightColor(row.rowElement[0]);
+          else {
+               this.ApplyHighlightColor(row);
           }
-      }
+     }
 
      this.HighlightedComponentRow = row;
      this.HighlightedComponentRowKey = key;
@@ -231,7 +220,7 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           return;
      }
 
-     //        // find the row to be highlighted in viewer
+     // find the row to be highlighted in viewer
      var selectedRowData = sheetData[thisRow.rowIndex];
      var name = selectedRowData[identifierColumns.name];
      var subClass = selectedRowData[identifierColumns.componentClass];

@@ -237,7 +237,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             height: "96%",
             width: "100%",
             allowColumnResizing : true,
-            focusedRowEnabled: true,
+            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -267,6 +267,11 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             onRowClick: function(e) {
                 _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
             },
+            onRowPrepared: function(e) {
+                if(e.isSelected) {
+                    _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
+                }
+            }
         });
     });
 }

@@ -135,7 +135,7 @@
       <!-- </div> -->
     </div>
 
-    <h1 id="pageName"></h1>
+    <!-- <h1 id="pageName"></h1> -->
     <a class="homeLink" id="homeButton" href="#" onclick="onHomeClick()"><img class="headerLogo"
         src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
@@ -752,15 +752,15 @@
   <script type="text/javascript" src="src/scripts/main.js"></script>
 
   <!-- infragistics dependencies -->
-  <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
   <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
   <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
-  <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
+  <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script> -->
 
   <!-- devExpress Dependancies -->
-  <link rel="stylesheet" href="src\devExtreme\Sources\Lib\css\dx.common.css" type="text/css" />
-  <link rel="stylesheet" href="src\devExtreme\Sources\Lib\css\dx.light.css" type="text/css" />
-  <script type="text/javascript" src="src\devExtreme\Sources\Lib\js\dx.all.js"></script>
+  <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
+  <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
+  <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 
 
   <!-- Excel reader dependencies -->
@@ -828,6 +828,7 @@
 
     window.onload = function () {
 
+      setPageTitle();
       loadCheckCases();
 
       var checkButton = document.getElementById("checkButton");

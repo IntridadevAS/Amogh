@@ -23,9 +23,20 @@ DBSourceManager.prototype.ClearSource = function () {
 
   // clear viewer
   var containerDiv = "#" + this.ViewerContainer;
-  if ($(containerDiv).data("igGrid") != null) {
-    $(containerDiv).igGrid("destroy");
-  }
+  var viewerContainer = document.getElementById(this.ViewerContainer);
+  var parent = viewerContainer.parentElement;
+
+  //remove html element which holds grid
+  $(containerDiv).remove();
+
+  //Create and add div with same id to add grid again
+  var viewerContainerDiv = document.createElement("div")
+  viewerContainerDiv.id = this.ViewerContainer;
+  viewerContainerDiv.className = "tempContainer";
+  var styleRule = ""
+  styleRule = "position: absolute";
+  viewerContainerDiv.setAttribute("style", styleRule);
+  parent.appendChild(viewerContainerDiv); 
 }
 
 DBSourceManager.prototype.LoadData = function (uri) {
@@ -49,20 +60,6 @@ DBSourceManager.prototype.LoadData = function (uri) {
         dbReader.DBData);
         
       _this.ModelTree.CreateModelBrowserTable();     
-
-      // if (checkCaseSelected) {
-      //   checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-      // }
-
-      // // hide view data graphics text on viewer conatainer
-      // var dbViewerContainer = document.getElementById("dataSourceViewer");
-      // for (var i = 0; i < dbViewerContainer.childElementCount; i++) {
-      //   var currentChild = dbViewerContainer.children[i];
-      //   if (currentChild.className === "viewdatagraphics") {
-      //     currentChild.style.display = "none";
-      //   }
-      // }
-
       return resolve(true);
     });
   });
