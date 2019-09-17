@@ -88,7 +88,13 @@ const CompliancePropertyColumnNames = {
 }
 
 
-const ViewerAContainer = "compare1";
-const ViewerBContainer = "compare2";
-const ViewerCContainer = "compare3";
-const ViewerDContainer = "compare4";
+const Comparison = {
+    ViewerAContainer: "compare1",
+    ViewerBContainer: "compare2",
+    ViewerCContainer: "compare3",
+    ViewerDContainer: "compare4"
+}
+
+const Compliance = {
+    ViewerContainer: "compliance1",
+}

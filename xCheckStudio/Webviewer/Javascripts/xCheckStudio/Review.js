@@ -1,11 +1,12 @@
 // var comparisonCheckGroups = undefined;
 var comparisons;
-var sourceAComplianceCheckGroups = undefined;
-var sourceBComplianceCheckGroups = undefined;
+var compliances;
+// var sourceAComplianceCheckGroups = undefined;
+// var sourceBComplianceCheckGroups = undefined;
 var sourceAComparisonHierarchy = undefined;
 var sourceBComparisonHierarchy = undefined;
-var sourceAComplianceHierarchy = undefined;
-var sourceBComplianceHierarchy = undefined;
+// var sourceAComplianceHierarchy = undefined;
+// var sourceBComplianceHierarchy = undefined;
 
 
 var comparisonReviewManager;
@@ -68,8 +69,6 @@ function initReviewModule() {
                 }
             }
 
-
-
             for (var key in checkResults) {
                 if (!checkResults.hasOwnProperty(key)) {
                     continue;
@@ -80,43 +79,48 @@ function initReviewModule() {
                     // comparisonCheckGroups = new CheckGroups();
                     // comparisonCheckGroups.restore(checkResults[key], false);
                 }
-                else if (key == 'SourceACompliance') {
-                    sourceAComplianceCheckGroups = new CheckGroups();
-                    sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                else if(key == 'Compliances')
+                {
+                    compliances = checkResults[key];
 
-                    model.files["a"].compliance = true;
-                }
-                else if (key == 'SourceBCompliance') {
-                    sourceBComplianceCheckGroups = new CheckGroups();
-                    sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                    // set compliance true/false for sources
+                    for (var i = 0; i < compliances.length; i++) {
+                        var compliance = compliances[i];
 
-                    model.files["b"].compliance = true;
+                        for (var sourceId in model.files) {
+                            var file = model.files[sourceId];
+                            if(file.fileName === compliance.source)
+                            {
+                                file["compliance"] = true;
+                            }
+                        }
+                    }
                 }
+                // else if (key == 'SourceACompliance') {
+                //     sourceAComplianceCheckGroups = new CheckGroups();
+                //     sourceAComplianceCheckGroups.restore(checkResults[key], true);
+
+                //     model.files["a"].compliance = true;
+                // }
+                // else if (key == 'SourceBCompliance') {
+                //     sourceBComplianceCheckGroups = new CheckGroups();
+                //     sourceBComplianceCheckGroups.restore(checkResults[key], true);
+
+                //     model.files["b"].compliance = true;
+                // }
                 else if (key == 'SourceAComparisonComponentsHierarchy') {
                     sourceAComparisonHierarchy = checkResults[key];
                 }
                 else if (key == 'SourceBComparisonComponentsHierarchy') {
                     sourceBComparisonHierarchy = checkResults[key];
                 }
-                else if (key == 'SourceAComplianceComponentsHierarchy') {
-                    sourceAComplianceHierarchy = checkResults[key];
-                }
-                else if (key == 'SourceBComplianceComponentsHierarchy') {
-                    sourceBComplianceHierarchy = checkResults[key];
-                }
-            }
-      
-            // // populate check results
-            // populateCheckResults(comparisonCheckGroups,
-            //     sourceAComplianceCheckGroups,
-            //     sourceBComplianceCheckGroups,
-            //     sourceAComparisonHierarchy,
-            //     sourceBComparisonHierarchy,
-            //     sourceAComplianceHierarchy,
-            //     sourceBComplianceHierarchy);
-
-            // // load analytics data
-            // document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';            
+                // else if (key == 'SourceAComplianceComponentsHierarchy') {
+                //     sourceAComplianceHierarchy = checkResults[key];
+                // }
+                // else if (key == 'SourceBComplianceComponentsHierarchy') {
+                //     sourceBComplianceHierarchy = checkResults[key];
+                // }
+            }            
         },
         error: function (error) {
             //alert('error; ' + eval(error));
@@ -124,16 +128,12 @@ function initReviewModule() {
     });
 }
 
-function populateCheckResults(comparisonCheckGroups,
-    sourceAComplianceCheckGroups,
-    sourceBComplianceCheckGroups,
+function populateCheckResults(comparison,
+    compliance,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy,
-    sourceAComplianceHierarchy,
-    sourceBComplianceHierarchy) {
-    if (!comparisonCheckGroups &&
-        !sourceAComplianceCheckGroups &&
-        !sourceBComplianceCheckGroups) {
+    sourceBComponentsHierarchy) {
+    if (!comparison &&
+        !compliance) {
         return;
     }
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -149,14 +149,12 @@ function populateCheckResults(comparisonCheckGroups,
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
 
-            var sourceAViewerOptions = undefined;
-            var sourceAClassWiseComponents = undefined;
-            if (/*viewerOptions['SourceAContainerId'] === undefined ||*/
-                viewerOptions['SourceAEndPointUri'] === undefined) {
-                // this ajax call is synchronous
-
-                // get class wise properties for excel and other 1D datasources
-               
+            // var sourceAViewerOptions = undefined;
+            //var sourceAClassWiseComponents = undefined;
+            var classWiseComponents = {};
+            if (viewerOptions['a'] === undefined) {
+                
+                // get class wise properties for excel and other 1D datasources               
                 $.ajax({
                     url: 'PHP/ClasswiseComponentsReader.php',
                     type: "POST",
@@ -168,19 +166,19 @@ function populateCheckResults(comparisonCheckGroups,
                         },
                     success: function (msg) {
                         if (msg != 'fail') {
-                            sourceAClassWiseComponents = JSON.parse(msg);
+                            // sourceAClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['a']  = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
             }
-            else {
-                sourceAViewerOptions = [/*viewerOptions['SourceAContainerId'],*/ viewerOptions['SourceAEndPointUri']];
-            }
+            // else {
+            //     sourceAViewerOptions = [viewerOptions['SourceAEndPointUri']];
+            // }
 
-            var sourceBViewerOptions = undefined;
-            var sourceBClassWiseComponents = undefined;
-            if (/*viewerOptions['SourceBContainerId'] === undefined ||*/
-                viewerOptions['SourceBEndPointUri'] === undefined) {
+            // var sourceBViewerOptions = undefined;
+            //var sourceBClassWiseComponents = undefined;
+            if (viewerOptions['b'] === undefined) {
                 // this ajax call is synchronous
 
                 // get class wise properties for excel and other 1D datasources
@@ -195,52 +193,53 @@ function populateCheckResults(comparisonCheckGroups,
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
-                            sourceBClassWiseComponents = JSON.parse(msg);
+                            // sourceBClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['b']  = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
             }
-            else {
-                sourceBViewerOptions = [/*viewerOptions['SourceBContainerId'],*/ viewerOptions['SourceBEndPointUri']];
-            }
+            // else {
+            //     sourceBViewerOptions = [viewerOptions['SourceBEndPointUri']];
+            // }
 
 
-            if (comparisonCheckGroups) {
-                loadComparisonData(comparisonCheckGroups,
-                    sourceAViewerOptions,
-                    sourceBViewerOptions,
-                    sourceAClassWiseComponents,
-                    sourceBClassWiseComponents,
+            if (comparison) {
+                loadComparisonData(comparison,
+                    viewerOptions['a'],
+                    viewerOptions['b'],
+                    classWiseComponents['a'],
+                    classWiseComponents['b'],
                     sourceAComponentsHierarchy,
                     sourceBComponentsHierarchy);
             }
 
-            if (sourceAComplianceCheckGroups) {
-                loadSourceAComplianceData(sourceAComplianceCheckGroups,
-                    sourceAViewerOptions,
-                    sourceAClassWiseComponents,
-                    sourceAComplianceHierarchy,);
+            if (compliance) {
+
+                for(var source in viewerOptions)
+                {
+                    var viewerOption = viewerOptions[source];
+                    if(viewerOption.source === compliance.source)
+                    {
+                        loadComplianceData(compliance,
+                            viewerOption,
+                            classWiseComponents[source]);
+
+                        break;
+                    }
+                }
+         
             }
 
-            if (sourceBComplianceCheckGroups) {
-                loadSourceBComplianceData(sourceBComplianceCheckGroups,
-                    sourceBViewerOptions,
-                    sourceBClassWiseComponents,
-                    sourceBComplianceHierarchy);
-            }
+            // if (sourceBComplianceCheckGroups) {
+            //     loadSourceBComplianceData(sourceBComplianceCheckGroups,
+            //         sourceBViewerOptions,
+            //         sourceBClassWiseComponents,
+            //         sourceBComplianceHierarchy);
+            // }
 
             // make buttons collapsible
-            setButtonsCollapsible();
-
-            // if (comparisonCheckGroups) {
-            //     openCheckResultTab('ComparisonTabPage');
-            // }
-            // else if (sourceAComplianceCheckGroups) {
-            //     openCheckResultTab('SourceAComplianceTabPage');
-            // }
-            // else if (sourceBComplianceCheckGroups) {
-            //     openCheckResultTab('SourceBComplianceTabPage');
-            // }
+            setButtonsCollapsible();         
         }
     });
 }
@@ -257,8 +256,7 @@ function loadComparisonData(comparisonCheckGroups,
         sourceAViewerOptions,
         sourceBViewerOptions,
         sourceAClassWiseComponents,
-        sourceBClassWiseComponents,
-        //"comparisonMainTable",
+        sourceBClassWiseComponents,       
         "comparisonMainContainer",
         "comparisonDetailInfo",
         sourceAComponentsHierarchy,
@@ -292,20 +290,45 @@ function loadComparisonData(comparisonCheckGroups,
     // comparisonData["reviewManager"]  = comparisonReviewManager;
 }
 
-function setButtonsCollapsible() {
-    // add event handler for collapsible rows
-    // var collapsibleRows = document.getElementsByClassName("collapsible");
-    // for (var i = 0; i < collapsibleRows.length; i++) {
-    //     collapsibleRows[i].addEventListener("click", function () {
-    //         this.classList.toggle("active");
-    //         var content = this.nextElementSibling;
-    //         if (content.style.display === "block") {
-    //             content.style.display = "none";
-    //         } else {
-    //             content.style.display = "block";
-    //         }
-    //     });
-    // }
+function loadComplianceData(compliance,
+    viewerOptions,
+    classWiseComponents) {
+
+    complianceReviewManager = new ComplianceReviewManager(compliance,
+        viewerOptions,
+        classWiseComponents,
+        'complianceMainContainer',
+        'complianceDetailInfo',
+        undefined);
+
+    complianceReviewManager.loadDatasource(Compliance.ViewerContainer);
+
+    // set current view
+    model.currentView = complianceReviewManager;
+
+    // set compliance data
+
+    // review manager
+    var complianceData = model.checks["compliance"];
+    complianceData["reviewManager"] = complianceReviewManager;
+
+    // selection manager    
+    var selectionManager = new ReviewComplianceSelectionManager();
+    complianceData["selectionManager"]  = selectionManager;
+
+    // compliance main table    
+    var checkResultsTable = new ComplianceCheckResultsTable("complianceMainContainer");
+    checkResultsTable.populateReviewTable();
+    complianceData["reviewTable"]  = checkResultsTable;
+
+    // compliance detailed info table
+    var checkPropertiesTable = new ComplianceCheckPropertiesTable("complianceDetailInfo");
+    complianceData["detailedInfoTable"]  = checkPropertiesTable;  
+
+
+}
+
+function setButtonsCollapsible() {   
 
     var acc = document.getElementsByClassName("accordion");
     var i;

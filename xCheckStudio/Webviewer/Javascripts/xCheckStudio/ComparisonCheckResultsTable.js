@@ -18,6 +18,7 @@ ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function(groupId,
 
     var btn = document.createElement("BUTTON");
     btn.className = "accordion";
+    btn.style.justifyContent = "left";    
     var t = document.createTextNode(componentClass);       // Create a text node
     btn.appendChild(t);
     return btn;
@@ -168,7 +169,7 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
 
         var div = document.createElement("DIV");
         div.className = "content scrollable";
-        div.id = componentsGroup.componentClass.replace(/\s/g, '');
+        div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
         parentTable.appendChild(div);
 
         // create column headers
@@ -208,8 +209,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     
     $(function () {
         var isFiredFromCheckbox = false;
-        $(containerDiv).igGrid({
-            // width : "575px",
+        $(containerDiv).igGrid({           
             height : "202px",
             columns: columnHeaders,
             autofitLastColumn: false,
@@ -281,27 +281,6 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 };
 
 ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function(rowIndex, containerDiv) {
-    // var rowData = {};
-    // var rowIndex = rowIndex;
-    // $(function () {
-    // var data = $(containerDiv).data("igGrid").dataSource.dataView();
-    // var ResultId = data[rowIndex].ID;
-    // var GroupId = data[rowIndex].groupId;
-    // var SourceANodeId = data[rowIndex].SourceANodeId;
-    // var SourceBNodeId = data[rowIndex].SourceBNodeId;
-    // var Status = data[rowIndex].Status;
-    // var SourceBName = data[rowIndex].SourceB;
-    // var SourceAName = data[rowIndex].SourceA;
-
-    // rowData['Status'] = Status;
-    // rowData['SourceBName'] = SourceBName;
-    // rowData['SourceAName'] = SourceAName;
-    // rowData['ResultId'] = ResultId;
-    // rowData['GroupId'] = GroupId;
-    // rowData['SourceANodeId'] = SourceANodeId;
-    // rowData['SourceBNodeId'] = SourceBNodeId;
-    // });
-
     var data = $(containerDiv).data("igGrid").dataSource.dataView();
     var rowData = data[rowIndex];
     return rowData;

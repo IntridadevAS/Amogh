@@ -202,6 +202,7 @@
       <div id="viewPanelCompliance" class="viewPanel hide">
         <div id="tableDataCompliance" class="tableContainer">
           <div class="tablesArea">
+             <div id="complianceMainContainer"  class="tempContainer"> </div>
           </div>
           <div class="infoArea">
             <div class="infoAreaHeader">
@@ -209,12 +210,17 @@
               <p>Detail Info</p>
               <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
             </div>
+
+            <div id="complianceDetailInfoContainer" class="detailInfoContainer">
+              <div id="complianceDetailInfo"></div>
+            </div>
+
           </div>
         </div>
         <div id="center" class="grabBar"></div>
         <div id="visualizerA" class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-          Compliance
+          <div id="compliance1"> </div>
         </div>
       </div>
       <div class="projectName">
@@ -250,10 +256,12 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerInterface.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewSelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComparisonSelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewComplianceSelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonCheckResultsTable.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceCheckResultsTable.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleConstants.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\HighlightManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
