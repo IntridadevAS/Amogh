@@ -13,82 +13,82 @@ $tabletoupdate = $_POST['tabletoupdate'];
 
 switch ($tabletoupdate) {
     case "comparison":
-        updateComponentComparisonStatusInReview();
+        acceptComparisonComponent();
         break;
     case "comparisonDetailed":
-        updatePropertyComparisonStatusInReview();
+        acceptComparisonProperty();
         break;
     case "category":
-        updateCategoryComparisonStatusInReview();
+        acceptComparisonCategory();
         break;
     case "complianceSourceA":
-        updateComponentComplianceStatusInReview()();
+        acceptComplianceComponent();
         break;
     case "complianceSourceB":
-        updateComponentComplianceStatusInReview()();
+        acceptComplianceComponent();
         break;
     case "ComplianceADetailedReview":
-        updatePropertyComplianceStatusInReview();
+        acceptComplianceProperty();
         break;
     case "ComplianceBDetailedReview":
-        updatePropertyComplianceStatusInReview();
+        acceptComplianceProperty();
         break;
     case "categoryComplianceA":
-        updateCategoryComplianceStatusInReview();
+        acceptComplianceCategory();
         break;
     case "categoryComplianceB":
-        updateCategoryComplianceStatusInReview();
+        acceptComplianceCategory();
         break;
     case "acceptAllCategoriesFromComparisonTab":
-        updateStatusOfAllComparisonCategories();
+        acceptAllComparison();
         break;
     case "acceptAllCategoriesFromComplianceATab":
-        updateStatusOfAllComplianceACategories();
+        acceptAllComplianceA();
         break;
     case "acceptAllCategoriesFromComplianceBTab":
-        updateStatusOfAllComplianceBCategories();
+        acceptAllComplianceB();
         break;
     case "rejectAllCategoriesFromComparisonTab":
-        updateStatusOfAllComparisonCategoriesToOriginal();
+        unAcceptAllComparison();
         break;
     case "rejectAllCategoriesFromComplianceATab":
-        updateStatusOfAllComplianceACategoriesToOriginal();
+        unAcceptAllComplianceA();
         break;
     case "rejectAllCategoriesFromComplianceBTab":
-        updateStatusOfAllComplianceBCategoriesToOriginal();
+        unAcceptAllComplianceB();
         break;
     case "rejectComponentFromComparisonTab":
-        rejectAcceptStatusComparisonComponent();
+        unAcceptComponent();
         break;
     case "rejectPropertyFromComparisonTab":
-        rejectAcceptStatusComparisonProperty();
+        unAcceptComparisonProperty();
         break;
     case "rejectCategoryFromComparisonTab":
-        rejectAcceptStatusComparisonCategory();
+        unAcceptComparisonCategory();
         break;
     case "rejectComponentFromComplianceATab":
-        rejectAcceptStatusComplianceAComponent();
+        unAcceptComplianceAComponent();
         break;
     case "rejectPropertyFromComplianceATab":
-        rejectAcceptStatusComplianceAProperty();
+        unAcceptComplianceAProperty();
         break;
     case "rejectCategoryFromComplianceATab":
-        rejectAcceptStatusComplianceACategory();
+        unAcceptComplianceACategory();
         break;
     case "rejectComponentFromComplianceBTab":
-        rejectAcceptStatusComplianceBComponent();
+        unAcceptComplianceBComponent();
         break;
     case "rejectPropertyFromComplianceBTab":
-        rejectAcceptStatusComplianceBProperty();
+        unAcceptComplianceBProperty();
         break;
     case "rejectCategoryFromComplianceBTab":
-        rejectAcceptStatusComplianceBCategory();
+        unAcceptComplianceBCategory();
         break;
     default:
         break;
 }
 
-function updateComponentComparisonStatusInReview() {
+function acceptComparisonComponent() {
     global $projectName;
     global $checkName;
     $componentid = $_POST['componentid']; 
@@ -132,7 +132,7 @@ function updateComponentComparisonStatusInReview() {
     }
 }
 
-function updatePropertyComparisonStatusInReview() {
+function acceptComparisonProperty() {
     if(!isset($_POST['sourceAPropertyName']) ||
     !isset($_POST['sourceBPropertyName']))
     {
@@ -223,7 +223,7 @@ function updatePropertyComparisonStatusInReview() {
     $dbh = null; 
 }
 
-function updateCategoryComparisonStatusInReview() {
+function acceptComparisonCategory() {
     if(!isset($_POST['groupid'])) {
         echo 'fail';
         return;
@@ -266,7 +266,7 @@ function updateCategoryComparisonStatusInReview() {
     $dbh = null;
 }
 
-function updateComponentComplianceStatusInReview() {
+function acceptComplianceComponent() {
     global $projectName;
     global $checkName;
     $componentid = $_POST['componentid']; 
@@ -310,7 +310,7 @@ function updateComponentComplianceStatusInReview() {
     }
 }
 
-function updatePropertyComplianceStatusInReview() {
+function acceptComplianceProperty() {
     global $projectName;
     global $checkName;
     global $tabletoupdate;
@@ -384,7 +384,7 @@ function updatePropertyComplianceStatusInReview() {
     $dbh = null; 
 }
 
-function updateCategoryComplianceStatusInReview() {
+function acceptComplianceCategory() {
     if(!isset($_POST['groupid'])) {
         echo 'fail';
         return;
@@ -439,7 +439,7 @@ function updateCategoryComplianceStatusInReview() {
     $dbh = null;
 }
 
-function updateStatusOfAllComparisonCategories() {
+function acceptAllComparison() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -461,7 +461,7 @@ function updateStatusOfAllComparisonCategories() {
     $dbh = null;
 }
 
-function updateStatusOfAllComplianceACategories() {
+function acceptAllComplianceA() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -482,7 +482,7 @@ function updateStatusOfAllComplianceACategories() {
     $dbh = null;
 }
 
-function updateStatusOfAllComplianceBCategories() {
+function acceptAllComplianceB() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -503,7 +503,7 @@ function updateStatusOfAllComplianceBCategories() {
     $dbh = null;
 }
 
-function updateStatusOfAllComparisonCategoriesToOriginal() {
+function unAcceptAllComparison() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -538,7 +538,7 @@ function updateStatusOfAllComparisonCategoriesToOriginal() {
     $dbh = null;
 }
 
-function updateStatusOfAllComplianceACategoriesToOriginal() {
+function unAcceptAllComplianceA() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -573,7 +573,7 @@ function updateStatusOfAllComplianceACategoriesToOriginal() {
     $dbh = null;
 }
 
-function updateStatusOfAllComplianceBCategoriesToOriginal() {
+function unAcceptAllComplianceB() {
     global $projectName;
     global $checkName;
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -609,7 +609,7 @@ function updateStatusOfAllComplianceBCategoriesToOriginal() {
     $dbh = null;
 }
 
-function rejectAcceptStatusComparisonComponent() {
+function unAcceptComponent() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -661,7 +661,7 @@ function rejectAcceptStatusComparisonComponent() {
     echo json_encode($statusArray);
 }
 
-function rejectAcceptStatusComparisonProperty() {
+function unAcceptComparisonProperty() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -754,7 +754,7 @@ function rejectAcceptStatusComparisonProperty() {
     echo json_encode($statusArray);
 }
 
-function rejectAcceptStatusComparisonCategory() {
+function unAcceptComparisonCategory() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -833,7 +833,7 @@ function rejectAcceptStatusComparisonCategory() {
     echo json_encode($statusArray);
 }
 
-function rejectAcceptStatusComplianceAComponent() {
+function unAcceptComplianceAComponent() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -884,7 +884,7 @@ function rejectAcceptStatusComplianceAComponent() {
 
 }
 
-function rejectAcceptStatusComplianceAProperty() {
+function unAcceptComplianceAProperty() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -965,7 +965,7 @@ function rejectAcceptStatusComplianceAProperty() {
 
 }
 
-function rejectAcceptStatusComplianceACategory() {
+function unAcceptComplianceACategory() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -1059,7 +1059,7 @@ function rejectAcceptStatusComplianceACategory() {
 }
 
 
-function rejectAcceptStatusComplianceBComponent() {
+function unAcceptComplianceBComponent() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -1112,7 +1112,7 @@ function rejectAcceptStatusComplianceBComponent() {
 
 }
 
-function rejectAcceptStatusComplianceBProperty() {
+function unAcceptComplianceBProperty() {
     $statusArray = array();
     global $projectName;
     global $checkName;
@@ -1192,7 +1192,7 @@ function rejectAcceptStatusComplianceBProperty() {
     echo json_encode($statusArray);
 }
 
-function rejectAcceptStatusComplianceBCategory() {
+function unAcceptComplianceBCategory() {
     $statusArray = array();
     global $projectName;
     global $checkName;

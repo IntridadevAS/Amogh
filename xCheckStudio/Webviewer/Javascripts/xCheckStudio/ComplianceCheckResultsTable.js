@@ -192,7 +192,11 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             dataSource : tableData,
             responseDataKey: "results",
             fixedHeaders : true,
-            autoCommit: true,
+            autoCommit: true,        
+            rendered: function (evt, ui) {                              
+                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                reviewComplianceContextMenuManager.InitComponentLevelContextMenu(viewerContainer);                
+            },  
             features: [
                 {
                     name: "Sorting",
@@ -423,12 +427,16 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     $(function () {
         $(viewerContainer).igGrid({
             // width: "100%",
-            height : "100%",
+            height: "100%",
             columns: columnHeaders,
             autoGenerateColumns: false,
-            dataSource : tableData,
+            dataSource: tableData,
             responseDataKey: "results",
-            fixedHeaders : true,
+            fixedHeaders: true,
+            rendered: function (evt, ui) {
+                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                reviewComplianceContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
+            },
             features: [
                 {
                     name: 'MultiColumnHeaders'
@@ -450,7 +458,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                     mode: 'row',
                     multipleSelection: true,
                     activation: true,
-                    rowSelectionChanging : function(evt, ui) {
+                    rowSelectionChanging: function (evt, ui) {
                         //var comment = _this.detailedReviewRowComments[ui.row.index];
                         var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
                         if (comment) {
@@ -458,7 +466,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                         }
                         else {
                             commentDiv.innerHTML = "Comment : <br>";
-                        }                       
+                        }
                     }
                 },
                 {

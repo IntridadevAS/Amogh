@@ -153,86 +153,6 @@ ComparisonReviewManager.prototype.SourceBComponentExists = function (row) {
     return false;
 }
 
-// ComparisonReviewManager.prototype.LoadReviewTableData = function (columnHeaders, tableData, containerDiv) {
-//     var _this = this;
-//     $(function () {
-//         var db = {
-//             loadData: filter => {
-//                 //   console.debug("Filter: ", filter);
-//                 let sourceA = (filter.SourceA || "").toLowerCase();
-//                 let sourceB = (filter.SourceB || "").toLowerCase();
-//                 let status = (filter.Status || "").toLowerCase();
-//                 let dmy = parseInt(filter.dummy, 10);
-//                 this.recalculateTotals = true;
-//                 return $.grep(tableData, row => {
-//                     return (!sourceA || row.SourceA.toLowerCase().indexOf(sourceA) >= 0)
-//                         && (!sourceB || row.SourceB.toLowerCase().indexOf(sourceB) >= 0)
-//                         && (!status || row.Status.toLowerCase().indexOf(status) >= 0)
-//                         && (isNaN(dmy) || row.dummy === dmy);
-//                 });
-//             }
-//         };
-
-//         $(containerDiv).jsGrid({
-//             height: "202px",
-//             width: "578px",
-//             filtering: true,
-//             autoload: true,
-//             controller: db,
-//             sorting: true,
-//             data: tableData,
-//             fields: columnHeaders,
-//             margin: "0px",
-//             onDataLoaded: function (args) {
-//                 //initializeComparisonContextMenus();
-//                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(_this);
-//                 reviewComparisonContextMenuManager.Init();
-//             },
-//             onItemUpdated: function (args) {
-//                 for (var index = 0; index < args.grid.data.length; index++) {
-//                     if (args.grid.data[index].ID == args.row[0].cells[ComparisonColumns.ResultId].innerHTML) {
-//                         if (args.grid.data[index].Status !== args.row[0].cells[ComparisonColumns.Status].innerHTML) {
-//                             args.grid.data[index].Status = args.row[0].cells[ComparisonColumns.Status].innerHTML;
-//                             break;
-//                         }
-//                     }
-//                 }
-//             },
-//             onRefreshed: function (config) {
-//                 var id = containerDiv.replace("#", "");
-//                 // _this.AddTableContentCount(this._container.context.id);
-//                 document.getElementById(id).style.width = "578px";
-//                 _this.highlightMainReviewTableFromCheckStatus(id);
-
-//                 // hide additional column cells
-//                 var tableRows = this._container.context.getElementsByTagName("tr");
-//                 for (var j = 0; j < tableRows.length; j++) {
-//                     var currentRow = tableRows[j];
-//                     for (var i = 0; i < currentRow.cells.length; i++) {
-//                         if (i > ComparisonColumns.Status) {
-//                             currentRow.cells[i].style.display = "none";
-//                         }
-//                     }
-//                 }
-
-//             },
-//             rowClick: function (args) {
-//                 _this.OnCheckComponentRowClicked(args.event.currentTarget, containerDiv);
-//             }
-//         });
-
-//     });
-
-//     var container = document.getElementById(containerDiv.replace("#", ""));
-//     container.style.width = "578px"
-//     container.style.height = "202px"
-//     container.style.margin = "0px"
-//     container.style.overflowX = "hidden";
-//     container.style.overflowY = "scroll";
-//     container.style.padding = "0";
-
-// };
-
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
 
     // populate property table
@@ -309,7 +229,7 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -366,7 +286,7 @@ ComparisonReviewManager.prototype.updateStatusForProperty = function (selectedRo
     }
 }
 
-ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedRow, tableContainer, componentId, groupId) {
+ComparisonReviewManager.prototype.AcceptComponent = function (selectedRow, tableContainer, componentId, groupId) {
 
     var _this = this;
     // var componentId = this.GetComparisonResultId(selectedRow[0]);
@@ -376,7 +296,7 @@ ComparisonReviewManager.prototype.updateStatusForComponent = function (selectedR
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: {
@@ -437,7 +357,7 @@ ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (
     var tabletoupdate = tabletoupdate;
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: { 'tabletoupdate': tabletoupdate, 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
@@ -511,7 +431,7 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (button) {
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             data: { 'groupid': groupId, 'tabletoupdate': "category", 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
@@ -569,7 +489,7 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             dataType: 'JSON',
             async: true,
@@ -584,7 +504,7 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                 status = msg;
                 var properties = status[1];
 
-                var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);;
+                var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
                 component.status = status[0];
                 if (component.transpose != null) {
                     if (!status[0].includes("(T)"))
@@ -623,7 +543,7 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             dataType: 'JSON',
@@ -688,7 +608,7 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (button) {
 
     try {
         $.ajax({
-            url: 'PHP/updateResultsStatusToAccept.php',
+            url: 'PHP/Accept.php',
             type: "POST",
             async: true,
             dataType: 'JSON',

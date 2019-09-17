@@ -12,16 +12,16 @@ function ReviewComparisonContextMenuManager(comparisonReviewManager) {
 ReviewComparisonContextMenuManager.prototype = Object.create(ReviewModuleContextMenuManager.prototype);
 ReviewComparisonContextMenuManager.prototype.constructor = ReviewComparisonContextMenuManager;
 
-ReviewComparisonContextMenuManager.prototype.Init = function () {
-    // components level
-    this.InitComponentLevelContextMenu();
+// ReviewComparisonContextMenuManager.prototype.Init = function () {
+//     // components level
+//     this.InitComponentLevelContextMenu();
 
-    // property level
-    this.InitPropertyLevelContextMenu();
+//     // property level
+//     this.InitPropertyLevelContextMenu();
 
-    // group level
-    this.InitGroupLevelContextMenu();
-}
+//     // group level
+//     this.InitGroupLevelContextMenu();
+// }
 
 ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = function (componentTableContainer) {
     var _this = this;
@@ -96,8 +96,8 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             return false;
                         }
                     },
-                    "showAll": {
-                        name: "Show All",
+                    "show": {
+                        name: "Show",
                         visible: function () {
                             if (_this.HaveSCOperations()) {
                                 return true;
@@ -414,8 +414,8 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "isolate") {
         this.OnIsolateClick();
     }
-    else if (key === "showAll") {
-        this.OnShowAllClick();
+    else if (key === "show") {
+        this.OnShowClick();
     }
     else if (key === "startTranslucency") {
         this.OnStartTranslucency();
@@ -433,7 +433,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowCl
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    comparisonReviewManager.updateStatusForComponent(rowClicked, this.ComponentTableContainer, componentId, groupId);
+    comparisonReviewManager.AcceptComponent(rowClicked, this.ComponentTableContainer, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
@@ -606,19 +606,30 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
     }
 }
 
-ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
+ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
+    // get selected source A and B node ids
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes) {
+        return;
+    }
+
     // source A
+    var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-    if (sourceAViewerInterface) {
-        sourceAViewerInterface.Viewer.model.setNodesVisibility([sourceAViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
+
+    if (sourceANodeIds.length > 0 &&
+        sourceAViewerInterface) {
+        sourceAViewerInterface.Viewer.model.setNodesVisibility(sourceANodeIds, true).then(function () {
             sourceAViewerInterface.Viewer.view.fitWorld();
         });
     }
 
     // source b
+    var sourceBNodeIds = nodes["SourceB"];
     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-    if (sourceBViewerInterface) {
-        sourceBViewerInterface.Viewer.model.setNodesVisibility([sourceBViewerInterface.Viewer.model.getAbsoluteRootNode()], true).then(function () {
+    if (sourceBNodeIds.length > 0 &&
+        sourceBViewerInterface) {
+        sourceBViewerInterface.Viewer.model.setNodesVisibility(sourceBNodeIds, true).then(function () {
             sourceBViewerInterface.Viewer.view.fitWorld();
         });
     }
@@ -626,7 +637,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowAllClick = function () {
 
 
 ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
-    var selectionManager = model.checks["comparison"]["selectionManager"];
+    var selectionManager = model.getCurrentSelectionManager();
     if (selectionManager.SelectedCheckComponentRows.length === 0) {
         return undefined;
     }
