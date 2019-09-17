@@ -56,28 +56,52 @@
         }   
 
         if($sourceAComplianceResult != NULL)
-        {
-            $results['SourceACompliance'] = $sourceAComplianceResult;
+        {           
+            if(! array_key_exists("Compliances", $results))
+            {
+                $results['Compliances'] = array();
+            }
+
+            $compliance = array();
+            $compliance["source"] = $data["sourceAFileName"];
+            $compliance["results"] = $sourceAComplianceResult;
+
+            //$results['SourceACompliance'] = $sourceAComplianceResult;
             
              // create component hierarchy
              $sourceAComplianceComponentsHierarchy = createComplianceComponentsHierarchy($sourceAComplianceResult,                                                  
                                                  true);
             if($sourceAComplianceComponentsHierarchy !== null)
             {
-                $results['SourceAComplianceComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
+                // $results['SourceAComplianceComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
+                $compliance['ComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
             }
+
+            array_push($results['Compliances'], $compliance);
         }                    
 
         if($sourceBComplianceResult != NULL)
         {
-            $results['SourceBCompliance'] = $sourceBComplianceResult;
+            if(! array_key_exists("Compliances", $results))
+            {
+                $results['Compliances'] = array();
+            }
+
+            $compliance = array();
+            $compliance["source"] = $data["sourceBFileName"];
+            $compliance["results"] = $sourceBComplianceResult;
+
+            // $results['SourceBCompliance'] = $sourceBComplianceResult;
             // create component hierarchy
             $sourceBComplianceComponentsHierarchy = createComplianceComponentsHierarchy($sourceBComplianceResult,                                                 
                                                 false);
             if($sourceBComplianceComponentsHierarchy !== null)
             {
-                $results['SourceBComplianceComponentsHierarchy'] = $sourceBComplianceComponentsHierarchy;
+                // $results['SourceBComplianceComponentsHierarchy'] = $sourceBComplianceComponentsHierarchy;
+                $compliance['ComponentsHierarchy'] = $sourceBComplianceComponentsHierarchy;
             }
+
+            array_push($results['Compliances'], $compliance);
         }        
 
         echo json_encode($results);

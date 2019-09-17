@@ -4,21 +4,21 @@ function ComplianceReviewManager(complianceCheckManager,
     sourceComponents,
     mainReviewTableContainer,
     detailedReviewTableContainer,
-    detailedReviewRowCommentDiv,
-    componentsHierarchy) {
+    detailedReviewRowCommentDiv /*,
+    componentsHierarchy*/) {
 
     this.ViewerData = viewerData;
 
     this.SourceComponents = sourceComponents;
 
-    this.ReviewModuleViewerInterface;
+    // this.ReviewModuleViewerInterface;
 
     this.ComplianceCheckManager = complianceCheckManager;
 
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
-    this.NodeIdStatusData = componentsHierarchy;
+    this.NodeIdStatusData = complianceCheckManager.ComponentsHierarchy;
     this.SourceAViewerCurrentSheetLoaded = undefined;
     this.SourceBViewerCurrentSheetLoaded = undefined;
 
@@ -39,38 +39,39 @@ function ComplianceReviewManager(complianceCheckManager,
 
     this.SourceViewerCurrentSheetLoaded = undefined;
 
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-    this.SelectionManager = new ReviewComplianceSelectionManager();
+    // this.SelectionManager = new ReviewComplianceSelectionManager();
 
-    this.CheckResultsTable = new ComplianceCheckResultsTable(this, mainReviewTableContainer);
-    this.CheckResultsTable.populateReviewTable();
+    // this.CheckResultsTable = new ComplianceCheckResultsTable(this, mainReviewTableContainer);
+    // this.CheckResultsTable.populateReviewTable();
 
-    this.CheckPropertiesTable = new ComplianceCheckPropertiesTable(this, detailedReviewTableContainer)
+    // this.CheckPropertiesTable = new ComplianceCheckPropertiesTable(detailedReviewTableContainer)
 }
 
-ComplianceReviewManager.prototype.loadDatasource = function () {
+ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
     if (this.ViewerData !== undefined) {
-        var containerId;
-        if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
-            containerId = "viewerContainer1";
-        }
-        else if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
-            containerId = "viewerContainer2";
-        }
+        // var containerId = "compliance1";
+        // if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
+        //     containerId = "viewerContainer1";
+        // }
+        // else if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
+        //     containerId = "viewerContainer2";
+        // }
 
-        this.ReviewModuleViewerInterface = new Review3DViewerInterface([containerId, this.ViewerData[0]],
+        var viewerInterface  = new Review3DViewerInterface([containerId, this.ViewerData["endPointUri"]],
             this.ComponentIdVsComponentData,
             this.NodeIdVsComponentData,
             this);
-        this.ReviewModuleViewerInterface.NodeIdStatusData = this.NodeIdStatusData;
+        viewerInterface.NodeIdStatusData = this.NodeIdStatusData;
 
-        this.ReviewModuleViewerInterface.setupViewer(550, 300);
+        viewerInterface.setupViewer(550, 300);
 
-        var viewerContainer = document.getElementById(containerId);
-        viewerContainer.style.height = "405px";
-        viewerContainer.style.top = "70px";
+        model.checks["compliance"]["viewer"] = viewerInterface;
+        // var viewerContainer = document.getElementById(containerId);
+        // viewerContainer.style.height = "405px";
+        // viewerContainer.style.top = "70px";
     }
 
     if (this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
@@ -235,7 +236,7 @@ ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     this.detailedReviewRowComments = {};
 
 
-    this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
     var tempString = "_" + this.MainReviewTableContainer;
     containerDiv = containerDiv.replace("#", "");
     var sheetName = containerDiv.replace(tempString, "");
@@ -678,7 +679,7 @@ ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
 
     // highlight component in graphics view in both viewer
     var nodeId = currentReviewTableRowData.NodeId;
-    this.ReviewModuleViewerInterface.highlightComponent(nodeId);
+    model.checks["compliance"]["viewer"].highlightComponent(nodeId);
 }
 
 ComplianceReviewManager.prototype.LoadSheetDataForSelectedComponent = function (viewerContainer, sheetName, thisRow) {
@@ -1263,7 +1264,24 @@ ComplianceReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
 }
 
 ComplianceReviewManager.prototype.ResizeViewers = function () {
-    if (this.ReviewModuleViewerInterface) {
-        this.ReviewModuleViewerInterface.ResizeViewer();
+    if (model.checks["compliance"]["viewer"]) {
+        model.checks["compliance"]["viewer"].ResizeViewer();
     }
+}
+
+ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
+    var checkGroup = this.ComplianceCheckManager.results[groupId];   
+    var component = checkGroup.components[componentId];
+
+    return component;
+}
+
+ComplianceReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewerId, selectedNode) {
+    var checkComponentData;
+    if (this.SourceNodeIdvsCheckComponent !== undefined &&
+        selectedNode in this.SourceNodeIdvsCheckComponent) {
+        checkComponentData = this.SourceNodeIdvsCheckComponent[selectedNode];
+    }
+
+    return checkComponentData;
 }

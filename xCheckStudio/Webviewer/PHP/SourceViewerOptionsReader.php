@@ -28,37 +28,46 @@
                 $dbh->beginTransaction();
 
                 $sourceViewerOptions = array();
+                
+                // read sources
+                $sourceA;
+                $sourceB;
+                $results = $dbh->query("SELECT *FROM  DatasourceInfo;");                     
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $sourceA = $record['sourceAFileName'];
+                    $sourceB = $record['sourceBFileName'];                               
+                }
+
                 // read sourceAViewerOptions
                 $sourceAViewerOptions = $dbh->query("SELECT *FROM SourceAViewerOptions;");
                 if($sourceAViewerOptions) 
                 {
                     while ($viewerOptions = $sourceAViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        // $sourceViewerOptions['SourceAContainerId'] = $viewerOptions['containerId'];
-                        $sourceViewerOptions['SourceAEndPointUri'] = $viewerOptions['endpointUri'];
+                        $sourceViewerOptions['a']  = array();
+                        
+                        $sourceViewerOptions['a']['endPointUri'] = $viewerOptions['endpointUri'];
+                        $sourceViewerOptions['a']['source'] =  $sourceA;
                         break;
                     }
                 }
-                else
-                {
-                    // table doesn't exist
-                }
+               
 
-                 // read sourceAViewerOptions
+                 // read sourceBViewerOptions
                  $sourceBViewerOptions = $dbh->query("SELECT *FROM SourceBViewerOptions;");
                  if($sourceBViewerOptions) 
                  {
                     while ($viewerOptions = $sourceBViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        //$sourceViewerOptions['SourceBContainerId'] = $viewerOptions['containerId'];
-                        $sourceViewerOptions['SourceBEndPointUri'] = $viewerOptions['endpointUri'];
+                        $sourceViewerOptions['b']  = array();
+                        
+                        $sourceViewerOptions['b']['endPointUri'] = $viewerOptions['endpointUri'];
+                        $sourceViewerOptions['b']['source'] =  $sourceB;
                         break;
                     }
                  }
-                 else
-                 {
-                     // table doesn't exist
-                 }
+                
                                  
                 // commit update
                 $dbh->commit();

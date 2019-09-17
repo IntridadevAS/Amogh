@@ -293,7 +293,7 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
     var sourceBReviewViewerInterface = model.checks["comparison"]["sourceBViewer"];
 
     // highlight corresponding component in another viewer
-    if (this.ViewerOptions[0] === ViewerAContainer) {
+    if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
         if (sourceBReviewViewerInterface !== undefined) {
             sourceBReviewViewerInterface.unHighlightComponent();
 
@@ -309,7 +309,7 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
             this.SelectedComponentRowFromSheetB = undefined;
         }
     }
-    else if (this.ViewerOptions[0] === ViewerBContainer) {
+    else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
         if (sourceAReviewViewerInterface !== undefined) {
             sourceAReviewViewerInterface.unHighlightComponent();
 
@@ -370,28 +370,28 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     var reviewManager = model.getCurrentReviewManager();
 
     // get check component id
-    var checkComponentData = undefined;
-    if (this.ViewerOptions[0] === ViewerAContainer) {
+    var checkComponentData = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], this.selectedNodeId);
+    // if (this.ViewerOptions[0] === ViewerAContainer) {
 
-        if (reviewManager.SourceANodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in reviewManager.SourceANodeIdvsCheckComponent) {
-            checkComponentData = reviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
-        }
-        else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
-            checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-        }
-    }
-    else if (this.ViewerOptions[0] === ViewerBContainer) {
-        if (reviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in reviewManager.SourceBNodeIdvsCheckComponent) {
-            checkComponentData = reviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];          
-        }
-        else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-            this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
-            checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-        }
-    }
+    //     if (reviewManager.SourceANodeIdvsCheckComponent !== undefined &&
+    //         this.selectedNodeId in reviewManager.SourceANodeIdvsCheckComponent) {
+    //         checkComponentData = reviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
+    //     }
+    //     else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+    //         this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
+    //         checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
+    //     }
+    // }
+    // else if (this.ViewerOptions[0] === ViewerBContainer) {
+    //     if (reviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
+    //         this.selectedNodeId in reviewManager.SourceBNodeIdvsCheckComponent) {
+    //         checkComponentData = reviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];          
+    //     }
+    //     else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
+    //         this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
+    //         checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
+    //     }
+    // }
 
     if (!checkComponentData) {
         return;
@@ -503,10 +503,10 @@ Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
     var nodeIdvsCheckComponent;
     // if comparison
-    if (this.ViewerOptions[0] === ViewerAContainer) {
+    if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
         nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceANodeIdvsCheckComponent;
     }
-    else if (this.ViewerOptions[0] === ViewerBContainer) {
+    else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
         nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceBNodeIdvsCheckComponent;
     }
 
@@ -553,7 +553,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
 
                 var childRow = childRows[k];
                 // var childRowColumns = childRow.getElementsByTagName("td");
-                var data = $("#" + componentsGroupName).data("igGrid").dataSource.dataView();
+                var data = $("#" + componentsGroupName + "_" + model.getCurrentReviewManager().MainReviewTableContainer).data("igGrid").dataSource.dataView();
                 var rowData = data[childRow.rowIndex];
                 var checkComponentId;
 
@@ -669,7 +669,7 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
     //check if sheet is already loaded       
     if (sheetName === currentlyLoadedSheet) {
         if (this.ComparisonManager && CurrentReviewTableRowData.Status === "No Match") {
-            if (viewerContainer === ViewerAContainer &&
+            if (viewerContainer === Comparison.ViewerAContainer &&
             CurrentReviewTableRowData.SourceAName === "") {
                 if (this.SelectedComponentRowFromSheetA) {
                     this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA,
@@ -678,7 +678,7 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
 
                 return;
             }
-            else if (viewerContainer === ViewerBContainer &&
+            else if (viewerContainer === Comparison.ViewerBContainer &&
             CurrentReviewTableRowData.SourceBName === "") {
 
                 if (this.SelectedComponentRowFromSheetB) {
@@ -761,22 +761,22 @@ Review1DViewerInterface.prototype.LoadSelectedSheetDataInViewer = function (view
         //     return;
         // }
 
-        if (viewerContainer === ViewerAContainer) {
+        if (viewerContainer === Comparison.ViewerAContainer) {
             this.checkStatusArrayA = {};
             this.SelectedComponentRowFromSheetA = undefined;
 
-            this.LoadSheetTableData(columnHeaders, tableData, "#"+ViewerAContainer, CurrentReviewTableRowData, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRowData, ViewerAContainer);
+            this.LoadSheetTableData(columnHeaders, tableData, "#"+Comparison.ViewerAContainer, CurrentReviewTableRowData, column, sheetName);
+            this.HighlightRowInSheetData(CurrentReviewTableRowData, Comparison.ViewerAContainer);
 
             // keep track of currently loaded sheet data
             model.getCurrentReviewManager().SourceAViewerCurrentSheetLoaded = sheetName;
         }
-        else if (viewerContainer === ViewerBContainer) {
+        else if (viewerContainer === Comparison.ViewerBContainer) {
             this.checkStatusArrayB = {};
             this.SelectedComponentRowFromSheetB = undefined;
 
-            this.LoadSheetTableData(columnHeaders, tableData, "#" + ViewerBContainer, CurrentReviewTableRowData, column, sheetName);
-            this.HighlightRowInSheetData(CurrentReviewTableRowData, ViewerBContainer);
+            this.LoadSheetTableData(columnHeaders, tableData, "#" + Comparison.ViewerBContainer, CurrentReviewTableRowData, column, sheetName);
+            this.HighlightRowInSheetData(CurrentReviewTableRowData, Comparison.ViewerBContainer);
 
             // keep track of currently loaded sheet data
             model.getCurrentReviewManager().SourceBViewerCurrentSheetLoaded = sheetName;
@@ -1023,11 +1023,11 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (viewerContainer, sheetName) {
 
-    if (viewerContainer === ViewerAContainer &&
+    if (viewerContainer === Comparison.ViewerAContainer &&
         sheetName in this.SourceAComponents) {
         return this.SourceAComponents[sheetName];
     }
-    else if (viewerContainer === ViewerBContainer &&
+    else if (viewerContainer === Comparison.ViewerBContainer &&
         sheetName in this.SourceBComponents) {
         return this.SourceBComponents[sheetName];
 
@@ -1039,10 +1039,10 @@ Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (
 Review1DViewerInterface.prototype.GetCurrentSheetInViewer = function (viewerContainer) {
 
     var reviewManager = model.getCurrentReviewManager();
-    if (viewerContainer === ViewerAContainer) {
+    if (viewerContainer === Comparison.ViewerAContainer) {
         return reviewManager.SourceAViewerCurrentSheetLoaded;
     }
-    else if (viewerContainer === ViewerBContainer) {
+    else if (viewerContainer === Comparison.ViewerBContainer) {
         return reviewManager.SourceBViewerCurrentSheetLoaded;
     }
 
@@ -1120,7 +1120,7 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (CurrentRev
 }
 
 Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = function(containerId, currentRowInSourceTable, containerChildren) {
-    if (containerId === ViewerAContainer) {
+    if (containerId === Comparison.ViewerAContainer) {
         if (this.SelectedComponentRowFromSheetA) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, 
                 this.SelectedComponentRowFromSheetA);
@@ -1134,7 +1134,7 @@ Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = functi
         sheetDataTable1.focus();
         sheetDataTable1.parentNode.parentNode.scrollTop = currentRowInSourceTable.offsetTop - currentRowInSourceTable.offsetHeight;
     }
-    if (containerId === ViewerBContainer) {
+    if (containerId === Comparison.ViewerBContainer) {
 
         if (this.SelectedComponentRowFromSheetB) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, this.SelectedComponentRowFromSheetB);
@@ -1151,7 +1151,7 @@ Review1DViewerInterface.prototype.HighlightComparisonViewerSheetDataRow = functi
 }
 
 Review1DViewerInterface.prototype.HighlightComplianceViewerSheetDataRow = function(containerId, currentRowInSourceTable, containerChildren) {
-    if (containerId === ViewerAContainer) {
+    if (containerId === Comparison.ViewerAContainer) {
         if (this.SelectedComponentRowFromSheetA) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayA, 
                 this.SelectedComponentRowFromSheetA);
@@ -1159,7 +1159,7 @@ Review1DViewerInterface.prototype.HighlightComplianceViewerSheetDataRow = functi
         this.SelectedComponentRowFromSheetA = currentRowInSourceTable;
         model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
     }
-    else if (containerId === ViewerBContainer) {
+    else if (containerId === Comparison.ViewerBContainer) {
         if (this.SelectedComponentRowFromSheetB) {
             this.unhighlightSelectedSheetRowInviewer(this.checkStatusArrayB, 
                 this.SelectedComponentRowFromSheetB);

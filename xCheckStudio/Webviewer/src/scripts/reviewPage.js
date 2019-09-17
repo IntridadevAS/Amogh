@@ -158,7 +158,7 @@ let viewTabs = {
     }
   },
 
-  makeCard: function (file) {
+  makeCardForComparison: function (file) {
     let newComparisonCard = document.createElement('DIV');
     newComparisonCard.classList.add('fileCard');
     newComparisonCard.innerHTML = file.fileName;
@@ -167,6 +167,17 @@ let viewTabs = {
     newComparisonCard.setAttribute("onclick", "viewTabs.selectSourceForComparison()");
 
     return newComparisonCard;
+  },
+
+  makeCardForCompliance: function (file) {
+    let newComplianceCard = document.createElement('DIV');
+    newComplianceCard.classList.add('fileCard');
+    newComplianceCard.innerHTML = file.fileName;
+    newComplianceCard.id = file.id;
+
+    newComplianceCard.setAttribute("onclick", "viewTabs.selectSourceForCompliance()");
+
+    return newComplianceCard;
   },
 
   openSelectFiles: function () {
@@ -186,7 +197,7 @@ let viewTabs = {
   populateComparisons: function () {
     this.openSelectFiles();
     for (file of Object.values(model.files)) {
-      let newCard = this.makeCard(file);
+      let newCard = this.makeCardForComparison(file);
       this.selectFiles.appendChild(newCard);
     };
 
@@ -226,12 +237,9 @@ let viewTabs = {
     if (requiredComparison) {
       // populate check results
       populateCheckResults(requiredComparison,
-        undefined,
-        undefined,
+        undefined,        
         sourceAComparisonHierarchy,
-        sourceBComparisonHierarchy,
-        undefined,
-        undefined);
+        sourceBComparisonHierarchy);
     }
 
     // close select files UI
@@ -239,10 +247,12 @@ let viewTabs = {
   },
 
   populateCompliances: function () {
+    model.selectedCompliance = null;
+
     this.openSelectFiles();
     for (file of Object.values(model.files)) {
       if (file.compliance) {
-        let newCard = this.makeCard(file);
+        let newCard = this.makeCardForCompliance(file);
         this.selectFiles.appendChild(newCard);
       };
     }
@@ -253,7 +263,22 @@ let viewTabs = {
   },
 
   enterCompliance: function () {
-    // TODO set enter functionality for compliance here
+    for (var i = 0; i < compliances.length; i++) {
+      var compliance = compliances[i];
+      if (compliance.source === model.selectedCompliance.fileName) {
+
+        // populate check results
+        populateCheckResults(undefined,
+          compliance,
+          undefined,
+          undefined);
+
+        break;
+      }
+    }
+
+     // close select files UI
+     viewTabs.closeSelectFiles();
   },
 
   selectSourceForComparison: function () {
@@ -271,6 +296,23 @@ let viewTabs = {
 
       event.target.style.removeProperty('border');
     }
+  },
+
+  selectSourceForCompliance: function () {
+    // remove background color of previously selected card, 
+    // as only one source/file/card can be selected at a time
+    for (var i = 0; i < this.selectFiles.children.length; i++) {
+      var card = this.selectFiles.children[i];
+      if (!card.classList.contains("fileCard")) {
+        continue;
+      }
+
+      card.style.removeProperty('border');
+    }
+
+    event.target.style.borderColor = '#15b9f9';
+    
+    model.selectedCompliance = model.files[event.target.id];
   }
 }
 
@@ -305,8 +347,7 @@ let viewPanels = {
     // element.classList.toggle("invert");
 
     let tableContainer = element.closest(".infoArea");
-    tableContainer.classList.toggle("openInfoArea");
-    // tableContainer.classList.toggle("closeInfoArea");
+    tableContainer.classList.toggle("openInfoArea");  
     element.classList.toggle("invert");
 
     //document.getElementById("comparisonDetailInfoContainer").classList.toggle("closeDetailInfo"); 
