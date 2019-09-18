@@ -181,11 +181,12 @@ let viewPanels = {
 
   hideAddPanel: function () {
     var senderElement = event.target;
-    if ($(senderElement).is("input")) {
-      return;
+    if (senderElement.id == "plusFileButtonId" ||
+        senderElement.parentElement.id == "plusFileButtonId") {
+      showLoadDataForm();
     }
 
-    showLoadDataForm();
+  
     //document.getElementById("fileInput").click();
 
     //this.addFilesPanel.classList.add("hide");
@@ -304,7 +305,6 @@ function hideBusyIndicator() {
   overlay.style.display = 'none';
   popup.style.display = 'none';
 }
-
 
 let menu = {
 
@@ -436,11 +436,14 @@ function closeLoadDataForm()
 }
 
 function loadDataSet() {
-  closeLoadDataForm();
-
   document.getElementById("uploadDatasourceForm").reset();
 
-  document.getElementById("fileInput").click();
+  // document.getElementById("file-uploader").click();
+  var fileUploader = $('#file-uploader').dxFileUploader('instance');  
+  fileUploader._isCustomClickEvent  = true;  
+  fileUploader._$fileInput.click();
+
+  closeLoadDataForm();
 
   viewPanels.addFilesPanel.classList.add("hide");
 }

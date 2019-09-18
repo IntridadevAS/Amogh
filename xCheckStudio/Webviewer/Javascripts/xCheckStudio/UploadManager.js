@@ -1,12 +1,32 @@
 let UploadManager = {
-    loadDataSource: function (event,
-        dataSource,
+
+    createFileUploader : function () {
+            $("#file-uploader").dxFileUploader({
+            multiple: true,
+            accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS",
+            width:"951px",
+            height: "461px",
+            value: [],
+            uploadMode: "useForm",
+            labelText: "",
+            showFileList: false,
+            onInitialized: function(e) {
+                console.log(e);
+            },
+            onValueChanged: function(e) {
+                viewPanels.addFilesPanel.classList.add("hide");
+                UploadManager.loadDataSource(e.value, 'uploadDatasourceForm');
+            }
+        });
+    },
+   
+    loadDataSource: function (selectedFiles,
         formId) {
 
         //show busy spinner
         showBusyIndicator();
         
-        let selectedFiles = document.getElementById(dataSource).files;
+        //let selectedFiles = document.getElementById(dataSource).files;
         let selectedFilesCount = selectedFiles.length;
         if (selectedFilesCount == 0) {
             document.getElementById(formId).reset();
@@ -32,7 +52,7 @@ let UploadManager = {
                 UploadManager.upload(fileName,
                     formId,
                     addedSource,
-                    event.target.files);              
+                    selectedFiles);              
             }
         };
         var formData = new FormData(document.getElementById(formId));
@@ -132,70 +152,4 @@ let UploadManager = {
             xhr.send(formData);            
         });
     }
-
-    // uploadAndLoadModel: function (fileExtension,
-    //     fileName, viewerContainer, modelTreeContainer, dataSource, formId, files) {
-    //     if (fileExtension.toLowerCase() === "xml" ||
-    //         fileExtension.toLowerCase() === "rvm" ||
-    //         fileExtension.toLowerCase() === "sldasm" ||
-    //         fileExtension.toLowerCase() === "dwg" ||
-    //         fileExtension.toLowerCase() === "sldprt" ||
-    //         fileExtension.toLowerCase() === "rvt" ||
-    //         fileExtension.toLowerCase() === "rfa" ||
-    //         fileExtension.toLowerCase() === "ifc" ||
-    //         fileExtension.toLowerCase() === "step" ||
-    //         fileExtension.toLowerCase() === "stp" ||
-    //         fileExtension.toLowerCase() === "ste" ||
-    //         fileExtension.toLowerCase() === "json" ||
-    //         fileExtension.toLowerCase() === "igs" ||
-    //         fileExtension.toLowerCase() === "xls") {
-    //         var busySpinner = document.getElementById("divLoading");
-    //         busySpinner.className = 'show';
-
-    //         var xhr = new XMLHttpRequest();
-    //         xhr.open("POST", "uploads/uploadfiles.php", true);
-    //         xhr.onload = function (event) {
-    //             if (fileExtension.toLowerCase() === "json") {
-    //                 if (loadDbDataSource(fileExtension,
-    //                     files,
-    //                     viewerContainer,
-    //                     modelTreeContainer)) {
-
-    //                     hideLoadButton(modelTreeContainer);
-    //                 }
-    //             }
-    //             else if (fileExtension.toLowerCase() === "xls") {
-    //                 if (loadExcelDataSource(fileExtension,
-    //                     files,
-    //                     viewerContainer,
-    //                     modelTreeContainer)) {
-    //                     hideLoadButton(modelTreeContainer);
-    //                 }
-    //             }
-    //             else {
-    //                 loadModel(fileName,
-    //                     viewerContainer,
-    //                     modelTreeContainer, formId);
-    //             }
-
-
-    //             busySpinner.classList.remove('show')
-    //         };
-    //         var formData = new FormData(document.getElementById(formId));
-    //         formData.append('viewerContainer', viewerContainer);
-
-    //         var convertToSCS = 'true';
-    //         if (fileExtension.toLowerCase() === "json" ||
-    //             fileExtension.toLowerCase() === "xls") {
-    //             convertToSCS = 'false';
-    //         }
-    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //         formData.append('ConvertToSCS', convertToSCS);
-    //         formData.append('ProjectName', projectinfo.projectname);
-    //         formData.append('CheckName', checkinfo.checkname);
-    //         xhr.send(formData);
-
-    //     }
-    // }
 }
