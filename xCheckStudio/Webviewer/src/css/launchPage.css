@@ -22,6 +22,20 @@ footer {
   z-index: 1;
 }
 
+.backgroundSplash {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  height: calc(100% - 50px);
+  background-image: url("../../public/imgs/xs.svg"), url("../../public/imgs/launchPageBackground.svg");
+  background-size:  90%, cover;
+  background-repeat: no-repeat;
+  background-position: 50% 42% , center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+
 .splashtext {
   height: 280px;
   width: 500px;
