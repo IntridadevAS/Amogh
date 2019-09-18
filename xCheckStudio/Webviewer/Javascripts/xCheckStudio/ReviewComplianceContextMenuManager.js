@@ -49,7 +49,7 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForComponent(this[0]);
                             return disable;
                         }
                     },
@@ -102,6 +102,28 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
     });
 }
 
+ReviewComplianceContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
+
+    var selectedRowStatus = selectedRow.cells[ComplianceColumns.Status].innerHTML;
+    if (selectedRowStatus.includes("OK") &&
+        !selectedRowStatus.includes("(A)")) {
+        return true;
+    }
+
+    return false;
+}
+
+ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function(selectedRow) {
+    
+    var selectedRowStatus = selectedRow.cells[CompliancePropertyColumns.Status].innerHTML;
+    if (selectedRowStatus.includes("OK")) {
+        return true;
+    }
+
+    return false;
+}
+
+
 ReviewComplianceContextMenuManager.prototype.HaveSCOperations = function () {
     if (model.checks["compliance"]["viewer"]) {
         return true;
@@ -117,7 +139,7 @@ ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = func
 
     $(propertyTableContainer).contextMenu({
         className: 'contextMenu_style',
-        selector: '.jsgrid-row, .jsgrid-alt-row',
+        selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -133,7 +155,7 @@ ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForProperty(this[0]);
                             return disable;
                         }
                     },
@@ -188,7 +210,7 @@ ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceComponent 
 }
 
 ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceProperty = function (selectedRow) {
-    if (selectedRow.cells[2].innerHTML == "ACCEPTED") {
+    if (selectedRow.cells[CompliancePropertyColumns.Status].innerHTML == "ACCEPTED") {
         return false;
     }
 
@@ -259,12 +281,34 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptComponent = function (rowCl
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    this.ComplianceReviewManager.AcceptComponent(rowClicked, this.ComponentTableContainer, tableToUpdate, componentId, groupId);
+    this.ComplianceReviewManager.AcceptComponent(rowClicked, 
+                                                 this.ComponentTableContainer, 
+                                                 tableToUpdate, 
+                                                 componentId, 
+                                                 groupId);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
+   
+    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    if (!highlightedRow) {
+        return;
+    }
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#" + componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[highlightedRow.rowIndex];
+
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+
     var tableToUpdate = this.GetTableNameToAcceptProperty();
-    this.ComplianceReviewManager.UpdateStatusForProperty(rowClicked, tableToUpdate);
+
+    this.ComplianceReviewManager.AcceptProperty(rowClicked,
+        "#" + componentTableId,
+        tableToUpdate,
+        componentId,
+        groupId);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
@@ -289,8 +333,26 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponent = function (row
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
+    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    if(!highlightedRow)
+    {
+        return;
+    }
+
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[highlightedRow.rowIndex];
+    
+    var componentId = rowData.ID;
+    var groupId = rowData.groupId;
+    
     var tableToUpdate = this.GetTableNameToUnAcceptProperty();
-    this.ComplianceReviewManager.UnAcceptProperty(rowClicked, tableToUpdate);
+    this.ComplianceReviewManager.UnAcceptProperty(rowClicked, 
+        "#"+ componentTableId, 
+        tableToUpdate,
+        componentId,
+        groupId);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptGroup = function (rowClicked) {
@@ -314,14 +376,18 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptComponent = fun
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptProperty = function () {
-    var tableToUpdate = "";
-    if (this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
+    var tableToUpdate;
+    var fileName = this.ComplianceReviewManager.GetFileName();
+    if ('a' in model.files &&
+        model.files['a'].fileName === fileName) {
         tableToUpdate = "ComplianceADetailedReview";
     }
-    else if (this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
+    else if ('b' in model.files &&
+        model.files['b'].fileName === fileName) {
         tableToUpdate = "ComplianceBDetailedReview";
     }
-    return tableToUpdate;
+
+    return tableToUpdate;   
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptGroup = function () {
@@ -352,14 +418,27 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptComponent = f
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptProperty = function () {
-    var tableToUpdate = "";
-    if (this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
+    var tableToUpdate;
+    var fileName = this.ComplianceReviewManager.GetFileName();
+    if ('a' in model.files &&
+        model.files['a'].fileName === fileName) {
         tableToUpdate = "rejectPropertyFromComplianceATab";
     }
-    else if (this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
+    else if ('b' in model.files &&
+        model.files['b'].fileName === fileName) {
         tableToUpdate = "rejectPropertyFromComplianceBTab";
     }
-    return tableToUpdate;
+
+    return tableToUpdate;   
+    
+    // var tableToUpdate = "";
+    // if (this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
+    //     tableToUpdate = "rejectPropertyFromComplianceATab";
+    // }
+    // else if (this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
+    //     tableToUpdate = "rejectPropertyFromComplianceBTab";
+    // }
+    // return tableToUpdate;
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = function () {

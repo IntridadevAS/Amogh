@@ -238,8 +238,8 @@ function populateCheckResults(comparison,
             //         sourceBComplianceHierarchy);
             // }
 
-            // make buttons collapsible
-            setButtonsCollapsible();         
+            // // make buttons collapsible
+            // setButtonsCollapsible();         
         }
     });
 }
@@ -288,6 +288,9 @@ function loadComparisonData(comparisonCheckGroups,
     
     // comparisonData["reviewManager"]  = comparisonReviewManager;
     // comparisonData["reviewManager"]  = comparisonReviewManager;
+
+    // make buttons collapsible
+    setButtonsCollapsible("comparisonMainContainer");         
 }
 
 function loadComplianceData(compliance,
@@ -319,18 +322,20 @@ function loadComplianceData(compliance,
     // compliance main table    
     var checkResultsTable = new ComplianceCheckResultsTable("complianceMainContainer");
     checkResultsTable.populateReviewTable();
-    complianceData["reviewTable"]  = checkResultsTable;
+    complianceData["reviewTable"] = checkResultsTable;
 
     // compliance detailed info table
     var checkPropertiesTable = new ComplianceCheckPropertiesTable("complianceDetailInfo");
-    complianceData["detailedInfoTable"]  = checkPropertiesTable;  
+    complianceData["detailedInfoTable"] = checkPropertiesTable;
 
-
+    // make buttons collapsible
+    setButtonsCollapsible("complianceMainContainer");
 }
 
-function setButtonsCollapsible() {   
+function setButtonsCollapsible(containerId) {   
 
-    var acc = document.getElementsByClassName("accordion");
+    var container = document.getElementById(containerId);
+    var acc = container.getElementsByClassName("accordion");
     var i;
 
     for (i = 0; i < acc.length; i++) {
