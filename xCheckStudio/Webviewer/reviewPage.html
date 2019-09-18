@@ -24,9 +24,9 @@
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program" onclick="onclosewindow()"></button>
       </div>
     </div>
 
@@ -315,7 +315,9 @@
   <!-- HOOPS Communicator dependencies -->
   <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>
   <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
-
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
+  
   <script>
 
     window.onload = function () {
