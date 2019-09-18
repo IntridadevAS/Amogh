@@ -305,12 +305,19 @@ ComplianceReviewManager.prototype.AcceptComponent = function (selectedRow, table
     catch (error) { }
 }
 
-ComplianceReviewManager.prototype.UpdateStatusForProperty = function (selectedRow, tableToUpdate) {
+ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow, 
+                                                             tableContainer, 
+                                                             tableToUpdate, 
+                                                             componentId, 
+                                                             groupId) {
     var _this = this;
 
-    var tableToUpdate = tableToUpdate;
-    var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    // var tableToUpdate = tableToUpdate;
+    // var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
 
     try {
         $.ajax({
@@ -325,11 +332,12 @@ ComplianceReviewManager.prototype.UpdateStatusForProperty = function (selectedRo
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var originalstatus = _this.getStatusFromMainReviewRow(_this.SelectionManager.HighlightedCheckComponentRow);
+                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
 
-                var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
-                var Properties = checkResultComponent["properties"];
+                var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
+                // var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                // var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
+                var properties = checkResultComponent["properties"];
                 var changedStatus = originalstatus;
                 if (!originalstatus.includes("(A)")) {
                     changedStatus = originalstatus + "(A)";
@@ -340,22 +348,29 @@ ComplianceReviewManager.prototype.UpdateStatusForProperty = function (selectedRo
                     checkResultComponent["Status"] = changedStatus;
                     _this.SelectionManager.GetRowHighlightColor(changedStatus);
                 }
-                var propertiesLen = Properties.length;
-                for (var i = 0; i < propertiesLen; i++) {
-                    var sourceAName = Properties[i]["SourceAName"];
-                    if (sourceAName == null) {
-                        sourceAName = "";
+                
+                for (var i = 0; i < properties.length; i++) {
+                    var property =  properties[i];
+                    var name = property["name"];
+                    if (!name) {
+                        name = "";
                     }
 
-                    if (sourceAName == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
-                        Properties[i]["Severity"] = "ACCEPTED";
+                    if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
+                        property["severity"] = "ACCEPTED";
                         selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = "ACCEPTED";
-                        _this.SelectionManager.ChangeBackgroundColor(selectedRow[0], "ACCEPTED");
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], "ACCEPTED");
                         break;
                     }
 
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                    tableContainer, 
+                    changedStatus, 
+                    false, 
+                    ComplianceColumns.Status);
+
             }
         });
     }
@@ -378,12 +393,12 @@ ComplianceReviewManager.prototype.updateReviewComponentGridData = function (sele
     if (populateDetailedTable) {
         model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
     }
-    else
-    {
-        if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-            model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerText = changedStatus;
-        }
-    }
+    // else
+    // {
+    //     if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+    //         model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerText = changedStatus;
+    //     }
+    // }
 
     // var row = selectedRow;
 
@@ -591,11 +606,20 @@ ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow,
     catch (error) { }
 }
 
-ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow, tableToUpdate) {
+ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow, 
+    tableContainer, 
+    tableToUpdate, 
+    componentId, 
+    groupId) {
+
     var _this = this;
-    var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
-    var tableToUpdate = tableToUpdate;
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    // var tableToUpdate = tableToUpdate;
+    // var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
+    // var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
 
     try {
         $.ajax({
@@ -615,24 +639,32 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
                 status = msg;
                 var changedStatus = status[0];
 
-                var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
-                var Properties = checkResultComponent["properties"];
+                var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
+                // var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                // var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
+                var properties = checkResultComponent["properties"];
 
                 checkResultComponent["Status"] = changedStatus;
-
-                var propertiesLen = Properties.length;
-                for (var i = 0; i < propertiesLen; i++) {
-                    var sourceAName = Properties[i]["SourceAName"];
-                    if (sourceAName == null) {
-                        sourceAName = ""
+                
+                for (var i = 0; i < properties.length; i++) {
+                    var property = properties[i];
+                    var name = property["name"];
+                    if (name == null) {
+                        name = ""
                     };
 
-                    if (sourceAName == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
-                        Properties[i]["Severity"] = status[1];
+                    if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
+                        property["severity"] = status[1];
+                        selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = status[1];
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                 }
-                _this.updateReviewComponentGridData(_this.SelectionManager.HighlightedCheckComponentRow, groupId, changedStatus);
+               
+                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                tableContainer, 
+                changedStatus, 
+                false, 
+                ComplianceColumns.Status);
             }
         });
     }

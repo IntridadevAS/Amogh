@@ -49,7 +49,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForComponent(this[0]);
                             return disable;
                         }
                     },
@@ -166,7 +166,7 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForProperty(this[0]);
                             return disable;
                         }
                     },
@@ -291,9 +291,30 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
     if (selectedRowStatus === "undefined" ||
         selectedRowStatus === "No Match" ||
         selectedRowStatus === "No Match(A)" ||
-        selectedRowStatus === "OK" ||
-        selectedRowStatus === "OK(A)" ||
-        selectedRowStatus === "OK(A)(T)") {
+        (selectedRowStatus.includes("OK") &&
+        !selectedRowStatus.includes("(T)"))) {
+        return true;
+    }
+
+    return false;
+}
+
+ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent= function(selectedRow) {
+    
+    var selectedRowStatus = selectedRow.cells[ComparisonColumns.Status].innerHTML;
+    if(selectedRowStatus.includes("OK") &&
+       !selectedRowStatus.includes("(A)"))
+    {
+        return true; 
+    }
+
+    return false;
+}
+
+ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
+
+    var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
+    if (selectedRowStatus.includes("OK")) {
         return true;
     }
 
@@ -318,11 +339,12 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
     var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
-    if (selectedRowStatus == "OK" ||
-        selectedRowStatus == "OK(T)" ||
-        selectedRowStatus == "No Value" ||
-        selectedRowStatus == "undefined" ||
-        selectedRowStatus == "ACCEPTED") {
+    if (selectedRowStatus === "OK" ||
+        selectedRowStatus === "OK(T)" ||
+        selectedRowStatus === "No Value" ||
+        selectedRowStatus === "No Match" ||
+        selectedRowStatus === "undefined" ||
+        selectedRowStatus === "ACCEPTED") {
         return true;
     }
     else if (selectedRow.cells[ComparisonPropertyColumns.SourceAName].innerHTML == "" ||
@@ -438,7 +460,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowCl
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
 
-    var highlightedRow = model.checks["comparison"]["selectionManager"].HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
     if(!highlightedRow)
     {
         return;
@@ -452,7 +474,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    comparisonReviewManager.updateStatusForProperty(rowClicked, this.PropertyTableContainer, componentId, groupId);
+    comparisonReviewManager.AcceptProperty(rowClicked, "#"+ componentTableId, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
@@ -483,15 +505,15 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
     var componentTableId = highlightedRow.offsetParent.id;
 
     var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
-    var rowData = rowsData[rowClicked[0].rowIndex];
+    var rowData = rowsData[highlightedRow.rowIndex];
     
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    comparisonReviewManager.UnAcceptProperty(rowClicked, 
-                                              this.PropertyTableContainer, 
-                                              componentId, 
-                                              groupId);
+    comparisonReviewManager.UnAcceptProperty(rowClicked,
+        "#" + componentTableId,
+        componentId,
+        groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClicked) {
@@ -500,9 +522,17 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClic
 
 ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
 
-    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
-    var rowData = rowsData[selectedRow[0].rowIndex];
+    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    if(!highlightedRow)
+    {
+        return;
+    }
 
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[highlightedRow.rowIndex];
+    
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
@@ -519,28 +549,23 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
             groupId);
     }
     else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.RestorePropertyTranspose(selectedRow, comparisonReviewManager);
-    }
-    // if (selectedRow[0].nodeName == "BUTTON") {
-
-    //     comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
-    // }
-    // else {
-    //     var typeOfRow = selectedRow[0].offsetParent.offsetParent.offsetParent.id;
-    //     if (typeOfRow == "ComparisonMainReviewTbody") {
-    //         comparisonReviewManager.RestoreComponentTranspose(selectedRow);
-    //     }
-    //     else if (typeOfRow == "ComparisonDetailedReviewTbody") {
-    //         comparisonReviewManager.RestorePropertyTranspose(selectedRow, comparisonReviewManager);
-    //     }
-    // }
+        comparisonReviewManager.RestorePropertyTranspose(selectedRow, "#"+ componentTableId, componentId, groupId);        
+    }   
 }
 
 ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
     // if (selectedRow[0].nodeName == "BUTTON") {
-    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
-    var rowData = rowsData[selectedRow[0].rowIndex];
+    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    if(!highlightedRow)
+    {
+        return;
+    }
 
+    var componentTableId = highlightedRow.offsetParent.id;
+
+    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var rowData = rowsData[highlightedRow.rowIndex];
+    
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
@@ -561,7 +586,7 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
     else if (source.toLowerCase() === "property") {
         comparisonReviewManager.TransposeProperty(key,
             selectedRow,
-            this.ComponentTableContainer,
+            "#"+ componentTableId,
             componentId,
             groupId);
     }
