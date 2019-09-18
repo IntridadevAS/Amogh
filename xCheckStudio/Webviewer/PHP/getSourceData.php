@@ -15,14 +15,14 @@ $ValidDataSources = ["xml",
                      "ste", 
                      "igs"];
 
-foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
+foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name)
 {
     $FileCount++;
 }
 
 if($FileCount > 0)
 {
-    foreach($_FILES["dataSouresName"]["name"] as $key=>$tmp_name)
+    foreach($_FILES["files"]["name"] as $key=>$tmp_name)
     {
         $file = $tmp_name;
      

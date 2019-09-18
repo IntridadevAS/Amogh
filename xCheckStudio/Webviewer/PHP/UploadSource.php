@@ -61,10 +61,10 @@
         return;
     }
 
-    foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
+    foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name)
     {
-        $temp = $_FILES["dataSouresName"]["tmp_name"][$key];
-        $name = $_FILES["dataSouresName"]["name"][$key];
+        $temp = $_FILES["files"]["tmp_name"][$key];
+        $name = $_FILES["files"]["name"][$key];
 
         // upload target file name
         $UploadFolder= $uploadDirectory."/".$name;

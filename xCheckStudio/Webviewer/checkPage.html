@@ -520,15 +520,16 @@
         <div class="loadDataContent">
           <h3>Load Data</h3>
           <p>Drag and Drop Here</p>
-          <div class="plusFileButton">
+          <div id="plusFileButtonId" class="plusFileButton" style="z-index: 1">
             <img src="public/symbols/plus.svg" alt="">
           </div>
 
-          <form id="uploadDatasourceForm" enctype="multipart/form-data">
+          <form id="uploadDatasourceForm" method="post" action="" enctype="multipart/form-data">
 
-            <input id="fileInput" name="dataSouresName[]" multiple="multiple" type="file" style="display: none"
-              onchange="UploadManager.loadDataSource(event, 'fileInput', 'uploadDatasourceForm')"
-              accept=".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS" />
+            <div id="fileuploader-container" style="position: absolute; top: 25%; left: 25%; height: 469px; width: 951px">
+              <div id="file-uploader"></div>
+            </div>
+
           </form>
         </div>
       </div>
@@ -731,6 +732,26 @@
       bottom: 0;
       overflow: auto;
     }
+
+    .dx-fileuploader-button {  
+        display: none !important;
+    }
+
+    .dx-fileuploader-input-wrapper {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .dx-fileuploader-input-container {
+      width: 937px !important;
+      height: 447px !important;
+    }
+
+    .dx-fileuploader-input {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
@@ -845,6 +866,9 @@
 
       // hide spinner
       hideBusyIndicator();
+
+      //Create file uploader using devExtreme
+      UploadManager.createFileUploader();
     }
 
     function showMenu() {
