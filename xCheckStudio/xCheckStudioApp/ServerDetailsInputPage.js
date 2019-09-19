@@ -32,7 +32,7 @@ window.onload = function () {
                 }
                 else {
                     //alert("'" + url + "' does not exist.");
-                    document.getElementById("errorMsgContainer").style.display = "block";
+                    //document.getElementById("errorMsgContainer").style.display = "block";
                 }
             };
 
