@@ -33,22 +33,23 @@ ExcelModeBrowser.prototype.CreateHeaders = function () {
         else if (i === ModelBrowserColumns1D.Component) {
             caption = ModelBrowserColumnNames1D.Component;
             dataField = ModelBrowserColumnNames1D.Component.replace(/\s/g, '');
-            width = "25%";
+            width = "40%";
         }
         else if (i === ModelBrowserColumns1D.MainClass) {
             caption = ModelBrowserColumnNames1D.MainClass;
             dataField = ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '');
-            width = "25%";
+            width = "30%";
         }
         else if (i === ModelBrowserColumns1D.SubClass) {
             caption = ModelBrowserColumnNames1D.SubClass;
             dataField = ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '');
-            width = "25%";
+            width = "30%";
         }
         else if (i === ModelBrowserColumns1D.Description) {
             caption = ModelBrowserColumnNames1D.Description;
             dataField = ModelBrowserColumnNames1D.Description.replace(/\s/g, '');
-            width = "25%";
+            width = "0%";
+            visible =  false;
         }
         else if(i == ModelBrowserColumns1D.RowKey) {
             caption = ModelBrowserColumnNames1D.RowKey;
@@ -250,7 +251,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             keyExpr: "RowKey",
             columns: columnHeaders,
             columnAutoWidth: true,
-            wordWrapEnabled: true,
+            wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
             height: "96%",

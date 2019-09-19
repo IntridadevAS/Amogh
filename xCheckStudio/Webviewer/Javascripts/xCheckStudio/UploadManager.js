@@ -4,8 +4,8 @@ let UploadManager = {
             $("#file-uploader").dxFileUploader({
             multiple: true,
             accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS",
-            width:"951px",
-            height: "461px",
+            width:"1882px",
+            height: "872px",
             value: [],
             uploadMode: "useForm",
             labelText: "",

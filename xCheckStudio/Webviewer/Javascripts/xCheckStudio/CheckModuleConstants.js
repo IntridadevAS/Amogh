@@ -35,7 +35,7 @@ const ModelBrowserColumnNames3D = {
     Select: "",
     Component: "Item",
     MainClass: "Category",
-    SubClass: "Item Class",
+    SubClass: "Class",
     NodeId: "NodeId",
     Parent: "parent"
 }
@@ -56,7 +56,7 @@ const ModelBrowserColumnNames1D = {
     Select: "",
     Component: "Item",
     MainClass: "Category",
-    SubClass: "Item Class",
+    SubClass: "Class",
     Description: "Description",
     RowKey: "RowKey"
 }
