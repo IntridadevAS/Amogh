@@ -30,8 +30,8 @@ function ComparisonReviewManager(comparisonCheckManager,
     this.SourceAComponentIdvsNodeId = {};
     this.SourceBComponentIdvsNodeId = {};
 
-    this.SourceAViewerCurrentSheetLoaded = undefined;
-    this.SourceBViewerCurrentSheetLoaded = undefined;
+    // this.SourceAViewerCurrentSheetLoaded = undefined;
+    // this.SourceBViewerCurrentSheetLoaded = undefined;
 
     // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -48,7 +48,7 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     // this.SourceAReviewViewerInterface;
     // this.SourceBReviewViewerInterface;
-    this.SheetDataViewer;
+    // this.SheetDataViewer;
 }
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
@@ -62,6 +62,10 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
         model.checks["comparison"]["sourceAViewer"] = viewerInterface;
     }
+    else if (this.SourceAComponents !== undefined) {
+        var viewerInterface = new Review1DViewerInterface("a", this.SourceAComponents);
+        model.checks["comparison"]["sourceAViewer"] = viewerInterface;
+    }
 
     if (this.SourceBViewerData !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData["endPointUri"]],
@@ -72,11 +76,15 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
         model.checks["comparison"]["sourceBViewer"] = viewerInterface;
     }
-
-    if (this.SourceAComponents !== undefined ||
-        this.SourceBComponents !== undefined) {
-        this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceAComponents, this.SourceBComponents);
+    else if (this.SourceBComponents !== undefined) {
+        var viewerInterface = new Review1DViewerInterface("b", this.SourceBComponents);
+        model.checks["comparison"]["sourceBViewer"] = viewerInterface;
     }
+
+    // if (this.SourceAComponents !== undefined ||
+    //     this.SourceBComponents !== undefined) {
+    //     this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceAComponents, this.SourceBComponents);
+    // }
 }
 
 ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
@@ -160,24 +168,34 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     //this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
 
     var sheetName = containerDiv.replace("#", "");
+    sheetName = sheetName.split('_')[0];
 
     if (this.SourceAComponents !== undefined &&
         this.SourceBComponents !== undefined) {
 
         var result = sheetName.split('-');
 
-        if (rowData.SourceAName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
+        if (rowData.SourceA && rowData.SourceA !== "") {
+            model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         }
         else {
-            this.SourceAViewerCurrentSheetLoaded = undefined;
+
+            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
+                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
+            }
+
+            model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
-        if (rowData.SourceBName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+        if (rowData.SourceB && rowData.SourceB !== "") {
+            model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-            this.SourceBViewerCurrentSheetLoaded = undefined;
+            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
+                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
+            }
+
+            model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
     }
     else if (this.SourceAViewerData !== undefined &&
@@ -188,10 +206,15 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         this.SourceBViewerData !== undefined) {
         var result = sheetName.split('-');
 
-        if (rowData.SourceAName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
+        if (rowData.SourceA && rowData.SourceA !== "") {
+            model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         } else {
-            this.SourceAViewerCurrentSheetLoaded = undefined;
+
+            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
+                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
+            }
+
+            model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
         this.HighlightComponentInGraphicsViewer(rowData)
@@ -200,11 +223,17 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         this.SourceBComponents !== undefined) {
         var result = sheetName.split('-');
 
-        if (rowData.SourceBName !== "") {
-            this.SheetDataViewer.LoadSelectedSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+        if (rowData.SourceB && rowData.SourceB !== "") {
+            model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-            this.SourceBViewerCurrentSheetLoaded = undefined;
+
+            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
+                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
+            }
+
+
+            model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
 
         this.HighlightComponentInGraphicsViewer(rowData)
@@ -1197,11 +1226,16 @@ ComparisonReviewManager.prototype.ResizeViewers = function () {
 }
 
 ComparisonReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
-    var checkGroup = this.ComparisonCheckManager.results[groupId];
+    var checkGroup = this.GetCheckGroup(groupId);
     var component = checkGroup.components[componentId];
 
     return component;
 }
+
+ComparisonReviewManager.prototype.GetCheckGroup = function (groupId) {
+    return this.ComparisonCheckManager.results[groupId];    
+}
+
 
 ComparisonReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewerId, selectedNode) {
     var checkComponentData;

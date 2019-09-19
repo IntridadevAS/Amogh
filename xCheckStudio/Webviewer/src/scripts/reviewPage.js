@@ -54,6 +54,9 @@ let model = {
   getCurrentSelectionManager: function () {
     return this.checks[this.currentCheck]["selectionManager"];
   },
+  getCurrentReviewType: function () {
+    return this.currentCheck;
+  }
 }
 
 let controller = {
