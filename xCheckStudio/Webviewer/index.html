@@ -51,7 +51,8 @@
           onclick="OnSubmitButtonClicked()">ENTER</button>
       </form>
     </div>
-    <div id="userNameDiv" class="background" style="display: none">
+    <div id="userNameDiv" class="backgroundSplash" style="display: none">
+      <div id="splashicon" class ="splashicon"></div>
       <p class="splashtext" id="username"></p>
     </div>
     <div id="electroncheckDiv" class="background" style="display: none">
@@ -91,7 +92,6 @@
       document.getElementById("username").innerHTML = str1.concat(str2);
       setTimeout(function () {
         window.location.href = "landingpage.html";
-        // newPage();
       }, 2000);
     }
   </script>
