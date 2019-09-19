@@ -30,20 +30,24 @@
   font-weight: 600;
   font-family: inherit;
   text-decoration: none;
+  padding: 12px;
 }
 
 
 
 .check {
   border-color: var(--xCheckOrange);
+  background-size: contain;
 }
 
 .review {
   border-color: var(--xCheckRed);
+  background-size: contain;
 }
 
 .prep {
   border-color: var(--intridaBlue);
+  background-size: contain;
 }
 
 .disabled {
