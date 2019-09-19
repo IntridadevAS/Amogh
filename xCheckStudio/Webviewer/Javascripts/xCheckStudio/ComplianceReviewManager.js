@@ -24,8 +24,8 @@ function ComplianceReviewManager(complianceCheckManager,
     //this.NodeIdVsComponentData = nodeIdVsComponentData;
 
     // this.SelectedComponentRowFromSheet;
-    this.SelectedComponentRowFromSheetA;
-    this.SelectedComponentRowFromSheetB;
+    //this.SelectedComponentRowFromSheetA;
+    // this.SelectedComponentRowFromSheetB;
 
     this.checkStatusArray = {};
 
@@ -73,11 +73,11 @@ ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
     }
 
     if (this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceAComplianceMainReviewCell") {
-        this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceComponents, undefined);
+        model.checks["compliance"]["viewer"] = new Review1DViewerInterface(this, this.SourceComponents, undefined);
     }
 
     if (this.SourceComponents !== undefined && this.MainReviewTableContainer == "SourceBComplianceMainReviewCell") {
-        this.SheetDataViewer = new Review1DViewerInterface(this, undefined, this.SourceComponents);
+        model.checks["compliance"]["viewer"] = new Review1DViewerInterface(this, undefined, this.SourceComponents);
     }
 }
 
@@ -249,7 +249,7 @@ ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             viewerContainer = "viewerContainer2";
         }
 
-        this.SheetDataViewer.LoadSelectedSheetDataInViewer(viewerContainer, sheetName, rowData);
+        model.checks["compliance"]["viewer"].ShowSheetDataInViewer(viewerContainer, sheetName, rowData);
     }
     else if (this.ViewerData !== undefined) {
         this.HighlightComponentInGraphicsViewer(rowData)
@@ -753,348 +753,348 @@ ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
     model.checks["compliance"]["viewer"].highlightComponent(nodeId);
 }
 
-ComplianceReviewManager.prototype.LoadSheetDataForSelectedComponent = function (viewerContainer, sheetName, thisRow) {
+// ComplianceReviewManager.prototype.LoadSheetDataForSelectedComponent = function (viewerContainer, sheetName, thisRow) {
 
-    var viewerContainerData = document.getElementById(viewerContainer);
-    var classWiseComponents = this.SourceComponents[sheetName];
+//     var viewerContainerData = document.getElementById(viewerContainer);
+//     var classWiseComponents = this.SourceComponents[sheetName];
 
-    if (viewerContainerData === null) {
-        return;
-    }
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    if (viewerContainerData.childElementCount > 1 &&
-        this.SourceViewerCurrentSheetLoaded === sheetName) {
-        if (_this.SelectedComponentRowFromSheetA) {
-            _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
-        }
+//     if (viewerContainerData === null) {
+//         return;
+//     }
+//     // jsGridHeaderTableIndex = 0 
+//     // jsGridTbodyTableIndex = 1
+//     if (viewerContainerData.childElementCount > 1 &&
+//         this.SourceViewerCurrentSheetLoaded === sheetName) {
+//         if (_this.SelectedComponentRowFromSheetA) {
+//             _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
+//         }
 
-        if (_this.SelectedComponentRowFromSheetB) {
-            _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
-        }
+//         if (_this.SelectedComponentRowFromSheetB) {
+//             _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
+//         }
 
-        if (_this.SelectionManager.HighlightedCheckComponentRow) {
-            _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
-        }
+//         if (_this.SelectionManager.HighlightedCheckComponentRow) {
+//             _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
+//         }
 
-        this.HighlightRowInSheetData(thisRow, viewerContainer);
-        return;
-    }
+//         this.HighlightRowInSheetData(thisRow, viewerContainer);
+//         return;
+//     }
 
-    if (classWiseComponents !== {}) {
-        var componentProperties;
-        for (var componentId in classWiseComponents) {
-            componentProperties = classWiseComponents[componentId];
-            break;
-        }
-        if (componentProperties === undefined) {
-            return;
-        }
+//     if (classWiseComponents !== {}) {
+//         var componentProperties;
+//         for (var componentId in classWiseComponents) {
+//             componentProperties = classWiseComponents[componentId];
+//             break;
+//         }
+//         if (componentProperties === undefined) {
+//             return;
+//         }
 
-        var column = {};
-        columnHeaders = [];
-        //if (sheetProperties !== undefined) {
-        for (var i = 0; i < componentProperties.length; i++) {
-            var compProperty = componentProperties[i];
+//         var column = {};
+//         columnHeaders = [];
+//         //if (sheetProperties !== undefined) {
+//         for (var i = 0; i < componentProperties.length; i++) {
+//             var compProperty = componentProperties[i];
 
-            columnHeader = {};
-            columnHeader["name"] = compProperty['name'];
-            var type;
-            if (compProperty['format'].toLowerCase() === "string") {
-                type = "textarea";
-            }
-            else if (compProperty['format'].toLowerCase() === "number") {
-                type = "number";
-            }
+//             columnHeader = {};
+//             columnHeader["name"] = compProperty['name'];
+//             var type;
+//             if (compProperty['format'].toLowerCase() === "string") {
+//                 type = "textarea";
+//             }
+//             else if (compProperty['format'].toLowerCase() === "number") {
+//                 type = "number";
+//             }
 
-            columnHeader["type"] = type;
-            columnHeader["width"] = "80";
-            columnHeaders.push(columnHeader);
+//             columnHeader["type"] = type;
+//             columnHeader["width"] = "80";
+//             columnHeaders.push(columnHeader);
 
-            //tagnumber is for instruments XLS data sheet
-            if (Object.keys(column).length <= 3) {
-                if (compProperty['name'] === "ComponentClass" ||
-                    compProperty['name'] === "Name" ||
-                    compProperty['name'] === "Description" ||
-                    compProperty['name'] === "Tagnumber") {
-                    column[compProperty['name']] = i;
-                }
-            }
-        }
-        //}
+//             //tagnumber is for instruments XLS data sheet
+//             if (Object.keys(column).length <= 3) {
+//                 if (compProperty['name'] === "ComponentClass" ||
+//                     compProperty['name'] === "Name" ||
+//                     compProperty['name'] === "Description" ||
+//                     compProperty['name'] === "Tagnumber") {
+//                     column[compProperty['name']] = i;
+//                 }
+//             }
+//         }
+//         //}
 
-        tableData = [];
-        for (var componentId in classWiseComponents) {
-            var component = classWiseComponents[componentId];
+//         tableData = [];
+//         for (var componentId in classWiseComponents) {
+//             var component = classWiseComponents[componentId];
 
-            tableRowContent = {};
-            for (var i = 0; i < component.length; i++) {
-                var compProperty = component[i];
+//             tableRowContent = {};
+//             for (var i = 0; i < component.length; i++) {
+//                 var compProperty = component[i];
 
-                // get property value
-                tableRowContent[compProperty['name']] = compProperty['value'];
-            }
+//                 // get property value
+//                 tableRowContent[compProperty['name']] = compProperty['value'];
+//             }
 
-            tableData.push(tableRowContent);
-        }
-
-
-        if (thisRow.tagName.toLowerCase() !== "tr") {
-            return;
-        }
-
-        if (viewerContainer === "viewerContainer1") {
-            _this = this;
-            if (_this.SelectedComponentRowFromSheetA) {
-                _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
-            }
-            if (_this.SelectionManager.HighlightedCheckComponentRow) {
-                _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
-            }
-
-            _this.checkStatusArray = {};
-            _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer1", thisRow, column, sheetName);
-            _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
-
-            // keep track of currently loaded sheet data
-            this.SourceViewerCurrentSheetLoaded = sheetName;
-        }
-        else if (viewerContainer === "viewerContainer2") {
-            _this = this;
-            if (_this.SelectedComponentRowFromSheetB) {
-                _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
-            }
-            if (_this.SelectionManager.HighlightedCheckComponentRow) {
-                _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
-            }
-            _this.checkStatusArray = {};
-            _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer2", thisRow, column, sheetName);
-            _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
-
-            // keep track of currently loaded sheet data
-            this.SourceViewerCurrentSheetLoaded = sheetName;
-        }
-    }
-};
-
-ComplianceReviewManager.prototype.LoadSheetTableData = function (_this, columnHeaders, tableData, viewerContainer, modelBrowserRow, column, sheetName) {
-
-    if (viewerContainer === "#viewerContainer1" || viewerContainer === "#viewerContainer2") {
-        $(function () {
-
-            $(viewerContainer).jsGrid({
-                width: "550px",
-                height: "450px",
-                autoload: true,
-                data: tableData,
-                fields: columnHeaders,
-                margin: "0px",
-                rowClick: function (args) {
-                    _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer);
-                }
-            });
-
-        });
-        _this.highlightSheetRowsFromCheckStatus(viewerContainer, modelBrowserRow, column, sheetName);
-    }
-
-    var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.width = "550px"
-    container.style.height = "450px"
-    container.style.overflowX = "scroll";
-    container.style.overflowY = "scroll";
-    container.style.margin = "0px";
-    container.style.top = "50px"
+//             tableData.push(tableRowContent);
+//         }
 
 
-};
+//         if (thisRow.tagName.toLowerCase() !== "tr") {
+//             return;
+//         }
+
+//         if (viewerContainer === "viewerContainer1") {
+//             _this = this;
+//             if (_this.SelectedComponentRowFromSheetA) {
+//                 _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetA);
+//             }
+//             if (_this.SelectionManager.HighlightedCheckComponentRow) {
+//                 _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
+//             }
+
+//             _this.checkStatusArray = {};
+//             _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer1", thisRow, column, sheetName);
+//             _this.HighlightRowInSheetData(thisRow, "viewerContainer1");
+
+//             // keep track of currently loaded sheet data
+//             this.SourceViewerCurrentSheetLoaded = sheetName;
+//         }
+//         else if (viewerContainer === "viewerContainer2") {
+//             _this = this;
+//             if (_this.SelectedComponentRowFromSheetB) {
+//                 _this.unhighlightSelectedSheetRow(_this.checkStatusArray, _this.SelectedComponentRowFromSheetB);
+//             }
+//             if (_this.SelectionManager.HighlightedCheckComponentRow) {
+//                 _this.SelectionManager.RemoveHighlightColor(_this.SelectionManager.HighlightedCheckComponentRow);
+//             }
+//             _this.checkStatusArray = {};
+//             _this.LoadSheetTableData(_this, columnHeaders, tableData, "#viewerContainer2", thisRow, column, sheetName);
+//             _this.HighlightRowInSheetData(thisRow, "viewerContainer2");
+
+//             // keep track of currently loaded sheet data
+//             this.SourceViewerCurrentSheetLoaded = sheetName;
+//         }
+//     }
+// };
+
+// ComplianceReviewManager.prototype.LoadSheetTableData = function (_this, columnHeaders, tableData, viewerContainer, modelBrowserRow, column, sheetName) {
+
+//     if (viewerContainer === "#viewerContainer1" || viewerContainer === "#viewerContainer2") {
+//         $(function () {
+
+//             $(viewerContainer).jsGrid({
+//                 width: "550px",
+//                 height: "450px",
+//                 autoload: true,
+//                 data: tableData,
+//                 fields: columnHeaders,
+//                 margin: "0px",
+//                 rowClick: function (args) {
+//                     _this.HighlightRowInMainReviewTable(args.event.currentTarget, viewerContainer);
+//                 }
+//             });
+
+//         });
+//         _this.highlightSheetRowsFromCheckStatus(viewerContainer, modelBrowserRow, column, sheetName);
+//     }
+
+//     var container = document.getElementById(viewerContainer.replace("#", ""));
+//     container.style.width = "550px"
+//     container.style.height = "450px"
+//     container.style.overflowX = "scroll";
+//     container.style.overflowY = "scroll";
+//     container.style.margin = "0px";
+//     container.style.top = "50px"
+
+
+// };
 
 
 /* This method returns the corresponding compliance 
    check result row for selected sheet row*/
-ComplianceReviewManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer) {
-    var containerId = viewerContainer.replace("#", "");
-    var viewerContainerData = document.getElementById(containerId)
+// ComplianceReviewManager.prototype.GetCheckComponentForSheetRow = function (sheetDataRow, viewerContainer) {
+//     var containerId = viewerContainer.replace("#", "");
+//     var viewerContainerData = document.getElementById(containerId)
 
-    if (viewerContainerData === undefined) {
-        return undefined;
-    }
+//     if (viewerContainerData === undefined) {
+//         return undefined;
+//     }
 
-    var containerChildren = viewerContainerData.children;
-    var columnHeaders = containerChildren[0].getElementsByTagName("th");
-    var column = {};
-    for (var i = 0; i < columnHeaders.length; i++) {
-        columnHeader = columnHeaders[i];
-        //tagnumber is for instruments XLS data sheet
-        if (columnHeader.innerHTML.trim() === "ComponentClass" ||
-            columnHeader.innerHTML.trim() === "Name" ||
-            columnHeader.innerHTML.trim() === "Description" ||
-            columnHeader.innerHTML.trim() === "Tagnumber") {
-            column[columnHeader.innerHTML.trim()] = i;
-        }
-        if (Object.keys(column).length === 3) {
-            break;
-        }
-    }
+//     var containerChildren = viewerContainerData.children;
+//     var columnHeaders = containerChildren[0].getElementsByTagName("th");
+//     var column = {};
+//     for (var i = 0; i < columnHeaders.length; i++) {
+//         columnHeader = columnHeaders[i];
+//         //tagnumber is for instruments XLS data sheet
+//         if (columnHeader.innerHTML.trim() === "ComponentClass" ||
+//             columnHeader.innerHTML.trim() === "Name" ||
+//             columnHeader.innerHTML.trim() === "Description" ||
+//             columnHeader.innerHTML.trim() === "Tagnumber") {
+//             column[columnHeader.innerHTML.trim()] = i;
+//         }
+//         if (Object.keys(column).length === 3) {
+//             break;
+//         }
+//     }
 
-    var reviewTableId;
-    if (containerId === "viewerContainer1") {
-        reviewTableId = "SourceAComplianceMainReviewCell";
-    }
-    else if (containerId === "viewerContainer2") {
-        reviewTableId = "SourceBComplianceMainReviewCell";
-    }
+//     var reviewTableId;
+//     if (containerId === "viewerContainer1") {
+//         reviewTableId = "SourceAComplianceMainReviewCell";
+//     }
+//     else if (containerId === "viewerContainer2") {
+//         reviewTableId = "SourceBComplianceMainReviewCell";
+//     }
 
-    var modelBrowserData = document.getElementById(reviewTableId);
-    var modelBrowserRowsData = modelBrowserData.getElementsByTagName("tr");
-
-
-    for (var i = 0; i < modelBrowserRowsData.length; i++) {
-        modelBrowserRow = modelBrowserRowsData[i];
-
-        var componentName;
-        if (column.Name !== undefined) {
-            componentName = sheetDataRow.cells[column.Name].innerText;
-        }
-        else if (column.Tagnumber !== undefined) {
-            componentName = sheetDataRow.cells[column.Tagnumber].innerText;
-        }
-        if (componentName === modelBrowserRow.cells[ComplianceColumns.SourceName].innerText) {
-
-            return modelBrowserRow;
-        }
-    }
-
-    return undefined;
-}
-
-ComplianceReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow, viewerContainer) {
-    var reviewTableRow = this.GetCheckComponentForSheetRow(sheetDataRow, viewerContainer);
-    if (!reviewTableRow) {
-        return;
-    }
-
-    // component group id which is container div for check components table of given row
-    var containerDiv = this.GetReviewTableId(reviewTableRow);
-    this.OnCheckComponentRowClicked(reviewTableRow, containerDiv);
-
-    var reviewTable = this.GetReviewTable(reviewTableRow);
-    this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, this.MainReviewTableContainer);
-}
-
-ComplianceReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, modelBrowserRow, column, sheetName) {
-    var modelBrowserTable = modelBrowserRow.parentElement;
-    var modelBrowserRows = modelBrowserTable.getElementsByTagName("tr");
-
-    var id = viewerContainer.replace("#", "");
-    var currentSheetDataTable = document.getElementById(id);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var currentSheetRows = currentSheetDataTable.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
-
-    var currentCheckStatusArray = {};
-    for (var i = 0; i < modelBrowserRows.length; i++) {
-        var modelBrowserRow = modelBrowserRows[i];
-        for (var j = 0; j < currentSheetRows.length; j++) {
-            currentSheetRow = currentSheetRows[j];
-            var componentName;
-            if (column.Name !== undefined) {
-                componentName = currentSheetRow.cells[column.Name].innerText;
-            }
-            else if (column.Tagnumber !== undefined) {
-                componentName = currentSheetRow.cells[column.Tagnumber].innerText;
-            }
-            if (this.getSourceNameFromMainReviewRow(modelBrowserRow) !== "" &&
-                this.getSourceNameFromMainReviewRow(modelBrowserRow) === componentName) {
-                var color = modelBrowserRow.cells[0].style.backgroundColor;
-                for (var j = 0; j < currentSheetRow.cells.length; j++) {
-                    cell = currentSheetRow.cells[j];
-                    cell.style.backgroundColor = color;
-                    cell.style.height = "10px"
-                }
-                currentCheckStatusArray[currentSheetRow.rowIndex] = this.getStatusFromMainReviewRow(modelBrowserRow);
-                break;
-            }
-            // else if (modelBrowserRow.cells[1].innerText !== "" && modelBrowserRow.cells[1].innerText === componentName) {
-            //     var color = modelBrowserRow.cells[0].style.backgroundColor;
-            //     for (var j = 0; j < currentSheetRow.cells.length; j++) {
-            //         cell = currentSheetRow.cells[j];
-            //         cell.style.backgroundColor = color;
-            //     }
-            //     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
-            //     break;
-            // }
-        }
-    }
-
-    this.checkStatusArray[sheetName] = currentCheckStatusArray;
+//     var modelBrowserData = document.getElementById(reviewTableId);
+//     var modelBrowserRowsData = modelBrowserData.getElementsByTagName("tr");
 
 
-}
+//     for (var i = 0; i < modelBrowserRowsData.length; i++) {
+//         modelBrowserRow = modelBrowserRowsData[i];
 
-ComplianceReviewManager.prototype.HighlightRowInSheetData = function (thisRow, viewerContainer) {
-    var containerId = viewerContainer.replace("#", "");
-    var viewerContainerData = document.getElementById(containerId);
+//         var componentName;
+//         if (column.Name !== undefined) {
+//             componentName = sheetDataRow.cells[column.Name].innerText;
+//         }
+//         else if (column.Tagnumber !== undefined) {
+//             componentName = sheetDataRow.cells[column.Tagnumber].innerText;
+//         }
+//         if (componentName === modelBrowserRow.cells[ComplianceColumns.SourceName].innerText) {
 
-    if (viewerContainerData != undefined) {
-        var containerChildren = viewerContainerData.children;
-        // jsGridHeaderTableIndex = 0 
-        // jsGridTbodyTableIndex = 1
-        var columnHeaders = containerChildren[jsGridHeaderTableIndex].getElementsByTagName("th");
-        var sheetDataTable = containerChildren[jsGridTbodyTableIndex].getElementsByTagName("table")[0];
-        var mainComponentClassDataTable = sheetDataTable.getElementsByTagName("tr");
-        var column = {};
-        for (var i = 0; i < columnHeaders.length; i++) {
-            columnHeader = columnHeaders[i];
-            //tagnumber is for instruments XLS data sheet
-            if (columnHeader.innerHTML.trim() === "ComponentClass" ||
-                columnHeader.innerHTML.trim() === "Name" ||
-                columnHeader.innerHTML.trim() === "Description" ||
-                columnHeader.innerHTML.trim() === "Tagnumber") {
-                column[columnHeader.innerHTML.trim()] = i;
-            }
-            if (Object.keys(column).length === 3) {
-                break;
-            }
-        }
-        for (var i = 0; i < mainComponentClassDataTable.length; i++) {
-            rowData = mainComponentClassDataTable[i];
+//             return modelBrowserRow;
+//         }
+//     }
 
-            var componentName;
-            if (column.Name !== undefined) {
-                componentName = rowData.cells[column.Name].innerText;
-            }
-            else if (column.Tagnumber !== undefined) {
-                componentName = rowData.cells[column.Tagnumber].innerText;
-            }
-            if (thisRow.cells[ComplianceColumns.SourceName].innerText === componentName) {
+//     return undefined;
+// }
 
-                if (containerId === "viewerContainer1") {
+// ComplianceReviewManager.prototype.HighlightRowInMainReviewTable = function (sheetDataRow, viewerContainer) {
+//     var reviewTableRow = this.GetCheckComponentForSheetRow(sheetDataRow, viewerContainer);
+//     if (!reviewTableRow) {
+//         return;
+//     }
 
-                    this.SelectedComponentRowFromSheetA = rowData;
+//     // component group id which is container div for check components table of given row
+//     var containerDiv = this.GetReviewTableId(reviewTableRow);
+//     this.OnCheckComponentRowClicked(reviewTableRow, containerDiv);
 
-                    this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
-                }
-                else if (containerId === "viewerContainer2") {
+//     var reviewTable = this.GetReviewTable(reviewTableRow);
+//     this.SelectionManager.ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, this.MainReviewTableContainer);
+// }
 
-                    this.SelectedComponentRowFromSheetB = rowData;
-                    this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
-                }
+// ComplianceReviewManager.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, modelBrowserRow, column, sheetName) {
+//     var modelBrowserTable = modelBrowserRow.parentElement;
+//     var modelBrowserRows = modelBrowserTable.getElementsByTagName("tr");
 
-                if (!this.SelectionManager.MaintainHighlightedRow(thisRow)) {
-                    return;
-                }
+//     var id = viewerContainer.replace("#", "");
+//     var currentSheetDataTable = document.getElementById(id);
+//     // jsGridHeaderTableIndex = 0 
+//     // jsGridTbodyTableIndex = 1
+//     var currentSheetRows = currentSheetDataTable.children[jsGridTbodyTableIndex].getElementsByTagName("tr");
 
-                sheetDataTable.focus();
-                sheetDataTable.parentNode.parentNode.scrollTop = rowData.offsetTop - rowData.offsetHeight;
+//     var currentCheckStatusArray = {};
+//     for (var i = 0; i < modelBrowserRows.length; i++) {
+//         var modelBrowserRow = modelBrowserRows[i];
+//         for (var j = 0; j < currentSheetRows.length; j++) {
+//             currentSheetRow = currentSheetRows[j];
+//             var componentName;
+//             if (column.Name !== undefined) {
+//                 componentName = currentSheetRow.cells[column.Name].innerText;
+//             }
+//             else if (column.Tagnumber !== undefined) {
+//                 componentName = currentSheetRow.cells[column.Tagnumber].innerText;
+//             }
+//             if (this.getSourceNameFromMainReviewRow(modelBrowserRow) !== "" &&
+//                 this.getSourceNameFromMainReviewRow(modelBrowserRow) === componentName) {
+//                 var color = modelBrowserRow.cells[0].style.backgroundColor;
+//                 for (var j = 0; j < currentSheetRow.cells.length; j++) {
+//                     cell = currentSheetRow.cells[j];
+//                     cell.style.backgroundColor = color;
+//                     cell.style.height = "10px"
+//                 }
+//                 currentCheckStatusArray[currentSheetRow.rowIndex] = this.getStatusFromMainReviewRow(modelBrowserRow);
+//                 break;
+//             }
+//             // else if (modelBrowserRow.cells[1].innerText !== "" && modelBrowserRow.cells[1].innerText === componentName) {
+//             //     var color = modelBrowserRow.cells[0].style.backgroundColor;
+//             //     for (var j = 0; j < currentSheetRow.cells.length; j++) {
+//             //         cell = currentSheetRow.cells[j];
+//             //         cell.style.backgroundColor = color;
+//             //     }
+//             //     currentCheckStatusArray[currentSheetRow.rowIndex] = modelBrowserRow.cells[1].innerHTML;
+//             //     break;
+//             // }
+//         }
+//     }
 
-                break;
-            }
+//     this.checkStatusArray[sheetName] = currentCheckStatusArray;
 
 
-        }
-    }
-}
+// }
+
+// ComplianceReviewManager.prototype.HighlightRowInSheetData = function (thisRow, viewerContainer) {
+//     var containerId = viewerContainer.replace("#", "");
+//     var viewerContainerData = document.getElementById(containerId);
+
+//     if (viewerContainerData != undefined) {
+//         var containerChildren = viewerContainerData.children;
+//         // jsGridHeaderTableIndex = 0 
+//         // jsGridTbodyTableIndex = 1
+//         var columnHeaders = containerChildren[jsGridHeaderTableIndex].getElementsByTagName("th");
+//         var sheetDataTable = containerChildren[jsGridTbodyTableIndex].getElementsByTagName("table")[0];
+//         var mainComponentClassDataTable = sheetDataTable.getElementsByTagName("tr");
+//         var column = {};
+//         for (var i = 0; i < columnHeaders.length; i++) {
+//             columnHeader = columnHeaders[i];
+//             //tagnumber is for instruments XLS data sheet
+//             if (columnHeader.innerHTML.trim() === "ComponentClass" ||
+//                 columnHeader.innerHTML.trim() === "Name" ||
+//                 columnHeader.innerHTML.trim() === "Description" ||
+//                 columnHeader.innerHTML.trim() === "Tagnumber") {
+//                 column[columnHeader.innerHTML.trim()] = i;
+//             }
+//             if (Object.keys(column).length === 3) {
+//                 break;
+//             }
+//         }
+//         for (var i = 0; i < mainComponentClassDataTable.length; i++) {
+//             rowData = mainComponentClassDataTable[i];
+
+//             var componentName;
+//             if (column.Name !== undefined) {
+//                 componentName = rowData.cells[column.Name].innerText;
+//             }
+//             else if (column.Tagnumber !== undefined) {
+//                 componentName = rowData.cells[column.Tagnumber].innerText;
+//             }
+//             if (thisRow.cells[ComplianceColumns.SourceName].innerText === componentName) {
+
+//                 if (containerId === "viewerContainer1") {
+
+//                     this.SelectedComponentRowFromSheetA = rowData;
+
+//                     this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetA);
+//                 }
+//                 else if (containerId === "viewerContainer2") {
+
+//                     this.SelectedComponentRowFromSheetB = rowData;
+//                     this.SelectionManager.ApplyHighlightColor(this.SelectedComponentRowFromSheetB);
+//                 }
+
+//                 if (!this.SelectionManager.MaintainHighlightedRow(thisRow)) {
+//                     return;
+//                 }
+
+//                 sheetDataTable.focus();
+//                 sheetDataTable.parentNode.parentNode.scrollTop = rowData.offsetTop - rowData.offsetHeight;
+
+//                 break;
+//             }
+
+
+//         }
+//     }
+// }
 
 ComplianceReviewManager.prototype.populateDetailedReviewTable = function (rowData) {
 
@@ -1362,8 +1362,12 @@ ComplianceReviewManager.prototype.GetFileName = function () {
 }
 
 ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
-    var checkGroup = this.ComplianceCheckManager.results[groupId];
+    var checkGroup = this.GetCheckGroup(groupId);
     var component = checkGroup.components[componentId];
 
     return component;
+}
+
+ComplianceReviewManager.prototype.GetCheckGroup = function (groupId) {
+    return this.ComplianceCheckManager.results[groupId];
 }

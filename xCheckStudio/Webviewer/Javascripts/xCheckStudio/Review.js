@@ -252,6 +252,14 @@ function loadComparisonData(comparisonCheckGroups,
     sourceAComponentsHierarchy,
     sourceBComponentsHierarchy) {
 
+    if (comparisonCheckGroups.sources.length === 3) {
+        document.getElementById("comparePanelD").style.display = "none";
+    }
+    else if (comparisonCheckGroups.sources.length === 2) {
+        document.getElementById("comparePanelC").style.display = "none";
+        document.getElementById("comparePanelD").style.display = "none";
+    }
+
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
         sourceBViewerOptions,

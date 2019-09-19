@@ -280,7 +280,7 @@ tr {
   background-color: var(--xCheckMedGrey);
   display: grid;
   grid-gap: 5px;
-  grid-template-rows: auto auto;
+  /* grid-template-rows: auto auto; */
 }
 
 .visualizer3 {
@@ -296,7 +296,7 @@ tr {
 
 .comparePanel {
   background-color: black;
-  position: relative;
+  position: relative;  
 }
 
 .maximize {
