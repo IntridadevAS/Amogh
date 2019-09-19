@@ -63,18 +63,36 @@ let controller = {
     const addedFile = model.views[this.nextAvailableView()];
     const table = addedFile.tableData; //NOTE FOR PROTOTECH - This will select the 'table' for this particular panel
     const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
-    model.activeTabs++;
+    // model.activeTabs++;
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
     addedFile.fileName = fileName;
     // SET FILENAME FOR TAB ABOVE
 
     addedFile.used = true;
-    viewTabs.createTab(addedFile);
-    viewPanels.showPanel(addedFile.viewPanel);
+    var tabNo = viewTabs.tabs.length - 1;
+
+    // if 1st dataset : tab is not already created 
+    // on add button click tab gets created and hence will just add filename in opened tab
+    if(tabNo < 0) {
+        model.activeTabs++;
+        viewTabs.createTab(addedFile);
+        viewPanels.showPanel(addedFile.viewPanel);
+    }
+    else {
+      var tab = viewTabs.tabs[tabNo];
+      tab.innerHTML = fileName + tab.innerHTML;
+    }
+
     if (model.activeTabs >= 4) {
       viewTabs.hideAddTab();
     }
 
+    if(model.views[currentTabId].fileName.includes(".xls") ||
+    model.views[currentTabId].fileName.includes(".json")) {
+      var id = "maxMinBtn" + currentTabId;
+      var maxMinBtn = document.getElementById(id);
+      maxMinBtn.style.opacity = 0.2;
+    }
     return addedFile;
   },
 
@@ -88,6 +106,16 @@ let controller = {
 
   selectView: function (id) {
     let changeViewTo = model.views[id];
+
+    if(!viewPanels.addFilesPanel.classList.contains("hide") &&
+    changeViewTo.fileName !== "") {
+        viewPanels.addFilesPanel.classList.add("hide");
+    }
+    else if(viewPanels.addFilesPanel.classList.contains("hide") &&
+    changeViewTo.fileName == "") {
+        viewPanels.addFilesPanel.classList.remove("hide");
+    }
+        
     viewPanels.showPanel(changeViewTo.viewPanel);
   }
 }
@@ -176,6 +204,10 @@ let viewPanels = {
   },
 
   showAddPanel: function () {
+    const view = model.views[controller.nextAvailableView()];
+    viewTabs.createTab(view);
+    viewPanels.showPanel(view.viewPanel);
+    model.activeTabs++;
     viewPanels.addFilesPanel.classList.remove("hide");
   },
 
@@ -215,7 +247,22 @@ let viewPanels = {
     if (currentTabId in SourceManagers) {
       SourceManagers[currentTabId].ResizeViewer();
     }
-  }
+  },
+
+  onMouseOverMaxMin: function(selected) {
+      selected.style.height = "35px";
+      selected.style.width = "35px";
+      selected.style.opacity = 1;
+  },
+
+  onMouseOutMaxMin: function(selected) {
+    selected.style.height = "30px";
+    selected.style.width = "30px";
+    if(model.views[currentTabId].fileName.includes(".xls") ||
+    model.views[currentTabId].fileName.includes(".json")) {
+      selected.style.opacity = 0.2;
+    }
+  } 
 }
 
 controller.init();

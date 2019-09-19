@@ -526,7 +526,7 @@
 
           <form id="uploadDatasourceForm" method="post" action="" enctype="multipart/form-data">
 
-            <div id="fileuploader-container" style="position: absolute; top: 25%; left: 25%; height: 469px; width: 951px">
+            <div id="fileuploader-container" style="position: absolute; top: 0%; left: 0%; width: 1882px; height: 872px;">
               <div id="file-uploader"></div>
             </div>
 
@@ -542,7 +542,7 @@
         </div>
         <div id="center" class="grabBar"></div>
         <div class="visualizerContainer">
-          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerA -->
 
           <!-- explode slider -->
@@ -574,7 +574,7 @@
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
-          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="maxMinBtnb" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerB -->
           <!-- explode slider -->
           <div id="explodeOverlay2" class="sliderOverlay" style="display: none">
@@ -605,7 +605,7 @@
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
-          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="maxMinBtnc" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerC -->
           <!-- explode slider -->
           <div id="explodeOverlay3" class="sliderOverlay" style="display: none">
@@ -635,7 +635,7 @@
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
-          <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+          <div id="maxMinBtnd" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
           <!-- visualizerD -->
           <!-- explode slider -->
           <div id="explodeOverlay4" class="sliderOverlay" style="display: none">
@@ -738,18 +738,18 @@
     }
 
     .dx-fileuploader-input-wrapper {
-      width: 100% !important;
-      height: 100% !important;
+      width: 1875px !important;
+      height: 860px !important;
     }
 
     .dx-fileuploader-input-container {
-      width: 937px !important;
-      height: 447px !important;
+      width: 1875px !important;
+      height: 860px !important;
     }
 
     .dx-fileuploader-input {
-      width: 100% !important;
-      height: 100% !important;
+      width: 1875px !important;
+      height: 860px !important;
     }
 
   </style>
