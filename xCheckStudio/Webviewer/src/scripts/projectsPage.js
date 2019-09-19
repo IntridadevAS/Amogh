@@ -791,7 +791,7 @@ let checkView = {
     }).done(function (msg) {
       if (msg === 'success') {
         localStorage.setItem('reviewinfo', JSON.stringify(currentReview));
-        window.location.href = "module2.html";
+        window.location.href = "reviewpage.html";
       }
     });
   },
@@ -841,7 +841,7 @@ let checkView = {
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
       newDiv.setAttribute("onclick", "checkView.reviewClicked(this)");
-      if (project.favorite) {
+      if (project.IsFavourite) {
         newDiv.classList.add('favorite');
       }
       let htmlInner;// = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`

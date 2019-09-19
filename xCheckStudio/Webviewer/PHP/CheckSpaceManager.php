@@ -1,5 +1,6 @@
 <?php
 require_once 'Utility.php';
+require_once 'UserManagerUtility.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
@@ -107,13 +108,16 @@ function GetCheckSpaces(){
     $userid = trim($_POST["userid"], " ");
     $projectName = $_POST['ProjectName'];   
     $ProjectId = trim($_POST["ProjectId"], " ");   
-    
+    $permission = GetUserPermission($userid);
     try
     {
         $dbPath = getProjectDatabasePath($projectName);;
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
-        $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     
+        if(strcasecmp ($permission, "check") == 0)
+            $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     
+        else
+            $query =  "select * from CheckSpace where ProjectId=".$ProjectId;     
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);

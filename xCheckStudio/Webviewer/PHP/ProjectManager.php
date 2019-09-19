@@ -1,5 +1,7 @@
 <?php
     require_once 'Utility.php';
+    require_once 'UserManagerUtility.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
     switch ($InvokeFunction) {
@@ -2146,9 +2148,13 @@ function GetProjects()
         echo 'fail';
         return;
     }
+    $permission = GetUserPermission($userid);
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select * from Projects where userid=".$userid;
+        if(strcasecmp ($permission, "check") == 0)
+            $query = "select * from Projects where userid=".$userid;
+        else
+            $query = "select * from Projects where type = 'Public'";
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);
@@ -2157,7 +2163,6 @@ function GetProjects()
       catch(Exception $e) {
         echo 'fail';
         return;
-      } 
+    } 
 }
-
 ?>
