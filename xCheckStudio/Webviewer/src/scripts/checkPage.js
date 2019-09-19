@@ -158,12 +158,19 @@ let viewTabs = {
 
     if (tabItem.previousElementSibling) {
       tabItem.previousElementSibling.click();
+      tabItem.remove();
+    }
+    else if(tabItem.nextElementSibling && tabItem.nextElementSibling.classList.contains("tab")) {
+      tabItem.nextElementSibling.click();
+      tabItem.remove();
     }
     else {
-      this.addTab.click();
+      // this.addTab.click();
+      tabItem.remove();
+      viewPanels.addFilesPanel.classList.remove("hide");
     }
 
-    tabItem.remove();
+    // tabItem.remove();
     viewTabs.showAddTab();
 
     // remove source manager
