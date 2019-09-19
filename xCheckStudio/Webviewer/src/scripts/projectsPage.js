@@ -535,6 +535,8 @@ let projectView = {
 
     projects.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
+      if(selected === null)
+        return;
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
       } else if (event.target.closest('.projectButtons')) {
@@ -546,6 +548,8 @@ let projectView = {
 
     publicProjectsCont.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
+      if(selected === null)
+        return;
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
       } else if (event.target.closest('.projectButtons')) {

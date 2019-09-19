@@ -457,6 +457,12 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
   <script>
+
+    window.onload = function () {
+      setPageTitle();
+      setUserName();
+    }
+    
     function OnCreateProject() {
       var projectname = document.getElementById("inputprojectname").value;
       if (projectname === undefined || projectname === "") {
