@@ -330,6 +330,9 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                 allowColumnResizing : true,
                 height: "100%",
                 width: "100%",
+                filterRow: {
+                    visible: true
+                },
                 scrolling: {
                     mode: "standard"
                 },
