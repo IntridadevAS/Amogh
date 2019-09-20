@@ -35,8 +35,11 @@
                 $results = $dbh->query("SELECT *FROM  DatasourceInfo;");                     
                 while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
                 {
-                    $sourceA = $record['sourceAFileName'];
-                    $sourceB = $record['sourceBFileName'];                               
+                    $sourceViewerOptions['a']  = array();
+                    $sourceViewerOptions['b']  = array();
+                   
+                    $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
+                    $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];                               
                 }
 
                 // read sourceAViewerOptions
@@ -45,10 +48,10 @@
                 {
                     while ($viewerOptions = $sourceAViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        $sourceViewerOptions['a']  = array();
+                        // $sourceViewerOptions['a']  = array();
                         
                         $sourceViewerOptions['a']['endPointUri'] = $viewerOptions['endpointUri'];
-                        $sourceViewerOptions['a']['source'] =  $sourceA;
+                        // $sourceViewerOptions['a']['source'] =  $sourceA;
                         break;
                     }
                 }
@@ -60,10 +63,10 @@
                  {
                     while ($viewerOptions = $sourceBViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {
-                        $sourceViewerOptions['b']  = array();
+                        // $sourceViewerOptions['b']  = array();
                         
                         $sourceViewerOptions['b']['endPointUri'] = $viewerOptions['endpointUri'];
-                        $sourceViewerOptions['b']['source'] =  $sourceB;
+                        // $sourceViewerOptions['b']['source'] =  $sourceB;
                         break;
                     }
                  }

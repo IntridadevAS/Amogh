@@ -29,31 +29,11 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.SourceAComponentIdvsNodeId = {};
     this.SourceBComponentIdvsNodeId = {};
-
-    // this.SourceAViewerCurrentSheetLoaded = undefined;
-    // this.SourceBViewerCurrentSheetLoaded = undefined;
-
-    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    // this.SelectionManager = new ReviewComparisonSelectionManager();
-
-    // // populate review table
-    // this.CheckResultsTable = new ComparisonCheckResultsTable(this, mainReviewTableContainer);   
-    // this.CheckResultsTable.populateReviewTable();
-    // model.checks["comparison"]["reviewTable"]  = this.CheckResultsTable;
-
-    // this.CheckPropertiesTable = new ComparisonCheckPropertiesTable(this, detailedReviewTableContainer)
-    // model.checks["comparison"]["detailedInfoTable"]  = this.CheckPropertiesTable;
-
-    // this.SourceAReviewViewerInterface;
-    // this.SourceBReviewViewerInterface;
-    // this.SheetDataViewer;
 }
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
 
-    if (this.SourceAViewerData !== undefined) {
+    if (this.SourceAViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData["endPointUri"]],
             this.SourceAComponentIdVsComponentData,
             this.SourceANodeIdVsComponentData);
@@ -67,7 +47,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
         model.checks["comparison"]["sourceAViewer"] = viewerInterface;
     }
 
-    if (this.SourceBViewerData !== undefined) {
+    if (this.SourceBViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData["endPointUri"]],
             this.SourceBComponentIdVsComponentData,
             this.SourceBNodeIdVsComponentData);
@@ -80,21 +60,12 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
         var viewerInterface = new Review1DViewerInterface("b", this.SourceBComponents);
         model.checks["comparison"]["sourceBViewer"] = viewerInterface;
     }
-
-    // if (this.SourceAComponents !== undefined ||
-    //     this.SourceBComponents !== undefined) {
-    //     this.SheetDataViewer = new Review1DViewerInterface(this, this.SourceAComponents, this.SourceBComponents);
-    // }
 }
 
 ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
     var modelBrowserData = document.getElementById(containerId);
     var categoryId = containerId + "System_table_container";
-    // var gridDiv = modelBrowserData.getElementsByTagName(categoryId);
-
-
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
+   
     var modelBrowserDataTable = modelBrowserData.children[0];
     var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
@@ -198,12 +169,12 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
     }
-    else if (this.SourceAViewerData !== undefined &&
-        this.SourceBViewerData !== undefined) {
+    else if (this.SourceAViewerData["endPointUri"] !== undefined &&
+        this.SourceBViewerData["endPointUri"] !== undefined) {
         this.HighlightComponentInGraphicsViewer(rowData)
     }
     else if (this.SourceAComponents !== undefined &&
-        this.SourceBViewerData !== undefined) {
+        this.SourceBViewerData["endPointUri"] !== undefined) {
         var result = sheetName.split('-');
 
         if (rowData.SourceA && rowData.SourceA !== "") {
@@ -219,7 +190,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
 
         this.HighlightComponentInGraphicsViewer(rowData)
     }
-    else if (this.SourceAViewerData !== undefined &&
+    else if (this.SourceAViewerData["endPointUri"] !== undefined &&
         this.SourceBComponents !== undefined) {
         var result = sheetName.split('-');
 
@@ -345,7 +316,7 @@ ComparisonReviewManager.prototype.AcceptComponent = function (selectedRow, table
             success: function (msg) {
                 var component = _this.GetCheckComponent(groupId, componentId);
                 component.status = "OK(A)";
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
+                
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
                     if (property.severity !== "OK" && property.severity !== "No Value") {
@@ -546,9 +517,7 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                 if (component.transpose != null) {
                     if (!status[0].includes("(T)"))
                         component.status = status[0] + "(T)";
-                }
-
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
+                }                
 
                 var index = 0;
                 for (var propertyId in properties) {
@@ -630,7 +599,7 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
                 groupId, 
                 changedStatus, 
                 false, 
-                ComparisonColumns.Status);                
+                ComparisonColumns.Status);          
             }
         });
     }
@@ -716,19 +685,19 @@ ComparisonReviewManager.prototype.GetCellValue = function (currentReviewTableRow
 
 ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {
     var sourceANodeId;
-    if (this.SourceAViewerData !== undefined &&
+    if (this.SourceAViewerData["endPointUri"] !== undefined &&
         currentReviewTableRowData.SourceANodeId !== "") {
         sourceANodeId = currentReviewTableRowData.SourceANodeId;
     }
 
     var sourceBNodeId;
-    if (this.SourceBViewerData !== undefined &&
+    if (this.SourceBViewerData["endPointUri"] !== undefined &&
         currentReviewTableRowData.SourceBNodeId !== "") {
         sourceBNodeId = currentReviewTableRowData.SourceBNodeId;
     }
 
     // highlight component in graphics view in both viewer
-    if (this.SourceAViewerData != undefined) {
+    if (this.SourceAViewerData["endPointUri"] != undefined) {
         if (sourceANodeId !== undefined && sourceANodeId !== "") {
             model.checks["comparison"]["sourceAViewer"].highlightComponent(sourceANodeId);
         }
@@ -737,7 +706,7 @@ ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
             model.checks["comparison"]["sourceAViewer"].unHighlightComponent();
         }
     }
-    if (this.SourceBViewerData != undefined) {
+    if (this.SourceBViewerData["endPointUri"] != undefined) {
 
         if (sourceBNodeId !== undefined && sourceBNodeId !== "") {
             model.checks["comparison"]["sourceBViewer"].highlightComponent(sourceBNodeId);
@@ -791,8 +760,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                     component.Status = changedStatus;
                     component.transpose = transposeType;
                 }
-
-                model.getCurrentSelectionManager().ChangeBackgroundColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow, changedStatus);
+               
 
                 var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML;
                 var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML;
@@ -928,7 +896,6 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                     false,
                     ComparisonColumns.Status);
                 
-                model.getCurrentSelectionManager().ChangeBackgroundColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow, changedStatus);
             }
 
         });
@@ -976,8 +943,7 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                     }
                     index++;
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);                
             }
         });
     }
@@ -1030,8 +996,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                     }
 
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], component.status);
+                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);                
             },
         });
     }

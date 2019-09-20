@@ -1,16 +1,10 @@
 function ComplianceCheckResultsTable(mainReviewTableContainer) {
     this.MainReviewTableContainer = mainReviewTableContainer;
+
+    this.CheckTableIds = {};    
 }
 
 ComplianceCheckResultsTable.prototype.CreateCheckGroupButton = function (componentClass) {
-
-    // var btn = document.createElement("BUTTON");
-    // var att = document.createAttribute("groupId");
-    // att.value = groupId;
-    // btn.setAttributeNode(att);       // Create a <button> element
-    // btn.className = "collapsible";
-    // var t = document.createTextNode(componentClass);       // Create a text node
-    // btn.appendChild(t);
 
     var btn = document.createElement("BUTTON");
     btn.className = "accordion";
@@ -141,26 +135,10 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         this.LoadReviewTableData(columnHeaders, tableData, id);
         this.highlightMainReviewTableFromCheckStatus(div.id);
 
-
-        // // update count in compliance table
-        // var modelBrowserData = document.getElementById(div.id);
-
-        // var modelBrowserDataTable = modelBrowserData.children[0];
-        // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-
-        // // var countBox;
-        // var div2 = document.createElement("DIV");
-        // var id = div.id + "_child";
-        // div2.id = id;
-        // div2.style.fontSize = "13px";
-
-        // // var countBox = document.getElementById(id);
-        // // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        // var rowCount = modelBrowserTableRows.length - 2;
-        // div2.innerHTML = "Count :" + rowCount;
-        // modelBrowserDataTable.appendChild(div2);
+        // maintain table ids
+        this.CheckTableIds[groupId] = id;
     }
-    //}
+   
 }
 
 ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
