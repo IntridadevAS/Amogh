@@ -20,10 +20,10 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           !this.SelectedCompoentExists(componentData)) {
 
           var checkedComponent = {};
-          checkedComponent['Name'] = componentData.Item;
-          checkedComponent['MainComponentClass'] = componentData.Category;
-          checkedComponent['ComponentClass'] = componentData.ItemClass;
-          checkedComponent['Description'] = componentData.Description;
+          checkedComponent['Name'] = componentData[ModelBrowserColumnNames1D.Component];
+          checkedComponent['MainComponentClass'] = componentData[ModelBrowserColumnNames1D.MainClass];
+          checkedComponent['ComponentClass'] = componentData[ModelBrowserColumnNames1D.SubClass];
+          checkedComponent['Description'] = componentData[ModelBrowserColumnNames1D.Description];
 
 
           this.SelectedCompoents.push(checkedComponent);
@@ -55,10 +55,10 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.Item &&
-               component['MainComponentClass'] === componentData.Category &&
-               component['ComponentClass'] === componentData.ItemClass &&
-               component['Description'] == componentData.Description) {
+          if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
+          component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
+          component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
+          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
                return true;
           }
      }
@@ -69,10 +69,10 @@ ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData
 ExcelSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
-          if (component['Name'] === componentData.Item &&
-               component['MainComponentClass'] === componentData.Category &&
-               component['ComponentClass'] === componentData.ItemClass  &&
-               component['Description'] === componentData.Description) {
+          if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
+          component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
+          component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
+          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
 
                this.SelectedCompoents.splice(i, 1);
                break;

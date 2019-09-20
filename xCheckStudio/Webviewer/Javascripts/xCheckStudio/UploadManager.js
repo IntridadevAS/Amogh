@@ -15,13 +15,15 @@ let UploadManager = {
             },
             onValueChanged: function(e) {
                 viewPanels.addFilesPanel.classList.add("hide");
-                UploadManager.loadDataSource(e.value, 'uploadDatasourceForm');
+                // add next available source
+                var addedSource = controller.addNewFile("");
+                UploadManager.loadDataSource(e.value, 'uploadDatasourceForm', addedSource);
             }
         });
     },
    
     loadDataSource: function (selectedFiles,
-        formId) {
+        formId, addedSource) {
 
         //show busy spinner
         showBusyIndicator();
@@ -42,13 +44,20 @@ let UploadManager = {
                 return;
             }
             else {
-                // addTabHeaders(modelTreeContainer, data.target.response);
-                //var fileExtension = xCheckStudio.Util.getFileExtension(data.target.response).toLowerCase();
                 var fileName = data.target.response;
+                addedSource.fileName = fileName;
 
-                // add next available source
-                var addedSource = controller.addNewFile(fileName);
+                //Create tab header and Show panel for selected tab
+                viewTabs.createTab(addedSource);
+                viewPanels.showPanel(addedSource.viewPanel);
 
+                if(model.views[currentTabId].fileName.includes(".xls") ||
+                model.views[currentTabId].fileName.includes(".json")) {
+                    var id = "maxMinBtn" + currentTabId;
+                    var maxMinBtn = document.getElementById(id);
+                    maxMinBtn.style.opacity = 0.2;
+                }
+                
                 UploadManager.upload(fileName,
                     formId,
                     addedSource,
