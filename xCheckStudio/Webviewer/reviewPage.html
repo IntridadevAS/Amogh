@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="src/css/main.css">
   <link rel="stylesheet" href="src/css/reviewPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
-  
+
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -24,18 +24,21 @@
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
       <img id="userImg" src="public/symbols/Max.png" alt="">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program" onclick="onclosewindow()"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
+            onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
+            onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
+            onclick="onclosewindow()"></button>
       </div>
     </div>
 
   </header>
   <div class="background">
-  
+
     <div id='contextMenu' style="z-index: 1; position: absolute;">
     </div>
-  
+
     <div class="tabButtonContainer" id="tabsContainer">
       <div id="tabContainer" class="tabContainer">
         <div id="comparisonTab" class="tab" data-id="comparison">
@@ -120,7 +123,7 @@
         <div id="visualizerA" class="visualizerContainer visualizer4">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
           <div id="comparePanelA" class="comparePanel">
-             <div id="compare1" class="tempContainer"></div>
+            <div id="compare1" class="tempContainer"></div>
             <!-- Translucency slider -->
             <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -130,19 +133,18 @@
             </div>
 
             <!-- explode slider -->
-             <div id="explodeOverlay1" class="sliderOverlay">
-                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                    <input type="range" min="0" max="10" value="0" step="0.5"
-                        class="slider" id="explodeSlider1">
-                    <p><span id="explodeValue1"></span></p>
-                </div>
+            <div id="explodeOverlay1" class="sliderOverlay">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+                <p><span id="explodeValue1"></span></p>
+              </div>
             </div>
 
           </div>
           <div id="comparePanelB" class="comparePanel">
             <div id="compare2" class="tempContainer"></div>
             <!-- Translucency slider -->
-             <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
+            <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
                 <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider2">
                 <p> <span id="translucencyValue2" style="color: grey"></span></p>
@@ -151,11 +153,10 @@
 
             <!-- explode slider -->
             <div id="explodeOverlay2" class="sliderOverlay">
-                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                    <input type="range" min="0" max="10" value="0" step="0.5"
-                        class="slider" id="explodeSlider2">
-                    <p><span id="explodeValue2"></span></p>
-                </div>
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider2">
+                <p><span id="explodeValue2"></span></p>
+              </div>
             </div>
 
           </div>
@@ -168,7 +169,7 @@
                 <p> <span id="translucencyValue3" style="color: grey"></span></p>
               </div>
             </div>
-          
+
             <!-- explode slider -->
             <div id="explodeOverlay3" class="sliderOverlay">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -176,7 +177,7 @@
                 <p><span id="explodeValue3"></span></p>
               </div>
             </div>
-          
+
           </div>
           <div id="comparePanelD" class="comparePanel">
             <div id="compare4" class="tempContainer"></div>
@@ -187,7 +188,7 @@
                 <p> <span id="translucencyValue4" style="color: grey"></span></p>
               </div>
             </div>
-          
+
             <!-- explode slider -->
             <div id="explodeOverlay4" class="sliderOverlay">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -195,14 +196,14 @@
                 <p><span id="explodeValue4"></span></p>
               </div>
             </div>
-          
+
           </div>
-          </div>
+        </div>
       </div>
       <div id="viewPanelCompliance" class="viewPanel hide">
         <div id="tableDataCompliance" class="tableContainer">
           <div class="tablesArea">
-             <div id="complianceMainContainer"  class="tempContainer"> </div>
+            <div id="complianceMainContainer" class="tempContainer"> </div>
           </div>
           <div class="infoArea">
             <div class="infoAreaHeader">
@@ -221,7 +222,7 @@
         <div id="visualizerA" class="visualizerContainer">
           <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
           <div id="compliance1" class="tempContainer">
-        
+
             <!-- Translucency slider -->
             <div id="translucencyOverlay5" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -229,7 +230,7 @@
                 <p> <span id="translucencyValue5" style="color: grey"></span></p>
               </div>
             </div>
-        
+
             <!-- explode slider -->
             <div id="explodeOverlay5" class="sliderOverlay">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -237,7 +238,7 @@
                 <p><span id="explodeValue5"></span></p>
               </div>
             </div>
-        
+
           </div>
         </div>
       </div>
@@ -274,7 +275,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckResults.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerInterface.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\Review3DViewerInterface.js"></script>
-  <script type="text/javascript" src="Javascripts\xCheckStudio\Review1DViewerInterface.js"></script>  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\Review1DViewerInterface.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComparisonReviewManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ComplianceReviewManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewSelectionManager.js"></script>
@@ -295,10 +296,12 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\IsolateManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\TranslucencyManager.js"></script>
-  <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExplodeManager.js"></script>
 
   <!-- <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewViewerContextMenu.js"></script>   -->
   <script type="text/javascript" src="Javascripts\xCheckStudio\ViewerContextMenu.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleMenuOptions.js"></script>
 
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
@@ -319,17 +322,20 @@
   <script type="text/javascript" src="Javascripts/communicator_server_integration.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
-  
+
   <script>
 
     window.onload = function () {
 
-        setPageTitle();
-        setUserName();
-        setCheckSpaceName();
+      setPageTitle();
+      setUserName();
+      setCheckSpaceName();
 
-        initReviewModule();
-      }
+      initReviewModule();
+
+      // enable menu options
+      enableMenuOptions();
+    }
 
   </script>
 </body>
