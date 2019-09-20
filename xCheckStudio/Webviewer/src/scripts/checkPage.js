@@ -477,6 +477,10 @@ function showLoadDataForm() {
 
   popup.style.width = "581px";
   popup.style.height = "278px";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+  
   // popup.style.overflow = "hidden";
 }
 
