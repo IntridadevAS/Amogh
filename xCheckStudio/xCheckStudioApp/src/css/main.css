@@ -89,7 +89,7 @@ header {
   display: flex;
   align-items: center;
   z-index: 2;
-  -webkit-app-region: drag;
+  /* -webkit-app-region: drag; */
 }
 
 button {
@@ -141,7 +141,7 @@ button {
   width: 30px;
   height: 30px;
   border: 1px solid var(--xCheckWhite);
-  border-radius: 50%
+  border-radius: 50%;
   position: absolute;
   color: var(--xCheckWhite);
   list-style-type: none;

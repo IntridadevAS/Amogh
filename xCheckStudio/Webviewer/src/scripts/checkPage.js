@@ -195,10 +195,12 @@ let viewPanels = {
     this.panels = document.getElementsByClassName("viewPanel");
   },
 
-  showAddPanel: function () {
+  showAddPanel: function () { 
     viewTabs.unselectAllTabs();
+    viewTabs.addTab.classList.add("selectedTab");
     viewPanels.addFilesPanel.classList.remove("hide");
   },
+
 
   hideAddPanel: function () {
     var senderElement = event.target;
@@ -247,10 +249,7 @@ let viewPanels = {
   onMouseOutMaxMin: function(selected) {
     selected.style.height = "30px";
     selected.style.width = "30px";
-    if(model.views[currentTabId].fileName.includes(".xls") ||
-    model.views[currentTabId].fileName.includes(".json")) {
-      selected.style.opacity = 0.2;
-    }
+    selected.style.opacity = 0.2;
   } 
 }
 
