@@ -65,34 +65,16 @@ let controller = {
     const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
     // model.activeTabs++;
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
-    addedFile.fileName = fileName;
+    // addedFile.fileName = fileName;
     // SET FILENAME FOR TAB ABOVE
-
+        
     addedFile.used = true;
-    var tabNo = viewTabs.tabs.length - 1;
-
-    // if 1st dataset : tab is not already created 
-    // on add button click tab gets created and hence will just add filename in opened tab
-    if(tabNo < 0) {
         model.activeTabs++;
-        viewTabs.createTab(addedFile);
-        viewPanels.showPanel(addedFile.viewPanel);
-    }
-    else {
-      var tab = viewTabs.tabs[tabNo];
-      tab.innerHTML = fileName + tab.innerHTML;
-    }
 
     if (model.activeTabs >= 4) {
       viewTabs.hideAddTab();
     }
 
-    if(model.views[currentTabId].fileName.includes(".xls") ||
-    model.views[currentTabId].fileName.includes(".json")) {
-      var id = "maxMinBtn" + currentTabId;
-      var maxMinBtn = document.getElementById(id);
-      maxMinBtn.style.opacity = 0.2;
-    }
     return addedFile;
   },
 
@@ -144,7 +126,10 @@ let viewTabs = {
     let newNode = document.createElement("div");
     newNode.classList.add("tab");
     newNode.setAttribute("data-id", view.id);
-    newNode.innerHTML = view.fileName;
+    var spanText = document.createElement("span")
+    spanText.innerHTML = view.fileName;
+    spanText.style.overflow = "hidden";
+    newNode.appendChild(spanText);
     let closeWin = document.createElement("div");
     closeWin.classList.add("deleteTab");
     newNode.appendChild(closeWin);
@@ -211,10 +196,7 @@ let viewPanels = {
   },
 
   showAddPanel: function () {
-    const view = model.views[controller.nextAvailableView()];
-    viewTabs.createTab(view);
-    viewPanels.showPanel(view.viewPanel);
-    model.activeTabs++;
+    viewTabs.unselectAllTabs();
     viewPanels.addFilesPanel.classList.remove("hide");
   },
 
@@ -499,5 +481,5 @@ function loadDataSet() {
 
   closeLoadDataForm();
 
-  viewPanels.addFilesPanel.classList.add("hide");
+  // viewPanels.addFilesPanel.classList.add("hide");
 }

@@ -37,10 +37,10 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 
         var checkedComponent = {};
 
-        checkedComponent['Name'] = componentData.Item;
-        checkedComponent['MainComponentClass'] = componentData.Category;
-        checkedComponent['ComponentClass'] = componentData.ItemClass;
-        checkedComponent['NodeId'] = componentData.NodeId;
+        checkedComponent['Name'] = componentData[ModelBrowserColumnNames3D.Component];
+        checkedComponent['MainComponentClass'] = componentData[ModelBrowserColumnNames3D.MainClass];
+        checkedComponent['ComponentClass'] = componentData[ModelBrowserColumnNames3D.SubClass];
+        checkedComponent['NodeId'] = componentData[ModelBrowserColumnNames3D.NodeId];
 
         this.SelectedCompoents.push(checkedComponent);
 
@@ -74,11 +74,11 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 SCSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentData.Item &&
-            component['MainComponentClass'] === componentData.Category &&
-            component['ComponentClass'] === componentData.ItemClass) {
+        if (component['Name'] === componentData[ModelBrowserColumnNames3D.Component] &&
+            component['MainComponentClass'] === componentData[ModelBrowserColumnNames3D.MainClass] &&
+            component['ComponentClass'] === componentData[ModelBrowserColumnNames3D.SubClass]) {
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentData.NodeId) {
+                if (component["NodeId"] === componentData[ModelBrowserColumnNames3D.NodeId]) {
                     return true;
                 }
             }
@@ -97,12 +97,12 @@ SCSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
 SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentData) {
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
-        if (component['Name'] === componentData.Item &&
-            component['MainComponentClass'] === componentData.Category &&
-            component['ComponentClass'] === componentData.ItemClass) {
+        if (component['Name'] === componentData[ModelBrowserColumnNames3D.Component] &&
+        component['MainComponentClass'] === componentData[ModelBrowserColumnNames3D.MainClass] &&
+        component['ComponentClass'] === componentData[ModelBrowserColumnNames3D.SubClass]) {
 
             if ("NodeId" in component) {
-                if (component["NodeId"] === componentData.NodeId) {
+                if (component["NodeId"] === componentData[ModelBrowserColumnNames3D.NodeId]) {
                     this.SelectedCompoents.splice(i, 1);
                 }
             }
