@@ -125,7 +125,7 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function
 
 
 ReviewComplianceContextMenuManager.prototype.HaveSCOperations = function () {
-    if (model.checks["compliance"]["viewer"]) {
+    if (model.checks["compliance"]["viewer"].ViewerOptions) {
         return true;
     }
 

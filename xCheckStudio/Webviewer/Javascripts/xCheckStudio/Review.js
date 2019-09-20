@@ -152,7 +152,7 @@ function populateCheckResults(comparison,
             // var sourceAViewerOptions = undefined;
             //var sourceAClassWiseComponents = undefined;
             var classWiseComponents = {};
-            if (viewerOptions['a'] === undefined) {
+            if (viewerOptions['a']['endPointUri'] === undefined) {
                 
                 // get class wise properties for excel and other 1D datasources               
                 $.ajax({
@@ -178,7 +178,7 @@ function populateCheckResults(comparison,
 
             // var sourceBViewerOptions = undefined;
             //var sourceBClassWiseComponents = undefined;
-            if (viewerOptions['b'] === undefined) {
+            if (viewerOptions['b']['endPointUri'] === undefined) {
                 // this ajax call is synchronous
 
                 // get class wise properties for excel and other 1D datasources

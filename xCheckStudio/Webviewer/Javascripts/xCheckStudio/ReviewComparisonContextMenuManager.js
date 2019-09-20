@@ -12,16 +12,6 @@ function ReviewComparisonContextMenuManager(comparisonReviewManager) {
 ReviewComparisonContextMenuManager.prototype = Object.create(ReviewModuleContextMenuManager.prototype);
 ReviewComparisonContextMenuManager.prototype.constructor = ReviewComparisonContextMenuManager;
 
-// ReviewComparisonContextMenuManager.prototype.Init = function () {
-//     // components level
-//     this.InitComponentLevelContextMenu();
-
-//     // property level
-//     this.InitPropertyLevelContextMenu();
-
-//     // group level
-//     this.InitGroupLevelContextMenu();
-// }
 
 ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = function (componentTableContainer) {
     var _this = this;
@@ -133,8 +123,8 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 }
 
 ReviewComparisonContextMenuManager.prototype.HaveSCOperations = function () {
-    if (model.checks["comparison"]["sourceAViewer"] ||
-        model.checks["comparison"]["sourceBViewer"]) {
+    if (model.checks["comparison"]["sourceAViewer"].ViewerOptions||
+        model.checks["comparison"]["sourceBViewer"].ViewerOptions) {
         return true;
     }
 

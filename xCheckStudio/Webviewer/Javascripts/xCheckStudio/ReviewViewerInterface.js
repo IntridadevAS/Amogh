@@ -57,67 +57,39 @@ ReviewViewerInterface.prototype.ChangeComponentColor = function (component, over
 
 ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) { }
 
-// ReviewViewerInterface.prototype.IsComparisonReviewManager = function () {
-//     if (this.ReviewManager.MainReviewTableContainer == "ComparisonMainReviewCell") {
-//         return true;
-//     }
-//     return false;
-// }
-
-// ReviewViewerInterface.prototype.IsComplianceReviewManager = function () {
-//     if (this.ReviewManager.MainReviewTableContainer.includes("Compliance")) {
-//         return true;
-//     }
-//     return false;
-// }
 
 ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (reviewTableRow) {
 
     var SourceA = reviewTableRow.cells[ComparisonColumns.SourceAName].innerText;
     var SourceB = reviewTableRow.cells[ComparisonColumns.SourceBName].innerText;
-    // var rowData = {};
-
+    
     var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
-    // $(function () {
+    
     var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
     for (var id in data) {
         if (data[id].SourceA.trim() == SourceA.trim() &&
             data[id].SourceB.trim() == SourceB.trim()) {
 
-            return data[id];
-            // rowData['Status'] = data[id].Status;
-            // rowData['SourceBName'] = data[id].SourceB;
-            // rowData['SourceAName'] = data[id].SourceA;
-            // rowData['ResultId'] = data[id].ID;
-            // rowData['GroupId'] = data[id].groupId;
-            // rowData['SourceANodeId'] = data[id].SourceANodeId;
-            // rowData['SourceBNodeId'] = data[id].SourceBNodeId;
-            // break;
+            return data[id];           
         }
     }
-    // });
-
+    
     return undefined;
 }
 
 ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow) {
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
-    var rowData = {};
+    
     var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
-    $(function () {
-        var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
         for (var id in data) {
             if (data[id].SourceA.trim() == SourceA.trim()) {
-                rowData['Status'] = data[id].Status;
-                rowData['SourceName'] = data[id].SourceA;
-                rowData['ResultId'] = data[id].ID;
-                rowData['GroupId'] = data[id].groupId;
-                rowData['NodeId'] = data[id].NodeId;
+                return data[id];               
             }
-        }
-    });
+       }
+    
 
-    return rowData;
+    return undefined;
 }
 
 ReviewViewerInterface.prototype.ResizeViewer = function () {    
