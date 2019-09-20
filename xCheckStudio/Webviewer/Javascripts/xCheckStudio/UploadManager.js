@@ -50,14 +50,8 @@ let UploadManager = {
                 //Create tab header and Show panel for selected tab
                 viewTabs.createTab(addedSource);
                 viewPanels.showPanel(addedSource.viewPanel);
-
-                if(model.views[currentTabId].fileName.includes(".xls") ||
-                model.views[currentTabId].fileName.includes(".json")) {
-                    var id = "maxMinBtn" + currentTabId;
-                    var maxMinBtn = document.getElementById(id);
-                    maxMinBtn.style.opacity = 0.2;
-                }
-                
+                viewTabs.addTab.classList.remove("selectedTab");  
+                             
                 UploadManager.upload(fileName,
                     formId,
                     addedSource,

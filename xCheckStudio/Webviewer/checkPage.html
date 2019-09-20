@@ -537,8 +537,10 @@
       <div id="viewPanelA" class="viewPanel">
         <div class="tableContainer">
           <!-- tableA           -->
-          <div id="tableDataA" style="position: absolute"></div>
-          <div id="itemCountA" style="position: absolute; top: 97%"></div>
+          <div style="position: absolute; height: calc(100% - 30px);">
+            <div id="tableDataA" style="position: relative"></div>
+          </div>
+          <div id="itemCountA" class="itemCountClass" style="position: absolute; height: 30px"></div>
         </div>
         <div id="center" class="grabBar"></div>
         <div class="visualizerContainer">
@@ -569,8 +571,10 @@
         <div class="tableContainer">
           <!-- tableB -->
           <!-- tableA           -->
-          <div id="tableDataB" style="position: absolute"> </div>
-          <div id="itemCountB" style="position: absolute; top: 97%"></div>
+          <div style="position: absolute; height: calc(100% - 30px);">
+              <div id="tableDataB" style="position: relative"> </div>
+          </div>
+          <div id="itemCountB" class="itemCountClass" style="position: absolute; height: 30px"></div>
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
@@ -600,8 +604,10 @@
       <div id="viewPanelC" class="viewPanel hide">
         <div class="tableContainer">
           <!-- tableC -->
-          <div id="tableDataC" style="position: absolute"> </div>
-          <div id="itemCountC" style="position: absolute; top: 97%"></div>
+          <div style="position: absolute; height: calc(100% - 30px);">
+              <div id="tableDataC" style="position: relative"> </div>
+          </div>
+          <div id="itemCountC" class="itemCountClass" style="position: absolute; height: 30px;"></div>
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
@@ -630,8 +636,10 @@
       <div id="viewPanelD" class="viewPanel hide">
         <div class="tableContainer">
           <!-- tableD -->
-          <div id="tableDataD" style="position: absolute"> </div>
-          <div id="itemCountD" style="position: absolute; top: 97%"></div>
+          <div style="position: absolute; height: calc(100% - 30px);">
+              <div id="tableDataD" style="position: absolute"> </div>
+          </div>
+          <div id="itemCountD" class="itemCountClass" style="position: absolute; height: 30px"></div>
         </div>
         <div class="grabBar"></div>
         <div class="visualizerContainer">
@@ -716,6 +724,10 @@
 
 
   <style>
+
+    .itemCountClass {
+      top: calc(100% - 31px);
+    }
     ::-webkit-scrollbar {
       width: 6px;
     }

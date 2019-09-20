@@ -234,7 +234,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             columnAutoWidth: true,
             wordWrapEnabled: false,
             showBorders: true,
-            height: "96%",
+            height: "100%",
             width: "100%",
             allowColumnResizing : true,
             // focusedRowEnabled: true,

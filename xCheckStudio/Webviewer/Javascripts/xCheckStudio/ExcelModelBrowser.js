@@ -254,7 +254,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            height: "96%",
+            height: "100%",
             width: "100%",
             allowColumnResizing : true,
             // focusedRowEnabled: true,

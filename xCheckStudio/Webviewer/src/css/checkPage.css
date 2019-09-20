@@ -290,6 +290,7 @@ button[type="submit"] {
   background-position: center;
   background-repeat: no-repeat;
   position: absolute;
+  opacity: 0.2;
   left: 5px;
   top: 5px;
   height: 30px;
