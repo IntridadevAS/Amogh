@@ -732,6 +732,7 @@ let checkView = {
   },
 
   renderChecks: function () {
+    scrollContentDivToTop();
     if (controller.permissions()) {
       let newCheckCard = `
         <div class="checkSpaceCard" onclick="newCheckView.init()">\
@@ -802,7 +803,7 @@ let checkView = {
 
 
   renderReviews: function () {
-
+    scrollContentDivToTop();
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
     //let selectedReviews = Object.values(this.selectedReviews.reviews);
@@ -888,11 +889,11 @@ let checkView = {
 let newProjectView = {
   init: function () {
     this.newProjectOverlay = document.getElementById("newProject");
-    document.getElementById("overlaymy").style.display = "block";
+    onToggleOverlayDisplay();
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
   },
   closeNewProject: function () {
-    document.getElementById("overlaymy").style.display = "none";
+    onToggleOverlayDisplay();
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
   }
 }
@@ -902,12 +903,12 @@ let newCheckView = {
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
     this.newCheckOverlay = document.getElementById("newCheck");
-    document.getElementById("overlaymy").style.display = "block";
+    onToggleOverlayDisplay();
     this.newCheckOverlay.classList.add("projectOverlaysOpen");
 
   },
   closeNewCheck: function () {
-    document.getElementById("overlaymy").style.display = "none";
+    onToggleOverlayDisplay();
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
   },
 
@@ -953,7 +954,7 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
     editProjectWin.classList.add("projectOverlaysOpen");
-    document.getElementById("overlaymy").style.display = "block";
+    onToggleOverlayDisplay();
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
 
     this.currentProject = controller.getCurrentProj();
@@ -970,7 +971,7 @@ let editProjectView = {
 
   closeEditProject: function () {
     //document.getElementById("editProjectForm").submit();
-    document.getElementById("overlaymy").style.display = "none";
+    onToggleOverlayDisplay();
     this.editProjectOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjects();
   }
@@ -987,7 +988,7 @@ let editCheckView = {
     let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
 
-    document.getElementById("overlaymy").style.display = "block";
+    onToggleOverlayDisplay();
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
 
     this.currentCheck = controller.getCurrentCheck();
@@ -1009,7 +1010,7 @@ let editCheckView = {
 
   closeEditCheck: function () {
     //document.getElementById("editCheckForm").submit();
-    document.getElementById("overlaymy").style.display = "none";
+    onToggleOverlayDisplay();
     this.editCheckOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectChecks();
   }
@@ -1124,4 +1125,23 @@ function onHomeClick() {
   popup.style.width = "581px";
   popup.style.height = "155px";
   popup.style.overflow = "hidden";
+}
+
+function onToggleOverlayDisplay() {
+  var overlaymyDiv = document.getElementById("overlaymy");
+  if (overlaymyDiv.style.display === "" || overlaymyDiv.style.display === "none") {
+    overlaymyDiv.style.display = "block";
+    var contentDiv = document.getElementById("content");
+    scrollContentDivToTop();
+    contentDiv.style.overflowY = "hidden";
+  }
+  else if (overlaymyDiv.style.display === "block") {
+    overlaymyDiv.style.display = "none";
+    document.getElementById("content").style.overflowY = "auto";
+  }
+}
+
+function scrollContentDivToTop() {
+  var contentDiv = document.getElementById("content");
+  contentDiv.scrollTop = 0;
 }
