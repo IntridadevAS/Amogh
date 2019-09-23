@@ -385,7 +385,15 @@ let viewPanels = {
     if (model.currentView) {
       model.currentView.ResizeViewers();
     }
-  }
+  },
+
+  showAnalytics: function () {
+    var visualizerA = document.getElementById("visualizerA");
+    analytics = document.getElementById("analyticsSmall");
+    visualizerA.style.display = "none";
+    analytics.style.display = "block";
+    // document.getElementById("analyticsSmall").innerHTML='<object type="text/html" data="/analyticsTotalCheckModule.html" style="height: 100%; width: 100%; overflow: hidden" ></object>';
+  },
 }
 
 controller.init();

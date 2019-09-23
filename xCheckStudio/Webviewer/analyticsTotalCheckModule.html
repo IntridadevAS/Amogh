@@ -19,6 +19,9 @@
 <script type="text/javascript" src="src\Infragistics\infragistics.dv.js"></script>
 <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager1.js"></script>
 <script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsTotalCheckModule.js"></script>
+<link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
+<link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
+<script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 <style id="applicationStylesheet" type="text/css">
 	.mediaViewInfo {
 		--web-view-name: Small;
@@ -693,6 +696,42 @@
 		cursor: pointer;		
 	}
 
+	.maxMinBtn{
+		background-color: var(--xCheckDarkGrey);
+		background-image: url(../../public/symbols/XD_Maximise.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		position: absolute;
+		left: 5px;
+		top: 5px;
+		height: 30px;
+		width: 30px;
+		border: var(--borderWidth) solid var(--xCheckMedGrey);
+		border-radius: var(--borderRadiusVal);
+		z-index: 1;
+		cursor: pointer;
+	}
+
+	.maximize .maxMinBtn {
+		background-image: url(../../public/symbols/XD_Minimise.svg);
+	}
+
+	.analyticsBtn{
+		background-color: var(--xCheckDarkGrey);
+		background-image: url(../../public/symbols/Analytics_Icon.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		position: absolute;
+		left: 5px;
+		top: 45px;
+		height: 30px;
+		width: 30px;
+		border: var(--borderWidth) solid var(--xCheckMedGrey);
+		border-radius: var(--borderRadiusVal);
+		z-index: 1;
+		cursor: pointer;
+	}
+
 	.icon_32_Summary:hover path {fill: wheat}
 	.icon_32_Summary_A1_BooleanGroup_2:hover path {fill: wheat}
 </style>
@@ -700,6 +739,8 @@
 </head>
 <body>
 <div id="Small">
+	<div class="maxMinBtn" onclick=""></div>
+	<div id="AnalyticsDashboard" class="analyticsBtn" onclick="ShowModelViewer()"></div>
 	<div id="Compliance_DataSet_Selection" onclick="RemoveComplianceSourceSelectionOverlay()">
 		<svg class="bgr">
 			<rect fill="rgba(41,46,77,1)" stroke="rgba(15,255,238,1)" stroke-width="4px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="16" ry="16" x="0" y="0" width="440" height="397">
