@@ -7,6 +7,7 @@
   <title>Review</title>
   <link rel="stylesheet" href="src/css/main.css">
   <link rel="stylesheet" href="src/css/reviewPage.css">
+  <link rel="stylesheet" href="CSS/modalAnalytics.css">
   <link rel="stylesheet" href="src/css/fonts.css">
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
 
@@ -384,6 +385,7 @@
           <div id="center" class="grabBar"></div>
           <div id="visualizerA" class="visualizerContainer visualizer4">
             <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+            <div id="AnalyticsDashboard" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="comparePanelA" class="comparePanel"  style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
@@ -461,6 +463,10 @@
 
             </div>
           </div>
+          <div id="analyticsSmall" class="visualizerContainer" style="display: none">
+              <iframe src="AnalyticsTotalCheckModule.html" style="height: 100%; width: 100%"></iframe>
+          </div>
+          
         </div>
         <div id="viewPanelCompliance" class="viewPanel hide">
           <div id="tableDataCompliance" class="tableContainer">
@@ -484,6 +490,7 @@
           <div id="center" class="grabBar"></div>
           <div id="visualizerA" class="visualizerContainer">
             <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
+            <div id="AnalyticsDashboard" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="compliance1" class="tempContainer">
 
               <!-- Translucency slider -->
@@ -503,6 +510,9 @@
               </div>
 
             </div>
+          </div>
+          <div id="analyticsSmall" class="visualizerContainer" style="display: none">
+              <iframe src="AnalyticsTotalCheckModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
         <div class="projectName">

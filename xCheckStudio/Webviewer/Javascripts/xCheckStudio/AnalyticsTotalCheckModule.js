@@ -5,7 +5,7 @@ function populateAnalyticsData(checkResults, container) {
             continue;
         }
 
-        if (key == 'Comparison') {
+        if (key == 'Comparisons') {
             comparisonCheckGroups = true;
         }
         else if (key == 'SourceACompliance') {
@@ -63,6 +63,12 @@ function populateAnalyticsData(checkResults, container) {
     //     !sourceBComplianceCheckGroups) {
     //     $("#compliance").addClass("disable");
     // }
+}
+
+function ShowModelViewer() {
+    var reviewDoc = window.frameElement.ownerDocument;
+    reviewDoc.getElementById("visualizerA").style.display = "grid";
+    reviewDoc.getElementById("analyticsSmall").style.display = "none";
 }
 
 function PopulateComparisonChartData()

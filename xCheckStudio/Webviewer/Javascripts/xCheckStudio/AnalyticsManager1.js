@@ -605,41 +605,36 @@ AnalyticsManager1.prototype.drawPieChart = function (mainChartItem,
 
         var data = []
 
-        if(itemCount == 0) {
-            data = [
-                { "name": "Other", "value": totalItemCount - itemCount },
-            ];
-
-            colorsArray = ["#EDEDED"];
-        }
-        else {
-            data = [
-                { "name": mainChartItem, "value": itemCount },
-                { "name": "Other", "value": totalItemCount - itemCount },
-            ];
-        }
-
-
-        $(chartDiv).css('background-color', 'rgba(0,0,0,0)');
-        $(function () {
-            $(chartDiv).igDoughnutChart({
-                width: "100%",
-                height: "180px",
-                innerExtent: 90,
-                series:
-                [{
-                    name: "Error",
-                    labelMemberPath: 'name',
-                    valueMemberPath: "value",
-                    dataSource: data,
-                    showTooltip: true,
-                    tooltipTemplate: "<div class='ui-chart-tooltip'><div class='bold'>${item.name}</div><div>Item count: <label class='bold'>${item.value}</label></div></div>",
-                    startAngle: 270,
-                    outlines: colorsArray,
-                    brushes : colorsArray
-                }]
-            });
-        });  
+        data = [
+            { "SeverityName": mainChartItem, "val": itemCount },
+            { "SeverityName": "Other", "val": totalItemCount - itemCount },
+        ];
+        
+        $(chartDiv).dxPieChart({
+            type: "doughnut",
+            palette: colorsArray,
+            dataSource: data,
+            startAngle: 90,
+            innerRadius: 0.8,
+            tooltip: {
+                enabled: true,
+                customizeTooltip: function (arg) {
+                    var percent = arg.percent * 100;
+                    var percentText = percent.toFixed(2);
+        
+                    return {
+                        text: arg.argumentText + " : " + percentText + "%"
+                    };
+                }
+            },
+            legend: {
+                visible: false
+            },
+            series: [{        
+                argumentField: "SeverityName",
+                showInLegend: false
+            }]
+        });
 
     //  this.CreateSeverityTextDivs();
     var percent = itemCount * 100 / totalItemCount;
@@ -721,109 +716,138 @@ AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) 
 
     var _this = this;
     
-    var Severitydata = []
+    var Severitydata = [];
     for(key in checkGroupsInfo) {
         var dataObject = {}
-        dataObject["category"] = key;
-        if(checkGroupsInfo[key]["OK"] !== "0")
-            dataObject["OK"] = checkGroupsInfo[key]["OK"];
-
-        if(checkGroupsInfo[key]["Error"] !== "0")
-            dataObject["Error"] = checkGroupsInfo[key]["Error"]
-        
-        if(checkGroupsInfo[key]["Warning"] !== "0")
-            dataObject["Warning"] = checkGroupsInfo[key]["Warning"]
-
+        dataObject["Category"] = key;
+        dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
+        dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
+        dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
         Severitydata.push(dataObject);
     }
    
-    var colorsArray = ["#0FFF72", "#F43742", "#F8C13B"]
+    var colorsArray = ["#F43742", "#F8C13B", "#0FFF72"];
 
-    xAxis = { name: "xAxis", type: "categoryX", label: "category", gap: 0.5,  };
-    yAxis = { name: "yAxis", type: "numericY", title: "Severity" };
-    $("#BarChart").igDataChart({
+    $("#BarChart").dxChart({
         dataSource: Severitydata,
-        height: "50%",
-        width: "50%",
-        title: "Severity Chart",
-        brushes: colorsArray,
-        horizontalZoomable: true,
-        verticalZoomable: true,
-        windowResponse: "immediate",
-        axes: [ xAxis, yAxis ],
-        series: [{
-            name: "Severity Chart",
-            type: "stackedColumn",
-            xAxis: "xAxis",
-            yAxis: "yAxis",
-            outline: "transparent",
-            series: [
-                _this.CreateStackedFragment("OK"),
-                _this.CreateStackedFragment("Error"),
-                _this.CreateStackedFragment("Warning"),
-            ]
-        }], 
-        refreshCompleted: function () {
-            var context,
-            canvas = document.querySelector("canvas"),
-            h = parseInt(canvas.getAttribute("height")),
-            w = parseInt(canvas.getAttribute("width"));
-            
-            context = canvas.getContext('2d');
-            context.fillStyle = "#292E4D";
-            context.fillRect(0, 0, w, h);
+        palette: colorsArray,
+        commonSeriesSettings: {
+            argumentField: "Category",
+            type: "stackedBar"
+        },
+        series: [
+            { valueField: "Error", name: "Error" },
+            { valueField: "Warning", name: "Warning" },
+            { valueField: "OK", name: "OK" }
+        ],
+        legend: {
+            visible: false
+        },
+		argumentAxis: {
+            label: {
+                wordWrap: "Wrap",
+                overlappingBehavior: "stagger"
+            }
+        },
+        valueAxis: {
+            title: {
+                text: " "
+            },
+            position: "left"
+        },
+        tooltip: {
+            enabled: true,
+            location: "edge",
+            customizeTooltip: function (arg) {
+                return {
+                    text: arg.seriesName
+                };
+            }
         }
     });
+
+    // $("#BarChart").igDataChart({
+    //     dataSource: Severitydata,
+    //     height: "50%",
+    //     width: "50%",
+    //     title: "Severity Chart",
+    //     brushes: colorsArray,
+    //     horizontalZoomable: true,
+    //     verticalZoomable: true,
+    //     windowResponse: "immediate",
+    //     axes: [ xAxis, yAxis ],
+    //     series: [{
+    //         name: "Severity Chart",
+    //         type: "stackedColumn",
+    //         xAxis: "xAxis",
+    //         yAxis: "yAxis",
+    //         outline: "transparent",
+    //         series: [
+    //             _this.CreateStackedFragment("OK"),
+    //             _this.CreateStackedFragment("Error"),
+    //             _this.CreateStackedFragment("Warning"),
+    //         ]
+    //     }], 
+    //     refreshCompleted: function () {
+    //         var context,
+    //         canvas = document.querySelector("canvas"),
+    //         h = parseInt(canvas.getAttribute("height")),
+    //         w = parseInt(canvas.getAttribute("width"));
+            
+    //         context = canvas.getContext('2d');
+    //         context.fillStyle = "#292E4D";
+    //         context.fillRect(0, 0, w, h);
+    //     }
+    // });
 }
 
 AnalyticsManager1.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
     var _this = this;
 
-    xAxis = { name: "xAxis", type: "categoryX", label: "category", gap: 1,  };
-    yAxis = { name: "yAxis", type: "numericY", title: "Severity" };
     var Infodata = []
     for(key in checkGroupsInfo) {
         var dataObject = {}
-        dataObject["category"] = key;
-        if(checkGroupsInfo[key]["No Match"] !== "0")
-            dataObject["No Match"] = checkGroupsInfo[key]["No Match"];
-
-        if(checkGroupsInfo[key]["undefined Item"] !== "0")
-            dataObject["undefined"] = checkGroupsInfo[key]["undefined Item"]
+        dataObject["Category"] = key;
+        dataObject["No Match"] = parseInt(checkGroupsInfo[key]["No Match"]);
+        dataObject["undefined"] = parseInt(checkGroupsInfo[key]["undefined Item"]);
         Infodata.push(dataObject);
     }
 
     var colorsArray = ["#dddbff", "#e7d7fa"]
-    $("#BarChart").igDataChart({
+    $("#BarChart").dxChart({
         dataSource: Infodata,
-        height: "50%",
-        width: "50%",
-        title: "Info Chart",
-        horizontalZoomable: true,
-        verticalZoomable: true,
-        brushes: colorsArray,
-        windowResponse: "immediate",
-        axes: [ xAxis, yAxis ],
-        series: [{
-            name: "Info Chart",
-            type: "stackedColumn",
-            xAxis: "xAxis",
-            yAxis: "yAxis",
-            outline: "transparent",
-            series: [
-                _this.CreateStackedFragment("No Match"),
-                _this.CreateStackedFragment("undefined")
-            ]
-        }], 
-        refreshCompleted: function () {
-            var context,
-            canvas = document.querySelector("canvas"),
-            h = parseInt(canvas.getAttribute("height")),
-            w = parseInt(canvas.getAttribute("width"));
-            
-            context = canvas.getContext('2d');
-            context.fillStyle = "#292E4D";
-            context.fillRect(0, 0, w, h);
+        palette: colorsArray,
+        commonSeriesSettings: {
+            argumentField: "Category",
+            type: "stackedBar"
+        },
+        series: [
+            { valueField: "No Match", name: "No Match" },
+            { valueField: "undefined", name: "undefined" }
+        ],
+        legend: {
+            visible: false
+        },
+		argumentAxis: {
+            label: {
+                wordWrap: "Wrap",
+                overlappingBehavior: "stagger"
+            }
+        },
+        valueAxis: {
+            title: {
+                text: " "
+            },
+            position: "left"
+        },
+        tooltip: {
+            enabled: true,
+            location: "edge",
+            customizeTooltip: function (arg) {
+                return {
+                    text: arg.seriesName
+                };
+            }
         }
     });
 }

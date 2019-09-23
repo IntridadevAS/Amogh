@@ -345,6 +345,22 @@ tr {
   cursor: pointer;
 }
 
+.analyticsBtn{
+  background-color: var(--xCheckDarkGrey);
+  background-image: url(../../public/symbols/Analytics_Icon.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 5px;
+  top: 45px;
+  height: 30px;
+  width: 30px;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  z-index: 1;
+  cursor: pointer;
+}
+
 .maximize .maxMinBtn {
   background-image: url(../../public/symbols/XD_Minimise.svg);
 }
