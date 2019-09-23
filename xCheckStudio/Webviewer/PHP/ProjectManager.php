@@ -14,6 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "AddNewProjectToMainDB":
             AddNewProjectToMainDB();
             break;
+        case "SetProjectAsFavourite":
+            SetProjectAsFavourite();
+            break;
         case "DeleteProject":
             DeleteProject();
             break;
@@ -2158,6 +2161,28 @@ function GetProjects()
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);
+        $dbh = null;
+      }
+      catch(Exception $e) {
+        echo 'fail';
+        return;
+    } 
+}
+
+function SetProjectAsFavourite()
+{
+    $userid = trim($_POST["userid"], " ");
+    $projectid = trim($_POST["ProjectId"], " ");
+    $favourite = trim($_POST["Favourite"], " ");
+    if($projectid === -1)
+    {
+        echo 'fail';
+        return;
+    }
+    try{
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+        $query = "UPDATE Projects SET IsFavourite=? WHERE projectid=?";
+        $dbh->prepare($query)->execute([$favourite, $projectid]);
         $dbh = null;
       }
       catch(Exception $e) {

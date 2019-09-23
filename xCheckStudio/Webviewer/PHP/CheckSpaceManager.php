@@ -14,6 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "DeleteCheckSpace":
         DeleteCheckSpace();
             break;
+        case "SetCheckAsFavourite":
+            SetCheckAsFavourite();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -214,6 +217,30 @@ function DeleteCheckSpace(){
     }
     catch(Exception $e) {
         echo 'Message: ' .$e->getMessage();
+        return;
+    } 
+}
+
+function SetCheckAsFavourite()
+{
+    $userid = trim($_POST["userid"], " ");
+    $CheckId = trim($_POST["CheckId"], " ");
+    $ProjectName = trim($_POST["ProjectName"], " ");
+    $favourite = trim($_POST["Favourite"], " ");
+    if($CheckId === -1)
+    {
+        echo 'fail';
+        return;
+    }
+
+    try{
+        $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
+        $query = "UPDATE CheckSpace SET checkisfavourite=? WHERE checkid=?";
+        $dbh->prepare($query)->execute([$favourite, $CheckId]);
+        $dbh = null;
+      }
+      catch(Exception $e) {
+        echo 'fail';
         return;
     } 
 }

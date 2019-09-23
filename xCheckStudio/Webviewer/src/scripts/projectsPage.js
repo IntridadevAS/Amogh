@@ -425,20 +425,71 @@ let controller = {
     return model.projectReviews;
   },
 
-  // TODO: Prototech, insert fetch URL to match server
+ 
   setFavoriteProject: function (projID) {
-    fetch(`exampleServer/project/${projID}`, {
-      method: "POST"
-    })
-      .then(this.fetchProjects);
+    var obj = model.myProjects.find(obj => obj.projectid == projID);
+    if (obj === undefined) {
+      obj = model.publicProjects.find(obj => obj.projectid == projID);
+    }
+    if(obj === undefined) {
+      console.log("No project found to mark as favourite");
+      return;
+    }
+    var newFav = 0;
+    if (obj.IsFavourite === "0") {
+      newFav = 1;
+    }
+    else {
+      newFav = 0;
+    }
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    $.ajax({
+      data: {
+        'InvokeFunction': 'SetProjectAsFavourite',
+        'userid': userinfo.userid,
+        'ProjectId': projID,
+        'Favourite': newFav,
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      if(msg==="") {
+        controller.fetchProjects();
+      }
+    });
   },
 
-  // TODO: Prototech, insert fetch URL to match server
   setFavoriteCheck: function (checkID) {
-    fetch(`exampleServer/check/${checkID}`, {
-      method: "POST"
-    })
-      .then(this.fetchProjectChecks);
+    event.stopPropagation();
+    var obj = model.projectChecks.find(obj => obj.checkid == checkID);
+    if(obj === undefined) {
+      console.log("No check found to mark as favourite");
+      return;
+    }
+    var newFav = 0;
+    if (obj.checkisfavourite === "0") {
+      newFav = 1;
+    }
+    else {
+      newFav = 0;
+    }
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    $.ajax({
+      data: {
+        'InvokeFunction': 'SetCheckAsFavourite',
+        'userid': userinfo.userid,
+        'CheckId': checkID,
+        'ProjectName': projectinfo.projectname,
+        'Favourite': newFav,
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      if(msg==="") {
+        controller.fetchProjectChecks();
+      }
+    });
   },
 
   // TODO: Prototech, insert fetch URL to match server
@@ -535,7 +586,7 @@ let projectView = {
 
     projects.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
-      if(selected === null)
+      if (selected === null)
         return;
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
@@ -548,7 +599,7 @@ let projectView = {
 
     publicProjectsCont.addEventListener("click", function (event) {
       let selected = event.target.closest('.card');
-      if(selected === null)
+      if (selected === null)
         return;
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init();
@@ -889,11 +940,11 @@ let checkView = {
 let newProjectView = {
   init: function () {
     this.newProjectOverlay = document.getElementById("newProject");
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(true);
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
   },
   closeNewProject: function () {
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(false);
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
   }
 }
@@ -903,12 +954,12 @@ let newCheckView = {
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
     this.newCheckOverlay = document.getElementById("newCheck");
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(true);
     this.newCheckOverlay.classList.add("projectOverlaysOpen");
 
   },
   closeNewCheck: function () {
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(false);
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
   },
 
@@ -954,7 +1005,7 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
     editProjectWin.classList.add("projectOverlaysOpen");
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(true);
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
 
     this.currentProject = controller.getCurrentProj();
@@ -971,7 +1022,7 @@ let editProjectView = {
 
   closeEditProject: function () {
     //document.getElementById("editProjectForm").submit();
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(false);
     this.editProjectOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjects();
   }
@@ -988,7 +1039,7 @@ let editCheckView = {
     let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
 
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(true);
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
 
     this.currentCheck = controller.getCurrentCheck();
@@ -1010,7 +1061,7 @@ let editCheckView = {
 
   closeEditCheck: function () {
     //document.getElementById("editCheckForm").submit();
-    onToggleOverlayDisplay();
+    onToggleOverlayDisplay(false);
     this.editCheckOverlay.classList.remove("projectOverlaysOpen");
     controller.fetchProjectChecks();
   }
@@ -1127,16 +1178,14 @@ function onHomeClick() {
   popup.style.overflow = "hidden";
 }
 
-function onToggleOverlayDisplay() {
-  var overlaymyDiv = document.getElementById("overlaymy");
-  if (overlaymyDiv.style.display === "" || overlaymyDiv.style.display === "none") {
-    overlaymyDiv.style.display = "block";
-    var contentDiv = document.getElementById("content");
+function onToggleOverlayDisplay(show) {
+  if (show === true) {
+    document.getElementById("overlaymy").style.display = "block";
     scrollContentDivToTop();
-    contentDiv.style.overflowY = "hidden";
+    document.getElementById("content").style.overflowY = "hidden";
   }
-  else if (overlaymyDiv.style.display === "block") {
-    overlaymyDiv.style.display = "none";
+  else {
+    document.getElementById("overlaymy").style.display = "none";
     document.getElementById("content").style.overflowY = "auto";
   }
 }
