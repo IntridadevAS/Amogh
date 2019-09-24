@@ -35,7 +35,8 @@
 
   </header>
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
-    
+    <div id="loadIndicator"></div>
+
     <div class="background">
       <div id='contextMenu' style="z-index: 1; position: absolute;">
       </div>
@@ -46,8 +47,8 @@
         <div id="Return_to_Home_Page">
           <svg class="Rectangle_1204">
             <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-              width="581" height="155">
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
             </rect>
           </svg>
           <svg class="Rectangle_1215">
@@ -71,7 +72,7 @@
               <span>Cancel</span>
             </div>
           </div>
-      
+
           <div id="symYesButton___10" onclick="returnHome()">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -90,15 +91,15 @@
           </svg>
         </div>
       </div>
-      
+
       <!-- Return to project center overlay -->
       <div id="returnProjectCenterOverlay" class="overlay"></div>
       <div id="returnProjectCenterPopup" class="popup">
         <div id="returnToProjects">
           <svg class="Rectangle_1204">
             <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-              width="581" height="155">
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
             </rect>
           </svg>
           <svg class="Rectangle_1215">
@@ -122,7 +123,7 @@
               <span>Cancel</span>
             </div>
           </div>
-      
+
           <div id="symYesButton___10" onclick="returnProjectCenter()">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -141,15 +142,15 @@
           </svg>
         </div>
       </div>
-      
+
       <!-- Return to home page overlay -->
       <div id="returnCheckOverlay" class="overlay"></div>
       <div id="returnCheckPopup" class="popup">
         <div id="Return_to_Home_Page">
           <svg class="Rectangle_1204">
             <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-              width="581" height="155">
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
             </rect>
           </svg>
           <svg class="Rectangle_1215">
@@ -173,7 +174,7 @@
               <span>Cancel</span>
             </div>
           </div>
-      
+
           <div id="symYesButton___10" onclick="returnCheck()">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -192,16 +193,16 @@
           </svg>
         </div>
       </div>
-      
-      
+
+
       <!-- Return to PREP overlay -->
       <div id="returnPREPOverlay" class="overlay"></div>
       <div id="returnPREPPopup" class="popup">
         <div id="returnToPREP">
           <svg class="Rectangle_1204">
             <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-              width="581" height="155">
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
             </rect>
           </svg>
           <svg class="Rectangle_1215">
@@ -225,7 +226,7 @@
               <span>Cancel</span>
             </div>
           </div>
-      
+
           <div id="symYesButton___10" onclick="returnToPREP()">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
@@ -567,7 +568,7 @@
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
-  
+
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
   <!-- JQuery dependencies -->
@@ -594,8 +595,12 @@
   <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 
   <script>
+    $("#loadIndicator").dxLoadPanel({
+      "visible": true
+    });
 
     window.onload = function () {
+
 
       setPageTitle();
       setUserName();
@@ -608,6 +613,19 @@
 
       // create drawer menu
       ReviewDrawerMenu.create();
+
+      // hide busy indicator
+      hideBusyIndicator();
+    }
+
+    function showBusyIndicator() {
+      // hide busy indicator
+      $("#loadIndicator").dxLoadPanel("show");
+    }
+
+    function hideBusyIndicator() {
+      // hide busy indicator
+      $("#loadIndicator").dxLoadPanel("hide");
     }
 
   </script>

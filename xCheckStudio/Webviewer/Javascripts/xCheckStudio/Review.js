@@ -79,8 +79,7 @@ function initReviewModule() {
                     // comparisonCheckGroups = new CheckGroups();
                     // comparisonCheckGroups.restore(checkResults[key], false);
                 }
-                else if(key == 'Compliances')
-                {
+                else if (key == 'Compliances') {
                     compliances = checkResults[key];
 
                     // set compliance true/false for sources
@@ -89,8 +88,7 @@ function initReviewModule() {
 
                         for (var sourceId in model.files) {
                             var file = model.files[sourceId];
-                            if(file.fileName === compliance.source)
-                            {
+                            if (file.fileName === compliance.source) {
                                 file["compliance"] = true;
                             }
                         }
@@ -120,7 +118,7 @@ function initReviewModule() {
                 // else if (key == 'SourceBComplianceComponentsHierarchy') {
                 //     sourceBComplianceHierarchy = checkResults[key];
                 // }
-            }            
+            }
         },
         error: function (error) {
             //alert('error; ' + eval(error));
@@ -136,6 +134,10 @@ function populateCheckResults(comparison,
         !compliance) {
         return;
     }
+
+    // show busy indicator
+    showBusyIndicator();
+
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     $.ajax({
@@ -153,21 +155,21 @@ function populateCheckResults(comparison,
             //var sourceAClassWiseComponents = undefined;
             var classWiseComponents = {};
             if (viewerOptions['a']['endPointUri'] === undefined) {
-                
+
                 // get class wise properties for excel and other 1D datasources               
                 $.ajax({
                     url: 'PHP/ClasswiseComponentsReader.php',
                     type: "POST",
                     async: false,
                     data: {
-                         'Source': "SourceA",
-                         'ProjectName': projectinfo.projectname ,
-                         'CheckName': checkinfo.checkname
-                        },
+                        'Source': "SourceA",
+                        'ProjectName': projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
+                    },
                     success: function (msg) {
                         if (msg != 'fail') {
                             // sourceAClassWiseComponents = JSON.parse(msg);
-                            classWiseComponents['a']  = sourceAClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['a'] = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
@@ -194,7 +196,7 @@ function populateCheckResults(comparison,
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
                             // sourceBClassWiseComponents = JSON.parse(msg);
-                            classWiseComponents['b']  = sourceAClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['b'] = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
@@ -216,11 +218,9 @@ function populateCheckResults(comparison,
 
             if (compliance) {
 
-                for(var source in viewerOptions)
-                {
+                for (var source in viewerOptions) {
                     var viewerOption = viewerOptions[source];
-                    if(viewerOption.source === compliance.source)
-                    {
+                    if (viewerOption.source === compliance.source) {
                         loadComplianceData(compliance,
                             viewerOption,
                             classWiseComponents[source]);
@@ -228,8 +228,11 @@ function populateCheckResults(comparison,
                         break;
                     }
                 }
-         
+
             }
+
+            // hide busy indicator
+            hideBusyIndicator();
 
             // if (sourceBComplianceCheckGroups) {
             //     loadSourceBComplianceData(sourceBComplianceCheckGroups,
@@ -264,41 +267,41 @@ function loadComparisonData(comparisonCheckGroups,
         sourceAViewerOptions,
         sourceBViewerOptions,
         sourceAClassWiseComponents,
-        sourceBClassWiseComponents,       
+        sourceBClassWiseComponents,
         "comparisonMainContainer",
         "comparisonDetailInfo",
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
-    
+
     comparisonReviewManager.loadDatasources();
 
     // set current view
-    model.currentView  = comparisonReviewManager;
-    
+    model.currentView = comparisonReviewManager;
+
     // set comparison data
 
     // review manager
     var comparisonData = model.checks["comparison"];
-    comparisonData["reviewManager"]  = comparisonReviewManager;
-    
+    comparisonData["reviewManager"] = comparisonReviewManager;
+
     // selection manager
     var selectionManager = new ReviewComparisonSelectionManager();
-    comparisonData["selectionManager"]  = selectionManager;
-    
+    comparisonData["selectionManager"] = selectionManager;
+
     // comparison main table    
-    var checkResultsTable = new ComparisonCheckResultsTable("comparisonMainContainer");   
+    var checkResultsTable = new ComparisonCheckResultsTable("comparisonMainContainer");
     checkResultsTable.populateReviewTable();
-    comparisonData["reviewTable"]  = checkResultsTable;
+    comparisonData["reviewTable"] = checkResultsTable;
 
     // comparison detailed info table
     var checkPropertiesTable = new ComparisonCheckPropertiesTable("comparisonDetailInfo")
-    comparisonData["detailedInfoTable"]  = checkPropertiesTable;      
-    
+    comparisonData["detailedInfoTable"] = checkPropertiesTable;
+
     // comparisonData["reviewManager"]  = comparisonReviewManager;
     // comparisonData["reviewManager"]  = comparisonReviewManager;
 
     // make buttons collapsible
-    setButtonsCollapsible("comparisonMainContainer");         
+    setButtonsCollapsible("comparisonMainContainer");
 }
 
 function loadComplianceData(compliance,
@@ -325,7 +328,7 @@ function loadComplianceData(compliance,
 
     // selection manager    
     var selectionManager = new ReviewComplianceSelectionManager();
-    complianceData["selectionManager"]  = selectionManager;
+    complianceData["selectionManager"] = selectionManager;
 
     // compliance main table    
     var checkResultsTable = new ComplianceCheckResultsTable("complianceMainContainer");
@@ -340,7 +343,7 @@ function loadComplianceData(compliance,
     setButtonsCollapsible("complianceMainContainer");
 }
 
-function setButtonsCollapsible(containerId) {   
+function setButtonsCollapsible(containerId) {
 
     var container = document.getElementById(containerId);
     var acc = container.getElementsByClassName("accordion");
