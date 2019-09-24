@@ -1064,7 +1064,8 @@ let editCheckView = {
     let editCheckConfig = document.getElementById("editCheckConfig");
     let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
-
+    let editCheckDescription = document.getElementById("editCheckDescription");
+    
     onToggleOverlayDisplay(true);
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
 
@@ -1074,22 +1075,47 @@ let editCheckView = {
     editCheckName.value = this.currentCheck.checkname;
     editCreator.innerHTML = this.currentCheck.creator;
     editDateCreated.innerHTML = this.currentCheck.checkdate;
-    editCheckDescription.innerHTML = this.currentCheck.checkdescription;
+    editCheckDescription.value = this.currentCheck.checkdescription;
     editCheckComments.value = this.currentCheck.checkcomments;
     editCheckConfig.value = this.currentCheck.checkconfiguration;
     editCheckStatus.value = this.currentCheck.checkstatus;
   },
 
-  // switchChecksReviews: function(){
-  //   controller.setModule();
-  //   if(controller.)
-  // },
-
   closeEditCheck: function () {
-    //document.getElementById("editCheckForm").submit();
-    onToggleOverlayDisplay(false);
-    this.editCheckOverlay.classList.remove("projectOverlaysOpen");
-    controller.fetchProjectChecks();
+    this.onUpdateCheck();
+  },
+
+  onUpdateCheck: function () {
+    let editCheckConfig = document.getElementById("editCheckConfig").value;
+    let editCheckStatus = document.getElementById("editCheckStatus").value;
+    let editCheckComments = document.getElementById("editCheckComments").value;
+    let editCheckDescription = document.getElementById("editCheckDescription").value;
+
+    var currentProject = controller.getCurrentProj();
+    var currentCheck = controller.getCurrentCheck();
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    // add this project's entry in main DB
+    $.ajax({
+      data: {
+        'InvokeFunction': 'UpdateCheck',
+        'userid': userinfo.userid,
+        'CheckId': currentCheck.checkid,
+        'projectname': currentProject.projectname,
+        'checkdescription': editCheckDescription,
+        'checkstatus': editCheckStatus,
+        "checkconfiguration": editCheckConfig,
+        "checkcomments": editCheckComments,
+        "checkIsFavorite": currentCheck.checkisfavourite,
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      onToggleOverlayDisplay(false);
+      document.getElementById("editCheck").classList.remove("projectOverlaysOpen");
+      if (msg === "true") {
+        controller.fetchProjectChecks();
+      }
+    });
   }
 }
 

@@ -11,8 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetCheckSpaces":
             GetCheckSpaces();
             break;
+        case "UpdateCheck":
+            UpdateCheck();
+            break;
         case "DeleteCheckSpace":
-        DeleteCheckSpace();
+            DeleteCheckSpace();
             break;
         case "SetCheckAsFavourite":
             SetCheckAsFavourite();
@@ -242,6 +245,31 @@ function SetCheckAsFavourite()
       }
       catch(Exception $e) {
         echo 'fail';
+        return;
+    } 
+}
+
+function UpdateCheck()
+{  
+    $userid = trim($_POST["userid"], " ");
+    $CheckId = trim($_POST["CheckId"], " ");   
+    $projectName = trim($_POST["projectname"], " ");
+    $checkdescription = trim($_POST["checkdescription"], " ");
+    $checkstatus = trim($_POST["checkstatus"], " ");  
+    $checkconfiguration = trim($_POST["checkconfiguration"], " ");  
+    $checkcomments = trim($_POST["checkcomments"], " "); 
+    $checkIsFavorite = trim($_POST["checkIsFavorite"], " ");
+    try{
+        $dbh = new PDO("sqlite:".getProjectDatabasePath($projectName)) or die("cannot open the database");
+        $query = 'UPDATE CheckSpace Set checkstatus=?, checkconfiguration=?, checkdescription=?, checkcomments=? WHERE checkid=?';
+        $stmt = $dbh->prepare($query);
+        $response = $stmt->execute(array( $checkstatus, $checkconfiguration, $checkdescription, $checkcomments,$CheckId));     
+        echo json_encode($response);
+        $dbh = null; //This is how you close a PDO connection
+        return;      
+    }
+    catch(Exception $e) {
+        echo "failed";
         return;
     } 
 }
