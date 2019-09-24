@@ -12,21 +12,22 @@
   <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
   <link rel="stylesheet" href="src/prompts/Load_Data.css" type="text/css" />
-  
+
   <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
   <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
 
   <header>
-    <div id="mainMenu" class="dropDownMenu" onclick="showMenu()">
+    <div id="mainMenu" class="dropDownMenu">
       <img src="public/symbols/infomenu.svg" alt="" class="srcImg">
     </div>
     <h1 id="pageName"></h1>
 
     <!-- <h1 id="pageName"></h1> -->
-    <a class="homeLink" id="homeButton" href="#" onclick="onHomeClick()"><img class="headerLogo"
-        src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
+    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+        alt=""></a>
     <div class="userInfo">
       <p id="userName" class="userName"></p>
       <!-- <img id="userImg" src="public/symbols/XD_Person.svg" alt=""> -->
@@ -44,17 +45,12 @@
   </header>
 
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
+    <div id="loadIndicator"></div>
+
     <div class="background">
 
       <div id='contextMenu' style="z-index: 1; position: absolute;">
       </div>
-
-      <div id="busyIndicatorOverlay" class="overlay" style="display: block"></div>
-      <div id="busyIndicatorPopup" class="popup"
-        style="display: block; width: 311px; height: 308px; top:50%; left: 50%; margin-left: -99px; margin-top: -99px; background-color: transparent;">
-        <img src="images/busySpinner.gif">
-      </div>
-
       <!-- Return to home page overlay -->
       <div id="returnHomeOverlay" class="overlay"></div>
       <div id="returnHomePopup" class="popup">
@@ -620,10 +616,10 @@
   </div>
 
   <style>
-
     .itemCountClass {
       top: calc(100% - 31px);
     }
+
     ::-webkit-scrollbar {
       width: 6px;
     }
@@ -641,8 +637,8 @@
       overflow: auto;
     }
 
-    .dx-fileuploader-button {  
-        display: none !important;
+    .dx-fileuploader-button {
+      display: none !important;
     }
 
     .dx-fileuploader-input-wrapper {
@@ -660,14 +656,13 @@
       height: 860px !important;
     }
 
-    .dx-datagrid{  
-        font-size: 11px !important;  
+    .dx-datagrid {
+      font-size: 11px !important;
     }
 
-    .dx-treelist{  
-        font-size: 11px !important;  
+    .dx-treelist {
+      font-size: 11px !important;
     }
-
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
@@ -765,44 +760,46 @@
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
 
   <script>
+    $("#loadIndicator").dxLoadPanel({
+      "visible": true
+    });
 
-        window.onload = function () {
+    window.onload = function () {
 
-          setPageTitle();
-          setUserName();
-          setCheckSpaceName();
-          loadCheckCases();
+      setPageTitle();
+      setUserName();
+      setCheckSpaceName();
+      loadCheckCases();
 
-          var checkButton = document.getElementById("checkButton");
-          checkButton.onclick = function () {
+      var checkButton = document.getElementById("checkButton");
+      checkButton.onclick = function () {
 
-            // show busy loader
-            onCheckButtonClick();
-          };
+        // show busy loader
+        onCheckButtonClick();
+      };
 
-          // enable menu options
-          enableMenuOptions();
+      // enable menu options
+      enableMenuOptions();    
 
-          // hide spinner
-          hideBusyIndicator();
+      //Create file uploader using devExtreme
+      UploadManager.createFileUploader();
 
-          //Create file uploader using devExtreme
-          UploadManager.createFileUploader();
+      // create drawer menu
+      CheckDrawerMenu.create();
 
-          // create drawer menu
-          CheckDrawerMenu.create();
-        }
-
-    function showMenu() {
-      var menu = document.getElementById("menuList");
-      if (menu.style.display === "none") {
-        menu.style.display = "block";
-      }
-      else {
-        menu.style.display = "none";
-      }
+      // hide busy indicator
+      hideBusyIndicator();
     }
 
+    function showBusyIndicator() {
+      // hide busy indicator
+      $("#loadIndicator").dxLoadPanel("show");
+    }
+
+    function hideBusyIndicator() {
+      // hide busy indicator
+      $("#loadIndicator").dxLoadPanel("hide");
+    } 
   </script>
 </body>
 
