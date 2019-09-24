@@ -5,6 +5,7 @@ window.onload = function () {
     if (ip !== null && port !== null) {
         document.getElementById("hostInput").value = ip;
         document.getElementById("portInput").value = port;
+        document.getElementById("hostInput").blur();
     }
     var submitButton = document.getElementById('submitButton');
 

@@ -58,7 +58,7 @@ footer {
 }
 
 .loginInfo input::placeholder {
-  color: inherit;
+  color: var(--xCheckMedGrey);;
   text-align: center;
   font-style: italic;
   font-weight: lighter;
