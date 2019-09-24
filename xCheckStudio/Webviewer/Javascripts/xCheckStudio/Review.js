@@ -255,13 +255,26 @@ function loadComparisonData(comparisonCheckGroups,
     sourceAComponentsHierarchy,
     sourceBComponentsHierarchy) {
 
-    if (comparisonCheckGroups.sources.length === 3) {
-        document.getElementById("comparePanelD").style.display = "none";
+    if (comparisonCheckGroups.sources.length > 1) {
+        document.getElementById("comparePanelA").style.width = "100%";
     }
-    else if (comparisonCheckGroups.sources.length === 2) {
-        document.getElementById("comparePanelC").style.display = "none";
-        document.getElementById("comparePanelD").style.display = "none";
+    else 
+    {
+        return;
     }
+
+    if (comparisonCheckGroups.sources.length === 2) {
+        document.getElementById("comparePanelB").style.display = "block";
+    }
+    else if (comparisonCheckGroups.sources.length === 3) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+    }
+    else if (comparisonCheckGroups.sources.length === 4) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+        document.getElementById("comparePanelD").style.display = "block";
+    }  
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
