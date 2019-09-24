@@ -531,6 +531,15 @@
       overflow-x: auto;
       overflow-y: auto;
     }
+
+    .dx-loadindicator-icon .dx-loadindicator-segment {
+      background: white !important;
+    }
+
+    .dx-loadpanel-message {
+      color: white !important;
+    }
+
   </style>
   <script type="text/javascript" src="src/scripts/main.js"></script>
   <script type="text/javascript" src="src/scripts/reviewPage.js"></script>
@@ -597,7 +606,9 @@
 
   <script>
     $("#loadIndicator").dxLoadPanel({
-      "visible": true
+       "visible": true,
+      "showPane": false,
+      "shadingColor": "rgba(0,0,0,0.4)",
     });
 
     window.onload = function () {
