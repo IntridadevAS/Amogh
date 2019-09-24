@@ -663,6 +663,14 @@
     .dx-treelist {
       font-size: 11px !important;
     }
+
+    .dx-loadindicator-icon .dx-loadindicator-segment {
+      background: white !important;
+    }
+
+    .dx-loadpanel-message {
+      color: white !important;
+    }
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
@@ -761,7 +769,9 @@
 
   <script>
     $("#loadIndicator").dxLoadPanel({
-      "visible": true
+      "visible": true,
+      "showPane": false,
+      "shadingColor": "rgba(0,0,0,0.4)",
     });
 
     window.onload = function () {
@@ -779,7 +789,7 @@
       };
 
       // enable menu options
-      enableMenuOptions();    
+      enableMenuOptions();
 
       //Create file uploader using devExtreme
       UploadManager.createFileUploader();
