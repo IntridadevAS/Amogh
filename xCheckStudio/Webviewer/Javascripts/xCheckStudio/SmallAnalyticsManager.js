@@ -747,40 +747,6 @@ SmallAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
             }
         }
     });
-
-    // $("#BarChart").igDataChart({
-    //     dataSource: Severitydata,
-    //     height: "50%",
-    //     width: "50%",
-    //     title: "Severity Chart",
-    //     brushes: colorsArray,
-    //     horizontalZoomable: true,
-    //     verticalZoomable: true,
-    //     windowResponse: "immediate",
-    //     axes: [ xAxis, yAxis ],
-    //     series: [{
-    //         name: "Severity Chart",
-    //         type: "stackedColumn",
-    //         xAxis: "xAxis",
-    //         yAxis: "yAxis",
-    //         outline: "transparent",
-    //         series: [
-    //             _this.CreateStackedFragment("OK"),
-    //             _this.CreateStackedFragment("Error"),
-    //             _this.CreateStackedFragment("Warning"),
-    //         ]
-    //     }], 
-    //     refreshCompleted: function () {
-    //         var context,
-    //         canvas = document.querySelector("canvas"),
-    //         h = parseInt(canvas.getAttribute("height")),
-    //         w = parseInt(canvas.getAttribute("width"));
-            
-    //         context = canvas.getContext('2d');
-    //         context.fillStyle = "#292E4D";
-    //         context.fillRect(0, 0, w, h);
-    //     }
-    // });
 }
 
 SmallAnalyticsManager.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
