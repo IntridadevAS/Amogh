@@ -1,4 +1,4 @@
-var ReviewDrawerMenu = {
+var CheckDrawerMenu = {
 
     create: function () {
         this.drawer = $("#drawer").dxDrawer({
@@ -28,13 +28,79 @@ var ReviewDrawerMenu = {
         }).dxDrawer("instance");
 
         var _this = this;
-        document.getElementById("mainMenu").onclick = function () {            
+        document.getElementById("mainMenu").onclick = function () {
             _this.drawer.toggle();
         }
+    },    
+}
+
+var menuItems = [
+    {
+        id: 1,
+        text: "Home",
+        // icon: "public/symbols/check.png",
+        click: function () {
+            menu.onHomeClick();
+        }
+    },
+    {
+        id: 2,
+        text: "Projects",
+        icon: "public/symbols/projects.png",
+        click: function () {
+            menu.onProjectsClicked();
+        }
+    },
+    {
+        id: 3,
+        text: "Prep",
+        icon: "public/symbols/prep.png",
+        click: function () {
+            menu.onPREPClicked();
+        }
+    },
+    {
+        id: 4,
+        text: "Help",
+        // icon: "public/symbols/prep.png",
+        click: function () {
+            menu.onHelpClicked();
+        }
+    },
+    {
+        id: 5,
+        text: "Settings",
+        // icon: "public/symbols/prep.png",
+        click: function () {
+            menu.onSettingsClicked();
+        }
+    },
+    {
+        id: 6,
+        text: "Sign Out",
+        icon: "public/symbols/logout.png",
+        click: function () {
+            menu.onSignOutClicked();
+        }
+    }
+];
+
+let menu = {
+
+    onHomeClick: function () {
+
+        var overlay = document.getElementById("returnHomeOverlay");
+        var popup = document.getElementById("returnHomePopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
     },
 
     onProjectsClicked: function () {
-
         var overlay = document.getElementById("returnProjectCenterOverlay");
         var popup = document.getElementById("returnProjectCenterPopup");
 
@@ -46,20 +112,7 @@ var ReviewDrawerMenu = {
         popup.style.overflow = "hidden";
     },
 
-    onCheckClicked: function () {
-        var overlay = document.getElementById("returnCheckOverlay");
-        var popup = document.getElementById("returnCheckPopup");
-
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-
-        popup.style.width = "581px";
-        popup.style.height = "155px";
-        popup.style.overflow = "hidden";
-    },
-
     onPREPClicked: function () {
-
         var overlay = document.getElementById("returnPREPOverlay");
         var popup = document.getElementById("returnPREPPopup");
 
@@ -74,11 +127,10 @@ var ReviewDrawerMenu = {
     onHelpClicked: function () {
     },
 
-    onOutputClicked: function () {
+    onSettingsClicked: function () {
     },
 
     onSignOutClicked: function () {
-
         var overlay = document.getElementById("signOutOverlay");
         var popup = document.getElementById("signOutPopup");
 
@@ -88,83 +140,8 @@ var ReviewDrawerMenu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
-        // if (confirm("You will be signed out.\nAre you sure?")) {
-        //    localStorage.removeItem("userinfo");
-        //    window.location.href = "index.html";
-        // }
-    },
-    onHomeClick: function () {
-
-        var overlay = document.getElementById("returnHomeOverlay");
-        var popup = document.getElementById("returnHomePopup");
-
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-
-        popup.style.width = "581px";
-        popup.style.height = "155px";
-        popup.style.overflow = "hidden";
     }
 }
-
-var menuItems = [
-    {
-        id: 1,
-        text: "Home",
-        // icon: "public/symbols/check.png",
-        click: function () {
-            ReviewDrawerMenu.onHomeClick();
-        }
-    },
-    {
-        id: 2,
-        text: "Projects",
-        icon: "public/symbols/projects.png",
-        click: function () {
-            ReviewDrawerMenu.onProjectsClicked();
-        }
-    },
-    {
-        id: 3,
-        text: "Check",
-        icon: "public/symbols/check.png",
-        click: function () {
-            ReviewDrawerMenu.onCheckClicked();
-        }
-    },
-    {
-        id: 4,
-        text: "Prep",
-        icon: "public/symbols/prep.png",
-        click: function () {
-            ReviewDrawerMenu.onPREPClicked();
-        }
-    },
-    {
-        id: 5,
-        text: "Help",
-        // icon: "public/symbols/prep.png",
-        click: function () {
-            ReviewDrawerMenu.onHelpClicked();
-        }
-    },
-    {
-        id: 6,
-        text: "Output",
-        icon: "public/symbols/reports.png",
-        click: function () {
-            ReviewDrawerMenu.onOutputClicked();
-        }
-    },
-    {
-        id: 7,
-        text: "Sign Out",
-        icon: "public/symbols/logout.png",
-        click: function () {
-            ReviewDrawerMenu.onSignOutClicked();
-        }
-    }
-];
 
 function cancelReturnHome() {
     var overlay = document.getElementById("returnHomeOverlay");
@@ -190,18 +167,6 @@ function returnProjectCenter() {
     window.location = "projectsPage.html";
 }
 
-function cancelReturnCheck() {
-    var overlay = document.getElementById("returnCheckOverlay");
-    var popup = document.getElementById("returnCheckPopup");
-
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-}
-
-function returnCheck() {
-    window.location = "checkPage.html";
-}
-
 function cancelReturnPREP() {
     var overlay = document.getElementById("returnPREPOverlay");
     var popup = document.getElementById("returnPREPPopup");
@@ -213,7 +178,6 @@ function cancelReturnPREP() {
 function returnToPREP() {
     window.location = "prephomepage.html";
 }
-
 
 function cancelSignOut() {
     var overlay = document.getElementById("signOutOverlay");
