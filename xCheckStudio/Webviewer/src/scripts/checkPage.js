@@ -286,37 +286,6 @@ for (grabBar of grabBars) {
   grabBarControl(grabBar);
 }
 
-function showBusyIndicator() {
-  //document.getElementById("busyIndicator").style.display = "block";
-  // show busy loader
-  //  var busySpinner = document.getElementById("divLoading");
-  //  if (busySpinner !== undefined) {
-  //      busySpinner.className = 'show';
-  //  }
-
-  var overlay = document.getElementById("busyIndicatorOverlay");
-  var popup = document.getElementById("busyIndicatorPopup");
-
-  overlay.style.display = 'block';
-  popup.style.display = 'block';
-
-  popup.style.width = "311px";
-  popup.style.height = "308px";
-}
-
-function hideBusyIndicator() {
-  // var busySpinner = document.getElementById("divLoading");
-  // busySpinner.classList.remove('show');
-  //document.getElementById("busyIndicator").style.display = "none";
-
-  var overlay = document.getElementById("busyIndicatorOverlay");
-  var popup = document.getElementById("busyIndicatorPopup");
-
-  overlay.style.display = 'none';
-  popup.style.display = 'none';
-}
-
-
 
 function showLoadDataForm() {
   var overlay = document.getElementById("loadDataOverlay");
