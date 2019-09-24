@@ -4,7 +4,7 @@ var ReviewDrawerMenu = {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
             height: "50%",
-            closeOnOutsideClick: true,
+            closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
             revealMode: "expand",
@@ -28,7 +28,8 @@ var ReviewDrawerMenu = {
         }).dxDrawer("instance");
 
         var _this = this;
-        document.getElementById("mainMenu").onclick = function () {            
+        document.getElementById("mainMenu").onclick = function () {
+            swapIcon();
             _this.drawer.toggle();
         }
     },
@@ -229,4 +230,14 @@ function signOut() {
             window.location.href = "index.html";
         }
     });
+}
+
+function swapIcon() {
+    var menuIcon = document.getElementById("menuIcon").src
+    if (menuIcon.includes("MenuRound.svg")) {
+        document.getElementById("menuIcon").src = "public/symbols/Backward Arrow.svg";
+    }
+    else {
+        document.getElementById("menuIcon").src = "public/symbols/MenuRound.svg";
+    }
 }

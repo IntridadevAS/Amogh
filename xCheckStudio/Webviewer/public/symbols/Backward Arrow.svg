@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="63" height="63" viewBox="0 0 63 63">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="63" height="63" fill="none"/>
+    </clipPath>
+    <filter id="Ellipse_232" x="0" y="0" width="63" height="63" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Backward_Arrow" data-name="Backward Arrow" clip-path="url(#clip-path)">
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Ellipse_232)">
+      <g id="Ellipse_232-2" data-name="Ellipse 232" transform="translate(9 9)" fill="#696969" stroke="#f0f3f6" stroke-width="1">
+        <circle cx="22.5" cy="22.5" r="22.5" stroke="none"/>
+        <circle cx="22.5" cy="22.5" r="22" fill="none"/>
+      </g>
+    </g>
+    <g id="Symbol_83" data-name="Symbol 83" transform="translate(1293 546) rotate(180)">
+      <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H0V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(1254 507)" fill="#f2f3f4"/>
+    </g>
+  </g>
+</svg>
