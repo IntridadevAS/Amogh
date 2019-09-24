@@ -17,6 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SetProjectAsFavourite":
             SetProjectAsFavourite();
             break;
+        case "UpdateProject":
+            UpdateProject();
+            break;
         case "DeleteProject":
             DeleteProject();
             break;
@@ -2051,8 +2054,6 @@ function CreateProject()
 */
 function AddNewProjectToMainDB()
 {
-
-   // $userName  = $_SESSION['Name'];
     $userid = trim($_POST["userid"], " ");      
     $projectName = trim($_POST["projectname"], " ");      
     $path = trim($_POST["path"], " ");
@@ -2063,7 +2064,6 @@ function AddNewProjectToMainDB()
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
     $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");   
     
-
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
         // projectname is text column
@@ -2187,6 +2187,32 @@ function SetProjectAsFavourite()
       }
       catch(Exception $e) {
         echo 'fail';
+        return;
+    } 
+}
+
+function UpdateProject()
+{
+    $projectid = trim($_POST["projectid"], " ");     
+    $userid = trim($_POST["userid"], " ");      
+    $projectName = trim($_POST["projectname"], " ");      
+    $projectDescription = trim($_POST["projectDescription"], " ");
+    $projectType = trim($_POST["projectType"], " ");  
+    $projectStatus = trim($_POST["projectStatus"], " ");  
+    $projectComments = trim($_POST["projectComments"], " "); 
+    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+    
+    try{
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+        $query = 'UPDATE Projects Set type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
+        $stmt = $dbh->prepare($query);
+        $response = $stmt->execute(array( $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
+        echo json_encode($response);
+        $dbh = null; //This is how you close a PDO connection
+        return;      
+    }
+    catch(Exception $e) {
+        echo "failed";
         return;
     } 
 }

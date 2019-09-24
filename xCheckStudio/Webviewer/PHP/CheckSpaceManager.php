@@ -181,7 +181,7 @@ function CreateCheckSpaceSchemaIfNot($dbh){
                 checkconfiguration	TEXT,
                 checkdescription	TEXT,
                 checkcomments	TEXT,
-                checkisfavourite	NUMBER,
+                checkisfavourite	INTEGER,
                 checkdate	TEXT NOT NULL,
                 projectid	INTEGER NOT NULL,
                 userid	INTEGER NOT NULL)";       
@@ -236,7 +236,8 @@ function SetCheckAsFavourite()
     try{
         $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
         $query = "UPDATE CheckSpace SET checkisfavourite=? WHERE checkid=?";
-        $dbh->prepare($query)->execute([$favourite, $CheckId]);
+        $response = $dbh->prepare($query)->execute([$favourite, $CheckId]);
+        echo json_encode($response);
         $dbh = null;
       }
       catch(Exception $e) {

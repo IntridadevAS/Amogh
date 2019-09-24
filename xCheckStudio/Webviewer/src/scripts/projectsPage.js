@@ -328,7 +328,7 @@ let controller = {
       var array = [];
       for (var i in object) {
         var obj = object[i];
-        if (obj.type === 'Private')
+        if (obj.type.toLowerCase()==='private')
           model.myProjects.push(object[i]);
         else
           model.publicProjects.push(object[i]);
@@ -425,13 +425,13 @@ let controller = {
     return model.projectReviews;
   },
 
- 
+
   setFavoriteProject: function (projID) {
     var obj = model.myProjects.find(obj => obj.projectid == projID);
     if (obj === undefined) {
       obj = model.publicProjects.find(obj => obj.projectid == projID);
     }
-    if(obj === undefined) {
+    if (obj === undefined) {
       console.log("No project found to mark as favourite");
       return;
     }
@@ -453,7 +453,7 @@ let controller = {
       type: "POST",
       url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-      if(msg==="") {
+      if (msg === "") {
         controller.fetchProjects();
       }
     });
@@ -462,7 +462,7 @@ let controller = {
   setFavoriteCheck: function (checkID) {
     event.stopPropagation();
     var obj = model.projectChecks.find(obj => obj.checkid == checkID);
-    if(obj === undefined) {
+    if (obj === undefined) {
       console.log("No check found to mark as favourite");
       return;
     }
@@ -474,7 +474,7 @@ let controller = {
       newFav = 0;
     }
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var projectinfo = controller.getCurrentProj();
     $.ajax({
       data: {
         'InvokeFunction': 'SetCheckAsFavourite',
@@ -486,7 +486,7 @@ let controller = {
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      if(msg==="") {
+      if (msg === "true") {
         controller.fetchProjectChecks();
       }
     });
@@ -550,12 +550,9 @@ let controller = {
   },
 
   editProject(id, type) {
-    console.log(id);
-    console.log(type);
-    if (type == "Public") {
+    if (type.toLowerCase() === "public") {
       controller.setPublicCurrentProj(id);
     } else {
-      console.log(2);
       controller.setMyCurrentProj(id);
     };
     editProjectView.init();
@@ -1004,27 +1001,56 @@ let editProjectView = {
     let editProjectForm = document.getElementById("editProjectForm");
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
+    let editProjectDescription = document.getElementById("editProjectDescription");
+
     editProjectWin.classList.add("projectOverlaysOpen");
     onToggleOverlayDisplay(true);
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
 
     this.currentProject = controller.getCurrentProj();
-    console.log(this.currentProject);
     currentProjectName.innerHTML = this.currentProject.projectname;
     editProjectName.value = this.currentProject.projectname;
     editCreator.innerHTML = this.currentProject.creator;
     editDateCreated.innerHTML = this.currentProject.createddate;
-    editProjectDescription.innerHTML = this.currentProject.description;
+    editProjectDescription.value = this.currentProject.description;
     editComments.value = this.currentProject.comments;
     editProjectStatus.value = this.currentProject.status.toLowerCase();
     editProjectType.value = this.currentProject.type.toLowerCase();
   },
 
   closeEditProject: function () {
-    //document.getElementById("editProjectForm").submit();
-    onToggleOverlayDisplay(false);
-    this.editProjectOverlay.classList.remove("projectOverlaysOpen");
-    controller.fetchProjects();
+    this.onUpdateProject();
+  },
+
+  onUpdateProject: function () {
+    let editComments = document.getElementById("editComments").value;
+    let editProjectStatus = document.getElementById("editProjectStatus").value;
+    let editProjectType = document.getElementById("editProjectType").value;
+    let editProjectDescription = document.getElementById("editProjectDescription").value;
+    this.currentProject = controller.getCurrentProj();
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    // add this project's entry in main DB
+    $.ajax({
+      data: {
+        'InvokeFunction': 'UpdateProject',
+        'userid': userinfo.userid,
+        'projectid': this.currentProject.projectid,
+        'projectname': this.currentProject.projectname,
+        'projectDescription': editProjectDescription,
+        'projectType': editProjectType,
+        "projectStatus": editProjectStatus,
+        "projectComments": editComments,
+        "projectIsFavorite": this.currentProject.IsFavourite,
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      onToggleOverlayDisplay(false);
+      document.getElementById("editProject").classList.remove("projectOverlaysOpen");
+      if (msg === "true") {
+        controller.fetchProjects();
+      }
+    });
   }
 }
 
