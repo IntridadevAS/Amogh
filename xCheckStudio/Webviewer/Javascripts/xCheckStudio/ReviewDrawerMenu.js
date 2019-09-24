@@ -12,7 +12,7 @@ var ReviewDrawerMenu = {
                 var $list = $("<div>").addClass("panel-list");
 
                 return $list.dxList({
-                    dataSource: navigation,
+                    dataSource: menuItems,
                     hoverStateEnabled: false,
                     focusStateEnabled: false,
                     activeStateEnabled: false,
@@ -28,7 +28,7 @@ var ReviewDrawerMenu = {
         }).dxDrawer("instance");
 
         var _this = this;
-        document.getElementById("mainMenu").onclick = function () {
+        document.getElementById("mainMenu").onclick = function () {            
             _this.drawer.toggle();
         }
     },
@@ -107,10 +107,11 @@ var ReviewDrawerMenu = {
     }
 }
 
-var navigation = [
+var menuItems = [
     {
         id: 1,
         text: "Home",
+        // icon: "public/symbols/check.png",
         click: function () {
             ReviewDrawerMenu.onHomeClick();
         }
@@ -118,6 +119,7 @@ var navigation = [
     {
         id: 2,
         text: "Projects",
+        icon: "public/symbols/projects.png",
         click: function () {
             ReviewDrawerMenu.onProjectsClicked();
         }
@@ -125,6 +127,7 @@ var navigation = [
     {
         id: 3,
         text: "Check",
+        icon: "public/symbols/check.png",
         click: function () {
             ReviewDrawerMenu.onCheckClicked();
         }
@@ -132,6 +135,7 @@ var navigation = [
     {
         id: 4,
         text: "Prep",
+        icon: "public/symbols/prep.png",
         click: function () {
             ReviewDrawerMenu.onPREPClicked();
         }
@@ -139,6 +143,7 @@ var navigation = [
     {
         id: 5,
         text: "Help",
+        // icon: "public/symbols/prep.png",
         click: function () {
             ReviewDrawerMenu.onHelpClicked();
         }
@@ -146,6 +151,7 @@ var navigation = [
     {
         id: 6,
         text: "Output",
+        icon: "public/symbols/reports.png",
         click: function () {
             ReviewDrawerMenu.onOutputClicked();
         }
@@ -153,6 +159,7 @@ var navigation = [
     {
         id: 7,
         text: "Sign Out",
+        icon: "public/symbols/logout.png",
         click: function () {
             ReviewDrawerMenu.onSignOutClicked();
         }
