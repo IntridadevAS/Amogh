@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="src/css/main.css">
   <link rel="stylesheet" href="src/css/reviewPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
+  <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
 
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 </head>
@@ -15,7 +16,7 @@
 <body>
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
-        <img src="public/symbols/infomenu.svg">
+        <img  id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
@@ -609,6 +610,7 @@
        "visible": true,
       "showPane": false,
       "shadingColor": "rgba(0,0,0,0.4)",
+      "message" : ""
     });
 
     window.onload = function () {
