@@ -10,7 +10,7 @@ var ReviewDrawerMenu = {
             revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
-
+                
                 return $list.dxList({
                     dataSource: navigation,
                     hoverStateEnabled: false,
@@ -22,7 +22,7 @@ var ReviewDrawerMenu = {
                     onSelectionChanged: function (e) {
                         //$("#view").load( e.addedItems[0].filePath + ".html" );
                         e.addedItems[0].click();
-                    },
+                    }
                 });
             }
         }).dxDrawer("instance");
@@ -47,7 +47,15 @@ var ReviewDrawerMenu = {
     },
 
     onCheckClicked: function () {
+        var overlay = document.getElementById("returnCheckOverlay");
+        var popup = document.getElementById("returnCheckPopup");
 
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
     },
 
     onPREPClicked: function () {
@@ -173,6 +181,18 @@ function cancelReturnProjectCenter() {
 
 function returnProjectCenter() {
     window.location = "projectsPage.html";
+}
+
+function cancelReturnCheck() {
+    var overlay = document.getElementById("returnCheckOverlay");
+    var popup = document.getElementById("returnCheckPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function returnCheck() {
+    window.location = "checkPage.html";
 }
 
 function cancelReturnPREP() {
