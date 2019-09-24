@@ -1,47 +1,38 @@
-function AnalyticsManager1(comparisonCheckGroups, 
-    sourceAComplianceCheckGroups, 
-    sourceBComplianceCheckGroups,
-    container) {
+function SmallAnalyticsManager() {
 
-    this.Container = container;
-    this.ComparisonCheckGroups = comparisonCheckGroups;
-    this.SourceAComplianceCheckGroups = sourceAComplianceCheckGroups;
-    this.SourceBComplianceCheckGroups = sourceBComplianceCheckGroups;
+    this.ComparisonTotalItemsChecked = 0;
+    this.ComparisonErrorsCount = 0;
+    this.ComparisonOKCount = 0;
+    this.ComparisonWarningsCount = 0;
+    this.ComparisonTotalItemsCount = 0;
+    this.ComparisonTotalItemsNotChecked = 0;
+    this.ComparisonNoMatchCount = 0;
+    this.ComparisonUndefinedCount = 0;
+    this.ComparisonOKATCount = 0;
+    this.TotalItemsLoaded = 0;
 
-    var ComparisonTotalItemsChecked = 0;
-    var ComparisonErrorsCount = 0;
-    var ComparisonOKCount = 0;
-    var ComparisonWarningsCount = 0;
-    
-    var ComparisonTotalItemsCount = 0;
-    var ComparisonTotalItemsNotChecked = 0;
-    var ComparisonNoMatchCount = 0;
-    var ComparisonUndefinedCount = 0;
-    var ComparisonOKATCount = 0;
-    var TotalItemsLoaded = 0;
+    this.SourceAComplianceTotalItemsChecked = 0;
+    this.SourceAComplianceErrorsCount = 0;
+    this.SourceAComplianceOKCount = 0;
+    this.SourceAComplianceWarningsCount = 0;
+    this.SourceAComplianceUndefinedCount = 0;
+    this.SourceAComplianceTotalItemsLoaded = 0;
+    this.SourceANotSelectedComps = 0;
+    this.SourceATotalItemsLoaded = 0;
+    this.SourceAOKATCount = 0;
 
-    var SourceAComplianceTotalItemsChecked = 0;
-    var SourceAComplianceErrorsCount = 0;
-    var SourceAComplianceOKCount = 0;
-    var SourceAComplianceWarningsCount = 0;
-    var SourceAComplianceUndefinedCount = 0;
-    var SourceAComplianceTotalItemsLoaded = 0;
-    var SourceANotSelectedComps = 0;
-    var SourceATotalItemsLoaded = 0;
-    var SourceAOKATCount = 0;
-
-    var SourceBComplianceTotalItemsChecked = 0;
-    var SourceBComplianceErrorsCount = 0;
-    var SourceBComplianceOKCount = 0;
-    var SourceBComplianceWarningsCount = 0;
-    var SourceBComplianceUndefinedCount = 0;
-    var SourceBComplianceTotalItemsLoaded = 0;
-    var SourceBNotSelectedComps = 0;
-    var SourceBTotalItemsLoaded = 0
-    var SourceBOKATCount = 0;
+    this.SourceBComplianceTotalItemsChecked = 0;
+    this.SourceBComplianceErrorsCount = 0;
+    this.SourceBComplianceOKCount = 0;
+    this.SourceBComplianceWarningsCount = 0;
+    this.SourceBComplianceUndefinedCount = 0;
+    this.SourceBComplianceTotalItemsLoaded = 0;
+    this.SourceBNotSelectedComps = 0;
+    this.SourceBTotalItemsLoaded = 0
+    this.SourceBOKATCount = 0;
 }
 
-AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
+SmallAnalyticsManager.prototype.populateComparisonAnalyticsData = function () {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     var _this = this;
@@ -203,7 +194,7 @@ AnalyticsManager1.prototype.populateComparisonAnalyticsData = function () {
     });
 }
 
-AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function () {
+SmallAnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = function () {
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -305,7 +296,7 @@ AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function ()
                         errorsCount,
                         noMatchCount,
                         undefinedCount,
-                        sourceANotSelectedComponents,
+                        _this.SourceANotSelectedComps,
                         totalItemsChecked,
                         sourceATotalComponentsCount);
                 }
@@ -327,7 +318,7 @@ AnalyticsManager1.prototype.populateSourceAComplianceAnalyticsData = function ()
     });
 }
 
-AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function () {
+SmallAnalyticsManager.prototype.populateSourceBComplianceAnalyticsData = function () {
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -424,7 +415,7 @@ AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function ()
                         errorsCount,
                         noMatchCount,
                         undefinedCount,
-                        sourceBNotSelectedComponents,
+                        _this.SourceBNotSelectedComps,
                         totalItemsChecked,
                         sourceBTotalComponentsCount);
                 }
@@ -443,7 +434,7 @@ AnalyticsManager1.prototype.populateSourceBComplianceAnalyticsData = function ()
     });
 }
 
-AnalyticsManager1.prototype.ShowPieChartDiv = function() {
+SmallAnalyticsManager.prototype.ShowPieChartDiv = function() {
     var left = document.getElementById("left");
     left.style.display="block";
     var right = document.getElementById("right");
@@ -452,7 +443,7 @@ AnalyticsManager1.prototype.ShowPieChartDiv = function() {
     bar.style.display="none";
 }
 
-AnalyticsManager1.prototype.ShowBarChartDiv = function() {
+SmallAnalyticsManager.prototype.ShowBarChartDiv = function() {
     var bar = document.getElementById("BarChart");
     bar.style.display="block";
     var left = document.getElementById("left");
@@ -461,7 +452,7 @@ AnalyticsManager1.prototype.ShowBarChartDiv = function() {
     right.style.display="none";
 }
 
-AnalyticsManager1.prototype.drawCompliancePieCharts = function (okCount,
+SmallAnalyticsManager.prototype.drawCompliancePieCharts = function (okCount,
     warningsCount,
     errorsCount,
     noMatchCount,
@@ -526,7 +517,7 @@ AnalyticsManager1.prototype.drawCompliancePieCharts = function (okCount,
 
 }
 
-AnalyticsManager1.prototype.drawComparisonPieCharts = function (okCount,
+SmallAnalyticsManager.prototype.drawComparisonPieCharts = function (okCount,
     warningsCount,
     errorsCount,
     noMatchCount,
@@ -596,7 +587,7 @@ AnalyticsManager1.prototype.drawComparisonPieCharts = function (okCount,
     
 }
 
-AnalyticsManager1.prototype.drawPieChart = function (mainChartItem,
+SmallAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
     itemCount,
     totalItemCount,
     chartDiv,
@@ -645,7 +636,7 @@ AnalyticsManager1.prototype.drawPieChart = function (mainChartItem,
     errorDiv.innerHTML = fixedPercent + "%";
 }
 
-AnalyticsManager1.prototype.getSeveritySummary = function(checkType) {
+SmallAnalyticsManager.prototype.getSeveritySummary = function(checkType) {
 
     var TotalItemsChecked = 0;
     var TotalItemsMatched = 0;
@@ -682,7 +673,7 @@ AnalyticsManager1.prototype.getSeveritySummary = function(checkType) {
              "WarningCount": WarningsCount, "TotalItemsMatched" : TotalItemsMatched, "oKATCount": OkATCount}
 }
 
-AnalyticsManager1.prototype.getInfoSummary = function(checkType) {
+SmallAnalyticsManager.prototype.getInfoSummary = function(checkType) {
 
     var TotalItemsLoaded = 0;
     var TotalItemsNotChecked = 0;
@@ -712,7 +703,7 @@ AnalyticsManager1.prototype.getInfoSummary = function(checkType) {
              "undefinedCount": undefinedCount}
 }
 
-AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) {
+SmallAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsInfo) {
 
     var _this = this;
     
@@ -765,43 +756,9 @@ AnalyticsManager1.prototype.createSeverityBarCharts = function(checkGroupsInfo) 
             }
         }
     });
-
-    // $("#BarChart").igDataChart({
-    //     dataSource: Severitydata,
-    //     height: "50%",
-    //     width: "50%",
-    //     title: "Severity Chart",
-    //     brushes: colorsArray,
-    //     horizontalZoomable: true,
-    //     verticalZoomable: true,
-    //     windowResponse: "immediate",
-    //     axes: [ xAxis, yAxis ],
-    //     series: [{
-    //         name: "Severity Chart",
-    //         type: "stackedColumn",
-    //         xAxis: "xAxis",
-    //         yAxis: "yAxis",
-    //         outline: "transparent",
-    //         series: [
-    //             _this.CreateStackedFragment("OK"),
-    //             _this.CreateStackedFragment("Error"),
-    //             _this.CreateStackedFragment("Warning"),
-    //         ]
-    //     }], 
-    //     refreshCompleted: function () {
-    //         var context,
-    //         canvas = document.querySelector("canvas"),
-    //         h = parseInt(canvas.getAttribute("height")),
-    //         w = parseInt(canvas.getAttribute("width"));
-            
-    //         context = canvas.getContext('2d');
-    //         context.fillStyle = "#292E4D";
-    //         context.fillRect(0, 0, w, h);
-    //     }
-    // });
 }
 
-AnalyticsManager1.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
+SmallAnalyticsManager.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
     var _this = this;
 
     var Infodata = []
@@ -852,7 +809,7 @@ AnalyticsManager1.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
     });
 }
 
-AnalyticsManager1.prototype.CreateStackedFragment = function(Severityname) {
+SmallAnalyticsManager.prototype.CreateStackedFragment = function(Severityname) {
 
     var stackFragment = {
         name: Severityname + "Fragment",

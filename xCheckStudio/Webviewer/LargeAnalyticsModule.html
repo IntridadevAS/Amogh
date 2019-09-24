@@ -17,8 +17,11 @@
 <script type="text/javascript" src="src\Infragistics\infragistics.core.js"></script>
 <script type="text/javascript" src="src\Infragistics\infragistics.core.js"></script>
 <script type="text/javascript" src="src\Infragistics\infragistics.dv.js"></script>
-<script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsManager1.js"></script>
-<script type="text/javascript" src="Javascripts\xCheckStudio\AnalyticsTotalCheckModule.js"></script>
+<script type="text/javascript" src="Javascripts\xCheckStudio\LargeAnalyticsManager.js"></script>
+<script type="text/javascript" src="Javascripts\xCheckStudio\LargeAnalyticsModule.js"></script>
+<link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
+<link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
+<script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 <script id="applicationScript">
 ///////////////////////////////////////
 // INITIALIZATION
@@ -1687,18 +1690,18 @@ window.application = new Application();
 	<div id="Group_1">
 		<div id="compare">
 			<svg class="bg">
-				<rect fill="rgba(41,46,77,1)" id="bg" rx="16" ry="16" x="0" y="0" width="904" height="397">
+				<rect fill="rgba(41,46,77,1)" id="bg" rx="16" ry="16" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="header">
 				<svg class="line">
-					<rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="904" height="4">
+					<rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 					</rect>
 				</svg>
 				<div id="type_2">
 					<div id="bar">
 						<svg class="bg_A3_Rectangle_3">
-							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_3" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_3" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
 							</rect>
 						</svg>
 						<div id="btn">
@@ -1713,7 +1716,7 @@ window.application = new Application();
 					</div>
 					<div id="pie">
 						<svg class="bg_A3_Rectangle_4">
-							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_4" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_4" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
 							</rect>
 						</svg>
 						<div id="btn_A3_Group_8">
@@ -1730,7 +1733,7 @@ window.application = new Application();
 				<div id="type_1">
 					<div id="bar_A3_Group_10">
 						<svg class="bg_A3_Rectangle_5">
-							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_5" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_5" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
 							</rect>
 						</svg>
 						<div id="btn_A3_Group_11">
@@ -1745,7 +1748,7 @@ window.application = new Application();
 					</div>
 					<div id="pie_A3_Group_12">
 						<svg class="bg_A3_Rectangle_6">
-							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_6" rx="8" ry="8" x="0" y="0" width="192" height="52">
+							<rect fill="transparent" stroke="rgba(15,255,238,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A3_Rectangle_6" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
 							</rect>
 						</svg>
 						<div id="btn_A3_Group_13">
@@ -1761,7 +1764,7 @@ window.application = new Application();
 				</div>
 			</div>
 			<svg class="line_A3_Rectangle_7">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_7" rx="0" ry="0" x="0" y="0" width="904" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_7" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="severity">
@@ -1788,7 +1791,7 @@ window.application = new Application();
 			</div>
 			<div id="charts">
 				<div id="error">
-					<div class="base">
+					<div id="errorPie" class="base">
 					
 					</div>
 					<div id="Group">
@@ -1801,7 +1804,7 @@ window.application = new Application();
 					</div>
 				</div>
 				<div id="warning">
-					<div class="base_A3_Ellipse_3">
+					<div id="warningPie" class="base_A3_Ellipse_3">
 						
 					</div>
 					<div id="Group_A3_Group_22">
@@ -1814,7 +1817,7 @@ window.application = new Application();
 					</div>
 				</div>
 				<div id="ok">
-					<div class="base_A3_Ellipse_5">
+					<div id="okPie" class="base_A3_Ellipse_5">
 
 					</div>
 					<div id="Group_A3_Group_24">
@@ -1827,221 +1830,37 @@ window.application = new Application();
 					</div>
 				</div>
 			</div>
+			<div id="BarCharts">
+
+			</div>
 		</div>
 		<div id="compare_A3_Group_25">
 			<svg class="bg_A3_Rectangle_8">
-				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_8" rx="16" ry="16" x="0" y="0" width="1832" height="461">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_8" rx="16" ry="16" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
-			<svg class="line_A3_Rectangle_9">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_9" rx="0" ry="0" x="0" y="0" width="1750" height="4">
-				</rect>
-			</svg>
-			<svg class="line_A3_Rectangle_10">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_10" rx="0" ry="0" x="0" y="0" width="1750" height="2">
-				</rect>
-			</svg>
-			<svg class="line_A3_Rectangle_11">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_11" rx="0" ry="0" x="0" y="0" width="1750" height="2">
-				</rect>
-			</svg>
-			<svg class="line_A3_Rectangle_12">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_12" rx="0" ry="0" x="0" y="0" width="1750" height="2">
-				</rect>
-			</svg>
-			<svg class="line_A3_Rectangle_13">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_13" rx="0" ry="0" x="0" y="0" width="1750" height="2">
-				</rect>
-			</svg>
-			<svg class="line_A3_Rectangle_14">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_14" rx="0" ry="0" x="0" y="0" width="1750" height="2">
-				</rect>
-			</svg>
-			<div id="ID10">
-				<span>10</span>
-			</div>
-			<div id="ID0">
-				<span>0</span>
-			</div>
-			<div id="Group_10">
-				<div id="Check_1">
-					<span>Check 1</span>
-				</div>
-				<svg class="Oval">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_8">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_8" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_9">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_9" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_27">
-				<div id="Check_2">
-					<span>Check 2</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_10">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_10" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_11">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_11" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_12">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_12" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_28">
-				<div id="Check_3">
-					<span>Check 3</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_13">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_13" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_14">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_14" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_15">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_15" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_29">
-				<div id="Check_4">
-					<span>Check 4</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_16">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_16" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_17">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_17" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_18">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_18" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_30">
-				<div id="Check_5">
-					<span>Check 5</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_19">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_19" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_20">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_20" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_21">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_21" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_31">
-				<div id="Check_6">
-					<span>Check 6</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_22">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_22" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_23">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_23" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_24">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_24" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_32">
-				<div id="Check_7">
-					<span>Check 7</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_25">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_25" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_26">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_26" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_27">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_27" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="Group_10_A3_Group_33">
-				<div id="Check_8">
-					<span>Check 8</span>
-				</div>
-				<svg class="Oval_A3_Ellipse_28">
-					<ellipse fill="rgba(15,255,114,1)" id="Oval_A3_Ellipse_28" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_29">
-					<ellipse fill="rgba(255,234,15,1)" id="Oval_A3_Ellipse_29" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-				<svg class="Oval_A3_Ellipse_30">
-					<ellipse fill="rgba(255,72,71,1)" id="Oval_A3_Ellipse_30" rx="8" ry="8" cx="8" cy="8">
-					</ellipse>
-				</svg>
-			</div>
-			<div id="ID20">
-				<span>20</span>
-			</div>
-			<div id="ID30">
-				<span>30</span>
-			</div>
-			<div id="ID40">
-				<span>40</span>
-			</div>
-			<div id="ID50">
-				<span>50</span>
-			</div>
 			<svg class="line_A3_Rectangle_15">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_15" rx="0" ry="0" x="0" y="0" width="1832" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_15" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="Project_health">
 				<span>Check progress</span>
 			</div>
-			<svg class="Path_2" viewBox="0 0 1532 184.5">
-				<path fill="transparent" stroke="rgba(15,255,114,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_2" d="M 0 184.5 L 219 159.5 L 438 138.5 L 657.5 91 L 875 66.5 L 1094 47.5 L 1313 23.5 L 1532 0">
-				</path>
-			</svg>
-			<svg class="Path_3" viewBox="0 0 1532 140">
-				<path fill="transparent" stroke="rgba(255,72,71,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_3" d="M 0 0 L 219 43.5 L 438 44.5 L 666 91 L 875 140 L 1094 89 L 1312.5 109.5 L 1532 137">
-				</path>
-			</svg>
-			<svg class="Path_4" viewBox="0 0 1532 218.5">
-				<path fill="transparent" stroke="rgba(255,234,15,1)" stroke-width="2px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="Path_4" d="M -7.123208273229764e-15 0 L 219 46 L 438 167.5 L 649 139 L 874.5 139.5 L 1094 189.5 L 1313 201.5 L 1532 218.5">
-				</path>
-			</svg>
+			<div id="line_charts">
+
+			</div>
 		</div>
 		<div id="details">
 			<svg class="bg_A3_Rectangle_16">
-				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_16" rx="16" ry="16" x="0" y="0" width="440" height="397">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_16" rx="16" ry="16" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<svg class="line_A3_Rectangle_17">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_17" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_17" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<svg class="line_A3_Rectangle_18">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_18" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_18" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="Details">
@@ -2052,7 +1871,7 @@ window.application = new Application();
 					<span>Data source 1</span>
 				</div>
 				<div id="ABC123">
-					<span>ABC123</span>
+					<span></span>
 				</div>
 			</div>
 			<div id="Group_6">
@@ -2060,11 +1879,11 @@ window.application = new Application();
 					<span>Data source 2</span>
 				</div>
 				<div id="ABC123_A3_Text_32">
-					<span>ABC123</span>
+					<span></span>
 				</div>
 			</div>
 			<svg class="line_A3_Rectangle_19">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_19" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_19" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="Group_7">
@@ -2072,12 +1891,12 @@ window.application = new Application();
 					<span>Data source 3</span>
 				</div>
 				<div id="ABC123_A3_Text_34">
-					<span>ABC123</span>
+					<span></span>
 				</div>
 			</div>
 			<div id="Group_8">
 				<div id="ABC123_A3_Text_35">
-					<span>ABC123</span>
+					<span></span>
 				</div>
 				<div id="Data_type_A3_Text_36">
 					<span>Data source 4</span>
@@ -2088,17 +1907,17 @@ window.application = new Application();
 					<span>Check case</span>
 				</div>
 				<div id="xml_2_xls">
-					<span>xml-2-xls</span>
+					<span> </span>
 				</div>
 			</div>
 		</div>
 		<div id="compare_A3_Group_40">
 			<svg class="bg_A3_Rectangle_20">
-				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_20" rx="16" ry="16" x="0" y="0" width="440" height="397">
+				<rect fill="rgba(41,46,77,1)" id="bg_A3_Rectangle_20" rx="16" ry="16" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<svg class="line_A3_Rectangle_21">
-				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_21" rx="0" ry="0" x="0" y="0" width="440" height="4">
+				<rect fill="rgba(255,255,255,1)" id="line_A3_Rectangle_21" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
 				</rect>
 			</svg>
 			<div id="Summary">
@@ -2159,5 +1978,120 @@ window.application = new Application();
 		</div>
 	</div>
 </div>
+
+<script>
+	var analyticsManager;
+
+var comparisonCheckGroups = false;
+var sourceAComplianceCheckGroups = false;
+var sourceBComplianceCheckGroups = false;
+var BarChartActive = false;
+var PieChartActive = true;
+var activeResultType = "";
+var SeveritybuttonActive = true;
+var InfoButtonActive = false;
+
+
+window.onload = function () {            
+	// read data source info
+	var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+	var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+	$.ajax({
+		url: 'PHP/DataSourceInfoReader.php',
+		type: "POST",
+		async: true,
+		data: {
+			'ProjectName': projectinfo.projectname,
+			'CheckName': checkinfo.checkname
+		},
+		success: function (msg) 
+		{                   
+			if(msg !== "fail")
+			{
+				var dataSourceInfo = JSON.parse(msg);
+
+				if('sourceBFileName' in dataSourceInfo)
+				{
+					var source = dataSourceInfo['sourceBFileName'];
+					if (source !== undefined) {
+						document.getElementById("ABC123_A3_Text_32").innerHTML = source;
+					}
+				}
+
+				if('sourceAFileName' in dataSourceInfo)
+				{
+					var source = dataSourceInfo['sourceAFileName'];
+					if(source !== undefined)
+					{
+						document.getElementById("ABC123").innerHTML = source;
+					}
+				}
+
+				if('sourceCFileName' in dataSourceInfo)
+				{
+					var source = dataSourceInfo['sourceCFileName'];
+					if (source !== undefined) {
+						document.getElementById("ABC123_A3_Text_34").innerHTML = source;
+					}
+				}
+
+				if('sourceDFileName' in dataSourceInfo)
+				{
+					var source = dataSourceInfo['sourceDFileName'];
+					if (source !== undefined) {
+						document.getElementById("ABC123_A3_Text_35").innerHTML = source;
+					}
+				}
+			}                   
+		}
+	});
+
+	// read check case info
+	$.ajax({
+		url: 'PHP/CheckCaseinfoReader.php',
+		type: "POST",
+		async: true,
+		data: {
+			'ProjectName': projectinfo.projectname,
+			'CheckName': checkinfo.checkname
+		},
+		success: function (msg) {
+			if (msg !== "fail") {
+				var checkCaseInfo = JSON.parse(msg);
+
+				if ('checkCaseData' in checkCaseInfo) {
+					var checkCaseData = JSON.parse(checkCaseInfo['checkCaseData']);
+
+					if ('CheckCase' in checkCaseData) {
+						var checkCase = checkCaseData['CheckCase'];
+						if ('Name' in checkCase) {
+
+							var checkCaseName = checkCase['Name'];
+							document.getElementById("xml_2_xls").innerHTML = checkCaseName;
+						}
+					}
+				}
+			}
+		}
+	});
+
+	$.ajax({
+		url: 'PHP/CheckResultsReader.php',
+		type: "POST",
+		async: true,
+		data: {
+			'ProjectName': projectinfo.projectname,
+			'CheckName': checkinfo.checkname
+		},
+		success: function (msg) 
+		{
+			var checkResults = JSON.parse(msg);                      
+			
+			populateLargeAnalyticsData(checkResults);                    
+		}
+	});    
+}
+
+</script>
 </body>
 </html>

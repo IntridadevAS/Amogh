@@ -28,370 +28,382 @@
 }
 #Group_1 {
 	position: absolute;
-	width: 1832px;
-	height: 882px;
-	left: 24px;
-	top: 24px;
-	overflow: visible;
+	width: 97.23%;
+	height: 95.86%;
+	left: 1.27%;
+	top: 2.60%;
+	overflow: hidden;
 }
 #compare {
 	position: absolute;
-	width: 904px;
-	height: 397px;
+	width: 49.34%;
+	height: 45.01%;
 	left: 0px;
 	top: 0px;
-	overflow: visible;
+	overflow: hidden;
 }
 .bg {
 	position: absolute;
-	overflow: visible;
-	width: 904px;
-	height: 397px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
 	left: 0px;
 	top: 0px;
 }
 #header {
 	position: absolute;
-	width: 904px;
-	height: 68px;
+	width: 100%;
+	height: 17.12%;
 	left: 0px;
-	top: 13px;
-	overflow: visible;
+	top: 3.27%;
+	overflow: hidden;
 }
 #line {
 	opacity: 0.1;
 }
 .line {
-	position: absolute;
-	overflow: visible;
-	width: 904px;
-	height: 4px;
-	left: 0px;
-	top: 64px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 6%;
+    left: 0px;
+    top: 95.52%;
 }
 #type_2 {
 	position: absolute;
-	width: 385px;
-	height: 52px;
-	left: 506px;
+	width: 42.58%;
+	height: 76.47%;
+	left: 55.97%;
 	top: 0px;
-	overflow: visible;
+	overflow: hidden;
 }
 #bar {
-	position: absolute;
-	width: 192px;
-	height: 52px;
-	left: 193px;
-	top: 0px;
-	overflow: visible;
+    position: absolute;
+    width: 49.87%;
+    height: 100%;
+    left: 50%;
+    top: 0px;
+	overflow: hidden;
 }
 .bg_A3_Rectangle_3 {
 	position: absolute;
-	overflow: visible;
-	width: 192px;
-	height: 52px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
 	left: 0px;
 	top: 0px;
 }
 #btn {
-	position: absolute;
-	width: 137px;
-	height: 32px;
-	left: 27px;
-	top: 10px;
-	overflow: visible;
+    position: absolute;
+    width: 71.35%;
+    height: 61.53%;
+    left: 14.06%;
+    top: 19.23%;
+    overflow: hidden;
 }
 .icon_32_bar_chart {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 32px;
-	height: 32px;
-	transform: matrix(1,0,0,1,0,0);
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 23.35%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Bar_chart {
-	position: absolute;
-	left: 40px;
-	top: 4px;
-	overflow: visible;
-	width: 98px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    position: absolute;
+    left: 29.19%;
+    top: 12.5%;
+    overflow: hidden;
+    width: 71.53%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #pie {
-	position: absolute;
-	width: 192px;
-	height: 52px;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
+    position: absolute;
+    width: 49.87%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_4 {
-	position: absolute;
-	overflow: visible;
-	width: 192px;
-	height: 52px;
-	left: 0px;
-	top: 0px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #btn_A3_Group_8 {
-	position: absolute;
-	width: 134px;
-	height: 32px;
-	left: 32px;
-	top: 10px;
-	overflow: visible;
+    position: absolute;
+    width: 71.35%;
+    height: 61.53%;
+    left: 14.06%;
+    top: 19.23%;
+    overflow: hidden;
 }
 .icon_32_pie_chart {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 32px;
-	height: 32px;
-	transform: matrix(1,0,0,1,0,0);
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 23.35%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Pie_chart {
 	position: absolute;
-	left: 40px;
-	top: 4px;
-	overflow: visible;
-	width: 95px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 29.19%;
+    top: 12.5%;
+    overflow: hidden;
+    width: 71.53%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #type_1 {
-	position: absolute;
-	width: 385px;
-	height: 52px;
-	left: 13px;
-	top: 0px;
-	overflow: visible;
+    position: absolute;
+    width: 42.58%;
+    height: 76.47%;
+    left: 13px;
+    top: 0px;
+    overflow: hidden;
 }
 #bar_A3_Group_10 {
 	position: absolute;
-	width: 192px;
-	height: 52px;
-	left: 193px;
-	top: 0px;
-	overflow: visible;
+    width: 49.87%;
+    height: 100%;
+    left: 50%;
+    top: 0px;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_5 {
 	position: absolute;
-	overflow: visible;
-	width: 192px;
-	height: 52px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #btn_A3_Group_11 {
 	position: absolute;
-	width: 165px;
-	height: 26.401px;
-	left: 13px;
-	top: 13px;
-	overflow: visible;
+    width: 85.93%;
+    height: 50%;
+    left: 6.7%;
+    top: 25%;
+    overflow: hidden;
 }
 .icon_32_Compliance {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 31.993px;
-	height: 26.401px;
-	transform: matrix(1,0,0,1,0,0);
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 19.40%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Compliance {
-	position: absolute;
-	left: 40px;
-	top: 1px;
-	overflow: visible;
-	width: 126px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    position: absolute;
+    left: 24.24%;
+    top: 1px;
+    overflow: hidden;
+    width: 76.36%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #pie_A3_Group_12 {
 	position: absolute;
-	width: 192px;
-	height: 52px;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
+    width: 49.87%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_6 {
 	position: absolute;
-	overflow: visible;
-	width: 192px;
-	height: 52px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #btn_A3_Group_13 {
 	position: absolute;
-	width: 135px;
-	height: 32px;
-	left: 28px;
-	top: 10px;
-	overflow: visible;
+    width: 75.93%;
+    height: 63%;
+    left: 10%;
+    top: 20%;
+    overflow: hidden;
 }
 .icon_32_Comparison {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 32px;
-	height: 32px;
-	transform: matrix(1,0,0,1,0,0);
+	overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 23%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Compare {
 	position: absolute;
-	left: 40px;
-	top: 4px;
-	overflow: visible;
-	width: 96px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 28%;
+    top: 10%;
+    overflow: hidden;
+    width: 66.20%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #line_A3_Rectangle_7 {
 	opacity: 0.1;
 }
 .line_A3_Rectangle_7 {
-	position: absolute;
-	overflow: visible;
-	width: 904px;
-	height: 4px;
-	left: 0px;
-	top: 341px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 0px;
+    top: 86.11%;
 }
 #severity {
-	position: absolute;
-	width: 125px;
-	height: 29.756px;
-	left: 24px;
-	top: 355px;
-	overflow: visible;
+    position: absolute;
+    width: 13.82%;
+    height: 7.55%;
+    left: 2.65%;
+    top: 89.42%;
+    overflow: hidden;
 }
 #Severity {
 	position: absolute;
-	left: 40px;
-	top: 4px;
-	overflow: visible;
-	width: 86px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,72,71,1);
+    left: 32%;
+    top: 13.33%;
+    overflow: hidden;
+    width: 69%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,72,71,1);
 }
 #Page_1 {
 	position: absolute;
-	width: 32px;
-	height: 29.756px;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
+    width: 25.6%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
 }
 #Small {
-	position: absolute;
-	width: 32px;
-	height: 29.756px;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
 }
 .icon_32_Severity {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 32px;
-	height: 29.756px;
-	transform: matrix(1,0,0,1,0,0);
+	overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #info {
-	position: absolute;
-	width: 81px;
-	height: 32px;
-	left: 804px;
-	top: 356px;
-	overflow: visible;
+    position: absolute;
+    width: 8.96%;
+    height: 8.5%;
+    left: 88.93%;
+    top: 89.67%;
+    overflow: hidden;
 }
 .icon_32_Info {
-	overflow: visible;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 32px;
-	height: 32px;
-	transform: matrix(1,0,0,1,0,0);
+	overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 39.5%;
+    height: 100%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Info {
 	position: absolute;
-	left: 40px;
-	top: 3px;
-	overflow: visible;
-	width: 42px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 45%;
+    top: 8%;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
+
+#BarCharts {
+    position: absolute;
+    width: 93%;
+    height: 60%;
+    left: 5%;
+    top: 23%;
+    overflow: hidden;
+    display: none;
+}
+
 #charts {
 	position: absolute;
-	width: 770px;
-	height: 212px;
-	left: 67px;
-	top: 105px;
-	overflow: visible;
+    width: 93%;
+    height: 60%;
+    left: 5%;
+    top: 23%;
+    overflow: hidden;
+    display: block;
 }
 #error {
 	position: absolute;
-	width: 212px;
-	height: 212px;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
+    width: 28.5%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
 }
 #base {
 	opacity: 0.1;
 }
 .base {
 	position: absolute;
-	overflow: visible;
-	width: 212px;
-	height: 212px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 .data {
 	position: absolute;
-	overflow: visible;
+	overflow: hidden;
 	width: 212px;
 	height: 212px;
 	left: 0px;
@@ -399,62 +411,62 @@
 }
 #Group {
 	position: absolute;
-	width: 90px;
-	height: 68px;
-	left: 61px;
-	top: 72px;
-	overflow: visible;
+    width: 38%;
+    height: 29%;
+    left: 30%;
+    top: 30.25%;
+    overflow: hidden;
 }
 #ID40_ {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 91px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 40px;
-	color: rgba(255,72,71,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 90%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    color: rgba(255,72,71,1);
 }
 #Errors {
 	position: absolute;
-	left: 20px;
-	top: 49px;
-	overflow: visible;
-	width: 51px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 16px;
-	color: rgba(255,255,255,1);
+    left: 15%;
+    top: 70%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgba(255,255,255,1);
 }
 #warning {
 	position: absolute;
-	width: 212px;
-	height: 212px;
-	left: 279px;
-	top: 0px;
-	overflow: visible;
+    width: 28.5%;
+    height: 100%;
+    left: 33.5%;
+    top: 0px;
+    overflow: hidden;
 }
 #base_A3_Ellipse_3 {
 	opacity: 0.1;
 }
 .base_A3_Ellipse_3 {
 	position: absolute;
-	overflow: visible;
-	width: 212px;
-	height: 212px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 .data_A3_Ellipse_4 {
 	position: absolute;
-	overflow: visible;
+	overflow: hidden;
 	width: 212px;
 	height: 212px;
 	left: 0px;
@@ -462,62 +474,62 @@
 }
 #Group_A3_Group_22 {
 	position: absolute;
-	width: 86px;
-	height: 68px;
-	left: 63px;
-	top: 72px;
-	overflow: visible;
+    width: 38%;
+    height: 29%;
+    left: 30%;
+    top: 30.25%;
+    overflow: hidden;
 }
 #ID30_ {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 87px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 40px;
-	color: rgba(255,234,15,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 90%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    color: rgba(255,234,15,1);
 }
 #Warnings {
 	position: absolute;
-	left: 2px;
-	top: 49px;
-	overflow: visible;
-	width: 83px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 16px;
-	color: rgba(255,255,255,1);
+    left: 2%;
+    top: 70%;
+    overflow: hidden;
+    width: 77%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgba(255,255,255,1);
 }
 #ok {
 	position: absolute;
-	width: 212px;
-	height: 212px;
-	left: 558px;
-	top: 0px;
-	overflow: visible;
+    width: 28.5%;
+    height: 100%;
+    left: 67%;
+    top: 0px;
+    overflow: hidden;
 }
 #base_A3_Ellipse_5 {
 	opacity: 0.1;
 }
 .base_A3_Ellipse_5 {
 	position: absolute;
-	overflow: visible;
-	width: 212px;
-	height: 212px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 .data_A3_Ellipse_6 {
 	position: absolute;
-	overflow: visible;
+	overflow: hidden;
 	width: 212px;
 	height: 212px;
 	left: 0px;
@@ -525,55 +537,55 @@
 }
 #Group_A3_Group_24 {
 	position: absolute;
-	width: 78px;
-	height: 68px;
-	left: 67px;
-	top: 72px;
-	overflow: visible;
+    width: 38%;
+    height: 29%;
+    left: 30%;
+    top: 30.25%;
+    overflow: hidden;
 }
 #ID10_ {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 79px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 40px;
-	color: rgba(15,255,114,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 90%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    color: rgba(15,255,114,1);
 }
 #OK {
 	position: absolute;
-	left: 26px;
-	top: 49px;
-	overflow: visible;
-	width: 27px;
-	white-space: nowrap;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 16px;
-	color: rgba(255,255,255,1);
+    left: 35%;
+    top: 70%;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgba(255,255,255,1);
 }
 #compare_A3_Group_25 {
 	position: absolute;
-	width: 1832px;
-	height: 461px;
-	left: 0px;
-	top: 421px;
-	overflow: visible;
+    width: 100%;
+    height: 52.32%;
+    left: 0px;
+    top: 47.78%;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_8 {
 	position: absolute;
-	overflow: visible;
-	width: 1832px;
-	height: 461px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #line_A3_Rectangle_9 {
 	opacity: 0.3;
@@ -1097,26 +1109,36 @@
 	opacity: 0.1;
 }
 .line_A3_Rectangle_15 {
-	position: absolute;
-	overflow: visible;
-	width: 1832px;
-	height: 4px;
-	left: 0px;
-	top: 77px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 0px;
+    top: 16.70%;
 }
+
+#line_charts {
+    position: absolute;
+    overflow: hidden;
+    width: 95%;
+    height: 75%;
+    top: 21%;
+    left: 2.5%;
+}
+
 #Project_health {
 	position: absolute;
-	left: 24px;
-	top: 26px;
-	overflow: visible;
-	width: 164px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 2%;
+    top: 6%;
+    overflow: hidden;
+    width: 8%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1)
 }
 .Path_2 {
 	overflow: visible;
@@ -1147,510 +1169,510 @@
 }
 #details {
 	position: absolute;
-	width: 441px;
-	height: 397px;
-	left: 1391px;
-	top: 2px;
-	overflow: visible;
+    width: 24.07%;
+    height: 45%;
+    left: 76%;
+    top: 0%;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_16 {
-	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 397px;
-	left: 0px;
-	top: 0px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #line_A3_Rectangle_17 {
 	opacity: 0.1;
 }
 .line_A3_Rectangle_17 {
 	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 4px;
-	left: 1px;
-	top: 76px;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 1px;
+    top: 20%;
 }
 #line_A3_Rectangle_18 {
 	opacity: 0.1;
 }
 .line_A3_Rectangle_18 {
 	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 4px;
-	left: 1px;
-	top: 198px;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 0%;
+    top: 50%;
 }
 #Details {
 	position: absolute;
-	left: 22px;
-	top: 26px;
-	overflow: visible;
-	width: 74px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 5%;
+    top: 5%;
+    overflow: hidden;
+    width: 15%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #Group_5 {
 	position: absolute;
-	width: 392px;
-	height: 29px;
-	left: 25px;
-	top: 100px;
-	overflow: visible;
+    width: 90%;
+    height: 7.5%;
+    left: 5%;
+    top: 25%;
+    overflow: hidden;
 }
 #Data_source_1 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 160px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 35%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #ABC123 {
 	position: absolute;
-	left: 299px;
-	top: 0px;
-	overflow: visible;
-	width: 94px;
-	white-space: nowrap;
-	text-align: right;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 50%;
+    top: 0px;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #Group_6 {
 	position: absolute;
-	width: 392px;
-	height: 29px;
-	left: 25px;
-	top: 149px;
-	overflow: visible;
+    width: 90%;
+    height: 7.5%;
+    left: 5%;
+    top: 38%;
+    overflow: hidden;
 }
 #Data_type {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 165px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 35%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #ABC123_A3_Text_32 {
 	position: absolute;
-	left: 299px;
-	top: 0px;
-	overflow: visible;
-	width: 94px;
-	white-space: nowrap;
-	text-align: right;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 50%;
+    top: 0px;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #line_A3_Rectangle_19 {
 	opacity: 0.1;
 }
 .line_A3_Rectangle_19 {
 	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 4px;
-	left: 1px;
-	top: 319px;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 0%;
+    top: 80%;
 }
 #Group_7 {
 	position: absolute;
-	width: 392px;
-	height: 29px;
-	left: 25px;
-	top: 221px;
-	overflow: visible;
+    width: 90%;
+    height: 7.5%;
+    left: 5%;
+    top: 55%;
+    overflow: hidden;
 }
 #Data_source_2 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 165px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 35%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #ABC123_A3_Text_34 {
 	position: absolute;
-	left: 299px;
-	top: 0px;
-	overflow: visible;
-	width: 94px;
-	white-space: nowrap;
-	text-align: right;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 50%;
+    top: 0px;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #Group_8 {
 	position: absolute;
-	width: 392px;
-	height: 29px;
-	left: 25px;
-	top: 270px;
-	overflow: visible;
+    width: 90%;
+    height: 7.5%;
+    left: 5%;
+    top: 68%;
+    overflow: hidden;
 }
 #ABC123_A3_Text_35 {
 	position: absolute;
-	left: 299px;
-	top: 0px;
-	overflow: visible;
-	width: 94px;
-	white-space: nowrap;
-	text-align: right;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 50%;
+    top: 0px;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #Data_type_A3_Text_36 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 167px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 35%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #Group_9 {
 	position: absolute;
-	width: 392px;
-	height: 29px;
-	left: 25px;
-	top: 343px;
-	overflow: visible;
+    width: 90%;
+    height: 7.5%;
+    left: 5%;
+    top: 85%;
+    overflow: hidden;
 }
 #Check_case {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: visible;
-	width: 137px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #xml_2_xls {
 	position: absolute;
-	left: 279px;
-	top: 0px;
-	overflow: visible;
-	width: 114px;
-	white-space: nowrap;
-	text-align: right;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 24px;
-	color: rgba(255,255,255,1);
+    left: 45%;
+    top: 0px;
+    overflow: hidden;
+    width: 55%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgba(255,255,255,1);
 }
 #compare_A3_Group_40 {
 	position: absolute;
-	width: 440px;
-	height: 397px;
-	left: 928px;
-	top: 0px;
-	overflow: visible;
+    width: 24.07%;
+    height: 45%;
+    left: 50.6%;
+    top: 0px;
+    overflow: hidden;
 }
 .bg_A3_Rectangle_20 {
 	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 397px;
-	left: 0px;
-	top: 0px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
 }
 #line_A3_Rectangle_21 {
 	opacity: 0.1;
 }
 .line_A3_Rectangle_21 {
 	position: absolute;
-	overflow: visible;
-	width: 440px;
-	height: 4px;
-	left: 0px;
-	top: 77px;
+    overflow: hidden;
+    width: 100%;
+    height: 1%;
+    left: 0px;
+    top: 20%;
 }
 #Summary {
 	position: absolute;
-	left: 64px;
-	top: 27px;
-	overflow: visible;
-	width: 103px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 13%;
+    top: 7%;
+    overflow: hidden;
+    width: 20%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 .icon_32_Summary {
-	overflow: visible;
-	position: absolute;
-	top: 28px;
-	left: 29px;
-	width: 21px;
-	height: 22px;
-	transform: matrix(1,0,0,1,0,0);
+    overflow: hidden;
+    position: absolute;
+    top: 6%;
+    left: 5%;
+    width: 6%;
+    height: 8%;
+    transform: matrix(1,0,0,1,0,0);
 }
 #Group_A3_Group_41 {
 	position: absolute;
-	width: 303px;
-	height: 49px;
-	left: 24px;
-	top: 101px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 25%;
+    overflow: hidden;
 }
 #ID37 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,255,255,1);
 }
 #Total_items_checked {
 	position: absolute;
-	left: 92px;
-	top: 7px;
-	overflow: visible;
-	width: 212px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #Group_2 {
 	position: absolute;
-	width: 272px;
-	height: 49px;
-	left: 24px;
-	top: 195px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 48%;
+    overflow: hidden;
 }
 #Items_with_errors {
 	position: absolute;
-	left: 92px;
-	top: 7px;
-	overflow: visible;
-	width: 181px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #ID18 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(255,72,71,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,72,71,1);
 }
 #Group_3 {
 	position: absolute;
-	width: 307px;
-	height: 49px;
-	left: 24px;
-	top: 241px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 59%;
+    overflow: hidden;
 }
 #Items_with_warnings {
 	position: absolute;
-	left: 92px;
-	top: 8px;
-	overflow: visible;
-	width: 216px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #ID13 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(255,234,15,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,234,15,1);
 }
 #Group_4 {
 	position: absolute;
-	width: 280px;
-	height: 49px;
-	left: 24px;
-	top: 334px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 70%;
+    overflow: visible;
 }
 #Items__OK_ {
 	position: absolute;
-	left: 92px;
-	top: 7px;
-	overflow: visible;
-	width: 189px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: visible;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #ID6 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(15,255,114,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(15,255,114,1);
 }
 #Group_4_A3_Group_45 {
 	position: absolute;
-	width: 199px;
-	height: 49px;
-	left: 24px;
-	top: 288px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 80%;
+    overflow: hidden;
 }
 #Items__OK__A3_Text_48 {
 	position: absolute;
-	left: 92px;
-	top: 7px;
-	overflow: visible;
-	width: 108px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
 #ID6_A3_Text_49 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(15,255,114,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(15,255,114,1);
 }
 #Group_A3_Group_46 {
 	position: absolute;
-	width: 307px;
-	height: 49px;
-	left: 24px;
-	top: 148px;
-	overflow: visible;
+    width: 70%;
+    height: 10%;
+    left: 5%;
+    top: 37%;
+    overflow: hidden;
 }
 #ID37_A3_Text_50 {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	overflow: hidden;
-	width: 69px;
-	height: 49px;
-	text-align: center;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 30px;
-	color: rgba(255,255,255,1);
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,255,255,1);
 }
 #Total_items_checked_A3_Text_51 {
 	position: absolute;
-	left: 92px;
-	top: 7px;
-	overflow: visible;
-	width: 216px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 20px;
-	color: rgba(255,255,255,1);
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
 }
