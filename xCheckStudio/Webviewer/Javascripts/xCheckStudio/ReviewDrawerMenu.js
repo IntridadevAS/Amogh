@@ -10,7 +10,7 @@ var ReviewDrawerMenu = {
             revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
-                
+
                 return $list.dxList({
                     dataSource: navigation,
                     hoverStateEnabled: false,
@@ -74,7 +74,7 @@ var ReviewDrawerMenu = {
     onHelpClicked: function () {
     },
 
-    onSettingsClicked: function () {
+    onOutputClicked: function () {
     },
 
     onSignOutClicked: function () {
@@ -145,9 +145,9 @@ var navigation = [
     },
     {
         id: 6,
-        text: "Settings",
+        text: "Output",
         click: function () {
-            ReviewDrawerMenu.onSettingsClicked();
+            ReviewDrawerMenu.onOutputClicked();
         }
     },
     {
