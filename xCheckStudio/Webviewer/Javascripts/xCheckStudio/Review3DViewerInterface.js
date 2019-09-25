@@ -488,3 +488,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
 
     return undefined;
 }
+
+Review3DViewerInterface.prototype.Destroy = function (viewerContainer) {
+    document.getElementById(viewerContainer).innerHTML = "";
+}

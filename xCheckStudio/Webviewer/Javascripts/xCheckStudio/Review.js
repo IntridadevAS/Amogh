@@ -281,8 +281,8 @@ function loadComparisonData(comparisonCheckGroups,
         sourceBViewerOptions,
         sourceAClassWiseComponents,
         sourceBClassWiseComponents,
-        "comparisonMainContainer",
-        "comparisonDetailInfo",
+        Comparison.MainReviewContainer,
+        Comparison.DetailInfoContainer,
         sourceAComponentsHierarchy,
         sourceBComponentsHierarchy);
 
@@ -302,19 +302,19 @@ function loadComparisonData(comparisonCheckGroups,
     comparisonData["selectionManager"] = selectionManager;
 
     // comparison main table    
-    var checkResultsTable = new ComparisonCheckResultsTable("comparisonMainContainer");
+    var checkResultsTable = new ComparisonCheckResultsTable( Comparison.MainReviewContainer);
     checkResultsTable.populateReviewTable();
     comparisonData["reviewTable"] = checkResultsTable;
 
     // comparison detailed info table
-    var checkPropertiesTable = new ComparisonCheckPropertiesTable("comparisonDetailInfo")
+    var checkPropertiesTable = new ComparisonCheckPropertiesTable(Comparison.DetailInfoContainer)
     comparisonData["detailedInfoTable"] = checkPropertiesTable;
 
     // comparisonData["reviewManager"]  = comparisonReviewManager;
     // comparisonData["reviewManager"]  = comparisonReviewManager;
 
     // make buttons collapsible
-    setButtonsCollapsible("comparisonMainContainer");
+    setButtonsCollapsible( Comparison.MainReviewContainer);
 }
 
 function loadComplianceData(compliance,
@@ -324,8 +324,8 @@ function loadComplianceData(compliance,
     complianceReviewManager = new ComplianceReviewManager(compliance,
         viewerOptions,
         classWiseComponents,
-        'complianceMainContainer',
-        'complianceDetailInfo',
+        Compliance.MainReviewContainer,
+        Compliance.DetailInfoContainer,
         undefined);
 
     complianceReviewManager.loadDatasource(Compliance.ViewerContainer);
@@ -344,16 +344,16 @@ function loadComplianceData(compliance,
     complianceData["selectionManager"] = selectionManager;
 
     // compliance main table    
-    var checkResultsTable = new ComplianceCheckResultsTable("complianceMainContainer");
+    var checkResultsTable = new ComplianceCheckResultsTable(Compliance.MainReviewContainer);
     checkResultsTable.populateReviewTable();
     complianceData["reviewTable"] = checkResultsTable;
 
     // compliance detailed info table
-    var checkPropertiesTable = new ComplianceCheckPropertiesTable("complianceDetailInfo");
+    var checkPropertiesTable = new ComplianceCheckPropertiesTable(Compliance.DetailInfoContainer);
     complianceData["detailedInfoTable"] = checkPropertiesTable;
 
     // make buttons collapsible
-    setButtonsCollapsible("complianceMainContainer");
+    setButtonsCollapsible(Compliance.MainReviewContainer);
 }
 
 function setButtonsCollapsible(containerId) {

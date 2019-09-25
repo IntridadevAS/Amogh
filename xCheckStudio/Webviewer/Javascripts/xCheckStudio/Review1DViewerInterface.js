@@ -4,14 +4,14 @@ function Review1DViewerInterface(id,
     // call super constructor
     ReviewViewerInterface.call(this, null, null, null);
     this.ActiveSheetName;
-       
+
     this.Components = components;
 
     this.CheckStatusArray = {};
-    
+
 
     this.IsComparison = model.getCurrentReviewType() === "comparison" ? true : false;
-   
+
     this.SelectedSheetRow;
 
     this.Id = id;
@@ -51,7 +51,7 @@ Review1DViewerInterface.prototype.FirstViewerExists = function () {
 Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContainer,
     sheetName,
     CurrentReviewTableRowData) {
-   
+
     // get class wise components                                                                                    
     var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName);
     if (!classWiseComponents) {
@@ -62,7 +62,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
     var currentlyLoadedSheet = this.GetCurrentSheetInViewer();
 
     //check if sheet is already loaded       
-    if (sheetName === currentlyLoadedSheet) {        
+    if (sheetName === currentlyLoadedSheet) {
 
         this.HighlightRowInSheetData(CurrentReviewTableRowData, viewerContainer);
         return;
@@ -131,16 +131,16 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
         }
 
 
-                
+
         this.CheckStatusArray = {};
         this.SelectedSheetRow = undefined;
 
         this.LoadSheetTableData(columnHeaders, tableData, "#" + viewerContainer, CurrentReviewTableRowData, column, sheetName);
-        
+
 
         // keep track of currently loaded sheet data
         this.ActiveSheetName = sheetName;
-        
+
     }
 };
 
@@ -151,8 +151,8 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
     column,
     sheetName) {
 
-    var _this = this;    
-    
+    var _this = this;
+
     if ($(viewerContainer).data("igGrid")) {
         $(viewerContainer).igGrid("destroy");
     }
@@ -181,15 +181,15 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
                 }
             },
         ]
-    });    
+    });
 
 };
 
-Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer, 
-    reviewTableRowData, 
-    column, 
+Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer,
+    reviewTableRowData,
+    column,
     sheetName) {
-   
+
     var selectedComponentName;
     if (this.Id === "a") {
         selectedComponentName = reviewTableRowData.SourceA;
@@ -243,11 +243,11 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                     model.getCurrentSelectionManager().ApplyHighlightColor(row);
                     this.SelectedSheetRow = row;
 
-                    var id = viewerContainer.replace("#","");
-                    var scrollTable =  document.getElementById(id+ "_table_scroll");
+                    var id = viewerContainer.replace("#", "");
+                    var scrollTable = document.getElementById(id + "_table_scroll");
                     if (scrollTable) {
                         scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
-                    }                    
+                    }
                 }
                 else {
 
@@ -270,21 +270,20 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
 
 Review1DViewerInterface.prototype.OnViewerRowClicked = function (row, viewerContainer) {
 
-    if(this.SelectedSheetRow === row)
-    {
+    if (this.SelectedSheetRow === row) {
         return;
     }
 
     // highlight check result component row
     this.HighlightRowInMainReviewTable(row, viewerContainer);
 
-    this.HighlightSheetDataRow(viewerContainer, row);   
+    this.HighlightSheetDataRow(viewerContainer, row);
 }
 
 /* This method returns the corresponding comparison 
    check result row for selected sheet row*/
 Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow, viewerContainer) {
-    
+
     var headers = $(viewerContainer).igGrid("headersTable")[0];
     var columnHeaders = headers.getElementsByTagName("th");
     var column = {};
@@ -320,7 +319,7 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
 
         for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
             var row = rows[rowIndex];
-            
+
             var name;
             if (this.IsComparison) {
                 if (this.Id === "a") {
@@ -334,8 +333,7 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
                 name = row.cells[ComplianceColumns.SourceName].innerText;
             }
 
-            if(componentName === name)
-            {
+            if (componentName === name) {
                 return row;
             }
         }
@@ -377,7 +375,7 @@ Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (
 
 Review1DViewerInterface.prototype.GetCurrentSheetInViewer = function () {
 
-    return  this.ActiveSheetName;   
+    return this.ActiveSheetName;
 }
 
 Review1DViewerInterface.prototype.unhighlightSelectedSheetRowInviewer = function (checkStatusArray,
@@ -410,7 +408,7 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
 
     var rows = $("#" + viewerContainer).igGrid("rows");
 
-    
+
     var headers = $("#" + viewerContainer).igGrid("headersTable")[0];
     var columnHeaders = headers.getElementsByTagName("th");
     var column = {};
@@ -460,7 +458,13 @@ Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContai
     var scrollTable = document.getElementById(viewerContainer + "_table_scroll");
     if (scrollTable) {
         scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
-    }       
+    }
+}
+
+Review1DViewerInterface.prototype.Destroy = function (viewerContainer) {
+    if ($("#" + viewerContainer).data("igGrid") != null) {
+        $("#" + viewerContainer).igGrid("destroy");
+    }
 }
 
 
