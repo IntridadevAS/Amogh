@@ -143,7 +143,12 @@ LargeAnalyticsManager.prototype.populateLargeAnalyticsComparisonCharts = functio
 
                  
                 //add data to summary
-                _this.setSeveritySummary('Comparison');
+                if(SeveritybuttonActive) {
+                    _this.setSeveritySummary('Comparison');
+                }
+                else if(InfoButtonActive) {
+                    _this.setInfoSummary('Comparison');
+                }
                  
                 // draw pie charts
 
@@ -269,7 +274,12 @@ LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceACharts = functi
 
 
             //add data to summary
-            _this.setSeveritySummary('complianceA');
+            if(SeveritybuttonActive) {
+                _this.setSeveritySummary('complianceA');
+            }
+            else if(InfoButtonActive) {
+                _this.setInfoSummary('complianceA');
+            }
                             
             // draw pie charts
 
@@ -396,7 +406,12 @@ LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceBCharts = functi
                 _this.SourceBOKATCount = okACount + okTCount + OkATCount;       
 
                 //add data to summary
-                _this.setSeveritySummary('complianceB');
+                if(SeveritybuttonActive) {
+                    _this.setSeveritySummary('complianceB');
+                }
+                else if(InfoButtonActive) {
+                    _this.setInfoSummary('complianceB');
+                }
                                 
                 // draw pie charts
 
@@ -697,6 +712,28 @@ LargeAnalyticsManager.prototype.setSeveritySummary = function(checkType) {
         document.getElementById("ID13").innerHTML = this.SourceBComplianceWarningsCount;    
         document.getElementById("ID37_A3_Text_50").innerHTML = this.SourceBComplianceErrorsCount + this.SourceBComplianceOKCount + this.SourceBComplianceWarningsCount;
         document.getElementById("ID6").innerHTML = this.SourceBOKATCount;
+    }
+}
+
+LargeAnalyticsManager.prototype.setInfoSummary = function(checkType) {
+
+    if (checkType.toLowerCase() == "comparison") {
+        document.getElementById("checkedItemCount").innerHTML =  this.TotalItemsLoaded;
+        document.getElementById("count_no_match").innerHTML =  this.ComparisonNoMatchCount;
+        document.getElementById("count_undefined").innerHTML = this.ComparisonUndefinedCount;
+        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.ComparisonTotalItemsNotChecked;    
+   }
+   else if(checkType.toLowerCase() == "compliancea") {
+        document.getElementById("checkedItemCount").innerHTML =  this.SourceATotalItemsLoaded;
+        document.getElementById("count_no_match").innerHTML =  0;
+        document.getElementById("count_undefined").innerHTML = this.SourceAComplianceUndefinedCount;
+        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.SourceANotSelectedComps;    
+   }
+   else if(checkType.toLowerCase() == "complianceb") {
+        document.getElementById("checkedItemCount").innerHTML =  this.SourceBTotalItemsLoaded;
+        document.getElementById("count_no_match").innerHTML =  0;
+        document.getElementById("count_undefined").innerHTML = this.SourceBComplianceUndefinedCount;
+        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.SourceBNotSelectedComps;   
     }
 }
 
