@@ -3,24 +3,24 @@ let model = {
   selectedCompliance: "",
   //defaultView: "compliance",
   currentView: null,
-  currentCheck : "comparison",
-  checks :  {
-    "comparison" :{
-      reviewManager : null,
-      reviewTable : null,
-      detailedInfoTable : null,
-      sourceAViewer : null,
-      sourceBViewer : null,
-      sourceCViewer : null,
-      sourceDViewer : null,
-      selectionManager : null
+  currentCheck: "comparison",
+  checks: {
+    "comparison": {
+      reviewManager: null,
+      reviewTable: null,
+      detailedInfoTable: null,
+      sourceAViewer: null,
+      sourceBViewer: null,
+      sourceCViewer: null,
+      sourceDViewer: null,
+      selectionManager: null
     },
-    "compliance" :{
-      reviewManager : null,
-      reviewTable : null,
-      detailedInfoTable : null,
-      viewer : null,
-      selectionManager : null
+    "compliance": {
+      reviewManager: null,
+      reviewTable: null,
+      detailedInfoTable: null,
+      viewer: null,
+      selectionManager: null
     }
   },
   files: {
@@ -211,6 +211,9 @@ let viewTabs = {
   },
 
   enterComparison: function () {
+    // clear earlier data
+    clearData();
+
     // TODO set enter functionality for comparison here
     var requiredComparison;
     for (var i = 0; i < comparisons.length; i++) {
@@ -240,7 +243,7 @@ let viewTabs = {
     if (requiredComparison) {
       // populate check results
       populateCheckResults(requiredComparison,
-        undefined,        
+        undefined,
         sourceAComparisonHierarchy,
         sourceBComparisonHierarchy);
     }
@@ -266,6 +269,9 @@ let viewTabs = {
   },
 
   enterCompliance: function () {
+    // clear earlier data
+    clearData();
+
     for (var i = 0; i < compliances.length; i++) {
       var compliance = compliances[i];
       if (compliance.source === model.selectedCompliance.fileName) {
@@ -280,8 +286,8 @@ let viewTabs = {
       }
     }
 
-     // close select files UI
-     viewTabs.closeSelectFiles();
+    // close select files UI
+    viewTabs.closeSelectFiles();
   },
 
   selectSourceForComparison: function () {
@@ -314,7 +320,7 @@ let viewTabs = {
     }
 
     event.target.style.borderColor = '#15b9f9';
-    
+
     model.selectedCompliance = model.files[event.target.id];
   }
 }
@@ -345,15 +351,10 @@ let viewPanels = {
   },
 
   toggleDetailInfo: function (element) {
-    // let tableContainer = element.closest(".tableContainer");
-    // tableContainer.classList.toggle("showDetailInfo");
-    // element.classList.toggle("invert");
-
     let tableContainer = element.closest(".infoArea");
-    tableContainer.classList.toggle("openInfoArea");  
+    tableContainer.classList.toggle("openInfoArea");
     element.classList.toggle("invert");
 
-    //document.getElementById("comparisonDetailInfoContainer").classList.toggle("closeDetailInfo"); 
     if (tableContainer.classList.contains("openInfoArea")) {
       tableContainer.style.height = tableContainer.offsetParent.offsetHeight / 2 + "px";
     }
@@ -426,4 +427,44 @@ let grabBars = document.getElementsByClassName("grabBar");
 
 for (grabBar of grabBars) {
   grabBarControl(grabBar);
+}
+
+function clearData() {
+  var currentCheckData = model.checks[model.currentCheck];
+  if (currentCheckData["reviewTable"]) {
+    currentCheckData["reviewTable"].Destroy();
+    currentCheckData["reviewTable"] = null;
+  }
+
+  if (currentCheckData["detailedInfoTable"]) {
+    currentCheckData["detailedInfoTable"].Destroy();
+    currentCheckData["detailedInfoTable"] = null;
+  }
+
+  currentCheckData["reviewManager"] = null;
+
+  if (this.currentCheck === "comparison") {
+    if (currentCheckData["sourceAViewer"]) {
+      currentCheckData["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
+      currentCheckData["sourceAViewer"] = null;
+    }
+    if (currentCheckData["sourceBViewer"]) {
+      currentCheckData["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
+      currentCheckData["sourceBViewer"] = null;
+    }
+    if (currentCheckData["sourceCViewer"]) {
+      currentCheckData["sourceCViewer"].Destroy(Comparison.ViewerCContainer);
+      currentCheckData["sourceCViewer"] = null;
+    }
+    if (currentCheckData["sourceDViewer"]) {
+      currentCheckData["sourceDViewer"].Destroy(Comparison.ViewerDContainer);
+      currentCheckData["sourceDViewer"] = null;
+    }
+  }
+  else if (this.currentCheck === "compliance") {
+    if (currentCheckData["viewer"]) {
+      currentCheckData["viewer"].Destroy(Compliance.ViewerContainer);
+      currentCheckData["viewer"] = null;
+    }
+  }
 }

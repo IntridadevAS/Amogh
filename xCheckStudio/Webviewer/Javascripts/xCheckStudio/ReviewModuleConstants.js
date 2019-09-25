@@ -89,6 +89,8 @@ const CompliancePropertyColumnNames = {
 
 
 const Comparison = {
+    MainReviewContainer: "comparisonMainContainer",
+    DetailInfoContainer: "comparisonDetailInfo",
     ViewerAContainer: "compare1",
     ViewerBContainer: "compare2",
     ViewerCContainer: "compare3",
@@ -96,5 +98,7 @@ const Comparison = {
 }
 
 const Compliance = {
+    MainReviewContainer: "complianceMainContainer",
+    DetailInfoContainer: "complianceDetailInfo",
     ViewerContainer: "compliance1",
 }

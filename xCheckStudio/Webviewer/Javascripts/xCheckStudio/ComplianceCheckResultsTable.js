@@ -1,17 +1,17 @@
 function ComplianceCheckResultsTable(mainReviewTableContainer) {
     this.MainReviewTableContainer = mainReviewTableContainer;
 
-    this.CheckTableIds = {};    
+    this.CheckTableIds = {};
 }
 
 ComplianceCheckResultsTable.prototype.CreateCheckGroupButton = function (componentClass) {
 
     var btn = document.createElement("BUTTON");
     btn.className = "accordion";
-    btn.style.justifyContent = "left";    
+    btn.style.justifyContent = "left";
     var t = document.createTextNode(componentClass);       // Create a text node
     btn.appendChild(t);
-    
+
     return btn;
 }
 
@@ -138,7 +138,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         // maintain table ids
         this.CheckTableIds[groupId] = id;
     }
-   
+
 }
 
 ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
@@ -162,19 +162,19 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 
     $(function () {
         var isFiredFromCheckbox = false;
-        $(viewerContainer).igGrid({           
-            height : "202px",
+        $(viewerContainer).igGrid({
+            height: "202px",
             columns: columnHeaders,
             autofitLastColumn: false,
             autoGenerateColumns: false,
-            dataSource : tableData,
+            dataSource: tableData,
             responseDataKey: "results",
-            fixedHeaders : true,
-            autoCommit: true,        
-            rendered: function (evt, ui) {                              
+            fixedHeaders: true,
+            autoCommit: true,
+            rendered: function (evt, ui) {
                 var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-                reviewComplianceContextMenuManager.InitComponentLevelContextMenu(viewerContainer);                
-            },  
+                reviewComplianceContextMenuManager.InitComponentLevelContextMenu(viewerContainer);
+            },
             features: [
                 {
                     name: "Sorting",
@@ -193,17 +193,17 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     mode: 'row',
                     multipleSelection: true,
                     activation: true,
-                    rowSelectionChanging : function(evt, ui) {
-                        
+                    rowSelectionChanging: function (evt, ui) {
+
                         if (isFiredFromCheckbox) {
                             isFiredFromCheckbox = false;
                         } else {
                             var id = viewerContainer.replace("#", "");
                             var rowData = _this.GetDataForSelectedRow(ui.row.index, viewerContainer);
-                            model.getCurrentSelectionManager().MaintainHighlightedRow(ui.row.element[0]); 
+                            model.getCurrentSelectionManager().MaintainHighlightedRow(ui.row.element[0]);
                             model.getCurrentReviewManager().OnCheckComponentRowClicked(rowData, id)
                             return false;
-                        }                            
+                        }
                     }
                 },
                 {
@@ -213,7 +213,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     enableSelectAllForPaging: true, // this option is true by default
                     checkBoxStateChanging: function (evt, ui) {
                         //we use this variable as a flag whether the selection is coming from a checkbox
-                        isFiredFromCheckbox = true;                          
+                        isFiredFromCheckbox = true;
                     },
                     checkBoxStateChanged: function (evt, ui) {
                         model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
@@ -226,17 +226,17 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 
         });
 
-    var container = document.getElementById(viewerContainer.replace("#", ""));
-    container.style.margin = "0px"
-    container.style.padding = "0";
+        var container = document.getElementById(viewerContainer.replace("#", ""));
+        container.style.margin = "0px"
+        container.style.padding = "0";
     });
 };
 
-ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function(rowIndex, containerDiv) {
+ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
     var data = $(containerDiv).data("igGrid").dataSource.dataView();
     var rowData = data[rowIndex];
     return rowData;
-    
+
     // var rowData = {};
     // var rowIndex = rowIndex;
     // $(function () {
@@ -257,15 +257,27 @@ ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function(rowIndex,
     // return rowData;
 }
 
+ComplianceCheckResultsTable.prototype.Destroy = function () {
+
+    for (var groupId in this.CheckTableIds) {
+        var id = this.CheckTableIds[groupId];
+        // clear previous grid
+        if ($(id).data("igGrid") != null) {
+            $(id).igGrid("destroy");
+        }
+    }
+
+    document.getElementById(this.MainReviewTableContainer).innerHTML = "";
+}
 
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
     // this.detailedReviewRowComments = reviewManager.detailedReviewRowComments;
 }
 
-ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function() {
+ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function () {
 
-    var group  = [];
+    var group = [];
     var columnHeader = {}
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(CompliancePropertyColumns).length; i++) {
@@ -483,6 +495,15 @@ ComplianceCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
             return;
         }
         var status = currentRow.cells[CompliancePropertyColumns.Status].innerHTML;
-       model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
+        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
+    }
+}
+
+ComplianceCheckPropertiesTable.prototype.Destroy = function () {
+
+    var viewerContainer = "#" + this.DetailedReviewTableContainer;
+    // clear previous grid
+    if ($(viewerContainer).data("igGrid") != null) {
+        $(viewerContainer).igGrid("destroy");
     }
 }
