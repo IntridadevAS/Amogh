@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="src/css/checkPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
 
-  <link rel="stylesheet" href="src/prompts/Return_to_Home_Page.css" type="text/css" />
+  <link rel="stylesheet" href="src/prompts/promptForms.css" type="text/css" />
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
   <link rel="stylesheet" href="src/prompts/Load_Data.css" type="text/css" />
 
@@ -764,7 +764,7 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
 
-  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckDrawerMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DrawerMenu.js"></script>
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
 
   <script>
@@ -796,7 +796,7 @@
       UploadManager.createFileUploader();
 
       // create drawer menu
-      CheckDrawerMenu.create();
+      DrawerMenu.create(["check"]);
 
       // hide busy indicator
       hideBusyIndicator();

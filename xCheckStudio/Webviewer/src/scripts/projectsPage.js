@@ -1205,30 +1205,30 @@ let deleteItems = {
 
 controller.init();
 
-function cancelReturnHome() {
-  var overlay = document.getElementById("returnHomeOverlay");
-  var popup = document.getElementById("returnHomePopup");
+// function cancelReturnHome() {
+//   var overlay = document.getElementById("returnHomeOverlay");
+//   var popup = document.getElementById("returnHomePopup");
 
-  overlay.style.display = 'none';
-  popup.style.display = 'none';
-}
+//   overlay.style.display = 'none';
+//   popup.style.display = 'none';
+// }
 
-function returnHome() {
-  window.location = "landingPage.html";
-}
+// function returnHome() {
+//   window.location = "landingPage.html";
+// }
 
-function onHomeClick() {
+// function onHomeClick() {
 
-  var overlay = document.getElementById("returnHomeOverlay");
-  var popup = document.getElementById("returnHomePopup");
+//   var overlay = document.getElementById("returnHomeOverlay");
+//   var popup = document.getElementById("returnHomePopup");
 
-  overlay.style.display = 'block';
-  popup.style.display = 'block';
+//   overlay.style.display = 'block';
+//   popup.style.display = 'block';
 
-  popup.style.width = "581px";
-  popup.style.height = "155px";
-  popup.style.overflow = "hidden";
-}
+//   popup.style.width = "581px";
+//   popup.style.height = "155px";
+//   popup.style.overflow = "hidden";
+// }
 
 function onToggleOverlayDisplay(show) {
   if (show === true) {

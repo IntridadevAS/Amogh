@@ -9,67 +9,141 @@
   <link rel="stylesheet" href="src/css/launchPage.css">
   <link rel="stylesheet" href="src/css/fonts.css">
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
+
+  <link rel="stylesheet" href="src/prompts/promptForms.css" type="text/css" />
+  <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <header>
-    <button type="button" class="dropDownMenu">
-        <img  id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+    <button id="mainMenu" type="button" class="dropDownMenu">
+      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
     </button>
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
       <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program" onclick="onminimizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program" onclick="onmaximizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program" onclick="onclosewindow()"></button>
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
+            onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
+            onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="close program"
+            onclick="onclosewindow()"></button>
       </div>
     </div>
   </header>
-  <div id="background" class="background">
-    <form class="langSelect" action="index.html" method="post">
-      <label for="language">Language:</label>
-      <!-- All languages to be present in options. "Selected" value for language picked when installed -->
-      <!-- Will self-post after being changed -->
-      <select name="language" onchange="this.form.submit();">
-        <option value="english" selected>English</option>
-        <option value="chinese">Chinese</option>
-        <option value="german">German</option>
-      </select>
-    </form>
-    <div id="loginInfo" class="loginInfo">
-      <form class="loginForm" action="index.html" method="post">
-        <input type="text" name="userName" value="" placeholder="USERNAME" id="usernametext" autofocus>
-        <input type="password" name="password" value="" placeholder="PASSWORD" id="passwordtext">
-        <!-- Error message - only display when returned with an error -->
-        <div class="errorMsgContainer" id="errorMsgContainer">
-          <!--Error Type  -->
-          <p>Incorrect Username or password</p>
-          <hr>
-          <!--Error further information  -->
-          <p>For assistance with user name or password reset contact your administrator</p>
-        </div>
-        <button type="button" class="submitBtn" name="login" id="submitBtn"
-          onclick="OnSubmitButtonClicked()">ENTER</button>
-      </form>
-    </div>
-    <div id="userNameDiv" class="backgroundSplash" style="display: none">
-      <div id="splashicon" class ="splashicon"></div>
-      <p class="splashtext" id="username"></p>
-    </div>
-    <div id="electroncheckDiv" class="background" style="display: none">
-      <p class="electronchecktext" id="electroncheck"></p>
-    </div>
 
+  <div id="drawer" style="position: fixed; top:50px; left: 0px">
+    <div id="background" class="background">
+  
+      <!-- Return to PREP overlay -->
+      <div id="exitOverlay" class="overlay"></div>
+      <div id="exitPopup" class="popup">
+        <div id="returnToPREP">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Info">
+            <span>Exit</span>
+          </div>
+          <div class="promptMessageDiv">
+            <span></span><span style="font-style:normal;font-weight:normal;">Are you sure?</span>
+          </div>
+          <div id="symNoButton___10" onclick="cancelExit()">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="CANCEL">
+              <span>Cancel</span>
+            </div>
+          </div>
+  
+          <div id="symYesButton___10" onclick="exit()">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK">
+              <span>OK</span>
+            </div>
+          </div>
+          <svg class="icon_32_Info" viewBox="0 1 32 32">
+            <path fill="rgba(123,168,219,1)" id="icon_32_Info"
+              d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+            </path>
+          </svg>
+        </div>
+      </div>
+  
+      <form class="langSelect" action="index.html" method="post">
+        <label for="language">Language:</label>
+        <!-- All languages to be present in options. "Selected" value for language picked when installed -->
+        <!-- Will self-post after being changed -->
+        <select name="language" onchange="this.form.submit();">
+          <option value="english" selected>English</option>
+          <option value="chinese">Chinese</option>
+          <option value="german">German</option>
+        </select>
+      </form>
+      <div id="loginInfo" class="loginInfo">
+        <form class="loginForm" action="index.html" method="post">
+          <input type="text" name="userName" value="" placeholder="USERNAME" id="usernametext" autofocus>
+          <input type="password" name="password" value="" placeholder="PASSWORD" id="passwordtext">
+          <!-- Error message - only display when returned with an error -->
+          <div class="errorMsgContainer" id="errorMsgContainer">
+            <!--Error Type  -->
+            <p>Incorrect Username or password</p>
+            <hr>
+            <!--Error further information  -->
+            <p>For assistance with user name or password reset contact your administrator</p>
+          </div>
+          <button type="button" class="submitBtn" name="login" id="submitBtn"
+            onclick="OnSubmitButtonClicked()">ENTER</button>
+        </form>
+      </div>
+      <div id="userNameDiv" class="backgroundSplash" style="display: none">
+        <div id="splashicon" class="splashicon"></div>
+        <p class="splashtext" id="username"></p>
+      </div>
+      <div id="electroncheckDiv" class="background" style="display: none">
+        <p class="electronchecktext" id="electroncheck"></p>
+      </div>
+
+    </div>
   </div>
+
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
+
+  <!-- devExpress Dependancies -->
+  <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
+  <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
+  <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
+  
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
   <script type="text/javascript" src="src/scripts/launchPage.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\LoginManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoginPageDrawerMenu.js"></script>
+  <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
+
   <script>
     window.onload = function () {
       isElectron();
+
+      LoginPageDrawerMenu.create();
     }
 
     function OnSubmitButtonClicked() {

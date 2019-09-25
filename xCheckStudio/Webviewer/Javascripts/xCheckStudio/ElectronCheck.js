@@ -22,7 +22,8 @@ function onclosewindow() {
     var window = remote.getCurrentWindow();
     var sPath = window.getURL();
     var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
-    if(sPage === ""){
+    if (sPage === "" ||
+        sPage === "index.html") {
         localStorage.clear();
         window.close();
     }

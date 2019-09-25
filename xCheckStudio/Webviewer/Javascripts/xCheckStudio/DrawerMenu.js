@@ -1,6 +1,6 @@
-var ReviewDrawerMenu = {
+var DrawerMenu = {
 
-    create: function () {
+    create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
             height: "50%",
@@ -10,6 +10,9 @@ var ReviewDrawerMenu = {
             revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
+                if (disableItems) {
+                    disableMenuItems(disableItems);
+                }
 
                 return $list.dxList({
                     dataSource: menuItems,
@@ -19,8 +22,7 @@ var ReviewDrawerMenu = {
                     width: 200,
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
-                    onSelectionChanged: function (e) {
-                        //$("#view").load( e.addedItems[0].filePath + ".html" );
+                    onSelectionChanged: function (e) {                       
                         e.addedItems[0].click();
                     }
                 });
@@ -33,9 +35,91 @@ var ReviewDrawerMenu = {
             _this.drawer.toggle();
         }
     },
+}
+
+var menuItems = [
+    {
+        id: 1,
+        text: "Home",
+        icon: "public/symbols/home.png",
+        click: function () {
+            menu.onHomeClick();
+        }
+    },
+    {
+        id: 2,
+        text: "Projects",
+        icon: "public/symbols/projects.png",
+        click: function () {
+            menu.onProjectsClicked();
+        }
+    },
+    {
+        id: 3,
+        text: "Check",
+        icon: "public/symbols/check.png",
+        click: function () {
+            menu.onCheckClicked();
+        }
+    },
+    {
+        id: 4,
+        text: "Prep",
+        icon: "public/symbols/prep.png",
+        click: function () {
+            menu.onPREPClicked();
+        }
+    },
+    {
+        id: 5,
+        text: "Help",
+        icon: "public/symbols/Group 99.svg",
+        click: function () {
+            menu.onHelpClicked();
+        }
+    },
+    {
+        id: 6,
+        text: "Output",
+        icon: "public/symbols/Output.png",
+        click: function () {
+            menu.onOutputClicked();
+        }
+    },
+    {
+        id: 7,
+        text: "Reports",
+        icon: "public/symbols/reports.png",
+        click: function () {
+            menu.onReportsClicked();
+        }
+    },
+    {
+        id: 8,
+        text: "Sign Out",
+        icon: "public/symbols/logout.png",
+        click: function () {
+            menu.onSignOutClicked();
+        }
+    }
+];
+
+let menu = {
+
+    onHomeClick: function () {
+
+        var overlay = document.getElementById("returnHomeOverlay");
+        var popup = document.getElementById("returnHomePopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
+    },
 
     onProjectsClicked: function () {
-
         var overlay = document.getElementById("returnProjectCenterOverlay");
         var popup = document.getElementById("returnProjectCenterPopup");
 
@@ -60,7 +144,6 @@ var ReviewDrawerMenu = {
     },
 
     onPREPClicked: function () {
-
         var overlay = document.getElementById("returnPREPOverlay");
         var popup = document.getElementById("returnPREPPopup");
 
@@ -75,11 +158,16 @@ var ReviewDrawerMenu = {
     onHelpClicked: function () {
     },
 
+    onSettingsClicked: function () {
+    },
+
     onOutputClicked: function () {
     },
 
-    onSignOutClicked: function () {
+    onReportsClicked: function () {
+    },
 
+    onSignOutClicked: function () {
         var overlay = document.getElementById("signOutOverlay");
         var popup = document.getElementById("signOutPopup");
 
@@ -89,83 +177,8 @@ var ReviewDrawerMenu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
-        // if (confirm("You will be signed out.\nAre you sure?")) {
-        //    localStorage.removeItem("userinfo");
-        //    window.location.href = "index.html";
-        // }
-    },
-    onHomeClick: function () {
-
-        var overlay = document.getElementById("returnHomeOverlay");
-        var popup = document.getElementById("returnHomePopup");
-
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-
-        popup.style.width = "581px";
-        popup.style.height = "155px";
-        popup.style.overflow = "hidden";
     }
 }
-
-var menuItems = [
-    {
-        id: 1,
-        text: "Home",
-        // icon: "public/symbols/check.png",
-        click: function () {
-            ReviewDrawerMenu.onHomeClick();
-        }
-    },
-    {
-        id: 2,
-        text: "Projects",
-        icon: "public/symbols/projects.png",
-        click: function () {
-            ReviewDrawerMenu.onProjectsClicked();
-        }
-    },
-    {
-        id: 3,
-        text: "Check",
-        icon: "public/symbols/check.png",
-        click: function () {
-            ReviewDrawerMenu.onCheckClicked();
-        }
-    },
-    {
-        id: 4,
-        text: "Prep",
-        icon: "public/symbols/prep.png",
-        click: function () {
-            ReviewDrawerMenu.onPREPClicked();
-        }
-    },
-    {
-        id: 5,
-        text: "Help",
-        // icon: "public/symbols/prep.png",
-        click: function () {
-            ReviewDrawerMenu.onHelpClicked();
-        }
-    },
-    {
-        id: 6,
-        text: "Output",
-        icon: "public/symbols/reports.png",
-        click: function () {
-            ReviewDrawerMenu.onOutputClicked();
-        }
-    },
-    {
-        id: 7,
-        text: "Sign Out",
-        icon: "public/symbols/logout.png",
-        click: function () {
-            ReviewDrawerMenu.onSignOutClicked();
-        }
-    }
-];
 
 function cancelReturnHome() {
     var overlay = document.getElementById("returnHomeOverlay");
@@ -191,18 +204,6 @@ function returnProjectCenter() {
     window.location = "projectsPage.html";
 }
 
-function cancelReturnCheck() {
-    var overlay = document.getElementById("returnCheckOverlay");
-    var popup = document.getElementById("returnCheckPopup");
-
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-}
-
-function returnCheck() {
-    window.location = "checkPage.html";
-}
-
 function cancelReturnPREP() {
     var overlay = document.getElementById("returnPREPOverlay");
     var popup = document.getElementById("returnPREPPopup");
@@ -214,7 +215,6 @@ function cancelReturnPREP() {
 function returnToPREP() {
     window.location = "prephomepage.html";
 }
-
 
 function cancelSignOut() {
     var overlay = document.getElementById("signOutOverlay");
@@ -235,9 +235,32 @@ function signOut() {
 function swapIcon() {
     var menuIcon = document.getElementById("menuIcon").src
     if (menuIcon.includes("MenuRound.svg")) {
-        document.getElementById("menuIcon").src = "public/symbols/Backward Arrow.svg";
+        document.getElementById("menuIcon").src = "public/symbols/Backward Arrow.png";
     }
     else {
         document.getElementById("menuIcon").src = "public/symbols/MenuRound.svg";
+    }
+}
+
+function cancelReturnCheck() {
+    var overlay = document.getElementById("returnCheckOverlay");
+    var popup = document.getElementById("returnCheckPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function returnCheck() {
+    window.location = "checkPage.html";
+}
+
+function disableMenuItems(items) {
+    for (var i = 0; i < items.length; i++) {
+        for (var j = 0; j < menuItems.length; j++) {
+            var menuItem = menuItems[j];
+            if (menuItem.text.toLowerCase() === items[i].toLowerCase()) {
+                menuItem["disabled"] = true;
+            }
+        }
     }
 }
