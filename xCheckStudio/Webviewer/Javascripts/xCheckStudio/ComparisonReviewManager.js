@@ -419,7 +419,7 @@ ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (
                             sourceBComplianceCheckGroups);
 
                         // load analytics data
-                        document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
+                        // document.getElementById("analyticsContainer").innerHTML = '<object type="text/html" data="analyticsModule.html" style="height: 100%; width: 100%" ></object>';
                     }
                 });
             }

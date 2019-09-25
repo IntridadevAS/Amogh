@@ -86,7 +86,7 @@
 	top: 94px;
 	overflow: visible;
 }
-#pie {
+#pie_complianceOverlay {
 	position: absolute;
 	width: 388px;
 	height: 52px;
@@ -95,7 +95,7 @@
 	overflow: visible;	
 }
 
-#pie:hover {
+#pie_complianceOverlay:hover {
 	background-color: gray;
 }
 .bg_A4_Rectangle_3 {
