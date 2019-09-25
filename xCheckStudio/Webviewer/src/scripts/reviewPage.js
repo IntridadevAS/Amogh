@@ -246,6 +246,7 @@ let viewTabs = {
         undefined,
         sourceAComparisonHierarchy,
         sourceBComparisonHierarchy);
+
     }
 
     // close select files UI
@@ -390,8 +391,15 @@ let viewPanels = {
 
   showAnalytics: function (selected) {
     let parent = selected.parentNode;
-    parent.style.display = "none";
-    document.getElementById("analyticsSmall").style.display = "block";
+    
+    if(selected.id == "AnalyticsDashboard1" && model.selectedComparisons.length > 0) {
+      parent.style.display = "none";
+      document.getElementById("analyticsSmall").style.display = "block";
+    }
+    else if(selected.id == "AnalyticsDashboard2" && model.selectedCompliance) {
+      parent.style.display = "none";
+      document.getElementById("analyticsSmall1").style.display = "block";
+    }
     // document.getElementById("analyticsSmall").innerHTML='<object type="text/html" data="/analyticsTotalCheckModule.html" style="height: 100%; width: 100%; overflow: hidden" ></object>';
   },
 }
