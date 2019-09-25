@@ -1410,7 +1410,8 @@
     font-size: 24px;
     color: rgba(255,255,255,1);
 }
-#compare_A3_Group_40 {
+
+.summary {
 	position: absolute;
     width: 24.07%;
     height: 45%;
@@ -1496,6 +1497,36 @@
     font-size: 20px;
     color: rgba(255,255,255,1);
 }
+
+#checkedItemCount {
+	position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,255,255,1);
+}
+#Total_items_checked_1 {
+	position: absolute;
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
+}
+
 #Group_2 {
 	position: absolute;
     width: 70%;
@@ -1532,6 +1563,36 @@
     font-size: 30px;
     color: rgba(255,72,71,1);
 }
+
+#Items_undefined {
+	position: absolute;
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
+}
+#count_undefined {
+	position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,72,71,1);
+}
+
 #Group_3 {
 	position: absolute;
     width: 70%;
@@ -1568,6 +1629,36 @@
     font-size: 30px;
     color: rgba(255,234,15,1);
 }
+
+#Total_items_not_checked {
+	position: absolute;
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
+}
+#ID37_A3_Text_12_1 {
+	position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,234,15,1);
+}
+
 #Group_4 {
 	position: absolute;
     width: 70%;
@@ -1663,6 +1754,35 @@
     color: rgba(255,255,255,1);
 }
 #Total_items_checked_A3_Text_51 {
+	position: absolute;
+    left: 40%;
+    top: 20%;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-align: left;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(255,255,255,1);
+}
+
+#count_no_match {
+	position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    color: rgba(255,255,255,1);
+}
+#Items_with_No_Match {
 	position: absolute;
     left: 40%;
     top: 20%;

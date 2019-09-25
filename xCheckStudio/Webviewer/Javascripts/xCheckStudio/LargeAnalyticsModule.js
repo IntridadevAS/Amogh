@@ -92,6 +92,16 @@ function onPieChartClick() {
     OpenAnalyticsCharts();
 }
 
+function showSeveritySummaryDiv() {
+    document.getElementById("compare_A3_Group_40").style.display = "block";
+    document.getElementById("compare_A3_Group_41").style.display = "none";
+}
+
+function showInfoSummaryDiv() {
+    document.getElementById("compare_A3_Group_41").style.display = "block";
+    document.getElementById("compare_A3_Group_40").style.display = "none";
+}
+
 function onSeverityClick() {
     SeveritybuttonActive = true;
     InfoButtonActive = false;
@@ -101,8 +111,9 @@ function onSeverityClick() {
 
     document.getElementById("severitybtn").style.fill = "rgba(143, 144, 145, 1)";
     document.getElementById("Severity").style.color = "rgba(143, 144, 145, 1)";
-    
+
     OpenAnalyticsCharts();
+    showSeveritySummaryDiv();
 }
 
 function onInfoClick() {
@@ -116,6 +127,7 @@ function onInfoClick() {
     document.getElementById("Info").style.color = "rgba(143, 144, 145, 1)";
     
     OpenAnalyticsCharts();
+    showInfoSummaryDiv();
 }
 
 function openChartComparison() {
