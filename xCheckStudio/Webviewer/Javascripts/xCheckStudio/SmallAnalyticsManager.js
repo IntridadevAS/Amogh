@@ -281,14 +281,8 @@ SmallAnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = functio
                 _this.SourceATotalItemsLoaded = sourceATotalComponentsCount;
                 _this.SourceAOKATCount = okACount + okTCount + OkATCount;
 
-                  // //add data to summary
-                //   if (! _this.ComparisonCheckGroups) 
-                //   {
-                //     _this.setSeveritySummary('SourceACompliance');                          
-                //   }
 
                 // draw pie charts
-
                 if(PieChartActive) {
                     _this.ShowPieChartDiv();
                     _this.drawCompliancePieCharts(okCount,
@@ -310,9 +304,6 @@ SmallAnalyticsManager.prototype.populateSourceAComplianceAnalyticsData = functio
                         _this.CreateInfoBarCharts(checkGroupsInfo);
                     }               
                 }
-
-                // draw source A compliance bar charts (total 1)
-                // _this.drawBarCharts("SourceACompliance", checkGroupsInfo);
             }
         }
     });
@@ -751,7 +742,7 @@ SmallAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.seriesName
+                    text: arg.seriesName + ": " + arg.valueText
                 };
             }
         }
@@ -802,22 +793,9 @@ SmallAnalyticsManager.prototype.CreateInfoBarCharts = function(checkGroupsInfo) 
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.seriesName
+                    text: arg.seriesName + ": " + arg.valueText
                 };
             }
         }
     });
-}
-
-SmallAnalyticsManager.prototype.CreateStackedFragment = function(Severityname) {
-
-    var stackFragment = {
-        name: Severityname + "Fragment",
-        title: Severityname,
-        valueMemberPath: Severityname,
-        type: "stackedFragment",
-        showTooltip: true,
-        tooltipTemplate: Severityname,
-    };
-    return stackFragment;
 }

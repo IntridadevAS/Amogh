@@ -16,19 +16,130 @@ function populateLargeAnalyticsData(checkResults) {
 
     analyticsManager = new LargeAnalyticsManager();
 
+
     // draw pie and bar charts 
     if (comparisonCheckGroups) {
-        analyticsManager.populateLargeAnalyticsComparisonCharts();
         activeResultType = "comparison";
+        openChartComparison();
     }
 
     else if (sourceAComplianceCheckGroups) {
-        analyticsManager.populateLargeAnalyticsComplianceACharts();
         activeResultType = "complianceA";
+        OpenComplianceAChart();
     }
 
     else if (sourceBComplianceCheckGroups) {
-        analyticsManager.populateLargeAnalyticsComplianceBCharts();
         activeResultType = "complianceB";
+        OpenComplianceBChart();
+    }
+}
+
+function OpenAnalyticsCharts() {
+    if(activeResultType == "comparison") {
+        openChartComparison()
+    }
+    else if(activeResultType == "complianceA") {
+        OpenComplianceAChart();
+    }
+    else if(activeResultType == "complianceB") {
+        OpenComplianceBChart();
+    }
+}
+
+function openComplianceOverlay() {
+    document.getElementById("pie_A3_Group_12").style.backgroundColor = "rgba(33,37,63,0)";
+    document.getElementById("bar_A3_Group_10").style.backgroundColor = "rgba(143, 144, 145, 1)";
+    var overlay = document.getElementById("Compliance_DataSet_Selection");
+    overlay.style.display="block";
+}
+
+function RemoveComplianceSourceSelectionOverlay() {
+    var complianceSelection = document.getElementById("Compliance_DataSet_Selection");
+    complianceSelection.style.display = "none";
+}
+
+function ShowBarChartDiv() {
+    var bar = document.getElementById("BarCharts");
+    bar.style.display="block";
+
+    var pie = document.getElementById("charts");
+    pie.style.display="none"; 
+}
+
+function ShowPieChartDiv() {
+    var bar = document.getElementById("BarCharts");
+    bar.style.display="none";
+
+    var pie = document.getElementById("charts");
+    pie.style.display="block"; 
+}
+
+function onBarChartClick() {
+    BarChartActive = true;
+    PieChartActive = false;
+    document.getElementById("pie").style.backgroundColor = "rgba(33,37,63,0)";
+    document.getElementById("bar").style.backgroundColor = "rgba(143, 144, 145, 1)";
+    ShowBarChartDiv();
+    OpenAnalyticsCharts();
+}
+
+function onPieChartClick() {
+    BarChartActive = false;
+    PieChartActive = true;
+    document.getElementById("bar").style.backgroundColor = "rgba(33,37,63,0)";
+    document.getElementById("pie").style.backgroundColor = "rgba(143, 144, 145, 1)";
+    ShowPieChartDiv();
+    OpenAnalyticsCharts();
+}
+
+function onSeverityClick() {
+    SeveritybuttonActive = true;
+    InfoButtonActive = false;
+
+    document.getElementById("Info").style.color = "rgba(255,255,255,1)"; 
+    document.getElementById("infobtn").style.fill = "rgba(255,255,255,1)";
+
+    document.getElementById("severitybtn").style.fill = "rgba(143, 144, 145, 1)";
+    document.getElementById("Severity").style.color = "rgba(143, 144, 145, 1)";
+    
+    OpenAnalyticsCharts();
+}
+
+function onInfoClick() {
+    SeveritybuttonActive = false;
+    InfoButtonActive = true;
+
+    document.getElementById("severitybtn").style.fill = "rgba(255,72,71,1)";
+    document.getElementById("Severity").style.color = "rgba(255,72,71,1)";
+    
+    document.getElementById("infobtn").style.fill = "rgba(143, 144, 145, 1)";
+    document.getElementById("Info").style.color = "rgba(143, 144, 145, 1)";
+    
+    OpenAnalyticsCharts();
+}
+
+function openChartComparison() {
+    activeResultType = "comparison";
+    
+    document.getElementById("pie_A3_Group_12").style.backgroundColor = "rgba(143, 144, 145, 1)";
+    document.getElementById("bar_A3_Group_10").style.backgroundColor = "rgba(33,37,63,0)";
+
+    if (comparisonCheckGroups) {
+        analyticsManager.populateLargeAnalyticsComparisonCharts();
+    }
+}
+
+function OpenComplianceAChart() {
+    activeResultType = "complianceA";
+    if (sourceAComplianceCheckGroups) {
+        analyticsManager.populateLargeAnalyticsComplianceACharts();
+    }
+}
+
+function OpenComplianceBChart() {
+    activeResultType = "complianceB";
+
+    if (sourceBComplianceCheckGroups) {
+        analyticsManager.populateLargeAnalyticsComplianceBCharts();
     }
 }

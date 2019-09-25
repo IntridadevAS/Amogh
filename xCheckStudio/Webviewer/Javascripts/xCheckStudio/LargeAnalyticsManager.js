@@ -150,23 +150,284 @@ LargeAnalyticsManager.prototype.populateLargeAnalyticsComparisonCharts = functio
                 if(PieChartActive) {
                     // _this.ShowPieChartDiv();
                     if(SeveritybuttonActive) {
-                        _this.drawComparisonSeverityPieCharts(checkGroupsInfo);
+                        _this.drawComparisonSeverityPieCharts(okCount,
+                            warningsCount,
+                            errorsCount,
+                            totalItemsChecked);
                     }
                     else if(InfoButtonActive) {
-                        _this.drawComparisonInfoPieCharts(checkGroupsInfo);
+                        _this.drawComparisonInfoPieCharts(noMatchCount,
+                            undefinedCount,
+                            totalItemsNotChecked,
+                            totalItemsLoaded);
                     } 
                 }
 
                 // //  draw bar chart (total 1)
                 if(BarChartActive) {
-                    _this.ShowBarChartDiv();
+                    // _this.ShowBarChartDiv();
                     if(SeveritybuttonActive) {
                         _this.createSeverityBarCharts(checkGroupsInfo);
                     }
                     else if(InfoButtonActive) {
-                        _this.CreateInfoBarCharts(checkGroupsInfo);
+                        _this.createInfoBarCharts(checkGroupsInfo);
                     }               
                 }
+
+                _this.drawLineChart(checkGroupsInfo);
+            }
+        }
+    });
+}
+
+LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceACharts = function () {
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    var _this = this;
+    $.ajax({
+        url: 'PHP/AnalyticsDataReader.php',
+        type: "POST",
+        async: true,
+        data: { 
+            'CheckType': 'SourceACompliance',
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        success: function (msg) {
+            if (msg != 'fail') {
+                var checkResults = JSON.parse(msg);
+                var totalItemsChecked = 0;
+                var errorsCount = 0;
+                var warningsCount = 0;
+                var okCount = 0;
+                var undefinedCount = 0;
+                var noMatchCount = 0;
+                var okACount = 0;
+                var okTCount = 0;
+                var OkATCount = 0;
+                var sourceASelectedCount = 0;                  
+                var sourceATotalComponentsCount = 0;                  
+                var checkGroupsInfo = 0;
+
+                var sourceANotSelectedComponents;
+
+                if ("okCount" in checkResults) {
+                    okCount = parseInt(checkResults["okCount"]);
+                }
+
+                if ("okACount" in checkResults) {
+                    okACount = parseInt(checkResults["okACount"]);
+                }
+
+                if ("okTCount" in checkResults) {
+                    okTCount = parseInt(checkResults["okTCount"]);
+                }
+
+                if ("okATCount" in checkResults) {
+                    OkATCount = parseInt(checkResults["okATCount"]);
+                }
+
+                if ("errorCount" in checkResults) {
+                    errorsCount = parseInt(checkResults["errorCount"]);
+                }
+
+                if ("warningCount" in checkResults) {
+                    warningsCount = parseInt(checkResults["warningCount"]);
+                }
+
+                if ("undefinedCount" in checkResults) {
+                    undefinedCount = parseInt(checkResults["undefinedCount"]);
+                }
+
+                if ("sourceASelectedCount" in checkResults) {
+                    sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
+                }                 
+
+                if ("sourceATotalComponentsCount" in checkResults) {
+                    sourceATotalComponentsCount = parseInt(checkResults["sourceATotalComponentsCount"]);
+                }      
+                
+                if ("CheckGroupsInfo" in checkResults) {
+                    checkGroupsInfo = checkResults["CheckGroupsInfo"];
+                }
+
+                if ("SourceANotSelectedComps" in checkResults) {
+                    sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
+                }
+               
+                totalItemsChecked = sourceASelectedCount;                 
+
+                _this.SourceAComplianceTotalItemsChecked = totalItemsChecked;
+                _this.SourceAComplianceErrorsCount = errorsCount;
+                _this.SourceAComplianceWarningsCount= warningsCount;
+                _this.SourceAComplianceOKCount  = okCount;
+                _this.SourceAComplianceUndefinedCount = undefinedCount;
+                _this.SourceANotSelectedComps = sourceATotalComponentsCount - totalItemsChecked;
+                _this.SourceATotalItemsLoaded = sourceATotalComponentsCount;
+                _this.SourceAOKATCount = okACount + okTCount + OkATCount;
+
+
+            //add data to summary
+            _this.setSeveritySummary('complianceA');
+                            
+            // draw pie charts
+
+            if(PieChartActive) {
+            // _this.ShowPieChartDiv();
+                if(SeveritybuttonActive) {
+                    _this.drawComparisonSeverityPieCharts(okCount,
+                        warningsCount,
+                        errorsCount,
+                        totalItemsChecked);
+                }
+                else if(InfoButtonActive) {
+                    _this.drawComparisonInfoPieCharts(noMatchCount,
+                        undefinedCount,
+                        _this.SourceANotSelectedComps,
+                        totalItemsLoaded);
+                } 
+            }
+
+            // //  draw bar chart (total 1)
+            if(BarChartActive) {
+                // _this.ShowBarChartDiv();
+                if(SeveritybuttonActive) {
+                    _this.createSeverityBarCharts(checkGroupsInfo);
+                }
+                else if(InfoButtonActive) {
+                    _this.createInfoBarCharts(checkGroupsInfo);
+                }               
+            }
+
+            _this.drawLineChart(checkGroupsInfo);
+
+            }
+        }
+    });
+}
+
+LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceBCharts = function () {
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    var _this = this;
+    $.ajax({
+        url: 'PHP/AnalyticsDataReader.php',
+        type: "POST",
+        async: true,
+        data: { 
+            'CheckType': 'SourceBCompliance',
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        success: function (msg) {
+            if (msg != 'fail') {
+                var checkResults = JSON.parse(msg);
+                var totalItemsChecked = 0;
+                var errorsCount = 0;
+                var warningsCount = 0;
+                var okCount = 0;
+                var noMatchCount = 0;
+                var undefinedCount = 0;
+                var okACount = 0;
+                var okTCount = 0;
+                var OkATCount = 0;
+                var sourceBSelectedCount = 0;
+                var checkGroupsInfo = 0;
+                var sourceBTotalComponentsCount = 0;         
+                var sourceBNotSelectedComponents = 0;
+
+                if ("okCount" in checkResults) {
+                    okCount = parseInt(checkResults["okCount"]);
+                }
+
+                if ("okACount" in checkResults) {
+                    okACount = parseInt(checkResults["okACount"]);
+                }
+
+                if ("okTCount" in checkResults) {
+                    okTCount = parseInt(checkResults["okTCount"]);
+                }
+
+                if ("okATCount" in checkResults) {
+                    OkATCount = parseInt(checkResults["okATCount"]);
+                }
+
+                if ("errorCount" in checkResults) {
+                    errorsCount = parseInt(checkResults["errorCount"]);
+                }
+
+                if ("warningCount" in checkResults) {
+                    warningsCount = parseInt(checkResults["warningCount"]);
+                }
+
+                if ("undefinedCount" in checkResults) {
+                    undefinedCount = parseInt(checkResults["undefinedCount"]);
+                }
+
+                if ("sourceBSelectedCount" in checkResults) {
+                    sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
+                }
+
+
+                if ("sourceBTotalComponentsCount" in checkResults) {
+                    sourceBTotalComponentsCount = parseInt(checkResults["sourceBTotalComponentsCount"]);
+                }      
+                
+                if ("CheckGroupsInfo" in checkResults) {
+                    checkGroupsInfo = checkResults["CheckGroupsInfo"];
+                }
+
+                if ("SourceBNotSelectedComps" in checkResults) {
+                    sourceBNotSelectedComponents = checkResults["SourceBNotSelectedComps"];
+                }
+               
+
+                totalItemsChecked = sourceBSelectedCount;
+
+                _this.SourceBComplianceTotalItemsChecked = totalItemsChecked;
+                _this.SourceBComplianceErrorsCount = errorsCount;
+                _this.SourceBComplianceWarningsCount  = warningsCount;
+                _this.SourceBComplianceOKCount = okCount;
+                _this.SourceBComplianceUndefinedCount = undefinedCount;
+                _this.SourceBNotSelectedComps = sourceBTotalComponentsCount - totalItemsChecked;
+                _this.SourceBTotalItemsLoaded = sourceBTotalComponentsCount;
+                _this.SourceBOKATCount = okACount + okTCount + OkATCount;       
+
+                //add data to summary
+                _this.setSeveritySummary('complianceB');
+                                
+                // draw pie charts
+
+                if(PieChartActive) {
+                // _this.ShowPieChartDiv();
+                    if(SeveritybuttonActive) {
+                        _this.drawComparisonSeverityPieCharts(okCount,
+                            warningsCount,
+                            errorsCount,
+                            totalItemsChecked);
+                    }
+                    else if(InfoButtonActive) {
+                        _this.drawComparisonInfoPieCharts(noMatchCount,
+                            undefinedCount,
+                            _this.SourceBNotSelectedComps,
+                            totalItemsLoaded);
+                    } 
+                }
+
+                // //  draw bar chart (total 1)
+                if(BarChartActive) {
+                    // _this.ShowBarChartDiv();
+                    if(SeveritybuttonActive) {
+                        _this.createSeverityBarCharts(checkGroupsInfo);
+                    }
+                    else if(InfoButtonActive) {
+                        _this.createInfoBarCharts(checkGroupsInfo);
+                    }               
+                }
+
+                _this.drawLineChart(checkGroupsInfo);
             }
         }
     });
@@ -188,7 +449,7 @@ LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
    
     var colorsArray = ["#F43742", "#F8C13B", "#0FFF72"];
 
-    $("#BarChart").dxChart({
+    $("#BarCharts").dxChart({
         dataSource: Severitydata,
         palette: colorsArray,
         commonSeriesSettings: {
@@ -227,7 +488,7 @@ LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
     });
 }
 
-LargeAnalyticsManager.prototype.CreateInfoBarCharts = function(checkGroupsInfo) {
+LargeAnalyticsManager.prototype.createInfoBarCharts = function(checkGroupsInfo) {
     var _this = this;
 
     var Infodata = []
@@ -240,7 +501,7 @@ LargeAnalyticsManager.prototype.CreateInfoBarCharts = function(checkGroupsInfo) 
     }
 
     var colorsArray = ["#dddbff", "#e7d7fa"]
-    $("#BarChart").dxChart({
+    $("#BarCharts").dxChart({
         dataSource: Infodata,
         palette: colorsArray,
         commonSeriesSettings: {
@@ -293,6 +554,7 @@ LargeAnalyticsManager.prototype.drawComparisonSeverityPieCharts = function (okCo
             colorsArray,
             "ID40_");
         document.getElementById("Errors").innerHTML = "Errors";
+        document.getElementById("Errors").style.color = colorsArray[0];
 
         // draw pie chart for Warnings
         colorsArray = ["#F8C13B", "#EDEDED"];
@@ -303,6 +565,7 @@ LargeAnalyticsManager.prototype.drawComparisonSeverityPieCharts = function (okCo
             colorsArray,
             'ID30_');
         document.getElementById("Warnings").innerHTML = "Warnings";
+        document.getElementById("Warnings").style.color = colorsArray[0];
 
         // draw pie chart for Oks
         colorsArray = ["#0FFF72", "#EDEDED"];
@@ -313,6 +576,7 @@ LargeAnalyticsManager.prototype.drawComparisonSeverityPieCharts = function (okCo
             colorsArray,
             'ID10_');
         document.getElementById("OK").innerHTML = "OK";
+        document.getElementById("OK").style.color = colorsArray[0];
     // }
     // else if(this.Container == "MaximizedAnalytics") {
 
@@ -329,27 +593,33 @@ LargeAnalyticsManager.prototype.drawComparisonInfoPieCharts = function(noMatchCo
     this.drawPieChart("Not Checked",
         totalItemsNotChecked,
         totalItemsLoaded,
-        '#baseNotChecked',
+        '#errorPie',
         colorsArray,
-        'notCheckedPercentage');
+        'ID40_');
+    document.getElementById("Errors").innerHTML = "Not Checked";
+    document.getElementById("Errors").style.color = colorsArray[0];
 
     // draw pie chart for No Match
     var colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("No Match",
         noMatchCount,
         totalItemsLoaded,
-        '#baseNoMatch',
+        '#warningPie',
         colorsArray,
-        'noMatchPercentage');
+        'ID30_');
+    document.getElementById("Warnings").innerHTML = "No Match";
+    document.getElementById("Warnings").style.color = colorsArray[0];
 
     // draw pie chart for Undefined
     colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("Undefined",
         undefinedCount,
         totalItemsLoaded,
-        '#baseUndefined',
+        '#okPie',
         colorsArray,
-        'undefinedPercentage');
+        'ID10_');
+    document.getElementById("OK").innerHTML = "Undefined";
+    document.getElementById("OK").style.color = colorsArray[0];
 }
 
 LargeAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
@@ -371,7 +641,7 @@ LargeAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
             palette: colorsArray,
             dataSource: data,
             startAngle: 90,
-            innerRadius: 0.8,
+            innerRadius: 1,
             tooltip: {
                 enabled: true,
                 customizeTooltip: function (arg) {
@@ -397,6 +667,7 @@ LargeAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
     var fixedPercent = parseFloat((percent).toFixed(1));
     
     var errorDiv = document.getElementById(percentageDiv);
+    errorDiv.style.color = colorsArray[0];
     errorDiv.innerHTML = "";
     errorDiv.innerHTML = fixedPercent + "%";
 }
@@ -412,19 +683,73 @@ LargeAnalyticsManager.prototype.setSeveritySummary = function(checkType) {
         document.getElementById("ID6").innerHTML = this.ComparisonOKATCount;
    }
    else if(checkType.toLowerCase() == "compliancea") {
-        TotalItemsChecked = this.SourceAComplianceTotalItemsChecked;
-        ErrorsCount = this.SourceAComplianceErrorsCount;
-        OKCount = this.SourceAComplianceOKCount;
-        WarningsCount = this.SourceAComplianceWarningsCount;    
-        TotalItemsMatched = this.SourceAComplianceErrorsCount + this.SourceAComplianceOKCount + this.SourceAComplianceWarningsCount;
-        OkATCount = this.SourceAOKATCount;
+        document.getElementById("ID37").innerHTML = this.SourceAComplianceTotalItemsChecked;
+        document.getElementById("ID18").innerHTML = this.SourceAComplianceErrorsCount;
+        document.getElementById("ID6_A3_Text_49").innerHTML = this.SourceAComplianceOKCount;
+        document.getElementById("ID13").innerHTML = this.SourceAComplianceWarningsCount;    
+        document.getElementById("ID37_A3_Text_50").innerHTML = this.SourceAComplianceErrorsCount + this.SourceAComplianceOKCount + this.SourceAComplianceWarningsCount;
+        document.getElementById("ID6").innerHTML = this.SourceAOKATCount;
    }
    else if(checkType.toLowerCase() == "complianceb") {
-        TotalItemsChecked = this.SourceBComplianceTotalItemsChecked;
-        ErrorsCount = this.SourceBComplianceErrorsCount;
-        OKCount = this.SourceBComplianceOKCount;
-        WarningsCount = this.SourceBComplianceWarningsCount;    
-        TotalItemsMatched = this.SourceBComplianceErrorsCount + this.SourceBComplianceOKCount + this.SourceBComplianceWarningsCount;
-        OkATCount = this.SourceBOKATCount;
+        document.getElementById("ID37").innerHTML = this.SourceBComplianceTotalItemsChecked;
+        document.getElementById("ID18").innerHTML = this.SourceBComplianceErrorsCount;
+        document.getElementById("ID6_A3_Text_49").innerHTML = this.SourceBComplianceOKCount;
+        document.getElementById("ID13").innerHTML = this.SourceBComplianceWarningsCount;    
+        document.getElementById("ID37_A3_Text_50").innerHTML = this.SourceBComplianceErrorsCount + this.SourceBComplianceOKCount + this.SourceBComplianceWarningsCount;
+        document.getElementById("ID6").innerHTML = this.SourceBOKATCount;
     }
+}
+
+LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
+
+    var _this = this;
+    
+    var Severitydata = [];
+    for(key in checkGroupsInfo) {
+        var dataObject = {}
+        dataObject["Category"] = key;
+        dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
+        dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
+        dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
+        Severitydata.push(dataObject);
+    }
+   
+    var colorsArray = ["#F43742", "#F8C13B", "#0FFF72"];
+    $("#line_charts").dxChart({
+        palette: colorsArray,
+        dataSource: Severitydata,
+        commonSeriesSettings: {
+            argumentField: "Category",
+            type: "line"
+        },
+        margin: {
+            bottom: 20
+        },
+        argumentAxis: {
+            valueMarginsEnabled: false,
+            discreteAxisDivisionMode: "crossLabels",
+            grid: {
+                visible: false
+            }
+        },
+        series: [
+            { valueField: "Error", name: "Error" },
+            { valueField: "Warning", name: "Warning" },
+            { valueField: "OK", name: "OK" }
+        ],
+        legend: {
+            visible: false
+        },
+        title: { 
+            text: " ",
+        },
+        tooltip: {
+            enabled: true,
+            customizeTooltip: function (arg) {
+                return {
+                    text: arg.valueText
+                };
+            }
+        }
+    })
 }
