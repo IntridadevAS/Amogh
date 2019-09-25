@@ -411,18 +411,16 @@
 }
 #Group {
 	position: absolute;
-    width:  45%;
+    width: 48%;
     height: 32%;
-    left: 30%;
-    top: 30.25%;
+    left: 25%;
+    top: 32%;
     overflow: hidden;
 }
 #ID40_ {
-	position: absolute;
-    left: 0px;
-    top: 0px;
+	position: relative;
     overflow: hidden;
-    width: 90%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;
@@ -433,10 +431,8 @@
 }
 #Errors {
 	position: absolute;
-    left: 15%;
-    top: 70%;
     overflow: hidden;
-    width: 60%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;
@@ -473,19 +469,19 @@
 	top: 0px;
 }
 #Group_A3_Group_22 {
-	position: absolute;
-    width: 45%;
+    position: absolute;
+    width: 48%;
     height: 32%;
-    left: 30%;
-    top: 30.25%;
+    left: 25%;
+    top: 32%;
     overflow: hidden;
 }
 #ID30_ {
-	position: absolute;
+    position: relative;
     left: 0px;
     top: 0px;
     overflow: hidden;
-    width: 90%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;
@@ -495,11 +491,9 @@
     color: rgba(255,234,15,1);
 }
 #Warnings {
-	position: absolute;
-    left: 2%;
-    top: 70%;
+    position: relative;
     overflow: hidden;
-    width: 77%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;
@@ -536,19 +530,19 @@
 	top: 0px;
 }
 #Group_A3_Group_24 {
-	position: absolute;
-    width: 45%;
+    position: absolute;
+    width: 48%;
     height: 32%;
-    left: 30%;
-    top: 30.25%;
+    left: 25%;
+    top: 32%;
     overflow: hidden;
 }
 #ID10_ {
-	position: absolute;
+    position: relative;
     left: 0px;
     top: 0px;
     overflow: hidden;
-    width: 90%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;
@@ -558,11 +552,9 @@
     color: rgba(15,255,114,1);
 }
 #OK {
-	position: absolute;
-    left: 35%;
-    top: 70%;
+    position: absolute;
     overflow: hidden;
-    width: 50%;
+    width: 100%;
     white-space: nowrap;
     text-align: center;
     font-family: Montserrat;

@@ -43,13 +43,14 @@ function populateSmallAnalyticsData(checkResults, container) {
 
 function ShowModelViewer() {
     var reviewDoc = window.frameElement.ownerDocument;
-    reviewDoc.getElementById("analyticsSmall").style.display = "none";
     var currentView = window.parent.getCurrentView();
     if(currentView.MainReviewTableContainer.includes("comparison")) {
+        reviewDoc.getElementById("analyticsSmall").style.display = "none";
         reviewDoc.getElementById("comparisonVisualizerA").style.display = "grid";
     }
     else {
-        reviewDoc.getElementById("complianceVisualizerA").style.display = "grid";
+        reviewDoc.getElementById("analyticsSmall1").style.display = "none";
+        reviewDoc.getElementById("complianceVisualizerA").style.display = "block";
     }
     window.parent.resizeCanvas();
 }
