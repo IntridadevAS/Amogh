@@ -46,7 +46,7 @@ function loadCheckCases() {
 }
 
 function filterCheckCases(sourceType) {
-    if(!(currentTabId in SourceManagers))
+    if(!(model.currentTabId in SourceManagers))
     {
         return;
     }
