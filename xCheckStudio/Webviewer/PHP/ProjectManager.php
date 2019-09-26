@@ -2155,7 +2155,7 @@ function GetProjects()
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         if(strcasecmp ($permission, "check") == 0)
-            $query = "select * from Projects where userid=".$userid;
+            $query = "select * from Projects where userid=".$userid." or type= 'Public'";
         else
             $query = "select * from Projects where type = 'Public'";
         $stmt = $dbh->query($query);

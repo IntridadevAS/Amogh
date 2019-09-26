@@ -854,39 +854,7 @@ let checkView = {
     scrollContentDivToTop();
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
-    //let selectedReviews = Object.values(this.selectedReviews.reviews);
-    /* This code is from Alex. For now, we don't have mechanism to save Reviews with specified name and rest things. So commenting it...Rahul K][10 Aug 2019]
-      for (review of this.selectedReviews) {
-      let newDiv = document.createElement('DIV');
-      newDiv.classList.add('checkSpaceCard');
-      newDiv.setAttribute("id", review.reviewID);
-      newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
-      newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
-      if (project.favorite) {
-        newDiv.classList.add('favorite');
-      }
-      let htmlInner = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`
-      htmlInner += `<p>${review.createDate}</p>`;
-      htmlInner += `<ul>`;
-      
-      htmlInner += "</ul></div>"
-      htmlInner += `<div class='checkCardTitle'><h2>${review.name}<h2>`;
-      htmlInner += `<p>${review.status}</p></div></a>`
-      htmlInner += `<div class="projectButtons">`;
-      htmlInner += `<div class="star" onclick="controller.setFavoriteReview(${review.reviewID})"></div>`;
-      if (controller.permissions()) {
-        htmlInner += `
-        <div class="btnSymbol hiddenBtn" onclick="controller.editReview(${review.reviewID});">\
-          <img class="btnSymbol" src="../public/symbols/infoMenu.svg">\
-        </div>\
-        <div class="btnSymbol hiddenBtn" onclick="deleteItems.init('review', ${review.reviewID});">\
-          <img src="../public/symbols/TrashDelete.svg">\
-        </div>`
-      }
-      htmlInner += `</div>`
-      newDiv.innerHTML = htmlInner;
-      this.checkCardContainer.appendChild(newDiv);
-  }*/
+  
     for (review of this.selectedReviews) {
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
