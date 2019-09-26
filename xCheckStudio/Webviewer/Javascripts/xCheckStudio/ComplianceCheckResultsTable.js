@@ -55,14 +55,14 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
     return tableData;
 }
 
-ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function () {
+ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source) {
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(ComplianceColumns).length; i++) {
         columnHeader = {};
         var headerText;
         var hidden = false;
         if (i === ComplianceColumns.SourceName) {
-            headerText = "Name";
+            headerText = source;
             key = ComplianceColumnNames.SourceName;
             hidden = false;
         }
@@ -127,7 +127,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
         parentTable.appendChild(div);
 
-        var columnHeaders = this.CreateMainTableHeaders();
+        var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
 
         var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
 
@@ -275,7 +275,7 @@ function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
     // this.detailedReviewRowComments = reviewManager.detailedReviewRowComments;
 }
 
-ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function () {
+ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (source) {
 
     var group = [];
     var columnHeader = {}
@@ -302,7 +302,7 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
         group.push(headerGroupComp);
     }
 
-    columnHeader["headerText"] = "Source";
+    columnHeader["headerText"] = source;
     columnHeader["group"] = group;
 
     columnHeaders.push(columnHeader)
@@ -335,7 +335,7 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
     var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
 
-    var columnHeaders = this.CreatePropertiesTableHeader();
+    var columnHeaders = this.CreatePropertiesTableHeader(model.getCurrentReviewManager().ComplianceCheckManager.source);
 
     var tableData = [];
     for (var propertyId in component.properties) {

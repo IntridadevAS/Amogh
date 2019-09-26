@@ -23,7 +23,7 @@ ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function (groupId
     return btn;
 }
 
-ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function () {
+ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources) {
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(ComparisonColumns).length; i++) {
         columnHeader = {};
@@ -33,13 +33,13 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function () {
             continue;
         }
         else if (i === ComparisonColumns.SourceAName) {
-            headerText = 'SourceA';
+            headerText = sources[0];
             key = ComparisonColumnNames.SourceAName;
             hidden = false;
             width = "35%";
         }
         else if (i === ComparisonColumns.SourceBName) {
-            headerText = "SourceB";
+            headerText = sources[1];
             key = ComparisonColumnNames.SourceBName;
             hidden = false;
             width = "35%";
@@ -165,7 +165,7 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
         parentTable.appendChild(div);
 
         // create column headers
-        var columnHeaders = this.CreateMainTableHeaders();
+        var columnHeaders = this.CreateMainTableHeaders(ComparisonTableData.sources);
 
         // create table data
         var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);
@@ -295,7 +295,7 @@ function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 }
 
-ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function () {
+ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (sources) {
     var columnHeaders = [];
 
     for (var i = 0; i < 3; i++) {
@@ -329,7 +329,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     group[1] = headerGroupComp;
                 }
             }
-            headerText = "SourceA";
+            headerText = sources[0];
             key = null;
             headerGroup = group;
         }
@@ -360,7 +360,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     group[1] = headerGroupComp;
                 }
             }
-            headerText = "SourceB";
+            headerText = sources[1];
             key = null;
             headerGroup = group;
         }
@@ -433,7 +433,7 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
     var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
 
-    var columnHeaders = this.CreatePropertiesTableHeader();
+    var columnHeaders = this.CreatePropertiesTableHeader(model.getCurrentReviewManager().ComparisonCheckManager.sources);
 
     // show component class name as property in detailed review table    
     var tableData = this.CreateTableData(component.properties);
