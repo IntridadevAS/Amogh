@@ -11,6 +11,11 @@
 	margin: 0;
 	padding: 0;
 }
+
+/* body {
+    font-size: calc(0.75em + 1vmin);
+} */
+
 #Large___1 {
 	position: absolute;
 	box-sizing: border-box;
@@ -121,7 +126,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #pie {
@@ -168,7 +173,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #type_1 {
@@ -223,7 +228,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #pie_A3_Group_12 {
@@ -270,7 +275,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #line_A3_Rectangle_7 {
@@ -303,7 +308,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,72,71,1);
 }
 #Page_1 {
@@ -359,7 +364,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 
@@ -426,7 +431,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 40px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,72,71,1);
 }
 #Errors {
@@ -438,7 +443,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #warning {
@@ -487,7 +492,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 40px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,234,15,1);
 }
 #Warnings {
@@ -499,7 +504,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ok {
@@ -548,7 +553,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 40px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(15,255,114,1);
 }
 #OK {
@@ -560,7 +565,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #compare_A3_Group_25 {
@@ -656,7 +661,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 #ID0 {
@@ -670,7 +675,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 #Group_10 {
@@ -692,7 +697,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval {
@@ -738,7 +743,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_10 {
@@ -784,7 +789,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_13 {
@@ -830,7 +835,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_16 {
@@ -876,7 +881,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_19 {
@@ -922,7 +927,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_22 {
@@ -968,7 +973,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_25 {
@@ -1014,7 +1019,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 .Oval_A3_Ellipse_28 {
@@ -1052,8 +1057,8 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
-	color: rgba(255,255,255,1);
+    font-size: calc(0.65vw + 1vmin);
+    color: rgba(255,255,255,1);
 }
 #ID30 {
 	position: absolute;
@@ -1066,7 +1071,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 #ID40 {
@@ -1080,7 +1085,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 #ID50 {
@@ -1094,7 +1099,7 @@
 	font-family: Montserrat;
 	font-style: normal;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: calc(0.65vw + 1vmin);
 	color: rgba(255,255,255,1);
 }
 #line_A3_Rectangle_15 {
@@ -1129,7 +1134,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1)
 }
 .Path_2 {
@@ -1208,7 +1213,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Group_5_1 {
@@ -1230,7 +1235,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ABC123 {
@@ -1244,7 +1249,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Group_6 {
@@ -1266,7 +1271,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ABC123_A3_Text_32 {
@@ -1280,7 +1285,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #line_A3_Rectangle_19 {
@@ -1313,7 +1318,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ABC123_A3_Text_34 {
@@ -1327,7 +1332,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Group_8 {
@@ -1349,7 +1354,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Data_type_A3_Text_36 {
@@ -1363,7 +1368,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Group_9 {
@@ -1385,7 +1390,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #xml_2_xls {
@@ -1399,7 +1404,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 
@@ -1441,7 +1446,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 .icon_32_Summary {
@@ -1472,7 +1477,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Total_items_checked {
@@ -1486,7 +1491,8 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    /* font-size: 20px; */
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 
@@ -1501,7 +1507,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Total_items_checked_1 {
@@ -1515,7 +1521,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.60vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 
@@ -1538,7 +1544,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ID18 {
@@ -1552,7 +1558,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,72,71,1);
 }
 
@@ -1567,7 +1573,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.60vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #count_undefined {
@@ -1581,7 +1587,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,72,71,1);
 }
 
@@ -1604,7 +1610,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ID13 {
@@ -1618,7 +1624,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,234,15,1);
 }
 
@@ -1633,7 +1639,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.60vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ID37_A3_Text_12_1 {
@@ -1647,7 +1653,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,234,15,1);
 }
 
@@ -1670,7 +1676,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ID6 {
@@ -1684,7 +1690,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(15,255,114,1);
 }
 #Group_4_A3_Group_45 {
@@ -1706,7 +1712,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #ID6_A3_Text_49 {
@@ -1720,7 +1726,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(15,255,114,1);
 }
 #Group_A3_Group_46 {
@@ -1742,7 +1748,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Total_items_checked_A3_Text_51 {
@@ -1756,7 +1762,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 
@@ -1771,7 +1777,7 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: calc(0.65vw + 1vmin);
     color: rgba(255,255,255,1);
 }
 #Items_with_No_Match {
@@ -1785,6 +1791,6 @@
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: calc(0.60vw + 1vmin);
     color: rgba(255,255,255,1);
 }

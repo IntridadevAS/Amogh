@@ -389,18 +389,48 @@ let viewPanels = {
     }
   },
 
+  onMouseOverMaxMin: function(selected) {
+      selected.style.opacity = 1;
+  },
+
+  onMouseOutMaxMin: function(selected) {
+    selected.style.opacity = 0.2;
+  }, 
+
+  showSmallAnalytics: function(parentContainer, analyticsContainerId ) {
+    parentContainer.style.display = "none";
+    document.getElementById(analyticsContainerId).style.display = "block";
+  },
+
+  showLargeAnalytics: function(parentContainer) {
+    // document.getElementById(parentContainer).style.display = "none";
+    var modal = document.getElementById('maximizeViewerContainer');
+    modal.style.display = "block";
+  },
+
+  onLargeAnalyticsClose: function(selected) {
+    console.log(selected);
+  },
+
   showAnalytics: function (selected) {
     let parent = selected.parentNode;
     
-    if(selected.id == "AnalyticsDashboard1" && model.selectedComparisons.length > 0) {
-      parent.style.display = "none";
-      document.getElementById("analyticsSmall").style.display = "block";
+    if(selected.id == "analyticsBtnA" && model.selectedComparisons.length > 0) {
+      if(!parent.classList.contains("maximize")) {
+        this.showSmallAnalytics(parent, "analyticsSmall");
+      }
+      else {
+        this.showLargeAnalytics(parent.parentNode);
+      }
     }
-    else if(selected.id == "AnalyticsDashboard2" && model.selectedCompliance) {
-      parent.style.display = "none";
-      document.getElementById("analyticsSmall1").style.display = "block";
+    else if(selected.id == "analyticsBtnB" && model.selectedCompliance) {
+      if(!parent.classList.contains("maximize")) {
+        this.showSmallAnalytics(parent, "analyticsSmall1");
+      }
+      else {
+        this.showLargeAnalytics(parent.parentNode);
+      }
     }
-    // document.getElementById("analyticsSmall").innerHTML='<object type="text/html" data="/analyticsTotalCheckModule.html" style="height: 100%; width: 100%; overflow: hidden" ></object>';
   },
 }
 

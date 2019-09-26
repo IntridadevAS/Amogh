@@ -335,6 +335,7 @@ tr {
   background-position: center;
   background-repeat: no-repeat;
   position: absolute;
+  opacity: 0.2;
   left: 5px;
   top: 5px;
   height: 30px;
@@ -354,6 +355,7 @@ tr {
   left: 5px;
   top: 45px;
   height: 30px;
+  opacity: 0.2;
   width: 30px;
   border: var(--borderWidth) solid var(--xCheckMedGrey);
   border-radius: var(--borderRadiusVal);

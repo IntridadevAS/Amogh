@@ -394,8 +394,10 @@
           </div>
           <div id="center" class="grabBar"></div>
           <div id="comparisonVisualizerA" class="visualizerContainer visualizer4">
-            <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-            <div id="AnalyticsDashboard1" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
+            <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+            <div id="analyticsBtnA" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="comparePanelA" class="comparePanel"  style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
@@ -499,8 +501,10 @@
           </div>
           <div id="center" class="grabBar"></div>
           <div id="complianceVisualizerA" class="visualizerContainer">
-            <div class="maxMinBtn" onClick="viewPanels.maxMin(this)"></div>
-            <div id="AnalyticsDashboard2" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
+            <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+            <div id="analyticsBtnB" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="compliance1" class="tempContainer">
 
               <!-- Translucency slider -->
@@ -567,7 +571,7 @@
           /* Hidden by default */
           position: absolute;
           /* Stay in place */
-          z-index: 3;
+          z-index: 4;
           /* Location of the box */
           width: 100%;
           /* Full width */

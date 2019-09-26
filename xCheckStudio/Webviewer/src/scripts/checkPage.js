@@ -241,14 +241,10 @@ let viewPanels = {
   },
 
   onMouseOverMaxMin: function(selected) {
-      selected.style.height = "35px";
-      selected.style.width = "35px";
       selected.style.opacity = 1;
   },
 
   onMouseOutMaxMin: function(selected) {
-    selected.style.height = "30px";
-    selected.style.width = "30px";
     selected.style.opacity = 0.2;
   } 
 }
