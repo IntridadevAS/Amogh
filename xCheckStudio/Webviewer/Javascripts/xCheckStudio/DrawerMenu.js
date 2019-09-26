@@ -133,6 +133,9 @@ let menu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
     onProjectsClicked: function () {
@@ -145,6 +148,9 @@ let menu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
     onCheckClicked: function () {
@@ -157,6 +163,9 @@ let menu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
     onPREPClicked: function () {
@@ -169,6 +178,9 @@ let menu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
     onHelpClicked: function () {
@@ -193,6 +205,9 @@ let menu = {
         popup.style.width = "581px";
         popup.style.height = "155px";
         popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 }
 
