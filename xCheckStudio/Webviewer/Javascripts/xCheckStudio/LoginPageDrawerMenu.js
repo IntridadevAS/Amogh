@@ -41,7 +41,7 @@ var menuItems = [
     {
         id: 1,
         text: "Version Info",
-        icon: "public/symbols/InfoMenu.svg",
+        //icon: "public/symbols/InfoMenu.svg",
         click: function () {
             menu.onVersionInfoClicked();
         }
@@ -49,7 +49,7 @@ var menuItems = [
     {
         id: 2,
         text: "Help",
-        icon: "public/symbols/Group 99.svg",
+        //icon: "public/symbols/Group 99.svg",
         click: function () {
             menu.onHelpClicked();
         }
@@ -73,7 +73,7 @@ var menuItems = [
     {
         id: 5,
         text: "Exit",
-        icon: "public/symbols/closeWin.svg",
+        //icon: "public/symbols/closeWin.svg",
         click: function () {
             menu.onExitClicked();
         }
