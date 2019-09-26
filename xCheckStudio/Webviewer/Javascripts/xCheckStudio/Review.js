@@ -13,116 +13,116 @@ var comparisonReviewManager;
 var complianceReviewManager;
 
 function initReviewModule() {
-    // // set project name
-    // setProjectName();
+    return new Promise((resolve) => {
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-    // // set user name
-    // setUserName();
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // read  check data
+        $.ajax({
+            url: 'PHP/CheckResultsReader.php',
+            type: "POST",
+            async: true,
+            data: {
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
+            success: function (msg) {
+                var checkResults = JSON.parse(msg);
 
-    // read  check data
-    $.ajax({
-        url: 'PHP/CheckResultsReader.php',
-        type: "POST",
-        async: true,
-        data: {
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        success: function (msg) {
-            var checkResults = JSON.parse(msg);
+                // var comparisonCheckGroups = undefined;
+                // var sourceAComplianceCheckGroups = undefined;
+                // var sourceBComplianceCheckGroups = undefined;
+                // var sourceAComparisonHierarchy = undefined;
+                // var sourceBComparisonHierarchy = undefined;
+                // var sourceAComplianceHierarchy = undefined;
+                // var sourceBComplianceHierarchy = undefined;
 
-            // var comparisonCheckGroups = undefined;
-            // var sourceAComplianceCheckGroups = undefined;
-            // var sourceBComplianceCheckGroups = undefined;
-            // var sourceAComparisonHierarchy = undefined;
-            // var sourceBComparisonHierarchy = undefined;
-            // var sourceAComplianceHierarchy = undefined;
-            // var sourceBComplianceHierarchy = undefined;
+                // initialize the check data
+                model.files = {};
+                if ("sourceInfo" in checkResults) {
+                    var sourceInfo = checkResults["sourceInfo"];
 
-            // initialize the check data
-            model.files = {};
-            if ("sourceInfo" in checkResults) {
-                var sourceInfo = checkResults["sourceInfo"];
+                    // 1st source
+                    if ("sourceAFileName" in sourceInfo) {
+                        var file = {};
+                        file["id"] = "a";
+                        file["fileName"] = sourceInfo["sourceAFileName"];
+                        file["compliance"] = false;
+                        file["sourceType"] = sourceInfo["sourceAType"];
 
-                // 1st source
-                if ("sourceAFileName" in sourceInfo) {
-                    var file = {};
-                    file["id"] = "a";
-                    file["fileName"] = sourceInfo["sourceAFileName"];
-                    file["compliance"] = false;
-                    file["sourceType"] = sourceInfo["sourceAType"];
+                        model.files[file.id] = file;
+                    }
 
-                    model.files[file.id] = file;
+                    // 2nd source
+                    if ("sourceBFileName" in sourceInfo) {
+                        var file = {};
+                        file["id"] = "b";
+                        file["fileName"] = sourceInfo["sourceBFileName"];
+                        file["compliance"] = false;
+                        file["sourceType"] = sourceInfo["sourceBType"];
+
+                        model.files[file.id] = file;
+                    }
                 }
 
-                // 2nd source
-                if ("sourceBFileName" in sourceInfo) {
-                    var file = {};
-                    file["id"] = "b";
-                    file["fileName"] = sourceInfo["sourceBFileName"];
-                    file["compliance"] = false;
-                    file["sourceType"] = sourceInfo["sourceBType"];
+                for (var key in checkResults) {
+                    if (!checkResults.hasOwnProperty(key)) {
+                        continue;
+                    }
 
-                    model.files[file.id] = file;
-                }
-            }
+                    if (key == 'Comparisons') {
+                        comparisons = checkResults[key];
+                        // comparisonCheckGroups = new CheckGroups();
+                        // comparisonCheckGroups.restore(checkResults[key], false);
+                    }
+                    else if (key == 'Compliances') {
+                        compliances = checkResults[key];
 
-            for (var key in checkResults) {
-                if (!checkResults.hasOwnProperty(key)) {
-                    continue;
-                }
+                        // set compliance true/false for sources
+                        for (var i = 0; i < compliances.length; i++) {
+                            var compliance = compliances[i];
 
-                if (key == 'Comparisons') {
-                    comparisons = checkResults[key];
-                    // comparisonCheckGroups = new CheckGroups();
-                    // comparisonCheckGroups.restore(checkResults[key], false);
-                }
-                else if (key == 'Compliances') {
-                    compliances = checkResults[key];
-
-                    // set compliance true/false for sources
-                    for (var i = 0; i < compliances.length; i++) {
-                        var compliance = compliances[i];
-
-                        for (var sourceId in model.files) {
-                            var file = model.files[sourceId];
-                            if (file.fileName === compliance.source) {
-                                file["compliance"] = true;
+                            for (var sourceId in model.files) {
+                                var file = model.files[sourceId];
+                                if (file.fileName === compliance.source) {
+                                    file["compliance"] = true;
+                                }
                             }
                         }
                     }
-                }
-                // else if (key == 'SourceACompliance') {
-                //     sourceAComplianceCheckGroups = new CheckGroups();
-                //     sourceAComplianceCheckGroups.restore(checkResults[key], true);
+                    // else if (key == 'SourceACompliance') {
+                    //     sourceAComplianceCheckGroups = new CheckGroups();
+                    //     sourceAComplianceCheckGroups.restore(checkResults[key], true);
 
-                //     model.files["a"].compliance = true;
-                // }
-                // else if (key == 'SourceBCompliance') {
-                //     sourceBComplianceCheckGroups = new CheckGroups();
-                //     sourceBComplianceCheckGroups.restore(checkResults[key], true);
+                    //     model.files["a"].compliance = true;
+                    // }
+                    // else if (key == 'SourceBCompliance') {
+                    //     sourceBComplianceCheckGroups = new CheckGroups();
+                    //     sourceBComplianceCheckGroups.restore(checkResults[key], true);
 
-                //     model.files["b"].compliance = true;
-                // }
-                else if (key == 'SourceAComparisonComponentsHierarchy') {
-                    sourceAComparisonHierarchy = checkResults[key];
+                    //     model.files["b"].compliance = true;
+                    // }
+                    else if (key == 'SourceAComparisonComponentsHierarchy') {
+                        sourceAComparisonHierarchy = checkResults[key];
+                    }
+                    else if (key == 'SourceBComparisonComponentsHierarchy') {
+                        sourceBComparisonHierarchy = checkResults[key];
+                    }
+                    // else if (key == 'SourceAComplianceComponentsHierarchy') {
+                    //     sourceAComplianceHierarchy = checkResults[key];
+                    // }
+                    // else if (key == 'SourceBComplianceComponentsHierarchy') {
+                    //     sourceBComplianceHierarchy = checkResults[key];
+                    // }                    
                 }
-                else if (key == 'SourceBComparisonComponentsHierarchy') {
-                    sourceBComparisonHierarchy = checkResults[key];
-                }
-                // else if (key == 'SourceAComplianceComponentsHierarchy') {
-                //     sourceAComplianceHierarchy = checkResults[key];
-                // }
-                // else if (key == 'SourceBComplianceComponentsHierarchy') {
-                //     sourceBComplianceHierarchy = checkResults[key];
-                // }
+
+                return resolve(true);
+            },
+            error: function (error) {
+                //alert('error; ' + eval(error));
+                return resolve(false);
             }
-        },
-        error: function (error) {
-            //alert('error; ' + eval(error));
-        }
+        });
     });
 }
 
