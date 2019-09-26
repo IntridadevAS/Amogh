@@ -481,7 +481,7 @@ function clearData() {
 
   currentCheckData["reviewManager"] = null;
 
-  if (this.currentCheck === "comparison") {
+  if (model.currentCheck === "comparison") {
     if (currentCheckData["sourceAViewer"]) {
       currentCheckData["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
       currentCheckData["sourceAViewer"] = null;
@@ -499,7 +499,7 @@ function clearData() {
       currentCheckData["sourceDViewer"] = null;
     }
   }
-  else if (this.currentCheck === "compliance") {
+  else if (model.currentCheck === "compliance") {
     if (currentCheckData["viewer"]) {
       currentCheckData["viewer"].Destroy(Compliance.ViewerContainer);
       currentCheckData["viewer"] = null;
