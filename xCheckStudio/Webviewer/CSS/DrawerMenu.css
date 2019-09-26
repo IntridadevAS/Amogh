@@ -11,7 +11,7 @@
     
     .panel-list {
       height: 100%;
-      background-color: var(--xCheckDarkGrey) !important;
+      background-color: var(--xCheckMedGrey) !important;
       font-family: Montserrat;
       font-size: 16px;
     }
