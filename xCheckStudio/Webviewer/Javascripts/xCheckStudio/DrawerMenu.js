@@ -16,20 +16,36 @@ var DrawerMenu = {
 
                 return $list.dxList({
                     dataSource: menuItems,
-                    hoverStateEnabled: false,
-                    focusStateEnabled: false,
+                    hoverStateEnabled: true,
+                    focusStateEnabled: true,
                     activeStateEnabled: false,
                     width: 200,
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
                     onSelectionChanged: function (e) {                       
-                        e.addedItems[0].click();
+                        if (e.component._selection.getSelectedItems().length > 0)
+                        {
+                            e.addedItems[0].click(e);
+                            e.component._selection.deselectAll();
+                        }
                     }
                 });
-            }
+            },
+            closeOnOutsideClick: function(e) {
+                if(drawerOpened === true) {
+                    drawerOpened = false;
+                    swapIcon();
+                }
+                return true;
+            },
+            onOptionChanged:function (e) {
+                if(e.value === true) 
+                    drawerOpened = !drawerOpened;
+            },
         }).dxDrawer("instance");
 
         var _this = this;
+        var drawerOpened = false;
         document.getElementById("mainMenu").onclick = function () {
             swapIcon();
             _this.drawer.toggle();

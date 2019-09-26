@@ -1,5 +1,5 @@
 var LoginPageDrawerMenu = {
-
+    
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
@@ -15,21 +15,38 @@ var LoginPageDrawerMenu = {
                 }
 
                 return $list.dxList({
+                    
                     dataSource: menuItems,
-                    hoverStateEnabled: false,
-                    focusStateEnabled: false,
+                    hoverStateEnabled: true,
+                    focusStateEnabled: true,
                     activeStateEnabled: false,
                     width: 200,
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
                     onSelectionChanged: function (e) {
-                        e.addedItems[0].click();
-                    }
+                        if (e.component._selection.getSelectedItems().length > 0)
+                        {
+                            e.addedItems[0].click(e);
+                            e.component._selection.deselectAll();
+                        }
+                    },
                 });
-            }
+            },
+            closeOnOutsideClick: function(e) {
+                if(drawerOpened === true) {
+                    drawerOpened = false;
+                    swapIcon();
+                }
+                return true;
+            },
+            onOptionChanged:function (e) {
+                if(e.value === true) 
+                    drawerOpened = !drawerOpened;
+            },
         }).dxDrawer("instance");
 
         var _this = this;
+        var drawerOpened = false;
         document.getElementById("mainMenu").onclick = function () {
             swapIcon();
             _this.drawer.toggle();
@@ -49,6 +66,7 @@ var menuItems = [
     {
         id: 2,
         text: "Help",
+
         //icon: "public/symbols/Group 99.svg",
         click: function () {
             menu.onHelpClicked();
@@ -82,18 +100,19 @@ var menuItems = [
 
 let menu = {
     onVersionInfoClicked: function () {
-
+        console.log("onVersionInfoClicked");
     },
     onHelpClicked: function () {
-
+        console.log("onHelpClicked");
     },
     onFAQsClicked: function () {
-
+        console.log("onFAQsClicked");
     },
     onWhatsNewClicked: function () {
-
+        console.log("onWhatsNewClicked");
     },
     onExitClicked: function () {
+        console.log("onExitClicked");
         var overlay = document.getElementById("exitOverlay");
         var popup = document.getElementById("exitPopup");
 
