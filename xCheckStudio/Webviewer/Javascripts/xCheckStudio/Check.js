@@ -19,11 +19,10 @@ function onCheckButtonClick() {
 
         // check if any check case type is selected
         var comparisonSwitch = document.getElementById('comparisonSwitch');
-        var complianceSwitch = document.getElementById('complianceSwitch');
-
+       
         // check if one of the check switch is on
         if (!comparisonSwitch.checked &&
-            !complianceSwitch.checked) {
+            !complianceChecked()) {
             // hide busy spinner
             //busySpinner.classList.remove('show');
             alert('No selected check type found.</br>Please select check type.');
@@ -49,7 +48,7 @@ function onCheckButtonClick() {
         checkcase.CheckTypes = checkCaseManager.CheckCase.CheckTypes;
 
         var checksCount = 0;
-        var totalChecksTobePerformed = 3;
+        var totalChecksTobePerformed = getTotalChecksTobePerformed();
 
         // perform comparison check
         performComparisonCheck(comparisonSwitch,
@@ -67,9 +66,11 @@ function onCheckButtonClick() {
                 }
             });
 
-        // perform source a compliance check                      
-        performSourceAComplianceCheck(complianceSwitch,
-            checkcase,
+        // perform source a compliance check      
+        if(model.views["a"].used && 
+           model.views["a"].complianceSwitchChecked)                
+        {
+            performSourceAComplianceCheck(checkcase,
             dataSourceOrderMaintained).then(function (result) {
                 if (!result) {
                     deleteCheckResultsFromDB("SourceACompliance").then(function (res) {
@@ -82,24 +83,58 @@ function onCheckButtonClick() {
                     onCheckCompleted();
                 }
             });
+        }
 
-        // perform source b compliance check                      
-        performSourceBComplianceCheck(complianceSwitch,
-            checkcase,
-            dataSourceOrderMaintained).then(function (result) {
-                if (!result) {
-                    deleteCheckResultsFromDB("SourceBCompliance").then(function (res) {
+        // perform source b compliance check       
+        if (model.views["b"].used &&
+            model.views["b"].complianceSwitchChecked) {
+            performSourceBComplianceCheck(checkcase,
+                dataSourceOrderMaintained).then(function (result) {
+                    if (!result) {
+                        deleteCheckResultsFromDB("SourceBCompliance").then(function (res) {
 
-                    });
-                }
+                        });
+                    }
 
-                checksCount++;
-                if (checksCount === totalChecksTobePerformed) {
-                    onCheckCompleted();
-                }
-            });
+                    checksCount++;
+                    if (checksCount === totalChecksTobePerformed) {
+                        onCheckCompleted();
+                    }
+                });
+        };
 
-    }, 1000);   
+    }, 1000);
+}
+
+function complianceChecked() {
+    for (var id in model.views) {
+        if (model.views[id].used &&
+            model.views[id].complianceSwitchChecked) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function getTotalChecksTobePerformed() {
+    var count = 0;
+
+    // check if any check case type is selected
+    var comparisonSwitch = document.getElementById('comparisonSwitch');
+    if (comparisonSwitch.checked) {
+        count++;
+    }
+
+    // total compliance checks
+    for (var id in model.views) {
+        if (model.views[id].used &&
+            model.views[id].complianceSwitchChecked) {
+            count++;
+        }
+    }
+
+    return count;
 }
 
 function onCheckCompleted() {
@@ -138,11 +173,10 @@ function performComparisonCheck(comparisonCB, checkcase, dataSourceOrderMaintain
     });
 }
 
-function performSourceAComplianceCheck(complianceCB, checkcase, dataSourceOrderMaintained) {
+function performSourceAComplianceCheck(checkcase, dataSourceOrderMaintained) {
 
     return new Promise((resolve) => {
-        if (!("a" in SourceManagers) ||
-            !complianceCB.checked) {
+        if (!("a" in SourceManagers)) {
             return resolve(false);
         }
 
@@ -182,10 +216,9 @@ function performSourceAComplianceCheck(complianceCB, checkcase, dataSourceOrderM
     });
 }
 
-function performSourceBComplianceCheck(complianceCB, checkcase, dataSourceOrderMaintained) {
+function performSourceBComplianceCheck(checkcase, dataSourceOrderMaintained) {
     return new Promise((resolve) => {
-        if (!("b" in SourceManagers) ||
-            !complianceCB.checked) {
+        if (!("b" in SourceManagers)) {
             return resolve(false);
         }
 

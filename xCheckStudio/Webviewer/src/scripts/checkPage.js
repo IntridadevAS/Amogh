@@ -1,9 +1,10 @@
-var currentTabId;
+//var currentTabId;
 
 let model = {
   activeTabs: 0,
   selectedTab: [],
   currentView: null,
+  currentTabId: undefined,
   views: {
     a: {
       id: "a",
@@ -11,7 +12,8 @@ let model = {
       viewPanel: document.getElementById("viewPanelA"),
       tableData: document.getElementById("tableDataA"),
       visualizer: document.getElementById("visualizerA"),
-      fileName: ""
+      fileName: "",
+      complianceSwitchChecked: false
     },
     b: {
       id: "b",
@@ -19,7 +21,8 @@ let model = {
       viewPanel: document.getElementById("viewPanelB"),
       tableData: document.getElementById("tableDataB"),
       visualizer: document.getElementById("visualizerB"),
-      fileName: ""
+      fileName: "",
+      complianceSwitchChecked: false
     },
     c: {
       id: "c",
@@ -27,7 +30,8 @@ let model = {
       viewPanel: document.getElementById("viewPanelC"),
       tableData: document.getElementById("tableDataC"),
       visualizer: document.getElementById("visualizerC"),
-      fileName: ""
+      fileName: "",
+      complianceSwitchChecked: false
     },
     d: {
       id: "d",
@@ -35,7 +39,19 @@ let model = {
       viewPanel: document.getElementById("viewPanelD"),
       tableData: document.getElementById("tableDataD"),
       visualizer: document.getElementById("visualizerD"),
-      fileName: ""
+      fileName: "",
+      complianceSwitchChecked: false
+    }
+  },
+  onDataSourceTabChanged : function (tabID)
+  {
+    this.currentTabId = tabID;
+
+    // manage state of compliance switch
+    if(this.currentTabId in this.views)
+    {
+      var complianceSwitch = document.getElementById("complianceSwitch");
+      complianceSwitch.checked =  this.views[this.currentTabId].complianceSwitchChecked;
     }
   }
 }
@@ -67,9 +83,9 @@ let controller = {
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
     // addedFile.fileName = fileName;
     // SET FILENAME FOR TAB ABOVE
-        
+
     addedFile.used = true;
-        model.activeTabs++;
+    model.activeTabs++;
 
     if (model.activeTabs >= 4) {
       viewTabs.hideAddTab();
@@ -83,21 +99,22 @@ let controller = {
   deleteTabData: function (id) {
     let tab = model.views[id];
     tab.fileName = "";
-    tab.used = false;    
+    tab.used = false;
+    tab.complianceSwitchChecked = false;
   },
 
   selectView: function (id) {
     let changeViewTo = model.views[id];
 
-    if(!viewPanels.addFilesPanel.classList.contains("hide") &&
-    changeViewTo.fileName !== "") {
-        viewPanels.addFilesPanel.classList.add("hide");
+    if (!viewPanels.addFilesPanel.classList.contains("hide") &&
+      changeViewTo.fileName !== "") {
+      viewPanels.addFilesPanel.classList.add("hide");
     }
-    else if(viewPanels.addFilesPanel.classList.contains("hide") &&
-    changeViewTo.fileName == "") {
-        viewPanels.addFilesPanel.classList.remove("hide");
+    else if (viewPanels.addFilesPanel.classList.contains("hide") &&
+      changeViewTo.fileName == "") {
+      viewPanels.addFilesPanel.classList.remove("hide");
     }
-        
+
     viewPanels.showPanel(changeViewTo.viewPanel);
   }
 }
@@ -145,7 +162,7 @@ let viewTabs = {
       tabItem.previousElementSibling.click();
       tabItem.remove();
     }
-    else if(tabItem.nextElementSibling && tabItem.nextElementSibling.classList.contains("tab")) {
+    else if (tabItem.nextElementSibling && tabItem.nextElementSibling.classList.contains("tab")) {
       tabItem.nextElementSibling.click();
       tabItem.remove();
     }
@@ -159,10 +176,10 @@ let viewTabs = {
     viewTabs.showAddTab();
 
     // remove source manager
-     SourceManagers[tabID].ClearSource();
-     delete SourceManagers[tabID];
+    SourceManagers[tabID].ClearSource();
+    delete SourceManagers[tabID];
 
-     model.activeTabs--;
+    model.activeTabs--;
   },
 
   selectTab: function (selectedTab) {
@@ -171,7 +188,7 @@ let viewTabs = {
     selectedTab.classList.add("selectedTab");
 
     // maintain currently active tab
-    currentTabId = tabID;
+    model.onDataSourceTabChanged(tabID);    
   },
 
   unselectAllTabs: function () {
@@ -195,7 +212,7 @@ let viewPanels = {
     this.panels = document.getElementsByClassName("viewPanel");
   },
 
-  showAddPanel: function () { 
+  showAddPanel: function () {
     viewTabs.unselectAllTabs();
     viewTabs.addTab.classList.add("selectedTab");
     viewPanels.addFilesPanel.classList.remove("hide");
@@ -205,11 +222,11 @@ let viewPanels = {
   hideAddPanel: function () {
     var senderElement = event.target;
     if (senderElement.id == "plusFileButtonId" ||
-        senderElement.parentElement.id == "plusFileButtonId") {
+      senderElement.parentElement.id == "plusFileButtonId") {
       showLoadDataForm();
     }
 
-  
+
     //document.getElementById("fileInput").click();
 
     //this.addFilesPanel.classList.add("hide");
@@ -235,18 +252,18 @@ let viewPanels = {
     }
 
     // resize canvas
-    if (currentTabId in SourceManagers) {
-      SourceManagers[currentTabId].ResizeViewer();
+    if (model.currentTabId in SourceManagers) {
+      SourceManagers[model.currentTabId].ResizeViewer();
     }
   },
 
-  onMouseOverMaxMin: function(selected) {
-      selected.style.opacity = 1;
+  onMouseOverMaxMin: function (selected) {
+    selected.style.opacity = 1;
   },
 
-  onMouseOutMaxMin: function(selected) {
+  onMouseOutMaxMin: function (selected) {
     selected.style.opacity = 0.2;
-  } 
+  }
 }
 
 controller.init();
@@ -261,8 +278,8 @@ let grabBarControl = function (element) {
     previous.style.width = previous.offsetWidth - dx + "px";
 
     // resize canvas
-    if (currentTabId in SourceManagers) {
-      SourceManagers[currentTabId].ResizeViewer();
+    if (model.currentTabId in SourceManagers) {
+      SourceManagers[model.currentTabId].ResizeViewer();
     }
   }
 
@@ -295,28 +312,36 @@ function showLoadDataForm() {
 
   popup.style.top = ((window.innerHeight / 2) - 139) + "px";
   popup.style.left = ((window.innerWidth / 2) - 290) + "px";
-  
+
   // popup.style.overflow = "hidden";
 }
 
-function closeLoadDataForm()
-{
-    var overlay = document.getElementById("loadDataOverlay");
-    var popup = document.getElementById("loadDataPopup");
-  
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
+function closeLoadDataForm() {
+  var overlay = document.getElementById("loadDataOverlay");
+  var popup = document.getElementById("loadDataPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
 }
 
 function loadDataSet() {
   document.getElementById("uploadDatasourceForm").reset();
 
   // document.getElementById("file-uploader").click();
-  var fileUploader = $('#file-uploader').dxFileUploader('instance');  
-  fileUploader._isCustomClickEvent  = true;  
+  var fileUploader = $('#file-uploader').dxFileUploader('instance');
+  fileUploader._isCustomClickEvent = true;
   fileUploader._$fileInput.click();
 
   closeLoadDataForm();
 
   // viewPanels.addFilesPanel.classList.add("hide");
+}
+
+function onComplianceSwitchStateChanged(checkBox) {
+  if (!model.currentTabId ||
+    !model.currentTabId in model.views) {
+    return;
+  }
+
+  model.views[model.currentTabId].complianceSwitchChecked = checkBox.checked;
 }

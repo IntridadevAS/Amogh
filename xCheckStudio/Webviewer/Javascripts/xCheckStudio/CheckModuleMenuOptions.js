@@ -1,8 +1,8 @@
 function enableMenuOptions() {
     // on isolate
     document.getElementById("isolate").onclick = function () {
-        if (currentTabId in SourceManagers) {
-            var sourceManager = SourceManagers[currentTabId];
+        if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
             if (!sourceManager.CheckViewerContextMenu) {
                 return;
             }
@@ -13,8 +13,8 @@ function enableMenuOptions() {
 
     // on isolate
     document.getElementById("show").onclick = function () {
-        if (currentTabId in SourceManagers) {
-            var sourceManager = SourceManagers[currentTabId];
+        if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
             if (!sourceManager.CheckViewerContextMenu) {
                 return;
             }
@@ -25,8 +25,8 @@ function enableMenuOptions() {
 
     // on isolate
     document.getElementById("hide").onclick = function () {
-        if (currentTabId in SourceManagers) {
-            var sourceManager = SourceManagers[currentTabId];
+        if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
             if (!sourceManager.CheckViewerContextMenu) {
                 return;
             }

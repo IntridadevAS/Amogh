@@ -184,11 +184,11 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
 */
 SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
     
-    if(!(currentTabId in SourceManagers))
+    if(!(model.currentTabId in SourceManagers))
     {
         return;
     }
-    var sourceManager = SourceManagers[currentTabId];
+    var sourceManager = SourceManagers[model.currentTabId];
 
     var nodeID = parseInt(nodeId)
     if (isNaN(nodeID)) {
