@@ -706,6 +706,7 @@
 		top: 5px;
 		height: 30px;
 		width: 30px;
+		opacity: 0.2;
 		border: var(--borderWidth) solid var(--xCheckMedGrey);
 		border-radius: var(--borderRadiusVal);
 		z-index: 1;
@@ -725,6 +726,7 @@
 		left: 5px;
 		top: 45px;
 		height: 30px;
+		opacity: 0.2;
 		width: 30px;
 		border: var(--borderWidth) solid var(--xCheckMedGrey);
 		border-radius: var(--borderRadiusVal);
@@ -739,8 +741,10 @@
 </head>
 <body>
 <div id="Small">
-	<div class="maxMinBtn" onclick="ShowLargeAnalytics()"></div>
-	<div id="AnalyticsDashboard" class="analyticsBtn" onclick="ShowModelViewer()"></div>
+	<div class="maxMinBtn" onmouseover="onMouseOverMaxMin(this)"
+	onmouseout="onMouseOutMaxMin(this)" onclick="ShowLargeAnalytics()"></div>
+	<div id="analyticsBtn" onmouseover="onMouseOverMaxMin(this)"
+	onmouseout="onMouseOutMaxMin(this)" class="analyticsBtn" onclick="ShowModelViewer()"></div>
 	<div id="Compliance_DataSet_Selection" onclick="RemoveComplianceSourceSelectionOverlay()">
 		<svg class="bgr">
 			<rect fill="rgba(41,46,77,1)" stroke="rgba(15,255,238,1)" stroke-width="4px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="16" ry="16" x="0" y="0" width="440" height="397">
@@ -1111,7 +1115,7 @@
 
 <script>
 
-	var analyticsManager;
+		var analyticsManager;
 
 		var comparisonCheckGroups = false;
 		var sourceAComplianceCheckGroups = false;
@@ -1122,6 +1126,14 @@
 		var SeveritybuttonActive = true;
 		var InfoButtonActive = false;
 
+
+		function onMouseOverMaxMin(selected) {
+			selected.style.opacity = 1;
+		}
+
+		function onMouseOutMaxMin(selected) {
+			selected.style.opacity = 0.2;
+		}
 
 		window.onload = function () {            
 		// read data source info
