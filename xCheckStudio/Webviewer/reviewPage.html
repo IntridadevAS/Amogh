@@ -13,13 +13,13 @@
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 
   <link rel="stylesheet" href="src/prompts/promptForms.css" type="text/css" />
-  <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />  
+  <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
-        <img  id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
@@ -39,6 +39,10 @@
     </div>
 
   </header>
+
+  <!-- page loading overlay -->
+  <div id="pageLoadingOverlay" class="overlay" style="display: block"></div>
+
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
     <div id="loadIndicator"></div>
 
@@ -365,10 +369,10 @@
         <div id="maximizeViewerContainer" class="modal">
           <!-- Modal content -->
           <div class="modal-content" id="maximizeViewerContainer-content"
-              style="width: 100%; height: 100%; padding: 6px;">
-              <span onclick="this.parentElement.parentElement.style.display='none'" style="color: white; font-weight: bolder; position: absolute; top: 25px;
+            style="width: 100%; height: 100%; padding: 6px;">
+            <span onclick="this.parentElement.parentElement.style.display='none'" style="color: white; font-weight: bolder; position: absolute; top: 25px;
               right: 25px;" class="closebtn">X</span>
-              <iframe src="LargeAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe src="LargeAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
         <div id="viewPanelComparison" class="viewPanel">
@@ -417,7 +421,7 @@
               </div>
 
             </div>
-            <div id="comparePanelB" class="comparePanel"  style="display: none">
+            <div id="comparePanelB" class="comparePanel" style="display: none">
               <div id="compare2" class="tempContainer"></div>
               <!-- Translucency slider -->
               <div id="translucencyOverlay2" class="sliderOverlay" style="display: none">
@@ -436,7 +440,7 @@
               </div>
 
             </div>
-            <div id="comparePanelC" class="comparePanel"  style="display: none">
+            <div id="comparePanelC" class="comparePanel" style="display: none">
               <div id="compare3" class="tempContainer"></div>
               <!-- Translucency slider -->
               <div id="translucencyOverlay3" class="sliderOverlay" style="display: none">
@@ -476,9 +480,9 @@
             </div>
           </div>
           <div id="analyticsSmall" class="visualizerContainer" style="display: none">
-              <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
-          
+
         </div>
         <div id="viewPanelCompliance" class="viewPanel hide">
           <div id="tableDataCompliance" class="tableContainer">
@@ -526,7 +530,7 @@
             </div>
           </div>
           <div id="analyticsSmall1" class="visualizerContainer" style="display: none">
-              <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
         <div class="projectName">
@@ -584,24 +588,24 @@
           /* Black w/ opacity */
       }
 
-      /* Modal Content */
-      .modal-content {
-          background-color: #fefefe;
-          border: 1px solid #888;
-          width: 100%;
-          height: 100%;
-          margin-top: 2px;
-      }
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      border: 1px solid #888;
+      width: 100%;
+      height: 100%;
+      margin-top: 2px;
+    }
 
-      .closebtn {
-          float: right;
-          color: white;
-          font-size: 15px;
-          cursor: pointer;
+    .closebtn {
+      float: right;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
 
-        }
+    }
   </style>
-  
+
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-1.11.3.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
   <script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
@@ -624,7 +628,7 @@
   <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
   <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
   <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
-  
+
   <script type="text/javascript" src="src/scripts/main.js"></script>
   <script type="text/javascript" src="src/scripts/reviewPage.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\Review.js"></script>
@@ -660,35 +664,37 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleMenuOptions.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DrawerMenu.js"></script>
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
-  
+
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
   <script>
     $("#loadIndicator").dxLoadPanel({
-       "visible": true,
+      "visible": false,
       "showPane": false,
       "shadingColor": "rgba(0,0,0,0.4)",
-      "message" : ""
+      "message": ""
     });
 
     window.onload = function () {
 
+        setPageTitle();
+        setUserName();
+        setCheckSpaceName();
 
-      setPageTitle();
-      setUserName();
-      setCheckSpaceName();
+        // enable menu options
+        enableMenuOptions();
 
-      initReviewModule();
+        // create drawer menu
+        DrawerMenu.create();
 
-      // enable menu options
-      enableMenuOptions();
-
-      // create drawer menu
-      DrawerMenu.create();
-
-      // hide busy indicator
-      hideBusyIndicator();
-    }
+        // init review module
+        initReviewModule().then(function (result) {
+          // hide loading overlay
+          document.getElementById("pageLoadingOverlay").style.display = "none";
+        });
+        // // hide busy indicator
+        // hideBusyIndicator();     
+      }
 
     function showBusyIndicator() {
       // hide busy indicator
@@ -700,11 +706,11 @@
       $("#loadIndicator").dxLoadPanel("hide");
     }
 
-    getCurrentView = function() {
+    getCurrentView = function () {
       return model.getCurrentReviewManager();
     }
 
-    resizeCanvas = function() {
+    resizeCanvas = function () {
       model.getCurrentReviewManager().ResizeViewers()
     }
 

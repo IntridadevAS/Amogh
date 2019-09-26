@@ -44,6 +44,9 @@
 
   </header>
 
+  <!-- page loading overlay -->
+  <div id="pageLoadingOverlay" class="overlay" style="display: block"></div>
+
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
     <div id="loadIndicator"></div>
 
@@ -769,10 +772,10 @@
 
   <script>
     $("#loadIndicator").dxLoadPanel({
-      "visible": true,
+      "visible": false,
       "showPane": false,
       "shadingColor": "rgba(0,0,0,0.4)",
-      "message" : ""
+      "message": ""
     });
 
     window.onload = function () {
@@ -798,8 +801,10 @@
       // create drawer menu
       DrawerMenu.create(["check"]);
 
-      // hide busy indicator
-      hideBusyIndicator();
+      // // hide busy indicator
+      // hideBusyIndicator();
+      // hide loading overlay
+      document.getElementById("pageLoadingOverlay").style.display = "none";
     }
 
     function showBusyIndicator() {
