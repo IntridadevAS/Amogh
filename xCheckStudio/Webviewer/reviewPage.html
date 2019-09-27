@@ -369,9 +369,9 @@
       <div class="viewsContainer" id="viewsContainer">
         <div id="selectFiles" class="selectFilesContainer">
         </div>
-        <div id="maximizeViewerContainer" class="modal">
+        <div id="largeAnalyticsContainer" class="modal">
           <!-- Modal content -->
-          <div class="modal-content" id="maximizeViewerContainer-content"
+          <div class="modal-content" id="largeAnalyticsContainer-content"
             style="width: 100%; height: 100%; padding: 6px;">
             <span onclick="this.parentElement.parentElement.style.display='none'" style="color: white; font-weight: bolder; position: absolute; top: 25px;
               right: 25px;" class="closebtn">X</span>
@@ -403,7 +403,7 @@
           <div id="comparisonVisualizerA" class="visualizerContainer visualizer4">
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
             onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="analyticsBtnA" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
             onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="comparePanelA" class="comparePanel"  style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
@@ -482,7 +482,7 @@
 
             </div>
           </div>
-          <div id="analyticsSmall" class="visualizerContainer" style="display: none">
+          <div id="comparisonSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
             <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
 
@@ -510,7 +510,7 @@
           <div id="complianceVisualizerA" class="visualizerContainer">
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
             onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="analyticsBtnB" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+            <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
             onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
             <div id="compliance1" class="tempContainer">
 
@@ -532,7 +532,7 @@
 
             </div>
           </div>
-          <div id="analyticsSmall1" class="visualizerContainer" style="display: none">
+          <div id="complianceSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
             <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
           </div>
         </div>

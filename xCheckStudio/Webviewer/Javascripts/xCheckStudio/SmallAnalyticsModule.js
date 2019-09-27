@@ -45,11 +45,11 @@ function ShowModelViewer() {
     var reviewDoc = window.frameElement.ownerDocument;
     var currentView = window.parent.getCurrentView();
     if(currentView.MainReviewTableContainer.includes("comparison")) {
-        reviewDoc.getElementById("analyticsSmall").style.display = "none";
+        reviewDoc.getElementById("comparisonSmallAnalyticsContainer").style.display = "none";
         reviewDoc.getElementById("comparisonVisualizerA").style.display = "grid";
     }
     else {
-        reviewDoc.getElementById("analyticsSmall1").style.display = "none";
+        reviewDoc.getElementById("complianceSmallAnalyticsContainer").style.display = "none";
         reviewDoc.getElementById("complianceVisualizerA").style.display = "block";
     }
     window.parent.resizeCanvas();
@@ -57,7 +57,7 @@ function ShowModelViewer() {
 
 function ShowLargeAnalytics() {
     var reviewDoc = window.frameElement.ownerDocument;
-    var modal = reviewDoc.getElementById('maximizeViewerContainer');
+    var modal = reviewDoc.getElementById('largeAnalyticsContainer');
     // When the user clicks the button, open the modal 
     modal.style.display = "block";
 }

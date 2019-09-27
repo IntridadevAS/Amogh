@@ -214,10 +214,6 @@ let viewTabs = {
     // clear earlier data
     clearData();
 
-    if (!comparisons) {
-      return;
-    }
-
     // TODO set enter functionality for comparison here
     var requiredComparison;
     for (var i = 0; i < comparisons.length; i++) {
@@ -276,10 +272,6 @@ let viewTabs = {
   enterCompliance: function () {
     // clear earlier data
     clearData();
-
-    if (!compliances) {
-      return;
-    }
 
     for (var i = 0; i < compliances.length; i++) {
       var compliance = compliances[i];
@@ -397,46 +389,41 @@ let viewPanels = {
     }
   },
 
-  onMouseOverMaxMin: function (selected) {
-    selected.style.opacity = 1;
+  onMouseOverMaxMin: function(selected) {
+      selected.style.opacity = 1;
   },
 
-  onMouseOutMaxMin: function (selected) {
+  onMouseOutMaxMin: function(selected) {
     selected.style.opacity = 0.2;
-  },
+  }, 
 
-  showSmallAnalytics: function (parentContainer, analyticsContainerId) {
+  showSmallAnalytics: function(parentContainer, analyticsContainerId ) {
     parentContainer.style.display = "none";
     document.getElementById(analyticsContainerId).style.display = "block";
   },
 
-  showLargeAnalytics: function (parentContainer) {
-    // document.getElementById(parentContainer).style.display = "none";
-    var modal = document.getElementById('maximizeViewerContainer');
+  showLargeAnalytics: function() {
+    var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
     modal.style.display = "block";
-  },
-
-  onLargeAnalyticsClose: function (selected) {
-    console.log(selected);
   },
 
   showAnalytics: function (selected) {
     let parent = selected.parentNode;
 
-    if (selected.id == "analyticsBtnA" && model.selectedComparisons.length > 0) {
+    if (selected.id == Comparison.AnalyticsButton && model.selectedComparisons.length > 0) {
       if (!parent.classList.contains("maximize")) {
-        this.showSmallAnalytics(parent, "analyticsSmall");
+        this.showSmallAnalytics(parent, Comparison.SmallAnalyticsContainer);
       }
       else {
-        this.showLargeAnalytics(parent.parentNode);
+        this.showLargeAnalytics();
       }
     }
-    else if (selected.id == "analyticsBtnB" && model.selectedCompliance) {
+    else if (selected.id == Compliance.AnalyticsButton && model.selectedCompliance) {
       if (!parent.classList.contains("maximize")) {
-        this.showSmallAnalytics(parent, "analyticsSmall1");
+        this.showSmallAnalytics(parent, Compliance.SmallAnalyticsContainer);
       }
       else {
-        this.showLargeAnalytics(parent.parentNode);
+        this.showLargeAnalytics();
       }
     }
   },
