@@ -188,6 +188,15 @@
 
             // read class wise check results counts
             $checkGroups = array();
+            $oks = 0;
+            $okAs = 0;
+            $okTs = 0;
+            $okTAs = 0;
+            $okATs = 0;
+            $errors = 0;
+            $warnings = 0;
+            $noMatches = 0;
+            $undefinedItem = 0;
             $groups = $mainDbh->query("SELECT DISTINCT ownerGroup FROM $checkComponentTable;");                
             if($groups)
             {
@@ -201,7 +210,6 @@
                         $groupName= $groupNameResults->fetchColumn();
 
                         // ok components
-                        $oks = 0;
                         $okResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK';");       
                         if( $okResults)
                         {
@@ -209,8 +217,6 @@
                         }
 
                         // OK(A) components
-
-                        $okAs = 0;
                         $okAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)';");       
                         if( $okAResults)
                         {
@@ -218,7 +224,6 @@
                         }
 
                         // OK(T) components
-                        $okTs = 0;
                         $okTResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)';");       
                         if( $okTResults)
                         {
@@ -226,7 +231,6 @@
                         }
 
                         // OK(T)(A) components
-                        $okTAs = 0;
                         $okTAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)(A)';");       
                         if( $okTAResults)
                         {
@@ -235,7 +239,6 @@
 
                         // OK(A)(T) components
                         // OK(T) components
-                        $okATs = 0;
                         $okATResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)(T)';");       
                         if( $okATResults)
                         {
@@ -244,7 +247,6 @@
 
  
                          // Error components
-                         $errors = 0;
                          $errorResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Error';");       
                          if( $errorResults)
                          {
@@ -252,7 +254,6 @@
                          }
 
                         // Warning components
-                        $warnings = 0;
                         $warningResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Warning';");       
                         if( $warningResults)
                         {
@@ -260,14 +261,12 @@
                         }
 
                          // Warning components
-                         $noMatches = 0;
                          $nomatchResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
                          if( $nomatchResults)
                          {
                              $noMatches = $nomatchResults->fetchColumn();
                          }    
                          
-                         $undefinedItem = 0;
                          $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");     
                          if($results)
                          {
