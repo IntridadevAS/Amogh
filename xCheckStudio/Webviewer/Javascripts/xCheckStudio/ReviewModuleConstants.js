@@ -94,13 +94,21 @@ const Comparison = {
     ViewerAContainer: "compare1",
     ViewerBContainer: "compare2",
     ViewerCContainer: "compare3",
-    ViewerDContainer: "compare4"
+    ViewerDContainer: "compare4",
+
+    LargeAnalyticsContainer : "largeAnalyticsContainer",
+    AnalyticsButton : "comparisonAnalyticsBtn",
+    SmallAnalyticsContainer : "comparisonSmallAnalyticsContainer",
+
 }
 
 const Compliance = {
     MainReviewContainer: "complianceMainContainer",
     DetailInfoContainer: "complianceDetailInfo",
     ViewerContainer: "compliance1",
+
+    AnalyticsButton : "complianceAnalyticsBtn",
+    SmallAnalyticsContainer : "complianceSmallAnalyticsContainer",
 }
 
 // menu bar
