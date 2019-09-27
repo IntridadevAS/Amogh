@@ -202,7 +202,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     $(function () {
         var isFiredFromCheckbox = false;
         $(containerDiv).igGrid({
-            height: "202px",
+            // height: "100%",
             columns: columnHeaders,
             autofitLastColumn: false,
             autoGenerateColumns: false,

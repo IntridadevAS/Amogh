@@ -163,7 +163,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     $(function () {
         var isFiredFromCheckbox = false;
         $(viewerContainer).igGrid({
-            height: "202px",
+            // height: "202px",
             columns: columnHeaders,
             autofitLastColumn: false,
             autoGenerateColumns: false,
