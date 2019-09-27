@@ -1,0 +1,16 @@
+<svg id="Group_422" data-name="Group 422" xmlns="http://www.w3.org/2000/svg" width="29" height="30" viewBox="0 0 29 30">
+  <g id="Component_1" data-name="Component 1">
+    <g id="Rectangle_1209" data-name="Rectangle 1209" transform="translate(7 7)" fill="#323132" stroke="#f2f3f4" stroke-width="1">
+      <rect width="15" height="16" stroke="none"/>
+      <rect x="0.5" y="0.5" width="14" height="15" fill="none"/>
+    </g>
+    <path id="Path_281" data-name="Path 281" d="M0,0H15L7.5,5Z" transform="translate(22 30) rotate(180)" fill="#474747"/>
+    <path id="Path_282" data-name="Path 282" d="M0,0H15L7.5,5Z" transform="translate(0 22.5) rotate(-90)" fill="#474747"/>
+    <path id="Path_283" data-name="Path 283" d="M9421-3142.784h15l-7.5,5Z" transform="translate(-9414 3142.784)" fill="#474747"/>
+    <path id="Path_284" data-name="Path 284" d="M0,0H15L7.5,5Z" transform="translate(29 7.5) rotate(90)" fill="#474747"/>
+    <path id="Path_285" data-name="Path 285" d="M7,40.135l10,10H7Z" transform="translate(1 -28.136)" fill="#474747"/>
+    <path id="Path_286" data-name="Path 286" d="M0,0,10,10H0Z" transform="translate(18 8) rotate(90)" fill="#474747"/>
+    <path id="Path_287" data-name="Path 287" d="M0,0,10,10H0Z" transform="translate(21 18) rotate(180)" fill="#474747"/>
+    <path id="Path_288" data-name="Path 288" d="M0,0,10,10H0Z" transform="translate(11 21.999) rotate(-90)" fill="#474747"/>
+  </g>
+</svg>
