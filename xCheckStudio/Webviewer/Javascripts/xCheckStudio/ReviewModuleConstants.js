@@ -102,3 +102,16 @@ const Compliance = {
     DetailInfoContainer: "complianceDetailInfo",
     ViewerContainer: "compliance1",
 }
+
+// menu bar
+const MenuBar ={
+    ReCheckBtn : "reCheck",  
+    ShowAllBtn : "showAll",      
+    HistoryBtn : "history",
+    UnitsBtn : "units",
+    CheckInfoBtn : "checkInfo",
+    SaveProgressBtn : "saveProgress",
+    ResetBtn : "reset",
+    NavCubeBtn : "navCube",
+}
+

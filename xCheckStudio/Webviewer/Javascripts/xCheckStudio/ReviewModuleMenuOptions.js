@@ -1,36 +1,12 @@
 function enableMenuOptions() {
-    // on isolate
-    document.getElementById("isolate").onclick = function () {
 
-        var currentCheck = model.checks[model.currentCheck];
-        if (model.currentCheck === "comparison") {
-            if (currentCheck.sourceAViewer &&
-                currentCheck.sourceAViewer.ViewerOptions) {
-                ReviewMenuOptions.isolateSelectedComponents(currentCheck.sourceAViewer.Viewer);
-            }
-            if (currentCheck.sourceBViewer &&
-                currentCheck.sourceBViewer.ViewerOptions) {
-                ReviewMenuOptions.isolateSelectedComponents(currentCheck.sourceBViewer.Viewer);
-            }
-            if (currentCheck.sourceCViewer &&
-                currentCheck.sourceCViewer.ViewerOptions) {
-                ReviewMenuOptions.isolateSelectedComponents(currentCheck.sourceCViewer.Viewer);
-            }
-            if (currentCheck.sourceDViewer &&
-                currentCheck.sourceDViewer.ViewerOptions) {
-                ReviewMenuOptions.isolateSelectedComponents(currentCheck.sourceDViewer.Viewer);
-            }
-        }
-        else if (model.currentCheck === "compliance") {
-            if (currentCheck.viewer &&
-                currentCheck.viewer.ViewerOptions) {
-                ReviewMenuOptions.isolateSelectedComponents(currentCheck.viewer.Viewer);
-            }
-        }
+    // on re check
+    document.getElementById(MenuBar.ReCheckBtn).onclick = function () {
+        alert("Not Handled");
     }
 
     // on show all
-    document.getElementById("show").onclick = function () {
+    document.getElementById(MenuBar.ShowAllBtn).onclick = function () {
         var currentCheck = model.checks[model.currentCheck];
         if (model.currentCheck === "comparison") {
             if (currentCheck.sourceAViewer &&
@@ -58,84 +34,66 @@ function enableMenuOptions() {
         }
     }
 
-    // on hide
-    document.getElementById("hide").onclick = function () {
-        var currentCheck = model.checks[model.currentCheck];
-        if (model.currentCheck === "comparison") {
-            if (currentCheck.sourceAViewer &&
-                currentCheck.sourceAViewer.ViewerOptions) {
-                ReviewMenuOptions.hide(currentCheck.sourceAViewer.Viewer);
-            }
-            if (currentCheck.sourceBViewer &&
-                currentCheck.sourceBViewer.ViewerOptions) {
-                ReviewMenuOptions.hide(currentCheck.sourceBViewer.Viewer);
-            }
-            if (currentCheck.sourceCViewer &&
-                currentCheck.sourceCViewer.ViewerOptions) {
-                ReviewMenuOptions.hide(currentCheck.sourceCViewer.Viewer);
-            }
-            if (currentCheck.sourceDViewer &&
-                currentCheck.sourceDViewer.ViewerOptions) {
-                ReviewMenuOptions.hide(currentCheck.sourceDViewer.Viewer);
-            }
-        }
-        else if (model.currentCheck === "compliance") {
-            if (currentCheck.viewer &&
-                currentCheck.viewer.ViewerOptions) {
-                ReviewMenuOptions.hide(currentCheck.viewer.Viewer);
-            }
-        }
-    }
-
-     // on properties
-     document.getElementById("properties").onclick = function () {
-         alert("need to implement.");
-     }
-
-     // on clearData
-     document.getElementById("clearData").onclick = function () {
-        alert("need to implement.");
-    }
-
-    // on saveProgress
-    document.getElementById("saveProgress").onclick = function () {
-        alert("need to implement.");
-    }
-
     // on history
-    document.getElementById("history").onclick = function () {
-        alert("need to implement.");
+    document.getElementById(MenuBar.HistoryBtn).onclick = function () {
+        alert("Not Handled");
     }
 
-    // on checkInfo
-    document.getElementById("checkInfo").onclick = function () {
-        alert("need to implement.");
+    // on units
+    document.getElementById(MenuBar.UnitsBtn).onclick = function () {
+        alert("Not Handled");
     }
+
+    // on check info
+    document.getElementById(MenuBar.CheckInfoBtn).onclick = function () {
+        alert("Not Handled");
+    }
+
+    // on save 
+    document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
+        alert("Not Handled");
+    }
+
+    // on reset
+    document.getElementById(MenuBar.ResetBtn).onclick = function () {
+        alert("Not Handled");
+    }
+
+    // on navigation cube
+    document.getElementById(MenuBar.NavCubeBtn).onclick = function () {
+        
+        if (model.currentCheck in model.checks) {
+            var check = model.checks[model.currentCheck];
+            if (model.currentCheck === "comparison") {
+                if (check.sourceAViewer &&
+                    check.sourceAViewer.Is3DViewer()) {
+                    toggleNavCube(check.sourceAViewer.Viewer);
+                }
+                if (check.sourceBViewer &&
+                    check.sourceBViewer.Is3DViewer()) {
+                    toggleNavCube(check.sourceBViewer.Viewer);
+                }
+                if (check.sourceCViewer &&
+                    check.sourceCViewer.Is3DViewer()) {
+                    toggleNavCube(check.sourceCViewer.Viewer);
+                }
+                if (check.sourceDViewer &&
+                    check.sourceDViewer.Is3DViewer()) {
+                    toggleNavCube(check.sourceDViewer.Viewer);
+                }
+            }
+            else if (model.currentCheck === "compliance") {
+                if (check.viewer &&
+                    check.viewer.Is3DViewer()) {
+                    toggleNavCube(check.viewer.Viewer);
+                }
+            }
+        }
+    }   
 }
 
 var ReviewMenuOptions =
 {
-    isolateSelectedComponents: function (viewer) {
-        if (!viewer) {
-            return;
-        }
-
-        var selectionManager = viewer.selectionManager;
-
-        var selectedNodes = [];
-        selectionManager.each(function (selectionItem) {
-            if (selectionItem.isNodeSelection()) {
-                selectedNodes.push(selectionItem._nodeId);
-            }
-        });
-
-        // perform isolate
-        var isolateManager = new IsolateManager(viewer);
-        isolateManager.Isolate(selectedNodes).then(function (affectedNodes) {
-
-        });
-    },
-
     showAll: function (viewer) {
         if (!viewer) {
             return;
@@ -145,16 +103,4 @@ var ReviewMenuOptions =
             viewer.view.fitWorld();
         });
     },
-
-    hide: function (viewer) {
-        var results = viewer.selectionManager.getResults();
-
-        var map = {};
-        for (var i = 0; i < results.length; i++) {
-            var selectedItem = results[i];
-            map[selectedItem._nodeId] = false;
-        }
-
-        viewer.model.setNodesVisibilities(map);
-    }
 };
