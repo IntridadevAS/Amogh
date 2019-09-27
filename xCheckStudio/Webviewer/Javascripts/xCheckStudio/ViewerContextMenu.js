@@ -48,40 +48,9 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     contextMenuDiv.appendChild(itemGroup);
 
     item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);
+    contextMenuDiv.appendChild(item);    
 
     // 2nd group
-    itemGroup = document.createElement("ul");
-    itemGroup.id = "items";
-
-    if (!this.NavCubeVisible) {
-        item = document.createElement("li");
-        item.id = "showNavigationCube";
-        item.innerText = "Show Navigation Cube";
-        item.onclick = function () {
-            showNavigationCube(_this.WebViewer);
-            
-            _this.NavCubeVisible = true;
-        };
-        itemGroup.appendChild(item);
-    }
-    else {
-        item = document.createElement("li");
-        item.id = "hideNavigationCube";
-        item.innerText = "Hide Navigation Cube";
-        item.onclick = function () {
-            hideNavigationCube(_this.WebViewer);
-
-            _this.NavCubeVisible = false;
-        };
-        itemGroup.appendChild(item);
-    }
-    contextMenuDiv.appendChild(itemGroup);
-
-    item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);
-
-    // 3rd group
     itemGroup = document.createElement("ul");
     itemGroup.id = "items";
     if (!this.ExplodeManager) {
@@ -107,7 +76,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     item = document.createElement("hr");
     contextMenuDiv.appendChild(item);
 
-    // 4th group
+    // 3rd group
     itemGroup = document.createElement("ul");
     itemGroup.id = "items";
 

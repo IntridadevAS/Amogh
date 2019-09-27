@@ -60,3 +60,15 @@ const ModelBrowserColumnNames1D = {
     Description: "Description",
     RowKey: "RowKey"
 }
+
+// menu bar
+const MenuBar ={
+    ShowAllBtn : "showAll",
+    ReloadDataBtn : "reloadData",
+    ClearDataBtn : "clearData",
+    HistoryBtn : "history",
+    UnitsBtn : "units",
+    CheckInfoBtn : "checkInfo",
+    SaveProgressBtn : "saveProgress",
+    NavCubeBtn : "navCube",
+}
