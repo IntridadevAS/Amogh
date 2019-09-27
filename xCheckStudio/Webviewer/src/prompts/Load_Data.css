@@ -62,7 +62,7 @@
 }
 #Browse {
 	position: absolute;
-	left: 63px;
+	left: 77px;
 	top: 77px;
 	overflow: hidden;
 	width: 67px;
@@ -88,10 +88,10 @@
 .Load_Data_Path_259 {
 	overflow: visible;
 	position: absolute;
-	top: 14px;
-	left: 549.854px;
-	width: 27px;
-	height: 27px;
+	top: 18px;
+	left: 545px;
+	width: 20px;
+	height: 20px;
 	transform: matrix(1,0,0,1,0,0);
 }
 #Load_Data_MenuRound {
