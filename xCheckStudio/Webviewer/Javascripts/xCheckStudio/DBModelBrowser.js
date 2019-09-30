@@ -425,30 +425,6 @@ DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
                     recursive: true
                 }, 
                 paging: { enabled: false },
-                // onInitialized: function(e) {
-                //     // initialize the context menu
-                //     var modelBrowserContextMenu = new ModelBrowserContextMenu();
-                //     modelBrowserContextMenu.Init(_this);
-                //     _this.ShowItemCount(_this.modelTreeRowData.length);
-                // },
-                // onSelectionChanged: function (e) {
-                //     if(e.currentSelectedRowKeys.length > 0) {
-                //         for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                //             rows = e.component.getVisibleRows();
-                //             var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
-                //             var  row = e.component.getRowElement(rowIndex);
-                //             _this.SelectionManager.HandleSelectFormCheckBox(row[0], "on", rows[rowIndex].data);
-                //         }
-                //     }
-                //     else {
-                //         for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                //             rows = e.component.getVisibleRows();
-                //             var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
-                //             var  row = e.component.getRowElement(rowIndex);
-                //             _this.SelectionManager.HandleSelectFormCheckBox(row[0], "off", rows[rowIndex].data);
-                //         }
-                //     }
-                // },
                 onRowClick: function(e) {
                     // console.log(e)
                     _this.SelectionManager.HandleRowSelectInViewer(e.rowElement[0], _this.ModelBrowserContainer, _this.ViewerContainer);
@@ -456,50 +432,6 @@ DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
             });
         });
     });
-
-    // $(containerDiv).igGrid({
-    //     columns: columnHeaders,
-    //     autofitLastColumn: false,
-    //     autoGenerateColumns: false,
-    //     dataSource: tableData,
-    //     responseDataKey: "results",
-    //     autoCommit: true,
-    //     height: "100%",
-    //     width: "100%",
-    //     alternateRowStyles: false,
-    //     rendered: function (evt, ui) {
-    //         _this.ShowItemCount(tableData.length);
-    //     },
-    //     features: [
-    //         {
-    //             name: "Selection",
-    //             mode: 'row',
-    //             multipleSelection: true,
-    //             activation: true,
-    //             rowSelectionChanging: function (evt, ui) {
-
-    //                 // if (isFiredFromCheckbox) {
-    //                 //     isFiredFromCheckbox = false;
-    //                 // } else {
-    //                 _this.SelectionManager.HandleRowSelectInViewer(ui.row.element[0],
-    //                     _this.ModelBrowserContainer,
-    //                     _this.ViewerContainer);
-    //                 return false;
-    //                 // }
-
-    //             }
-    //         },
-    //         {
-    //             name: "RowSelectors",
-    //             enableCheckBoxes: false,
-    //             enableRowNumbering: false,
-    //             enableSelectAllForPaging: true, // this option is true by default              
-    //         },
-    //         {
-    //             name: "Resizing"
-    //         }
-    //     ]
-    // });
 }
 
 DBModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
@@ -518,21 +450,21 @@ DBModelBrowser.prototype.ClearSelectedComponent = function () {
     this.SelectionManager.ClearSelectedComponent();
 }
 
-DBModelBrowser.prototype.GetDataFromSelectedRow = function (rowIndex,
-    containerDiv) {
+// DBModelBrowser.prototype.GetDataFromSelectedRow = function (rowIndex,
+//     containerDiv) {
 
 
-    var data = $(containerDiv).data("igGrid").dataSource.dataView();
-    if (data.length === 0) {
-        return;
-    }
-    var record = data[rowIndex];
+//     var data = $(containerDiv).data("igGrid").dataSource.dataView();
+//     if (data.length === 0) {
+//         return;
+//     }
+//     var record = data[rowIndex];
 
-    var rowData = {};
-    rowData['component'] = record[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')];
-    rowData['mainClass'] = record[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')];
-    rowData['subClass'] = record[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')];
-    rowData['description'] = record[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')];
+//     var rowData = {};
+//     rowData['component'] = record[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')];
+//     rowData['mainClass'] = record[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')];
+//     rowData['subClass'] = record[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')];
+//     rowData['description'] = record[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')];
 
-    return rowData;
-}
+//     return rowData;
+// }
