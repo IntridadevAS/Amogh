@@ -515,35 +515,35 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
     }
 }
 
-SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
-    containerDiv,
-    iterateChilds) {
+// SCModelBrowser.prototype.GetDataFromSelectedRow = function (rowKey,
+//     containerDiv,
+//     iterateChilds) {
 
-    var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
+//     var record = $(containerDiv).igTreeGrid("findRecordByKey", rowKey);
 
-    var rowData = {};
-    rowData['component'] = record[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')];
-    rowData['mainClass'] = record[ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')];
-    rowData['subClass'] = record[ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')];
-    rowData['nodeId'] = record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')];
+//     var rowData = {};
+//     rowData['component'] = record[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')];
+//     rowData['mainClass'] = record[ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')];
+//     rowData['subClass'] = record[ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')];
+//     rowData['nodeId'] = record[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')];
 
-    if (iterateChilds && record.childData) {
-        rowData['children'] = [];
+//     if (iterateChilds && record.childData) {
+//         rowData['children'] = [];
 
-        for (var i = 0; i < record.childData.length; i++) {
-            var child = record.childData[i];
+//         for (var i = 0; i < record.childData.length; i++) {
+//             var child = record.childData[i];
 
-            var result = this.GetDataFromSelectedRow(child[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')],
-                containerDiv,
-                iterateChilds);
-            if (result) {
-                rowData['children'].push(result);
-            }
-        }
-    }
+//             var result = this.GetDataFromSelectedRow(child[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')],
+//                 containerDiv,
+//                 iterateChilds);
+//             if (result) {
+//                 rowData['children'].push(result);
+//             }
+//         }
+//     }
 
-    return rowData;
-}
+//     return rowData;
+// }
 
 SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
 
