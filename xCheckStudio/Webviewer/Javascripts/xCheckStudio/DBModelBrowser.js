@@ -385,10 +385,11 @@ DBModelBrowser.prototype.Clear = function () {
     $(containerDiv).remove();
 
     //Create and add div with same id to add grid again
+    //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
     var browserContainerDiv = document.createElement("div")
     browserContainerDiv.id = this.ModelBrowserContainer;
     var styleRule = ""
-    styleRule = "position: absolute";
+    styleRule = "position: relative";
     browserContainerDiv.setAttribute("style", styleRule);
     parent.appendChild(browserContainerDiv);
 
