@@ -207,13 +207,14 @@ SCModelBrowser.prototype.Clear = function () {
     var parent = browserContainer.parentElement;
 
     //remove html element which holds grid
+    //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
     $(containerDiv).remove();
 
     //Create and add div with same id to add grid again
     var browserContainerDiv = document.createElement("div")
     browserContainerDiv.id = this.ModelBrowserContainer;
     var styleRule = ""
-    styleRule = "position: absolute";
+    styleRule = "position: relative";
     browserContainerDiv.setAttribute("style", styleRule);
     parent.appendChild(browserContainerDiv);
     // clear count

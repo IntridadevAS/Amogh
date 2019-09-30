@@ -30,12 +30,13 @@ DBSourceManager.prototype.ClearSource = function () {
   $(containerDiv).remove();
 
   //Create and add div with same id to add grid again
+  //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
   var viewerContainerDiv = document.createElement("div")
   viewerContainerDiv.id = this.ViewerContainer;
   viewerContainerDiv.className = "tempContainer";
-  var styleRule = ""
-  styleRule = "position: absolute";
-  viewerContainerDiv.setAttribute("style", styleRule);
+  // var styleRule = ""
+  // styleRule = "position: relative";
+  // viewerContainerDiv.setAttribute("style", styleRule);
   parent.appendChild(viewerContainerDiv); 
 }
 
