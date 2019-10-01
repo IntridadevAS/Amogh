@@ -299,7 +299,9 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     // component group id which is container div for check components table of given row
     var containerDiv = reviewManager.GetReviewTableId(reviewRow);
 
-    var data = $("#" + containerDiv).data("igGrid").dataSource.dataView();
+    // var data = $("#" + containerDiv).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
     var rowData = data[reviewRow.rowIndex];
 
     reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
@@ -444,7 +446,9 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
 
                 var childRow = childRows[k];
                 // var childRowColumns = childRow.getElementsByTagName("td");
-                var data = $("#" + componentsGroupName + "_" + model.getCurrentReviewManager().MainReviewTableContainer).data("igGrid").dataSource.dataView();
+                // var data = $("#" + componentsGroupName + "_" + model.getCurrentReviewManager().MainReviewTableContainer).data("igGrid").dataSource.dataView();
+                var dataGrid = $("#" + componentsGroupName + "_" + model.getCurrentReviewManager().MainReviewTableContainer).dxDataGrid("instance");
+                var data = dataGrid.getDataSource().items();
                 var rowData = data[childRow.rowIndex];
                 var checkComponentId;
 

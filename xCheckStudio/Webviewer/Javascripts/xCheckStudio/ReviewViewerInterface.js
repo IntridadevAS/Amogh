@@ -65,7 +65,9 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (revi
     
     var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
     
-    var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    // var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
     for (var id in data) {
         if (data[id].SourceA.trim() == SourceA.trim() &&
             data[id].SourceB.trim() == SourceB.trim()) {
@@ -81,7 +83,9 @@ ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (revi
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
     
     var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
-    var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    // var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
         for (var id in data) {
             if (data[id].SourceA.trim() == SourceA.trim()) {
                 return data[id];               

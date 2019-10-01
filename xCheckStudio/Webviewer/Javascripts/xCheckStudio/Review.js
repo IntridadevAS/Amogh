@@ -370,6 +370,7 @@ function setButtonsCollapsible(containerId) {
                 panel.style.display = "none";
             } else {
                 panel.style.display = "block";
+                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = panel.id;
             }
         });
     }
