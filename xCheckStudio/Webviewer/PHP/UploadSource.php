@@ -93,31 +93,56 @@
 
     if($counter>0)
     { 
-        if($ConvertToSCS === "true" )
-        {
-            // echo 'Starting File Conversion....';
-            // echo "<br>";
-        
-            foreach($uploadedFiles as $fileName)
-            {
-                $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-                if(in_array($ext, $validSources) == true)
-                {
-                    $output_name=explode(".",$fileName);
-        
+        if($ConvertToSCS !== "true" )
+        {    
+            echo "fail"; 
+            return; 
+        }     
 
-                    $UploadFolder= $uploadDirectory."/".$fileName;  
-                    $output_file_path= $uploadDirectory."/".$output_name[0];                    
-                    
-                    $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';                  
-                    exec($command, $output);
-                   
-                    echo 'success';
-        
-                    break; 
+        $convertibleFiles = array();
+        foreach($uploadedFiles as $fileName)
+        {
+            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+            if(in_array($ext, $validSources) == true)
+            {
+                $UploadedFile= $uploadDirectory."/".$fileName;    
+                array_push($convertibleFiles, $UploadedFile);
+
+                if(strtolower($ext) === 'xml')
+                {
+                    continue;
                 }
+
+                break;
+                // else
+                // {
+                //     //$output_name=explode(".",$fileName);       
+
+                //     $UploadFolder= $uploadDirectory."/".$fileName;                                                      
+                //     $command = '"'.$launch_converter. '" "'. $UploadFolder. '"';                  
+                //     exec($command, $output);
+                    
+                //     echo 'success';        
+                //     return; 
+                // }
             }
+        }      
+        if(count($convertibleFiles) === 0)
+        {
+            echo "fail";
+            return;     
         }
+
+        $command = '"'.$launch_converter. '"';
+        for ($i = 0; $i < count($convertibleFiles); $i++) 
+        {
+            $command =   $command.' "'.$convertibleFiles[$i]. '"';
+        }
+        exec($command, $output);
+
+        // echo $command;
+        echo 'success';        
+        return; 
     }
     else
     {

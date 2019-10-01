@@ -1,12 +1,15 @@
 let LoadManager = {
 
-    load3DModel: function (fileName,
+    load3DModel: function (fileNames,
         sourceId,
         viewerContainer,
         modelTreeContainer,
         formId) {
 
         return new Promise((resolve) => {
+
+            var fileName = fileNames[0];           
+            
             // get SCS file path and load model into viewer
             var fileNameWithoutExt = undefined;
             if (fileName.includes(".")) {
@@ -15,6 +18,12 @@ let LoadManager = {
             else {
                 fileNameWithoutExt = fileName;
             }
+
+            // if multiple xml files are selected for loading
+            if (fileNames.length > 1) {
+                fileNameWithoutExt = "source";
+            }
+
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
@@ -36,9 +45,9 @@ let LoadManager = {
                     xCheckStudio.Util.fileExists(uri).then(function (success) {
                         if (success) {
 
-                            var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
+                            var fileExtension = xCheckStudio.Util.getFileExtension(fileNames[0]).toLowerCase();
                             // if (viewerContainer === "viewerContainer1") {
-                            var sourceManager = createSourceManager(fileName,
+                            var sourceManager = createSourceManager(fileNames[0],
                                 fileExtension,
                                 viewerContainer,
                                 modelTreeContainer,
