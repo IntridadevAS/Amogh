@@ -38,13 +38,17 @@ let UploadManager = {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/GetSourceData.php", true);
         xhr.onload = function (data) {
-            if (data.target.response === "undefined") {
+            
+            var sourceArray = JSON.parse(data.target.response);
+
+            if (!sourceArray ||
+                sourceArray.length === 0) {
                 //OnShowToast('Valid data source not found');
                 alert('Valid data source not found');
                 return;
             }
             else {
-                var fileName = data.target.response;
+                var fileName = sourceArray[0];
                 addedSource.fileName = fileName;
 
                 //Create tab header and Show panel for selected tab
@@ -52,7 +56,7 @@ let UploadManager = {
                 viewPanels.showPanel(addedSource.viewPanel);
                 viewTabs.addTab.classList.remove("selectedTab");  
                              
-                UploadManager.upload(fileName,
+                UploadManager.upload(sourceArray,
                     formId,
                     addedSource,
                     selectedFiles);              
@@ -63,21 +67,21 @@ let UploadManager = {
     },
 
 
-    upload: function (fileName,
+    upload: function (fileNames,
         formId,
         addedSource,
         files) {
-        var fileExtension = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();                
+        var fileExtension = xCheckStudio.Util.getFileExtension(fileNames[0]).toLowerCase();                
 
         if (xCheckStudio.Util.isSource3D(fileExtension) ||
             xCheckStudio.Util.isSourceDB(fileExtension)) {
 
             UploadManager.uploadSource(fileExtension, formId, addedSource.id).then(function (result) {
 
-                if (xCheckStudio.Util.isSource3D(fileExtension)) {
+                if (xCheckStudio.Util.isSource3D(fileExtension)) {                  
 
                     // load model
-                    LoadManager.load3DModel(fileName,
+                    LoadManager.load3DModel(fileNames,
                         addedSource.id,
                         addedSource.visualizer.id,
                         addedSource.tableData.id,

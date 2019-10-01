@@ -22,6 +22,7 @@ foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name)
 
 if($FileCount > 0)
 {
+    $xmlFiles = array();
     foreach($_FILES["files"]["name"] as $key=>$tmp_name)
     {
         $file = $tmp_name;
@@ -31,14 +32,18 @@ if($FileCount > 0)
         $isFound = in_array($fileExtension, $ValidDataSources);
         if($isFound)
         {
-            echo $file;
-            return;
-        }
-        else{
-            //echo "undefined";
-        }
+            if($fileExtension === "xml")
+            {
+                array_push($xmlFiles, $file);
+            }
+            else
+            {
+                echo json_encode(array($file));
+                return;
+            }
+        }        
     }
 
-    echo "undefined";
+    echo  json_encode($xmlFiles);
 }
 ?>
