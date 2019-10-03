@@ -335,10 +335,10 @@ input:checked + .slider:before {
   background: #FFBB99;
   display: none;
   cursor: pointer;
-  left: 50%;
+  /* left: 50%; */
   margin-left: -5px;
   max-width: 40px;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   text-align: center;
   top: 15px;

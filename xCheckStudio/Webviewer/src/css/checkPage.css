@@ -64,6 +64,7 @@
   position: relative;
   background-color: var(--xCheckDarkGrey);
   width:calc(25% - 7.5px);
+  max-width: 220px;
   margin-right: 5px;
   padding-right: 25px;
   border: 1px solid var(--xCheckMedGrey);
@@ -75,7 +76,7 @@
   font-size: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .deleteTab {
