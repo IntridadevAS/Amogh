@@ -48,7 +48,18 @@ let UploadManager = {
                 return;
             }
             else {
-                var fileName = sourceArray[0];
+                //var fileName = sourceArray[0];
+                var fileName = "";
+                for (var i = 0; i < sourceArray.length; i++) {
+
+                    if (i === sourceArray.length - 1) {
+                        fileName += sourceArray[i];
+                    }
+                    else {
+                        fileName += sourceArray[i] + ", ";
+                    }
+                }
+
                 addedSource.fileName = fileName;
 
                 //Create tab header and Show panel for selected tab

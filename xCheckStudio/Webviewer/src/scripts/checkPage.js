@@ -141,15 +141,49 @@ let viewTabs = {
 
   createTab: function (view) {
     let newNode = document.createElement("div");
+    newNode.id = "tab_" + view.id;
     newNode.classList.add("tab");
     newNode.setAttribute("data-id", view.id);
-    var spanText = document.createElement("span")
+    newNode.classList.add("tooltipHov");
+
+    // create text span
+    var spanText = document.createElement("span");
     spanText.innerHTML = view.fileName;
     spanText.style.overflow = "hidden";
     newNode.appendChild(spanText);
+
+    // create tool-tip
+    var spanTooltip = document.createElement("span");
+    spanTooltip.setAttribute("data-tooltip", view.fileName);
+    spanTooltip.classList.add("tooltip");
+    newNode.appendChild(spanTooltip);
+
+    // spanText.onmouseover = function()
+    // {
+    //   spanTooltip.style.display = "block";
+    // }
+
+    // spanText.onmouseleave = function()
+    // {
+    //   spanTooltip.style.display = "none";
+    // }
+    // let tooltipNode = document.createElement("div");
+    // tooltipNode.id = "tooltip" + view.id;
+    // tooltipNode.innerText = view.fileName;
+    // newNode.appendChild(tooltipNode);
+    // $("#tooltip" + view.id).dxTooltip({
+    //   target: "#" + newNode.id,
+    //   showEvent: "mouseenter",
+    //   hideEvent: "mouseleave",
+    //   closeOnOutsideClick: false
+    // });
+
+    
+
     let closeWin = document.createElement("div");
     closeWin.classList.add("deleteTab");
     newNode.appendChild(closeWin);
+
     this.container.insertBefore(newNode, this.addTab);
     this.selectTab(document.querySelector(`[data-id = ${view.id}]`));
   },
