@@ -156,11 +156,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         }
         else {
-
-            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
             model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
@@ -168,10 +164,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
             model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
     }
@@ -187,10 +180,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         } else {
 
-            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
             model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
@@ -204,12 +194,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-
-            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
-            }
-
-
+            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
             model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
 
@@ -260,12 +245,7 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                     component["status"] = changedStatus;
                 }
 
-                // var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
-                // var checkComponents = checkGroup["CheckComponents"];
-                // var component = checkComponents[componentId];
                 var properties = component["properties"];
-
-                //var propertiesLen = properties.length;
 
                 for (var i = 0; i < properties.length; i++) {
                     var property = properties[i];
@@ -281,9 +261,11 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
                         // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, "ACCEPTED")
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                         property["severity"] = "ACCEPTED";
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                     }
 
                 }
@@ -590,10 +572,11 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
+
                         property["severity"] = status[1];
 
-                        // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, status[1])
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
 
                     }
@@ -767,11 +750,8 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                 }
 
                 // use innerText instead of innerHtml, innerhtml gives garbage values
-                var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerText;
-                var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerText;
-
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
-               
+                // var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerText;
+                // var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerText;              
 
                 for (var i = 0; i < properties.length; i++) {
                     var property = properties[i];
@@ -786,17 +766,13 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
 
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
+
                         property["severity"] = 'OK(T)';
                         property['transpose'] = transposeType;
-                        // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = 'OK(T)';
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, 'OK(T)');
-                        if (transposeType == "lefttoright") {
-                            selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML = SourceAValue;
-                            
-                        }
-                        else if (transposeType == "righttoleft") {
-                            selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML = SourceBValue;
-                        }
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
 
                     }
                 }
@@ -857,16 +833,12 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                     if (sourceAName == selectedRow[0].cells[ComparisonPropertyColumns.SourceAName].innerText &&
                         sourceBName == selectedRow[0].cells[ComparisonPropertyColumns.SourceBName].innerText) {
 
-                        // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, status[1]);
-                        
-                        selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML = property["sourceAValue"];
-                        selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML = property["sourceBValue"];
-
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
-
                         property["severity"] = status[1];
                         property["transpose"] = null;
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                     else if (property["transpose"] !== null && !status[0].includes("(T)")) {
                         changedStatus = status[0] + "(T)";

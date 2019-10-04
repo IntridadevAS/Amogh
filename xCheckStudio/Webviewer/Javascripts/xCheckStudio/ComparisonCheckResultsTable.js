@@ -279,7 +279,6 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 };
 
 ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
-    // var data = $(containerDiv).data("igGrid").dataSource.dataView();
     var dataGrid = $(containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items(); 
     var rowData = data[rowIndex];
@@ -291,9 +290,7 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
     for (var groupId in this.CheckTableIds) {
         var id = this.CheckTableIds[groupId];
         
-        if ($(id).data("igGrid") != null) {
-            $(id).igGrid("destroy");
-        }
+        $(id).remove()
     }
 
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
@@ -462,11 +459,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     var viewerContainer = "#" + this.DetailedReviewTableContainer;
     var _this = this;
 
-    // clear previous grid
-    // if ($(viewerContainer).data("igGrid") != null) {
-    //     $(viewerContainer).igGrid("destroy");
-    // }
-
+    // var height =  document.getElementById("tableDataComparison").offsetHeight / 2 + "px";
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,
@@ -488,7 +481,12 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 showCheckBoxesMode: "always",
                 recursive: true
             }, 
-            paging: { enabled: false },
+            scrolling: {
+                mode : "standard"
+            },
+            paging: {
+                enabled: false
+            },
             onContentReady: function(e) {
                 _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer)
             },
@@ -608,11 +606,18 @@ ComparisonCheckPropertiesTable.prototype.SetComment = function (comment) {
 
 ComparisonCheckPropertiesTable.prototype.Destroy = function () {
 
-    var viewerContainer = "#" + this.DetailedReviewTableContainer;
-    // clear previous grid
-    if ($(viewerContainer).data("igGrid") != null) {
-        $(viewerContainer).igGrid("destroy");
-    }
+    // var viewerContainer = "#" + this.DetailedReviewTableContainer;
+
+    var containerDiv = "#" + this.DetailedReviewTableContainer;
+    var viewerContainerElement = document.getElementById(this.DetailedReviewTableContainer);
+    var parent = viewerContainerElement.parentElement;
+
+    $(containerDiv).remove();
+
+    var viewerContainerDiv = document.createElement("div")
+    viewerContainerDiv.id = this.DetailedReviewTableContainer;
+
+    parent.appendChild(viewerContainerDiv); 
 }
 
 ComparisonCheckPropertiesTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
@@ -622,11 +627,26 @@ ComparisonCheckPropertiesTable.prototype.GetDataForSelectedRow = function (rowIn
     return rowData;
 }
 
-ComparisonCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, changedStatus) {
+ComparisonCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, property) {
     var detailInfoContainer =  model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items(); 
     var rowData = data[rowIndex];
-    rowData.Status = changedStatus;
+    rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
+    
+    if(property["severity"] !== "ACCEPTED") {
+        if (property.transpose == "lefttoright") {
+            rowData[ComparisonPropertyColumnNames.SourceBValue] = property["sourceAValue"];
+            
+        }
+        else if (property.transpose == "righttoleft") {
+            rowData[ComparisonPropertyColumnNames.SourceAValue] = property["sourceBValue"];
+        }
+        else if(property.transpose == null) {
+            rowData[ComparisonPropertyColumnNames.SourceAValue] = property["sourceAValue"];
+            rowData[ComparisonPropertyColumnNames.SourceBValue] = property["sourceBValue"];
+        }
+    }
+
     dataGrid.repaintRows(rowIndex);
 }
