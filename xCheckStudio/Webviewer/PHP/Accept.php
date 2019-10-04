@@ -719,7 +719,12 @@ function unAcceptComparisonProperty() {
     $toBecompstatus = $componentstatus1['status'];
     while($index < count($statusChanged)) {
         if($statusChanged[$index]['accepted'] == "true" && $componentstatus['accepted'] !== "true") {
-            $toBecompstatus = $componentstatus1['status'];
+            if(strpos($componentstatus1['status'], '(A)') == false) {
+                $toBecompstatus = $componentstatus1['status'] . "(A)";
+            }
+            else {
+                $toBecompstatus = $componentstatus1['status'];
+            }
             break;
         } 
         else {

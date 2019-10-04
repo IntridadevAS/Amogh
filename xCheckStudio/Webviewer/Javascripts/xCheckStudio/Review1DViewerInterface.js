@@ -80,6 +80,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
         }
 
         var column = {};
+
         columnHeaders = [];
 
         for (var i = 0; i < componentProperties.length; i++) {
@@ -87,8 +88,8 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
 
             columnHeader = {};
 
-            columnHeader["headerText"] = compProperty['name'];
-            columnHeader["key"] = compProperty['name'];
+            columnHeader["caption"] = compProperty['name'];
+            columnHeader["dataField"] = compProperty['name'];
             var type;
             if (compProperty['format'].toLowerCase() === "string") {
                 type = "string";
@@ -144,6 +145,14 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
     }
 };
 
+Review1DViewerInterface.prototype.unHighlightComponent = function () {
+    if (this.SelectedSheetRow) {
+        this.unhighlightSelectedSheetRowInviewer(this.CheckStatusArray,
+            this.SelectedSheetRow);
+        this.SelectedSheetRow = null;
+    }
+}
+
 Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
     tableData,
     viewerContainer,
@@ -153,35 +162,61 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
 
     var _this = this;
 
-    if ($(viewerContainer).data("igGrid")) {
-        $(viewerContainer).igGrid("destroy");
-    }
+    this.Destroy(viewerContainer.replace("#", ""));
 
-    $(viewerContainer).igGrid({
-        width: "100%",
-        height: "100%",
-        columns: columnHeaders,
-        autofitLastColumn: false,
-        autoGenerateColumns: false,
-        dataSource: tableData,
-        responseDataKey: "results",
-        fixedHeaders: true,
-        autoCommit: true,
-        rendered: function (evt, ui) {
-            this.SelectedSheetRow = undefined;
-            _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
-        },
-        features: [
-            {
-                name: "Selection",
-                mode: 'row',
-                multipleSelection: false,
-                rowSelectionChanging: function (evt, ui) {
-                    _this.OnViewerRowClicked(ui.row.element[0], viewerContainer);
-                }
+    $(function () {
+
+        $(viewerContainer).dxDataGrid({
+            dataSource: tableData,
+            columns: columnHeaders,
+            showBorders: true,
+            showRowLines: true,
+            allowColumnResizing : true,
+            height: "100%",
+            width: "100%",
+            filterRow: {
+                visible: true
             },
-        ]
+            scrolling: {
+                mode: "standard"
+            },
+            paging: { enabled: false },
+            onContentReady: function(e) {
+                this.SelectedSheetRow = undefined;
+                _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
+            },
+            onRowClick: function(e) {
+                _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
+            }
+
+        });
     });
+
+    // $(viewerContainer).igGrid({
+    //     width: "100%",
+    //     height: "100%",
+    //     columns: columnHeaders,
+    //     autofitLastColumn: false,
+    //     autoGenerateColumns: false,
+    //     dataSource: tableData,
+    //     responseDataKey: "results",
+    //     fixedHeaders: true,
+    //     autoCommit: true,
+    //     rendered: function (evt, ui) {
+    //         this.SelectedSheetRow = undefined;
+    //         _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
+    //     },
+    //     features: [
+    //         {
+    //             name: "Selection",
+    //             mode: 'row',
+    //             multipleSelection: false,
+    //             rowSelectionChanging: function (evt, ui) {
+    //                 _this.OnViewerRowClicked(ui.row.element[0], viewerContainer);
+    //             }
+    //         },
+    //     ]
+    // });
 
 };
 
@@ -200,7 +235,8 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
 
     var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
 
-    var rows = $(viewerContainer).igGrid("rows");
+    var dataGrid = $(viewerContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
 
     // get rowIndex vs status array
     var checkStatusArray = {};
@@ -226,7 +262,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
         }
 
         for (var i = 0; i < rows.length; i++) {
-            var row = rows[i];
+            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
 
             var componentName;
             if (column['Name'] !== undefined) {
@@ -243,11 +279,8 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                     model.getCurrentSelectionManager().ApplyHighlightColor(row);
                     this.SelectedSheetRow = row;
 
-                    var id = viewerContainer.replace("#", "");
-                    var scrollTable = document.getElementById(id + "_table_scroll");
-                    if (scrollTable) {
-                        scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
-                    }
+                    // var id = viewerContainer.replace("#", "");
+                    dataGrid.getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
                 }
                 else {
 
@@ -284,17 +317,17 @@ Review1DViewerInterface.prototype.OnViewerRowClicked = function (row, viewerCont
    check result row for selected sheet row*/
 Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow, viewerContainer) {
 
-    var headers = $(viewerContainer).igGrid("headersTable")[0];
-    var columnHeaders = headers.getElementsByTagName("th");
+    var dataGrid = $(viewerContainer).dxDataGrid("instance");
+    var columnHeaders = dataGrid.getVisibleColumns();
     var column = {};
     for (var i = 0; i < columnHeaders.length; i++) {
         var columnHeader = columnHeaders[i];
         //tagnumber is for instruments XLS data sheet
-        if (columnHeader.innerText.trim() === "ComponentClass" ||
-            columnHeader.innerText.trim() === "Name" ||
-            columnHeader.innerText.trim() === "Description" ||
-            columnHeader.innerText.trim() === "Tagnumber") {
-            column[columnHeader.innerText.trim()] = i;
+        if (columnHeader["caption"] === "ComponentClass" ||
+            columnHeader["caption"] === "Name" ||
+            columnHeader["caption"] === "Description" ||
+            columnHeader["caption"] === "Tagnumber") {
+            column[columnHeader["caption"]] = i;
         }
         if (Object.keys(column).length === 3) {
             break;
@@ -312,13 +345,13 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
     }
 
     var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
-    for (var groupId in checkTableIds) {
-        var checkTableId = checkTableIds[groupId];
-
-        var rows = $(checkTableId).igGrid("rows");
+    // for (var groupId in checkTableIds) {
+        var checkTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+        var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
+        var rows = checkDataGrid.getVisibleRows();
 
         for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-            var row = rows[rowIndex];
+            var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
 
             var name;
             if (this.IsComparison) {
@@ -337,7 +370,7 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
                 return row;
             }
         }
-    }
+    // }
     return undefined;
 }
 
@@ -352,7 +385,9 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
     var reviewManager = model.getCurrentReviewManager();
 
     // component group id which is container div for check components table of given row
-    var containerDiv = reviewManager.GetReviewTableId(reviewTableRow);
+    // var containerDiv = reviewManager.GetReviewTableId(reviewTableRow);
+    var containerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+
     var rowData;
     if (this.IsComparison) {
         rowData = this.GetComparisonCheckComponentData(reviewTableRow);
@@ -361,11 +396,17 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
         rowData = this.GetComplianceCheckComponentData(reviewTableRow);
     }
 
-    reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
+    // reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
+    this.HighlightMatchedComponent(containerDiv, rowData)
+    model.checks[model.currentCheck]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+    
     model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow);
 
-    var reviewTable = reviewManager.GetReviewTable(reviewTableRow);
-    model.getCurrentSelectionManager().ScrollToHighlightedCheckComponentRow(reviewTable, reviewTableRow, reviewManager.MainReviewTableContainer);
+    var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+
+    // var rowElement = dataGrid.getRowElement(reviewTableRow.rowIndex)
+    // scroll to rowElement
+    dataGrid.getScrollable().scrollTo({top: reviewTableRow.offsetTop - reviewTableRow.offsetHeight});
 }
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName) {
@@ -406,20 +447,20 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
 
     //var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
 
-    var rows = $("#" + viewerContainer).igGrid("rows");
+    var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
 
-
-    var headers = $("#" + viewerContainer).igGrid("headersTable")[0];
-    var columnHeaders = headers.getElementsByTagName("th");
+    // var headers = dataGrid.getVisibleColumns();
+    var columnHeaders = dataGrid.getVisibleColumns();
     var column = {};
     for (var i = 0; i < columnHeaders.length; i++) {
         var columnHeader = columnHeaders[i];
         //tagnumber is for instruments XLS data sheet
-        if (columnHeader.innerText.trim() === "ComponentClass" ||
-            columnHeader.innerText.trim() === "Name" ||
-            columnHeader.innerText.trim() === "Description" ||
-            columnHeader.innerText.trim() === "Tagnumber") {
-            column[columnHeader.innerText.trim()] = i;
+        if (columnHeader["caption"] === "ComponentClass" ||
+            columnHeader["caption"] === "Name" ||
+            columnHeader["caption"] === "Description" ||
+            columnHeader["caption"] === "Tagnumber") {
+            column[columnHeader["caption"]] = i;
         }
         if (Object.keys(column).length === 3) {
             break;
@@ -427,7 +468,7 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
     }
 
     for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
+        var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
 
         var componentName;
         if (column.Name !== undefined) {
@@ -439,6 +480,8 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
 
         if (selectedComponentName === componentName) {
             this.HighlightSheetDataRow(viewerContainer, row);
+            // scroll to rowElement
+            dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});
         }
     }
 }
@@ -454,17 +497,31 @@ Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContai
 
     model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedSheetRow);
 
-    //var sheetDataTable1 = containerChildren[0];
-    var scrollTable = document.getElementById(viewerContainer + "_table_scroll");
-    if (scrollTable) {
-        scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
+    var containerId = viewerContainer;
+    if(!viewerContainer.includes("#")) {
+        containerId = "#" + viewerContainer;
     }
+    $(containerId).dxDataGrid("instance").getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
+    //var sheetDataTable1 = containerChildren[0];
+    // var scrollTable = document.getElementById(viewerContainer + "_table_scroll");
+    // if (scrollTable) {
+    //     scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
+    // }
 }
 
 Review1DViewerInterface.prototype.Destroy = function (viewerContainer) {
-    if ($("#" + viewerContainer).data("igGrid") != null) {
-        $("#" + viewerContainer).igGrid("destroy");
-    }
+  this.ActiveSheetName = undefined;
+  var containerDiv = "#" + viewerContainer;
+  var viewerContainerElement = document.getElementById(viewerContainer);
+  var parent = viewerContainerElement.parentElement;
+
+  $(containerDiv).remove();
+
+  var viewerContainerDiv = document.createElement("div")
+  viewerContainerDiv.id = viewerContainer;
+  viewerContainerDiv.className = "tempContainer";
+
+  parent.appendChild(viewerContainerDiv); 
 }
 
 

@@ -224,11 +224,9 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
         model.getCurrentSelectionManager().HighlightedCheckComponentRow = undefined;
 
         // clear detailed info table
-        var viewerContainer = "#" + reviewManager.DetailedReviewTableContainer;
+        // var viewerContainer = "#" + reviewManager.DetailedReviewTableContainer;
         // clear previous grid
-        if ($(viewerContainer).data("igGrid") != null) {
-            $(viewerContainer).igGrid("destroy");
-        }
+        model.checks[model.currentCheck]["detailedInfoTable"].Destroy();
     }
 }
 
@@ -262,27 +260,6 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
     // get check component id
     var checkComponentData = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], this.selectedNodeId);
-    // if (this.ViewerOptions[0] === ViewerAContainer) {
-
-    //     if (reviewManager.SourceANodeIdvsCheckComponent !== undefined &&
-    //         this.selectedNodeId in reviewManager.SourceANodeIdvsCheckComponent) {
-    //         checkComponentData = reviewManager.SourceANodeIdvsCheckComponent[this.selectedNodeId];
-    //     }
-    //     else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-    //         this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
-    //         checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-    //     }
-    // }
-    // else if (this.ViewerOptions[0] === ViewerBContainer) {
-    //     if (reviewManager.SourceBNodeIdvsCheckComponent !== undefined &&
-    //         this.selectedNodeId in reviewManager.SourceBNodeIdvsCheckComponent) {
-    //         checkComponentData = reviewManager.SourceBNodeIdvsCheckComponent[this.selectedNodeId];          
-    //     }
-    //     else if (reviewManager.SourceNodeIdvsCheckComponent !== undefined &&
-    //         this.selectedNodeId in reviewManager.SourceNodeIdvsCheckComponent) {
-    //         checkComponentData = reviewManager.SourceNodeIdvsCheckComponent[this.selectedNodeId];
-    //     }
-    // }
 
     if (!checkComponentData) {
         return;
@@ -297,17 +274,18 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     }
 
     // component group id which is container div for check components table of given row
-    var containerDiv = reviewManager.GetReviewTableId(reviewRow);
+    var containerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-    var data = $("#" + containerDiv).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
     var rowData = data[reviewRow.rowIndex];
 
-    reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
+    this.HighlightMatchedComponent(containerDiv, rowData);
 
-    var reviewTable = reviewManager.GetReviewTable(reviewRow);
-    model.getCurrentSelectionManager().ScrollToHighlightedCheckComponentRow(reviewTable,
-        reviewRow,
-        reviewManager.MainReviewTableContainer);
+    model.checks[model.currentCheck]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+
+    // scroll to rowElement
+    dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
@@ -427,63 +405,51 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
         return undefined;
     }
 
-    //var doc = mainReviewTableContainer.getElementsByClassName("collapsible");
-    var doc = mainReviewTableContainer.getElementsByClassName("accordion");
-    for (var i = 0; i < doc.length; i++) {
-
-        if (doc[i].innerHTML !== componentsGroupName) {
+    var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
+    for(var groupId in checkTableIds) {
+        if (!checkTableIds[groupId].includes(componentsGroupName)) {
             continue;
         }
-        var nextSibling = doc[i].nextSibling;
+        else {
+            var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
-        var siblingCount = nextSibling.childElementCount;
-        for (var j = 0; j < siblingCount; j++) {
-            var child = doc[i].nextSibling.children[j];
-            var childRows = child.getElementsByTagName("tr");
-            for (var k = 2; k < childRows.length; k++) {
+            var dataGrid =  $(checkTableIds[groupId]).dxDataGrid("instance");
+            var rows = dataGrid.getVisibleRows();
 
-                var childRow = childRows[k];
-                // var childRowColumns = childRow.getElementsByTagName("td");
-                var data = $("#" + componentsGroupName + "_" + model.getCurrentReviewManager().MainReviewTableContainer).data("igGrid").dataSource.dataView();
-                var rowData = data[childRow.rowIndex];
-                var checkComponentId;
+            for(var i = 0; i < rows.length; i++) {
+                if(rows[i].rowType == "data") {
+                    var rowObj = rows[i];
+                    var rowData = rowObj.data
+                    var checkComponentId;
 
-                checkComponentId = rowData.ID;
-                // if (childRowColumns.length === Object.keys(ComparisonColumns).length) {
-                //     checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
-                // }
-                // else if (childRowColumns.length === Object.keys(ComplianceColumns).length) {
-                //     checkComponentId = childRowColumns[ComplianceColumns.ResultId].innerText
-                // }
-                // else {
-                //     continue;
-                // }
+                    checkComponentId = rowData.ID;
+                    if (checkComponentId == checkcComponentData["Id"]) {
 
-                //var checkComponentId = childRowColumns[ComparisonColumns.ResultId].innerText
-                if (checkComponentId == checkcComponentData["Id"]) {
+                        // open collapsible area
+                        if (categoryTable.style.display != "block") {
+                            categoryTable.style.display = "block";
+                        }
 
-                    // open collapsible area
-                    if (nextSibling.style.display != "block") {
-                        nextSibling.style.display = "block";
+                        model.checks[model.currentCheck]["reviewTable"].CurrentTableId = categoryTable.id;
+    
+                        if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+                            model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                        }
+    
+                        // highlight selected row
+                        var row = dataGrid.getRowElement(rowObj.rowIndex)
+                        model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
+                        model.getCurrentSelectionManager().HighlightedCheckComponentRow = row[0];
+    
+                        // scroll to table
+                        mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
+    
+                        //break;
+                        return row[0];
                     }
-
-                    if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-                        model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
-                    }
-
-                    // highlight selected row
-                    model.getCurrentSelectionManager().ApplyHighlightColor(childRow)
-                    model.getCurrentSelectionManager().HighlightedCheckComponentRow = childRow;
-
-                    // scroll to table
-                    mainReviewTableContainer.scrollTop = doc[i].offsetTop;
-
-                    //break;
-                    return childRow;
                 }
             }
         }
-        //}
     }
 
     return undefined;

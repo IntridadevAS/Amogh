@@ -63,23 +63,29 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 }
 
 ComparisonReviewManager.prototype.AddTableContentCount = function (containerId) {
-    var modelBrowserData = document.getElementById(containerId);
-    var categoryId = containerId + "System_table_container";
-   
-    var modelBrowserDataTable = modelBrowserData.children[0];
-    var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-
-    // var countBox;
-    var div2 = document.createElement("DIV");
-    var id = containerId + "_child";
-    div2.id = id;
-    div2.style.fontSize = "13px";
-
-    // var countBox = document.getElementById(id);
-    // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-    var rowCount = modelBrowserTableRows.length - 2;
-    div2.innerHTML = "Count :" + rowCount;
-    modelBrowserDataTable.appendChild(div2);
+    var countDiv = document.getElementById(containerId + "_child");
+    if(countDiv) {
+        return;
+    }
+    else {
+        var modelBrowserData = document.getElementById(containerId);
+        var categoryId = containerId + "System_table_container";
+       
+        var modelBrowserDataTable = modelBrowserData.children[0];
+        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+    
+        // var countBox;
+        var div2 = document.createElement("DIV");
+        var id = containerId + "_child";
+        div2.id = id;
+        div2.style.fontSize = "13px";
+    
+        // var countBox = document.getElementById(id);
+        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
+        var rowCount = modelBrowserTableRows.length - 2;
+        div2.innerHTML = "Count :" + rowCount;
+        modelBrowserDataTable.appendChild(div2);
+    }
 }
 
 ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (component, mainClass) {
@@ -150,11 +156,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         }
         else {
-
-            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
             model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
@@ -162,10 +164,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
             model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
     }
@@ -181,10 +180,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
         } else {
 
-            if ($("#" + Comparison.ViewerAContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerAContainer).igGrid("destroy");
-            }
-
+            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
             model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
         }
 
@@ -198,12 +194,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
         }
         else {
-
-            if ($("#" + Comparison.ViewerBContainer).data("igGrid")) {
-                $("#" + Comparison.ViewerBContainer).igGrid("destroy");
-            }
-
-
+            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
             model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
         }
 
@@ -254,12 +245,7 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                     component["status"] = changedStatus;
                 }
 
-                // var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
-                // var checkComponents = checkGroup["CheckComponents"];
-                // var component = checkComponents[componentId];
                 var properties = component["properties"];
-
-                //var propertiesLen = properties.length;
 
                 for (var i = 0; i < properties.length; i++) {
                     var property = properties[i];
@@ -274,9 +260,12 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
 
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
-                        selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
+                        // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
                         property["severity"] = "ACCEPTED";
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                     }
 
                 }
@@ -345,20 +334,17 @@ ComparisonReviewManager.prototype.updateReviewComponentGridData = function (sele
     populateDetailedTable,
     statusColumnId) {
    
-    var data = $(tableContainer).data("igGrid").dataSource.dataView();
+    // var data = $(tableContainer).data("igGrid").dataSource.dataView();
+    var dataGrid = $(tableContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
     var rowData = data[selectedRow.rowIndex];
     rowData.Status = changedStatus;
+    model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
+    dataGrid.repaintRows(selectedRow.rowIndex);
 
-    selectedRow.cells[statusColumnId].innerText = changedStatus;
-    
     if (populateDetailedTable) {
         model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
     }
-    // else {
-    //     if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-    //         model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComparisonColumns.Status].innerText = changedStatus;
-    //     }
-    // }    
 }
 
 ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (tabletoupdate) {
@@ -586,9 +572,11 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
+
                         property["severity"] = status[1];
 
-                        selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
 
                     }
@@ -749,7 +737,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                 // var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
                 // var checkComponents = checkGroup["CheckComponents"];
                 // var component = checkComponents[componentId];
-                var properties = component["properties"];
+                var properties = component["properties"];             
 
                 if (!originalstatus.includes("(T)")) {
                     changedStatus = originalstatus + "(T)";
@@ -760,13 +748,10 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                     component.Status = changedStatus;
                     component.transpose = transposeType;
                 }
-               
 
-                var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML;
-                var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML;
-
-                model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
-               
+                // use innerText instead of innerHtml, innerhtml gives garbage values
+                // var SourceAValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerText;
+                // var SourceBValue = selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerText;              
 
                 for (var i = 0; i < properties.length; i++) {
                     var property = properties[i];
@@ -781,28 +766,15 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
 
                     if (sourceAName == propertiesNames.SourceAName &&
                         sourceBName == propertiesNames.SourceBName) {
+
                         property["severity"] = 'OK(T)';
                         property['transpose'] = transposeType;
-                        selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = 'OK(T)';
-                        if (transposeType == "lefttoright") {
-                            selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML = SourceAValue;
-                        }
-                        else if (transposeType == "righttoleft") {
-                            selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML = SourceBValue;
-                        }
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
 
                     }
-
-                    // if (property["severity"] != 'OK' && 
-                    //    property["severity"] !== 'No Match') {
-                       
-                        // if (properties[i]['transpose'] !== null) {
-                        //     if (i == propertiesLen - 1) {
-                        //         component["Status"] = 'OK(T)';
-                        //         component["transpose"] = transposeType;
-                        //     }
-                        // }
-                    //}
                 }
                 _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer, 
@@ -821,11 +793,6 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    // var transposeType = 'restoreProperty';
-
-    // var componentId = this.GetComparisonResultId(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
-    // var groupId = this.GetComparisonResultGroupId(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
 
     var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
     try {
@@ -849,9 +816,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                 var changedStatus = status[0];
 
                 var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
-                // var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
-                // var checkComponents = checkGroup["CheckComponents"];
-                // var component = checkComponents[componentId];
+
                 var properties = component["properties"];                
 
                 for (var i = 0; i < properties.length; i++) {
@@ -868,17 +833,12 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                     if (sourceAName == selectedRow[0].cells[ComparisonPropertyColumns.SourceAName].innerText &&
                         sourceBName == selectedRow[0].cells[ComparisonPropertyColumns.SourceBName].innerText) {
 
-                        selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = status[1];
-                        // if (property["transpose"] == "lefttoright") {
-                        selectedRow[0].cells[ComparisonPropertyColumns.SourceAValue].innerHTML = property["sourceAValue"];
-                        // }
-                        // else if (property["transpose"] == "righttoleft") {
-                        selectedRow[0].cells[ComparisonPropertyColumns.SourceBValue].innerHTML = property["sourceBValue"];
-                        // }
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
-
                         property["severity"] = status[1];
                         property["transpose"] = null;
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+
+                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                     else if (property["transpose"] !== null && !status[0].includes("(T)")) {
                         changedStatus = status[0] + "(T)";
