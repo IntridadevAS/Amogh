@@ -280,7 +280,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                     this.SelectedSheetRow = row;
 
                     // var id = viewerContainer.replace("#", "");
-                    dataGrid.getScrollable().scrollTo(row.offsetTop - row.offsetHeight);
+                    dataGrid.getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
                 }
                 else {
 
@@ -406,7 +406,7 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
 
     // var rowElement = dataGrid.getRowElement(reviewTableRow.rowIndex)
     // scroll to rowElement
-    dataGrid.getScrollable().scrollTo(reviewTableRow.offsetTop - reviewTableRow.offsetHeight);
+    dataGrid.getScrollable().scrollTo({top: reviewTableRow.offsetTop - reviewTableRow.offsetHeight});
 }
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName) {
@@ -481,7 +481,7 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
         if (selectedComponentName === componentName) {
             this.HighlightSheetDataRow(viewerContainer, row);
             // scroll to rowElement
-            dataGrid.getScrollable().scrollTo(row.offsetTop - row.offsetHeight);
+            dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});
         }
     }
 }
@@ -501,7 +501,7 @@ Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContai
     if(!viewerContainer.includes("#")) {
         containerId = "#" + viewerContainer;
     }
-    $(containerId).dxDataGrid("instance").getScrollable().scrollTo(row.offsetTop - row.offsetHeight);
+    $(containerId).dxDataGrid("instance").getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
     //var sheetDataTable1 = containerChildren[0];
     // var scrollTable = document.getElementById(viewerContainer + "_table_scroll");
     // if (scrollTable) {
