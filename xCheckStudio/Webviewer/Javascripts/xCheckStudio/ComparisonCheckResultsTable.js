@@ -193,13 +193,6 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     //}
 }
 
-ComparisonCheckResultsTable.prototype.RestoreBackgroundColorOfFilteredRows = function (filteredData) {
-    for (var row = 0; row < filteredData.length; row++) {
-        var status = model.checks["comparison"]["reviewManager"].GetCellValue(filteredData[row], ComparisonColumns.Status);
-        model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(filteredData[row], status);
-    }
-}
-
 ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders,
     tableData,
     containerDiv) {
@@ -294,6 +287,23 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
     }
 
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
+}
+
+ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
+    tableContainer,
+    changedStatus,
+    populateDetailedTable) {
+   
+    var dataGrid = $(tableContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+    var rowData = data[selectedRow.rowIndex];
+    rowData.Status = changedStatus;
+    model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
+    dataGrid.repaintRows(selectedRow.rowIndex);
+
+    if (populateDetailedTable) {
+        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
+    }
 }
 
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
@@ -514,63 +524,6 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             //     }
             // }
         });
-        // $(viewerContainer).igGrid({
-        //     // width: "100%",
-        //     height: "100%",
-        //     columns: columnHeaders,
-        //     autoGenerateColumns: false,
-        //     dataSource: tableData,
-        //     responseDataKey: "results",
-        //     fixedHeaders: true,
-        //     autofitLastColumn: true,
-        //     rendered: function (evt, ui) {
-        //         var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
-        //         reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
-        //     },
-        //     features: [
-        //         {
-        //             name: 'MultiColumnHeaders'
-        //         },
-        //         {
-        //             name: "Sorting",
-        //             sortingDialogContainment: "window"
-        //         },
-        //         {
-        //             name: "Filtering",
-        //             type: "local",
-        //             // dataFiltered: function (evt, ui) {
-        //             //         var filteredData = evt.target.rows;
-        //             //     // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-        //             // }
-        //         },
-        //         {
-        //             name: "Selection",
-        //             mode: 'row',
-        //             multipleSelection: true,
-        //             activation: true,
-        //             rowSelectionChanging: function (evt, ui) {
-        //                 var comment = model.checks["comparison"]["reviewManager"].detailedReviewRowComments[ui.row.index];
-        //                 var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-        //                 if (comment) {
-        //                     commentDiv.innerHTML = "Comment : <br>" + comment;
-        //                 }
-        //                 else {
-        //                     commentDiv.innerHTML = "Comment : <br>";
-        //                 }
-        //             }
-        //         },
-        //         {
-        //             name: "RowSelectors",
-        //             enableCheckBoxes: true,
-        //             enableRowNumbering: false,
-        //             enableSelectAllForPaging: true, // this option is true by default
-        //         },
-        //         {
-        //             name: "Resizing"
-        //         },
-        //     ]
-
-        // });
     });
 
     // var container = document.getElementById(viewerContainer.replace("#", ""));

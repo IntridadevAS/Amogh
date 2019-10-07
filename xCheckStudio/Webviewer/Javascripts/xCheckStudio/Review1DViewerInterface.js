@@ -345,32 +345,48 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
     }
 
     var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
-    // for (var groupId in checkTableIds) {
-        var checkTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
-        var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
-        var rows = checkDataGrid.getVisibleRows();
+    var componentsGroupName = sheetDataRow.cells[column.ComponentClass].innerText;
 
-        for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-            var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+    for (var groupId in checkTableIds) {
+        if (!checkTableIds[groupId].includes(componentsGroupName)) {
+            continue;
+        }
+        else {
+            var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
-            var name;
-            if (this.IsComparison) {
-                if (this.Id === "a") {
-                    name = row.cells[ComparisonColumns.SourceAName].innerText;
-                }
-                else if (this.Id === "b") {
-                    name = row.cells[ComparisonColumns.SourceBName].innerText;
-                }
-            }
-            else {
-                name = row.cells[ComplianceColumns.SourceName].innerText;
+            var checkTableId = categoryTable.id;
+            // open collapsible area
+            if (categoryTable.style.display != "block") {
+                categoryTable.style.display = "block";
             }
 
-            if (componentName === name) {
-                return row;
+            model.checks[model.currentCheck]["reviewTable"].CurrentTableId = categoryTable.id;
+
+            var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
+            var rows = checkDataGrid.getVisibleRows();
+
+            for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+
+                var name;
+                if (this.IsComparison) {
+                    if (this.Id === "a") {
+                        name = row.cells[ComparisonColumns.SourceAName].innerText;
+                    }
+                    else if (this.Id === "b") {
+                        name = row.cells[ComparisonColumns.SourceBName].innerText;
+                    }
+                }
+                else {
+                    name = row.cells[ComplianceColumns.SourceName].innerText;
+                }
+
+                if (componentName === name) {
+                    return row;
+                }
             }
         }
-    // }
+    }
     return undefined;
 }
 

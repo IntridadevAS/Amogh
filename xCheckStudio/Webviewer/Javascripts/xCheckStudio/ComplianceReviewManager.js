@@ -60,6 +60,32 @@ ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
     }
 }
 
+ComplianceReviewManager.prototype.AddTableContentCount = function (containerId) {
+    var countDiv = document.getElementById(containerId + "_child");
+    if(countDiv) {
+        return;
+    }
+    else {
+        var modelBrowserData = document.getElementById(containerId);
+        var categoryId = containerId + "System_table_container";
+       
+        var modelBrowserDataTable = modelBrowserData.children[0];
+        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+    
+        // var countBox;
+        var div2 = document.createElement("DIV");
+        var id = containerId + "_child";
+        div2.id = id;
+        div2.style.fontSize = "13px";
+    
+        // var countBox = document.getElementById(id);
+        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
+        var rowCount = modelBrowserTableRows.length - 2;
+        div2.innerHTML = "Count :" + rowCount;
+        modelBrowserDataTable.appendChild(div2);
+    }
+}
+
 ComplianceReviewManager.prototype.unhighlightSelectedSheetRow = function (checkStatusArray, currentRow) {
     var rowIndex = currentRow.rowIndex;
     obj = Object.keys(checkStatusArray)
@@ -217,11 +243,10 @@ ComplianceReviewManager.prototype.AcceptComponent = function (selectedRow, table
                     if (property.severity !== "OK")
                         property.severity = 'ACCEPTED';
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
                                                    tableContainer, 
                                                    checkResultComponent.status, 
-                                                   true, 
-                                                   ComplianceColumns.Status);
+                                                   true);
             }
         });
     }
@@ -237,10 +262,6 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    // var tableToUpdate = tableToUpdate;
-    // var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    // var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
 
     try {
         $.ajax({
@@ -258,8 +279,7 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
                 var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
-                // var checkResultGroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                // var checkResultComponent = checkResultGroup["CheckComponents"][componentId];
+
                 var properties = checkResultComponent["properties"];
                 var changedStatus = originalstatus;
                 if (!originalstatus.includes("(A)")) {
@@ -281,18 +301,19 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
 
                     if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
                         property["severity"] = "ACCEPTED";
-                        selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = "ACCEPTED";
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+                        // selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = "ACCEPTED";
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], "ACCEPTED");
                         break;
                     }
 
                 }
 
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                     tableContainer, 
                     changedStatus, 
-                    false, 
-                    ComplianceColumns.Status);
+                    false);
 
             }
         });
@@ -300,47 +321,6 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
     catch (error) {
         console.log(error);
     }
-}
-
-ComplianceReviewManager.prototype.updateReviewComponentGridData = function (selectedRow,
-    tableContainer,    
-    changedStatus,
-    populateDetailedTable,
-    statusColumnId) {
-
-    var data = $(tableContainer).data("igGrid").dataSource.dataView();
-    var rowData = data[selectedRow.rowIndex];
-    rowData.Status = changedStatus;
-    
-    selectedRow.cells[statusColumnId].innerText = changedStatus;
-    if (populateDetailedTable) {
-        model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
-    }
-    // else
-    // {
-    //     if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-    //         model.getCurrentSelectionManager().HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerText = changedStatus;
-    //     }
-    // }
-
-    // var row = selectedRow;
-
-    // var gridId = '#' + this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + this.MainReviewTableContainer;
-    // var _this = this;
-
-    // var editedItem = {
-    //     "SourceA": selectedRow.cells[ComplianceColumns.SourceName].innerText,
-    //     "Status": changedStatus,
-    //     "NodeId": selectedRow.cells[ComplianceColumns.NodeId].innerText,
-    //     "ID": selectedRow.cells[ComplianceColumns.ResultId].innerText,
-    //     "groupId": selectedRow.cells[ComplianceColumns.GroupId].innerText
-    // };
-
-    // $(gridId).jsGrid("updateItem", selectedRow, editedItem).done(function () {
-    //     _this.SelectionManager.HighlightedCheckComponentRow.cells[ComplianceColumns.Status].innerHTML = changedStatus;
-    //     _this.populateDetailedReviewTable(selectedRow);
-    //     $(gridId).jsGrid("refresh");
-    // });
 }
 
 ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tableToUpdate) {
@@ -518,11 +498,10 @@ ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow,
                     index++;
                 }               
                 
-                _this.updateReviewComponentGridData(selectedRow[0], 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
                     tableContainer, 
                     checkResultComponent.status, 
-                    true, 
-                    ComplianceColumns.Status);
+                    true);
             }
         });
     }
@@ -578,16 +557,17 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
 
                     if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
                         property["severity"] = status[1];
-                        selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = status[1];
+
+                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+                        // selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = status[1];
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                 }
                
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer, 
                 changedStatus, 
-                false, 
-                ComplianceColumns.Status);
+                false);
             }
         });
     }

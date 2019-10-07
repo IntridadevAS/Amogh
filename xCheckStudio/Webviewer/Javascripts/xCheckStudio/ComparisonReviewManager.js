@@ -269,12 +269,10 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                     }
 
                 }
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer, 
-                groupId, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                tableContainer,  
                 changedStatus, 
-                false, 
-                ComparisonColumns.Status);
+                false);
             }
         });
     }
@@ -320,31 +318,11 @@ ComparisonReviewManager.prototype.AcceptComponent = function (selectedRow, table
                         }
                     }
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], tableContainer, component.status, true);
             }
         });
     }
     catch (error) { }
-}
-
-ComparisonReviewManager.prototype.updateReviewComponentGridData = function (selectedRow,
-    tableContainer,
-    groupId,
-    changedStatus,
-    populateDetailedTable,
-    statusColumnId) {
-   
-    // var data = $(tableContainer).data("igGrid").dataSource.dataView();
-    var dataGrid = $(tableContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
-    var rowData = data[selectedRow.rowIndex];
-    rowData.Status = changedStatus;
-    model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
-    dataGrid.repaintRows(selectedRow.rowIndex);
-
-    if (populateDetailedTable) {
-        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
-    }
 }
 
 ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (tabletoupdate) {
@@ -518,7 +496,7 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                     }
                     index++;
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], tableContainer, component.status, true);
             }
         });
     }
@@ -582,12 +560,10 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
                     }
 
                 }
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer, 
-                groupId, 
                 changedStatus, 
-                false, 
-                ComparisonColumns.Status);          
+                false);          
             }
         });
     }
@@ -776,12 +752,10 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
 
                     }
                 }
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer, 
-                groupId, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                tableContainer,
                 changedStatus, 
-                false, 
-                ComparisonColumns.Status);
+                false);
             }
         });
     }
@@ -849,12 +823,10 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                 component["Status"] = changedStatus;
                 component["transpose"] = null;
 
-                _this.updateReviewComponentGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow,
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow,
                     tableContainer,
-                    groupId,
                     changedStatus,
-                    false,
-                    ComparisonColumns.Status);
+                    false);
                 
             }
 
@@ -903,7 +875,10 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                     }
                     index++;
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);                
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                    tableContainer,
+                    component.status, 
+                    true);                
             }
         });
     }
@@ -956,7 +931,10 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                     }
 
                 }
-                _this.updateReviewComponentGridData(selectedRow[0], tableContainer, groupId, component.status, true, ComparisonColumns.Status);                
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                    tableContainer, 
+                    component.status, 
+                    true);                
             },
         });
     }

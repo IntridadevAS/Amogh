@@ -65,7 +65,6 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (revi
     
     var ContainerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
     
-    // var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
     var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
     for (var id in data) {
@@ -82,8 +81,7 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (revi
 ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow) {
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
     
-    var ContainerDiv = model.getCurrentReviewManager().GetReviewTableId(reviewTableRow);
-    // var data = $("#" + ContainerDiv).data("igGrid").dataSource.dataView();
+    var ContainerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
     var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
         for (var id in data) {

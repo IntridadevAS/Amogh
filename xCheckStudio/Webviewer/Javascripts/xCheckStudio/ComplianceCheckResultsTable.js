@@ -1,6 +1,6 @@
 function ComplianceCheckResultsTable(mainReviewTableContainer) {
     this.MainReviewTableContainer = mainReviewTableContainer;
-
+    this.CurrentTableId;
     this.CheckTableIds = {};
 }
 
@@ -59,41 +59,40 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(ComplianceColumns).length; i++) {
         columnHeader = {};
-        var headerText;
-        var hidden = false;
+        var caption;
+        var dataField;
+        var visible = true;
         if (i === ComplianceColumns.SourceName) {
-            headerText = source;
-            key = ComplianceColumnNames.SourceName;
-            hidden = false;
+            caption = source;
+            dataField = ComplianceColumnNames.SourceName;
         }
         else if (i === ComplianceColumns.Status) {
-            headerText = "Status";
-            key = ComplianceColumnNames.Status;
+            caption = "Status";
+            dataField = ComplianceColumnNames.Status;
             hidden = false;
         }
         else if (i === ComplianceColumns.NodeId) {
-            headerText = "NodeId";
-            key = ComplianceColumnNames.NodeId;
-            width = "0";
-            hidden = true;
+            caption = "NodeId";
+            dataField = ComplianceColumnNames.NodeId;
+            visible = false;
         }
         else if (i === ComplianceColumns.ResultId) {
-            headerText = "ID";
-            key = ComplianceColumnNames.ResultId;
-            width = "0";
-            hidden = true;
+            caption = "ID";
+            dataField = ComplianceColumnNames.ResultId;
+            visible = false;
         }
         else if (i === ComplianceColumns.GroupId) {
-            headerText = "groupId";
-            key = ComplianceColumnNames.GroupId;
-            width = "0";
-            hidden = true;
+            caption = "groupId";
+            dataField = ComplianceColumnNames.GroupId;
+            visible = false;
         }
 
-        columnHeader["headerText"] = headerText;
-        columnHeader["key"] = key;
-        columnHeader["dataType"] = "string";
-        columnHeader["hidden"] = hidden;
+        columnHeader["caption"] = caption;
+        columnHeader["dataField"] = dataField;
+        // columnHeader["dataType"] = "string";
+        if(visible == false) {
+            columnHeader["visible"] = visible;
+        }
         columnHeaders.push(columnHeader);
     }
 
@@ -103,6 +102,9 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
 ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
     var parentTable = document.getElementById(this.MainReviewTableContainer);
     var ComplianceData = model.getCurrentReviewManager().ComplianceCheckManager;
+
+    // //Clear Review table data
+    // this.Destroy();
 
     if (!("results" in ComplianceData)) {
         return;
@@ -125,6 +127,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         var div = document.createElement("DIV");
         div.className = "content scrollable";
         div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+        div.style.display = "none";
         parentTable.appendChild(div);
 
         var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
@@ -133,7 +136,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
 
         var id = "#" + div.id;
         this.LoadReviewTableData(columnHeaders, tableData, id);
-        this.highlightMainReviewTableFromCheckStatus(div.id);
+        // this.highlightMainReviewTableFromCheckStatus(div.id);
 
         // maintain table ids
         this.CheckTableIds[groupId] = id;
@@ -161,113 +164,101 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     var _this = this;
 
     $(function () {
-        var isFiredFromCheckbox = false;
-        $(viewerContainer).igGrid({
-            // height: "202px",
-            columns: columnHeaders,
-            autofitLastColumn: false,
-            autoGenerateColumns: false,
+        $(viewerContainer).dxDataGrid({
             dataSource: tableData,
-            responseDataKey: "results",
-            fixedHeaders: true,
-            autoCommit: true,
-            rendered: function (evt, ui) {
+            keyExpr: ComparisonColumnNames.ResultId,
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: false,
+            showBorders: true,
+            showRowLines: true,
+            height: "100%",
+            width: "100%",
+            allowColumnResizing : true,
+            // focusedRowEnabled: true,
+            filterRow: {
+                visible: true
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                recursive: true
+            }, 
+            paging: { enabled: false },
+            onContentReady: function(e) {
+                _this.highlightMainReviewTableFromCheckStatus(viewerContainer.replace("#", ""));
+                model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
+                if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
+                model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
+                    var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
+                    model.getCurrentSelectionManager().HighlightedCheckComponentRow = e.component.getRowElement(rowIndex)[0];
+                    model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
+                }
+            },
+            onInitialized: function(e) {
+                // initialize the context menu
                 var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
                 reviewComplianceContextMenuManager.InitComponentLevelContextMenu(viewerContainer);
             },
-            features: [
-                {
-                    name: "Sorting",
-                    sortingDialogContainment: "window"
-                },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    // dataFiltered: function (evt, ui) {
-                    //         var filteredData = evt.target.rows;
-                    //     _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-                    // }
-                },
-                {
-                    name: "Selection",
-                    mode: 'row',
-                    multipleSelection: true,
-                    activation: true,
-                    rowSelectionChanging: function (evt, ui) {
-
-                        if (isFiredFromCheckbox) {
-                            isFiredFromCheckbox = false;
-                        } else {
-                            var id = viewerContainer.replace("#", "");
-                            var rowData = _this.GetDataForSelectedRow(ui.row.index, viewerContainer);
-                            model.getCurrentSelectionManager().MaintainHighlightedRow(ui.row.element[0]);
-                            model.getCurrentReviewManager().OnCheckComponentRowClicked(rowData, id)
-                            return false;
-                        }
+            onSelectionChanged: function (e) {
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
+                        var  row = e.component.getRowElement(rowIndex);
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "on");
                     }
-                },
-                {
-                    name: "RowSelectors",
-                    enableCheckBoxes: true,
-                    enableRowNumbering: false,
-                    enableSelectAllForPaging: true, // this option is true by default
-                    checkBoxStateChanging: function (evt, ui) {
-                        //we use this variable as a flag whether the selection is coming from a checkbox
-                        isFiredFromCheckbox = true;
-                    },
-                    checkBoxStateChanged: function (evt, ui) {
-                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(ui.row[0], ui.state);
+                }
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
+                        var  row = e.component.getRowElement(rowIndex);
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "off");
                     }
-                },
-                {
-                    name: "Resizing"
-                },
-            ]
-
+                }
+            },
+            onRowClick: function(e) {
+                var id = viewerContainer.replace("#", "");
+                _this.CurrentTableId = id;
+                model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0]);
+                model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id)
+            },
         });
-
-        var container = document.getElementById(viewerContainer.replace("#", ""));
-        container.style.margin = "0px"
-        container.style.padding = "0";
     });
 };
 
 ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
-    var data = $(containerDiv).data("igGrid").dataSource.dataView();
+    var dataGrid = $(containerDiv).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
     var rowData = data[rowIndex];
     return rowData;
-
-    // var rowData = {};
-    // var rowIndex = rowIndex;
-    // $(function () {
-    // var data = $(containerDiv).data("igGrid").dataSource.dataView();
-    // var resultId = data[rowIndex].ID;
-    // var groupId = data[rowIndex].groupId;
-    // var nodeId = data[rowIndex].NodeId;
-    // var status = data[rowIndex].Status;
-    // var sourceName = data[rowIndex].SourceA;
-
-    // rowData['Status'] = status;
-    // rowData['SourceName'] = sourceName;
-    // rowData['ResultId'] = resultId;
-    // rowData['GroupId'] = groupId;
-    // rowData['NodeId'] = nodeId;
-    // });
-
-    // return rowData;
 }
 
 ComplianceCheckResultsTable.prototype.Destroy = function () {
 
     for (var groupId in this.CheckTableIds) {
         var id = this.CheckTableIds[groupId];
-        // clear previous grid
-        if ($(id).data("igGrid") != null) {
-            $(id).igGrid("destroy");
-        }
+        
+        $(id).remove()
     }
 
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
+}
+
+ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
+    tableContainer,    
+    changedStatus,
+    populateDetailedTable) {
+
+        var dataGrid = $(tableContainer).dxDataGrid("instance");
+        var data = dataGrid.getDataSource().items(); 
+        var rowData = data[selectedRow.rowIndex];
+        rowData.Status = changedStatus;
+        model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
+        dataGrid.repaintRows(selectedRow.rowIndex);
+    
+        if (populateDetailedTable) {
+            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
+        }
 }
 
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
@@ -277,33 +268,33 @@ function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
 
 ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (source) {
 
-    var group = [];
+    var columns = [];
     var columnHeader = {}
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(CompliancePropertyColumns).length; i++) {
         var headerGroupComp = {}
-        var headerText;
+        var caption;
         if (i === CompliancePropertyColumns.PropertyName) {
-            headerText = "Property";
-            key = CompliancePropertyColumnNames.PropertyName;
+            caption = "Property";
+            dataField = CompliancePropertyColumnNames.PropertyName;
         }
         else if (i === CompliancePropertyColumns.PropertyValue) {
-            headerText = "Value";
-            key = CompliancePropertyColumnNames.PropertyValue;
+            caption = "Value";
+            dataField = CompliancePropertyColumnNames.PropertyValue;
         }
         else if (i === CompliancePropertyColumns.Status) {
-            headerText = "Status";
-            key = CompliancePropertyColumnNames.Status;
+            caption = "Status";
+            dataField = CompliancePropertyColumnNames.Status;
         }
 
-        headerGroupComp["headerText"] = headerText;
-        headerGroupComp["key"] = key;
-        headerGroupComp["dataType"] = "string";
-        group.push(headerGroupComp);
+        headerGroupComp["caption"] = caption;
+        headerGroupComp["dataField"] = dataField;
+        // headerGroupComp["dataType"] = "string";
+        columns.push(headerGroupComp);
     }
 
-    columnHeader["headerText"] = source;
-    columnHeader["group"] = group;
+    columnHeader["caption"] = source;
+    columnHeader["columns"] = columns;
 
     columnHeaders.push(columnHeader)
     return columnHeaders;
@@ -349,127 +340,67 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
     var id = "#" + this.DetailedReviewTableContainer;
     this.LoadDetailedReviewTableData(columnHeaders, tableData, id);
-    this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
-
-    // for (var componentsGroupID in this.ReviewManager.ComplianceCheckManager) {
-
-    //     // get the componentgroupd corresponding to selected component 
-    //     var componentsGroupList = this.ReviewManager.ComplianceCheckManager[componentsGroupID];
-    //     if (componentsGroupList && componentsGroupID != "restore") {
-
-    //         var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-
-    //         // var div = document.createElement("DIV");
-    //         // parentTable.appendChild(div);
-
-    //         // div.innerHTML = "Check Details :";
-    //         // div.style.fontSize = "20px";
-    //         // div.style.fontWeight = "bold";
-
-    //         var columnHeaders = this.CreatePropertiesTableHeader()
-
-    //         // // show component class name as property in detailed review table               
-
-    //         for (var propertyId in component.properties) {
-    //             property = component.properties[propertyId];
-
-    //             this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
-
-    //             tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-    //             tableData.push(tableRowContent);
-    //         }
-
-    //         var id = "#" + this.DetailedReviewTableContainer;
-    //         this.LoadDetailedReviewTableData(columnHeaders, tableData, id);
-    //         this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
-
-    //         // var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
-    //         // // jsGridHeaderTableIndex = 0 
-    //         // // jsGridTbodyTableIndex = 1
-    //         // var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-    //         // modelBrowserHeaderTable.style.position = "fixed"
-    //         // modelBrowserHeaderTable.style.width = "565px";
-    //         // modelBrowserHeaderTable.style.backgroundColor = "white";
-    //         // modelBrowserHeaderTable.style.overflowX = "hidden";
-
-    //         // // jsGridHeaderTableIndex = 0 
-    //         // // jsGridTbodyTableIndex = 1
-    //         // var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
-    //         // modelBrowserDataTable.style.position = "static"
-    //         // modelBrowserDataTable.style.width = "579px";
-    //         // modelBrowserDataTable.style.margin = "55px 0px 0px 0px"
-
-    //         break;
-    //         //}
-    //     }
-    // }
+    
 }
 
 ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer) {
     var _this = this;
 
     // clear previous grid
-    if ($(viewerContainer).data("igGrid") != null) {
-        $(viewerContainer).igGrid("destroy");
-    }
-
+    // this.Destroy();
     $(function () {
-        $(viewerContainer).igGrid({
-            // width: "100%",
-            height: "100%",
-            columns: columnHeaders,
-            autoGenerateColumns: false,
+        $(viewerContainer).dxDataGrid({
             dataSource: tableData,
-            responseDataKey: "results",
-            fixedHeaders: true,
-            rendered: function (evt, ui) {
+            // keyExpr: ComparisonColumnNames.ResultId,
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: false,
+            showBorders: true,
+            showRowLines: true,
+            height: "100%",
+            width: "100%",
+            allowColumnResizing : true,
+            // focusedRowEnabled: true,
+            filterRow: {
+                visible: true
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                recursive: true
+            }, 
+            scrolling: {
+                mode : "standard"
+            },
+            paging: {
+                enabled: false
+            },
+            onContentReady: function(e) {
+                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
+            },
+            onInitialized: function(e) {
+                // initialize the context menu
                 var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
                 reviewComplianceContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
             },
-            features: [
-                {
-                    name: 'MultiColumnHeaders'
-                },
-                {
-                    name: "Sorting",
-                    sortingDialogContainment: "window"
-                },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    // dataFiltered: function (evt, ui) {
-                    //         var filteredData = evt.target.rows;
-                    //     // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-                    // }
-                },
-                {
-                    name: "Selection",
-                    mode: 'row',
-                    multipleSelection: true,
-                    activation: true,
-                    rowSelectionChanging: function (evt, ui) {
-                        //var comment = _this.detailedReviewRowComments[ui.row.index];
-                        var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                        if (comment) {
-                            commentDiv.innerHTML = "Comment : <br>" + comment;
-                        }
-                        else {
-                            commentDiv.innerHTML = "Comment : <br>";
-                        }
-                    }
-                },
-                {
-                    name: "RowSelectors",
-                    enableCheckBoxes: true,
-                    enableRowNumbering: false,
-                    enableSelectAllForPaging: true, // this option is true by default
-                },
-                {
-                    name: "Resizing"
-                },
-            ]
-
+            onSelectionChanged: function (e) {
+                
+            },
+            onRowClick: function(e) {
+                // var comment = model.checks["compliance"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
+                // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+                // if (comment) {
+                //     commentDiv.innerHTML = "Comment : <br>" + comment;
+                // }
+                // else {
+                //     commentDiv.innerHTML = "Comment : <br>";
+                // }
+            },
+            // onRowPrepared: function(e) {
+            //     if(e.isSelected) {
+            //         _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
+            //     }
+            // }
         });
     });
 
@@ -501,9 +432,23 @@ ComplianceCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
 
 ComplianceCheckPropertiesTable.prototype.Destroy = function () {
 
-    var viewerContainer = "#" + this.DetailedReviewTableContainer;
-    // clear previous grid
-    if ($(viewerContainer).data("igGrid") != null) {
-        $(viewerContainer).igGrid("destroy");
-    }
+    var containerDiv = "#" + this.DetailedReviewTableContainer;
+    var viewerContainerElement = document.getElementById(this.DetailedReviewTableContainer);
+    var parent = viewerContainerElement.parentElement;
+
+    $(containerDiv).remove();
+
+    var viewerContainerDiv = document.createElement("div")
+    viewerContainerDiv.id = this.DetailedReviewTableContainer;
+
+    parent.appendChild(viewerContainerDiv); 
+}
+
+ComplianceCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, property) {
+    var detailInfoContainer =  model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+    var rowData = data[rowIndex];
+    rowData[CompliancePropertyColumnNames.Status] = property["severity"];
+    dataGrid.repaintRows(rowIndex);
 }
