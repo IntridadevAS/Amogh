@@ -248,12 +248,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent = function (selectedRow) {   
    
-    // var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
     var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
-    // var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
-
-    // var rowData = rowsData[selectedRow.rowIndex];
     
     var componentId = rowData.ID;
     var groupId = rowData.groupId;    
@@ -268,11 +263,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent = function (selectedRow) {
-    // var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
-    // var rowData = rowsData[selectedRow.rowIndex];
 
-    // var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
     var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
 
     if (rowData.Status == "OK(A)" ||
@@ -479,10 +470,6 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowClicked) {
 
-    // var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
-    // var rowData = rowsData[rowClicked[0].rowIndex];
-    // var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
     var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
     
     
@@ -501,10 +488,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     }
 
     var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
-
-    // var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
-    // var dataGrid = $("#"+ componentTableId).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
+ 
     var containerId = "#"+ componentTableId;
     var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
     
@@ -519,10 +503,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
-   
-    // var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
-    // var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
+
     var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
     
     var componentId = rowData.ID;
@@ -543,10 +524,6 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
 
     var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-
-    // var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
-    // var dataGrid = $("#"+ componentTableId).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
     var containerId = "#"+ componentTableId;
     var rowData =  model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
     
@@ -573,9 +550,6 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
 
     var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-    // var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
-    // var dataGrid = $("#"+ componentTableId).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
     var containerId = "#"+ componentTableId;
     var rowData =  model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
     
@@ -609,9 +583,6 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
 
     var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-    // var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
-    // var dataGrid = $("#"+ componentTableId).dxDataGrid("instance");
-    // var rowsData = dataGrid.getDataSource().items(); 
     var containerId = "#"+ componentTableId;
     var rowData =  model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
     
@@ -716,7 +687,6 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         return undefined;
     }
 
-    // var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
     var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
 
@@ -728,13 +698,13 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         var rowData = rowsData[selectedRow.rowIndex];
         // source A
         //var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
-        if (rowData.SourceANodeId !== "") {
+        if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
             sourceANodeIds.push(Number(rowData.SourceANodeId));
         }
 
         // source B
         //var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
-        if (rowData.SourceBNodeId !== "") {
+        if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
             sourceBNodeIds.push(Number(rowData.SourceBNodeId));
         }
     }
