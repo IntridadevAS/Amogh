@@ -40,7 +40,7 @@ function CreateCheckSpace(){
     $CheckComments = $obj['checkComments'];
     $CheckIsFavourite = $obj['favoriteCheck'];
     $CheckCreateDate = $obj['checkdate'];
-    if (CheckIfCheckSpaceExists($projectName , $CheckName) == false)
+    if (CheckIfCheckSpaceExists($projectName , $ProjectId, $CheckName) == false)
     {
         try
         {
@@ -91,9 +91,9 @@ function CreateCheckSpace(){
     }
 }
 
-function CheckIfCheckSpaceExists($projectName, $checkName){
+function CheckIfCheckSpaceExists($projectName, $projectId, $checkName){
     $dbh = new PDO("sqlite:".getProjectDatabasePath($projectName)) or die("cannot open the database");
-    $query =  "select checkname from CheckSpace where checkname='". $checkName."' COLLATE NOCASE;";      
+    $query =  "select checkname from CheckSpace where checkname='". $checkName."' and projectid=".$projectId." COLLATE NOCASE;";  
     $count=0;
     foreach ($dbh->query($query) as $row)
     {
