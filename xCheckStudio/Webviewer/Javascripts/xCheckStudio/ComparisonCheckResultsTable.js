@@ -18,7 +18,7 @@ ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function (groupId
 
     var btn = document.createElement("BUTTON");
     btn.className = "accordion";
-    btn.style.justifyContent = "left";
+    btn.style.justifyContent = "center";
     var t = document.createTextNode(componentClass);       // Create a text node
     btn.appendChild(t);
     return btn;
@@ -207,10 +207,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            height: "100%",
-            width: "100%",
             allowColumnResizing : true,
-            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -229,6 +226,13 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     model.getCurrentSelectionManager().HighlightedCheckComponentRow = e.component.getRowElement(rowIndex)[0];
                     model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
                 }
+            },
+            onCellPrepared: function(e) {
+                if(e.rowType == "header"){  
+                    e.cellElement.css("text-align", "center"); 
+                    e.cellElement.css("color", "black");
+                    e.cellElement.css("font-weight", "bold");   
+                 }  
             },
             onInitialized: function(e) {
                 // initialize the context menu
@@ -330,7 +334,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
+                    headerGroupComp["width"] = "20%";                    
                     // headerGroupComp["dataType"] = "string";
                     // headerGroupComp["width"] = "27%";
 
@@ -342,8 +346,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[1] = headerGroupComp;
                 }
@@ -363,8 +365,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[0] = headerGroupComp;
                 }
@@ -375,8 +375,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[1] = headerGroupComp;
                 }
@@ -473,16 +471,12 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,
-            // keyExpr: ComparisonColumnNames.ResultId,
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            height: "100%",
-            width: "100%",
             allowColumnResizing : true,
-            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -504,6 +498,13 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 // initialize the context menu
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
                 reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
+            },
+            onCellPrepared: function(e) {
+                if(e.rowType == "header"){  
+                    e.cellElement.css("text-align", "center"); 
+                    e.cellElement.css("color", "black");
+                    e.cellElement.css("font-weight", "bold");   
+                 }  
             },
             onSelectionChanged: function (e) {
                 
