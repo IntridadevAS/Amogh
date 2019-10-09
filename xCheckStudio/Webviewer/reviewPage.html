@@ -547,15 +547,30 @@
       width: 6px;
     }
 
-    .ui-iggrid tbody td {
-      white-space: nowrap;
-    }
-
     .content {
       padding: 0 18px;
       display: none;
       overflow: hidden;
       background-color: #f1f1f1;
+    }
+
+    .dx-data-row > td {  
+        border-color: darkgrey !important;
+    }
+    .dx-header-row > td {
+      border-color: darkgrey !important
+    }
+
+    .dx-datagrid-filter-row > td {
+      border-color: darkgrey !important
+    }
+
+    .dx-scrollbar-vertical {
+      display: none !important;
+    }
+
+    .dx-scrollbar-horizontal {
+      display: none !important;
     }
 
     .scrollable {
