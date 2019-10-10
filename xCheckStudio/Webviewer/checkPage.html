@@ -54,6 +54,25 @@
 
       <div id='contextMenu' style="z-index: 1; position: absolute;">
       </div>
+
+      <!-- reference selection overlay -->
+      <div id="referenceSelectionOverlay" class="overlay" style="z-index: 201;"></div>
+      <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
+        <iframe src="Reference_selection.html" style="height: 401px; width: 444px"></iframe>
+      </div>
+
+      <!-- add reference overlay -->
+      <div id="addReferenceOverlay" class="overlay" style="z-index: 201;"></div>
+      <div id="addReferencePopup" class="popup" style="z-index: 201;">
+        <iframe src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
+      </div>
+
+      <!-- reference overlay -->
+      <div id="referenceOverlay" class="overlay"></div>
+      <div id="referencePopup" class="popup">
+        <iframe src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
+      </div>
+
       <!-- Return to home page overlay -->
       <div id="returnHomeOverlay" class="overlay"></div>
       <div id="returnHomePopup" class="popup">
@@ -357,14 +376,14 @@
               <option value="checkCase3">CheckCaseType 3</option>
             </select>
           </div>
-          
+
           <div class="buttonGroup">
-            
+
             <button id="showAll" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Show All"></span>
               <img src="public/symbols/XD_Show.svg" alt="">
             </button>
-            
+
             <button id="reloadData" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Reload Data(Reset)"></span>
               <img src="public/symbols/XD_ClearData.svg" alt="">
@@ -389,7 +408,7 @@
               <span class="tooltip" data-tooltip="Check Info"></span>
               <img src="public/symbols/XD_Checkinfo.svg" alt="">
             </button>
-                        
+
             <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Save Progress"></span>
               <img src="public/symbols/XD_SaveData.svg" alt="">
@@ -400,7 +419,7 @@
               <img src="public/symbols/Navigation box.svg" alt="">
             </button>
 
-          </div>          
+          </div>
         </div>
       </div>
       <div class="viewsContainer" id="viewsContainer">
@@ -560,7 +579,8 @@
 
         <div class="checkTogglesContainer">
           <label class="toggleContainer" style="grid-area:compliance">Compliance
-            <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance" onchange = "onComplianceSwitchStateChanged(this)">
+            <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance"
+              onchange="onComplianceSwitchStateChanged(this)">
             <span class="toggleSlider"></span>
           </label>
           <label class="toggleContainer" style="grid-area:comparison">Comparison
@@ -760,7 +780,9 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\DrawerMenu.js"></script>
-  <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
+  <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" /> 
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReferenceManager.js"></script>
 
   <script>
     $("#loadIndicator").dxLoadPanel({
@@ -807,7 +829,38 @@
     function hideBusyIndicator() {
       // hide busy indicator
       $("#loadIndicator").dxLoadPanel("hide");
-    } 
+    }
+
+
+    // reference related functions
+    function closeReference() {
+      ReferenceManager.closeReferenceDiv();     
+    }
+
+    function showReferenceSelection() {
+      ReferenceManager.showReferenceSelectionDiv();
+    }
+
+    function closeReferenceSelection() {
+      ReferenceManager.closeReferenceSelectionDiv();      
+    }
+
+    function showInputReference() {
+        ReferenceManager.showInputReferenceDiv();
+      }
+
+      function closeInputReference() {
+        ReferenceManager.closeInputReferenceDiv();
+
+        if ("referenceType" in localStorage) {
+          localStorage.removeItem('referenceType');
+        }
+      }
+
+      function addReference(value) {
+        ReferenceManager.addReference(value);
+      }
+
   </script>
 </body>
 

@@ -1,0 +1,154 @@
+.mediaViewInfo {
+	--web-view-name: Add Reference Overlay;
+	--web-view-id: Add_Reference_Overlay;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Add_Reference_Overlay;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+#Add_Reference_Overlay {
+	position: absolute;
+	box-sizing: border-box;
+	background: #E5E5E5;
+	width: 581px;
+	height: 144px;
+	background-color: rgba(255,255,255,1);
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	--web-view-name: Add Reference Overlay;
+	--web-view-id: Add_Reference_Overlay;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+#Rectangle_1204 {
+	filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.502));
+}
+.Rectangle_1204 {
+	position: absolute;
+	overflow: visible;
+	width: 617px;
+	height: 180px;
+	left: 0px;
+	top: 0px;
+}
+#Component_1 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 476px;
+	top: 99px;
+	overflow: visible;
+}
+.Path_310 {
+	overflow: visible;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 90px;
+	height: 30px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#OK {
+	position: absolute;
+	left: 16px;
+	top: 4px;
+	overflow: hidden;
+	width: 60px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_1_A86_SymbolInstance_2 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 380px;
+	top: 99px;
+	overflow: visible;
+}
+.Rectangle_1242 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#CANCEL {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Group_342 {
+	position: absolute;
+	width: 551.141px;
+	height: 75.027px;
+	left: 14.859px;
+	top: 15.385px;
+	overflow: visible;
+}
+#referenceInput {
+	position: absolute;
+	width: 551.141px;
+	height: 75.027px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Rectangle_1205 {
+	position: absolute;
+	overflow: visible;
+	width: 551.141px;
+	height: 75.027px;
+	left: 0px;
+	top: 0px;
+}
+#Component_3 {
+	position: absolute;
+	width: 128px;
+	height: 30px;
+	left: 15px;
+	top: 99px;
+	overflow: visible;
+}
+.Rectangle_1242_A86_Rectangle_4 {
+	position: absolute;
+	overflow: visible;
+	width: 128px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#Load_File {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 129px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}

@@ -1,44 +1,8 @@
-function ModelBrowserContextMenu() {
-      // // call super constructor
-      // ContextMenuManager.call(this);
-
+function ModelBrowserContextMenu() {     
       this.ModelBrowser;
-
-      //this.IsolatedNodes = [];
+     
       this.IsolateManager;
 }
-
-// // inherit from parent
-// ModelBrowserContextMenu.prototype = Object.create(ContextMenuManager.prototype);
-// ModelBrowserContextMenu.prototype.constructor = ModelBrowserContextMenu;
-
-// ModelBrowserContextMenu.prototype.Init = function (x,y) {
-
-//       var radialMenuParent = document.getElementById("radialMenuParent");
-//       radialMenuParent.style.left = x;
-//       radialMenuParent.style.left = y;
-
-//       // create the radial menu
-//       $("#radialMenu").igRadialMenu({
-//             width: "300px",
-//             height: "300px",
-//             items:
-//                   [
-//                         {
-//                               name: "button1",
-//                               header: "Bold",
-//                               //iconUri: "http://igniteui.com/images/samples/radial-menu/Bold.png",
-//                               click: function () { toggleBold(); }
-//                         },
-//                         {
-//                               name: "button2",
-//                               header: "Italic",
-//                               //iconUri: "http://igniteui.com/images/samples/radial-menu/Italic.png",
-//                               click: function () { toggleItalic(); }
-//                         },
-//                   ]
-//       });
-// }
 
 ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
@@ -104,6 +68,9 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
                                           return false;
                                     }
+                              },
+                              "reference": {
+                                    name: "Reference"
                               }
                         }
                   };
@@ -137,6 +104,16 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       else if (key.toLowerCase() === "stoptranslucency") {
             this.OnStopTranslucencyClicked();
       }
+      else if (key.toLowerCase() === "reference") {
+            this.OnReferenceClicked();
+      }      
+}
+
+ModelBrowserContextMenu.prototype.OnReferenceClicked = function () {
+      
+      // var referenceManager = new ReferenceManager();
+      // referenceManager.ShowReferenceDiv();      
+      ReferenceManager.showReferenceDiv();
 }
 
 ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {

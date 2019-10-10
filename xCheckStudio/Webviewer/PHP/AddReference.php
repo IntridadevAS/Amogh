@@ -1,11 +1,11 @@
 <?php
     require_once 'Utility.php';
 
-    if(!isset($_POST['ReferenceTable']) ||
-       !isset($_POST['TypeofReference'])||
-       !isset($_POST['Component'])||
-       !isset($_POST['ProjectName']) ||
-       !isset($_POST['CheckName']) ||
+    if(!isset($_POST['currentSource']) ||
+       !isset($_POST['typeofReference'])||
+       !isset($_POST['component'])||
+       !isset($_POST['projectName']) ||
+       !isset($_POST['checkName']) ||
        !isset($_POST['referenceData']))
     {
         echo 'fail';
@@ -13,16 +13,19 @@
     }
         
     // get project name
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    $projectName = $_POST['projectName'];
+    $checkName = $_POST['checkName'];
     AddReference($projectName);
     function AddReference($projectName)
     {
         $dbh;
-        try{
+        try{ 
+            $currentSource = $_POST['currentSource']
+            $tableName = $currentSource."_References";
+ 
             $tableName = $_POST['ReferenceTable'];
-            $typeofReference = $_POST['TypeofReference'];
-            $component = $_POST['Component'];
+            $typeofReference = $_POST['typeofReference'];
+            $component = $_POST['component'];
             $referenceData =$_POST['referenceData'];
 
             // open database
