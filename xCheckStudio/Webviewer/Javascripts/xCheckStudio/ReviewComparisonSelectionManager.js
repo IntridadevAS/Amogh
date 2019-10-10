@@ -61,9 +61,39 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     this.HighlightedCheckComponentRow = currentReviewTableRow;
 }
 
+ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow) {
+    if (this.HighlightedDetailedComponentRow === currentDetailedTableRow) {
+        return;
+    }
+
+    if (this.HighlightedDetailedComponentRow) {
+        var row = this.HighlightedDetailedComponentRow;
+        var Color = this.GetRowHighlightColor(row.cells[ComparisonPropertyColumns.Status].innerHTML);
+        for (var j = 0; j < row.cells.length; j++) {
+            cell = row.cells[j];
+            cell.style.backgroundColor = Color;
+        }
+    }
+
+    this.ApplyHighlightColor(currentDetailedTableRow);
+    this.HighlightedDetailedComponentRow = currentDetailedTableRow;
+}
+
 ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row, status) {
     var color = this.GetRowHighlightColor(status);
     for (var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;
+    }
+}
+
+// After accept, transpose performed, Grid data changes and so as the rows 
+// To keep track of highlighted row after grid update we take new rowKey for the componet 
+// and save highlighted row again
+ReviewComparisonSelectionManager.prototype.UpdateHighlightedCheckComponent = function(dataGridObject) {
+    if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
+    model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
+        var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
+        model.getCurrentSelectionManager().HighlightedCheckComponentRow = dataGridObject.getRowElement(rowIndex)[0];
+        model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
     }
 }
