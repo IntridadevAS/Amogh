@@ -174,6 +174,7 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
             allowColumnResizing : true,
             height: "100%",
             width: "100%",
+            hoverStateEnabled: true,
             filterRow: {
                 visible: true
             },

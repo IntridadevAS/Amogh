@@ -80,3 +80,33 @@ ReviewComplianceSelectionManager.prototype.MaintainHighlightedRow = function (cu
 
     return true;
 }
+
+ReviewComplianceSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow) {
+    if (this.HighlightedDetailedComponentRow === currentDetailedTableRow) {
+        return;
+    }
+
+    if (this.HighlightedDetailedComponentRow) {
+        var row = this.HighlightedDetailedComponentRow;
+        var Color = this.GetRowHighlightColor(row.cells[CompliancePropertyColumns.Status].innerHTML);
+        for (var j = 0; j < row.cells.length; j++) {
+            cell = row.cells[j];
+            cell.style.backgroundColor = Color;
+        }
+    }
+
+    this.ApplyHighlightColor(currentDetailedTableRow);
+    this.HighlightedDetailedComponentRow = currentDetailedTableRow;
+}
+
+// After accept, transpose performed, Grid data changes and so as the rows 
+// To keep track of highlighted row after grid update we take new rowKey for the componet 
+// and save highlighted row again
+ReviewComplianceSelectionManager.prototype.UpdateHighlightedCheckComponent = function(dataGridObject) {
+    if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
+    model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
+        var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
+        model.getCurrentSelectionManager().HighlightedCheckComponentRow = dataGridObject.getRowElement(rowIndex)[0];
+        model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
+    }
+}

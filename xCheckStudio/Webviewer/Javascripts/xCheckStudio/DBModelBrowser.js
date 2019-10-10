@@ -196,6 +196,7 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
             height: "100%",
             width: "100%",
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
                 visible: true
@@ -412,6 +413,7 @@ DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
                 allowColumnResizing : true,
                 height: "100%",
                 width: "100%",
+                hoverStateEnabled: true,
                 // focusedRowEnabled: true,
                 filterRow: {
                     visible: true
