@@ -208,6 +208,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             showBorders: true,
             showRowLines: true,
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -220,12 +221,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function(e) {
                 _this.highlightMainReviewTableFromCheckStatus(containerDiv.replace("#", ""));
                 model.checks["comparison"]["reviewManager"].AddTableContentCount(containerDiv.replace("#", ""));
-                if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
-                model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
-                    var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
-                    model.getCurrentSelectionManager().HighlightedCheckComponentRow = e.component.getRowElement(rowIndex)[0];
-                    model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
-                }
+                model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onCellPrepared: function(e) {
                 if(e.rowType == "header"){  
@@ -260,12 +256,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 _this.CurrentTableId = id;
                 model.checks["comparison"]["selectionManager"].MaintainHighlightedRow(e.rowElement[0]);
                 model.checks["comparison"]["reviewManager"].OnCheckComponentRowClicked(e.data, id);
-            },
-            // onRowPrepared: function(e) {
-            //     if(e.isSelected) {
-            //         _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
-            //     }
-            // }
+            }
         });
     });
 
@@ -477,6 +468,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             showBorders: true,
             showRowLines: true,
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -510,14 +502,15 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 
             },
             onRowClick: function(e) {
-                var comment = model.checks["comparison"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
-                var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                if (comment) {
-                    commentDiv.innerHTML = "Comment : <br>" + comment;
-                }
-                else {
-                    commentDiv.innerHTML = "Comment : <br>";
-                }
+                model.checks["comparison"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
+                // var comment = model.checks["comparison"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
+                // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
+                // if (comment) {
+                //     commentDiv.innerHTML = "Comment : <br>" + comment;
+                // }
+                // else {
+                //     commentDiv.innerHTML = "Comment : <br>";
+                // }
             },
             // onRowPrepared: function(e) {
             //     if(e.isSelected) {

@@ -258,6 +258,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             height: "100%",
             width: "100%",
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
                 visible: true
@@ -329,6 +330,7 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
                 showBorders: true,
                 showRowLines: true,
                 allowColumnResizing : true,
+                hoverStateEnabled: true,
                 height: "100%",
                 width: "100%",
                 filterRow: {
