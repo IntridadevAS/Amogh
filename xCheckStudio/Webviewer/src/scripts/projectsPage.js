@@ -1149,7 +1149,7 @@ let deleteItems = {
         controller.setMyCurrentProj(id);
       }
     } else if (type == "check") {
-      message.innerHTML = "Check and all association Reviews?";
+      message.innerHTML = "Check and all associated Reviews?";
       controller.setCurrentCheck(id);
     } else if (type == "review") {
       message.innerHTML = "Review?";

@@ -18,7 +18,7 @@ ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function (groupId
 
     var btn = document.createElement("BUTTON");
     btn.className = "accordion";
-    btn.style.justifyContent = "left";
+    btn.style.justifyContent = "center";
     var t = document.createTextNode(componentClass);       // Create a text node
     btn.appendChild(t);
     return btn;
@@ -193,13 +193,6 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     //}
 }
 
-ComparisonCheckResultsTable.prototype.RestoreBackgroundColorOfFilteredRows = function (filteredData) {
-    for (var row = 0; row < filteredData.length; row++) {
-        var status = model.checks["comparison"]["reviewManager"].GetCellValue(filteredData[row], ComparisonColumns.Status);
-        model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(filteredData[row], status);
-    }
-}
-
 ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders,
     tableData,
     containerDiv) {
@@ -214,10 +207,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            height: "100%",
-            width: "100%",
             allowColumnResizing : true,
-            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -236,6 +226,13 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     model.getCurrentSelectionManager().HighlightedCheckComponentRow = e.component.getRowElement(rowIndex)[0];
                     model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
                 }
+            },
+            onCellPrepared: function(e) {
+                if(e.rowType == "header"){  
+                    e.cellElement.css("text-align", "center"); 
+                    e.cellElement.css("color", "black");
+                    e.cellElement.css("font-weight", "bold");   
+                 }  
             },
             onInitialized: function(e) {
                 // initialize the context menu
@@ -296,6 +293,23 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
 }
 
+ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
+    tableContainer,
+    changedStatus,
+    populateDetailedTable) {
+   
+    var dataGrid = $(tableContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+    var rowData = data[selectedRow.rowIndex];
+    rowData.Status = changedStatus;
+    model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
+    dataGrid.repaintRows(selectedRow.rowIndex);
+
+    if (populateDetailedTable) {
+        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
+    }
+}
+
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 }
@@ -320,7 +334,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
+                    headerGroupComp["width"] = "20%";                    
                     // headerGroupComp["dataType"] = "string";
                     // headerGroupComp["width"] = "27%";
 
@@ -332,8 +346,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[1] = headerGroupComp;
                 }
@@ -353,8 +365,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[0] = headerGroupComp;
                 }
@@ -365,8 +375,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[1] = headerGroupComp;
                 }
@@ -463,16 +471,12 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,
-            // keyExpr: ComparisonColumnNames.ResultId,
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            height: "100%",
-            width: "100%",
             allowColumnResizing : true,
-            // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -495,6 +499,13 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
                 reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
             },
+            onCellPrepared: function(e) {
+                if(e.rowType == "header"){  
+                    e.cellElement.css("text-align", "center"); 
+                    e.cellElement.css("color", "black");
+                    e.cellElement.css("font-weight", "bold");   
+                 }  
+            },
             onSelectionChanged: function (e) {
                 
             },
@@ -514,63 +525,6 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             //     }
             // }
         });
-        // $(viewerContainer).igGrid({
-        //     // width: "100%",
-        //     height: "100%",
-        //     columns: columnHeaders,
-        //     autoGenerateColumns: false,
-        //     dataSource: tableData,
-        //     responseDataKey: "results",
-        //     fixedHeaders: true,
-        //     autofitLastColumn: true,
-        //     rendered: function (evt, ui) {
-        //         var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
-        //         reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
-        //     },
-        //     features: [
-        //         {
-        //             name: 'MultiColumnHeaders'
-        //         },
-        //         {
-        //             name: "Sorting",
-        //             sortingDialogContainment: "window"
-        //         },
-        //         {
-        //             name: "Filtering",
-        //             type: "local",
-        //             // dataFiltered: function (evt, ui) {
-        //             //         var filteredData = evt.target.rows;
-        //             //     // _this.RestoreBackgroundColorOfFilteredRows(filteredData);
-        //             // }
-        //         },
-        //         {
-        //             name: "Selection",
-        //             mode: 'row',
-        //             multipleSelection: true,
-        //             activation: true,
-        //             rowSelectionChanging: function (evt, ui) {
-        //                 var comment = model.checks["comparison"]["reviewManager"].detailedReviewRowComments[ui.row.index];
-        //                 var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-        //                 if (comment) {
-        //                     commentDiv.innerHTML = "Comment : <br>" + comment;
-        //                 }
-        //                 else {
-        //                     commentDiv.innerHTML = "Comment : <br>";
-        //                 }
-        //             }
-        //         },
-        //         {
-        //             name: "RowSelectors",
-        //             enableCheckBoxes: true,
-        //             enableRowNumbering: false,
-        //             enableSelectAllForPaging: true, // this option is true by default
-        //         },
-        //         {
-        //             name: "Resizing"
-        //         },
-        //     ]
-
-        // });
     });
 
     // var container = document.getElementById(viewerContainer.replace("#", ""));

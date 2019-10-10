@@ -22,7 +22,7 @@
       <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
-    <a class="homeLink" id="homeButton" href="#"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
+    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
         alt=""></a>
     <div class="userInfo">
       <p id="userName" class="userName"> User Name </p>
@@ -491,7 +491,7 @@
             <div class="tablesArea">
               <div id="complianceMainContainer" class="tempContainer"> </div>
             </div>
-            <div class="infoArea">
+            <div class="infoArea" style="height: 40px">
               <div class="infoAreaHeader">
                 <img src="public/symbols/InfoMenu.svg" alt="">
                 <p>Detail Info</p>
@@ -547,15 +547,30 @@
       width: 6px;
     }
 
-    .ui-iggrid tbody td {
-      white-space: nowrap;
-    }
-
     .content {
       padding: 0 18px;
       display: none;
       overflow: hidden;
       background-color: #f1f1f1;
+    }
+
+    .dx-data-row > td {  
+        border-color: darkgrey !important;
+    }
+    .dx-header-row > td {
+      border-color: darkgrey !important
+    }
+
+    .dx-datagrid-filter-row > td {
+      border-color: darkgrey !important
+    }
+
+    .dx-scrollbar-vertical {
+      display: none !important;
+    }
+
+    .dx-scrollbar-horizontal {
+      display: none !important;
     }
 
     .scrollable {
@@ -627,16 +642,6 @@
   <script type="text/javascript" src="Javascripts\jquery\jquery.contextMenu.min.js"></script>
   <link rel="stylesheet" href="CSS\jquery.contextMenu.min.css" type="text/css" />
 
-  <!-- infragistics dependencies -->
-  <link rel="stylesheet" href="src\Infragistics\themes\infragistics\infragistics.theme.css" type="text/css" />
-  <link rel="stylesheet" href="src\Infragistics\structure\infragistics.css" type="text/css" />
-  <script type="text/javascript" src="src\infragistics\infragistics.core.js"></script>
-  <script type="text/javascript" src="src\infragistics\infragistics.lob.js"></script>
-
-  <!-- devExtreme dependencies
-  <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
-  <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
-  <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script> -->
 
   <!-- HOOPS Communicator dependencies -->
   <script type="text/javascript" src="Javascripts/hoops_web_viewer.js"></script>

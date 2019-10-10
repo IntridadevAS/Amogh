@@ -275,7 +275,8 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 ReviewComplianceContextMenuManager.prototype.OnAcceptComponent = function (rowClicked) {
     var tableToUpdate = this.GetTableNameToAcceptComponent();
 
-    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
     var rowData = rowsData[rowClicked[0].rowIndex];
     
     var componentId = rowData.ID;
@@ -294,9 +295,10 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     if (!highlightedRow) {
         return;
     }
-    var componentTableId = highlightedRow.offsetParent.id;
+    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-    var rowsData = $("#" + componentTableId).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
     var rowData = rowsData[highlightedRow.rowIndex];
 
     var componentId = rowData.ID;
@@ -319,7 +321,8 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
     var tableToUpdate = this.GetTableNameToUnAcceptComponent();
 
-    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
     var rowData = rowsData[rowClicked[0].rowIndex];
     
     var componentId = rowData.ID;
@@ -339,9 +342,10 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
         return;
     }
 
-    var componentTableId = highlightedRow.offsetParent.id;
+    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
 
-    var rowsData = $("#"+ componentTableId).data("igGrid").dataSource.dataView();
+    var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
     var rowData = rowsData[highlightedRow.rowIndex];
     
     var componentId = rowData.ID;
@@ -496,7 +500,8 @@ ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         return undefined;
     }
 
-    var rowsData = $(this.ComponentTableContainer).data("igGrid").dataSource.dataView();
+    var dataGrid = $(this.ComponentTableContainer).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
 
     var sourceNodeIds = [];
     for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {

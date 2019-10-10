@@ -191,33 +191,6 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
 
         });
     });
-
-    // $(viewerContainer).igGrid({
-    //     width: "100%",
-    //     height: "100%",
-    //     columns: columnHeaders,
-    //     autofitLastColumn: false,
-    //     autoGenerateColumns: false,
-    //     dataSource: tableData,
-    //     responseDataKey: "results",
-    //     fixedHeaders: true,
-    //     autoCommit: true,
-    //     rendered: function (evt, ui) {
-    //         this.SelectedSheetRow = undefined;
-    //         _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
-    //     },
-    //     features: [
-    //         {
-    //             name: "Selection",
-    //             mode: 'row',
-    //             multipleSelection: false,
-    //             rowSelectionChanging: function (evt, ui) {
-    //                 _this.OnViewerRowClicked(ui.row.element[0], viewerContainer);
-    //             }
-    //         },
-    //     ]
-    // });
-
 };
 
 Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer,
@@ -334,7 +307,6 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
         }
     }
 
-    //var rows = $("#" + viewerContainer).igGrid("rows");
 
     var componentName;
     if (column.Name !== undefined) {
@@ -345,32 +317,48 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
     }
 
     var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
-    // for (var groupId in checkTableIds) {
-        var checkTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
-        var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
-        var rows = checkDataGrid.getVisibleRows();
+    var componentsGroupName = sheetDataRow.cells[column.ComponentClass].innerText;
 
-        for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-            var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+    for (var groupId in checkTableIds) {
+        if (!checkTableIds[groupId].includes(componentsGroupName)) {
+            continue;
+        }
+        else {
+            var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
-            var name;
-            if (this.IsComparison) {
-                if (this.Id === "a") {
-                    name = row.cells[ComparisonColumns.SourceAName].innerText;
-                }
-                else if (this.Id === "b") {
-                    name = row.cells[ComparisonColumns.SourceBName].innerText;
-                }
-            }
-            else {
-                name = row.cells[ComplianceColumns.SourceName].innerText;
+            var checkTableId = categoryTable.id;
+            // open collapsible area
+            if (categoryTable.style.display != "block") {
+                categoryTable.style.display = "block";
             }
 
-            if (componentName === name) {
-                return row;
+            model.checks[model.currentCheck]["reviewTable"].CurrentTableId = categoryTable.id;
+
+            var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
+            var rows = checkDataGrid.getVisibleRows();
+
+            for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+
+                var name;
+                if (this.IsComparison) {
+                    if (this.Id === "a") {
+                        name = row.cells[ComparisonColumns.SourceAName].innerText;
+                    }
+                    else if (this.Id === "b") {
+                        name = row.cells[ComparisonColumns.SourceBName].innerText;
+                    }
+                }
+                else {
+                    name = row.cells[ComplianceColumns.SourceName].innerText;
+                }
+
+                if (componentName === name) {
+                    return row;
+                }
             }
         }
-    // }
+    }
     return undefined;
 }
 
