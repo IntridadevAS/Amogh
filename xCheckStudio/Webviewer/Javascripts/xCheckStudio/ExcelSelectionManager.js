@@ -311,5 +311,25 @@ ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {
 }
 
 ExcelSelectionManager.prototype.GetSelectedComponentIds = function () {
-     return undefined;
+     if (!(model.currentTabId in SourceManagers)) {
+          return;
+     }
+     var sourceManager = SourceManagers[model.currentTabId];
+     var selectedCompoents = this.GetSelectedComponents();
+
+     var componentIds = [];
+     for (id in sourceManager.ComponentIdVsData) {
+          var compData = sourceManager.ComponentIdVsData[id];
+
+          for (var i = 0; i < selectedCompoents.length; i++) {
+               var selectedComponent = selectedCompoents[i];
+               if (selectedComponent.Name === compData.name &&
+                    selectedComponent.MainComponentClass === compData.mainClass &&
+                    selectedComponent.ComponentClass === compData.subClass) {
+                    componentIds.push(id);
+               }
+          }
+     }
+
+     return componentIds;
 }

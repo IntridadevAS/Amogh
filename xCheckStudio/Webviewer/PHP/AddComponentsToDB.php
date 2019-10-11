@@ -104,7 +104,7 @@
              $dbh->exec($command);     
 
              
-             $nodeIdvsComponentIdList = NULL;
+            $nodeIdvsComponentIdList = NULL;
             for ($i = 0; $i < count($ComponentsList); $i++) 
             {
                 $component = $ComponentsList[$i];
@@ -232,8 +232,8 @@
 
              //$qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES ';           
              //$values = array();
-
-        for ($i = 0; $i < count($ComponentsList); $i++) {
+             $componentIdvsDataList = array();
+            for ($i = 0; $i < count($ComponentsList); $i++) {
                 $component = $ComponentsList[$i];
 
                 $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, ischecked) VALUES(?,?,?,?) ';    
@@ -271,14 +271,18 @@
                     $stmt = $dbh->prepare($insertPropertyQuery);                    
                     $stmt->execute($propertyValues);   
                 }  
-              
+
+                 // keep track of component id vs component data
+                 $componentIdvsDataList[$componentId]= array("name" => $component->Name, 
+                 "mainClass" => $component->MainComponentClass, 
+                 "subClass" => $component->SubComponentClass) ;              
             }          
             
             // commit update
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection
                 
-            //echo 'success';               
+            echo json_encode($componentIdvsDataList);           
             return;
         }
         catch(Exception $e) {        
