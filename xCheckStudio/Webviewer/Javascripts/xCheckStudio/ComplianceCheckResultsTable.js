@@ -307,6 +307,7 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
         headerGroupComp["caption"] = caption;
         headerGroupComp["dataField"] = dataField;
+        headerGroupComp["width"] = "25%";    
         // headerGroupComp["dataType"] = "string";
         columns.push(headerGroupComp);
     }
