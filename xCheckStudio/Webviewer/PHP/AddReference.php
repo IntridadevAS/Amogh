@@ -3,30 +3,32 @@
 
     if(!isset($_POST['currentSource']) ||
        !isset($_POST['typeofReference'])||
-       !isset($_POST['component'])||
+       !isset($_POST['components'])||
        !isset($_POST['projectName']) ||
        !isset($_POST['checkName']) ||
        !isset($_POST['referenceData']))
     {
         echo 'fail';
         return;
-    }
-        
-    // get project name
-    $projectName = $_POST['projectName'];
-    $checkName = $_POST['checkName'];
-    AddReference($projectName);
-    function AddReference($projectName)
+    }       
+    
+    
+    AddReference();
+ 
+    function AddReference()
     {
         $dbh;
         try{ 
-            $currentSource = $_POST['currentSource']
-            $tableName = $currentSource."_References";
- 
-            $tableName = $_POST['ReferenceTable'];
+            $currentSource = $_POST['currentSource'];
+            $tableName = $currentSource."_References"; 
+            
             $typeofReference = $_POST['typeofReference'];
-            $component = $_POST['component'];
-            $referenceData =$_POST['referenceData'];
+            $components = json_decode($_POST['components'],false);
+            $referenceData =$_POST['referenceData'];         
+
+            // get project name
+            $projectName = $_POST['projectName'];
+            $checkName = $_POST['checkName'];
 
             // open database
             $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -41,27 +43,38 @@
                 webAddress TEXT,
                 document TEXT,
                 pic TEXT,
-                users TEXT,
-                parentComponent INTEGER NOT NULL    
+                comment TEXT,
+                component INTEGER NOT NULL       
               )';         
             $dbh->exec($command);              
            
-            $parentComponent = (int)$component;
+            // $parentComponent = (int)$component;
             switch($typeofReference)
             {
                 case "WebAddress":
-                    $qry = 'INSERT INTO '.$tableName. '(webAddress, parentComponent) VALUES(?,?) '; 
-                    $stmt = $dbh->prepare($qry);
-                    $stmt->execute( array($referenceData,  $parentComponent));                     
+                    for($i = 0; $i< count($components); $i++)
+                    {
+                        $component = $components[$i];
+                        $qry = 'INSERT INTO '.$tableName. '(webAddress, component) VALUES(?,?) '; 
+                        $stmt = $dbh->prepare($qry);
+                        $stmt->execute( array($referenceData,  $component));      
+                    }
+                                  
                     break;
                 case "Document":
                 
                     break;
-                case "Picture":
+                case "Image":
                     
                     break;
-                case "User":
-                    
+                case "Comment":
+                    for($i = 0; $i< count($components); $i++)
+                    {
+                        $component = $components[$i];
+                        $qry = 'INSERT INTO '.$tableName. '(comment, component) VALUES(?,?) '; 
+                        $stmt = $dbh->prepare($qry);
+                        $stmt->execute( array($referenceData,  $component));      
+                    }
                     break;           
             }            
 

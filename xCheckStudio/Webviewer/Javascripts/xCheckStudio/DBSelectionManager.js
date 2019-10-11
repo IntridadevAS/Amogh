@@ -243,3 +243,7 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           }
      }
 }
+
+DBSelectionManager.prototype.GetSelectedComponentIds = function () {
+     return undefined;
+}

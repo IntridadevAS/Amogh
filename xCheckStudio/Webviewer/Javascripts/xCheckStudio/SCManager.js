@@ -24,7 +24,7 @@ function SCManager(sourceName,
 SCManager.prototype = Object.create(SourceManager.prototype);
 SCManager.prototype.constructor = SCManager;
 
-SCManager.prototype.IsSCSource = function () {
+SCManager.prototype.Is3DSource = function () {
     return true;
 };
 

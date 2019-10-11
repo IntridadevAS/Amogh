@@ -309,3 +309,7 @@ ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {
 
      return true;
 }
+
+ExcelSelectionManager.prototype.GetSelectedComponentIds = function () {
+     return undefined;
+}

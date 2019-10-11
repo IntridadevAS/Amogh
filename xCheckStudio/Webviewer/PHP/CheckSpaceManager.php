@@ -210,7 +210,7 @@ function DeleteCheckSpace(){
     }
     try{
         $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
-        $query =  "Delete from CheckSpace where checkid='". $CheckId."';";      ;
+        $query =  "Delete from CheckSpace where checkid='". $CheckId."';"; 
         $stmt = $dbh->prepare($query);      
         $stmt->execute();
         echo $stmt->rowCount();

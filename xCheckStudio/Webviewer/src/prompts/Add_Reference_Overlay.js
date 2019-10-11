@@ -1664,11 +1664,70 @@ function onCancel() {
 }
 
 function onOK() {
-	var value = $('#referenceInput').dxTextArea('instance').option('value') ;
+	var value = $('#referenceInput').dxTextArea('instance').option('value');
 	window.parent.addReference(value);
 	window.parent.closeInputReference();
 }
 
 window.onload = function () {
-	$("#referenceInput").dxTextArea({  });
+	$("#referenceInput").dxTextArea({});
+
+	$("#referenceFileInput").dxFileUploader({
+		name: "file",
+		multiple: false,
+		// accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS",
+		width: "551px",
+		height: "75px",
+		value: [],
+		uploadMode: "useForm",		
+		labelText: "",
+		showFileList: true,
+		onValueChanged: function (e) {			
+		}
+	});
+}
+
+function activateTextInput() {
+	document.getElementById("referenceInput").style.display = "block";
+	var referenceInput = $('#referenceInput').dxTextArea('instance');
+	referenceInput.reset();
+	deActivateFileInput();
+}
+
+function activateFileInput() {
+	document.getElementById("referenceFileInput").style.display = "block";
+	var fileUploader = $('#referenceFileInput').dxFileUploader('instance');
+	fileUploader.reset();
+	deActivateTextInput();
+}
+
+function deActivateTextInput() {
+	document.getElementById("referenceInput").style.display = "none";
+}
+
+function deActivateFileInput() {
+	document.getElementById("referenceFileInput").style.display = "none";
+}
+
+function onLoad() {
+	if ("referenceType" in localStorage) {
+		var referenceType = localStorage.getItem("referenceType");
+
+		if (referenceType.toLowerCase() === "webaddress") {
+			activateTextInput();
+		}
+		else if (referenceType.toLowerCase() === "document" ||
+			referenceType.toLowerCase() === "image") {
+			activateFileInput();
+		}
+		else if (referenceType.toLowerCase() === "itemlink") {
+
+		}
+	}
+}
+
+function onLoadFile() {
+	var fileUploader = $('#referenceFileInput').dxFileUploader('instance');
+	fileUploader._isCustomClickEvent = true;
+	fileUploader._$fileInput.click();
 }

@@ -14,7 +14,7 @@ function DBSourceManager(sourceName,
 DBSourceManager.prototype = Object.create(SourceManager.prototype);
 DBSourceManager.prototype.constructor = DBSourceManager;
 
-DBSourceManager.prototype.IsDBSource = function () {
+DBSourceManager.prototype.Is1DSource = function () {
   return true;
 };
 

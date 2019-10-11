@@ -42,14 +42,22 @@
 			</div>
 		</div>
 		<div id="Group_342">
-			<div id="referenceInput">
-				<!-- <svg class="Rectangle_1205">
-				<rect fill="rgba(71,71,71,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1205" rx="5" ry="5" x="0" y="0" width="551.141" height="75.027">
-				</rect>
-			</svg> -->
+
+			
+			<div id="referenceInput"></div>
+			
+			<!-- <svg class="Rectangle_1205">
+							<rect fill="rgba(71,71,71,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1205" rx="5" ry="5" x="0" y="0" width="551.141" height="75.027">
+							</rect>
+						</svg> -->
+			<form id="uploadFileForm" method="post" action="" enctype="multipart/form-data">
+				<div id="referenceFileInput" style="background-color: white; border: 1px solid #ddd;
+						border-radius: 4px;">
+				</div>
+			</form>
+			
 			</div>
-		</div>
-		<div id="Component_3">
+		<div id="loadFileButton" onclick="onLoadFile()">
 			<svg class="Rectangle_1242_A86_Rectangle_4">
 				<rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
 					stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto"
@@ -61,6 +69,12 @@
 			</div>
 		</div>
 	</div>
+
+	<style>
+	.dx-fileuploader-button {
+		display: none !important;
+	  }
+	</style>
 
 	<!-- JQuery dependencies -->
 	<script src="Javascripts/jquery/jquery-1.11.3.min.js"></script>

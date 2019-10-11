@@ -1669,22 +1669,26 @@ function onWebAdress()
 {
 	localStorage.setItem("referenceType", "webAddress");
 	window.parent.showInputReference();
+	window.parent.closeReferenceSelection();
 }
 
 function onDocument()
 {
 	localStorage.setItem("referenceType", "document");
 	window.parent.showInputReference();
+	window.parent.closeReferenceSelection();
 }
 
 function onImage()
 {
 	localStorage.setItem("referenceType", "image");
 	window.parent.showInputReference();
+	window.parent.closeReferenceSelection();
 }
 
 function onItemLink()
 {
 	localStorage.setItem("referenceType", "itemLink");
 	window.parent.showInputReference();
+	window.parent.closeReferenceSelection();
 }

@@ -45,7 +45,7 @@ function enableMenuOptions() {
     document.getElementById(MenuBar.NavCubeBtn).onclick = function () {
         if (model.currentTabId in SourceManagers) {
             var sourceManager = SourceManagers[model.currentTabId];
-            if (sourceManager.IsSCSource()) {
+            if (sourceManager.Is3DSource()) {
                 toggleNavCube(sourceManager.Webviewer);
             }
         }

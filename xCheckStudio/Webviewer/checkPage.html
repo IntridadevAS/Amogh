@@ -26,8 +26,7 @@
     <h1 id="pageName"></h1>
 
     <!-- <h1 id="pageName"></h1> -->
-    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
-        alt=""></a>
+    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
       <p id="userName" class="userName"></p>
       <!-- <img id="userImg" src="public/symbols/XD_Person.svg" alt=""> -->
@@ -58,19 +57,20 @@
       <!-- reference selection overlay -->
       <div id="referenceSelectionOverlay" class="overlay" style="z-index: 201;"></div>
       <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
-        <iframe src="Reference_selection.html" style="height: 401px; width: 444px"></iframe>
+        <iframe id="referenceSelectionIFrame" src="Reference_selection.html"
+          style="height: 401px; width: 444px"></iframe>
       </div>
 
       <!-- add reference overlay -->
       <div id="addReferenceOverlay" class="overlay" style="z-index: 201;"></div>
       <div id="addReferencePopup" class="popup" style="z-index: 201;">
-        <iframe src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
+        <iframe id="addReferenceIFrame" src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
       </div>
 
       <!-- reference overlay -->
       <div id="referenceOverlay" class="overlay"></div>
       <div id="referencePopup" class="popup">
-        <iframe src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
+        <iframe id="referenceIFrame" src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
       </div>
 
       <!-- Return to home page overlay -->
@@ -780,7 +780,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\DrawerMenu.js"></script>
-  <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" /> 
+  <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReferenceManager.js"></script>
 
@@ -834,32 +834,44 @@
 
     // reference related functions
     function closeReference() {
-      ReferenceManager.closeReferenceDiv();     
+      ReferenceManager.closeReferenceDiv();
     }
 
     function showReferenceSelection() {
       ReferenceManager.showReferenceSelectionDiv();
     }
 
+    function deleteReference() {
+      ReferenceManager.deleteReference();
+    }
+
     function closeReferenceSelection() {
-      ReferenceManager.closeReferenceSelectionDiv();      
+      ReferenceManager.closeReferenceSelectionDiv();
     }
 
     function showInputReference() {
-        ReferenceManager.showInputReferenceDiv();
+      ReferenceManager.showInputReferenceDiv();
+
+      // call on launch of input form
+      var addReferenceIFrame = document.getElementById("addReferenceIFrame");
+      if (!addReferenceIFrame) {
+        return;
       }
 
-      function closeInputReference() {
-        ReferenceManager.closeInputReferenceDiv();
+      document.getElementById("addReferenceIFrame").contentWindow.onLoad();
+    }
 
-        if ("referenceType" in localStorage) {
-          localStorage.removeItem('referenceType');
-        }
-      }
+    function closeInputReference() {
+      ReferenceManager.closeInputReferenceDiv();
 
-      function addReference(value) {
-        ReferenceManager.addReference(value);
+      if ("referenceType" in localStorage) {
+        localStorage.removeItem('referenceType');
       }
+    }
+
+    function addReference(value) {
+      ReferenceManager.addReference(value);
+    }
 
   </script>
 </body>

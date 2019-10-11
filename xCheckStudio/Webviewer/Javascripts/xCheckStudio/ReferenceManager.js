@@ -1,6 +1,6 @@
 
 let ReferenceManager = {
-
+    selectedReference: undefined,
     showReferenceDiv: function () {
 
         var overlay = document.getElementById("referenceOverlay");
@@ -71,44 +71,10 @@ let ReferenceManager = {
 
     processWebAddress: function (value) {
 
-        // var webAddressString = document.getElementById("webAddressInput").value;
-
-        // // get component id
-        // var checkComponentId = undefined;
-        // var referenceTable = undefined;
-
-        // var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
-        // if (typeOfRow == "ComparisonMainReviewTbody") {
-        //     referenceTable = "ComparisonCheckReferences";
-        //     checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
-        // }
-        // else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
-        //     referenceTable = "SourceAComplianceCheckReferences";
-        //     checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-        // }
-        // else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
-        //     referenceTable = "SourceBComplianceCheckReferences";
-        //     checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-        // }
-
-        // if (checkComponentId === undefined ||
-        //     referenceTable === undefined) {
-        //     return;
-        // }
-
-        if(!(model.currentTabId in SourceManagers))
-        {
-            var selectionManager = SourceManagers[model.currentTabId].ModelTree.SelectionManager;
-            if(!selectionManager)
-            {
-                return;
-            }
-
-            for(var i = 0; i < selectionManager.SelectedCompoents.length; i++)
-            {
-                var selectedCompoent = selectionManager.SelectedCompoents[i];
-                
-            }
+        // get selected component ids
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
         }
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -119,74 +85,53 @@ let ReferenceManager = {
             type: "POST",
             async: true,
             data: {
-                'currentSource': [model.currentTabId],
+                'currentSource': model.currentTabId,
                 'typeofReference': "WebAddress",
-                'component': componentId,
+                'components': JSON.stringify(componentIds),
                 'referenceData': value,
                 'projectName': projectinfo.projectname,
                 'checkName': checkinfo.checkname
             },
             success: function (msg) {
                 if (msg != 'fail') {
-                    // var referenceList = document.getElementById("webAddressList");
-                    // var listItem = document.createElement('li');
-                    // listItem.innerText = msg;
 
-                    // referenceList.appendChild(listItem);
+                    var referenceIFrame = document.getElementById("referenceIFrame");
+                    if (!referenceIFrame) {
+                        return;
+                    }
 
-                    // listItem.onclick = function () {
-                    //     window.open(this.innerText);
-                    // }
+                    var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
+                    if (!webAddressList) {
+                        return;
+                    }
 
-                    // listItem.onmouseover = function () {
-                    //     _this.Highlight(this);
-                    // }
+                    var listItem = referenceIFrame.contentDocument.createElement('li');
+                    listItem.innerText = msg;
+                    webAddressList.appendChild(listItem);
 
-                    // listItem.onmouseout = function () {
-                    //     _this.UnHighlight(this);
-                    // }
+                    listItem.onclick = function () {
+
+                        // select this list item
+                        ReferenceManager.select(this);
+
+                        const BrowserWindow = require('electron').remote.BrowserWindow;
+                        win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                        win.loadURL(this.innerText);
+                        win.show();
+                    }
+
+                    listItem.onmouseover = function () {
+                        ReferenceManager.Highlight(this);
+                    }
+
+                    listItem.onmouseout = function () {
+                        ReferenceManager.UnHighlight(this);
+                    }
                 }
             }
         });
-        
-        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        // // add reference
-        // $.ajax({
-        //     url: 'PHP/AddReference.php',
-        //     type: "POST",
-        //     async: true,
-        //     data: {
-        //         'ReferenceTable': referenceTable,
-        //         'TypeofReference': "WebAddress",
-        //         'Component': checkComponentId,
-        //         'referenceData': webAddressString,
-        //         'ProjectName': projectinfo.projectname,
-        //         'CheckName': checkinfo.checkname
-        //     },
-        //     success: function (msg) {
-        //         if (msg != 'fail') {
-        //             // var referenceList = document.getElementById("webAddressList");
-        //             // var listItem = document.createElement('li');
-        //             // listItem.innerText = msg;
-
-        //             // referenceList.appendChild(listItem);
-
-        //             // listItem.onclick = function () {
-        //             //     window.open(this.innerText);
-        //             // }
-
-        //             // listItem.onmouseover = function () {
-        //             //     _this.Highlight(this);
-        //             // }
-
-        //             // listItem.onmouseout = function () {
-        //             //     _this.UnHighlight(this);
-        //             // }
-        //         }
-        //     }
-        // });
     },
+
     addReference: function (value) {
         if (!("referenceType" in localStorage)) {
             return;
@@ -197,14 +142,446 @@ let ReferenceManager = {
             ReferenceManager.addWebAddress(value);
         }
         else if (referenceType.toLowerCase() === "document") {
-
+            ReferenceManager.addDocumet();
         }
         else if (referenceType.toLowerCase() === "image") {
-
+            ReferenceManager.addImage();
+        }
+        else if (referenceType.toLowerCase() === "comment") {
+            ReferenceManager.addComment(value);
         }
         else if (referenceType.toLowerCase() === "itemlink") {
 
         }
+    },
+
+    Highlight: function (item) {
+        item.style.backgroundColor = "#808080";
+    },
+
+    UnHighlight: function (item) {
+        if (item === ReferenceManager.selectedReference) {
+            return;
+        }
+        item.style.backgroundColor = "rgba(71,71,71,1)";
+    },
+
+    addDocumet: function () {
+        ReferenceManager.uploadRefernceDocument();
+    },
+
+    uploadRefernceDocument: function () {
+
+        // get selected component ids
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
+        xhr.onload = function (event) {
+
+            if (event.target.response === "fail") {
+                alert("Adding Document reference failed.");
+                return;
+            }
+            else if (event.target.response === 'invalid file type') {
+                alert("invalid file type");
+                return;
+            }
+
+            var referenceIFrame = document.getElementById("referenceIFrame");
+            if (!referenceIFrame) {
+                return;
+            }
+
+            var documentList = referenceIFrame.contentDocument.getElementById("documentList");
+            if (!documentList) {
+                return;
+            }
+
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = event.target.response;
+            documentList.appendChild(listItem);
+
+            listItem.onclick = function () {
+                // select this list item
+                ReferenceManager.select(this);
+
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+                const BrowserWindow = require('electron').remote.BrowserWindow;
+                const path = require("path");
+
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+
+                var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
+                win.loadURL(docUrl);
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        };
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+        var addReferenceIFrame = document.getElementById("addReferenceIFrame");
+        if (!addReferenceIFrame) {
+            return;
+        }
+        var uploadFileForm = addReferenceIFrame.contentDocument.getElementById("uploadFileForm");
+        if (!uploadFileForm) {
+            return;
+        }
+        var formData = new FormData(uploadFileForm);
+        formData.append('currentSource', model.currentTabId);
+        formData.append('components', JSON.stringify(componentIds));
+        formData.append('typeofReference', "Document");
+        formData.append('projectName', projectinfo.projectname);
+        formData.append('checkName', checkinfo.checkname);
+        xhr.send(formData);
+    },
+
+    addImage: function () {
+        ReferenceManager.uploadRefernceImage();
+    },
+
+    uploadRefernceImage: function () {
+
+        // get selected component ids
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
+        xhr.onload = function (event) {
+
+            // document.getElementById("UploadReferenceDocForm").reset();
+            if (event.target.response === "fail") {
+                alert("Adding Image reference failed.");
+                return;
+            }
+            else if (event.target.response === 'invalid file type') {
+                alert("invalid file type");
+                return;
+            }
+
+
+            var referenceIFrame = document.getElementById("referenceIFrame");
+            if (!referenceIFrame) {
+                return;
+            }
+
+            var imageList = referenceIFrame.contentDocument.getElementById("imageList");
+            if (!imageList) {
+                return;
+            }
+
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = event.target.response;
+            imageList.appendChild(listItem);
+
+            listItem.onclick = function () {
+                // select this list item
+                ReferenceManager.select(this);
+
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+                const BrowserWindow = require('electron').remote.BrowserWindow;
+                const path = require("path");
+
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
+                win.loadURL(docUrl);
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        };
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+        var addReferenceIFrame = document.getElementById("addReferenceIFrame");
+        if (!addReferenceIFrame) {
+            return;
+        }
+        var uploadFileForm = addReferenceIFrame.contentDocument.getElementById("uploadFileForm");
+        if (!uploadFileForm) {
+            return;
+        }
+        var formData = new FormData(uploadFileForm);
+        formData.append('currentSource', model.currentTabId);
+        formData.append('components', JSON.stringify(componentIds));
+        formData.append('typeofReference', "Image");
+        formData.append('projectName', projectinfo.projectname);
+        formData.append('checkName', checkinfo.checkname);
+        xhr.send(formData);
+
+
+
+        /////////////////////////////
+        // var _this = this;
+
+        // var referenceDataDir = undefined;
+        // var referenceTable = undefined;
+        // var checkComponentId = undefined;
+        // var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
+        // if (typeOfRow == "ComparisonMainReviewTbody") {
+        //     referenceDataDir = "ComparisonCheckReferenceData";
+        //     referenceTable = "ComparisonCheckReferences";
+
+        //     // get component id
+        //     checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
+        // }
+        // else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
+        //     referenceDataDir = "SourceAComplianceCheckReferenceData";
+        //     referenceTable = "SourceAComplianceCheckReferences";
+
+        //     // get component id
+        //     checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        // }
+        // else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
+        //     referenceDataDir = "SourceBComplianceCheckReferenceData";
+        //     referenceTable = "SourceBComplianceCheckReferences";
+
+        //     // get component id
+        //     checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
+        // }
+
+        // if (referenceDataDir === undefined ||
+        //     referenceTable === undefined ||
+        //     checkComponentId === undefined) {
+        //     return;
+        // }
+
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
+        // xhr.onload = function (event) {
+
+        //     document.getElementById("UploadReferencePicForm").reset();
+        //     if (event.target.response === "fail") {
+        //         alert("Adding Picture reference failed.");
+        //         return;
+        //     }
+
+        //     var referenceList = document.getElementById("pictureList");
+        //     var listItem = document.createElement('li');
+        //     listItem.innerText = event.target.response;
+
+        //     referenceList.appendChild(listItem);
+
+        //     listItem.onclick = function () {
+        //         _this.OnPictureReferenceSelected(this);
+        //     }
+
+        //     listItem.onmouseover = function () {
+        //         _this.Highlight(this);
+        //     }
+
+        //     listItem.onmouseout = function () {
+        //         _this.UnHighlight(this);
+        //     }
+
+        //     _this.CloseAddReferncePictureOverlay();
+        // };
+        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // var formData = new FormData(document.getElementById("UploadReferencePicForm"));
+        // formData.append('ReferenceDataDir', referenceDataDir);
+        // formData.append('ReferenceTable', referenceTable);
+        // formData.append('Component', checkComponentId);
+        // formData.append('TypeofReference', "Picture");
+        // formData.append('ProjectName', projectinfo.projectname);
+        // formData.append('CheckName', checkinfo.checkname);
+        // xhr.send(formData);
+    },
+
+    getComponentIds: function () {
+        var componentIds = [];
+        if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
+            var selectionManager = sourceManager.ModelTree.SelectionManager;
+            if (!selectionManager) {
+                return;
+            }
+            componentIds = selectionManager.GetSelectedComponentIds();
+        }
+
+        return componentIds;
+    },
+
+    addComment: function (value) {
+
+        ReferenceManager.processComment(value);
+
+        if ("referenceType" in localStorage) {
+            localStorage.removeItem('referenceType');
+        }
+    },
+
+    processComment: function (value) {
+        // get selected component ids
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
+        }
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // add reference
+        $.ajax({
+            url: 'PHP/AddReference.php',
+            type: "POST",
+            async: true,
+            data: {
+                'currentSource': model.currentTabId,
+                'typeofReference': "Comment",
+                'components': JSON.stringify(componentIds),
+                'referenceData': value,
+                'projectName': projectinfo.projectname,
+                'checkName': checkinfo.checkname
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+
+                    var referenceIFrame = document.getElementById("referenceIFrame");
+                    if (!referenceIFrame) {
+                        return;
+                    }
+
+                    var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
+                    if (!commentsList) {
+                        return;
+                    }
+
+                    var listItem = referenceIFrame.contentDocument.createElement('li');
+                    listItem.innerText = msg;
+                    commentsList.appendChild(listItem);
+
+                    listItem.onclick = function () {
+                        ReferenceManager.select(this);
+                    }
+
+                    listItem.onmouseover = function () {
+                        ReferenceManager.Highlight(this);
+                    }
+
+                    listItem.onmouseout = function () {
+                        ReferenceManager.UnHighlight(this);
+                    }
+                }
+            }
+        });
+    },
+
+    select: function (item) {
+        if (ReferenceManager.selectedReference) {
+            ReferenceManager.selectedReference.style.backgroundColor = "rgba(71,71,71,1)";
+        }
+
+        ReferenceManager.selectedReference = item;
+        ReferenceManager.selectedReference.style.backgroundColor = "#808080";
+    },
+
+    deleteReference: function () {
+        if (!ReferenceManager.selectedReference) {
+            return;
+        }
+
+        // get selected component ids       
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
+        }
+
+        var typeofReference;
+        if (ReferenceManager.selectedReference.offsetParent.id === "webAddressList") {
+            typeofReference = "WebAddress";
+        }
+        else if (ReferenceManager.selectedReference.offsetParent.id === "documentList") {
+            typeofReference = "Document";
+        }
+        else if (ReferenceManager.selectedReference.offsetParent.id === "imageList") {
+            typeofReference = "Image";
+        }
+        else if (ReferenceManager.selectedReference.offsetParent.id === "commentsList") {
+            typeofReference = "Comment";
+        }
+        else
+        {
+            return;
+        }
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // add reference
+        $.ajax({
+            url: 'PHP/RemoveReference.php',
+            type: "POST",
+            async: true,
+            data: {
+                'currentSource': model.currentTabId,
+                'typeofReference': typeofReference,
+                'components': JSON.stringify(componentIds),
+                'referenceData': ReferenceManager.selectedReference.innerText,
+                'projectName': projectinfo.projectname,
+                'checkName': checkinfo.checkname
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+
+                    ReferenceManager.selectedReference.parentNode.removeChild(ReferenceManager.selectedReference);
+                    ReferenceManager.selectedReference = undefined;
+                    // var referenceIFrame = document.getElementById("referenceIFrame");
+                    // if (!referenceIFrame) {
+                    //     return;
+                    // }
+
+                    // var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
+                    // if (!webAddressList) {
+                    //     return;
+                    // }
+
+                    // var listItem = referenceIFrame.contentDocument.createElement('li');
+                    // listItem.innerText = msg;
+                    // webAddressList.appendChild(listItem);
+
+                    // listItem.onclick = function () {
+
+                    //     // select this list item
+                    //     ReferenceManager.select(this);
+
+                    //     const BrowserWindow = require('electron').remote.BrowserWindow;
+                    //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                    //     win.loadURL(this.innerText);
+                    //     win.show();
+                    // }
+
+                    // listItem.onmouseover = function () {
+                    //     ReferenceManager.Highlight(this);
+                    // }
+
+                    // listItem.onmouseout = function () {
+                    //     ReferenceManager.UnHighlight(this);
+                    // }
+                }
+            }
+        });
     }
 }
 
@@ -413,202 +790,8 @@ let ReferenceManager = {
 //     ReferenceManager.prototype.CloseAddRefernceWebAddressOverlay = function () {
 //         document.getElementById("addAddressOverlay").style.display = "none";
 //         document.getElementById("addAddressPopup").style.display = "none";
-//     }
+//     }   
 
-//     ReferenceManager.prototype.AddDocumet = function () {
-//         var _this = this;
-
-//         this.ToggleNewReferenceDropdown();
-
-//         _this.ShowAddRefernceDocumentOverlay();
-
-//         document.getElementById("UploadRefernceDocumentBtn").onclick = function () {
-//             _this.UploadRefernceDocument();
-//         }
-
-//         document.getElementById("CancelAddDocument").onclick = function () {
-//             _this.CloseAddRefernceDocumentOverlay();
-//         }
-//     }
-
-//     ReferenceManager.prototype.ShowAddRefernceDocumentOverlay = function () {
-//         document.getElementById("addDocumentOverlay").style.display = "block";
-//         document.getElementById("addDocumentPopup").style.display = "block";
-//     }
-//     ReferenceManager.prototype.CloseAddRefernceDocumentOverlay = function () {
-//         document.getElementById("addDocumentOverlay").style.display = "none";
-//         document.getElementById("addDocumentPopup").style.display = "none";
-//     }
-
-//     ReferenceManager.prototype.UploadRefernceDocument = function () {
-//         var _this = this;
-
-//         var referenceDataDir = undefined;
-//         var referenceTable = undefined;
-//         var checkComponentId = undefined;
-//         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
-//         if (typeOfRow == "ComparisonMainReviewTbody") {
-//             referenceDataDir = "ComparisonCheckReferenceData";
-//             referenceTable = "ComparisonCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
-//         }
-//         else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
-//             referenceDataDir = "SourceAComplianceCheckReferenceData";
-//             referenceTable = "SourceAComplianceCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-//         }
-//         else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
-//             referenceDataDir = "SourceBComplianceCheckReferenceData";
-//             referenceTable = "SourceBComplianceCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-//         }
-
-//         if (referenceDataDir === undefined ||
-//             referenceTable === undefined ||
-//             checkComponentId === undefined) {
-//             return;
-//         }
-
-//         var xhr = new XMLHttpRequest();
-//         xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
-//         xhr.onload = function (event) {
-
-//             document.getElementById("UploadReferenceDocForm").reset();
-//             if (event.target.response === "fail") {
-//                 alert("Adding Document reference failed.");
-//                 return;
-//             }
-
-//             var referenceList = document.getElementById("documentList");
-//             var listItem = document.createElement('li');
-//             listItem.innerText = event.target.response;
-
-//             referenceList.appendChild(listItem);
-
-//             listItem.onclick = function () {
-//                 _this.OnDocumentReferenceSelected(this);
-//             }
-
-//             listItem.onmouseover = function () {
-//                 _this.Highlight(this);
-//             }
-
-//             listItem.onmouseout = function () {
-//                 _this.UnHighlight(this);
-//             }
-
-//             _this.CloseAddRefernceDocumentOverlay();
-//         };
-//         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-//         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-//         var formData = new FormData(document.getElementById("UploadReferenceDocForm"));
-//         formData.append('ReferenceDataDir', referenceDataDir);
-//         formData.append('ReferenceTable', referenceTable);
-//         formData.append('Component', checkComponentId);
-//         formData.append('TypeofReference', "Document");
-//         formData.append('ProjectName', projectinfo.projectname);
-//         formData.append('CheckName', checkinfo.checkname);
-//         xhr.send(formData);
-//     }
-
-//     ReferenceManager.prototype.AddPicture = function () {
-//         var _this = this;
-
-//         this.ToggleNewReferenceDropdown();
-
-//         _this.ShowAddReferncePictureOverlay();
-
-//         document.getElementById("UploadReferncePicBtn").onclick = function () {
-//             _this.UploadReferncePicture();
-//         }
-
-//         document.getElementById("CancelAddPic").onclick = function () {
-//             _this.CloseAddReferncePictureOverlay();
-//         }
-//     }
-
-//     ReferenceManager.prototype.UploadReferncePicture = function () {
-//         var _this = this;
-
-//         var referenceDataDir = undefined;
-//         var referenceTable = undefined;
-//         var checkComponentId = undefined;
-//         var typeOfRow = this.SelectedComponentRow[0].offsetParent.offsetParent.offsetParent.id;
-//         if (typeOfRow == "ComparisonMainReviewTbody") {
-//             referenceDataDir = "ComparisonCheckReferenceData";
-//             referenceTable = "ComparisonCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[5].innerText;
-//         }
-//         else if (typeOfRow == "SourceAComplianceMainReviewTbody") {
-//             referenceDataDir = "SourceAComplianceCheckReferenceData";
-//             referenceTable = "SourceAComplianceCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-//         }
-//         else if (typeOfRow == "SourceBComplianceMainReviewTbody") {
-//             referenceDataDir = "SourceBComplianceCheckReferenceData";
-//             referenceTable = "SourceBComplianceCheckReferences";
-
-//             // get component id
-//             checkComponentId = this.SelectedComponentRow[0].cells[3].innerText;
-//         }
-
-//         if (referenceDataDir === undefined ||
-//             referenceTable === undefined ||
-//             checkComponentId === undefined) {
-//             return;
-//         }
-
-//         var xhr = new XMLHttpRequest();
-//         xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
-//         xhr.onload = function (event) {
-
-//             document.getElementById("UploadReferencePicForm").reset();
-//             if (event.target.response === "fail") {
-//                 alert("Adding Picture reference failed.");
-//                 return;
-//             }
-
-//             var referenceList = document.getElementById("pictureList");
-//             var listItem = document.createElement('li');
-//             listItem.innerText = event.target.response;
-
-//             referenceList.appendChild(listItem);
-
-//             listItem.onclick = function () {
-//                 _this.OnPictureReferenceSelected(this);
-//             }
-
-//             listItem.onmouseover = function () {
-//                 _this.Highlight(this);
-//             }
-
-//             listItem.onmouseout = function () {
-//                 _this.UnHighlight(this);
-//             }
-
-//             _this.CloseAddReferncePictureOverlay();
-//         };
-//         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-//         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-//         var formData = new FormData(document.getElementById("UploadReferencePicForm"));
-//         formData.append('ReferenceDataDir', referenceDataDir);
-//         formData.append('ReferenceTable', referenceTable);
-//         formData.append('Component', checkComponentId);
-//         formData.append('TypeofReference', "Picture");
-//         formData.append('ProjectName', projectinfo.projectname);
-//         formData.append('CheckName', checkinfo.checkname);
-//         xhr.send(formData);
-//     }
 
 //     ReferenceManager.prototype.ShowAddReferncePictureOverlay = function () {
 //         document.getElementById("addPictureOverlay").style.display = "block";
