@@ -1,4 +1,12 @@
 function onClose() {
+
+    // clear data
+    document.getElementById("webAddressList").innerHTML = "";
+    document.getElementById("documentList").innerHTML = "";
+    document.getElementById("imageList").innerHTML = "";
+    document.getElementById("commentsList").innerHTML = "";
+    $('#commentInput').dxTextArea('instance').reset();
+    
     window.parent.closeReference();
 }
 
@@ -10,8 +18,7 @@ function onShowReferenceSelection() {
     window.parent.showReferenceSelection();
 }
 
-function onDeleteReference()
-{
+function onDeleteReference() {
     window.parent.deleteReference();
 }
 
