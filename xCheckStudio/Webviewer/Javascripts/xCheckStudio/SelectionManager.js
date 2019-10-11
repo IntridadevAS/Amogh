@@ -33,6 +33,6 @@ SelectionManager.prototype.RemoveHighlightColor = function (row) {
 SelectionManager.prototype.ApplyHighlightColor = function (row) {
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
-        cell.style.backgroundColor = "#B2BABB"
+        cell.style.backgroundColor = "#e6e8e8";
     }
 }

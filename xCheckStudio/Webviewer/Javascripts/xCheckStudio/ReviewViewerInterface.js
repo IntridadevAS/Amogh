@@ -5,6 +5,7 @@ function ReviewViewerInterface(viewerOptions,
     this.ViewerOptions = viewerOptions;
     this.selectedNodeId = null;
     this.selectedComponentId = null;
+    this.HiddenResultIdVsTableId = {};
 
     this.ComponentIdVsComponentData = componentIdVsComponentData;
     this.NodeIdVsComponentData = nodeIdVsComponentData;
@@ -151,5 +152,220 @@ ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDi
                 }
             }
         }
+    }
+}
+
+ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, selectedComponentRows) {
+
+    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
+    if(model.currentCheck == "comparison") {
+        for (var i = 0; i < selectedComponentRows.length; i++) {
+            var selectedRow = selectedComponentRows[i];
+            var rowData = rowsData[selectedRow.rowIndex];
+                // source A
+                if(model.checks[model.currentCheck].sourceAViewer) {
+                    var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
+                    if(viewerInterface == this) {
+                        if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;            
+                        }
+                    }
+                }
+
+                // source B
+                if(model.checks[model.currentCheck].sourceBViewer) {
+                    var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
+                    if(viewerInterface == this) {
+                        if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                        }
+                    }
+                }
+            }
+    }
+    else {
+        if(model.checks[model.currentCheck].viewer) {
+            var viewerInterface = model.checks[model.currentCheck].viewer;
+            if(viewerInterface == this) {
+                for (var i = 0; i < selectedComponentRows.length; i++) {
+                    var selectedRow = selectedComponentRows[i];
+                    var rowData = rowsData[selectedRow.rowIndex];
+                    if (rowData.NodeId !== "" && rowData.NodeId !== null) {       
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                    }
+                }
+            }
+        }
+    }      
+}
+
+ReviewViewerInterface.prototype.RemoveHiddenResultId = function(containerId, selectedComponentRows) {
+    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items(); 
+    
+    for (var i = 0; i < selectedComponentRows.length; i++) {
+        var selectedRow = selectedComponentRows[i];
+        var rowData = rowsData[selectedRow.rowIndex];
+        // source A
+        if(model.checks[model.currentCheck].sourceAViewer) {
+            var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
+            if(viewerInterface == this) {
+                if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
+                    delete model.checks[model.currentCheck].sourceAViewer.HiddenResultIdVsTableId[rowData.ID];            
+                }
+            }
+        }
+
+        // source B
+        if(model.checks[model.currentCheck].sourceBViewer) {
+            var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
+            if(viewerInterface == this) {
+                if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
+                    delete model.checks[model.currentCheck].sourceBViewer.HiddenResultIdVsTableId[rowData.ID];           
+                }
+            }
+        }
+    }
+}
+
+ReviewViewerInterface.prototype.CheckIfMatchedElementIsHidden = function(key) {
+    var isHidden = false;
+
+    var currentCheck = model.checks[model.currentCheck];
+    if(this == currentCheck.sourceAViewer) {
+        if(currentCheck.sourceBViewer) {
+            if(Object.keys(currentCheck.sourceBViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceCViewer) {
+            if(Object.keys(currentCheck.sourceCViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceDViewer) {
+            if(Object.keys(currentCheck.sourceDViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+    }
+
+    if(this == currentCheck.sourceBViewer) {
+        if(currentCheck.sourceAViewer) {
+            if(Object.keys(currentCheck.sourceAViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceCViewer) {
+            if(Object.keys(currentCheck.sourceCViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceDViewer) {
+            if(Object.keys(currentCheck.sourceDViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+    }
+
+    if(this == currentCheck.sourceCViewer) {
+        if(currentCheck.sourceAViewer) {
+            if(Object.keys(currentCheck.sourceAViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceBViewer) {
+            if(Object.keys(currentCheck.sourceBViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceDViewer) {
+            if(Object.keys(currentCheck.sourceDViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+    }
+
+    if(this == currentCheck.sourceDViewer) {
+        if(currentCheck.sourceAViewer) {
+            if(Object.keys(currentCheck.sourceAViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceBViewer) {
+            if(Object.keys(currentCheck.sourceBViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+        if(currentCheck.sourceCViewer) {
+            if(Object.keys(currentCheck.sourceCViewer.HiddenResultIdVsTableId).includes(key)) {
+                isHidden = true;
+            }
+        }
+    }
+
+    return isHidden;
+}
+
+ReviewViewerInterface.prototype.ShowHiddenRows = function() {
+    var checkComponentRows = [];
+    var currentCheck = model.checks[model.currentCheck];
+    if(model.currentCheck == "comparison") {
+        if(currentCheck.sourceAViewer && this == currentCheck.sourceAViewer) {
+            var hiddenResultIdsSourceA = currentCheck.sourceAViewer.HiddenResultIdVsTableId;
+
+            for(var hiddenObj in hiddenResultIdsSourceA) {
+                var isHidden = this.CheckIfMatchedElementIsHidden(hiddenObj);
+                if(!isHidden) {
+                    var dataGrid = $(hiddenResultIdsSourceA[hiddenObj]).dxDataGrid("instance");
+                    var rowsData = dataGrid.getVisibleRows(); 
+                    for(var i = 0; i < rowsData.length; i++) {
+                        if(hiddenObj == rowsData[i].key) {
+                            checkComponentRows.push(dataGrid.getRowElement(rowsData[i].rowIndex)[0]);
+                            break;
+                        }
+                    }
+                }
+                delete currentCheck.sourceAViewer.HiddenResultIdVsTableId[hiddenObj];
+            }
+            currentCheck["reviewTable"].HighlightHiddenRows(false, checkComponentRows);
+        } 
+        
+        if(currentCheck.sourceBViewer && this == currentCheck.sourceBViewer) {
+            var hiddenResultIdsSourceB = currentCheck.sourceBViewer.HiddenResultIdVsTableId;
+
+            for(var hiddenObj in hiddenResultIdsSourceB) {
+                var isHidden = this.CheckIfMatchedElementIsHidden(hiddenObj);
+                if(!isHidden) {
+                    var dataGrid = $(hiddenResultIdsSourceB[hiddenObj]).dxDataGrid("instance");
+                    var rowsData = dataGrid.getVisibleRows(); 
+                    for(var i = 0; i < rowsData.length; i++) {
+                        if(hiddenObj == rowsData[i].key) {
+                            checkComponentRows.push(dataGrid.getRowElement(rowsData[i].rowIndex)[0]);
+                            break;
+                        }
+                    }
+                }
+                delete currentCheck.sourceBViewer.HiddenResultIdVsTableId[hiddenObj];
+            }
+            currentCheck["reviewTable"].HighlightHiddenRows(false, checkComponentRows);
+        }   
+    }
+    else {
+        var hiddenResultIdsSource = currentCheck.viewer.HiddenResultIdVsTableId;
+
+        for(var hiddenObj in hiddenResultIdsSource) {
+            var dataGrid = $(hiddenResultIdsSource[hiddenObj]).dxDataGrid("instance");
+            var rowsData = dataGrid.getVisibleRows(); 
+            for(var i = 0; i < rowsData.length; i++) {
+                if(hiddenObj == rowsData[i].key) {
+                    checkComponentRows.push(dataGrid.getRowElement(rowsData[i].rowIndex)[0]);
+                    break;
+                }
+            }
+            delete currentCheck.viewer.HiddenResultIdVsTableId[hiddenObj];
+        }
+        currentCheck["reviewTable"].HighlightHiddenRows(false, checkComponentRows);
     }
 }

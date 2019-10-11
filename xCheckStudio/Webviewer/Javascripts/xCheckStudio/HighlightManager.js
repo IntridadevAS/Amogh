@@ -7,6 +7,8 @@ var NoMatchColor = "#dddbff"//"#ccccff";
 var NoValueColor = "#f2f2f2";
 var AcceptedColor = "#cbf287";
 var PropertyAcceptedColor = "#ffff99";
+var SelectedRowColor = "#e6e8e8";
+var HiddenElementTextColor = "#b3b5b5";
 // var TransposedColor = "#ace396";
 
 function HighlightManager(viewer,

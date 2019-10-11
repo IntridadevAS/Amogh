@@ -76,6 +76,16 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             return false;
                         }
                     },
+                    "hide": {
+                        name: "Hide",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
                     "startTranslucency": {
                         name: "Start Translucency",
                         visible: function () {
@@ -263,6 +273,9 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     }
     else if (key === "show") {
         this.OnShowClick();
+    }
+    else if (key === "hide") {
+        this.OnHideClick();
     }
     else if (key === "startTranslucency") {
         this.OnStartTranslucency();
@@ -491,6 +504,37 @@ ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
         viewerInterface.Viewer.model.setNodesVisibility(nodes, true).then(function () {
             viewerInterface.Viewer.view.fitWorld();
         });
+
+        var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+
+        var containerId = this.ComponentTableContainer.replace("#", "");
+         //Remove resultId on show
+        viewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, SelectedCheckComponentRows);
+    }
+}
+
+
+ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
+    var viewerInterface = model.checks["compliance"]["viewer"];
+
+    if (viewerInterface) {
+
+        var nodes = this.GetNodeIdsFormComponentRow();
+        if (!nodes ||
+            nodes.length === 0) {
+            return;
+        }
+
+        viewerInterface.Viewer.model.setNodesVisibility(nodes, false).then(function () {
+            viewerInterface.Viewer.view.fitWorld();
+        });
+
+        var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+        var containerId = this.ComponentTableContainer.replace("#", "");
+
+        viewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, SelectedCheckComponentRows);
     }
 }
 
