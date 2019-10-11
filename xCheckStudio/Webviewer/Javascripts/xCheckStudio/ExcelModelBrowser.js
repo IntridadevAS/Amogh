@@ -270,6 +270,10 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             }, 
             paging: { enabled: false },
             onInitialized: function(e) {
+                  // initialize the context menu
+                  var modelBrowserContextMenu = new ModelBrowserContextMenu();
+                  modelBrowserContextMenu.Init(_this);
+                  
                 _this.ShowItemCount(tableData.length);
             },
             onSelectionChanged: function (e) {

@@ -11,13 +11,13 @@ function DBSelectionManager(selectedComponents) {
 DBSelectionManager.prototype = Object.create(SelectionManager.prototype);
 DBSelectionManager.prototype.constructor = DBSelectionManager;
 
-DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow, 
-     checkBoxState, 
+DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
+     checkBoxState,
      componentData) {
 
      // maintain track of selected/deselected components
      if (checkBoxState === "on" &&
-     !this.SelectedCompoentExists(componentData)) {
+          !this.SelectedCompoentExists(componentData)) {
 
           var checkedComponent = {};
           checkedComponent['Name'] = componentData[ModelBrowserColumnNames1D.Component];
@@ -43,9 +43,9 @@ DBSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
-          component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
-          component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+               component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
+               component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
+               component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
                return true;
           }
      }
@@ -57,9 +57,9 @@ DBSelectionManager.prototype.RemoveFromselectedCompoents = function (componentDa
      for (var i = 0; i < this.SelectedCompoents.length; i++) {
           var component = this.SelectedCompoents[i];
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
-          component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
-          component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+               component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
+               component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
+               component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
 
                this.SelectedCompoents.splice(i, 1);
                break;
@@ -118,19 +118,19 @@ DBSelectionManager.prototype.HighlightBrowserRow = function (row, key, container
      var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
      var selectedRows = dataGrid.getSelectedRowKeys("all");
 
-    if (this.HighlightedComponentRow &&
-        !selectedRows.includes(this.HighlightedComponentRowKey)) {
-        if(this.HighlightedComponentRow.rowElement)
-            this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
-        else {
-            this.RemoveHighlightColor(this.HighlightedComponentRow);
-        }
-    }
+     if (this.HighlightedComponentRow &&
+          !selectedRows.includes(this.HighlightedComponentRowKey)) {
+          if (this.HighlightedComponentRow.rowElement)
+               this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
+          else {
+               this.RemoveHighlightColor(this.HighlightedComponentRow);
+          }
+     }
 
      // highlight new row  
-    
-     if(!selectedRows.includes(key)) {
-          if(row.rowElement)
+
+     if (!selectedRows.includes(key)) {
+          if (row.rowElement)
                this.ApplyHighlightColor(row.rowElement[0]);
           else {
                this.ApplyHighlightColor(row);
@@ -176,7 +176,7 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
      }
 
      var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
-     var sheetData = dataGrid.getDataSource().items();  
+     var sheetData = dataGrid.getDataSource().items();
 
      if (sheetData.length === 0) {
           return;
@@ -231,13 +231,13 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           if (name === rowData[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] &&
                subClass === rowData[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')]) {
 
-                    var row = modelBrowserDataGrid.getRowElement(i);
-                    var key = modelBrowserDataGrid.getKeyByRowIndex(i);
-                    // highlight row in model browser     
-                    this.HighlightBrowserRow(row[0], key, modelBrowserContainer);
-     
-                    // scroll to selected row                 
-                    modelBrowserDataGrid.getScrollable().scrollToElement(row[0])         
+               var row = modelBrowserDataGrid.getRowElement(i);
+               var key = modelBrowserDataGrid.getKeyByRowIndex(i);
+               // highlight row in model browser     
+               this.HighlightBrowserRow(row[0], key, modelBrowserContainer);
+
+               // scroll to selected row                 
+               modelBrowserDataGrid.getScrollable().scrollToElement(row[0])
 
                break;
           }
@@ -245,5 +245,25 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
 }
 
 DBSelectionManager.prototype.GetSelectedComponentIds = function () {
-     return undefined;
+     if (!(model.currentTabId in SourceManagers)) {
+          return;
+     }
+     var sourceManager = SourceManagers[model.currentTabId];
+     var selectedCompoents = this.GetSelectedComponents();
+
+     var componentIds = [];
+     for (id in sourceManager.ComponentIdVsData) {
+          var compData = sourceManager.ComponentIdVsData[id];
+
+          for (var i = 0; i < selectedCompoents.length; i++) {
+               var selectedComponent = selectedCompoents[i];
+               if (selectedComponent.Name === compData.name &&
+                    selectedComponent.MainComponentClass === compData.mainClass &&
+                    selectedComponent.ComponentClass === compData.subClass) {
+                    componentIds.push(id);
+               }
+          }
+     }
+
+     return componentIds;
 }
