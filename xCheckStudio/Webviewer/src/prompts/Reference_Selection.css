@@ -1,0 +1,264 @@
+.mediaViewInfo {
+	--web-view-name: Reference Selection;
+	--web-view-id: Reference_Selection;
+	--web-scale-on-resize: true;
+	--web-center-horizontally: true;
+	--web-center-vertically: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Reference_Selection;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+#Reference_Selection {
+	position: absolute;
+	box-sizing: border-box;
+	transform: translateX(-50%) translateY(-50%);
+	left: 50%;
+	top: 50%;
+	background: #E5E5E5;
+	width: 440px;
+	height: 397px;
+	background-color: rgba(255,255,255,1);
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	--web-view-name: Reference Selection;
+	--web-view-id: Reference_Selection;
+	--web-scale-on-resize: true;
+	--web-center-horizontally: true;
+	--web-center-vertically: true;
+	--web-enable-deep-linking: true;
+}
+.bg {
+	position: absolute;
+	overflow: visible;
+	width: 440px;
+	height: 397px;
+	left: 0px;
+	top: 0px;
+}
+#line {
+	opacity: 0.1;
+}
+.line {
+	position: absolute;
+	overflow: visible;
+	width: 440px;
+	height: 4px;
+	left: 0px;
+	top: 77px;
+}
+#Summary {
+	position: absolute;
+	left: 28px;
+	top: 24px;
+	overflow: visible;
+	width: 142px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 25px;
+	color: rgba(255,255,255,1);
+}
+#type_2 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 28px;
+	top: 94px;
+	overflow: visible;
+}
+#pie {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.bg_A87_Rectangle_3 {
+	position: absolute;
+	overflow: visible;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+}
+#Group_5 {
+	position: absolute;
+	width: 161px;
+	height: 29px;
+	left: 113px;
+	top: 12px;
+	overflow: visible;
+}
+#Data_source_1 {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 162px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	color: rgba(255,255,255,1);
+}
+#type_2_A87_Group_4 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 28px;
+	top: 166px;
+	overflow: visible;
+}
+#pie_A87_Group_5 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.bg_A87_Rectangle_4 {
+	position: absolute;
+	overflow: visible;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+}
+#Group_5_A87_Group_6 {
+	position: absolute;
+	width: 128px;
+	height: 29px;
+	left: 127px;
+	top: 12px;
+	overflow: visible;
+}
+#Data_source_1_A87_Text_3 {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 129px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	color: rgba(255,255,255,1);
+}
+#type_2_A87_Group_7 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 28px;
+	top: 238px;
+	overflow: visible;
+}
+#pie_A87_Group_8 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.bg_A87_Rectangle_5 {
+	position: absolute;
+	overflow: visible;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+}
+#Group_5_A87_Group_9 {
+	position: absolute;
+	width: 76px;
+	height: 29px;
+	left: 153px;
+	top: 12px;
+	overflow: visible;
+}
+#Data_source_1_A87_Text_4 {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 77px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	color: rgba(255,255,255,1);
+}
+#type_2_A87_Group_10 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 28px;
+	top: 310px;
+	overflow: visible;
+}
+#pie_A87_Group_11 {
+	position: absolute;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.bg_A87_Rectangle_6 {
+	position: absolute;
+	overflow: visible;
+	width: 388px;
+	height: 52px;
+	left: 0px;
+	top: 0px;
+}
+#Group_5_A87_Group_12 {
+	position: absolute;
+	width: 113px;
+	height: 29px;
+	left: 135px;
+	top: 12px;
+	overflow: visible;
+}
+#Data_source_1_A87_Text_5 {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 114px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 24px;
+	color: rgba(255,255,255,1);
+}
+#Path_362 {
+	filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.749));
+}
+.Path_362 {
+	overflow: visible;
+	position: absolute;
+	top: 15px;
+	left: 406.854px;
+	width: 27px;
+	height: 27px;
+	transform: matrix(1,0,0,1,0,0);
+}

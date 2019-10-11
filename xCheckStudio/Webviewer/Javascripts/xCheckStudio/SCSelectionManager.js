@@ -17,7 +17,7 @@ function SCSelectionManager(nodeIdvsSelectedComponents) {
 
             this.SelectedCompoents.push(checkedComponent);
         }
-    }   
+    }
 }
 // assign SelectionManager's method to this class
 SCSelectionManager.prototype = Object.create(SelectionManager.prototype);
@@ -26,14 +26,14 @@ SCSelectionManager.prototype.constructor = SCSelectionManager;
 /* 
    This function is called when checkbox from the model browser table is checked or unchecked
 */
-SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow, 
-                                                                  checkBoxState, 
-                                                                  componentData,
-                                                                  containerDiv) {
+SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
+    checkBoxState,
+    componentData,
+    containerDiv) {
 
     // maintain track of selected/deselected components
     if (checkBoxState === "on" &&
-         !this.SelectedCompoentExists(componentData)) {
+        !this.SelectedCompoentExists(componentData)) {
 
         var checkedComponent = {};
 
@@ -44,8 +44,8 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
 
         this.SelectedCompoents.push(checkedComponent);
 
-         // highlight selected row         
-         this.ApplyHighlightColor(currentRow);
+        // highlight selected row         
+        this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
         if (!this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
@@ -56,7 +56,7 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
         this.RemoveFromselectedCompoents(componentData);
 
         // restore color        
-         this.RemoveHighlightColor(currentRow);
+        this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
         if (this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
@@ -98,8 +98,8 @@ SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentDa
     for (var i = 0; i < this.SelectedCompoents.length; i++) {
         var component = this.SelectedCompoents[i];
         if (component['Name'] === componentData[ModelBrowserColumnNames3D.Component] &&
-        component['MainComponentClass'] === componentData[ModelBrowserColumnNames3D.MainClass] &&
-        component['ComponentClass'] === componentData[ModelBrowserColumnNames3D.SubClass]) {
+            component['MainComponentClass'] === componentData[ModelBrowserColumnNames3D.MainClass] &&
+            component['ComponentClass'] === componentData[ModelBrowserColumnNames3D.SubClass]) {
 
             if ("NodeId" in component) {
                 if (component["NodeId"] === componentData[ModelBrowserColumnNames3D.NodeId]) {
@@ -113,7 +113,7 @@ SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentDa
             // this.selectedCompoents.splice(i, 1);
             break;
         }
-    }  
+    }
 }
 
 /* 
@@ -153,7 +153,7 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
 
     if (this.HighlightedComponentRow &&
         !selectedRows.includes(this.HighlightedComponentRowKey)) {
-        if(this.HighlightedComponentRow.rowElement)
+        if (this.HighlightedComponentRow.rowElement)
             this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
         else {
             this.RemoveHighlightColor(this.HighlightedComponentRow);
@@ -161,16 +161,16 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
     }
 
     // highlight new row  
-    if(!selectedRows.includes(nodeId)) {
-        if(row.rowElement)
+    if (!selectedRows.includes(nodeId)) {
+        if (row.rowElement)
             this.ApplyHighlightColor(row.rowElement[0]);
         else {
-             this.ApplyHighlightColor(row);
+            this.ApplyHighlightColor(row);
         }
-   }
+    }
     this.HighlightedComponentRow = row;
     this.HighlightedComponentRowKey = nodeId;
-     
+
     if (viewer && nodeId) {
         // var nodeId = row.cells[ModelBrowserColumns3D.NodeId].innerText
         // if (nodeId !== undefined) {
@@ -183,9 +183,8 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
    This function 
 */
 SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
-    
-    if(!(model.currentTabId in SourceManagers))
-    {
+
+    if (!(model.currentTabId in SourceManagers)) {
         return;
     }
     var sourceManager = SourceManagers[model.currentTabId];
@@ -193,8 +192,8 @@ SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
     var nodeID = parseInt(nodeId)
     if (isNaN(nodeID)) {
         return;
-    }   
-   
+    }
+
     // keep track of graphically selected node
     sourceManager.SelectedNodeId = nodeID;
     sourceManager.Webviewer.selectPart(nodeID);
@@ -208,4 +207,30 @@ SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
 
     // viewer.selectPart(nodeID);
     // viewer.view.fitNodes([nodeID]);
+};
+
+/* 
+   This function 
+*/
+SCSelectionManager.prototype.GetSelectedComponentIds = function () {
+
+    if (!(model.currentTabId in SourceManagers)) {
+        return;
+    }
+    var sourceManager = SourceManagers[model.currentTabId];
+
+    var componentIds = [];
+    var selectedCompoents = this.GetSelectedComponents();
+    for (var i = 0; i < selectedCompoents.length; i++) {
+        var selectedComponent = selectedCompoents[i];
+
+        if (selectedComponent.NodeId in sourceManager.NodeIdvsComponentIdList) {
+
+            var componentId = sourceManager.NodeIdvsComponentIdList[selectedComponent.NodeId];
+            componentIds.push(componentId);
+        }
+
+    }
+
+    return componentIds;
 };

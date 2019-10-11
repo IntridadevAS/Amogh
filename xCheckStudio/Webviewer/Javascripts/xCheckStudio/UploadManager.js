@@ -11,7 +11,7 @@ let UploadManager = {
             labelText: "",
             showFileList: false,
             onInitialized: function(e) {
-                console.log(e);
+                // console.log(e);
             },
             onValueChanged: function(e) {
                 viewPanels.addFilesPanel.classList.add("hide");

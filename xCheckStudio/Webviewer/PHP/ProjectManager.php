@@ -556,7 +556,7 @@ function  SaveCheckReferences($tempDbh, $dbh, $tableName)
             webAddress TEXT,
             document TEXT,
             pic TEXT,
-            users TEXT,
+            comment TEXT,
             parentComponent INTEGER NOT NULL    
           )';         
         $dbh->exec($command); 
@@ -2123,7 +2123,7 @@ function DeleteProject()
     }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "Delete from Projects where projectid='". $projectid."';";      ;
+        $query =  "Delete from Projects where projectid='". $projectid."';";  
         $stmt = $dbh->prepare($query);      
         $stmt->execute();
         echo $stmt->rowCount();

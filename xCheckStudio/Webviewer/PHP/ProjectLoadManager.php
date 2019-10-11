@@ -152,7 +152,7 @@
                 webAddress TEXT,
                 document TEXT,
                 pic TEXT,
-                users TEXT,
+                comment TEXT,
                 parentComponent INTEGER NOT NULL    
               )';         
             $toDbh->exec($command);  

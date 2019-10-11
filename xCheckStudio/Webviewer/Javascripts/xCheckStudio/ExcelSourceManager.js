@@ -16,7 +16,7 @@ ExcelSourceManager.prototype = Object.create(SourceManager.prototype);
 ExcelSourceManager.prototype.constructor = ExcelSourceManager;
 
 
-ExcelSourceManager.prototype.IsExcelSource = function () {
+ExcelSourceManager.prototype.Is1DSource = function () {
   return true;
 };
 

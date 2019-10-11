@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Add reference overlay</title>
+
+	<link rel="stylesheet" type="text/css" id="applicationStylesheet" href="src/prompts/Add_Reference_Overlay.css" />
+	<script id="applicationScript" type="text/javascript" src="src/prompts/Add_Reference_Overlay.js"></script>
+</head>
+
+<body>
+
+	<div id="Add_Reference_Overlay">
+		<svg class="Rectangle_1204">
+			<rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+				stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5"
+				x="0" y="0" width="581" height="144">
+			</rect>
+		</svg>
+		<div id="Component_1" onclick="onOK()">
+			<svg class="Path_310" viewBox="0 0 90 30">
+				<path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+					stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+					d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+				</path>
+			</svg>
+			<div id="OK">
+				<span>OK</span>
+			</div>
+		</div>
+		<div id="Component_1_A86_SymbolInstance_2" onclick="onCancel()">
+			<svg class="Rectangle_1242">
+				<rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+					stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
+					x="0" y="0" width="90" height="30">
+				</rect>
+			</svg>
+			<div id="CANCEL">
+				<span>CANCEL</span>
+			</div>
+		</div>
+		<div id="Group_342">
+
+			
+			<div id="referenceInput"></div>
+			
+			<!-- <svg class="Rectangle_1205">
+							<rect fill="rgba(71,71,71,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1205" rx="5" ry="5" x="0" y="0" width="551.141" height="75.027">
+							</rect>
+						</svg> -->
+			<form id="uploadFileForm" method="post" action="" enctype="multipart/form-data">
+				<div id="referenceFileInput" style="background-color: white; border: 1px solid #ddd;
+						border-radius: 4px;">
+				</div>
+			</form>
+			
+			</div>
+		<div id="loadFileButton" onclick="onLoadFile()">
+			<svg class="Rectangle_1242_A86_Rectangle_4">
+				<rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+					stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto"
+					id="Rectangle_1242_A86_Rectangle_4" rx="5" ry="5" x="0" y="0" width="128" height="30">
+				</rect>
+			</svg>
+			<div id="Load_File">
+				<span>Load File</span>
+			</div>
+		</div>
+	</div>
+
+	<style>
+	.dx-fileuploader-button {
+		display: none !important;
+	  }
+	</style>
+
+	<!-- JQuery dependencies -->
+	<script src="Javascripts/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="Javascripts/jquery/jquery-ui.min.js"></script>
+
+	<!-- devExpress Dependancies -->
+	<link rel="stylesheet" href="src/devExtreme\css\dx.common.css" type="text/css" />
+	<link rel="stylesheet" href="src/devExtreme\css\dx.light.css" type="text/css" />
+	<script type="text/javascript" src="src/devExtreme\js\dx.all.js"></script>
+
+</body>
+
+</html>
