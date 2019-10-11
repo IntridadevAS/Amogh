@@ -178,13 +178,19 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 ViewerContextMenu.prototype.GetViewerInterface = function() {
     var viewerContainer = this.WebViewer._params["containerId"];
 
-    if(viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
-        return model.checks[model.currentCheck].sourceAViewer;
+    if(model.currentCheck == "comparison") {
+        if(viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceAViewer;
+        }
+    
+        if(viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceBViewer;
+        }
     }
-
-    if(viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
-        return model.checks[model.currentCheck].sourceBViewer;
+    else {
+        return model.checks[model.currentCheck].viewer;
     }
+   
 }
 
 ViewerContextMenu.prototype.OnIsolateClicked = function () {

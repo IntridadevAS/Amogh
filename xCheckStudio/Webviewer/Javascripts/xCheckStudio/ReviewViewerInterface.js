@@ -159,30 +159,45 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
 
     var dataGrid = $("#" + containerId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
-    
-    for (var i = 0; i < selectedComponentRows.length; i++) {
-        var selectedRow = selectedComponentRows[i];
-        var rowData = rowsData[selectedRow.rowIndex];
-        // source A
-        if(model.checks[model.currentCheck].sourceAViewer) {
-            var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
-            if(viewerInterface == this) {
-                if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
-                    viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;            
+    if(model.currentCheck == "comparison") {
+        for (var i = 0; i < selectedComponentRows.length; i++) {
+            var selectedRow = selectedComponentRows[i];
+            var rowData = rowsData[selectedRow.rowIndex];
+                // source A
+                if(model.checks[model.currentCheck].sourceAViewer) {
+                    var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
+                    if(viewerInterface == this) {
+                        if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;            
+                        }
+                    }
                 }
-            }
-        }
 
-        // source B
-        if(model.checks[model.currentCheck].sourceBViewer) {
-            var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
+                // source B
+                if(model.checks[model.currentCheck].sourceBViewer) {
+                    var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
+                    if(viewerInterface == this) {
+                        if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                        }
+                    }
+                }
+            }
+    }
+    else {
+        if(model.checks[model.currentCheck].viewer) {
+            var viewerInterface = model.checks[model.currentCheck].viewer;
             if(viewerInterface == this) {
-                if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
-                    viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                for (var i = 0; i < selectedComponentRows.length; i++) {
+                    var selectedRow = selectedComponentRows[i];
+                    var rowData = rowsData[selectedRow.rowIndex];
+                    if (rowData.NodeId !== "" && rowData.NodeId !== null) {       
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                    }
                 }
             }
         }
-    }
+    }      
 }
 
 ReviewViewerInterface.prototype.RemoveHiddenResultId = function(containerId, selectedComponentRows) {
@@ -336,5 +351,21 @@ ReviewViewerInterface.prototype.ShowHiddenRows = function() {
             }
             currentCheck["reviewTable"].HighlightHiddenRows(false, checkComponentRows);
         }   
+    }
+    else {
+        var hiddenResultIdsSource = currentCheck.viewer.HiddenResultIdVsTableId;
+
+        for(var hiddenObj in hiddenResultIdsSource) {
+            var dataGrid = $(hiddenResultIdsSource[hiddenObj]).dxDataGrid("instance");
+            var rowsData = dataGrid.getVisibleRows(); 
+            for(var i = 0; i < rowsData.length; i++) {
+                if(hiddenObj == rowsData[i].key) {
+                    checkComponentRows.push(dataGrid.getRowElement(rowsData[i].rowIndex)[0]);
+                    break;
+                }
+            }
+            delete currentCheck.viewer.HiddenResultIdVsTableId[hiddenObj];
+        }
+        currentCheck["reviewTable"].HighlightHiddenRows(false, checkComponentRows);
     }
 }

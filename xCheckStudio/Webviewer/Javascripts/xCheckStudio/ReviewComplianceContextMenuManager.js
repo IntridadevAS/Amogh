@@ -506,6 +506,10 @@ ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
         });
 
         var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+
+        var containerId = this.ComponentTableContainer.replace("#", "");
+         //Remove resultId on show
+        viewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, SelectedCheckComponentRows);
     }
 }
@@ -527,6 +531,9 @@ ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
         });
 
         var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+        var containerId = this.ComponentTableContainer.replace("#", "");
+
+        viewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, SelectedCheckComponentRows);
     }
 }
