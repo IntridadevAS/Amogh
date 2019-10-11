@@ -238,6 +238,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             height: "100%",
             width: "100%",
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
                 visible: true

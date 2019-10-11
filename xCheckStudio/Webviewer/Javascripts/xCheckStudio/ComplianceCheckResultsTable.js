@@ -173,6 +173,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             showBorders: true,
             showRowLines: true,
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
                 visible: true
@@ -186,12 +187,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function(e) {
                 _this.highlightMainReviewTableFromCheckStatus(viewerContainer.replace("#", ""));
                 model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
-                if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
-                model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
-                    var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
-                    model.getCurrentSelectionManager().HighlightedCheckComponentRow = e.component.getRowElement(rowIndex)[0];
-                    model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
-                }
+                model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onInitialized: function(e) {
                 // initialize the context menu
@@ -363,6 +359,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             showBorders: true,
             showRowLines: true,
             allowColumnResizing : true,
+            hoverStateEnabled: true,
             filterRow: {
                 visible: true
             },
@@ -396,6 +393,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 
             },
             onRowClick: function(e) {
+                model.checks["compliance"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
                 // var comment = model.checks["compliance"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
                 // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
                 // if (comment) {
