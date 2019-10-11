@@ -245,6 +245,23 @@ ComplianceCheckResultsTable.prototype.Destroy = function () {
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
 }
 
+ComplianceCheckResultsTable.prototype.HighlightHiddenRows = function(isHide, checkComponentsRows) {
+
+    for (var i = 0; i < checkComponentsRows.length; i++) {
+        var selectedRow = checkComponentsRows[i];
+
+        for(var j = 0; j < selectedRow.cells.length; j++) {
+            var cell = selectedRow.cells[j];
+            if(isHide) {
+                cell.style.color = HiddenElementTextColor;
+            }
+            else {
+                cell.style.color = "black";
+            }
+        }
+    }       
+}
+
 ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
     tableContainer,    
     changedStatus,

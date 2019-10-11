@@ -96,6 +96,16 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             return false;
                         }
                     },
+                    "hide": {
+                        name: "Hide",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },
                     "startTranslucency": {
                         name: "Start Translucency",
                         visible: function () {
@@ -460,6 +470,9 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "show") {
         this.OnShowClick();
     }
+    else if (key === "hide") {
+        this.OnHideClick();
+    }
     else if (key === "startTranslucency") {
         this.OnStartTranslucency();
     }
@@ -658,6 +671,8 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         return;
     }
 
+    var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+    var containerId = this.ComponentTableContainer.replace("#", "");
     // source A
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -667,6 +682,8 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         sourceAViewerInterface.Viewer.model.setNodesVisibility(sourceANodeIds, true).then(function () {
             sourceAViewerInterface.Viewer.view.fitWorld();
         });
+        //Remove resultId on show
+        sourceAViewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
     }
 
     // source b
@@ -677,9 +694,50 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         sourceBViewerInterface.Viewer.model.setNodesVisibility(sourceBNodeIds, true).then(function () {
             sourceBViewerInterface.Viewer.view.fitWorld();
         });
+
+        //Remove resultId on show
+        sourceBViewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
     }
+
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, SelectedCheckComponentRows);
 }
 
+ReviewComparisonContextMenuManager.prototype.OnHideClick =  function() {
+     // get selected source A and B node ids
+     var nodes = this.GetNodeIdsFormComponentRow();
+     if (!nodes) {
+         return;
+     }
+ 
+     var containerId = this.ComponentTableContainer.replace("#", "");
+     var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+     // source A
+     var sourceANodeIds = nodes["SourceA"];
+     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
+ 
+     if (sourceANodeIds.length > 0 &&
+         sourceAViewerInterface) {
+         sourceAViewerInterface.Viewer.model.setNodesVisibility(sourceANodeIds, false).then(function () {
+             sourceAViewerInterface.Viewer.view.fitWorld();
+         });
+        //Store resultId of hidden elements
+        sourceAViewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
+     }
+ 
+     // source b
+     var sourceBNodeIds = nodes["SourceB"];
+     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
+     if (sourceBNodeIds.length > 0 &&
+         sourceBViewerInterface) {
+         sourceBViewerInterface.Viewer.model.setNodesVisibility(sourceBNodeIds, false).then(function () {
+             sourceBViewerInterface.Viewer.view.fitWorld();
+         });
+         //Store resultId of hidden elements
+        sourceBViewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
+     } 
+
+     model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, SelectedCheckComponentRows);
+}
 
 ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
     var selectionManager = model.getCurrentSelectionManager();
