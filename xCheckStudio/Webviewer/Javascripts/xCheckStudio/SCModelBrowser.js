@@ -273,9 +273,67 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 if(e.isSelected) {
                     _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
                 }
+                if(e.rowType == "data" && SourceManagers[model.currentTabId].HiddenNodeIds.includes(e.data.NodeId)) {
+                    var selectedRows = [e.rowElement[0]];
+                    _this.HighlightHiddenRows(true, selectedRows);
+                }
             }
         });
     });
+}
+
+
+SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function() {
+    var selectedRows = [];
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+
+    var selectedNodeIds = this.SelectionManager.SelectedComponentNodeIds;
+    for(var i = 0; i < selectedNodeIds.length; i++) {
+        var nodeId = Number(selectedNodeIds[i]);
+
+        var  rowIndex = treeList.getRowIndexByKey(nodeId);
+
+        if(rowIndex !== -1) {
+            var row = treeList.getRowElement(rowIndex);
+            selectedRows.push(row[0]);
+        }
+    }
+    return selectedRows;
+}
+
+SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
+    for (var i = 0; i < selectedRows.length; i++) {
+        var selectedRow = selectedRows[i];
+
+        for(var j = 0; j < selectedRow.cells.length; j++) {
+            var cell = selectedRow.cells[j];
+            if(isHide) {
+                cell.style.color = "#b3b5b5";
+            }
+            else {
+                cell.style.color = "black";
+            }
+        }
+    }     
+}
+
+SCModelBrowser.prototype.ShowAllHiddenRows = function() {
+    var selectedRows = [];
+    var sourceManager = SourceManagers[model.currentTabId];
+    var hiddenNodeIds = sourceManager.HiddenNodeIds;
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+
+    for(var i = 0; i < hiddenNodeIds.length; i++) {
+        var nodeId = Number(hiddenNodeIds[i]);      
+        var  rowIndex = treeList.getRowIndexByKey(nodeId);
+        if(rowIndex !== -1) {
+            var row = treeList.getRowElement(rowIndex);
+            selectedRows.push(row[0]);
+        }
+    }
+
+    sourceManager.HiddenNodeIds = [];
+    this.HighlightHiddenRows(false, selectedRows);
 }
 
 SCModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function(clickedCheckBoxRowKeys, 

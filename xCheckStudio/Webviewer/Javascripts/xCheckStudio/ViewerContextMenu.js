@@ -161,7 +161,34 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         this.WebViewer.model.setNodesVisibilities(map);
 
-        var checkComponentRows = [];
+        if(model.currentTabId) {
+            this.HideInCheck(selectedItem._nodeId);
+        }
+        else {
+            this.HideInReview();
+        }
+    }
+}
+
+ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
+    // get highlighted row 
+    var sourceManager = SourceManagers[model["currentTabId"]]
+    var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
+    var selectedRows = [row];
+
+    //Add nodeId to hidden elements list
+    var index = sourceManager.HiddenNodeIds.indexOf(nodeId);
+    if (index < 0) {
+        sourceManager.HiddenNodeIds.push(nodeId);
+    }
+
+    //Grey out the text of hidden element rows
+    sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
+
+}
+
+ViewerContextMenu.prototype.HideInReview = function() {
+    var checkComponentRows = [];
         var row = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
         checkComponentRows.push(row);
 
@@ -172,7 +199,6 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         viewerInterface.StoreHiddenResultId(containerId, checkComponentRows);
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
-    }
 }
 
 ViewerContextMenu.prototype.GetViewerInterface = function() {
@@ -225,8 +251,15 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
         _this.WebViewer.view.fitWorld();
     });
 
-    var viewerInterface = this.GetViewerInterface();
-    viewerInterface.ShowHiddenRows();
+    if(model.currentTabId) {
+        // Remove all nodeIds from list (Showing all) and show all rows
+        var sourceManager = SourceManagers[model.currentTabId];
+        sourceManager.ModelTree.ShowAllHiddenRows();
+    }
+    else {
+        var viewerInterface = this.GetViewerInterface();
+        viewerInterface.ShowHiddenRows();
+    }
 }
 
 
