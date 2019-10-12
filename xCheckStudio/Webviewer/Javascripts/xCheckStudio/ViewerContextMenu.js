@@ -161,7 +161,21 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         this.WebViewer.model.setNodesVisibilities(map);
 
-        var checkComponentRows = [];
+        if(model.currentTabId) {
+            this.HideInCheck();
+        }
+        else {
+            this.HideInReview();
+        }
+    }
+}
+
+ViewerContextMenu.prototype.HideInCheck = function() {
+
+}
+
+ViewerContextMenu.prototype.HideInReview = function() {
+    var checkComponentRows = [];
         var row = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
         checkComponentRows.push(row);
 
@@ -172,7 +186,6 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         viewerInterface.StoreHiddenResultId(containerId, checkComponentRows);
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
-    }
 }
 
 ViewerContextMenu.prototype.GetViewerInterface = function() {
@@ -225,8 +238,13 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
         _this.WebViewer.view.fitWorld();
     });
 
-    var viewerInterface = this.GetViewerInterface();
-    viewerInterface.ShowHiddenRows();
+    if(model.currentTabId) {
+        
+    }
+    else {
+        var viewerInterface = this.GetViewerInterface();
+        viewerInterface.ShowHiddenRows();
+    }
 }
 
 

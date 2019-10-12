@@ -16,6 +16,7 @@ function SCManager(sourceName,
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
     this.NodeIdvsComponentIdList = {};
+    this.HiddenNodeIds = [];
 
     this.CheckViewerContextMenu;
 }
