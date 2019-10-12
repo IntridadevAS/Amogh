@@ -283,11 +283,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 }
 
 
-SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function() {
+SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(selectedNodeIds) {
     var selectedRows = [];
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
 
-    var selectedNodeIds = this.SelectionManager.SelectedComponentNodeIds;
     for(var i = 0; i < selectedNodeIds.length; i++) {
         var nodeId = Number(selectedNodeIds[i]);
 
@@ -369,6 +368,17 @@ SCModelBrowser.prototype.GetSelectedChildren = function(componentObj, node) {
         children.push(child);
     }
     return children;
+}
+
+SCModelBrowser.prototype.GetNodeChildren = function(nodeId) {
+    var nodeList = [];
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+    var nodeObj = treeList.getNodeByKey(nodeId);
+    var children = this.GetSelectedChildren(treeList, nodeObj);
+    for(var i = 0; i < children.length; i++) {
+        nodeList.push(children[i].key);
+    }
+    return nodeList;
 }
 
 SCModelBrowser.prototype.isAssemblyNode = function (nodeId) {

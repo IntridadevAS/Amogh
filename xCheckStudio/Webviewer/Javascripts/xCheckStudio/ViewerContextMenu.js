@@ -173,15 +173,17 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
     // get highlighted row 
     var sourceManager = SourceManagers[model["currentTabId"]]
-    var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
-    var selectedRows = [row];
+    // var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
+    var selectedRows = [];
 
+    var nodeList = sourceManager.ModelTree.GetNodeChildren(nodeId);
+    nodeList.push(nodeId);
     //Add nodeId to hidden elements list
-    var index = sourceManager.HiddenNodeIds.indexOf(nodeId);
-    if (index < 0) {
-        sourceManager.HiddenNodeIds.push(nodeId);
-    }
+    sourceManager.HandleHiddenNodeIdsList(true, nodeList)
 
+    if(nodeList.length > 1) {
+        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
+    }
     //Grey out the text of hidden element rows
     sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 

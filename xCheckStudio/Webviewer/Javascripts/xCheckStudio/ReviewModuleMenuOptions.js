@@ -12,24 +12,29 @@ function enableMenuOptions() {
             if (currentCheck.sourceAViewer &&
                 currentCheck.sourceAViewer.ViewerOptions) {
                 ReviewMenuOptions.showAll(currentCheck.sourceAViewer.Viewer);
+                currentCheck.sourceAViewer.ShowHiddenRows();
             }
             if (currentCheck.sourceBViewer &&
                 currentCheck.sourceBViewer.ViewerOptions) {
                 ReviewMenuOptions.showAll(currentCheck.sourceBViewer.Viewer);
+                currentCheck.sourceBViewer.ShowHiddenRows();
             }
             if (currentCheck.sourceCViewer &&
                 currentCheck.sourceCViewer.ViewerOptions) {
                 ReviewMenuOptions.showAll(currentCheck.sourceCViewer.Viewer);
+                currentCheck.sourceCViewer.ShowHiddenRows();
             }
             if (currentCheck.sourceDViewer &&
                 currentCheck.sourceDViewer.ViewerOptions) {
                 ReviewMenuOptions.showAll(currentCheck.sourceDViewer.Viewer);
+                currentCheck.sourceDViewer.ShowHiddenRows();
             }
         }
         else if (model.currentCheck === "compliance") {
             if (currentCheck.viewer &&
                 currentCheck.viewer.ViewerOptions) {
                 ReviewMenuOptions.showAll(currentCheck.viewer.Viewer);
+                currentCheck.viewer.ShowHiddenRows();
             }
         }
     }
