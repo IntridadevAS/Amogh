@@ -3,17 +3,224 @@ let ReferenceManager = {
     selectedReference: undefined,
     showReferenceDiv: function () {
 
-        var overlay = document.getElementById("referenceOverlay");
-        var popup = document.getElementById("referencePopup");
+        // get selected component ids
+        var componentIds = ReferenceManager.getComponentIds();
+        if (componentIds.length === 0) {
+            return;
+        }
 
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // add reference
+        $.ajax({
+            url: 'PHP/GetReferences.php',
+            type: "POST",
+            async: true,
+            data: {
+                'currentSource': model.currentTabId,
+                'components': JSON.stringify(componentIds),
+                'projectName': projectinfo.projectname,
+                'checkName': checkinfo.checkname
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    var references = JSON.parse(msg);
+                    ReferenceManager.loadWebAddresses(references['webAddress']);
+                    ReferenceManager.loadDocuments(references['document']);
+                    ReferenceManager.loadImages(references['image']);
+                    ReferenceManager.loadComments(references['comment']);
 
-        popup.style.width = "585px";
-        popup.style.height = "569px";
+                    // show div
+                    var overlay = document.getElementById("referenceOverlay");
+                    var popup = document.getElementById("referencePopup");
 
-        popup.style.top = ((window.innerHeight / 2) - 290) + "px";
-        popup.style.left = ((window.innerWidth / 2) - 257) + "px";
+                    overlay.style.display = 'block';
+                    popup.style.display = 'block';
+
+                    popup.style.width = "585px";
+                    popup.style.height = "569px";
+
+                    popup.style.top = ((window.innerHeight / 2) - 290) + "px";
+                    popup.style.left = ((window.innerWidth / 2) - 257) + "px";
+
+                }
+            }
+        });
+
+
+    },
+
+    loadWebAddresses: function (webAddresses) {
+        if (webAddresses.length === 0) {
+            return;
+        }
+
+        var referenceIFrame = document.getElementById("referenceIFrame");
+        if (!referenceIFrame) {
+            return;
+        }
+
+        var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
+        if (!webAddressList) {
+            return;
+        }
+
+        for (var i = 0; i < webAddresses.length; i++) {
+            var webAddress = webAddresses[i];
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = webAddress;
+            webAddressList.appendChild(listItem);
+
+            listItem.onclick = function () {
+
+                // select this list item
+                ReferenceManager.select(this);
+
+                const BrowserWindow = require('electron').remote.BrowserWindow;
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                win.loadURL(this.innerText);
+                win.show();
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        }
+    },
+
+    loadDocuments: function (documents) {
+        if (documents.length === 0) {
+            return;
+        }
+
+        var referenceIFrame = document.getElementById("referenceIFrame");
+        if (!referenceIFrame) {
+            return;
+        }
+
+        var documentList = referenceIFrame.contentDocument.getElementById("documentList");
+        if (!documentList) {
+            return;
+        }
+
+        for (var i = 0; i < documents.length; i++) {
+            var doc = documents[i];
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = doc;
+            documentList.appendChild(listItem);
+
+            listItem.onclick = function () {
+                // select this list item
+                ReferenceManager.select(this);
+
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+                const BrowserWindow = require('electron').remote.BrowserWindow;
+                const path = require("path");
+
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+
+                var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
+                win.loadURL(docUrl);
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        }
+    },
+
+    loadImages: function (images) {
+        if (images.length === 0) {
+            return;
+        }
+
+        var referenceIFrame = document.getElementById("referenceIFrame");
+        if (!referenceIFrame) {
+            return;
+        }
+
+        var imageList = referenceIFrame.contentDocument.getElementById("imageList");
+        if (!imageList) {
+            return;
+        }
+
+
+        for (var i = 0; i < images.length; i++) {
+            var image = images[i];
+
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = image;
+            imageList.appendChild(listItem);
+
+            listItem.onclick = function () {
+                // select this list item
+                ReferenceManager.select(this);
+
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+                const BrowserWindow = require('electron').remote.BrowserWindow;
+                const path = require("path");
+
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
+                win.loadURL(docUrl);
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        }
+    },
+
+    loadComments: function (comments) {
+        if (comments.length === 0) {
+            return;
+        }
+
+        var referenceIFrame = document.getElementById("referenceIFrame");
+        if (!referenceIFrame) {
+            return;
+        }
+
+        var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
+        if (!commentsList) {
+            return;
+        }
+
+        for (var i = 0; i < comments.length; i++) {
+            var comment = comments[i];
+
+            var listItem = referenceIFrame.contentDocument.createElement('li');
+            listItem.innerText = comment;
+            commentsList.appendChild(listItem);
+
+            listItem.onclick = function () {
+                ReferenceManager.select(this);
+            }
+
+            listItem.onmouseover = function () {
+                ReferenceManager.Highlight(this);
+            }
+
+            listItem.onmouseout = function () {
+                ReferenceManager.UnHighlight(this);
+            }
+        }
     },
 
     closeReferenceDiv: function () {
@@ -522,8 +729,7 @@ let ReferenceManager = {
         else if (ReferenceManager.selectedReference.offsetParent.id === "commentsList") {
             typeofReference = "Comment";
         }
-        else
-        {
+        else {
             return;
         }
 
