@@ -606,3 +606,6 @@ ReviewComplianceContextMenuManager.prototype.OnStopTranslucency = function () {
     translucencyManagers[viewerInterface.Viewer._params.containerId].Stop();
     delete translucencyManagers[viewerInterface.Viewer._params.containerId];
 }
+
+ReviewComplianceContextMenuManager.prototype.onReferenceClick = function () {
+}

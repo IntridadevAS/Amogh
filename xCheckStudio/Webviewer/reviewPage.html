@@ -22,8 +22,7 @@
       <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
-    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg"
-        alt=""></a>
+    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
       <p id="userName" class="userName"> User Name </p>
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
@@ -48,6 +47,25 @@
 
     <div class="background">
       <div id='contextMenu' style="z-index: 4; position: absolute;">
+      </div>
+
+      <!-- reference selection overlay -->
+      <div id="referenceSelectionOverlay" class="overlay" style="z-index: 201;"></div>
+      <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
+        <iframe id="referenceSelectionIFrame" src="Reference_selection.html"
+          style="height: 401px; width: 444px"></iframe>
+      </div>
+
+      <!-- add reference overlay -->
+      <div id="addReferenceOverlay" class="overlay" style="z-index: 201;"></div>
+      <div id="addReferencePopup" class="popup" style="z-index: 201;">
+        <iframe id="addReferenceIFrame" src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
+      </div>
+
+      <!-- reference overlay -->
+      <div id="referenceOverlay" class="overlay"></div>
+      <div id="referencePopup" class="popup">
+        <iframe id="referenceIFrame" src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
       </div>
 
       <!-- Return to home page overlay -->
@@ -321,7 +339,7 @@
           </div>
         </div>
         <div class="buttonContainer">
-          <div class="buttonGroup">            
+          <div class="buttonGroup">
             <button id="reCheck" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="ReCheck"></span>
               <img src="public/symbols/XD_ClearData.svg" alt="">
@@ -361,9 +379,9 @@
               <span class="tooltip" data-tooltip="Navigation Cube"></span>
               <img src="public/symbols/Navigation box.svg" alt="">
             </button>
-           
+
           </div>
-          
+
         </div>
       </div>
       <div class="viewsContainer" id="viewsContainer">
@@ -401,10 +419,11 @@
           <div id="center" class="grabBar"></div>
           <div id="comparisonVisualizerA" class="visualizerContainer visualizer4">
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-            onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-            onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
-            <div id="comparePanelA" class="comparePanel"  style="width: 200%">
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
+              onclick="viewPanels.showAnalytics(this)"></div>
+            <div id="comparePanelA" class="comparePanel" style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
               <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
@@ -508,9 +527,10 @@
           <div id="center" class="grabBar"></div>
           <div id="complianceVisualizerA" class="visualizerContainer">
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-            onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-            onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="viewPanels.showAnalytics(this)"></div>
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
+              onclick="viewPanels.showAnalytics(this)"></div>
             <div id="compliance1" class="tempContainer">
 
               <!-- Translucency slider -->
@@ -554,14 +574,15 @@
       background-color: #f1f1f1;
     }
 
-    .dx-data-row > td {  
-        border-color: darkgrey !important;
+    .dx-data-row>td {
+      border-color: darkgrey !important;
     }
-    .dx-header-row > td {
+
+    .dx-header-row>td {
       border-color: darkgrey !important
     }
 
-    .dx-datagrid-filter-row > td {
+    .dx-datagrid-filter-row>td {
       border-color: darkgrey !important
     }
 
@@ -586,7 +607,7 @@
       font-size: 11px !important;
     }
 
-    .dx-datagrid-headers .dx-header-row {  
+    .dx-datagrid-headers .dx-header-row {
       color: #ffffff !important;
       background-color: lightgray !important;
     }
@@ -600,27 +621,27 @@
     }
 
     .dx-row.dx-data-row.dx-column-lines.dx-state-hover td {
-      background:	#D3D3D3!important;
+      background: #D3D3D3 !important;
     }
 
     /* The Modal (background) */
     .modal {
-          display: none;
-          /* Hidden by default */
-          position: absolute;
-          /* Stay in place */
-          z-index: 4;
-          /* Location of the box */
-          width: 100%;
-          /* Full width */
-          height: 100%;
-          /* Full height */
-          top: 0px;
-          background-color: rgb(0, 0, 0);
-          /* Fallback color */
-          background-color: rgba(0, 0, 0, 0.4);
-          /* Black w/ opacity */
-      }
+      display: none;
+      /* Hidden by default */
+      position: absolute;
+      /* Stay in place */
+      z-index: 4;
+      /* Location of the box */
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      top: 0px;
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+    }
 
     /* Modal Content */
     .modal-content {
@@ -696,6 +717,7 @@
 
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewReferenceManager.js"></script>
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
@@ -706,24 +728,24 @@
 
     window.onload = function () {
 
-        setPageTitle();
-        setUserName();
-        setCheckSpaceName();
+      setPageTitle();
+      setUserName();
+      setCheckSpaceName();
 
-        // enable menu options
-        enableMenuOptions();
+      // enable menu options
+      enableMenuOptions();
 
-        // create drawer menu
-        DrawerMenu.create();
+      // create drawer menu
+      DrawerMenu.create();
 
-        // init review module
-        initReviewModule().then(function (result) {
-          // hide loading overlay
-          document.getElementById("pageLoadingOverlay").style.display = "none";
-        });
-        // // hide busy indicator
-        // hideBusyIndicator();     
-      }
+      // init review module
+      initReviewModule().then(function (result) {
+        // hide loading overlay
+        document.getElementById("pageLoadingOverlay").style.display = "none";
+      });
+      // // hide busy indicator
+      // hideBusyIndicator();     
+    }
 
     function showBusyIndicator() {
       // hide busy indicator
@@ -741,6 +763,47 @@
 
     resizeCanvas = function () {
       model.getCurrentReviewManager().ResizeViewers()
+    }
+
+    // reference related functions
+    function closeReference() {
+      ReferenceManager.closeReferenceDiv();
+    }
+
+    function showReferenceSelection() {
+      ReferenceManager.showReferenceSelectionDiv();
+    }
+
+    function deleteReference() {
+      ReferenceManager.deleteReference();
+    }
+
+    function closeReferenceSelection() {
+      ReferenceManager.closeReferenceSelectionDiv();
+    }
+
+    function showInputReference() {
+      ReferenceManager.showInputReferenceDiv();
+
+      // call on launch of input form
+      var addReferenceIFrame = document.getElementById("addReferenceIFrame");
+      if (!addReferenceIFrame) {
+        return;
+      }
+
+      document.getElementById("addReferenceIFrame").contentWindow.onLoad();
+    }
+
+    function closeInputReference() {
+      ReferenceManager.closeInputReferenceDiv();
+
+      if ("referenceType" in localStorage) {
+        localStorage.removeItem('referenceType');
+      }
+    }
+
+    function addReference(value) {
+      ReferenceManager.addReference(value);
     }
 
   </script>
