@@ -8,8 +8,7 @@
         
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
-        // $sourceAComponents = array();
-        // $sourceBComponents = array();
+      
         $sourceAComparisonComponentsHierarchy = array();
         $sourceBComparisonComponentsHierarchy = array();
         $sourceAComplianceComponentsHierarchy = array();
@@ -34,8 +33,20 @@
        // getSourceComponents();
 
         // var_dump($sourceBComponents);
+        // source A components
+        $sourceAComponents = readComponents("a");
+        if($sourceAComponents)
+        {
+            $results['sourceAComponents'] = $sourceAComponents;
+        }
 
-        
+        // source b components
+        $sourceBComponents = readComponents("b");  
+        if($sourceBComponents)
+        {
+            $results['sourceBComponents'] = $sourceBComponents;
+        }   
+               
         if($comparisonResult != NULL)
         {            
             //$results['Comparison'] = $comparisonResult;
@@ -779,4 +790,52 @@
 
             return $component;                   
         } 
+
+        function readComponents($source)
+        {
+            global $projectName;
+            global $checkName;
+
+            try
+            {   
+                // open database
+                $dbPath = getCheckDatabasePath($projectName, $checkName);            
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+   
+                // begin the transaction
+                $dbh->beginTransaction();
+
+                if($source === "a") {
+                    $componentsTable = "SourceAComponents";                   
+                }
+                else if($source === "b") {
+                    $componentsTable = "SourceBComponents";                       
+                }
+                else if($source === "c") {                             
+                }
+                else if($source === "d") {                    
+                }
+    
+                // read component main class and subclass
+                $compStmt = $dbh->query("SELECT * FROM  ".$componentsTable.";"); 
+                $result = null;
+                if($compStmt)
+                {
+                    $result = $compStmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection
+
+                return $result;
+            }                
+            catch(Exception $e) 
+            {        
+                echo "fail"; 
+                return NULL;
+            } 
+
+            return NULL;
+        }
 ?>

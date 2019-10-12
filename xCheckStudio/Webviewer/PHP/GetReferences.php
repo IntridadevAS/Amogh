@@ -148,10 +148,10 @@
                  }
              }
 
-            $res = array("webAddress" => $webAddressList,
+            $res = array(  $currentSource => array("webAddress" => $webAddressList,
             "document" => $documentsList,
             "image" => $imagesList,
-            "comment" => $commentsList);          
+            "comment" => $commentsList));          
              
             echo json_encode($res);
 

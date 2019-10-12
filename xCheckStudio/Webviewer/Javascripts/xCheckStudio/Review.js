@@ -1,13 +1,8 @@
-// var comparisonCheckGroups = undefined;
+var checkResults;
 var comparisons;
 var compliances;
-// var sourceAComplianceCheckGroups = undefined;
-// var sourceBComplianceCheckGroups = undefined;
 var sourceAComparisonHierarchy = undefined;
 var sourceBComparisonHierarchy = undefined;
-// var sourceAComplianceHierarchy = undefined;
-// var sourceBComplianceHierarchy = undefined;
-
 
 var comparisonReviewManager;
 var complianceReviewManager;
@@ -27,15 +22,7 @@ function initReviewModule() {
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var checkResults = JSON.parse(msg);
-
-                // var comparisonCheckGroups = undefined;
-                // var sourceAComplianceCheckGroups = undefined;
-                // var sourceBComplianceCheckGroups = undefined;
-                // var sourceAComparisonHierarchy = undefined;
-                // var sourceBComparisonHierarchy = undefined;
-                // var sourceAComplianceHierarchy = undefined;
-                // var sourceBComplianceHierarchy = undefined;
+                checkResults = JSON.parse(msg);
 
                 // initialize the check data
                 model.files = {};
@@ -71,9 +58,7 @@ function initReviewModule() {
                     }
 
                     if (key == 'Comparisons') {
-                        comparisons = checkResults[key];
-                        // comparisonCheckGroups = new CheckGroups();
-                        // comparisonCheckGroups.restore(checkResults[key], false);
+                        comparisons = checkResults[key];                        
                     }
                     else if (key == 'Compliances') {
                         compliances = checkResults[key];
@@ -89,31 +74,13 @@ function initReviewModule() {
                                 }
                             }
                         }
-                    }
-                    // else if (key == 'SourceACompliance') {
-                    //     sourceAComplianceCheckGroups = new CheckGroups();
-                    //     sourceAComplianceCheckGroups.restore(checkResults[key], true);
-
-                    //     model.files["a"].compliance = true;
-                    // }
-                    // else if (key == 'SourceBCompliance') {
-                    //     sourceBComplianceCheckGroups = new CheckGroups();
-                    //     sourceBComplianceCheckGroups.restore(checkResults[key], true);
-
-                    //     model.files["b"].compliance = true;
-                    // }
+                    }                    
                     else if (key == 'SourceAComparisonComponentsHierarchy') {
                         sourceAComparisonHierarchy = checkResults[key];
                     }
                     else if (key == 'SourceBComparisonComponentsHierarchy') {
                         sourceBComparisonHierarchy = checkResults[key];
-                    }
-                    // else if (key == 'SourceAComplianceComponentsHierarchy') {
-                    //     sourceAComplianceHierarchy = checkResults[key];
-                    // }
-                    // else if (key == 'SourceBComplianceComponentsHierarchy') {
-                    //     sourceBComplianceHierarchy = checkResults[key];
-                    // }                    
+                    }                 
                 }
 
                 return resolve(true);

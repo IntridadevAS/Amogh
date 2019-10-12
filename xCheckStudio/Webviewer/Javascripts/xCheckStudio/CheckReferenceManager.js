@@ -25,10 +25,12 @@ let ReferenceManager = {
             success: function (msg) {
                 if (msg != 'fail') {
                     var references = JSON.parse(msg);
-                    ReferenceManager.loadWebAddresses(references['webAddress']);
-                    ReferenceManager.loadDocuments(references['document']);
-                    ReferenceManager.loadImages(references['image']);
-                    ReferenceManager.loadComments(references['comment']);
+                    for (source in references) {
+                        ReferenceManager.loadWebAddresses(references[source]['webAddress']);
+                        ReferenceManager.loadDocuments(references[source]['document']);
+                        ReferenceManager.loadImages(references[source]['image']);
+                        ReferenceManager.loadComments(references[source]['comment']);
+                    }                  
 
                     // show div
                     var overlay = document.getElementById("referenceOverlay");
