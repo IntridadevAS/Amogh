@@ -149,11 +149,13 @@ ModelBrowserContextMenu.prototype.OnHideClicked = function () {
 
       this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, false);
       
+      var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
+
       // Handle hidden elements nodeIds list 
-      SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(true, this.ModelBrowser.SelectionManager.SelectedComponentNodeIds);
+      SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(true, selectedNodeIds);
 
       //Get rows of selected node Ids to change text color 
-      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds();
+      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
 
       //Grey out the text of hidden element rows
       this.ModelBrowser.HighlightHiddenRows(true, selectedRows);
@@ -187,11 +189,12 @@ ModelBrowserContextMenu.prototype.OnShowClicked = function () {
             this.IsolateManager.IsolatedNodes = [];
       }
       
+      var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
       // Handle hidden elements nodeIds list 
-      SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(false, this.ModelBrowser.SelectionManager.SelectedComponentNodeIds);
+      SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(false, selectedNodeIds);
 
       //Get rows of selected node Ids to change text color 
-      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds();
+      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
 
       //Grey out the text of hidden element rows
       this.ModelBrowser.HighlightHiddenRows(false, selectedRows);
