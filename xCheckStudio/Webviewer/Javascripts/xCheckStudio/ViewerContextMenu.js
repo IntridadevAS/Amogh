@@ -162,7 +162,7 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
         this.WebViewer.model.setNodesVisibilities(map);
 
         if(model.currentTabId) {
-            this.HideInCheck();
+            this.HideInCheck(selectedItem._nodeId);
         }
         else {
             this.HideInReview();
@@ -170,7 +170,20 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
     }
 }
 
-ViewerContextMenu.prototype.HideInCheck = function() {
+ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
+    // get highlighted row 
+    var sourceManager = SourceManagers[model["currentTabId"]]
+    var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
+    var selectedRows = [row];
+
+    //Add nodeId to hidden elements list
+    var index = sourceManager.HiddenNodeIds.indexOf(nodeId);
+    if (index < 0) {
+        sourceManager.HiddenNodeIds.push(nodeId);
+    }
+
+    //Grey out the text of hidden element rows
+    sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 
 }
 
@@ -239,7 +252,9 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
     });
 
     if(model.currentTabId) {
-        
+        // Remove all nodeIds from list (Showing all) and show all rows
+        var sourceManager = SourceManagers[model.currentTabId];
+        sourceManager.ModelTree.ShowAllHiddenRows();
     }
     else {
         var viewerInterface = this.GetViewerInterface();

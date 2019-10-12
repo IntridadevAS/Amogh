@@ -229,6 +229,25 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
     }
 };
 
+SCManager.prototype.HandleHiddenNodeIdsList = function(isHide, nodeList) {
+
+    for(var i = 0; i < nodeList.length; i++) {
+        var nodeId = nodeList[i];
+        var index = this.HiddenNodeIds.indexOf(nodeId);
+        if(isHide) {
+            if (index < 0) {
+                this.HiddenNodeIds.push(nodeId);
+            }
+        }
+        else {
+            // If show is clicked, remove nodeId from list of hidden elements list
+            if (index > -1) {
+                this.HiddenNodeIds.splice(index, 1);
+            }         
+        }
+    }
+}
+
 SCManager.prototype.SelectValidNode = function () {
 
     if (this.SelectedNodeId in this.SourceProperties) {

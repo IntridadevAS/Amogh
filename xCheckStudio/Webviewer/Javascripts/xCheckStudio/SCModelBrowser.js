@@ -283,25 +283,14 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 }
 
 
-SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(isHide) {
+SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function() {
     var selectedRows = [];
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
 
     var selectedNodeIds = this.SelectionManager.SelectedComponentNodeIds;
-    var sourceManager = SourceManagers[model.currentTabId];
     for(var i = 0; i < selectedNodeIds.length; i++) {
         var nodeId = Number(selectedNodeIds[i]);
 
-        if(isHide) {
-            sourceManager.HiddenNodeIds.push(nodeId);
-        }
-        else {
-            var index = sourceManager.HiddenNodeIds.indexOf(nodeId);
-            if (index > -1) {
-                sourceManager.HiddenNodeIds.splice(index, 1);
-            }         
-        }
-        
         var  rowIndex = treeList.getRowIndexByKey(nodeId);
 
         if(rowIndex !== -1) {
@@ -326,6 +315,25 @@ SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
             }
         }
     }     
+}
+
+SCModelBrowser.prototype.ShowAllHiddenRows = function() {
+    var selectedRows = [];
+    var sourceManager = SourceManagers[model.currentTabId];
+    var hiddenNodeIds = sourceManager.HiddenNodeIds;
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+
+    for(var i = 0; i < hiddenNodeIds.length; i++) {
+        var nodeId = Number(hiddenNodeIds[i]);      
+        var  rowIndex = treeList.getRowIndexByKey(nodeId);
+        if(rowIndex !== -1) {
+            var row = treeList.getRowElement(rowIndex);
+            selectedRows.push(row[0]);
+        }
+    }
+
+    sourceManager.HiddenNodeIds = [];
+    this.HighlightHiddenRows(false, selectedRows);
 }
 
 SCModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function(clickedCheckBoxRowKeys, 
