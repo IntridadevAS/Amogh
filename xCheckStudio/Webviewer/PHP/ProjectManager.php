@@ -2153,13 +2153,17 @@ function GetProjects()
     }
     $permission = GetUserPermission($userid);
     try{
+        $privateprojects = array();
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        if(strcasecmp ($permission, "check") == 0)
-            $query = "select * from Projects where userid=".$userid." or type= 'Public'";
-        else
-            $query = "select * from Projects where type = 'Public'";
+        if(strcasecmp ($permission, "check") == 0) {
+            $query = "select * from Projects where userid=".$userid." and type= 'Private' COLLATE NOCASE";
+            $stmt = $dbh->query($query);
+            $privateprojects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        $query = "select * from Projects where type = 'Public' COLLATE NOCASE";
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = array_merge($privateprojects, $data);  
         echo json_encode($data);
         $dbh = null;
       }
