@@ -16,7 +16,7 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
-        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer
+        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
         div.append(datagridDiv);
         parentTable.append(div);
     }
@@ -27,8 +27,9 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         deferRendering: false,
         selectedIndex: -1,
         onSelectionChanged: function(e) {
-            if(e.addedItems.length > 0)
-                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer
+            if(e.addedItems.length > 0) {
+                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+            }
         }
     });
 }
