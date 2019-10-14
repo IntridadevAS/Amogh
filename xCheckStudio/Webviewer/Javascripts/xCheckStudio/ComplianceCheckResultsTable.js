@@ -100,7 +100,6 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
 }
 
 ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
-    var parentTable = document.getElementById(this.MainReviewTableContainer);
     var ComplianceData = model.getCurrentReviewManager().ComplianceCheckManager;
 
     // //Clear Review table data
@@ -110,7 +109,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         return;
     }
     var checkGroups = ComplianceData["results"];
-
+    var undefinedGroupId;
     for (var groupId in checkGroups) {
         if (!checkGroups.hasOwnProperty(groupId)) {
             continue;
@@ -121,27 +120,42 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
             continue;
         }
 
-        var btn = this.CreateCheckGroupButton(componentsGroup.componentClass);
-        parentTable.appendChild(btn);
+        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+            undefinedGroupId = groupId;
+            continue;
+        }
 
-        var div = document.createElement("DIV");
-        div.className = "content scrollable";
-        div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-        div.style.display = "none";
-        parentTable.appendChild(div);
-
-        var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
-
-        var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
-
-        var id = "#" + div.id;
-        this.LoadReviewTableData(columnHeaders, tableData, id);
-        // this.highlightMainReviewTableFromCheckStatus(div.id);
-
-        // maintain table ids
-        this.CheckTableIds[groupId] = id;
+        this.CreateTable(groupId, componentsGroup);
     }
+    // Add undefined category last
+    var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+    this.CreateTable(undefinedGroupId, componentsGroup);
 
+}
+
+ComplianceCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
+    var parentTable = document.getElementById(this.MainReviewTableContainer);
+    var ComplianceData = model.getCurrentReviewManager().ComplianceCheckManager;
+
+    var btn = this.CreateCheckGroupButton(componentsGroup.componentClass);
+    parentTable.appendChild(btn);
+
+    var div = document.createElement("DIV");
+    div.className = "content scrollable";
+    div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+    div.style.display = "none";
+    parentTable.appendChild(div);
+
+    var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
+
+    var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
+
+    var id = "#" + div.id;
+    this.LoadReviewTableData(columnHeaders, tableData, id);
+    // this.highlightMainReviewTableFromCheckStatus(div.id);
+
+    // maintain table ids
+    this.CheckTableIds[groupId] = id;
 }
 
 ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {

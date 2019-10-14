@@ -137,17 +137,13 @@ ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = 
 ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     // var _this = this;
     var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
-    var parentTable = document.getElementById(this.MainReviewTableContainer);
 
     if (!("results" in ComparisonTableData)) {
         return;
     }
-    // for (var key in ComparisonTableData) {
-    //     if (!ComparisonTableData.hasOwnProperty(key)) {
-    //         continue;
-    //     }
 
     var checkGroups = ComparisonTableData["results"];
+    var undefinedGroupId;
     for (var groupId in checkGroups) {
         if (!checkGroups.hasOwnProperty(groupId)) {
             continue;
@@ -159,38 +155,48 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
             continue;
         }
 
-        // create check group button
-        var btn = this.CreateCheckGroupButton(groupId, componentsGroup.componentClass);
-        parentTable.appendChild(btn);
 
-        var div = document.createElement("DIV");
-        div.className = "content scrollable";
-        div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-        div.style.display = "none";
-        parentTable.appendChild(div);
+        // undefined group should be last in table
+        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+            undefinedGroupId = groupId;
+            continue;
+        }
 
-        // create column headers
-        var columnHeaders = this.CreateMainTableHeaders(ComparisonTableData.sources);
-
-        // create table data
-        var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);
-
-        var id = "#" + div.id;
-
-        // Create table for category results
-        this.LoadReviewTableData(columnHeaders, tableData, id);
-        // .then(function() {
-        //     // highlight table rows as per their severity status
-        //     _this.highlightMainReviewTableFromCheckStatus(div.id);
-
-        //     // Add category check results count 
-        //     model.checks["comparison"]["reviewManager"].AddTableContentCount(div.id);
-
-        // maintain table ids
-        this.CheckTableIds[groupId] = id;
-        // });
+        this.CreateTable(groupId, componentsGroup);
     }
-    //}
+
+    // Add undefined category last
+    var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+    this.CreateTable(undefinedGroupId, componentsGroup);
+}
+
+ComparisonCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
+    var parentTable = document.getElementById(this.MainReviewTableContainer);
+    var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
+
+    // create check group button
+    var btn = this.CreateCheckGroupButton(groupId, componentsGroup.componentClass);
+    parentTable.appendChild(btn);
+
+    var div = document.createElement("DIV");
+    div.className = "content scrollable";
+    div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+    div.style.display = "none";
+    parentTable.appendChild(div);
+
+    // create column headers
+    var columnHeaders = this.CreateMainTableHeaders(ComparisonTableData.sources);
+
+    // create table data
+    var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);
+
+    var id = "#" + div.id;
+
+    // Create table for category results
+    this.LoadReviewTableData(columnHeaders, tableData, id);
+
+    // maintain table ids
+    this.CheckTableIds[groupId] = id;
 }
 
 ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders,
