@@ -128,9 +128,10 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         this.CreateTable(groupId, componentsGroup);
     }
     // Add undefined category last
-    var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
-    this.CreateTable(undefinedGroupId, componentsGroup);
-
+    if(undefinedGroupId) {
+        var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        this.CreateTable(undefinedGroupId, componentsGroup);
+    }
 }
 
 ComplianceCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {

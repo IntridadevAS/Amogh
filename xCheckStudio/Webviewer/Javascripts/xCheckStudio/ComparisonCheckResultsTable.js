@@ -166,8 +166,10 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     }
 
     // Add undefined category last
-    var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
-    this.CreateTable(undefinedGroupId, componentsGroup);
+    if(undefinedGroupId) {
+        var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        this.CreateTable(undefinedGroupId, componentsGroup);
+    }
 }
 
 ComparisonCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
