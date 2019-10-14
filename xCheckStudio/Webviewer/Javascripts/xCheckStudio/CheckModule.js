@@ -1284,7 +1284,7 @@ function saveData() {
     var sourceBType;
 
     if (sourceManager1) {
-        if (sourceManager1.IsSCSource()) {
+        if (sourceManager1.Is3DSource()) {
             //virewer container Data
             var viewerOptions = [];
             viewerOptions.push(sourceManager1.Webviewer._params.containerId);
@@ -1312,8 +1312,7 @@ function saveData() {
             sourceAType = sourceManager1.SourceType;
 
         }
-        else if (sourceManager1.IsExcelSource() ||
-            sourceManager1.IsDBSource()) {
+        else if (sourceManager1.Is1DSource()) {
             //sourceANodeIdvsComponentIdList = sourceManager1.NodeIdvsComponentIdList;
             sourceANodeIdvsComponentIdList = {};
             sourceASelectedComponents = sourceManager1.ModelTree.GetSelectedComponents();
@@ -1323,7 +1322,7 @@ function saveData() {
     }
 
     if (sourceManager2) {
-        if (sourceManager2.IsSCSource()) {
+        if (sourceManager2.Is3DSource()) {
 
             //virewer container Data
             var viewerOptions = [];
@@ -1352,8 +1351,7 @@ function saveData() {
             sourceBSelectedComponents = sourceManager2.ModelTree.GetSelectedComponents();
             sourceBType = sourceManager2.SourceType;
         }
-        else if (sourceManager2.IsExcelSource() ||
-            sourceManager2.IsDBSource()) {
+        else if (sourceManager2.Is1DSource()) {
 
             //sourceBNodeIdvsComponentIdList = sourceManager2.NodeIdvsComponentIdList;
             sourceBNodeIdvsComponentIdList = {};

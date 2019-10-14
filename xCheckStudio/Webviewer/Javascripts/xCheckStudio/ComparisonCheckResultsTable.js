@@ -284,6 +284,23 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
 }
 
+ComparisonCheckResultsTable.prototype.HighlightHiddenRows = function(isHide, checkComponentsRows) {
+
+    for (var i = 0; i < checkComponentsRows.length; i++) {
+        var selectedRow = checkComponentsRows[i];
+
+        for(var j = 0; j < selectedRow.cells.length; j++) {
+            var cell = selectedRow.cells[j];
+            if(isHide) {
+                cell.style.color = HiddenElementTextColor;
+            }
+            else {
+                cell.style.color = "black";
+            }
+        }
+    }       
+}
+
 ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
     tableContainer,
     changedStatus,
@@ -523,6 +540,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     // var container = document.getElementById(viewerContainer.replace("#", ""));
     // container.style.margin = "0px";
 };
+
 
 ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {
     var detailedReviewTableContainer = document.getElementById(containerId);

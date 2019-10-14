@@ -6,6 +6,8 @@ function DBSourceManager(sourceName,
   this.ModelBrowsercontainer = modelBrowsercontainer;
   this.ViewerContainer = viewerContainer;
 
+  this.ComponentIdVsData;
+
   // call super constructor
   SourceManager.call(this,sourceName, sourceType);
 }
@@ -14,7 +16,7 @@ function DBSourceManager(sourceName,
 DBSourceManager.prototype = Object.create(SourceManager.prototype);
 DBSourceManager.prototype.constructor = DBSourceManager;
 
-DBSourceManager.prototype.IsDBSource = function () {
+DBSourceManager.prototype.Is1DSource = function () {
   return true;
 };
 
@@ -80,6 +82,7 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
 
 DBSourceManager.prototype.AddComponentsToDB = function () {
 
+  var _this = this;
   var source = undefined;
   if (this.ViewerContainer.toLowerCase() == "visualizera") {
     source = "SourceA"
@@ -101,11 +104,7 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
     type: "POST",
     url: "PHP/AddComponentsToDB.php"
   }).done(function (data) {
-    console.log(data);
-    // remove busy spinner
-    // var busySpinner = document.getElementById("divLoading");
-    // if (busySpinner.classList.contains('show'))
-    //   busySpinner.classList.remove('show')
+    _this.ComponentIdVsData = JSON.parse(data);
   });
 
 }

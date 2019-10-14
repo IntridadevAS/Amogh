@@ -24,19 +24,19 @@ function SourceManager(sourceName, sourceType)
     }
 
     // virtual function
-    SourceManager.prototype.IsSCSource = function () {
+    SourceManager.prototype.Is3DSource = function () {
         return false;
     }; 
 
    // virtual function
-   SourceManager.prototype.IsExcelSource = function () {
+   SourceManager.prototype.Is1DSource = function () {
         return false;
     }; 
 
-    // virtual function
-    SourceManager.prototype.IsDBSource = function () {
-        return false;
-    }; 
+    // // virtual function
+    // SourceManager.prototype.Is1DSource = function () {
+    //     return false;
+    // }; 
 
      // virtual function
     SourceManager.prototype.ResizeViewer = function () {

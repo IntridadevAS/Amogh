@@ -1,47 +1,48 @@
 <?php
     require_once 'Utility.php';
-    if(!isset($_POST['ReferenceDataDir']) ||
-       !isset( $_POST['ReferenceTable']) ||
-       !isset( $_POST['Component']) ||
-       !isset($_POST['ProjectName']) ||
-       !isset($_POST['CheckName']) ||
-       !isset( $_POST['TypeofReference']))
+    if(!isset( $_POST['currentSource']) ||
+       !isset( $_POST['components']) ||
+       !isset($_POST['projectName']) ||
+       !isset($_POST['checkName']) ||
+       !isset( $_POST['typeofReference']))
     {
         echo 'fail';
         return;
     }
   
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    $projectName = $_POST['projectName'];
+    $checkName = $_POST['checkName'];
     $supportedFiles = array("pdf","PDF","txt","TXT", "xml", "XML","jpg", "JPG", "jpeg", "JPEG", "jpe", "JPE", "bmp", "BMP", "gif", "GIF", "tif", "TIF", "png", "PNG");
 
-    $ext = pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION);
+    $ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
     if(in_array($ext, $supportedFiles) == false)
 	{
-        echo 'fail';
+        echo 'invalid file type';
         return;
     }    
 
+    // construct destination path
+    $currentSource =  $_POST['currentSource'];
     $webViewerDirectory = dirname ( __DIR__ );
-    $target_dir = $webViewerDirectory."/Projects/".$projectName."/".$checkName."/".$_POST['ReferenceDataDir'];
-
+    $target_dir = $webViewerDirectory."/Projects/".$projectName."/CheckSpaces/".$checkName."/".$currentSource."_referenceData";  
+    
     // create target directory if not exists
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
 
-    $target_file = $target_dir."/".basename($_FILES["fileToUpload"]["name"]);
+    $target_file = $target_dir."/".basename($_FILES["file"]["name"]);
 
     // Check if file already exists
     if (file_exists($target_file)) 
     {
-        echo $_POST['ReferenceDataDir']."/".basename($target_file);
+        echo $currentSource."_referenceData"."/".basename($target_file);;
         return;        
     }
 
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) 
+    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) 
     {
-        $dataToSave = $_POST['ReferenceDataDir']."/".basename($target_file);
+        $dataToSave = $currentSource."_referenceData"."/".basename($target_file);        
         if(AddDocumentReference($projectName, $checkName, $dataToSave))
         {
             echo $dataToSave;
@@ -62,9 +63,10 @@
     {
         $dbh;
         try{
-            $tableName = $_POST['ReferenceTable'];            
-            $component = $_POST['Component'];           
-            $typeofReference = $_POST['TypeofReference'];
+            $currentSource =  $_POST['currentSource'];
+            $tableName = $currentSource."_References";             
+            $components = json_decode($_POST['components'],false);        
+            $typeofReference = $_POST['typeofReference'];
 
             // open database
             $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -79,24 +81,33 @@
                 webAddress TEXT,
                 document TEXT,
                 pic TEXT,
-                users TEXT,
-                parentComponent INTEGER NOT NULL    
+                comment TEXT,
+                component INTEGER NOT NULL    
               )';         
-            $dbh->exec($command);              
-           
-            $parentComponent = (int)$component;                          
-                
+            $dbh->exec($command);                      
+ 
             switch($typeofReference)
             {
                 case "Document":
-                    $qry = 'INSERT INTO '.$tableName. '(document, parentComponent) VALUES(?,?) '; 
-                    $stmt = $dbh->prepare($qry);
-                    $stmt->execute( array($referenceData,  $parentComponent));     
+
+                    for($i = 0; $i< count($components); $i++)
+                    {
+                        $component = $components[$i];
+                        $qry = 'INSERT INTO '.$tableName. '(document, component) VALUES(?,?) '; 
+                        $stmt = $dbh->prepare($qry);
+                        $stmt->execute( array($referenceData,  $component));      
+                    }
+
+                   
                     break;
-                case "Picture":
-                    $qry = 'INSERT INTO '.$tableName. '(pic, parentComponent) VALUES(?,?) '; 
-                    $stmt = $dbh->prepare($qry);
-                    $stmt->execute( array($referenceData,  $parentComponent));     
+                case "Image":
+                    for($i = 0; $i< count($components); $i++)
+                    {
+                        $component = $components[$i];
+                        $qry = 'INSERT INTO '.$tableName. '(pic, component) VALUES(?,?) '; 
+                        $stmt = $dbh->prepare($qry);
+                        $stmt->execute( array($referenceData,  $component));      
+                    }                  
                     break;                     
             }        
 

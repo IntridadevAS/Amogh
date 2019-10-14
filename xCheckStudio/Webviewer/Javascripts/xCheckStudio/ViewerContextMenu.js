@@ -160,7 +160,65 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
         }
 
         this.WebViewer.model.setNodesVisibilities(map);
+
+        if(model.currentTabId) {
+            this.HideInCheck(selectedItem._nodeId);
+        }
+        else {
+            this.HideInReview();
+        }
     }
+}
+
+ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
+    // get highlighted row 
+    var sourceManager = SourceManagers[model["currentTabId"]]
+    // var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
+    var selectedRows = [];
+
+    var nodeList = sourceManager.ModelTree.GetNodeChildren(nodeId);
+    nodeList.push(nodeId);
+    //Add nodeId to hidden elements list
+    sourceManager.HandleHiddenNodeIdsList(true, nodeList)
+
+    if(nodeList.length > 1) {
+        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
+    }
+    //Grey out the text of hidden element rows
+    sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
+
+}
+
+ViewerContextMenu.prototype.HideInReview = function() {
+    var checkComponentRows = [];
+        var row = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+        checkComponentRows.push(row);
+
+        var containerId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+
+        // get viewerInterface on which "hide" is called
+        var viewerInterface = this.GetViewerInterface();
+
+        viewerInterface.StoreHiddenResultId(containerId, checkComponentRows);
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
+}
+
+ViewerContextMenu.prototype.GetViewerInterface = function() {
+    var viewerContainer = this.WebViewer._params["containerId"];
+
+    if(model.currentCheck == "comparison") {
+        if(viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceAViewer;
+        }
+    
+        if(viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceBViewer;
+        }
+    }
+    else {
+        return model.checks[model.currentCheck].viewer;
+    }
+   
 }
 
 ViewerContextMenu.prototype.OnIsolateClicked = function () {
@@ -194,6 +252,16 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
     this.WebViewer.model.setNodesVisibility([this.WebViewer.model.getAbsoluteRootNode()], true).then(function () {
         _this.WebViewer.view.fitWorld();
     });
+
+    if(model.currentTabId) {
+        // Remove all nodeIds from list (Showing all) and show all rows
+        var sourceManager = SourceManagers[model.currentTabId];
+        sourceManager.ModelTree.ShowAllHiddenRows();
+    }
+    else {
+        var viewerInterface = this.GetViewerInterface();
+        viewerInterface.ShowHiddenRows();
+    }
 }
 
 

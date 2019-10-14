@@ -6,6 +6,8 @@ function ExcelSourceManager(sourceName,
   this.ModelBrowsercontainer = modelBrowsercontainer;
   this.ViewerContainer = viewerContainer;
 
+  this.ComponentIdVsData;
+
   // call super constructor
   SourceManager.call(this, sourceName, sourceType);
 }
@@ -16,7 +18,7 @@ ExcelSourceManager.prototype = Object.create(SourceManager.prototype);
 ExcelSourceManager.prototype.constructor = ExcelSourceManager;
 
 
-ExcelSourceManager.prototype.IsExcelSource = function () {
+ExcelSourceManager.prototype.Is1DSource = function () {
   return true;
 };
 
@@ -99,7 +101,7 @@ ExcelSourceManager.prototype.ClearSource = function () {
 }
 
 ExcelSourceManager.prototype.AddComponentsToDB = function () {
-
+  var _this = this;
   var source = undefined;
   if (this.ViewerContainer.toLowerCase() == "visualizera") {
     source = "SourceA"
@@ -120,12 +122,7 @@ ExcelSourceManager.prototype.AddComponentsToDB = function () {
     type: "POST",
     url: "PHP/AddComponentsToDB.php"
   }).done(function (data) {
-    console.log(data);
-    // // remove busy spinner
-    // var busySpinner = document.getElementById("divLoading");
-    // if (busySpinner.classList.contains('show'))
-    //   busySpinner.classList.remove('show')
-
+    _this.ComponentIdVsData = JSON.parse(data);
   });
 }
 

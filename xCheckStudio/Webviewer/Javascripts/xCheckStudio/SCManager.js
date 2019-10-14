@@ -16,6 +16,7 @@ function SCManager(sourceName,
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
     this.NodeIdvsComponentIdList = {};
+    this.HiddenNodeIds = [];
 
     this.CheckViewerContextMenu;
 }
@@ -24,7 +25,7 @@ function SCManager(sourceName,
 SCManager.prototype = Object.create(SourceManager.prototype);
 SCManager.prototype.constructor = SCManager;
 
-SCManager.prototype.IsSCSource = function () {
+SCManager.prototype.Is3DSource = function () {
     return true;
 };
 
@@ -227,6 +228,25 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
         }
     }
 };
+
+SCManager.prototype.HandleHiddenNodeIdsList = function(isHide, nodeList) {
+
+    for(var i = 0; i < nodeList.length; i++) {
+        var nodeId = nodeList[i];
+        var index = this.HiddenNodeIds.indexOf(nodeId);
+        if(isHide) {
+            if (index < 0) {
+                this.HiddenNodeIds.push(nodeId);
+            }
+        }
+        else {
+            // If show is clicked, remove nodeId from list of hidden elements list
+            if (index > -1) {
+                this.HiddenNodeIds.splice(index, 1);
+            }         
+        }
+    }
+}
 
 SCManager.prototype.SelectValidNode = function () {
 
