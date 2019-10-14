@@ -605,13 +605,20 @@
                 {
                     $nodeId =$sourceComponent['nodeid'];
                 }
-
+                
+                $id = NULL;
+                if(isset($sourceComponent['id']))
+                {
+                    $id  = $sourceComponent['id'];
+                }
                 $checkComponent = new CheckComponent($sourceComponent['name'],
                                                      "",
                                                     $sourceComponent['subclass'],
                                                     "",
                                                     $nodeId ,
-                                                    "");
+                                                    "",
+                                                    $id,
+                                                    NULL);
 
                 $checkComponentGroup->AddCheckComponent($checkComponent);
 
@@ -676,12 +683,20 @@
                 $nodeId =$sourceComponent['nodeid'];
             }
 
+            $id = NULL;
+            if(isset($sourceComponent['id']))
+            {
+                $id  = $sourceComponent['id'];
+            }
+
             $checkComponent = new CheckComponent($sourceComponent['name'],
                                         "",
                                     $sourceComponent['subclass'],
                                     "",
                                     $nodeId ,
-                                    "");
+                                    "",
+                                    $id,
+                                    NULL);
 
             if(!empty($CheckComponentsGroups) &&
                 array_key_exists('Undefined', $CheckComponentsGroups))

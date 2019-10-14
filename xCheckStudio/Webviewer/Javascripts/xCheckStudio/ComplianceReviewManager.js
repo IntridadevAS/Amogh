@@ -102,59 +102,6 @@ ComplianceReviewManager.prototype.unhighlightSelectedSheetRow = function (checkS
     }
 }
 
-ComplianceReviewManager.prototype.CreateMainTableHeaders = function () {
-    var columnHeaders = [];
-    for (var i = 0; i < Object.keys(ComplianceColumns).length; i++) {
-        columnHeader = {};
-        var title;
-        if (i === ComplianceColumns.Select) {
-            title = '';//"Source A";
-            name = ComplianceColumnNames.Select;
-            width = "20";
-        }
-        else if (i === ComplianceColumns.SourceName) {
-            // if (this.MainReviewTableContainer === "SourceAComplianceMainReviewCell") {
-            //     title = "Name";
-            // }
-            // if (this.MainReviewTableContainer === "SourceBComplianceMainReviewCell") {
-            //title = AnalyticsData.SourceBName;
-            title = "Name";
-            // }
-            // title = "Source A";
-            name = ComplianceColumnNames.SourceName;
-        }
-        else if (i === ComplianceColumns.Status) {
-            title = "Status";
-            name = ComplianceColumnNames.Status;
-        }
-        else if (i === ComplianceColumns.NodeId) {
-            title = "NodeId";
-            name = ComplianceColumnNames.NodeId;
-            width = "10";
-        }
-        else if (i === ComplianceColumns.ResultId) {
-            title = "ID";
-            name = ComplianceColumnNames.ResultId;
-            width = "10";
-        }
-        else if (i === ComplianceColumns.GroupId) {
-            title = "groupId";
-            name = ComplianceColumnNames.GroupId;
-            width = "10";
-        }
-
-        columnHeader["title"] = title;
-        columnHeader["name"] = name;
-        columnHeader["type"] = "text";
-        columnHeader["width"] = "20";
-        columnHeaders.push(columnHeader);
-    }
-
-    return columnHeaders;
-}
-
-
-
 ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, componentClass) {
 
     var btn = document.createElement("BUTTON");
@@ -365,6 +312,7 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tab
                         "SourceA": row.cells[ComplianceColumns.SourceName].innerText,
                         "Status": component.status,
                         "NodeId": row.cells[ComplianceColumns.NodeId].innerText,
+                        "SourceId": row.cells[ComplianceColumns.SourceId].innerText,
                         "ID": row.cells[ComplianceColumns.ResultId].innerText,
                         "groupId": row.cells[ComplianceColumns.GroupId].innerText
                     };
@@ -625,6 +573,7 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (button, tableToUp
                         "SourceA": row.cells[ComplianceColumns.SourceName].innerText,
                         "Status": component.status,
                         "NodeId": row.cells[ComplianceColumns.NodeId].innerText,
+                        "SourceId": row.cells[ComplianceColumns.SourceId].innerText,
                         "ID": row.cells[ComplianceColumns.ResultId].innerText,
                         "groupId": row.cells[ComplianceColumns.GroupId].innerText
                     };

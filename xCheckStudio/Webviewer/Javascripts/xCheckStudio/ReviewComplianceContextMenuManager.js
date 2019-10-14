@@ -266,7 +266,7 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "freeze") {
     }
     else if (key === "reference") {
-        onReferenceClick(selectedRow);
+        this.onReferenceClick(selectedRow);
     }
     else if (key === "isolate") {
         this.OnIsolateClick();
@@ -608,4 +608,24 @@ ReviewComplianceContextMenuManager.prototype.OnStopTranslucency = function () {
 }
 
 ReviewComplianceContextMenuManager.prototype.onReferenceClick = function () {
+    var componentIds = model.checks[model.currentCheck].reviewTable.GetComponentIds(this.ComponentTableContainer);
+    var title = undefined;
+    for (var src in componentIds) {
+        var file;
+        if (src === "a") {
+            file = checkResults.sourceInfo.sourceAFileName;
+        }
+        else if (src === "b") {
+            file = checkResults.sourceInfo.sourceBFileName;
+        }
+
+        if (!title) {
+            title = file;
+        }
+        else {
+            title += " | " + file;
+        }
+    }
+
+    ReferenceManager.showReferenceDiv(componentIds, title);
 }
