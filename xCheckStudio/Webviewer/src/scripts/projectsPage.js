@@ -1141,7 +1141,7 @@ let deleteItems = {
 
     if (type == "project") {
       delType.innerHTML = "Project";
-      message.innerHTML = "Delete this Project and all associated Checks and Reviews?";
+      message.innerHTML = "Delete this Project and all associated CheckSpaces?";
       let obj = model.myProjects.find(obj => obj.projectid == id);
       if (obj === undefined) {
         controller.setPublicCurrentProj(id);
