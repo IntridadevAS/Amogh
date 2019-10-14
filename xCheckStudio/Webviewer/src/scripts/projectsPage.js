@@ -1140,7 +1140,8 @@ let deleteItems = {
     deleteBtn.onclick = this.deleteItem;
 
     if (type == "project") {
-      message.innerHTML = "Project and all associated Checks and Reviews?";
+      delType.innerHTML = "Project";
+      message.innerHTML = "Delete this Project and all associated Checks and Reviews?";
       let obj = model.myProjects.find(obj => obj.projectid == id);
       if (obj === undefined) {
         controller.setPublicCurrentProj(id);
@@ -1149,10 +1150,12 @@ let deleteItems = {
         controller.setMyCurrentProj(id);
       }
     } else if (type == "check") {
-      message.innerHTML = "Check and all associated Reviews?";
+      delType.innerHTML = "CheckSpace";
+      message.innerHTML = "Delete this CheckSpace and all associated checks?";
       controller.setCurrentCheck(id);
     } else if (type == "review") {
-      message.innerHTML = "Review?";
+      delType.innerHTML = "Review";
+      message.innerHTML = "Delete this Review and all associated data?";
     }
   },
 
