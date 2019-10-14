@@ -818,64 +818,83 @@ ReviewComparisonContextMenuManager.prototype.OnStopTranslucency = function () {
 }
 
 ReviewComparisonContextMenuManager.prototype.onReferenceClick = function () {
-    // get selected source A and B node ids
-    var nodes = this.GetNodeIdsFormComponentRow();
-    if (!nodes) {
-        return;
-    }    
-    var title = "";
+    // // get selected source A and B node ids
+    // var nodes = this.GetNodeIdsFormComponentRow();
+    // if (!nodes) {
+    //     return;
+    // }    
+    // var title = "";
 
-    // source A
-    var srcAIds = [];
-    var sourceANodeIds = nodes["SourceA"];
-    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-    if (sourceANodeIds.length > 0 &&
-        sourceAViewerInterface) {
+    // // source A
+    // var srcAIds = [];
+    // var sourceANodeIds = nodes["SourceA"];
+    // var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
+    // if (sourceANodeIds.length > 0 &&
+    //     sourceAViewerInterface) {
 
-            // comonent ids
-        for (var i = 0; i < checkResults.sourceAComponents.length; i++) {
-            var component = checkResults.sourceAComponents[i];
+    //         // comonent ids
+    //     for (var i = 0; i < checkResults.sourceAComponents.length; i++) {
+    //         var component = checkResults.sourceAComponents[i];
             
-            for(var j = 0; j < sourceANodeIds.length; j++)
-            {
-                var nodeid = sourceANodeIds[j];
-                if(Number(component.nodeid) === nodeid)
-                {
-                    srcAIds.push(Number(component.id));
-                }
-            }
+    //         for(var j = 0; j < sourceANodeIds.length; j++)
+    //         {
+    //             var nodeid = sourceANodeIds[j];
+    //             if(Number(component.nodeid) === nodeid)
+    //             {
+    //                 srcAIds.push(Number(component.id));
+    //             }
+    //         }
+    //     }
+
+    //     // source name
+    //     title = checkResults.sourceInfo["sourceAFileName"];
+    // }
+
+
+    // // source B
+    // var srcBIds = [];
+    // var sourceBNodeIds = nodes["SourceB"];
+    // var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
+    // if (sourceBNodeIds.length > 0 &&
+    //     sourceBViewerInterface) {
+
+    //          // comonent ids
+    //         for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
+    //             var component = checkResults.sourceBComponents[i];
+                
+    //             for(var j = 0; j < sourceBNodeIds.length; j++)
+    //             {
+    //                 var nodeid = sourceBNodeIds[j];
+    //                 if(Number(component.nodeid) === nodeid)
+    //                 {
+    //                     srcBIds.push(Number(component.id));
+    //                 }
+    //             }
+    //         }
+
+    //     // source name
+    //     title += " | " + checkResults.sourceInfo["sourceBFileName"];
+    // }
+
+    //var componentIds = { "a" : srcAIds, "b" : srcBIds};
+
+    var componentIds = model.checks[model.currentCheck].reviewTable.GetComponentIds(this.ComponentTableContainer);
+    var title = undefined;
+    for (var src in componentIds) {
+        var file;
+        if (src === "a") {
+            file = checkResults.sourceInfo.sourceAFileName;
+        }
+        else if (src === "b") {
+            file = checkResults.sourceInfo.sourceBFileName;
         }
 
-        // source name
-        title = checkResults.sourceInfo["sourceAFileName"];
+        if (!title) {
+            title = file;
+        }
+        else {
+            title += " | " + file;
+        }
     }
-
-
-    // source B
-    var srcBIds = [];
-    var sourceBNodeIds = nodes["SourceB"];
-    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-    if (sourceBNodeIds.length > 0 &&
-        sourceBViewerInterface) {
-
-             // comonent ids
-            for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
-                var component = checkResults.sourceBComponents[i];
-                
-                for(var j = 0; j < sourceBNodeIds.length; j++)
-                {
-                    var nodeid = sourceBNodeIds[j];
-                    if(Number(component.nodeid) === nodeid)
-                    {
-                        srcBIds.push(Number(component.id));
-                    }
-                }
-            }
-
-        // source name
-        title += " | " + checkResults.sourceInfo["sourceBFileName"];
-    }
-
-    var componentIds = { "a" : srcAIds, "b" : srcBIds};
     ReferenceManager.showReferenceDiv(componentIds, title);
 }

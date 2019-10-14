@@ -62,6 +62,18 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
             visible = false;
             width = "0%";
         }
+        else if (i === ComparisonColumns.SourceAId) {
+            caption = "SourceAId";
+            dataField = ComparisonColumnNames.SourceAId;
+            visible = false;
+            width = "0%";
+        }
+        else if (i === ComparisonColumns.SourceBId) {
+            caption = "SourceBId";
+            dataField = ComparisonColumnNames.SourceBId;
+            visible = false;
+            width = "0%";
+        }
         else if (i === ComparisonColumns.ResultId) {
             caption = "ID";
             dataField = ComparisonColumnNames.ResultId;
@@ -106,6 +118,8 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
         tableRowContent[ComparisonColumnNames.Status] = component.status;
         tableRowContent[ComparisonColumnNames.SourceANodeId] = component.sourceANodeId;
         tableRowContent[ComparisonColumnNames.SourceBNodeId] = component.sourceBNodeId;
+        tableRowContent[ComparisonColumnNames.SourceAId] = component.sourceAId;
+        tableRowContent[ComparisonColumnNames.SourceBId] = component.sourceBId;
         tableRowContent[ComparisonColumnNames.ResultId] = component.id;
         tableRowContent[ComparisonColumnNames.GroupId] = component.ownerGroup;
 
@@ -324,6 +338,40 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
     if (populateDetailedTable) {
         model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
     }
+}
+
+ComparisonCheckResultsTable.prototype.GetComponentIds = function (gridId) {
+    var selectionManager = model.getCurrentSelectionManager();
+    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+        return undefined;
+    }
+
+    var dataGrid = $(gridId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items();
+
+    var sourceAIds = [];
+    var sourceBIds = [];
+    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
+        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+
+        var rowData = rowsData[selectedRow.rowIndex];
+        // source A
+        //var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
+        if (rowData[ComparisonColumnNames.SourceAId] !== "" && rowData[ComparisonColumnNames.SourceAId] !== null) {
+            sourceAIds.push(Number(rowData[ComparisonColumnNames.SourceAId]));
+        }
+
+        // source B
+        //var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
+        if (rowData[ComparisonColumnNames.SourceBId] !== "" && rowData[ComparisonColumnNames.SourceBId] !== null) {
+            sourceBIds.push(Number(rowData[ComparisonColumnNames.SourceBId]));
+        }
+    }
+
+    return {
+        "a": sourceAIds,
+        "b": sourceBIds
+    };   
 }
 
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {

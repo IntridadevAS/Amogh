@@ -27,13 +27,18 @@
             
                 var $SourceANodeId;
                 var $SourceBNodeId;
+
+                var $SourceAId;
+                var $SourceBId;
             
                 function __construct( $sourceAName,
                                     $sourceBName,
                                     $sourceASubComponentClass,
                                     $sourceBSubComponentClass,
                                     $sourceANodeId,
-                                    $sourceBNodeId ) 
+                                    $sourceBNodeId,
+                                    $sourceAId,
+                                    $sourceBId ) 
                 {
                     $this->SourceAName = $sourceAName;
                     $this->SourceBName = $sourceBName; 
@@ -45,6 +50,9 @@
             
                     $this->SourceANodeId = $sourceANodeId;
                     $this->SourceBNodeId = $sourceBNodeId;
+
+                    $this->SourceAId = $sourceAId;
+                    $this->SourceBId = $sourceBId;
                 }
             
                 function AddCheckProperty($property){

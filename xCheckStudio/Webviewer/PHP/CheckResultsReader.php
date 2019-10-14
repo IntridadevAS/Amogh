@@ -238,6 +238,7 @@
                                             'subComponentClass'=>$componentRow['subComponentClass'],                                           
                                             'status'=>$changedStatus,
                                             'nodeId'=>$componentRow['nodeId'],
+                                            'sourceId'=>$componentRow['sourceId'],
                                             'ownerGroup'=>$componentRow['ownerGroup']);                                                         
 
                             $componentId = $componentRow['id'];
@@ -349,6 +350,8 @@
                                             'status'=>$changedStatus,
                                             'sourceANodeId'=>$componentRow['sourceANodeId'],
                                             'sourceBNodeId'=>$componentRow['sourceBNodeId'],
+                                            'sourceAId'=>$componentRow['sourceAId'],
+                                            'sourceBId'=>$componentRow['sourceBId'],
                                             'ownerGroup'=>$componentRow['ownerGroup'],                                                        
                                             'transpose' => $componentRow['transpose'],
                                             'accepted' => $componentRow['accepted']); 

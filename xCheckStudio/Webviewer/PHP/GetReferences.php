@@ -55,7 +55,7 @@
                                 break;
                            }                        
                     }  
-                    if($validReference)
+                    if($validReference && $value)
                     {
                         array_push($webAddressList, $value);                       
                     }                    
@@ -83,7 +83,7 @@
                                 break;
                            }                        
                     }  
-                    if($validReference)
+                    if($validReference && $value)
                     {
                         array_push($documentsList, $value);                       
                     }          
@@ -111,7 +111,7 @@
                                 break;
                            }                        
                     }  
-                    if($validReference)
+                    if($validReference && $value)
                     {
                         array_push($imagesList, $value);                       
                     }      
@@ -141,7 +141,7 @@
                            }                             
                        
                     }  
-                    if($validReference)
+                    if($validReference && $value)
                     {
                         array_push($commentsList, $value);                       
                     }  

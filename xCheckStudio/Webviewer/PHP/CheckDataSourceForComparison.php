@@ -325,13 +325,26 @@
                                 $sourceBNodeId = $sourceBComponent['nodeid'];
                             }
 
+                            $sourceAId = NULL;
+                            if(isset( $sourceAComponent['id']))
+                            {
+                                $sourceAId = $sourceAComponent['id'];
+                            }
+                            $sourceBId = NULL;
+                            if(isset( $sourceBComponent['id']))
+                            {
+                                $sourceBId = $sourceBComponent['id'];
+                            }
+
                             // create checkcomponent object                      
                             $checkComponent = new CheckComponent($sourceAComponent['name'],
                                 $sourceBComponent['name'],
                                 $sourceAComponent['subclass'],
                                 $sourceBComponent['subclass'],
                                 $sourceANodeId,
-                                $sourceBNodeId);
+                                $sourceBNodeId,
+                                $sourceAId,
+                                $sourceBId);
 
                             
                             $checkComponentGroup->AddCheckComponent($checkComponent);
@@ -574,13 +587,27 @@
                         {
                             $sourceBNodeId = $sourceBComponent['nodeid'];
                         }
+
+                        $sourceAId = NULL;
+                        if(isset( $sourceAComponent['id']))
+                        {
+                            $sourceAId = $sourceAComponent['id'];
+                        }
+                        $sourceBId = NULL;
+                        if(isset( $sourceBComponent['id']))
+                        {
+                            $sourceBId = $sourceBComponent['id'];
+                        }
+
                         // create checkcomponent object
                         $checkComponent = new CheckComponent($sourceAComponent['name'],
                                                             $sourceBComponent['name'],
                                                             $sourceAComponent['subclass'],
                                                             $sourceBComponent['subclass'],
                                                             $sourceANodeId,
-                                                            $sourceBNodeId);
+                                                            $sourceBNodeId,
+                                                            $sourceAId,
+                                                            $sourceBId);
                         $checkComponentGroup->AddCheckComponent($checkComponent);
 
                         for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) {
@@ -770,15 +797,24 @@
                     global $SourceAProperties;                  
 
                     $nodeId = NUll;
+                   
                     if(isset($sourceComponent['nodeid']))
                     {
-                        $nodeId = $sourceComponent['nodeid'];
+                        $nodeId = $sourceComponent['nodeid'];                        
+                    }
+
+                    $id = NULL;
+                    if(isset($sourceComponent['id']))
+                    {
+                        $id  = $sourceComponent['id'];
                     }
                     $checkComponent = new CheckComponent($sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
                                                         "",
                                                         $nodeId ,
+                                                        NULL,
+                                                        $id ,
                                                         NULL);
 
                     $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
@@ -807,12 +843,20 @@
                     {
                         $nodeId = $sourceComponent['nodeid'];
                     }
+
+                    $id = NULL;
+                    if(isset($sourceComponent['id']))
+                    {
+                        $id  = $sourceComponent['id'];
+                    }
                     $checkComponent = new CheckComponent("",
                                                         $sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
                                                         NULL,
-                                                        $nodeId);
+                                                        $nodeId,
+                                                        NULL,
+                                                        $id );
 
                     $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
                     foreach ($sourceBComponentProperties as $name => $property) 
@@ -848,11 +892,19 @@
                     {
                         $nodeId = $sourceComponent['nodeid'];
                     }
+
+                    $id = NULL;
+                    if(isset($sourceComponent['id']))
+                    {
+                        $id  = $sourceComponent['id'];
+                    }
                     $checkComponent = new CheckComponent($sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
                                                         "",
                                                         $nodeId ,
+                                                        NULL,
+                                                        $id,
                                                         NULL);
 
                     $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
@@ -881,12 +933,21 @@
                     {
                         $nodeId = $sourceComponent['nodeid'];
                     }
+
+                    
+                    $id = NULL;
+                    if(isset($sourceComponent['id']))
+                    {
+                        $id  = $sourceComponent['id'];
+                    }
                     $checkComponent = new CheckComponent("",
                                                         $sourceComponent["name"],
                                                         "",
                                                         $sourceComponent["subclass"],
                                                         NULL,
-                                                        $nodeId);
+                                                        $nodeId,
+                                                        NULL,
+                                                        $id);
 
                     $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
                     foreach ($sourceBComponentProperties as $name => $property) 
