@@ -43,6 +43,7 @@
                 status TEXT,
                 accepted TEXT,
                 nodeId TEXT,
+                sourceId INTEGER,
                 ownerGroup INTEGER NOT NULL)'; 
             $ss = $dbh->exec($command);    
             
@@ -107,13 +108,15 @@
                         status, 
                         accepted,
                         nodeId,
-                        ownerGroup) VALUES(?,?,?,?,?,?) ';                                                                          
+                        sourceId,
+                        ownerGroup) VALUES(?,?,?,?,?,?,?) ';                                                                          
 
                     $componentValues = array($checkComponent->SourceAName, 
                                              $checkComponent->SourceASubComponentClass,
                                              $checkComponent->Status,
                                              'false',
                                              $checkComponent->SourceANodeId,
+                                             $checkComponent->SourceAId,
                                              $groupId);                   
                    
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
@@ -212,6 +215,8 @@
                 accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
+                sourceAId TEXT,
+                sourceBId TEXT,
                 ownerGroup INTEGER NOT NULL,
                 transpose TEXT)'; 
             $dbh->exec($command);    
@@ -295,8 +300,10 @@
                         accepted, 
                         sourceANodeId, 
                         sourceBNodeId,
+                        sourceAId, 
+                        sourceBId,
                         ownerGroup,
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?) ';                                        
+                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ';                                        
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
                                              $checkComponent->SourceASubComponentClass,
@@ -305,6 +312,8 @@
                                              'false',
                                              $checkComponent->SourceANodeId,
                                              $checkComponent->SourceBNodeId,
+                                             $checkComponent->SourceAId,
+                                             $checkComponent->SourceBId,
                                              $groupId,
                                             null);
 

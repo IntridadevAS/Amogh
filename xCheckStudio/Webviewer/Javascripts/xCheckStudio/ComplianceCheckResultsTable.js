@@ -34,6 +34,7 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
         tableRowContent[ComplianceColumnNames.SourceName] = component.name;
         tableRowContent[ComplianceColumnNames.Status] = component.status;
         tableRowContent[ComplianceColumnNames.NodeId] = component.nodeId;
+        tableRowContent[ComplianceColumnNames.SourceId] = component.sourceId;
         tableRowContent[ComplianceColumnNames.ResultId] = component.id;
         tableRowContent[ComplianceColumnNames.GroupId] = groupId;
 
@@ -74,6 +75,11 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
         else if (i === ComplianceColumns.NodeId) {
             caption = "NodeId";
             dataField = ComplianceColumnNames.NodeId;
+            visible = false;
+        }
+        else if (i === ComplianceColumns.SourceId) {
+            caption = "SourceId";
+            dataField = ComplianceColumnNames.SourceId;
             visible = false;
         }
         else if (i === ComplianceColumns.ResultId) {
@@ -181,7 +187,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,
-            keyExpr: ComparisonColumnNames.ResultId,
+            keyExpr: ComplianceColumnNames.ResultId,
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: false,
@@ -294,6 +300,31 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
         }
 }
 
+ComplianceCheckResultsTable.prototype.GetComponentIds = function (gridId) {
+    var selectionManager = model.getCurrentSelectionManager();
+    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+        return undefined;
+    }
+
+    var dataGrid = $(gridId).dxDataGrid("instance");
+    var rowsData = dataGrid.getDataSource().items();
+
+    var sourceIds = [];    
+    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
+        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+
+        var rowData = rowsData[selectedRow.rowIndex];
+        
+        if (rowData[ComplianceColumnNames.SourceId] !== "" && rowData[ComplianceColumnNames.SourceId] !== null) {
+            sourceIds.push(Number(rowData[ComplianceColumnNames.SourceId]));
+        }      
+    }
+
+    var result = {};
+    result[model.selectedCompliance.id] = sourceIds;
+    return result;
+}
+
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
     // this.detailedReviewRowComments = reviewManager.detailedReviewRowComments;
@@ -379,13 +410,10 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
 ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer) {
     var _this = this;
-
-    // clear previous grid
-    // this.Destroy();
+  
     $(function () {
         $(viewerContainer).dxDataGrid({
-            dataSource: tableData,
-            // keyExpr: ComparisonColumnNames.ResultId,
+            dataSource: tableData,           
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: false,

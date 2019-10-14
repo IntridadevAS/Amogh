@@ -7,8 +7,10 @@ const ComparisonColumns = {
     Status: 3,
     SourceANodeId: 4,
     SourceBNodeId: 5,
-    ResultId: 6,
-    GroupId: 7
+    SourceAId: 6,
+    SourceBId: 7,
+    ResultId: 8,
+    GroupId: 9
 }
 
 // column names
@@ -19,6 +21,8 @@ const ComparisonColumnNames = {
     Status: "Status",
     SourceANodeId: "SourceANodeId",
     SourceBNodeId: "SourceBNodeId",
+    SourceAId: "SourceAId",
+    SourceBId: "SourceBId",
     ResultId: "ID",
     GroupId: "groupId"
 }
@@ -51,8 +55,9 @@ const ComplianceColumns = {
     SourceName: 1,
     Status: 2,
     NodeId: 3,
-    ResultId: 4,
-    GroupId: 5
+    SourceId: 4,
+    ResultId: 5,
+    GroupId: 6
 
     // // Select: 0,
     // SourceName: 0,
@@ -68,6 +73,7 @@ const ComplianceColumnNames = {
     SourceName: "SourceA",
     Status: "Status",
     NodeId: "NodeId",
+    SourceId : "SourceId",
     ResultId: "ID",
     GroupId: "groupId"
 }

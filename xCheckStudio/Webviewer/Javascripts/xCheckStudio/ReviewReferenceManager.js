@@ -40,7 +40,7 @@ let ReferenceManager = {
             // get selected component ids
             var componentIds = ReferenceManager.componentIds[src];
             if (componentIds.length === 0) {
-                return;
+                continue;
             }
 
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));

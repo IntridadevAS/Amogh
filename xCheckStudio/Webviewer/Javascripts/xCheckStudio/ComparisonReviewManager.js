@@ -431,6 +431,8 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (button) {
                             "Status": component.status,
                             "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
                             "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
+                            "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
+                            "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
                             "ID": row.cells[ComparisonColumns.ResultId].innerText,
                             "groupId": row.cells[ComparisonColumns.GroupId].innerText
                         };
@@ -622,6 +624,8 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (button) {
                         "Status": component.status,
                         "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
                         "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
+                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
+                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
                         "ID": row.cells[ComparisonColumns.ResultId].innerText,
                         "groupId": row.cells[ComparisonColumns.GroupId].innerText
                     };
@@ -987,6 +991,8 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (button) {
                         "Status": component.status,
                         "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
                         "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
+                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
+                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
                         "ID": row.cells[ComparisonColumns.ResultId].innerText,
                         "groupId": row.cells[ComparisonColumns.GroupId].innerText
                     };
@@ -1060,6 +1066,8 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, button) {
                         "Status": component.status,
                         "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
                         "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
+                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
+                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
                         "ID": row.cells[ComparisonColumns.ResultId].innerText,
                         "groupId": row.cells[ComparisonColumns.GroupId].innerText
                     };
