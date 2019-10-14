@@ -245,15 +245,15 @@
         </div>
       </div>
 
-      <a href="#" id="checkmodule" onclick="OnCheckClick()">
-        <img src="public/symbols/Check_Module_Icon.svg" class="module check" />
-      </a>
-      <a href="#" id="reviewmodule" onclick="OnReviewClicked()">
-        <img src="public/symbols/Review_Module_Icon.svg" class="module review" />
-      </a>
-      <a href="prephomepage.html" id="prepmodule">
-        <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" />
-      </a>
+      <div id="checkmodule">
+        <img src="public/symbols/Check_Module_Icon.svg" class="module check" onclick="OnCheckClick()"/>
+      </div>
+      <div id="reviewmodule">
+        <img src="public/symbols/Review_Module_Icon.svg" class="module review" onclick="OnReviewClicked()"/>
+      </div>
+      <div id="prepmodule">
+        <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" onclick="OnPrepClick()"/>
+      </div>
     </div>
   </div>
   <script>
@@ -270,6 +270,9 @@
       document.getElementById("userName").innerHTML = userinfo.alias;
     }
 
+    function OnPrepClick() {
+      window.location = "prephomepage.html";
+    }
     function OnCheckClick() {
       // set local storage variable to know where did it come from to
       // createProject.html i.e. Check tile click or Review tile click

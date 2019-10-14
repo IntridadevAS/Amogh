@@ -30,6 +30,7 @@
   font-family: inherit;
   text-decoration: none;
   padding: 12px;
+  user-select: none;
 }
 
 
@@ -37,16 +38,19 @@
 .check {
   border-color: var(--xCheckOrange);
   background-size: contain;
+  cursor: pointer;
 }
 
 .review {
   border-color: var(--xCheckRed);
   background-size: contain;
+  cursor: pointer;
 }
 
 .prep {
   border-color: var(--intridaBlue);
   background-size: contain;
+  cursor: pointer;
 }
 
 .disabled {
