@@ -89,7 +89,8 @@ header {
   display: flex;
   align-items: center;
   z-index: 2;
-  /* -webkit-app-region: drag; */
+  -webkit-app-region: drag;
+  user-select: none;
 }
 
 button {
@@ -102,7 +103,7 @@ button {
   background: none;
   border: none;
   padding: 0;
-  /* -webkit-app-region: no-drag; */
+  -webkit-app-region: no-drag;
 }
 
 .btnSymbol {
@@ -112,6 +113,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-app-region: no-drag;
 }
 
 .btnSymbol:hover {
@@ -131,6 +133,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-app-region: no-drag;
 }
 
 .menu {
@@ -151,6 +154,7 @@ button {
   flex-direction: column;
   z-index: 2;
   transition: top 2s, height 2s;
+  -webkit-app-region: no-drag;
 }
 
 .menu a {
@@ -159,6 +163,7 @@ button {
   text-decoration: none;
   color: inherit;
   z-index: 3;
+  -webkit-app-region: no-drag;
 }
 
 .menu a:hover {
@@ -174,6 +179,7 @@ button {
   padding-top: 50px;
   display: flex;
   height: auto;
+  -webkit-app-region: no-drag;
 }
 
 .homeLink {
@@ -184,6 +190,7 @@ button {
   margin-top: 1px;
   border-radius: 50%;
   z-index: 2;
+  -webkit-app-region: no-drag;
 }
 
 .userInfo {
@@ -193,12 +200,14 @@ button {
   justify-items: center;
   align-items: center;
   z-index: 2;
+  -webkit-app-region: no-drag;
 }
 
 .userName {
   margin-top: 0;
   margin-bottom: 0;
   color: var(--xCheckWhite);
+  -webkit-app-region: no-drag;
 }
 
 #userImg {
@@ -208,6 +217,7 @@ button {
   border: 1px var(--xCheckWhite);
   color: var(--xCheckWhite);
   margin-left: 5px;
+  -webkit-app-region: no-drag;
 }
 
 .searchForm {
@@ -219,6 +229,7 @@ button {
   display: flex;
   align-items: center;
   padding-left: 5px;
+  -webkit-app-region: no-drag ;
 }
 
 .searchBox {
@@ -226,26 +237,30 @@ button {
   border-style: none;
   font-family: inherit;
   margin-left: 5px;
+  -webkit-app-region: no-drag;
 }
 
 .searchBox::placeholder {
   color: var(--xCheckWhite);
   color: var(--xCheckWhite);
   font-family: inherit;
+  -webkit-app-region: no-drag;
 }
 
 .programCntrls {
   display: flex;
+  -webkit-app-region: no-drag;
 }
 
 .programCntrls{
   padding-right: 10px;
+  -webkit-app-region: no-drag;
 }
 
 .programCntrls button {
   background: none;
   border: none;
-
+  -webkit-app-region: no-drag;
 }
 /* End header css */
 /*Page content container  */
@@ -254,6 +269,7 @@ button {
   box-sizing: border-box;
   color: var(--xCheckWhite);
   padding-top: 50px;
+  -webkit-app-region: no-drag;
 }
 
 /* End page content container */
@@ -335,10 +351,10 @@ input:checked + .slider:before {
   background: #FFBB99;
   display: none;
   cursor: pointer;
-  /* left: 50%; */
+  left: 50%;
   margin-left: -5px;
   max-width: 40px;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   text-align: center;
   top: 15px;
