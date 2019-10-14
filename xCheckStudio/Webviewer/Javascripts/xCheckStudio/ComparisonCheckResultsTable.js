@@ -6,22 +6,72 @@ function ComparisonCheckResultsTable(mainReviewTableContainer) {
     this.CheckTableIds = {};
 }
 
-ComparisonCheckResultsTable.prototype.CreateCheckGroupButton = function (groupId, componentClass) {
+ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
+    var parentTable = document.getElementById(this.MainReviewTableContainer);
 
-    // var btn = document.createElement("BUTTON");
-    // var att = document.createAttribute("groupId");
-    // att.value = groupId;
-    // btn.setAttributeNode(att);       // Create a <button> element
-    // btn.className = "collapsible";
-    // var t = document.createTextNode(componentClass);       // Create a text node
-    // btn.appendChild(t);
+    var _this = this;
+    var data = this.CreateAccordionData();
+    for(var i = 0; i < data.length; i++) {
+        var div = document.createElement("DIV");
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+        div.id = data[i]["template"];
+        var datagridDiv = document.createElement("DIV");
+        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer
+        div.append(datagridDiv);
+        parentTable.append(div);
+    }
 
-    var btn = document.createElement("BUTTON");
-    btn.className = "accordion";
-    btn.style.justifyContent = "center";
-    var t = document.createTextNode(componentClass);       // Create a text node
-    btn.appendChild(t);
-    return btn;
+    $("#"+ this.MainReviewTableContainer).dxAccordion({
+        collapsible: true,
+        dataSource: data,
+        deferRendering: false,
+        selectedIndex: -1,
+        onSelectionChanged: function(e) {
+            if(e.addedItems.length > 0)
+                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer
+        }
+    });
+}
+
+ComparisonCheckResultsTable.prototype.CreateAccordionData = function() {
+    var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
+    var checkGroups = ComparisonTableData["results"];
+
+    var data = [];
+    var undefinedGroupId;
+    for (var groupId in checkGroups) {
+        var dataObject = {};
+        if (!checkGroups.hasOwnProperty(groupId)) {
+            continue;
+        }
+
+        // get check group
+        var componentsGroup = checkGroups[groupId];
+        if (componentsGroup.components.length === 0) {
+            continue;
+        }
+
+        // undefined group should be last in table
+        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+            undefinedGroupId = groupId;
+            continue;
+        }
+
+        dataObject["template"] = componentsGroup.componentClass;
+        dataObject["title"] = componentsGroup.componentClass;
+
+        data.push(dataObject);
+    }
+
+    if(undefinedGroupId) {
+        var dataObject = {};
+        var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        dataObject["template"] = componentsGroup.componentClass;
+        dataObject["title"] = componentsGroup.componentClass;
+
+        data.push(dataObject);
+    }
+    return data;
 }
 
 ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources) {
@@ -132,18 +182,16 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 }
 
 ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var mainReviewTableContainer = document.getElementById(containerId);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
+    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var mainReviewTableRows = dataGrid.getVisibleRows();
 
-    for (var i = 2; i < mainReviewTableRows.length; i++) {
-        var currentRow = mainReviewTableRows[i];
-        if (currentRow.cells.length < 3) {
+    for (var i = 0; i < mainReviewTableRows.length; i++) {
+        var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
+        if (currentRow[0].cells.length < 3) {
             return;
         }
-        var status = currentRow.cells[ComparisonColumns.Status].innerText;
-        model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow, status);
+        var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComparisonColumns.Status)
+        model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
     }
 }
 
@@ -156,6 +204,10 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
         return;
     }
 
+    // 
+    var data = [];
+
+    this.CreateAccordion();
     var checkGroups = ComparisonTableData["results"];
     var undefinedGroupId;
     for (var groupId in checkGroups) {
@@ -187,26 +239,16 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
 }
 
 ComparisonCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
-    var parentTable = document.getElementById(this.MainReviewTableContainer);
+
     var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
 
-    // create check group button
-    var btn = this.CreateCheckGroupButton(groupId, componentsGroup.componentClass);
-    parentTable.appendChild(btn);
-
-    var div = document.createElement("DIV");
-    div.className = "content scrollable";
-    div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    div.style.display = "none";
-    parentTable.appendChild(div);
-
-    // create column headers
+   // create column headers
     var columnHeaders = this.CreateMainTableHeaders(ComparisonTableData.sources);
 
     // create table data
     var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);
 
-    var id = "#" + div.id;
+    var id = "#" + componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
 
     // Create table for category results
     this.LoadReviewTableData(columnHeaders, tableData, id);
@@ -606,16 +648,17 @@ ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
     if (detailedReviewTableContainer.children.length === 0) {
         return;
     }
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var detailedReviewTableRows = detailedReviewTableContainer.children[0].getElementsByTagName("tr");
+    
+    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+
+    var detailedReviewTableRows = dataGrid.getVisibleRows();
 
     // skip header and filter textbox, hence i = 3
-    for (var i = 3; i < detailedReviewTableRows.length; i++) {
-        var currentRow = detailedReviewTableRows[i];
-        if (currentRow.cells.length > 1) {
-            var status = currentRow.cells[ComparisonPropertyColumns.Status].innerHTML;
-            model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow, status);
+    for (var i = 0; i < detailedReviewTableRows.length; i++) {
+        var currentRow = dataGrid.getRowElement(detailedReviewTableRows[i].rowIndex);
+        if (currentRow[0].cells.length > 1) {
+            var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
+            model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
         }
     }
 }
