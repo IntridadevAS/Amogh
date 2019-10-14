@@ -586,7 +586,7 @@ let projectView = {
       if (selected === null)
         return;
       if (selected.classList.contains('newProjectCard')) {
-        newProjectView.init();
+        newProjectView.init("Private");
       } else if (event.target.closest('.projectButtons')) {
       } else {
         controller.setMyCurrentProj(selected.id);
@@ -599,7 +599,7 @@ let projectView = {
       if (selected === null)
         return;
       if (selected.classList.contains('newProjectCard')) {
-        newProjectView.init();
+        newProjectView.init("Public");
       } else if (event.target.closest('.projectButtons')) {
       } else {
         controller.setPublicCurrentProj(selected.id);
@@ -903,10 +903,12 @@ let checkView = {
 }
 
 let newProjectView = {
-  init: function () {
+  init: function (type) {
     this.newProjectOverlay = document.getElementById("newProject");
     onToggleOverlayDisplay(true);
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
+    let projectType = document.getElementById("inputprojecttype");
+    projectType.value = type;
   },
   closeNewProject: function () {
     onToggleOverlayDisplay(false);
