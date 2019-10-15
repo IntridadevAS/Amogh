@@ -346,7 +346,26 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
         $(id).remove()
     }
 
+
+    //Destroy accordion
+    $("#" + this.MainReviewTableContainer).dxAccordion("dispose");
+
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
+}
+
+ComparisonCheckResultsTable.prototype.GetAccordionIndex = function(groupName) {
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var accordionItems = accordion.getDataSource().items();
+    var index;
+    for(var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName)) {
+            continue;
+        }
+        else {
+            return i;
+        }
+    }
+    return index;
 }
 
 ComparisonCheckResultsTable.prototype.HighlightHiddenRows = function(isHide, checkComponentsRows) {

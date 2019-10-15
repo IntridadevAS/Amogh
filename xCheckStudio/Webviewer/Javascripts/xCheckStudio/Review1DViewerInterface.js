@@ -329,12 +329,11 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
 
             var checkTableId = categoryTable.id;
             // open collapsible area
-            if (categoryTable.style.display != "block") {
-                categoryTable.style.display = "block";
+            var accordionIndex = model.checks[model.currentCheck]["reviewTable"].GetAccordionIndex(checkcComponentData.MainClass)
+            if(accordionIndex >= 0) {
+                accordion.expandItem(Number(accordionIndex));
             }
-
-            model.checks[model.currentCheck]["reviewTable"].CurrentTableId = categoryTable.id;
-
+           
             var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
             var rows = checkDataGrid.getVisibleRows();
 
