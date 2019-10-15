@@ -566,7 +566,7 @@
     ::-webkit-scrollbar {
       width: 6px;
     }
-
+    
     .content {
       padding: 0 18px;
       display: none;
@@ -624,9 +624,15 @@
       background: #D3D3D3 !important;
     }
 
-    .dx-accordion-item.dx-state-hover > .dx-accordion-item-title {
-      background-color: black !important;
+    /* To change the mouse hover color for accordion */
+    .dx-accordion-item.dx-state-hover .dx-accordion-item-title {
+      background-color: #D3D3D3 !important;
     }
+
+    .dx-accordion-item-opened.dx-state-hover > .dx-accordion-item-title {
+      background-color: transparent !important;
+    }
+
     .dx-accordion-item.dx-state-hover:not(:last-child):not(.dx-accordion-item-opened):not(.dx-state-focused) {
       border-bottom-color: white !important;
     }
