@@ -4,15 +4,88 @@ function ComplianceCheckResultsTable(mainReviewTableContainer) {
     this.CheckTableIds = {};
 }
 
-ComplianceCheckResultsTable.prototype.CreateCheckGroupButton = function (componentClass) {
+ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
+    var parentTable = document.getElementById(this.MainReviewTableContainer);
 
-    var btn = document.createElement("BUTTON");
-    btn.className = "accordion";
-    btn.style.justifyContent = "center";
-    var t = document.createTextNode(componentClass);       // Create a text node
-    btn.appendChild(t);
+    var _this = this;
+    var data = this.CreateAccordionData();
+    for(var i = 0; i < data.length; i++) {
+        var div = document.createElement("DIV");
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+        div.id = data[i]["template"];
+        var datagridDiv = document.createElement("DIV");
+        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+        div.append(datagridDiv);
+        parentTable.append(div);
+    }
 
-    return btn;
+    $("#"+ this.MainReviewTableContainer).dxAccordion({
+        collapsible: true,
+        dataSource: data,
+        deferRendering: false,
+        selectedIndex: -1,
+        onSelectionChanged: function(e) {
+            if(e.addedItems.length > 0) {
+                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+            }
+        }
+    });
+}
+
+ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
+    var ComplianceTableData = model.checks["compliance"]["reviewManager"].ComplianceCheckManager;
+    var checkGroups = ComplianceTableData["results"];
+
+    var data = [];
+    var undefinedGroupId;
+    for (var groupId in checkGroups) {
+        var dataObject = {};
+        if (!checkGroups.hasOwnProperty(groupId)) {
+            continue;
+        }
+
+        // get check group
+        var componentsGroup = checkGroups[groupId];
+        if (componentsGroup.components.length === 0) {
+            continue;
+        }
+
+        // undefined group should be last in table
+        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+            undefinedGroupId = groupId;
+            continue;
+        }
+
+        dataObject["template"] = componentsGroup.componentClass;
+        dataObject["title"] = componentsGroup.componentClass;
+
+        data.push(dataObject);
+    }
+
+    if(undefinedGroupId) {
+        var dataObject = {};
+        var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        dataObject["template"] = componentsGroup.componentClass;
+        dataObject["title"] = componentsGroup.componentClass;
+
+        data.push(dataObject);
+    }
+    return data;
+}
+
+ComplianceCheckResultsTable.prototype.GetAccordionIndex = function(groupName) {
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var accordionItems = accordion.getDataSource().items();
+    var index;
+    for(var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName)) {
+            continue;
+        }
+        else {
+            return i;
+        }
+    }
+    return index;
 }
 
 ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponents,
@@ -114,6 +187,8 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
     if (!("results" in ComplianceData)) {
         return;
     }
+
+    this.CreateAccordion();
     var checkGroups = ComplianceData["results"];
     var undefinedGroupId;
     for (var groupId in checkGroups) {
@@ -141,43 +216,30 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
 }
 
 ComplianceCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
-    var parentTable = document.getElementById(this.MainReviewTableContainer);
     var ComplianceData = model.getCurrentReviewManager().ComplianceCheckManager;
-
-    var btn = this.CreateCheckGroupButton(componentsGroup.componentClass);
-    parentTable.appendChild(btn);
-
-    var div = document.createElement("DIV");
-    div.className = "content scrollable";
-    div.id = componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    div.style.display = "none";
-    parentTable.appendChild(div);
 
     var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
 
     var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
 
-    var id = "#" + div.id;
+    var id = "#" + componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
     this.LoadReviewTableData(columnHeaders, tableData, id);
-    // this.highlightMainReviewTableFromCheckStatus(div.id);
 
     // maintain table ids
     this.CheckTableIds[groupId] = id;
 }
 
 ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var mainReviewTableContainer = document.getElementById(containerId);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
+    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var mainReviewTableRows = dataGrid.getVisibleRows();
 
-    for (var i = 2; i < mainReviewTableRows.length; i++) {
-        var currentRow = mainReviewTableRows[i];
-        if (currentRow.cells.length === 1) {
+    for (var i = 0; i < mainReviewTableRows.length; i++) {
+        var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
+        if (currentRow[0].cells.length < 3) {
             return;
         }
-        var status = currentRow.cells[ComplianceColumns.Status].innerHTML;
-        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
+        var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComplianceColumns.Status)
+        model.checks["compliance"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
     }
 }
 
@@ -262,6 +324,10 @@ ComplianceCheckResultsTable.prototype.Destroy = function () {
         
         $(id).remove()
     }
+
+    // destroy accordion
+
+    $("#" + this.MainReviewTableContainer).dxAccordion("dispose");
 
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
 }

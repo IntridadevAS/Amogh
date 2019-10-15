@@ -411,10 +411,11 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
             continue;
         }
         else {
-            var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
             var dataGrid =  $(checkTableIds[groupId]).dxDataGrid("instance");
             var rows = dataGrid.getVisibleRows();
+
+            var accordion = $(mainReviewTableContainer).dxAccordion("instance");
 
             for(var i = 0; i < rows.length; i++) {
                 if(rows[i].rowType == "data") {
@@ -425,13 +426,14 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                     checkComponentId = rowData.ID;
                     if (checkComponentId == checkcComponentData["Id"]) {
 
+
                         // open collapsible area
-                        if (categoryTable.style.display != "block") {
-                            categoryTable.style.display = "block";
+                        var accordionIndex = model.checks[model.currentCheck]["reviewTable"].GetAccordionIndex(checkcComponentData.MainClass)
+                        if(accordionIndex >= 0) {
+                            accordion.expandItem(Number(accordionIndex));
                         }
 
-                        model.checks[model.currentCheck]["reviewTable"].CurrentTableId = categoryTable.id;
-    
+                          
                         if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
                             model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
                         }
@@ -442,7 +444,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                         model.getCurrentSelectionManager().HighlightedCheckComponentRow = row[0];
     
                         // scroll to table
-                        mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
+                        // mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
     
                         //break;
                         return row[0];
