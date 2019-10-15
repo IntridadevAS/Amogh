@@ -52,14 +52,21 @@
 						</svg> -->
 			<form id="uploadFileForm" method="post" action="" enctype="multipart/form-data">
 				<div id="referenceFileInput" style="background-color: white; border: 1px solid #ddd;
-						border-radius: 4px;">
+						border-radius: 4px;">				
 				</div>
 			</form>
 			
+			<div id="selectedFileArea" style="position:absolute; top:0px; left: 4px;">
+				<div>
+					<h4>Selected File</h4>
+				</div>
+				<div id="selectedFile"></div>
 			</div>
-		<div id="loadFileButton" onclick="onLoadFile()">
+
+			</div>
+		<div id="loadFileButton" style="background-color: dimgray;" onclick="onLoadFile()">
 			<svg class="Rectangle_1242_A86_Rectangle_4">
-				<rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+				<rect id="loadFileButtonRect" fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
 					stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto"
 					id="Rectangle_1242_A86_Rectangle_4" rx="5" ry="5" x="0" y="0" width="128" height="30">
 				</rect>

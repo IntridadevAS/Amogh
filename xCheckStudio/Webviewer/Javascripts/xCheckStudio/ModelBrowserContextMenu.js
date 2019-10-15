@@ -112,8 +112,12 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
 ModelBrowserContextMenu.prototype.OnReferenceClicked = function () {
       
       // var referenceManager = new ReferenceManager();
-      // referenceManager.ShowReferenceDiv();      
-      ReferenceManager.showReferenceDiv();
+      // referenceManager.ShowReferenceDiv();
+      var title = "";
+      if (model.currentTabId in model.views) {
+            title = model.views[model.currentTabId].fileName;
+      }
+      ReferenceManager.showReferenceDiv(title);
 }
 
 ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {

@@ -1679,10 +1679,40 @@ window.onload = function () {
 		width: "551px",
 		height: "75px",
 		value: [],
-		uploadMode: "useForm",		
+		uploadMode: "useForm",
 		labelText: "",
 		showFileList: true,
-		onValueChanged: function (e) {			
+		_allowDrop: false, // fake option to disable drag and drop
+		onInitialized: function (e) {
+			var baseCall = e.component._dropHandler;
+			e.component._dropHandler = function (args) {
+				if (this.option('_allowDrop') == false) {
+					return;
+				}
+
+				baseCall.apply(this, arguments);
+			}
+		},
+
+		onValueChanged: function (e) {
+			var files = e.value;
+
+			var selectedFiles = document.getElementById("selectedFile");
+			selectedFiles.innerHTML = "";
+			for (var i = 0; i < files.length; i++) {
+				var file = files[0];
+				var nameSpan = document.createElement("span");
+				nameSpan.innerHTML = "Name: " + file.name;
+				selectedFiles.appendChild(nameSpan);
+
+				selectedFiles.appendChild(document.createElement("br"));
+
+				var sizeSpan = document.createElement("span");
+				sizeSpan.innerHTML = "Size: " + file.size + " bytes";
+				selectedFiles.appendChild(sizeSpan);
+
+				selectedFiles.appendChild(document.createElement("br"));
+			}
 		}
 	});
 }
@@ -1691,22 +1721,10 @@ function activateTextInput() {
 	document.getElementById("referenceInput").style.display = "block";
 	var referenceInput = $('#referenceInput').dxTextArea('instance');
 	referenceInput.reset();
-	deActivateFileInput();
-}
-
-function activateFileInput() {
-	document.getElementById("referenceFileInput").style.display = "block";
-	var fileUploader = $('#referenceFileInput').dxFileUploader('instance');
-	fileUploader.reset();
-	deActivateTextInput();
 }
 
 function deActivateTextInput() {
 	document.getElementById("referenceInput").style.display = "none";
-}
-
-function deActivateFileInput() {
-	document.getElementById("referenceFileInput").style.display = "none";
 }
 
 function onLoad() {
@@ -1715,10 +1733,15 @@ function onLoad() {
 
 		if (referenceType.toLowerCase() === "webaddress") {
 			activateTextInput();
+
+			disableFileInput();
 		}
 		else if (referenceType.toLowerCase() === "document" ||
 			referenceType.toLowerCase() === "image") {
-			activateFileInput();
+
+			deActivateTextInput();
+
+			enableFileInput();
 		}
 		else if (referenceType.toLowerCase() === "itemlink") {
 
@@ -1730,4 +1753,35 @@ function onLoadFile() {
 	var fileUploader = $('#referenceFileInput').dxFileUploader('instance');
 	fileUploader._isCustomClickEvent = true;
 	fileUploader._$fileInput.click();
+}
+
+function disableFileInput() {
+	var button = document.getElementById('loadFileButton');
+	button.removeAttribute('onclick');
+	document.getElementById('Load_File').style.color = "gray";
+
+	var referenceFileInput = $("#referenceFileInput").dxFileUploader("instance");
+	referenceFileInput.option("_allowDrop", false);
+
+	document.getElementById("referenceFileInput").style.display = "none";
+
+	// show selected files
+	document.getElementById("selectedFileArea").style.display = "none";
+	document.getElementById("selectedFile").innerHTML = "";
+}
+
+function enableFileInput() {
+	var button = document.getElementById('loadFileButton');
+	button.setAttribute('onclick', "onLoadFile()");
+	document.getElementById('Load_File').style.color = "rgba(242,243,244,1)";
+
+	var referenceFileInput = $("#referenceFileInput").dxFileUploader("instance");
+	referenceFileInput.option("_allowDrop", true);
+	referenceFileInput.reset();
+
+	document.getElementById("referenceFileInput").style.display = "block";
+
+	// show selected files
+	document.getElementById("selectedFileArea").style.display = "block";
+	document.getElementById("selectedFile").innerHTML = "";
 }
