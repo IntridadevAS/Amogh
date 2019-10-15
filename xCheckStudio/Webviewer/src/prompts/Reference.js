@@ -25,9 +25,23 @@ function onDeleteReference() {
 window.onload = function () {
     $("#commentInput").dxTextArea({
         onChange: function (e) {
-            localStorage.setItem("referenceType", "comment");
-            window.parent.addReference(e.component.option('value'));
-            e.component.reset();
+            // localStorage.setItem("referenceType", "comment");
+            // window.parent.addReference(e.component.option('value'));
+            // e.component.reset();
         }
     });
+
+
+    document.getElementById("addComment").onclick = function () {
+        localStorage.setItem("referenceType", "comment");
+        var commentInput =  $('#commentInput').dxTextArea('instance');
+        var value = commentInput.option('value');
+        if(!value || value === "")
+        {
+            return;
+        }
+
+        window.parent.addReference(value);
+        commentInput.reset();
+    }
 }

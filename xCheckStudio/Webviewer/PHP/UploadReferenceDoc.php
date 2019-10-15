@@ -34,10 +34,17 @@
     $target_file = $target_dir."/".basename($_FILES["file"]["name"]);
 
     // Check if file already exists
-    if (file_exists($target_file)) 
+    if (!file_exists($target_file)) 
     {
-        echo $currentSource."_referenceData"."/".basename($target_file);;
-        return;        
+        move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
+        // echo $currentSource."_referenceData"."/".basename($target_file);;
+        // return;        
+    } 
+
+    if (!file_exists($target_file)) 
+    {
+        echo "fail";
+        return;
     }
 
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) 
