@@ -165,9 +165,6 @@ function populateCheckResults(comparisonCheckGroups,
                     sourceBComplianceHierarchy);
             }
 
-            // make buttons collapsible
-            setButtonsCollapsible();
-
             if (comparisonCheckGroups) {
                 openCheckResultTab('ComparisonTabPage');
             }

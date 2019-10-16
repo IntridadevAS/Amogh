@@ -102,19 +102,6 @@ ComplianceReviewManager.prototype.unhighlightSelectedSheetRow = function (checkS
     }
 }
 
-ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, componentClass) {
-
-    var btn = document.createElement("BUTTON");
-    var att = document.createAttribute("groupId");
-    att.value = groupId;
-    btn.setAttributeNode(att);       // Create a <button> element
-    btn.className = "collapsible";
-    var t = document.createTextNode(componentClass);       // Create a text node
-    btn.appendChild(t);
-
-    return btn;
-}
-
 ComplianceReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
     var mainReviewTableContainer = document.getElementById(containerId);
     // jsGridHeaderTableIndex = 0 
@@ -190,7 +177,7 @@ ComplianceReviewManager.prototype.AcceptComponent = function (selectedRow, table
                     if (property.severity !== "OK")
                         property.severity = 'ACCEPTED';
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], 
                                                    tableContainer, 
                                                    checkResultComponent.status, 
                                                    true);
@@ -249,7 +236,7 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
                     if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
                         property["severity"] = "ACCEPTED";
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
                         // selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = "ACCEPTED";
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], "ACCEPTED");
                         break;
@@ -257,7 +244,7 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
 
                 }
 
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                     tableContainer, 
                     changedStatus, 
                     false);
@@ -446,7 +433,7 @@ ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow,
                     index++;
                 }               
                 
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], 
                     tableContainer, 
                     checkResultComponent.status, 
                     true);
@@ -506,13 +493,13 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
                     if (name == selectedRow[0].cells[CompliancePropertyColumns.PropertyName].innerText) {
                         property["severity"] = status[1];
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property);
                         // selectedRow[0].cells[CompliancePropertyColumns.Status].innerHTML = status[1];
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                 }
                
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer, 
                 changedStatus, 
                 false);

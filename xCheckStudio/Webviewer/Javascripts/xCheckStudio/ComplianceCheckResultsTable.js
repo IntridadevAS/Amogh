@@ -26,10 +26,27 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         selectedIndex: -1,
         onSelectionChanged: function(e) {
             if(e.addedItems.length > 0) {
-                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+                model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
         }
     });
+}
+
+ComplianceCheckResultsTable.prototype.ExpandAccordionScrollToRow = function(row, groupName) {
+
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var mainReviewTableContainer = document.getElementById(this.MainReviewTableContainer);
+
+    // scroll to table
+    var accordionIndex = this.GetAccordionIndex(groupName)
+    if(accordionIndex >= 0) {
+        accordion.expandItem(Number(accordionIndex)).then( function (result) {
+            mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
+        });
+    }
+    else {
+        mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
+    }
 }
 
 ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
@@ -77,8 +94,10 @@ ComplianceCheckResultsTable.prototype.GetAccordionIndex = function(groupName) {
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var index;
+    var selectedItems = accordion._selection.getSelectedItemKeys();
     for(var i = 0; i < accordionItems.length; i++) {
-        if (!accordionItems[i]["template"].includes(groupName)) {
+        if (!accordionItems[i]["template"].includes(groupName) || 
+        (selectedItems.length > 0 && accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;
         }
         else {
@@ -579,7 +598,7 @@ ComplianceCheckPropertiesTable.prototype.Destroy = function () {
 }
 
 ComplianceCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, property) {
-    var detailInfoContainer =  model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items(); 
     var rowData = data[rowIndex];

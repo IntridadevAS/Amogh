@@ -308,7 +308,7 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     if (!highlightedRow) {
         return;
     }
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
@@ -355,7 +355,7 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
         return;
     }
 
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
@@ -510,7 +510,7 @@ ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
         var containerId = this.ComponentTableContainer.replace("#", "");
          //Remove resultId on show
         viewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, SelectedCheckComponentRows);
+        model.getCurrentReviewTable().HighlightHiddenRows(false, SelectedCheckComponentRows);
     }
 }
 
@@ -534,7 +534,7 @@ ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
         var containerId = this.ComponentTableContainer.replace("#", "");
 
         viewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, SelectedCheckComponentRows);
+        model.getCurrentReviewTable().HighlightHiddenRows(true, SelectedCheckComponentRows);
     }
 }
 
