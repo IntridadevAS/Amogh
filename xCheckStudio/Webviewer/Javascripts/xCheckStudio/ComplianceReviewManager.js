@@ -86,20 +86,17 @@ ComplianceReviewManager.prototype.AddTableContentCount = function (containerId) 
     }
 }
 
-ComplianceReviewManager.prototype.unhighlightSelectedSheetRow = function (checkStatusArray, currentRow) {
-    var rowIndex = currentRow.rowIndex;
-    obj = Object.keys(checkStatusArray)
-    var status = checkStatusArray[obj[0]][rowIndex]
-    if (status !== undefined) {
-        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
-    }
-    else {
-        color = "#fffff"
-        for (var j = 0; j < currentRow.cells.length; j++) {
-            cell = currentRow.cells[j];
-            cell.style.backgroundColor = color;
-        }
-    }
+ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, componentClass) {
+
+    var btn = document.createElement("BUTTON");
+    var att = document.createAttribute("groupId");
+    att.value = groupId;
+    btn.setAttributeNode(att);       // Create a <button> element
+    btn.className = "collapsible";
+    var t = document.createTextNode(componentClass);       // Create a text node
+    btn.appendChild(t);
+
+    return btn;
 }
 
 ComplianceReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
@@ -210,7 +207,12 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                var originalstatus = _this.getStatusFromMainReviewRow(highlightedRow["row"]);
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
@@ -244,9 +246,9 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
 
                 }
 
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                    tableContainer, 
-                    changedStatus, 
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
+                    highlightedRow["tableId"],
+                    changedStatus,
                     false);
 
             }
@@ -452,11 +454,7 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
     var _this = this;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    // var tableToUpdate = tableToUpdate;
-    // var componentId = this.GetComplianceResultId(this.SelectionManager.HighlightedCheckComponentRow);
-    // var groupId = this.GetComplianceResultGroupId(this.SelectionManager.HighlightedCheckComponentRow);
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));    
 
     try {
         $.ajax({
@@ -498,11 +496,16 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
                 }
-               
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer, 
-                changedStatus, 
-                false);
+
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
+                    highlightedRow["tableId"],
+                    changedStatus,
+                    false);
             }
         });
     }
@@ -582,11 +585,7 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (button, tableToUp
     }
 }
 
-ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {
-    // if (!this.SelectionManager.MaintainHighlightedRow(currentReviewTableRow)) {
-    //     return;
-    // }
-
+ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {    
     // highlight component in graphics view in both viewer
     var nodeId = currentReviewTableRowData.NodeId;
     model.checks["compliance"]["viewer"].highlightComponent(nodeId);

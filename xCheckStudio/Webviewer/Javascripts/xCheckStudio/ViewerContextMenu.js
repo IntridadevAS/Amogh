@@ -190,17 +190,15 @@ ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
 }
 
 ViewerContextMenu.prototype.HideInReview = function() {
-    var checkComponentRows = [];
-        var row = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
-        checkComponentRows.push(row);
-
-        var containerId = model.getCurrentReviewTable().CurrentTableId;
+        var checkComponentRows = [];
+        var row = model.getCurrentSelectionManager().GetHighlightedRow;
+        checkComponentRows.push(row["row"]);       
 
         // get viewerInterface on which "hide" is called
         var viewerInterface = this.GetViewerInterface();
 
-        viewerInterface.StoreHiddenResultId(containerId, checkComponentRows);
-        model.getCurrentReviewTable().HighlightHiddenRows(true, checkComponentRows);
+        viewerInterface.StoreHiddenResultId(row["tableId"], checkComponentRows);
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
 }
 
 ViewerContextMenu.prototype.GetViewerInterface = function() {

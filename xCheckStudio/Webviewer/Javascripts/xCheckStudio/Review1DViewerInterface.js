@@ -348,10 +348,10 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
                 }
 
                 if (componentName === name) {
-
                     //Expand Accordion and Scroll to Row
                     model.getCurrentReviewTable().ExpandAccordionScrollToRow(row, componentsGroupName);
-                    return row;
+                    
+                    return { "row": row, "tableId": "#" + checkTableId };
                 }
             }
         }
@@ -362,34 +362,28 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
 Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (sheetDataRow,
     viewerContainer) {
 
-    var reviewTableRow = this.GetCheckComponentRow(sheetDataRow, viewerContainer);
-    if (!reviewTableRow) {
+    var reviewTableRowData = this.GetCheckComponentRow(sheetDataRow, viewerContainer);
+    if (!reviewTableRowData) {
         return;
     }
-
-    var reviewManager = model.getCurrentReviewManager();
-
-    // component group id which is container div for check components table of given row
-    // var containerDiv = reviewManager.GetReviewTableId(reviewTableRow);
-    var containerDiv = model.getCurrentReviewTable().CurrentTableId;
+    var reviewTableRow = reviewTableRowData["row"];
+    var containerDiv = reviewTableRowData["tableId"];         
 
     var rowData;
     if (this.IsComparison) {
-        rowData = this.GetComparisonCheckComponentData(reviewTableRow);
+        rowData = this.GetComparisonCheckComponentData(reviewTableRow, containerDiv);
     }
     else {
-        rowData = this.GetComplianceCheckComponentData(reviewTableRow);
+        rowData = this.GetComplianceCheckComponentData(reviewTableRow, containerDiv);
     }
 
-    // reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
     this.HighlightMatchedComponent(containerDiv, rowData)
     model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);
     
-    model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow);
+    model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow, containerDiv);
 
-    var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
-
-    // var rowElement = dataGrid.getRowElement(reviewTableRow.rowIndex)
+    var dataGrid = $(containerDiv).dxDataGrid("instance");
+ 
     // scroll to rowElement
     dataGrid.getScrollable().scrollTo({top: reviewTableRow.offsetTop - reviewTableRow.offsetHeight});
 }

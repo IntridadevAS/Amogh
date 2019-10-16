@@ -7,28 +7,30 @@ function ReviewComparisonSelectionManager() {
 ReviewComparisonSelectionManager.prototype = Object.create(ReviewSelectionManager.prototype);
 ReviewComparisonSelectionManager.prototype.constructor = ReviewComparisonSelectionManager;
 
-ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, checkBoxState) {
+ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, tableId, checkBoxState) {
+    
+    
     if (checkBoxState == "on" &&
-        !this.SelectedCheckComponentRows.includes(currentRow)) {
+        !this.ComponentSelected(currentRow.rowIndex, tableId)) {
         // if check component is selected and and selected 
         // component row doesn't exist already
 
         // highlight selected row
-        this.ApplyHighlightColor(currentRow);
+        this.ApplyHighlightColor(currentRow["row"]);
 
         // keep track of selected component row
-        this.SelectedCheckComponentRows.push(currentRow);
+        this.AddSelectedComponent({
+            "row" : currentRow,
+            "rowIndex" : currentRow.rowIndex,
+            "tableId" : tableId});
     }
-    else if (this.SelectedCheckComponentRows.includes(currentRow)) {
+    else if (this.ComponentSelected(currentRow.rowIndex, tableId)) {
 
         // restore color
-        this.RemoveHighlightColor(currentRow);
+        this.RemoveHighlightColor(currentRow["row"]);
 
         // remove current row from selected rows array
-        var index = this.SelectedCheckComponentRows.indexOf(currentRow);
-        if (index !== -1) {
-            this.SelectedCheckComponentRows.splice(index, 1);
-        }
+        this.RemoveSelectedComponent (currentRow.rowIndex, tableId);        
     }
 }
 
@@ -47,18 +49,24 @@ ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row)
     }
 }
 
-ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (currentReviewTableRow) {
-    if (this.HighlightedCheckComponentRow === currentReviewTableRow) {
+ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (currentReviewTableRow, tableId) {
+    var highlightedRow = this.GetHighlightedRow();
+    if (highlightedRow &&
+        highlightedRow["row"] === currentReviewTableRow) {
         return;
     }
 
-    if (this.HighlightedCheckComponentRow &&
-        !this.SelectedCheckComponentRows.includes(this.HighlightedCheckComponentRow)) {
-        this.RemoveHighlightColor(this.HighlightedCheckComponentRow);
+    if (highlightedRow &&
+        !this.ComponentSelected(highlightedRow["rowIndex"], highlightedRow["tableId"])) {
+        this.RemoveHighlightColor(highlightedRow["row"]);
     }
 
-    this.ApplyHighlightColor(currentReviewTableRow);
-    this.HighlightedCheckComponentRow = currentReviewTableRow;
+    this.ApplyHighlightColor(currentReviewTableRow["row"]);
+    this.SetHighlightedRow({
+        "row": currentReviewTableRow,
+        "rowIndex": currentReviewTableRow.rowIndex,
+        "tableId": tableId
+    });   
 }
 
 ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow) {
@@ -83,17 +91,5 @@ ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row
     var color = this.GetRowHighlightColor(status);
     for (var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;
-    }
-}
-
-// After accept, transpose performed, Grid data changes and so as the rows 
-// To keep track of highlighted row after grid update we take new rowKey for the componet 
-// and save highlighted row again
-ReviewComparisonSelectionManager.prototype.UpdateHighlightedCheckComponent = function(dataGridObject) {
-    if(model.getCurrentSelectionManager().HighlightedComponentRowIndex >= 0 && 
-    model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
-        var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
-        model.getCurrentSelectionManager().HighlightedCheckComponentRow = dataGridObject.getRowElement(rowIndex)[0];
-        model.getCurrentSelectionManager().HighlightedComponentRowIndex = undefined;
     }
 }
