@@ -582,6 +582,7 @@ let projectView = {
     });
 
     projects.addEventListener("click", function (event) {
+      onToggleOverlayDisplayForCheckSpaces(true);
       let selected = event.target.closest('.card');
       if (selected === null)
         return;
@@ -595,6 +596,7 @@ let projectView = {
     });
 
     publicProjectsCont.addEventListener("click", function (event) {
+      onToggleOverlayDisplayForCheckSpaces(true);
       let selected = event.target.closest('.card');
       if (selected === null)
         return;
@@ -897,6 +899,7 @@ let checkView = {
   // },
 
   closeCheckSpace: function () {
+    onToggleOverlayDisplayForCheckSpaces(false);
     this.checkSpaceOpen.classList.remove("open");
     controller.clearChecksReviews();
   }
@@ -1215,6 +1218,15 @@ function onToggleOverlayDisplay(show) {
   }
 }
 
+function onToggleOverlayDisplayForCheckSpaces (show) {
+  if (show === true) {
+    scrollContentDivToTop();
+    document.getElementById("content").style.overflowY = "hidden";
+  }
+  else {
+    document.getElementById("content").style.overflowY = "auto";
+  }
+}
 function scrollContentDivToTop() {
   var contentDiv = document.getElementById("content");
   contentDiv.scrollTop = 0;
