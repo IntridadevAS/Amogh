@@ -28,7 +28,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             accept = _this.ChooseActionForComparisonComponent(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
-            _this.HighlightSelectedRowOnRightClick(selectedRow);
+            _this.HighlightSelectedRowOnRightClick(selectedRow, _this.ComponentTableContainer);
             return {
                 callback: function (key, options) {
                     _this.ExecuteContextMenuClicked(key, options, this, "component");
@@ -286,9 +286,8 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent 
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonColumnNames.Status];
     if (selectedRowStatus === "undefined" ||
@@ -303,9 +302,8 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonColumnNames.Status];
     if (selectedRowStatus.includes("OK") &&
@@ -493,20 +491,18 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowCl
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
 
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
         return;
     }
 
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
-
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow["rowIndex"], containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    comparisonReviewManager.AcceptProperty(rowClicked, "#" + componentTableId, componentId, groupId);
+    comparisonReviewManager.AcceptProperty(rowClicked, containerId, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
@@ -527,21 +523,19 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (row
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
         return;
     }
 
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
-
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
     comparisonReviewManager.UnAcceptProperty(rowClicked,
-        "#" + componentTableId,
+        containerId,
         componentId,
         groupId);
 }
@@ -552,15 +546,14 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClic
 
 ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
 
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
         return;
     }
 
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -573,26 +566,26 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
     }
     else if (source.toLowerCase() === "component") {
         comparisonReviewManager.RestoreComponentTranspose(selectedRow,
-            this.ComponentTableContainer,
+            containerId,
             componentId,
             groupId);
     }
     else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.RestorePropertyTranspose(selectedRow, "#" + componentTableId, componentId, groupId);
+        comparisonReviewManager.RestorePropertyTranspose(selectedRow, containerId, componentId, groupId);
     }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
     // if (selectedRow[0].nodeName == "BUTTON") {
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
         return;
     }
 
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var containerId = this.ComponentTableContainer;
+
+    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -600,21 +593,21 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
     if (source.toLowerCase() === "group") {
         comparisonReviewManager.TransposeCategory(key,
             selectedRow[0],
-            this.ComponentTableContainer,
+            containerId,
             componentId,
             groupId);
     }
     else if (source.toLowerCase() === "component") {
         comparisonReviewManager.TransposeComponent(key,
             selectedRow,
-            this.ComponentTableContainer,
+            containerId,
             componentId,
             groupId);
     }
     else if (source.toLowerCase() === "property") {
         comparisonReviewManager.TransposeProperty(key,
             selectedRow,
-            "#" + componentTableId,
+            containerId,
             componentId,
             groupId);
     }
@@ -665,8 +658,8 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         return;
     }
 
-    var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
-    var containerId = this.ComponentTableContainer.replace("#", "");
+    var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
+    
     // source A
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -677,7 +670,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
             sourceAViewerInterface.Viewer.view.fitWorld();
         });
         //Remove resultId on show
-        sourceAViewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
+        sourceAViewerInterface.RemoveHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
     }
 
     // source b
@@ -690,10 +683,15 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         });
 
         //Remove resultId on show
-        sourceBViewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
+        sourceBViewerInterface.RemoveHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
     }
 
-    model.getCurrentReviewTable().HighlightHiddenRows(false, SelectedCheckComponentRows);
+    var rows = [];
+    for (var i = 0; i < SelectedComponentRows.length; i++) {
+        rows.push(SelectedComponentRows[i]["row"]);
+    }
+
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
@@ -702,9 +700,8 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
     if (!nodes) {
         return;
     }
-
-    var containerId = this.ComponentTableContainer.replace("#", "");
-    var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+    
+    var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
     // source A
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -715,7 +712,7 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
             sourceAViewerInterface.Viewer.view.fitWorld();
         });
         //Store resultId of hidden elements
-        sourceAViewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
+        sourceAViewerInterface.StoreHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
     }
 
     // source b
@@ -727,15 +724,19 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
             sourceBViewerInterface.Viewer.view.fitWorld();
         });
         //Store resultId of hidden elements
-        sourceBViewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
+        sourceBViewerInterface.StoreHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
     }
 
-    model.getCurrentReviewTable().HighlightHiddenRows(true, SelectedCheckComponentRows);
+    var rows = [];
+    for (var i = 0; i < SelectedComponentRows.length; i++) {
+        rows.push(SelectedComponentRows[i]["row"]);
+    }
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
 }
 
 ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
-    var selectionManager = model.getCurrentSelectionManager();
-    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+    var selectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+    if (selectedComponents.length === 0) {
         return undefined;
     }
 
@@ -744,18 +745,16 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
 
     var sourceANodeIds = [];
     var sourceBNodeIds = [];
-    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
-        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+    for (var i = 0; i < selectedComponents.length; i++) {
+        var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow.rowIndex];
-        // source A
-        //var sourceANodeIdCell = selectedRow.cells[ComparisonColumns.SourceANodeId];
+        var rowData = rowsData[selectedRow["rowIndex"]];
+        // source A        
         if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
             sourceANodeIds.push(Number(rowData.SourceANodeId));
         }
 
-        // source B
-        //var sourceBNodeIdCell = selectedRow.cells[ComparisonColumns.SourceBNodeId];
+        // source B        
         if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
             sourceBNodeIds.push(Number(rowData.SourceBNodeId));
         }

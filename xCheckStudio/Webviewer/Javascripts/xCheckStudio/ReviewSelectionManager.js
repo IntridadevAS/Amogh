@@ -1,8 +1,7 @@
 function ReviewSelectionManager()
 {
-    this.HighlightedCheckComponentRow;
-    this.SelectedCheckComponentRows = [];
-    this.HighlightedComponentRowIndex;
+    this.HighlightedCheckComponentRow = undefined;
+    this.SelectedCheckComponentRows = {};    
 }
 
 ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
@@ -50,4 +49,82 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
     else {
         return "#ffffff";
     }
+}
+
+// After accept, transpose performed, Grid data changes and so as the rows 
+// To keep track of highlighted row after grid update we take new rowKey for the componet 
+// and save highlighted row again
+ReviewSelectionManager.prototype.UpdateHighlightedCheckComponent = function (dataGridObject) {
+    var highlightedRow = this.GetHighlightedRow();
+
+    if (highlightedRow && highlightedRow["row"].rowIndex === -1) {
+        
+        var rowIndex = highlightedRow["rowIndex"];
+        highlightedRow["row"] = dataGridObject.getRowElement(rowIndex)[0];
+        this.SetHighlightedRow(highlightedRow);       
+    }    
+}
+
+ReviewSelectionManager.prototype.GetHighlightedRow = function () {
+    return this.HighlightedCheckComponentRow;
+}
+
+ReviewSelectionManager.prototype.SetHighlightedRow = function (row) {
+    this.HighlightedCheckComponentRow = row;
+}
+
+ReviewSelectionManager.prototype.GetSelectedComponents = function () {
+    return this.SelectedCheckComponentRows;
+}
+
+ReviewSelectionManager.prototype.AddSelectedComponent = function (row) {
+    this.SelectedCheckComponentRows.push(row);
+}
+
+ReviewSelectionManager.prototype.ComponentSelected = function (rowIndex, tableId) {
+    for(var i = 0; i < this.SelectedCheckComponentRows.length; i++)
+    {
+        var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];
+        if(selectedCheckComponentRow["rowIndex"] === rowIndex &&
+        selectedCheckComponentRow["tableId"] === tableId )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+ReviewSelectionManager.prototype.GetSelectedComponent = function (rowIndex, tableId) {
+    for(var i = 0; i < this.SelectedCheckComponentRows.length; i++)
+    {
+        var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];
+        if(selectedCheckComponentRow["rowIndex"] === rowIndex &&
+        selectedCheckComponentRow["tableId"] === tableId )
+        {
+            return selectedCheckComponentRow;
+        }
+    }
+
+    return undefined;
+}
+
+ReviewSelectionManager.prototype.RemoveSelectedComponent = function (rowIndex, tableId) {
+    
+    var index = -1;
+    for(var i = 0; i < this.SelectedCheckComponentRows.length; i++)
+    {
+        var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];
+        if(selectedCheckComponentRow["rowIndex"] === rowIndex &&
+        selectedCheckComponentRow["tableId"] === tableId )
+        {
+            index = i;
+            break;
+        }
+    }
+
+    if(index !== -1)
+    {
+        this.SelectedCheckComponentRows.splice(index, 1);
+    }    
 }

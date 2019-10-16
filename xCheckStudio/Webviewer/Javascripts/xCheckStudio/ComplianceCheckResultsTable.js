@@ -308,21 +308,21 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "on");
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], viewerContainer, "on");
                     }
                 }
                 else {
                     for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "off");
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], viewerContainer, "off");
                     }
                 }
             },
             onRowClick: function(e) {
                 var id = viewerContainer.replace("#", "");
                 _this.CurrentTableId = id;
-                model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0]);
+                model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0], viewerContainer);
                 model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id)
             },
         });
@@ -377,7 +377,7 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
         var data = dataGrid.getDataSource().items(); 
         var rowData = data[selectedRow.rowIndex];
         rowData.Status = changedStatus;
-        model.getCurrentSelectionManager().HighlightedComponentRowIndex = selectedRow.rowIndex;
+        
         dataGrid.repaintRows(selectedRow.rowIndex);
     
         if (populateDetailedTable) {
@@ -387,7 +387,8 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
 
 ComplianceCheckResultsTable.prototype.GetComponentIds = function (gridId) {
     var selectionManager = model.getCurrentSelectionManager();
-    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+    var selectedComponents = selectionManager.GetSelectedComponents();
+    if (selectedComponents.length === 0) {
         return undefined;
     }
 
@@ -395,10 +396,10 @@ ComplianceCheckResultsTable.prototype.GetComponentIds = function (gridId) {
     var rowsData = dataGrid.getDataSource().items();
 
     var sourceIds = [];    
-    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
-        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+    for (var i = 0; i < selectedComponents.length; i++) {
+        var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow.rowIndex];
+        var rowData = rowsData[selectedRow["rowIndex"]];
         
         if (rowData[ComplianceColumnNames.SourceId] !== "" && rowData[ComplianceColumnNames.SourceId] !== null) {
             sourceIds.push(Number(rowData[ComplianceColumnNames.SourceId]));

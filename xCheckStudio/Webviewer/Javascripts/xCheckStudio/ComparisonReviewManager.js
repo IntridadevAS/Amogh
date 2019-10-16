@@ -114,29 +114,6 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
     }
 }
 
-ComparisonReviewManager.prototype.SecondViewerExists = function () {
-    if (document.getElementById(ViewerBContainer.ViewerBContainer).innerHTML !== "") {
-        return true;
-    }
-
-    return false;
-}
-
-ComparisonReviewManager.prototype.SourceAComponentExists = function (row) {
-    if (row.cells[ComparisonColumns.SourceAName].innerText !== "") {
-        return true;
-    }
-
-    return false;
-}
-
-ComparisonReviewManager.prototype.SourceBComponentExists = function (row) {
-    if (row.cells[ComparisonColumns.SourceBName].innerText !== "") {
-        return true;
-    }
-
-    return false;
-}
 
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
 
@@ -234,7 +211,12 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
             success: function (msg) {
                 var component = _this.GetCheckComponent(groupId, componentId);
 
-                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                var originalstatus = _this.getStatusFromMainReviewRow(highlightedRow["row"]);
                 var changedStatus = originalstatus;                
                 if (!originalstatus.includes("(A)")) {
                     changedStatus = originalstatus + "(A)";
@@ -269,8 +251,8 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                     }
 
                 }
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer,  
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"], 
+                highlightedRow["tableId"],  
                 changedStatus, 
                 false);
             }
@@ -562,8 +544,14 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
                     }
 
                 }
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer, 
+
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"], 
+                highlightedRow["tableId"], 
                 changedStatus, 
                 false);          
             }
@@ -710,7 +698,13 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var originalstatus = _this.getStatusFromMainReviewRow(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                var originalstatus = _this.getStatusFromMainReviewRow(highlightedRow["row"]);
                 var changedStatus = originalstatus;
 
                 var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
@@ -756,8 +750,8 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
 
                     }
                 }
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
-                tableContainer,
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"], 
+                highlightedRow["tableId"],
                 changedStatus, 
                 false);
             }
@@ -827,11 +821,15 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                 component["Status"] = changedStatus;
                 component["transpose"] = null;
 
-                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow,
-                    tableContainer,
+                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                if (!highlightedRow) {
+                    return;
+                }
+
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
+                    highlightedRow["tableId"],
                     changedStatus,
                     false);
-                
             }
 
         });

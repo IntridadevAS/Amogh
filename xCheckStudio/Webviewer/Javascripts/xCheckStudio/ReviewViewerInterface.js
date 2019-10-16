@@ -59,14 +59,12 @@ ReviewViewerInterface.prototype.ChangeComponentColor = function (component, over
 ReviewViewerInterface.prototype.highlightComponent = function (nodeIdString) { }
 
 
-ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (reviewTableRow) {
+ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (reviewTableRow, containerDiv) {
 
     var SourceA = reviewTableRow.cells[ComparisonColumns.SourceAName].innerText;
-    var SourceB = reviewTableRow.cells[ComparisonColumns.SourceBName].innerText;
-    
-    var ContainerDiv = model.getCurrentReviewTable().CurrentTableId;
-    
-    var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
+    var SourceB = reviewTableRow.cells[ComparisonColumns.SourceBName].innerText;  
+        
+    var dataGrid = $(containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
     for (var id in data) {
         if (data[id].SourceA.trim() == SourceA.trim() &&
@@ -79,11 +77,10 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (revi
     return undefined;
 }
 
-ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow) {
-    var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;
+ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow, containerDiv) {
+    var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;   
     
-    var ContainerDiv = model.getCurrentReviewTable().CurrentTableId;
-    var dataGrid = $("#" + ContainerDiv).dxDataGrid("instance");
+    var dataGrid = $(ContainerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
         for (var id in data) {
             if (data[id].SourceA.trim() == SourceA.trim()) {
@@ -157,18 +154,18 @@ ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDi
 
 ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, selectedComponentRows) {
 
-    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var dataGrid = $(containerId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
     if(model.currentCheck == "comparison") {
         for (var i = 0; i < selectedComponentRows.length; i++) {
             var selectedRow = selectedComponentRows[i];
-            var rowData = rowsData[selectedRow.rowIndex];
+            var rowData = rowsData[selectedRow["rowIndex"]];
                 // source A
                 if(model.checks[model.currentCheck].sourceAViewer) {
                     var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
                     if(viewerInterface == this) {
                         if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
-                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;            
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;            
                         }
                     }
                 }
@@ -178,7 +175,7 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
                     var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
                     if(viewerInterface == this) {
                         if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
-                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;           
                         }
                     }
                 }
@@ -190,9 +187,9 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
             if(viewerInterface == this) {
                 for (var i = 0; i < selectedComponentRows.length; i++) {
                     var selectedRow = selectedComponentRows[i];
-                    var rowData = rowsData[selectedRow.rowIndex];
+                    var rowData = rowsData[selectedRow["rowIndex"]];
                     if (rowData.NodeId !== "" && rowData.NodeId !== null) {       
-                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = "#" + containerId;           
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;           
                     }
                 }
             }
@@ -201,12 +198,12 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
 }
 
 ReviewViewerInterface.prototype.RemoveHiddenResultId = function(containerId, selectedComponentRows) {
-    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var dataGrid = $(containerId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
     
     for (var i = 0; i < selectedComponentRows.length; i++) {
         var selectedRow = selectedComponentRows[i];
-        var rowData = rowsData[selectedRow.rowIndex];
+        var rowData = rowsData[selectedRow["rowIndex"]];
         // source A
         if(model.checks[model.currentCheck].sourceAViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceAViewer;

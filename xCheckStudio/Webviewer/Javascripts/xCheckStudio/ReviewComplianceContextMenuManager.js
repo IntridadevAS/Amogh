@@ -38,7 +38,7 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             var accept = true;
             accept = _this.ChooseActionForComplianceComponent(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
-            _this.HighlightSelectedRowOnRightClick(selectedRow);
+            _this.HighlightSelectedRowOnRightClick(selectedRow, _this.ComponentTableContainer);
             return {
                 callback: function (key, options) {
                     _this.ExecuteContextMenuClicked(key, options, this);
@@ -304,15 +304,16 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptComponent = function (rowCl
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
    
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
         return;
     }
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
+    
+    var componentTableId = this.ComponentTableContainer;
 
-    var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
+    var dataGrid = $(componentTableId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
-    var rowData = rowsData[highlightedRow.rowIndex];
+    var rowData = rowsData[highlightedRow["rowIndex"]];
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -320,7 +321,7 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     var tableToUpdate = this.GetTableNameToAcceptProperty();
 
     this.ComplianceReviewManager.AcceptProperty(rowClicked,
-        "#" + componentTableId,
+        componentTableId,
         tableToUpdate,
         componentId,
         groupId);
@@ -349,24 +350,23 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponent = function (row
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
-    var highlightedRow = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
-    if(!highlightedRow)
-    {
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+    if (!highlightedRow) {
         return;
     }
 
-    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
+    var componentTableId = this.ComponentTableContainer;   
 
-    var dataGrid = $("#" + componentTableId).dxDataGrid("instance");
+    var dataGrid = $(componentTableId).dxDataGrid("instance");
     var rowsData = dataGrid.getDataSource().items(); 
-    var rowData = rowsData[highlightedRow.rowIndex];
+    var rowData = rowsData[highlightedRow["rowIndex"]];
     
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
     
     var tableToUpdate = this.GetTableNameToUnAcceptProperty();
     this.ComplianceReviewManager.UnAcceptProperty(rowClicked, 
-        "#"+ componentTableId, 
+        componentTableId, 
         tableToUpdate,
         componentId,
         groupId);
@@ -505,12 +505,17 @@ ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
             viewerInterface.Viewer.view.fitWorld();
         });
 
-        var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
+        var SelectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+        
+        //Remove resultId on show
+        viewerInterface.RemoveHiddenResultId(this.ComponentTableContainer, SelectedComponents);
 
-        var containerId = this.ComponentTableContainer.replace("#", "");
-         //Remove resultId on show
-        viewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
-        model.getCurrentReviewTable().HighlightHiddenRows(false, SelectedCheckComponentRows);
+
+        var rows = [];
+        for (var i = 0; i < SelectedComponentRows.length; i++) {
+            rows.push(SelectedComponentRows[i]["row"]);
+        }
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
     }
 }
 
@@ -530,17 +535,20 @@ ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
             viewerInterface.Viewer.view.fitWorld();
         });
 
-        var SelectedCheckComponentRows = model.getCurrentSelectionManager().SelectedCheckComponentRows;
-        var containerId = this.ComponentTableContainer.replace("#", "");
-
-        viewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
-        model.getCurrentReviewTable().HighlightHiddenRows(true, SelectedCheckComponentRows);
+        var SelectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+       
+        viewerInterface.StoreHiddenResultId(this.ComponentTableContainer, SelectedComponents);
+        var rows = [];
+        for (var i = 0; i < SelectedComponentRows.length; i++) {
+            rows.push(SelectedComponentRows[i]["row"]);
+        }
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
     }
 }
 
 ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
-    var selectionManager = model.getCurrentSelectionManager();
-    if (selectionManager.SelectedCheckComponentRows.length === 0) {
+    var selectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+    if (selectedComponents.length === 0) {
         return undefined;
     }
 
@@ -548,10 +556,10 @@ ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
     var rowsData = dataGrid.getDataSource().items(); 
 
     var sourceNodeIds = [];
-    for (var i = 0; i < selectionManager.SelectedCheckComponentRows.length; i++) {
-        var selectedRow = selectionManager.SelectedCheckComponentRows[i];
+    for (var i = 0; i < selectedComponents.length; i++) {
+        var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow.rowIndex];
+        var rowData = rowsData[selectedRow["rowIndex"]];
 
         if (rowData.NodeId &&
             rowData.NodeId !== "") {

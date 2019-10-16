@@ -218,10 +218,15 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
         }
     }
 
-    // restore highlightcolor of selected row in main review table
-    if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-        model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
-        model.getCurrentSelectionManager().HighlightedCheckComponentRow = undefined;
+    // restore highlightcolor of highlightedRow row in main review table
+    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+    if (!highlightedRow) {
+        return;
+    }
+
+    if (highlightedRow) {
+        model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+        model.getCurrentSelectionManager().SetHighlightedRow(undefined);
 
         // clear detailed info table
         // var viewerContainer = "#" + reviewManager.DetailedReviewTableContainer;
@@ -265,18 +270,19 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewRow = this.GetReviewComponentRow(checkComponentData);
-    if (!reviewRow) {
+    var reviewRowData = this.GetReviewComponentRow(checkComponentData);
+    if (!reviewRowData) {
         this.unHighlightComponent();
         this.unHighlightAll();
 
         return;
     }
+    var reviewRow = reviewRowData["row"];
 
-    // component group id which is container div for check components table of given row
-    var containerDiv = model.getCurrentReviewTable().CurrentTableId;
+    // component group id which is container div for check components table of given row    
+    var containerDiv = reviewRowData["tableId"];
 
-    var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
+    var dataGrid = $(containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
     var rowData = data[reviewRow.rowIndex];
 
@@ -424,21 +430,30 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
 
                     checkComponentId = rowData.ID;
                     if (checkComponentId == checkcComponentData["Id"]) {
-      
-                        if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-                            model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
+                        var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                        if (!highlightedRow) {
+                            return;
                         }
-    
+
+                        model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+                           
                         // highlight selected row
                         var row = dataGrid.getRowElement(rowObj.rowIndex)
                         model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
-                        model.getCurrentSelectionManager().HighlightedCheckComponentRow = row[0];                     
+                        model.getCurrentSelectionManager().SetHighlightedRow({
+                            "row": row[0],
+                            "tableId": mainReviewTableContainer,
+                            "rowIndex": row[0].rowIndex
+                        });
+    
+                        // scroll to table
+                        // mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
     
                         //Expand Accordion and Scroll to Row
                         model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkcComponentData.MainClass);
 
                         //break;
-                        return row[0];
+                        return {"row" : row[0], "tableId" : checkTableIds[groupId]};
                     }
                 }
             }
