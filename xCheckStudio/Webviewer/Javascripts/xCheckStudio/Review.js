@@ -200,16 +200,6 @@ function populateCheckResults(comparison,
 
             // hide busy indicator
             hideBusyIndicator();
-
-            // if (sourceBComplianceCheckGroups) {
-            //     loadSourceBComplianceData(sourceBComplianceCheckGroups,
-            //         sourceBViewerOptions,
-            //         sourceBClassWiseComponents,
-            //         sourceBComplianceHierarchy);
-            // }
-
-            // // make buttons collapsible
-            // setButtonsCollapsible();         
         }
     });
 }
@@ -276,12 +266,6 @@ function loadComparisonData(comparisonCheckGroups,
     // comparison detailed info table
     var checkPropertiesTable = new ComparisonCheckPropertiesTable(Comparison.DetailInfoContainer)
     comparisonData["detailedInfoTable"] = checkPropertiesTable;
-
-    // comparisonData["reviewManager"]  = comparisonReviewManager;
-    // comparisonData["reviewManager"]  = comparisonReviewManager;
-
-    // make buttons collapsible
-    setButtonsCollapsible( Comparison.MainReviewContainer);
 }
 
 function loadComplianceData(compliance,
@@ -319,26 +303,4 @@ function loadComplianceData(compliance,
     var checkPropertiesTable = new ComplianceCheckPropertiesTable(Compliance.DetailInfoContainer);
     complianceData["detailedInfoTable"] = checkPropertiesTable;
 
-    // make buttons collapsible
-    setButtonsCollapsible(Compliance.MainReviewContainer);
-}
-
-function setButtonsCollapsible(containerId) {
-
-    var container = document.getElementById(containerId);
-    var acc = container.getElementsByClassName("accordion");
-    var i;
-
-    for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = panel.id;
-            }
-        });
-    }
 }

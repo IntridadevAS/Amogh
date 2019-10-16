@@ -103,7 +103,7 @@ ReviewComplianceSelectionManager.prototype.MaintainHighlightedDetailedRow = func
 // To keep track of highlighted row after grid update we take new rowKey for the componet 
 // and save highlighted row again
 ReviewComplianceSelectionManager.prototype.UpdateHighlightedCheckComponent = function(dataGridObject) {
-    if(model.getCurrentSelectionManager().HighlightedComponentRowIndex && 
+    if(model.getCurrentSelectionManager().HighlightedComponentRowIndex >= 0 && 
     model.getCurrentSelectionManager().HighlightedCheckComponentRow.rowIndex == -1) {
         var rowIndex = model.getCurrentSelectionManager().HighlightedComponentRowIndex;
         model.getCurrentSelectionManager().HighlightedCheckComponentRow = dataGridObject.getRowElement(rowIndex)[0];

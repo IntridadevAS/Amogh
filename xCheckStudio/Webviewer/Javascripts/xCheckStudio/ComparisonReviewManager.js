@@ -263,13 +263,13 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
                         // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
                         property["severity"] = "ACCEPTED";
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
 
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
                     }
 
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer,  
                 changedStatus, 
                 false);
@@ -318,7 +318,7 @@ ComparisonReviewManager.prototype.AcceptComponent = function (selectedRow, table
                         }
                     }
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], tableContainer, component.status, true);
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], tableContainer, component.status, true);
             }
         });
     }
@@ -498,7 +498,7 @@ ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tab
                     }
                     index++;
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], tableContainer, component.status, true);
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], tableContainer, component.status, true);
             }
         });
     }
@@ -555,14 +555,14 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 
                         property["severity"] = status[1];
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property)
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
 
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
 
                     }
 
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer, 
                 changedStatus, 
                 false);          
@@ -750,13 +750,13 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow
                         property["severity"] = 'OK(T)';
                         property['transpose'] = transposeType;
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property);
 
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'OK(T)');
 
                     }
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow, 
                 tableContainer,
                 changedStatus, 
                 false);
@@ -814,7 +814,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                         property["severity"] = status[1];
                         property["transpose"] = null;
 
-                        model.checks[model.currentCheck]["detailedInfoTable"].UpdateGridData(selectedRow[0].rowIndex, property);
+                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property);
 
                         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
                     }
@@ -827,7 +827,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedR
                 component["Status"] = changedStatus;
                 component["transpose"] = null;
 
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow,
+                model.getCurrentReviewTable().UpdateGridData(model.getCurrentSelectionManager().HighlightedCheckComponentRow,
                     tableContainer,
                     changedStatus,
                     false);
@@ -879,7 +879,7 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                     }
                     index++;
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], 
                     tableContainer,
                     component.status, 
                     true);                
@@ -935,7 +935,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                     }
 
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(selectedRow[0], 
+                model.getCurrentReviewTable().UpdateGridData(selectedRow[0], 
                     tableContainer, 
                     component.status, 
                     true);                

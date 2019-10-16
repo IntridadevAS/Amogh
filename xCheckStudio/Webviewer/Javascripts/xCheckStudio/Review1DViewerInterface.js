@@ -317,23 +317,17 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
         componentName = sheetDataRow.cells[column.Tagnumber].innerText;
     }
 
-    var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
+    var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     var componentsGroupName = sheetDataRow.cells[column.ComponentClass].innerText;
 
     for (var groupId in checkTableIds) {
-        if (!checkTableIds[groupId].includes(componentsGroupName)) {
+        if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
             continue;
         }
         else {
             var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
-            var checkTableId = categoryTable.id;
-            // open collapsible area
-            var accordionIndex = model.checks[model.currentCheck]["reviewTable"].GetAccordionIndex(checkcComponentData.MainClass)
-            if(accordionIndex >= 0) {
-                accordion.expandItem(Number(accordionIndex));
-            }
-           
+            var checkTableId = categoryTable.id;          
             var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
             var rows = checkDataGrid.getVisibleRows();
 
@@ -354,6 +348,9 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
                 }
 
                 if (componentName === name) {
+
+                    //Expand Accordion and Scroll to Row
+                    model.getCurrentReviewTable().ExpandAccordionScrollToRow(row, componentsGroupName);
                     return row;
                 }
             }
@@ -374,7 +371,7 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
 
     // component group id which is container div for check components table of given row
     // var containerDiv = reviewManager.GetReviewTableId(reviewTableRow);
-    var containerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var containerDiv = model.getCurrentReviewTable().CurrentTableId;
 
     var rowData;
     if (this.IsComparison) {
@@ -386,7 +383,7 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
 
     // reviewManager.OnCheckComponentRowClicked(rowData, containerDiv);
     this.HighlightMatchedComponent(containerDiv, rowData)
-    model.checks[model.currentCheck]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);
     
     model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow);
 

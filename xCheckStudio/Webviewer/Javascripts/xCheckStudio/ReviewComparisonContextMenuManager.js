@@ -258,7 +258,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent = function (selectedRow) {
 
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -274,7 +274,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent = function (selectedRow) {
 
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, this.ComponentTableContainer);
 
     if (rowData.Status == "OK(A)" ||
         rowData.Status == 'OK(A)(T)') {
@@ -286,9 +286,9 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent 
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonColumnNames.Status];
     if (selectedRowStatus === "undefined" ||
@@ -303,9 +303,9 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonColumnNames.Status];
     if (selectedRowStatus.includes("OK") &&
@@ -317,9 +317,9 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
-    var componentTableId = model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["detailedInfoTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
 
@@ -332,9 +332,9 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
-    var componentTableId = model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["detailedInfoTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
 
@@ -347,9 +347,9 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
 
-    var componentTableId = model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["detailedInfoTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
 
@@ -361,9 +361,9 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
-    var componentTableId = model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["detailedInfoTable"].GetDataForSelectedRow(selectedRow.rowIndex, containerId);
+    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
     var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
     var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
@@ -482,7 +482,7 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowClicked) {
 
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
 
 
     var componentId = rowData.ID;
@@ -498,10 +498,10 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
         return;
     }
 
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -515,7 +515,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
 
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -532,10 +532,10 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
         return;
     }
 
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -557,10 +557,10 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
         return;
     }
 
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -589,10 +589,10 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
         return;
     }
 
-    var componentTableId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var componentTableId = model.getCurrentReviewTable().CurrentTableId;
 
     var containerId = "#" + componentTableId;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -693,7 +693,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
         sourceBViewerInterface.RemoveHiddenResultId(containerId, SelectedCheckComponentRows);
     }
 
-    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, SelectedCheckComponentRows);
+    model.getCurrentReviewTable().HighlightHiddenRows(false, SelectedCheckComponentRows);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
@@ -730,7 +730,7 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
         sourceBViewerInterface.StoreHiddenResultId(containerId, SelectedCheckComponentRows);
     }
 
-    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, SelectedCheckComponentRows);
+    model.getCurrentReviewTable().HighlightHiddenRows(true, SelectedCheckComponentRows);
 }
 
 ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {

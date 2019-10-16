@@ -51,34 +51,3 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
         return "#ffffff";
     }
 }
-
-ReviewSelectionManager.prototype.ScrollToHighlightedCheckComponentRow = function (reviewTable, reviewRow, mainReviewTableContainerId) {
-
-    if (!this.HighlightedCheckComponentRow ||
-        !reviewTable) {
-    }
-
-    var top = (reviewRow.offsetTop - reviewRow.offsetHeight);
-
-    var ContainerId = reviewTable.parentElement.id;
-    // $(function () {
-    //$("#" + ContainerId + "_table_scroll").scrollTop = top;
-    // });
-    document.getElementById(ContainerId + "_table_scroll").scrollTop = top;    
-    // var mainReviewTableContainer = document.getElementById("#" + ContainerId + "table_scroll");
-    // if (!mainReviewTableContainer) {
-    //     return;
-    // }
-
-    // var collapsibleClasses = mainReviewTableContainer.getElementsByClassName("collapsible");
-    // for (var i = 0; i < collapsibleClasses.length; i++) {
-    //     var collapsibleClass = collapsibleClasses[i];
-    //     if (collapsibleClass.innerText !== reviewTable.previousElementSibling.innerText) {
-    //         collapsibleClass.nextElementSibling.style.display = "none";
-    //         collapsibleClass.className = "collapsible";
-    //     }
-    //     else {
-    //         collapsibleClass.nextElementSibling.style.display = "block";
-    //     }
-    // }
-}

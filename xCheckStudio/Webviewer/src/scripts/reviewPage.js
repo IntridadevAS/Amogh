@@ -56,6 +56,12 @@ let model = {
   },
   getCurrentReviewType: function () {
     return this.currentCheck;
+  },
+  getCurrentReviewTable: function() {
+   return this.checks[model.currentCheck]["reviewTable"];
+  },
+  getCurrentDetailedInfoTable: function() {
+    return this.checks[model.currentCheck]["detailedInfoTable"];
   }
 }
 

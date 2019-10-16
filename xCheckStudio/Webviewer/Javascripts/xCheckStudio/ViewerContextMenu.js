@@ -194,13 +194,13 @@ ViewerContextMenu.prototype.HideInReview = function() {
         var row = model.getCurrentSelectionManager().HighlightedCheckComponentRow;
         checkComponentRows.push(row);
 
-        var containerId = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+        var containerId = model.getCurrentReviewTable().CurrentTableId;
 
         // get viewerInterface on which "hide" is called
         var viewerInterface = this.GetViewerInterface();
 
         viewerInterface.StoreHiddenResultId(containerId, checkComponentRows);
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
+        model.getCurrentReviewTable().HighlightHiddenRows(true, checkComponentRows);
 }
 
 ViewerContextMenu.prototype.GetViewerInterface = function() {

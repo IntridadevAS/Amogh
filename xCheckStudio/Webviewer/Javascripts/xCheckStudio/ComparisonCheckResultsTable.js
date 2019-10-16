@@ -28,14 +28,31 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         selectedIndex: -1,
         onSelectionChanged: function(e) {
             if(e.addedItems.length > 0) {
-                model.checks[model.currentCheck]["reviewTable"].CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+                _this.CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
         }
     });
 }
 
+ComparisonCheckResultsTable.prototype.ExpandAccordionScrollToRow = function(row, groupName) {
+
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var mainReviewTableContainer = document.getElementById(this.MainReviewTableContainer);
+
+    // scroll to table
+    var accordionIndex = this.GetAccordionIndex(groupName)
+    if(accordionIndex >= 0) {
+        accordion.expandItem(Number(accordionIndex)).then( function (result) {
+            mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
+        });
+    }
+    else {
+        mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
+    }
+}
+
 ComparisonCheckResultsTable.prototype.CreateAccordionData = function() {
-    var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
+    var ComparisonTableData = model.getCurrentReviewManager().ComparisonCheckManager;
     var checkGroups = ComparisonTableData["results"];
 
     var data = [];
@@ -66,7 +83,7 @@ ComparisonCheckResultsTable.prototype.CreateAccordionData = function() {
 
     if(undefinedGroupId) {
         var dataObject = {};
-        var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        var componentsGroup = model.getCurrentReviewManager().GetCheckGroup(undefinedGroupId);
         dataObject["template"] = componentsGroup.componentClass;
         dataObject["title"] = componentsGroup.componentClass;
 
@@ -176,7 +193,7 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 
         tableData.push(tableRowContent);
 
-        model.checks["comparison"]["reviewManager"].MaintainNodeIdVsCheckComponent(component, mainClass);
+        model.getCurrentReviewManager().MaintainNodeIdVsCheckComponent(component, mainClass);
     }
 
     return tableData;
@@ -192,14 +209,14 @@ ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = 
             return;
         }
         var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComparisonColumns.Status)
-        model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
+        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
     }
 }
 
 
 ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     // var _this = this;
-    var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
+    var ComparisonTableData = model.getCurrentReviewManager().ComparisonCheckManager;
 
     if (!("results" in ComparisonTableData)) {
         return;
@@ -234,14 +251,14 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
 
     // Add undefined category last
     if(undefinedGroupId) {
-        var componentsGroup = model.checks["comparison"]["reviewManager"].GetCheckGroup(undefinedGroupId);
+        var componentsGroup = model.getCurrentReviewManager().GetCheckGroup(undefinedGroupId);
         this.CreateTable(undefinedGroupId, componentsGroup);
     }
 }
 
 ComparisonCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
 
-    var ComparisonTableData = model.checks["comparison"]["reviewManager"].ComparisonCheckManager;
+    var ComparisonTableData = model.getCurrentReviewManager().ComparisonCheckManager;
 
    // create column headers
     var columnHeaders = this.CreateMainTableHeaders(ComparisonTableData.sources);
@@ -285,7 +302,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             paging: { enabled: false },
             onContentReady: function(e) {
                 _this.highlightMainReviewTableFromCheckStatus(containerDiv.replace("#", ""));
-                model.checks["comparison"]["reviewManager"].AddTableContentCount(containerDiv.replace("#", ""));
+                model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
                 model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onCellPrepared: function(e) {
@@ -297,7 +314,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             onInitialized: function(e) {
                 // initialize the context menu
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
                 reviewComparisonContextMenuManager.InitComponentLevelContextMenu(containerDiv);
             },
             onSelectionChanged: function (e) {
@@ -305,22 +322,22 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], "on");
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "on");
                     }
                 }
                 else {
                     for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], "off");
+                        model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], "off");
                     }
                 }
             },
             onRowClick: function(e) {
                 var id = containerDiv.replace("#", "");
                 _this.CurrentTableId = id;
-                model.checks["comparison"]["selectionManager"].MaintainHighlightedRow(e.rowElement[0]);
-                model.checks["comparison"]["reviewManager"].OnCheckComponentRowClicked(e.data, id);
+                model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0]);
+                model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id);
             }
         });
     });
@@ -357,8 +374,10 @@ ComparisonCheckResultsTable.prototype.GetAccordionIndex = function(groupName) {
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var index;
+    var selectedItems = accordion._selection.getSelectedItemKeys();
     for(var i = 0; i < accordionItems.length; i++) {
-        if (!accordionItems[i]["template"].includes(groupName)) {
+        if (!accordionItems[i]["template"].includes(groupName) || 
+        (selectedItems.length > 0 && accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;
         }
         else {
@@ -558,7 +577,7 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
             tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceBValue;
         }
 
-        model.checks["comparison"]["reviewManager"].detailedReviewRowComments[Object.keys(model.checks["comparison"]["reviewManager"].detailedReviewRowComments).length] = property.description;
+        model.getCurrentReviewManager().detailedReviewRowComments[Object.keys(model.getCurrentReviewManager().detailedReviewRowComments).length] = property.description;
 
         tableData.push(tableRowContent);
     }
@@ -637,15 +656,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 
             },
             onRowClick: function(e) {
-                model.checks["comparison"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
-                // var comment = model.checks["comparison"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
-                // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                // if (comment) {
-                //     commentDiv.innerHTML = "Comment : <br>" + comment;
-                // }
-                // else {
-                //     commentDiv.innerHTML = "Comment : <br>";
-                // }
+                model.getCurrentSelectionManager().MaintainHighlightedDetailedRow(e.rowElement[0]);
             },
             // onRowPrepared: function(e) {
             //     if(e.isSelected) {
@@ -678,7 +689,7 @@ ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
         var currentRow = dataGrid.getRowElement(detailedReviewTableRows[i].rowIndex);
         if (currentRow[0].cells.length > 1) {
             var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
-            model.checks["comparison"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
+            model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
         }
     }
 }
@@ -712,7 +723,7 @@ ComparisonCheckPropertiesTable.prototype.GetDataForSelectedRow = function (rowIn
 }
 
 ComparisonCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, property) {
-    var detailInfoContainer =  model.checks[model.currentCheck]["detailedInfoTable"]["DetailedReviewTableContainer"];
+    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items(); 
     var rowData = data[rowIndex];

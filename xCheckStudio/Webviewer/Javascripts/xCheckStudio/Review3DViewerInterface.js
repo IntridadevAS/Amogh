@@ -226,7 +226,7 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
         // clear detailed info table
         // var viewerContainer = "#" + reviewManager.DetailedReviewTableContainer;
         // clear previous grid
-        model.checks[model.currentCheck]["detailedInfoTable"].Destroy();
+        model.getCurrentDetailedInfoTable().Destroy();
     }
 }
 
@@ -274,7 +274,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     }
 
     // component group id which is container div for check components table of given row
-    var containerDiv = model.checks[model.currentCheck]["reviewTable"].CurrentTableId;
+    var containerDiv = model.getCurrentReviewTable().CurrentTableId;
 
     var dataGrid = $("#" + containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
@@ -282,10 +282,11 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
     this.HighlightMatchedComponent(containerDiv, rowData);
 
-    model.checks[model.currentCheck]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);
 
     // scroll to rowElement
-    dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
+    // dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
+    // document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer).scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
@@ -405,17 +406,15 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
         return undefined;
     }
 
-    var checkTableIds = model.checks[model.currentCheck]["reviewTable"].CheckTableIds;
+    var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     for(var groupId in checkTableIds) {
-        if (!checkTableIds[groupId].includes(componentsGroupName)) {
+        if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
             continue;
         }
         else {
 
             var dataGrid =  $(checkTableIds[groupId]).dxDataGrid("instance");
             var rows = dataGrid.getVisibleRows();
-
-            var accordion = $(mainReviewTableContainer).dxAccordion("instance");
 
             for(var i = 0; i < rows.length; i++) {
                 if(rows[i].rowType == "data") {
@@ -425,15 +424,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
 
                     checkComponentId = rowData.ID;
                     if (checkComponentId == checkcComponentData["Id"]) {
-
-
-                        // open collapsible area
-                        var accordionIndex = model.checks[model.currentCheck]["reviewTable"].GetAccordionIndex(checkcComponentData.MainClass)
-                        if(accordionIndex >= 0) {
-                            accordion.expandItem(Number(accordionIndex));
-                        }
-
-                          
+      
                         if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
                             model.getCurrentSelectionManager().RemoveHighlightColor(model.getCurrentSelectionManager().HighlightedCheckComponentRow);
                         }
@@ -441,11 +432,11 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                         // highlight selected row
                         var row = dataGrid.getRowElement(rowObj.rowIndex)
                         model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
-                        model.getCurrentSelectionManager().HighlightedCheckComponentRow = row[0];
+                        model.getCurrentSelectionManager().HighlightedCheckComponentRow = row[0];                     
     
-                        // scroll to table
-                        // mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
-    
+                        //Expand Accordion and Scroll to Row
+                        model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkcComponentData.MainClass);
+
                         //break;
                         return row[0];
                     }
