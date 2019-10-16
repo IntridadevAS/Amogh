@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="30" fill="none"/>
+    </clipPath>
+    <filter id="Path_290" x="5" y="6.23" width="20.536" height="20.537" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-color="#323132"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="SymRefresh" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" fill="#323132" stroke="#8a8a8a" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <g id="Group_228" data-name="Group 228" transform="translate(0 4)">
+      <g transform="matrix(1, 0, 0, 1, 0, -4)" filter="url(#Path_290)">
+        <g id="Path_290-2" data-name="Path 290" transform="translate(5.5 6.73)" fill="none">
+          <path d="M8.768,0A8.768,8.768,0,1,1,0,8.768,8.768,8.768,0,0,1,8.768,0Z" stroke="none"/>
+          <path d="M 8.76827335357666 2.000000953674316 C 5.036232948303223 2.000000953674316 2.000003814697266 5.036250114440918 2.000003814697266 8.768310546875 C 2.000003814697266 12.50037002563477 5.036232948303223 15.53662109375 8.76827335357666 15.53662109375 C 12.50031280517578 15.53662109375 15.53654289245605 12.50037002563477 15.53654289245605 8.768310546875 C 15.53654289245605 5.036250114440918 12.50031280517578 2.000000953674316 8.76827335357666 2.000000953674316 M 8.76827335357666 0 C 13.61085319519043 0 17.53654289245605 3.925710678100586 17.53654289245605 8.768310546875 C 17.53654289245605 13.61091041564941 13.61085319519043 17.53662109375 8.76827335357666 17.53662109375 C 3.925693511962891 17.53662109375 3.814697265625e-06 13.61091041564941 3.814697265625e-06 8.768310546875 C 3.814697265625e-06 3.925710678100586 3.925693511962891 0 8.76827335357666 0 Z" stroke="none" fill="#51e0dc"/>
+        </g>
+      </g>
+      <path id="Path_291" data-name="Path 291" d="M0,7.307,3.653,3.653,0,0" transform="translate(21.267 2) rotate(45)" fill="none" stroke="#51e0dc" stroke-width="2"/>
+      <rect id="Rectangle_1240" data-name="Rectangle 1240" width="13" height="3" transform="translate(12 8)" fill="#323132"/>
+    </g>
+    <rect id="Rectangle_1241" data-name="Rectangle 1241" width="4" height="7" transform="translate(22.25 2)" fill="#323132"/>
+  </g>
+</svg>
