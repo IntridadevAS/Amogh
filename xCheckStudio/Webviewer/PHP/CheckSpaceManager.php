@@ -120,9 +120,9 @@ function GetCheckSpaces(){
         $dbPath = getProjectDatabasePath($projectName);;
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
-        if(strcasecmp ($permission, "check") == 0)
+        /*if(strcasecmp ($permission, "check") == 0)
             $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     
-        else
+        else*/
             $query =  "select * from CheckSpace where ProjectId=".$ProjectId;     
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
