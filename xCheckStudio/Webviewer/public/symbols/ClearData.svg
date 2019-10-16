@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="30" height="30" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="symTrash" clip-path="url(#clip-path)">
+    <g id="Rectangle_1177" data-name="Rectangle 1177" fill="#323132" stroke="#15b9f9" stroke-width="1">
+      <rect width="30" height="30" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="4.5" fill="none"/>
+    </g>
+    <path id="Path_309" data-name="Path 309" d="M5978.351-4122.15h18l-3,14h-12Z" transform="translate(-5972.351 4133.15)" fill="none" stroke="#f2f3f4" stroke-linejoin="round" stroke-width="1.5"/>
+    <g id="Group_227" data-name="Group 227" transform="translate(-5165.644 5108.13) rotate(-10)">
+      <g id="Rectangle_1234" data-name="Rectangle 1234" transform="translate(5978 -4125.5)" fill="#15b9f9" stroke="#f2f3f4" stroke-linejoin="round" stroke-width="1">
+        <rect width="20" height="2" stroke="none"/>
+        <rect x="0.5" y="0.5" width="19" height="1" fill="none"/>
+      </g>
+      <g id="Rectangle_1235" data-name="Rectangle 1235" transform="translate(5986.326 -4126.515)" fill="#15b9f9" stroke="#f2f3f4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
+        <rect width="3" height="2" stroke="none"/>
+        <rect x="0.5" y="0.5" width="2" height="1" fill="none"/>
+      </g>
+    </g>
+    <text id="x" transform="translate(11 7)" fill="#ed1c24" font-size="16" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="-0.76" y="15">x</tspan></text>
+  </g>
+</svg>
