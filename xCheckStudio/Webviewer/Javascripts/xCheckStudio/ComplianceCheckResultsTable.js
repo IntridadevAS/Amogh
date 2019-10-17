@@ -191,6 +191,8 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
         if(visible == false) {
             columnHeader["visible"] = visible;
         }
+
+        columnHeader["width"] = "50%";
         columnHeaders.push(columnHeader);
     }
 
