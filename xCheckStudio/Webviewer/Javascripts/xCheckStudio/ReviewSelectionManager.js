@@ -1,7 +1,7 @@
 function ReviewSelectionManager()
 {
     this.HighlightedCheckComponentRow = undefined;
-    this.SelectedCheckComponentRows = {};    
+    this.SelectedCheckComponentRows = [];    
 }
 
 ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {

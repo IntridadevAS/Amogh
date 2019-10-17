@@ -16,7 +16,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         // component row doesn't exist already
 
         // highlight selected row
-        this.ApplyHighlightColor(currentRow["row"]);
+        this.ApplyHighlightColor(currentRow);
 
         // keep track of selected component row
         this.AddSelectedComponent({
@@ -27,7 +27,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     else if (this.ComponentSelected(currentRow.rowIndex, tableId)) {
 
         // restore color
-        this.RemoveHighlightColor(currentRow["row"]);
+        this.RemoveHighlightColor(currentRow);
 
         // remove current row from selected rows array
         this.RemoveSelectedComponent (currentRow.rowIndex, tableId);        
@@ -61,7 +61,7 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
         this.RemoveHighlightColor(highlightedRow["row"]);
     }
 
-    this.ApplyHighlightColor(currentReviewTableRow["row"]);
+    this.ApplyHighlightColor(currentReviewTableRow);
     this.SetHighlightedRow({
         "row": currentReviewTableRow,
         "rowIndex": currentReviewTableRow.rowIndex,

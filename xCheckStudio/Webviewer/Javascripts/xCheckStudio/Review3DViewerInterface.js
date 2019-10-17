@@ -431,11 +431,9 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                     checkComponentId = rowData.ID;
                     if (checkComponentId == checkcComponentData["Id"]) {
                         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-                        if (!highlightedRow) {
-                            return;
-                        }
-
-                        model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+                        if (highlightedRow) {
+                            model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+                        }                        
                            
                         // highlight selected row
                         var row = dataGrid.getRowElement(rowObj.rowIndex)
