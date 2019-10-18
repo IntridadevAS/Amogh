@@ -30,6 +30,43 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
             if (e.addedItems.length > 0) {
                 _this.CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
+        },
+        itemTitleTemplate: function(itemData, itemIndex, itemElement) {
+            var btn = $('<div>')
+            $(btn).data("index", itemIndex)
+                .dxButton({
+                icon: "chevrondown",
+                width: "38px",
+                height: "30px",
+                onClick: function (e) {
+                    e.jQueryEvent.stopPropagation();
+                    var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
+                    if(!isOpened) {
+                        $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+                    }
+                    else {
+                        $("#" + _this.MainReviewTableContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
+                    }
+                    
+                }
+            }).css("float", "right").appendTo(itemElement);
+
+            btn.css("position", "absolute");  
+            btn.css("right", " 10px");
+            btn.css("top", " 5px");
+            btn.css("border", "none");
+            btn.css("background", "black");
+
+
+
+            itemElement.append("<h1 style = 'width:320px; font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
+
+        },
+        onItemTitleClick: function(e){
+            e.event.stopPropagation();
+        },
+        onItemClick: function(e) {
+            e.event.stopPropagation();
         }
     });
 }
