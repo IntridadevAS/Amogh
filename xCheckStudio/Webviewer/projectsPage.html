@@ -503,7 +503,7 @@
               <div class="checkCardInfo reviewCardInfo"></div>
               <div class="projectName">
                 <input id="editReviewName" type="text" name="checkName" value="">
-                <select class="" name="status">
+                <select class="" name="status" id="reviewCheckStatus">
                   <option value="active">Active</option>
                   <option value="finished">Finished</option>
                   <option value="archived">Archived</option>
@@ -511,16 +511,16 @@
               </div>
             </div>
             <div class="projectParametersContainer">
-              <label>Type:
-                <select class="" name="type">
-                  <option value="private">Private</option>
-                  <option value="public">Public</option>
+              <label>Configuration: <br>
+                <select class="" name="config" id="reviewCheckConfig">
+                  <option value="config1">Config1</option>
+                  <option value="config2">Config2</option>
                 </select>
               </label>
             </div>
             <div class="projectParametersContainer">
               <p>Creator:<span id="editCreator"></span></p>
-              <p>Date Created:<span id="editDateCreated"> </p>
+              <p>Date Created:<span id="editReviewDateCreated"></p>
             </div>
             <div class="projectParametersContainer">
               <h3>Last Updated</h3>

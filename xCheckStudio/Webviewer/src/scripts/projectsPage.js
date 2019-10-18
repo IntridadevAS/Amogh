@@ -864,7 +864,7 @@ let checkView = {
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
       newDiv.setAttribute("onclick", "checkView.reviewClicked(this)");
-      if (project.IsFavourite) {
+      if (review.checkisfavourite === "1") {
         newDiv.classList.add('favorite');
       }
       let htmlInner;// = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`
@@ -1098,27 +1098,27 @@ let editReviewView = {
     let currentReviewName = document.getElementById("currentReviewName");
     let editReviewName = document.getElementById("editReviewName");
     let editCreator = document.getElementById("editCreator");
-    let editDateCreated = document.getElementById("editDateCreated");
+    let editReviewDateCreated = document.getElementById("editReviewDateCreated");
     let editReviewComments = document.getElementById("editReviewComments");
     let lastEditedBy = document.getElementById("lastEditedBy");
     let lastEditedDate = document.getElementById("lastEditedDate");
-
-    this.editReviewOverlay.classList.add("projectOverlaysOpen");
+    let reviewCheckConfig = document.getElementById("reviewCheckConfig");
+    let reviewCheckStatus = document.getElementById("reviewCheckStatus");
 
     this.editReviewOverlay.classList.add("projectOverlaysOpen");
 
     this.currentReview = controller.getCurrentReview();
-    console.log(this.currentReview);
 
     currentReviewName.innerHTML = this.currentReview.checkname;
     editReviewName.value = this.currentReview.checkname;
     editCreator.innerHTML = this.currentReview.creator;
-    editDateCreated.innerHTML = this.currentReview.checkdate;
+    editReviewDateCreated.innerHTML = this.currentReview.checkdate;
     editReviewDescription.innerHTML = this.currentReview.checkdescription;
-    editComments.value = this.currentReview.checkcomments;
+    editReviewComments.value = this.currentReview.checkcomments;
     lastEditedBy.innerHTML = this.currentReview.editedBy;
     lastEditedDate.innerHTML = this.currentReview.editDate;
-
+    reviewCheckConfig.value = this.currentReview.checkconfiguration;
+    reviewCheckStatus.value = this.currentReview.checkstatus;
   },
 
   closeEditReview: function () {
