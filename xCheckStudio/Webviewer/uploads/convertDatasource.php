@@ -1,19 +1,18 @@
 <?php 
 
-session_start();
+require_once '../PHP/Utility.php';
 // check if sourceA and sourceB paths are in session data
-if(!isset( $_SESSION["SourceAPath"]) ||
-   !isset( $_SESSION["SourceBPath"]) ||
-   !isset($_POST['viewerContainer']))
-   {
-       echo "fail";
-       return;
-   }
+if(!isset($_POST['CheckName']) || 
+!isset($_POST['ProjectName']))
+{
+ echo 'fail';
+ return; 
+}
 
-   $sourceADirectory =  $_SESSION["SourceAPath"];
-   $sourceBDirectory =  $_SESSION["SourceBPath"];
+$projectName = $_POST['ProjectName'];
+$checkName = $_POST['CheckName'];
 
-   $scriptParentDirectory = dirname ( __DIR__ );
+//    $scriptParentDirectory = dirname ( __DIR__ );
 
     $array = explode("\\", __DIR__);
     unset($array[sizeof($array)-1]);
@@ -24,14 +23,42 @@ if(!isset( $_SESSION["SourceAPath"]) ||
 
     $mainFileName = $_POST['MainFile'];
 
-    if($_POST['viewerContainer'] == "viewerContainer1")
+    $uploadDirectory = NULL;
+
+    if($_POST['Source'] == "a")
     {
-        $filename=  $scriptParentDirectory."/".$sourceADirectory."/".$mainFileName;               
+        $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);
     }
-    if($_POST['viewerContainer'] == "viewerContainer2")
+    else if($_POST['Source'] == "b")
     {
-        $filename= $scriptParentDirectory."/".$sourceBDirectory."/".$mainFileName;               
+        $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);
     }
+    else if($_POST['Source'] == "c")
+    {
+        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);      
+    }
+    else if($_POST['Source'] == "d")
+    {
+        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName); 
+    }
+
+    if($_POST['Source'] == "a")
+    {
+        $filename=  $uploadDirectory."/".$mainFileName;          
+    }
+    else if($_POST['Source'] == "b")
+    {
+        $filename=  $uploadDirectory."/".$mainFileName;              
+    }
+    else if($_POST['Source'] == "c")
+    {
+        $filename=  $uploadDirectory."/".$mainFileName;     
+    }
+    else if($_POST['Source'] == "d")
+    {
+        $filename=  $uploadDirectory."/".$mainFileName;      
+    }
+
 
     $file = fileExists($filename, false);
     if ($file) {
@@ -46,26 +73,24 @@ if(!isset( $_SESSION["SourceAPath"]) ||
 
     $file = basename($file);     
 
-    if($_POST['viewerContainer'] == "viewerContainer1")
+    if($_POST['Source'] == "a")
     {
-        $inputFileName=  $scriptParentDirectory."/".$sourceADirectory."/".$file;               
+        $inputFileName=  $uploadDirectory."/".$file;          
     }
-    if($_POST['viewerContainer'] == "viewerContainer2")
+    else if($_POST['Source'] == "b")
     {
-        $inputFileName= $scriptParentDirectory."/".$sourceBDirectory."/".$file;               
+        $inputFileName=  $uploadDirectory."/".$file;               
     }
-   
-    $output_name=explode(".",$file);
-    if($_POST['viewerContainer'] == "viewerContainer1")
+    else if($_POST['Source'] == "c")
     {
-        $output_file_path=  $scriptParentDirectory."/".$sourceADirectory."/".$output_name[0];               
+        $inputFileName=  $uploadDirectory."/".$file;       
     }
-    if($_POST['viewerContainer'] == "viewerContainer2")
+    else if($_POST['Source'] == "d")
     {
-        $output_file_path= $scriptParentDirectory."/".$sourceBDirectory."/".$output_name[0];              
-    }   
+        $inputFileName=  $uploadDirectory."/".$file;       
+    }
 
-    $command = '"'.$launch_converter. '" "'. $inputFileName. '" "'.$output_file_path.'"';
+    $command = '"'.$launch_converter. '" "'. $inputFileName. '"';
     exec($command, $output);
 
     echo  trim($file);
