@@ -73,7 +73,7 @@ const ComplianceColumnNames = {
     SourceName: "SourceA",
     Status: "Status",
     NodeId: "NodeId",
-    SourceId : "SourceId",
+    SourceId: "SourceId",
     ResultId: "ID",
     GroupId: "groupId"
 }
@@ -102,9 +102,9 @@ const Comparison = {
     ViewerCContainer: "compare3",
     ViewerDContainer: "compare4",
 
-    LargeAnalyticsContainer : "largeAnalyticsContainer",
-    AnalyticsButton : "comparisonAnalyticsBtn",
-    SmallAnalyticsContainer : "comparisonSmallAnalyticsContainer",
+    LargeAnalyticsContainer: "largeAnalyticsContainer",
+    AnalyticsButton: "comparisonAnalyticsBtn",
+    SmallAnalyticsContainer: "comparisonSmallAnalyticsContainer",
 
 }
 
@@ -113,19 +113,58 @@ const Compliance = {
     DetailInfoContainer: "complianceDetailInfo",
     ViewerContainer: "compliance1",
 
-    AnalyticsButton : "complianceAnalyticsBtn",
-    SmallAnalyticsContainer : "complianceSmallAnalyticsContainer",
+    AnalyticsButton: "complianceAnalyticsBtn",
+    SmallAnalyticsContainer: "complianceSmallAnalyticsContainer",
 }
 
 // menu bar
-const MenuBar ={
-    ReCheckBtn : "reCheck",  
-    ShowAllBtn : "showAll",      
-    HistoryBtn : "history",
-    UnitsBtn : "units",
-    CheckInfoBtn : "checkInfo",
-    SaveProgressBtn : "saveProgress",
-    ResetBtn : "reset",
-    NavCubeBtn : "navCube",
+const MenuBar = {
+    ReCheckBtn: "reCheck",
+    ShowAllBtn: "showAll",
+    HistoryBtn: "history",
+    UnitsBtn: "units",
+    CheckInfoBtn: "checkInfo",
+    SaveProgressBtn: "saveProgress",
+    ResetBtn: "reset",
+    NavCubeBtn: "navCube",
 }
 
+/* Comparison model browser */
+const ComparisonBrowserNames = {
+    Select: "Select",
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    Status: "Status",
+    NodeId : "NodeId",
+    ResultId : "ResultId",
+    GroupId : "GroupId",
+    Parent : "Parent"
+}
+
+const ComparisonBrowserColumns = {
+    Select: 0,
+    Component: 1,
+    MainClass: 2,
+    SubClass: 3,
+    Status: 4,
+    NodeId : 5,
+    ResultId : 6,
+    GroupId : 7,
+    Parent : 8
+}
+
+/* Comparison model browser detailed table */
+const ComparisonBrowserDetailedNames = {
+    Select: "Select",
+    PropertyName: "Property",
+    PropertyValue: "Value",
+    Status: "Status"
+}
+
+const ComparisonBrowserDetailedColumns = {
+    Select: 0,
+    PropertyName: 1,
+    PropertyValue: 2,
+    Status: 3
+}
