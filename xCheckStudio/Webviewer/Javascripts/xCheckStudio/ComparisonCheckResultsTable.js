@@ -237,7 +237,7 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 }
 
 ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var dataGrid = $("#" + containerId).dxDataGrid("instance");
+    var dataGrid = $(containerId).dxDataGrid("instance");
     var mainReviewTableRows = dataGrid.getVisibleRows();
 
     for (var i = 0; i < mainReviewTableRows.length; i++) {
@@ -338,7 +338,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             paging: { enabled: false },
             onContentReady: function (e) {
-                _this.highlightMainReviewTableFromCheckStatus(containerDiv.replace("#", ""));
+                _this.highlightMainReviewTableFromCheckStatus(containerDiv);
                 model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
                 model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },

@@ -58,7 +58,7 @@ function initReviewModule() {
                     }
 
                     if (key == 'Comparisons') {
-                        comparisons = checkResults[key];                        
+                        comparisons = checkResults[key];
                     }
                     else if (key == 'Compliances') {
                         compliances = checkResults[key];
@@ -74,13 +74,13 @@ function initReviewModule() {
                                 }
                             }
                         }
-                    }                    
+                    }
                     else if (key == 'SourceAComparisonComponentsHierarchy') {
                         sourceAComparisonHierarchy = checkResults[key];
                     }
                     else if (key == 'SourceBComparisonComponentsHierarchy') {
                         sourceBComparisonHierarchy = checkResults[key];
-                    }                 
+                    }
                 }
 
                 return resolve(true);
@@ -212,26 +212,8 @@ function loadComparisonData(comparisonCheckGroups,
     sourceAComponentsHierarchy,
     sourceBComponentsHierarchy) {
 
-    if (comparisonCheckGroups.sources.length > 1) {
-        document.getElementById("comparePanelA").style.width = "100%";
-    }
-    else 
-    {
-        return;
-    }
-
-    if (comparisonCheckGroups.sources.length === 2) {
-        document.getElementById("comparePanelB").style.display = "block";
-    }
-    else if (comparisonCheckGroups.sources.length === 3) {
-        document.getElementById("comparePanelB").style.display = "block";
-        document.getElementById("comparePanelC").style.display = "block";
-    }
-    else if (comparisonCheckGroups.sources.length === 4) {
-        document.getElementById("comparePanelB").style.display = "block";
-        document.getElementById("comparePanelC").style.display = "block";
-        document.getElementById("comparePanelD").style.display = "block";
-    }  
+    // make viewers enable
+    enableViewers(comparisonCheckGroups.sources);
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
@@ -259,7 +241,7 @@ function loadComparisonData(comparisonCheckGroups,
     comparisonData["selectionManager"] = selectionManager;
 
     // comparison main table    
-    var checkResultsTable = new ComparisonCheckResultsTable( Comparison.MainReviewContainer);
+    var checkResultsTable = new ComparisonCheckResultsTable(Comparison.MainReviewContainer);
     checkResultsTable.populateReviewTable();
     comparisonData["reviewTable"] = checkResultsTable;
 
@@ -304,3 +286,161 @@ function loadComplianceData(compliance,
     complianceData["detailedInfoTable"] = checkPropertiesTable;
 
 }
+
+
+function populateModelBrowser(comparison) {
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    $.ajax({
+        url: 'PHP/SourceViewerOptionsReader.php',
+        type: "POST",
+        async: true,
+        data: {
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        success: function (msg) {
+            var viewerOptions = JSON.parse(msg);
+
+            // make viewers enable
+            enableViewers(comparison.sources);
+
+            for (var i = 0; i < comparison.sources.length; i++) {
+                if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
+
+                    //var container = checkResults.sourceInfo.sourceAFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
+                    var source = checkResults.sourceInfo.sourceAFileName;
+
+                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
+
+                    var comparisonData = model.checks["comparison"];
+                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;
+
+                    if (viewerOptions['a']['endPointUri'] !== undefined) {
+
+                        var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
+                            undefined,
+                            undefined);
+                        viewerInterface.setupViewer(550, 280);
+
+                        comparisonData["sourceAViewer"] = viewerInterface;
+                    }
+
+
+                }
+                else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
+                    //var container = checkResults.sourceInfo.sourceBFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
+                    var source = checkResults.sourceInfo.sourceBFileName;
+
+                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+
+                    var comparisonData = model.checks["comparison"];
+                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
+
+                    // selection manager
+                    var selectionManager = new ReviewComparisonSelectionManager();
+                    comparisonData["selectionManager"] = selectionManager;
+
+                    if (viewerOptions['b']['endPointUri'] !== undefined) {
+                        var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
+                            undefined,
+                            undefined);
+                        viewerInterface.setupViewer(550, 280);
+
+                        comparisonData["sourceBViewer"] = viewerInterface;
+                    }
+                }
+            }
+
+            // make buttons collapsible
+            setButtonsCollapsible(Comparison.MainReviewContainer);
+        }
+    });
+    // createModelBrowserAccordion(comparison.sources);   
+}
+
+function setButtonsCollapsible(containerId) {
+
+    var container = document.getElementById(containerId);
+    var acc = container.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+}
+
+function enableViewers(sources) {
+    if (sources.length > 1) {
+        document.getElementById("comparePanelA").style.width = "100%";
+    }
+    else {
+        return;
+    }
+
+    if (sources.length === 2) {
+        document.getElementById("comparePanelB").style.display = "block";
+    }
+    else if (sources.length === 3) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+    }
+    else if (sources.length === 4) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+        document.getElementById("comparePanelD").style.display = "block";
+    }
+}
+
+// function createModelBrowserAccordion(sources) {
+//     var parentTable = document.getElementById(Comparison.MainReviewContainer);
+
+//     var data = createAccordionData(sources);
+//     for (var i = 0; i < data.length; i++) {
+//         var div = document.createElement("DIV");
+//         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+//         div.id = data[i]["template"];
+//         var datagridDiv = document.createElement("DIV");
+//         // datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
+//         datagridDiv.id = data[i]["template"] + "_";
+//         div.append(datagridDiv);
+//         parentTable.append(div);
+//     }
+
+//     $("#" + Comparison.MainReviewContainer).dxAccordion({
+//         collapsible: true,
+//         dataSource: data,
+//         deferRendering: false,
+//         selectedIndex: -1,
+//         onSelectionChanged: function (e) {
+
+//         }
+//     });
+// }
+
+// function createAccordionData(sources) {
+
+//     var data = [];
+//     for (var i = 0; i < sources.length; i++) {
+//         var source = sources[i];
+
+//         var dataObject = {};
+//         dataObject["template"] = source;
+//         dataObject["title"] = source;
+
+//         data.push(dataObject);
+//     }
+
+//     return data;
+// }

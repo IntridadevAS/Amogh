@@ -532,8 +532,7 @@
                             $comp = traverseRecursivelyForComparison($dbh, $sourceANodeId, $traversedNodes, true);
                             
                             if($comp !== NULL && 
-                               !array_key_exists($comp['NodeId'], $sourceAComparisonComponentsHierarchy)) {
-                            
+                               !array_key_exists($comp['NodeId'], $sourceAComparisonComponentsHierarchy)) {                                
                                 $sourceAComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
                             }
                         }
@@ -550,7 +549,7 @@
                             $comp = traverseRecursivelyForComparison($dbh, $sourceBNodeId, $traversedNodes, false);                     
                            
                             if($comp !== NULL && 
-                               !array_key_exists($comp['NodeId'], $sourceBComparisonComponentsHierarchy)) {
+                               !array_key_exists($comp['NodeId'], $sourceBComparisonComponentsHierarchy)) {                                
                                 $sourceBComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
                             }
                         }
@@ -599,6 +598,7 @@
             // read component main class and subclass
             $compStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =$nodeId"); 
             $compRow = $compStmt->fetch(\PDO::FETCH_ASSOC);
+            $component["Name"] = $compRow['name'];
             $component["MainClass"] = $compRow['mainclass'];
             $component["SubClass"] = $compRow['subclass'];
 
@@ -607,12 +607,20 @@
             $comparisonComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);            
             if(!$comparisonComponentRow)
             {
-                return NULL;
+                $component["Id"] =  NULL;
+                $component["GroupId"]  = NULL;
+                $component["accepted"] = NULL;
+                $component["transpose"] = NULL;
+                $component["Status"] =  "Not Checked";
             }
-
-            $component["accepted"] = $comparisonComponentRow['accepted'];
-            $component["transpose"] = $comparisonComponentRow['transpose'];
-            $component["Status"] =  $comparisonComponentRow['status'];
+            else
+            {
+                $component["Id"] =  $comparisonComponentRow['id'];
+                $component["GroupId"]  = $comparisonComponentRow['ownerGroup'];
+                $component["accepted"] = $comparisonComponentRow['accepted'];
+                $component["transpose"] = $comparisonComponentRow['transpose'];
+                $component["Status"] =  $comparisonComponentRow['status'];
+            }
 
             // traverse child if any
             $childrenStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where parentid =$nodeId"); 

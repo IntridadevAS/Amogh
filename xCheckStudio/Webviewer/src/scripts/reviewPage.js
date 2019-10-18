@@ -13,14 +13,16 @@ let model = {
       sourceBViewer: null,
       sourceCViewer: null,
       sourceDViewer: null,
-      selectionManager: null
+      selectionManager: null,
+      modelBrowsers : {}
     },
     "compliance": {
       reviewManager: null,
       reviewTable: null,
       detailedInfoTable: null,
       viewer: null,
-      selectionManager: null
+      selectionManager: null,
+      modelBrowsers : {}
     }
   },
   files: {
@@ -210,10 +212,36 @@ let viewTabs = {
       this.selectFiles.appendChild(newCard);
     };
 
-    let enterBtn = document.createElement("div");
-    enterBtn.classList.add("enterBtn");
-    enterBtn.setAttribute("onclick", "viewTabs.enterComparison()");
-    this.selectFiles.appendChild(enterBtn);
+    // let enterBrowserBtn = document.createElement("div");
+    // enterBrowserBtn.classList.add("enterBtn");    
+    // //enterBrowserBtn.setAttribute("onclick", "viewTabs.enterComparison()");
+
+    // var img = document.createElement("img");
+    // img.src = "public/symbols/Model Explorer Icon.svg";
+    // enterBrowserBtn.appendChild(img);
+
+    // this.selectFiles.appendChild(enterBrowserBtn);
+
+    let enterComparisonBtn = document.createElement("div");
+    enterComparisonBtn.classList.add("enterBtn");
+    // enterComparisonBtn.style.position = "absolute";
+    // enterComparisonBtn.style.left = enterBrowserBtn.offsetLeft + "px";
+    // enterComparisonBtn.style.top = enterBrowserBtn.offsetTop + enterBrowserBtn.offsetHeight + "px";
+    //enterComparisonBtn.setAttribute("onclick", "viewTabs.enterComparison()");
+
+    var browserImg = document.createElement("img");
+    browserImg.src = "public/symbols/Model Explorer Icon.svg";
+    browserImg.setAttribute("onclick", "viewTabs.enterComparisonBrowser()");
+    enterComparisonBtn.appendChild(browserImg);
+
+    reviewTableImg = document.createElement("img");
+    reviewTableImg.src = "public/symbols/Display Review Table icon.svg";
+    reviewTableImg.style.position = "relative";
+    reviewTableImg.style.top = "24px";
+    reviewTableImg.setAttribute("onclick", "viewTabs.enterComparison()");
+    enterComparisonBtn.appendChild(reviewTableImg);
+
+    this.selectFiles.appendChild(enterComparisonBtn);
   },
 
   enterComparison: function () {
@@ -221,7 +249,59 @@ let viewTabs = {
     clearData();
 
     // TODO set enter functionality for comparison here
-    var requiredComparison;
+    var requiredComparison = viewTabs.getComparison();
+    // for (var i = 0; i < comparisons.length; i++) {
+    //   var comparison = comparisons[i];
+
+    //   if (comparison.sources.length != model.selectedComparisons.length) {
+    //     continue;
+    //   }
+
+    //   var validComparison = false;
+    //   for (var j = 0; j < model.selectedComparisons.length; j++) {
+    //     var selectedComparison = model.selectedComparisons[i];
+    //     if (!comparison.sources.includes(selectedComparison.fileName)) {
+    //       validComparison = false;
+    //       break;
+    //     }
+
+    //     validComparison = true;
+    //   }
+
+    //   if (validComparison) {
+    //     requiredComparison = comparison;
+    //     break;
+    //   }
+    // }
+
+    if (requiredComparison) {
+      // populate check results
+      populateCheckResults(requiredComparison,
+        undefined,
+        sourceAComparisonHierarchy,
+        sourceBComparisonHierarchy);
+
+    }
+
+    // close select files UI
+    viewTabs.closeSelectFiles();
+  },
+
+  enterComparisonBrowser: function () {
+    // clear earlier data
+    clearData();
+
+    var requiredComparison = viewTabs.getComparison();
+
+    if (requiredComparison) {
+      populateModelBrowser(requiredComparison);     
+    }
+
+    // close select files UI
+    viewTabs.closeSelectFiles();
+  },
+
+  getComparison: function () {   
     for (var i = 0; i < comparisons.length; i++) {
       var comparison = comparisons[i];
 
@@ -241,22 +321,11 @@ let viewTabs = {
       }
 
       if (validComparison) {
-        requiredComparison = comparison;
-        break;
+        return comparison;
       }
     }
 
-    if (requiredComparison) {
-      // populate check results
-      populateCheckResults(requiredComparison,
-        undefined,
-        sourceAComparisonHierarchy,
-        sourceBComparisonHierarchy);
-
-    }
-
-    // close select files UI
-    viewTabs.closeSelectFiles();
+    return undefined;
   },
 
   populateCompliances: function () {
