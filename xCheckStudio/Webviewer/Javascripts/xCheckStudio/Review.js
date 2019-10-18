@@ -212,25 +212,8 @@ function loadComparisonData(comparisonCheckGroups,
     sourceAComponentsHierarchy,
     sourceBComponentsHierarchy) {
 
-    if (comparisonCheckGroups.sources.length > 1) {
-        document.getElementById("comparePanelA").style.width = "100%";
-    }
-    else {
-        return;
-    }
-
-    if (comparisonCheckGroups.sources.length === 2) {
-        document.getElementById("comparePanelB").style.display = "block";
-    }
-    else if (comparisonCheckGroups.sources.length === 3) {
-        document.getElementById("comparePanelB").style.display = "block";
-        document.getElementById("comparePanelC").style.display = "block";
-    }
-    else if (comparisonCheckGroups.sources.length === 4) {
-        document.getElementById("comparePanelB").style.display = "block";
-        document.getElementById("comparePanelC").style.display = "block";
-        document.getElementById("comparePanelD").style.display = "block";
-    }
+    // make viewers enable
+    enableViewers(comparisonCheckGroups.sources);
 
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
@@ -307,38 +290,76 @@ function loadComplianceData(compliance,
 
 function populateModelBrowser(comparison) {
 
-    // createModelBrowserAccordion(comparison.sources);
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    $.ajax({
+        url: 'PHP/SourceViewerOptionsReader.php',
+        type: "POST",
+        async: true,
+        data: {
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        success: function (msg) {
+            var viewerOptions = JSON.parse(msg);
 
-    for (var i = 0; i < comparison.sources.length; i++) {
-        if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
+            // make viewers enable
+            enableViewers(comparison.sources);
 
-            //var container = checkResults.sourceInfo.sourceAFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
-            var source = checkResults.sourceInfo.sourceAFileName;
+            for (var i = 0; i < comparison.sources.length; i++) {
+                if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
 
-            var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
-            modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
+                    //var container = checkResults.sourceInfo.sourceAFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
+                    var source = checkResults.sourceInfo.sourceAFileName;
 
-            var comparisonData = model.checks["comparison"];
-            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;            
+                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
+
+                    var comparisonData = model.checks["comparison"];
+                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;
+
+                    if (viewerOptions['a']['endPointUri'] !== undefined) {
+
+                        var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
+                            undefined,
+                            undefined);
+                        viewerInterface.setupViewer(550, 280);
+
+                        comparisonData["sourceAViewer"] = viewerInterface;
+                    }
+
+
+                }
+                else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
+                    //var container = checkResults.sourceInfo.sourceBFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
+                    var source = checkResults.sourceInfo.sourceBFileName;
+
+                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+
+                    var comparisonData = model.checks["comparison"];
+                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
+
+                    // selection manager
+                    var selectionManager = new ReviewComparisonSelectionManager();
+                    comparisonData["selectionManager"] = selectionManager;
+
+                    if (viewerOptions['b']['endPointUri'] !== undefined) {
+                        var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
+                            undefined,
+                            undefined);
+                        viewerInterface.setupViewer(550, 280);
+
+                        comparisonData["sourceBViewer"] = viewerInterface;
+                    }
+                }
+            }
+
+            // make buttons collapsible
+            setButtonsCollapsible(Comparison.MainReviewContainer);
         }
-        else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
-            //var container = checkResults.sourceInfo.sourceBFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
-            var source = checkResults.sourceInfo.sourceBFileName;
-
-            var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
-            modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
-
-            var comparisonData = model.checks["comparison"];
-            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
-
-            // selection manager
-            var selectionManager = new ReviewComparisonSelectionManager();
-            comparisonData["selectionManager"] = selectionManager;
-        }
-    }
-
-    // make buttons collapsible
-    setButtonsCollapsible(Comparison.MainReviewContainer);
+    });
+    // createModelBrowserAccordion(comparison.sources);   
 }
 
 function setButtonsCollapsible(containerId) {
@@ -354,9 +375,31 @@ function setButtonsCollapsible(containerId) {
             if (panel.style.display === "block") {
                 panel.style.display = "none";
             } else {
-                panel.style.display = "block";                
+                panel.style.display = "block";
             }
         });
+    }
+}
+
+function enableViewers(sources) {
+    if (sources.length > 1) {
+        document.getElementById("comparePanelA").style.width = "100%";
+    }
+    else {
+        return;
+    }
+
+    if (sources.length === 2) {
+        document.getElementById("comparePanelB").style.display = "block";
+    }
+    else if (sources.length === 3) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+    }
+    else if (sources.length === 4) {
+        document.getElementById("comparePanelB").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";
+        document.getElementById("comparePanelD").style.display = "block";
     }
 }
 
