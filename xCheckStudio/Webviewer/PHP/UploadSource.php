@@ -114,17 +114,6 @@
                 }
 
                 break;
-                // else
-                // {
-                //     //$output_name=explode(".",$fileName);       
-
-                //     $UploadFolder= $uploadDirectory."/".$fileName;                                                      
-                //     $command = '"'.$launch_converter. '" "'. $UploadFolder. '"';                  
-                //     exec($command, $output);
-                    
-                //     echo 'success';        
-                //     return; 
-                // }
             }
         }      
         if(count($convertibleFiles) === 0)
