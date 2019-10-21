@@ -626,7 +626,26 @@
 
     /* To change the mouse hover color for accordion */
     .dx-accordion-item.dx-state-hover .dx-accordion-item-title {
-      background-color: #D3D3D3 !important;
+      background-color: #706f6f !important;
+    }
+
+    /*To change button background on title tab hover*/
+    .dx-accordion-item.dx-state-hover .dx-button-mode-contained{
+      background: #706f6f !important;
+    }
+
+    /*If accordion is selected then hover should not show effect on button*/
+    .dx-accordion-item.dx-item-selected.dx-state-hover .dx-button-mode-contained{
+      background: transparent !important;
+    }
+
+    .dx-button-mode-contained.dx-state-hover {
+      background: #706f6f !important;
+    }
+
+    .dx-accordion-item-title .dx-icon {
+      font-size: 22px !important;
+      font-weight: bolder !important;
     }
 
     .dx-accordion-item-opened.dx-state-hover > .dx-accordion-item-title {
