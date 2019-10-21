@@ -80,7 +80,7 @@ ReviewViewerInterface.prototype.GetComparisonCheckComponentData = function (revi
 ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (reviewTableRow, containerDiv) {
     var SourceA = reviewTableRow.cells[ComplianceColumns.SourceName].innerText;   
     
-    var dataGrid = $(ContainerDiv).dxDataGrid("instance");
+    var dataGrid = $(containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
         for (var id in data) {
             if (data[id].SourceA.trim() == SourceA.trim()) {
