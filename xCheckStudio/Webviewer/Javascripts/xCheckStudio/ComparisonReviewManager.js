@@ -120,8 +120,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
 
     // populate property table
-    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
-    //this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
 
     var sheetName = containerDiv.replace("#", "");
     sheetName = sheetName.split('_')[0];
@@ -378,64 +377,50 @@ ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (
     }
 }
 
-ComparisonReviewManager.prototype.updateStatusOfCategory = function (button) {
+ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordion) {
     var _this = this;
 
-    var groupId = button.attributes[0].value;
-    var categorydiv = document.getElementById(button.innerHTML);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
+    var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     try {
         $.ajax({
             url: 'PHP/Accept.php',
             type: "POST",
             async: true,
-            data: { 'groupid': groupId, 'tabletoupdate': "category", 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
+            data: { 'groupid': groupId, 
+            'tabletoupdate': "category", 
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname },
             success: function (msg) {
-                for (var i = 0; i < noOfComponents; i++) {
-                    if (categorydiv.children[1].children[0].children[0].children[i].children[2].innerHTML !== "OK") {
-                        var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                var compgroup = _this.ComparisonCheckManager["results"][groupId];
+                    if (compgroup.categoryStatus !== "ACCEPTED") {
                         compgroup.categoryStatus = "ACCEPTED";
-                        for (var compId in compgroup["CheckComponents"]) {
-                            var component = compgroup["CheckComponents"][compId];
+                        for (var i = 0; i < rows.length; i++) {
+                            var compId = rows[i]["data"]["ID"];
+                            var component = compgroup["components"][compId];
                             component.status = "OK(A)";
                             for (var propertyId in component.properties) {
                                 property = component.properties[propertyId];
-                                if (property.Severity !== 'No Value' && property.Severity !== 'OK')
-                                    property.Severity = 'ACCEPTED';
-
+                                if (property.severity !== 'No Value' && property.severity !== 'OK')
+                                    property.severity = 'ACCEPTED';
                             }
+                            var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                            model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                         }
-                        var row = categorydiv.children[1].children[0].children[0].children[i];
-                        var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-
-                        var editedItem = {
-                            "SourceA": row.cells[ComparisonColumns.SourceAName].innerText,
-                            "SourceB": row.cells[ComparisonColumns.SourceBName].innerText,
-                            "Status": component.status,
-                            "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
-                            "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
-                            "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
-                            "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
-                            "ID": row.cells[ComparisonColumns.ResultId].innerText,
-                            "groupId": row.cells[ComparisonColumns.GroupId].innerText
-                        };
-
-                        $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                            if (i == noOfComponents - 1) {
-                                selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                                _this.populateDetailedReviewTable(selectedRow);
-                                $(gridId).jsGrid("refresh");
-                            }
-                        });
                     }
                 }
-            }
-        });
-    }
-    catch (error) {
-        console.log(error);
-    }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
 }
 
 ComparisonReviewManager.prototype.UnAcceptComponent = function (selectedRow, tableContainer, componentId, groupId) {
@@ -564,13 +549,17 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
     }
 }
 
-ComparisonReviewManager.prototype.UnAcceptCategory = function (button) {
+ComparisonReviewManager.prototype.UnAcceptCategory = function (accordion) {
     var _this = this;
 
-    var groupId = button.attributes[0].value;
-    var categorydiv = document.getElementById(button.innerHTML);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
+    var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
 
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     try {
         $.ajax({
             url: 'PHP/Accept.php',
@@ -588,46 +577,20 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (button) {
                 status = msg;
                 var componentStatus = status[0];
                 var propsStatus = status[1];
-                var index = 0
-                for (var i = 0; i < noOfComponents; i++) {
-                    var j = 0;
-                    var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
-                    compgroup.categoryStatus = "UNACCEPTED";
-                    for (var compId in compgroup["CheckComponents"]) {
-                        var component = compgroup["CheckComponents"][compId];
-                        component.status = componentStatus[index]['status'];
-                        var propindex = 0;
-                        for (var propertyId in component.properties) {
-                            property = component.properties[propertyId];
-                            property.Severity = propsStatus[j][propindex]['severity'];
-                            propindex++;
-                        }
-                        j++;
+                var compgroup = _this.ComparisonCheckManager["results"][groupId];
+                compgroup.categoryStatus = "UNACCEPTED";
+                for (var i = 0; i < rows.length; i++) {
+                    var compId = rows[i]["data"]["ID"];
+                    var component = compgroup["components"][compId];
+                    component.status = componentStatus[i]['status'];
+                    var propertyIndex = 0;
+                    for (var propertyId in component.properties) {
+                        property = component.properties[propertyId];
+                        property.severity = propsStatus[i][propertyIndex]['severity'];
+                        propertyIndex++;
                     }
-
-                    var row = categorydiv.children[1].children[0].children[0].children[i];
-                    var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-
-                    var editedItem = {
-                        "SourceA": row.cells[ComparisonColumns.SourceAName].innerText,
-                        "SourceB": row.cells[ComparisonColumns.SourceBName].innerText,
-                        "Status": component.status,
-                        "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
-                        "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
-                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
-                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
-                        "ID": row.cells[ComparisonColumns.ResultId].innerText,
-                        "groupId": row.cells[ComparisonColumns.GroupId].innerText
-                    };
-
-                    $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                        if (i == noOfComponents - 1) {
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            $(gridId).jsGrid("refresh");
-                        }
-                    });
-                    index++;
+                    var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                    model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                 }
             }
         });
@@ -913,6 +876,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
             success: function (msg) {
                 var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
                 component.transpose = transposeType;
+                var originalstatus = component.status;
                 component.status = 'OK(T)';
                 for (var propertyId in component.properties) {
                     property = component.properties[propertyId];
@@ -928,8 +892,8 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
                         else {
                             if ((property.severity == 'Error' || property.severity == 'No Match') && property.transpose == null &&
                                 component.status == 'OK(T)') {
-                                if (!(component.status).includes('(T)'))
-                                    component.status = component.Status + "(T)";
+                                if (!(originalstatus).includes('(T)'))
+                                    component.status = originalstatus + "(T)";
                             }
                         }
                     }
@@ -945,12 +909,17 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (button) {
+ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion) {
     var _this = this;
 
-    var groupId = button.getAttribute("groupId");
-    var categorydiv = document.getElementById(button.innerHTML);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
+    var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     try {
         $.ajax({
@@ -964,47 +933,23 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (button) {
                 status = msg;
                 var componentStatus = status[0];
                 var propsStatus = status[1];
-                var index = 0
-                for (var i = 0; i < noOfComponents; i++) {
-                    var j = 0;
-                    var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
-                    compgroup.categoryStatus = "UNACCEPTED";
-                    for (var compId in compgroup["CheckComponents"]) {
-                        var component = compgroup["CheckComponents"][compId];
-                        component.status = componentStatus[index]['status'];
-                        component.transpose = null;
-                        var propindex = 0;
-                        for (var propertyId in component.properties) {
-                            property = component.properties[propertyId];
-                            property.Severity = propsStatus[j][propindex]['severity'];
-                            property.transpose = null;
-                            propindex++;
-                        }
-                        j++;
+
+                var compgroup = _this.ComparisonCheckManager["results"][groupId];
+                compgroup.categoryStatus = "UNACCEPTED";
+                for (var i = 0; i < rows.length; i++) {
+                    var compId = rows[i]["data"]["ID"];
+                    var component = compgroup["components"][compId];
+                    component.status = componentStatus[i]['status'];;
+                    component.transpose = null;
+                    var propindex = 0;
+                    for (var propertyId in component.properties) {
+                        property = component.properties[propertyId];
+                        property.severity = propsStatus[i][propindex]['severity'];
+                        property.transpose = null;
+                        propindex++;
                     }
-                    var row = categorydiv.children[1].children[0].children[0].children[i];
-                    var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-
-                    var editedItem = {
-                        "SourceA": row.cells[ComparisonColumns.SourceAName].innerText,
-                        "SourceB": row.cells[ComparisonColumns.SourceBName].innerText,
-                        "Status": component.status,
-                        "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
-                        "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
-                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
-                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
-                        "ID": row.cells[ComparisonColumns.ResultId].innerText,
-                        "groupId": row.cells[ComparisonColumns.GroupId].innerText
-                    };
-
-                    $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                        if (i == noOfComponents - 1) {
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            $(gridId).jsGrid("refresh");
-                        }
-                    });
-                    index++;
+                    var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                    model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                 }
             }
         });
@@ -1014,12 +959,17 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (button) {
     }
 }
 
-ComparisonReviewManager.prototype.TransposeCategory = function (key, button) {
+ComparisonReviewManager.prototype.TransposeCategory = function (key, accordion) {
     var _this = this;
 
-    var groupId = button.getAttribute("groupId");
-    var categorydiv = document.getElementById(button.innerHTML);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
+    var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     var transposeType = key;
 
     try {
@@ -1030,56 +980,36 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, button) {
             data: { 'groupid': groupId, 'transposeType': transposeType, 'transposeLevel': 'categorylevel', 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
             success: function (msg) {
 
-                var compgroup = _this.ComparisonCheckManager["CheckGroups"][groupId];
+                var compgroup = _this.ComparisonCheckManager["results"][groupId];
                 compgroup.categoryStatus = "OK(T)";
-                var index = 0;
-                for (var compId in compgroup["CheckComponents"]) {
-                    var component = compgroup["CheckComponents"][compId];
-                    component.status = component.Status;
-                    if (component.Status !== 'No Match' && component.Status !== 'OK') {
+
+                for (var i = 0; i < rows.length; i++) {
+                    var compId = rows[i]["data"]["ID"];
+                    var component = compgroup["components"][compId];
+                    var originalstatus = component.status;
+                    if (component.status !== 'No Match' && component.status !== 'OK') {
+                        component.status = "OK(T)";
+                        component.transpose = transposeType;
                         for (var propertyId in component.properties) {
                             property = component.properties[propertyId];
-                            if (property.Severity !== 'OK' && property.Severity !== 'No Value') {
+                            if (property.severity !== 'OK' && property.severity !== 'No Value') {
                                 if ((transposeType == 'lefttoright' || transposeType == 'righttoleft')
-                                    && (property.SourceAName !== "" && property.SourceBName !== "")) {
-                                    property.Severity = 'OK(T)';
+                                    && (property.sourceAName !== "" && property.sourceBName !== "")) {
+                                    property.severity = 'OK(T)';
                                     property.transpose = transposeType;
-                                    component.status = "OK(T)";
-                                    component.transpose = transposeType;
                                 }
                                 else {
-                                    if ((property.Severity == 'Error' || property.Severity == 'No Match') && property.transpose == null &&
+                                    if ((property.severity == 'Error' || property.severity == 'No Match') && property.transpose == null &&
                                         component.status == 'OK(T)') {
-                                        if (!(component.Status).includes('(T)'))
-                                            component.status = component.Status + "(T)";
+                                        if (!(originalstatus).includes('(T)'))
+                                            component.status = originalstatus + "(T)";
                                     }
                                 }
                             }
                         }
                     }
-                    var row = categorydiv.children[1].children[0].children[0].children[index];
-                    var gridId = '#' + _this.ComparisonCheckManager["CheckGroups"][groupId].ComponentClass;
-
-                    var editedItem = {
-                        "SourceA": row.cells[ComparisonColumns.SourceAName].innerText,
-                        "SourceB": row.cells[ComparisonColumns.SourceBName].innerText,
-                        "Status": component.status,
-                        "SourceANodeId": row.cells[ComparisonColumns.SourceANodeId].innerText,
-                        "SourceBNodeId": row.cells[ComparisonColumns.SourceBNodeId].innerText,
-                        "SourceAId": row.cells[ComparisonColumns.SourceAId].innerText,
-                        "SourceBId": row.cells[ComparisonColumns.SourceBId].innerText,
-                        "ID": row.cells[ComparisonColumns.ResultId].innerText,
-                        "groupId": row.cells[ComparisonColumns.GroupId].innerText
-                    };
-
-                    $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                        if (index == noOfComponents - 1) {
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            $(gridId).jsGrid("refresh");
-                        }
-                    });
-                    index++;
+                    var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                    model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                 }
             }
         });

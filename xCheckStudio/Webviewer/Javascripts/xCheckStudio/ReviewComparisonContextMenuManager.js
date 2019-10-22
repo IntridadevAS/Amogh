@@ -24,6 +24,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             var selectedRow = $triggerElement;
             var accept = true;
             var transpose = true;
+            // _this.ComponentTableContainer = componentTableContainer;
             transpose = _this.ChooseRestoreTransposeForComponent(selectedRow[0]);
             accept = _this.ChooseActionForComparisonComponent(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
@@ -199,12 +200,12 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
     });
 }
 
-ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = function () {
+ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = function (categoryTableContainer) {
     var _this = this;
 
-    $("#ComparisonMainReviewTbody").contextMenu({
+    $("#" + categoryTableContainer).contextMenu({
         className: 'contextMenu_style',
-        selector: 'BUTTON',
+        selector: 'div',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -215,7 +216,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
                 callback: function (key, options) {
-                    _this.ExecuteContextMenuClicked(key, options, this, group);
+                    _this.ExecuteContextMenuClicked(key, options, this, "group");
                 },
                 items: {
                     "acceptGroup":
@@ -223,7 +224,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForGroup(this[0]);
                             return disable;
                         }
                     },
@@ -384,9 +385,11 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = function (selectedRow) {
-
-    var groupId = selectedRow.getAttribute("groupId");
-    if (comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'OK(T)') {
+    // var groupIndex = model.getCurrentReviewTable().GetAccordionIndex(selectedRow.textContext);
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+    
+    if (comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'OK(T)') {
         return false;
     }
 
@@ -394,18 +397,35 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = fu
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonGroup = function (selectedRow) {
-    var groupId = selectedRow.getAttribute("groupId");
-    if (comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED' ||
-        comparisonReviewManager.ComparisonCheckManager["CheckGroups"][groupId].categoryStatus == 'ACCEPTED(T)') {
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+
+    if (comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'ACCEPTED' ||
+        comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'ACCEPTED(T)') {
         return false;
     }
 
     return true;
 }
 
+ReviewComparisonContextMenuManager.prototype.DisableAcceptForGroup = function (selectedRow) {
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+    var checkGroup = comparisonReviewManager.ComparisonCheckManager.results[groupId];
+
+    // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
+    if (checkGroup.categoryStatus == 'OK' ||
+    checkGroup.ComponentClass == 'Undefined') {
+        return true;
+    }
+
+    return false;
+}
+
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForGroup = function (selectedRow) {
-    var groupId = selectedRow.getAttribute("groupId");
-    var checkGroup = comparisonReviewManager.ComparisonCheckManager.CheckGroups[groupId];
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+    var checkGroup = comparisonReviewManager.ComparisonCheckManager.results[groupId];
 
     if (checkGroup.categoryStatus == 'OK' ||
         checkGroup.categoryStatus == 'No Match' ||
@@ -546,71 +566,68 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClic
 
 ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
 
-    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-    if (!highlightedRow) {
-        return;
+    if(source.toLowerCase() !== "group") {
+        var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+        if (!highlightedRow) {
+            return;
+        }
+    
+    
+        var containerId = this.ComponentTableContainer;
+        var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+    
+        var componentId = rowData.ID;
+        var groupId = rowData.groupId;
+
+        if (source.toLowerCase() === "component") {
+            comparisonReviewManager.RestoreComponentTranspose(selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
+        else if (source.toLowerCase() === "property") {
+            comparisonReviewManager.RestorePropertyTranspose(selectedRow, containerId, componentId, groupId);
+        }
     }
-
-
-    var containerId = this.ComponentTableContainer;
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
-
-    var componentId = rowData.ID;
-    var groupId = rowData.groupId;
-
-    if (source.toLowerCase() === "group") {
-        comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0],
-            this.ComponentTableContainer,
-            componentId,
-            groupId);
-    }
-    else if (source.toLowerCase() === "component") {
-        comparisonReviewManager.RestoreComponentTranspose(selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
-    else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.RestorePropertyTranspose(selectedRow, containerId, componentId, groupId);
+    else if (source.toLowerCase() === "group") {
+        comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
     }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
-    // if (selectedRow[0].nodeName == "BUTTON") {
-    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-    if (!highlightedRow) {
-        return;
+    if(source.toLowerCase() !== "group") {
+        var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+        if (!highlightedRow) {
+            return;
+        }
+
+
+        var containerId = this.ComponentTableContainer;
+
+        var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
+
+        var componentId = rowData.ID;
+        groupId = rowData.groupId;
+        if (source.toLowerCase() === "component") {
+            comparisonReviewManager.TransposeComponent(key,
+                selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
+        else if (source.toLowerCase() === "property") {
+            comparisonReviewManager.TransposeProperty(key,
+                selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
     }
-
-
-    var containerId = this.ComponentTableContainer;
-
-    var rowData = model.checks[model.currentCheck]["reviewTable"].GetDataForSelectedRow(highlightedRow.rowIndex, containerId);
-
-    var componentId = rowData.ID;
-    var groupId = rowData.groupId;
-
-    if (source.toLowerCase() === "group") {
+    else if (source.toLowerCase() === "group") {
         comparisonReviewManager.TransposeCategory(key,
-            selectedRow[0],
-            containerId,
-            componentId,
-            groupId);
+            selectedRow[0]);
     }
-    else if (source.toLowerCase() === "component") {
-        comparisonReviewManager.TransposeComponent(key,
-            selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
-    else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.TransposeProperty(key,
-            selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
+     
 }
 
 ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {

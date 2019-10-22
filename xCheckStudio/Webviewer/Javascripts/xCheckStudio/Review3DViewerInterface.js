@@ -308,7 +308,11 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
     this.HighlightMatchedComponent(containerDiv, rowData);
 
-    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);    
+    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
+
+    // scroll to rowElement
+    // dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
+    // document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer).scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
