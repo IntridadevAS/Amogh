@@ -2,6 +2,7 @@ function ComplianceCheckResultsTable(mainReviewTableContainer) {
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.CurrentTableId;
     this.CheckTableIds = {};
+    this.ContextMenus = {};
 }
 
 ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
@@ -12,7 +13,6 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
     for(var i = 0; i < data.length; i++) {
         var div = document.createElement("DIV");
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
-        div.setAttribute('groupId', data[i]["groupId"]);
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
         datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
@@ -25,16 +25,22 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         dataSource: data,
         deferRendering: false,
         selectedIndex: -1,
-        onInitialized: function(e) {
-             // initialize the context menu
-             var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-             reviewComplianceContextMenuManager.InitGroupLevelContextMenu();
-        },
         onSelectionChanged: function(e) {
             if(e.addedItems.length > 0) {
                 model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
         },
+        onItemRendered: function (e) {
+            // initialize the context menu             
+            var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
+
+            if(!(containerDiv in _this.ContextMenus)) {
+               var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+               _this.ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
+           }   
+           e.itemElement[0].id = e.itemData["template"] + "_accordion";
+           _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
+       },
         itemTitleTemplate: function(itemData, itemIndex, itemElement) {
             var btn = $('<div>')
             $(btn).data("index", itemIndex)
@@ -73,6 +79,26 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
             e.event.stopPropagation();
         }
     });
+}
+
+ComplianceCheckResultsTable.prototype.getTableId = function(tableName) {
+    return tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+}
+
+ComplianceCheckResultsTable.prototype.GetAccordionData = function(groupName) {
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var accordionItems = accordion.getDataSource().items();
+    var accordionData;
+    for (var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName)) {
+            continue;
+        }
+        else {
+            return accordionItems[i];
+        }
+    }
+
+    return accordionData;
 }
 
 ComplianceCheckResultsTable.prototype.ExpandAccordionScrollToRow = function(row, groupName) {
@@ -339,8 +365,13 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             onInitialized: function(e) {
                 // initialize the context menu
-                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-                reviewComplianceContextMenuManager.InitComponentLevelContextMenu(viewerContainer);
+                if (!(viewerContainer in _this.ContextMenus)) {
+                    var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                    _this.ContextMenus[viewerContainer] = reviewComplianceContextMenuManager;
+                }
+
+                _this.ContextMenus[viewerContainer].ComponentTableContainer = viewerContainer;
+                _this.ContextMenus[viewerContainer].InitComponentLevelContextMenu(viewerContainer);
             },
             onCellPrepared: function(e) {
                 if(e.rowType == "header"){  
@@ -427,7 +458,7 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
         dataGrid.repaintRows(selectedRow.rowIndex);
     
         if (populateDetailedTable) {
-            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);    
+            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));    
         }
 }
 
@@ -513,7 +544,7 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
 }
 
 
-ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData) {
+ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData, containerDiv) {
 
     // var tableData = [];
     // var columnHeaders = [];
@@ -536,11 +567,11 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     }
 
     var id = "#" + this.DetailedReviewTableContainer;
-    this.LoadDetailedReviewTableData(columnHeaders, tableData, id);
+    this.LoadDetailedReviewTableData(columnHeaders, tableData, id, containerDiv);
     
 }
 
-ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer) {
+ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer, containerDiv) {
     var _this = this;
   
     $(function () {
@@ -568,12 +599,20 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 enabled: false
             },
             onContentReady: function(e) {
-                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
-            },
-            onInitialized: function(e) {
                 // initialize the context menu
-                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-                reviewComplianceContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
+                // internal call from repaint rows gives containerId with # hence check
+                if(!containerDiv.includes("#")) {
+                    containerDiv = "#" + containerDiv;
+                }
+                
+                if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
+                {
+                    var reviewComplianceContextMenuManager = new reviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                    model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
+                }
+
+                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);    
+                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
             },
             onCellPrepared: function(e) {
                 if(e.rowType == "header"){  

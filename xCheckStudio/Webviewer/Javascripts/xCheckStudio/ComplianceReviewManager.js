@@ -122,7 +122,7 @@ ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     this.detailedReviewRowComments = {};
 
 
-    model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+    model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
     var tempString = "_" + this.MainReviewTableContainer;
     containerDiv = containerDiv.replace("#", "");
     var sheetName = containerDiv.replace(tempString, "");
@@ -262,7 +262,8 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
 ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordion, tableToUpdate) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -501,7 +502,8 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
 ComplianceReviewManager.prototype.UnAcceptCategory = function (accordion, tableToUpdate) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -555,93 +557,6 @@ ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
     model.checks["compliance"]["viewer"].highlightComponent(nodeId);
 }
 
-
-ComplianceReviewManager.prototype.populateDetailedReviewTable = function (rowData) {
-
-    var parentTable = document.getElementById(this.DetailedReviewTableContainer);
-    parentTable.innerHTML = '';
-
-
-    var tableData = [];
-    var columnHeaders = [];
-
-    var componentId = rowData.ResultId;
-    var groupId = rowData.GroupId;
-    for (var componentsGroupID in this.ComplianceCheckManager) {
-
-        // get the componentgroupd corresponding to selected component 
-        var componentsGroupList = this.ComplianceCheckManager[componentsGroupID];
-        if (componentsGroupList && componentsGroupID != "restore") {
-
-            var component = componentsGroupList[groupId].CheckComponents[componentId];
-
-
-            var div = document.createElement("DIV");
-            parentTable.appendChild(div);
-
-            div.innerHTML = "Check Details :";
-            div.style.fontSize = "20px";
-            div.style.fontWeight = "bold";
-
-            for (var i = 0; i < Object.keys(CompliancePropertyColumns).length; i++) {
-                columnHeader = {};
-                var title;
-                if (i === CompliancePropertyColumns.PropertyName) {
-                    title = "Property";
-                    name = CompliancePropertyColumnNames.PropertyName;
-                }
-                else if (i === CompliancePropertyColumns.PropertyValue) {
-                    title = "Value";
-                    name = CompliancePropertyColumnNames.PropertyValue;
-                }
-                else if (i === CompliancePropertyColumns.Status) {
-                    title = "Status";
-                    name = CompliancePropertyColumnNames.Status;
-                }
-
-                columnHeader["name"] = name;
-                columnHeader["title"] = title;
-                columnHeader["type"] = "textarea";
-                columnHeader["width"] = "30";
-                columnHeaders.push(columnHeader);
-            }
-
-            // // show component class name as property in detailed review table               
-
-            for (var propertyId in component.properties) {
-                property = component.properties[propertyId];
-
-                this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
-
-                tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
-                tableData.push(tableRowContent);
-            }
-
-            var id = "#" + this.DetailedReviewTableContainer;
-            this.LoadDetailedReviewTableData(this, columnHeaders, tableData, id);
-            this.highlightDetailedReviewTableFromCheckStatus(this.DetailedReviewTableContainer)
-
-            var modelBrowserData = document.getElementById(this.DetailedReviewTableContainer);
-            // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
-            var modelBrowserHeaderTable = modelBrowserData.children[jsGridHeaderTableIndex];
-            modelBrowserHeaderTable.style.position = "fixed"
-            modelBrowserHeaderTable.style.width = "565px";
-            modelBrowserHeaderTable.style.backgroundColor = "white";
-            modelBrowserHeaderTable.style.overflowX = "hidden";
-
-            // jsGridHeaderTableIndex = 0 
-            // jsGridTbodyTableIndex = 1
-            var modelBrowserDataTable = modelBrowserData.children[jsGridTbodyTableIndex]
-            modelBrowserDataTable.style.position = "static"
-            modelBrowserDataTable.style.width = "579px";
-            modelBrowserDataTable.style.margin = "55px 0px 0px 0px"
-
-            break;
-            //}
-        }
-    }
-}
 
 ComplianceReviewManager.prototype.highlightDetailedReviewTableFromCheckStatus = function (containerId) {
     var detailedReviewTableContainer = document.getElementById(containerId);

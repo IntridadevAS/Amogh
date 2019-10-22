@@ -134,7 +134,8 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function
 }
 
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForGroup = function (selectedRow) {
-    var groupId = Number(selectedRow.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
     var checkGroup = complianceReviewManager.ComplianceCheckManager.results[groupId];
 
     // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
@@ -189,14 +190,13 @@ ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = func
 
 }
 
-ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = function () {
+ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = function (categoryTableContainer) {
 
     var _this = this;
-    var mainReviewTableDiv = "#" + this.ComplianceReviewManager.MainReviewTableContainer;
 
-    $(mainReviewTableDiv).contextMenu({
+    $("#" + categoryTableContainer).contextMenu({
         className: 'contextMenu_style',
-        selector: '.dx-accordion-item',
+        selector: 'div',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -241,7 +241,8 @@ ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceProperty =
 }
 
 ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceGroup = function (selectedRow) {
-    var groupId =  Number(selectedRow.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
     if (this.ComplianceReviewManager.ComplianceCheckManager["results"][groupId].categoryStatus == 'ACCEPTED') {
         return false;
     }

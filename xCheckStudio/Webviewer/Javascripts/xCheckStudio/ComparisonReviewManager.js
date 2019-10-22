@@ -120,8 +120,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
 
     // populate property table
-    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
-    //this.CheckPropertiesTable.populateDetailedReviewTable(rowData);
+    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
 
     var sheetName = containerDiv.replace("#", "");
     sheetName = sheetName.split('_')[0];
@@ -381,7 +380,8 @@ ComparisonReviewManager.prototype.toggleAcceptAllComparedComponents = function (
 ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordion) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -552,7 +552,8 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
 ComparisonReviewManager.prototype.UnAcceptCategory = function (accordion) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -911,7 +912,8 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedRo
 ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -960,7 +962,8 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
 ComparisonReviewManager.prototype.TransposeCategory = function (key, accordion) {
     var _this = this;
 
-    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
+    var groupId = groupData["groupId"];
     var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid =  $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();

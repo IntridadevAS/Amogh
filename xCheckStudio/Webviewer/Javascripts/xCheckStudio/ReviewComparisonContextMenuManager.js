@@ -24,6 +24,7 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             var selectedRow = $triggerElement;
             var accept = true;
             var transpose = true;
+            // _this.ComponentTableContainer = componentTableContainer;
             transpose = _this.ChooseRestoreTransposeForComponent(selectedRow[0]);
             accept = _this.ChooseActionForComparisonComponent(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
@@ -199,13 +200,12 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
     });
 }
 
-ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = function () {
+ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = function (categoryTableContainer) {
     var _this = this;
-    var groupContainer = "#" + this.ComparisonReviewManager.MainReviewTableContainer;
 
-    $(groupContainer).contextMenu({
+    $("#" + categoryTableContainer).contextMenu({
         className: 'contextMenu_style',
-        selector: '.dx-accordion-item',
+        selector: 'div',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -385,8 +385,10 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = function (selectedRow) {
-
-    var groupId = Number(selectedRow.children[1].getAttribute("groupId"));
+    // var groupIndex = model.getCurrentReviewTable().GetAccordionIndex(selectedRow.textContext);
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+    
     if (comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'OK(T)') {
         return false;
     }
@@ -395,7 +397,9 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = fu
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonGroup = function (selectedRow) {
-    var groupId =  Number(selectedRow.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
+
     if (comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'ACCEPTED' ||
         comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'ACCEPTED(T)') {
         return false;
@@ -405,7 +409,8 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonGroup = fu
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForGroup = function (selectedRow) {
-    var groupId = Number(selectedRow.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
     var checkGroup = comparisonReviewManager.ComparisonCheckManager.results[groupId];
 
     // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
@@ -418,7 +423,8 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForGroup = function (s
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForGroup = function (selectedRow) {
-    var groupId = Number(selectedRow.children[1].getAttribute("groupId"));
+    var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
+    var groupId = groupData["groupId"];
     var checkGroup = comparisonReviewManager.ComparisonCheckManager.results[groupId];
 
     if (checkGroup.categoryStatus == 'OK' ||
@@ -560,7 +566,7 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClic
 
 ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
 
-    if(source !== "group") {
+    if(source.toLowerCase() !== "group") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
         if (!highlightedRow) {
             return;
@@ -572,25 +578,24 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
     
         var componentId = rowData.ID;
         var groupId = rowData.groupId;
+
+        if (source.toLowerCase() === "component") {
+            comparisonReviewManager.RestoreComponentTranspose(selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
+        else if (source.toLowerCase() === "property") {
+            comparisonReviewManager.RestorePropertyTranspose(selectedRow, containerId, componentId, groupId);
+        }
     }
-
-
-    if (source.toLowerCase() === "group") {
+    else if (source.toLowerCase() === "group") {
         comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
-    }
-    else if (source.toLowerCase() === "component") {
-        comparisonReviewManager.RestoreComponentTranspose(selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
-    else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.RestorePropertyTranspose(selectedRow, containerId, componentId, groupId);
     }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
-    if(source !== "group") {
+    if(source.toLowerCase() !== "group") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
         if (!highlightedRow) {
             return;
@@ -603,26 +608,26 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
 
         var componentId = rowData.ID;
         groupId = rowData.groupId;
+        if (source.toLowerCase() === "component") {
+            comparisonReviewManager.TransposeComponent(key,
+                selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
+        else if (source.toLowerCase() === "property") {
+            comparisonReviewManager.TransposeProperty(key,
+                selectedRow,
+                containerId,
+                componentId,
+                groupId);
+        }
     }
-
-    if (source.toLowerCase() === "group") {
+    else if (source.toLowerCase() === "group") {
         comparisonReviewManager.TransposeCategory(key,
             selectedRow[0]);
     }
-    else if (source.toLowerCase() === "component") {
-        comparisonReviewManager.TransposeComponent(key,
-            selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
-    else if (source.toLowerCase() === "property") {
-        comparisonReviewManager.TransposeProperty(key,
-            selectedRow,
-            containerId,
-            componentId,
-            groupId);
-    }
+     
 }
 
 ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {

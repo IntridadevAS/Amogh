@@ -4,6 +4,7 @@ function ComparisonCheckResultsTable(mainReviewTableContainer) {
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.CurrentTableId;
     this.CheckTableIds = {};
+    this.ContextMenus = {};
 }
 
 ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
@@ -14,10 +15,9 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
     for (var i = 0; i < data.length; i++) {
         var div = document.createElement("DIV");
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
-        div.setAttribute('groupId', data[i]["groupId"]);
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
-        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+        datagridDiv.id = _this.getTableId( data[i]["template"]);
         div.append(datagridDiv);
         parentTable.append(div);
     }
@@ -27,15 +27,21 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         dataSource: data,
         deferRendering: false,
         selectedIndex: -1,
-        onInitialized: function(e) {
-             // initialize the context menu
-             var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
-             reviewComparisonContextMenuManager.InitGroupLevelContextMenu();
-        },
         onSelectionChanged: function (e) {
             if (e.addedItems.length > 0) {
-                _this.CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+                _this.CurrentTableId = _this.getTableId(e.addedItems[0]["template"]);
             }
+        },
+        onItemRendered: function (e) {
+             // initialize the context menu             
+             var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
+
+             if(!(containerDiv in _this.ContextMenus)) {
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
+                _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
+            }   
+            e.itemElement[0].id = e.itemData["template"] + "_accordion";
+            _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
         },
         itemTitleTemplate: function(itemData, itemIndex, itemElement) {
             var btn = $('<div>')
@@ -77,6 +83,10 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
     });
 }
 
+ComparisonCheckResultsTable.prototype.getTableId = function(tableName) {
+    return tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+}
+
 ComparisonCheckResultsTable.prototype.ExpandAccordionScrollToRow = function (row, groupName) {
 
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
@@ -92,6 +102,22 @@ ComparisonCheckResultsTable.prototype.ExpandAccordionScrollToRow = function (row
     else {
         mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
     }
+}
+
+ComparisonCheckResultsTable.prototype.GetAccordionData = function(groupName) {
+    var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
+    var accordionItems = accordion.getDataSource().items();
+    var accordionData;
+    for (var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName)) {
+            continue;
+        }
+        else {
+            return accordionItems[i];
+        }
+    }
+
+    return accordionData;
 }
 
 ComparisonCheckResultsTable.prototype.CreateAccordionData = function () {
@@ -358,8 +384,14 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             onInitialized: function (e) {
                 // initialize the context menu
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
-                reviewComparisonContextMenuManager.InitComponentLevelContextMenu(containerDiv);
+                if(!(containerDiv in _this.ContextMenus))
+                {
+                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
+                    _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
+                }
+
+                _this.ContextMenus[containerDiv].ComponentTableContainer = containerDiv;
+                _this.ContextMenus[containerDiv].InitComponentLevelContextMenu(containerDiv);                
             },
             onSelectionChanged: function (e) {
                 if (e.currentSelectedRowKeys.length > 0) {
@@ -462,7 +494,7 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
     dataGrid.repaintRows(selectedRow.rowIndex);
 
     if (populateDetailedTable) {
-        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData);
+        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
     }
 }
 
@@ -524,8 +556,6 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
-                    // headerGroupComp["dataType"] = "string";
-                    // headerGroupComp["width"] = "27%";
 
                     group[0] = headerGroupComp;
                 }
@@ -629,7 +659,7 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
     return tableData;
 }
 
-ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData) {
+ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData, containerDiv) {
     // clear comment
     this.SetComment("");
 
@@ -648,11 +678,11 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     // show component class name as property in detailed review table    
     var tableData = this.CreateTableData(component.properties);
 
-    this.LoadDetailedReviewTableData(columnHeaders, tableData);
+    this.LoadDetailedReviewTableData(columnHeaders, tableData, containerDiv);
 
 }
 
-ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData) {
+ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, containerDiv) {
     var viewerContainer = "#" + this.DetailedReviewTableContainer;
     var _this = this;
 
@@ -682,12 +712,20 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 enabled: false
             },
             onContentReady: function (e) {
-                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer)
-            },
-            onInitialized: function (e) {
-                // initialize the context menu
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.checks["comparison"]["reviewManager"]);
-                reviewComparisonContextMenuManager.InitPropertyLevelContextMenu(viewerContainer);
+                // initialize the context menu  
+                // internal call from repaint rows gives containerId with # hence check
+                if(!containerDiv.includes("#")) {
+                    containerDiv = "#" + containerDiv;
+                }
+                
+                if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
+                {
+                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
+                    model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
+                }
+
+                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);       
+                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
             },
             onCellPrepared: function (e) {
                 if (e.rowType == "header") {

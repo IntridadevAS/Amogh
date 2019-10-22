@@ -378,7 +378,7 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
     }
 
     this.HighlightMatchedComponent(containerDiv, rowData)
-    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);
+    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData, viewerContainer.replace("#", ""));
     
     model.getCurrentSelectionManager().MaintainHighlightedRow(reviewTableRow, containerDiv);
 
