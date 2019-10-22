@@ -56,7 +56,11 @@ let controller = {
 
   setSortChecksBy: function (sortByValue) {
     model.sortChecksBy = sortByValue;
-    this.fetchProjectChecks();
+    if (model.currentModule == "check") {
+      this.fetchProjectChecks();
+    } else if (model.currentModule == "review") {
+      this.fetchProjectReviews();
+    }
   },
 
   sortProjects: function () {
@@ -209,6 +213,58 @@ let controller = {
     }
   },
 
+  sortReviews: function () {
+    if (model.sortChecksBy === "name") {
+      model.projectReviews.sort(function (a, b) {
+        var nameA = a.checkname.toLowerCase(), nameB = b.checkname.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "nameReverse") {
+      model.projectReviews.sort(function (a, b) {
+        var nameA = a.checkname.toLowerCase(), nameB = b.checkname.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    if (model.sortChecksBy === "status") {
+      model.projectReviews.sort(function (a, b) {
+        var nameA = a.checkstatus.toLowerCase(), nameB = b.checkstatus.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "statusReverse") {
+      model.projectReviews.sort(function (a, b) {
+        var nameA = a.checkstatus.toLowerCase(), nameB = b.checkstatus.toLowerCase()
+        if (nameA > nameB) //sort string descending
+          return -1
+        if (nameA < nameB)
+          return 1
+        return 0 //default return value (no sorting)
+      })
+    }
+    else if (model.sortChecksBy === "date") {
+      model.projectReviews.sort(function (a, b) {
+        return new Date(a.checkdate).getTime() - new Date(b.checkdate).getTime()
+      })
+    }
+    else if (model.sortChecksBy === "dateReverse") {
+      model.projectReviews.sort(function (a, b) {
+        return new Date(b.checkdate).getTime() - new Date(a.checkdate).getTime()
+      })
+    }
+  },
 
   getCurrentProj: function () {
     return model.currentProject;
@@ -417,6 +473,7 @@ let controller = {
     }).done(function (msg) {
       var objectArray = JSON.parse(msg);
       model.projectReviews = [...objectArray];
+      controller.sortReviews();
       checkView.init()
     });
   },
@@ -747,7 +804,7 @@ let checkView = {
   },
 
   setToggleBtn: function () {
-    if (!controller.permissions()) {
+    if (!controller.permissions() && this.toggle != null) {
       this.toggle.remove();
     } else if (controller.permissions()) {
       if (controller.currentModule() == "review") {
@@ -987,8 +1044,8 @@ let editProjectView = {
     editDateCreated.innerHTML = this.currentProject.createddate;
     editProjectDescription.value = this.currentProject.description;
     editComments.value = this.currentProject.comments;
-    editProjectStatus.value = this.currentProject.status.toLowerCase();
-    editProjectType.value = this.currentProject.type.toLowerCase();
+    editProjectStatus.value = this.currentProject.status;
+    editProjectType.value = this.currentProject.type;
   },
 
   closeEditProject: function () {
