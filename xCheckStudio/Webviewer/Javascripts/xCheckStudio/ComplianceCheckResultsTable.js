@@ -11,7 +11,8 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
     var data = this.CreateAccordionData();
     for(var i = 0; i < data.length; i++) {
         var div = document.createElement("DIV");
-        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
+        div.setAttribute('groupId', data[i]["groupId"]);
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
         datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
@@ -24,6 +25,11 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         dataSource: data,
         deferRendering: false,
         selectedIndex: -1,
+        onInitialized: function(e) {
+             // initialize the context menu
+             var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+             reviewComplianceContextMenuManager.InitGroupLevelContextMenu();
+        },
         onSelectionChanged: function(e) {
             if(e.addedItems.length > 0) {
                 model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
@@ -112,6 +118,7 @@ ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
 
         dataObject["template"] = componentsGroup.componentClass;
         dataObject["title"] = componentsGroup.componentClass;
+        dataObject["groupId"] = groupId;
 
         data.push(dataObject);
     }

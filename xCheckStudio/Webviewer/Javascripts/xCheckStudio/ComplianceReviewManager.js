@@ -259,12 +259,16 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedRow,
     }
 }
 
-ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tableToUpdate) {
+ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordion, tableToUpdate) {
     var _this = this;
-    var groupId = button.getAttribute("groupId");
 
-    var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     var tableToUpdate = tableToUpdate;
     try {
         $.ajax({
@@ -278,42 +282,22 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (button, tab
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var index = 0;
-                var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
-                compgroup.categoryStatus = "ACCEPTED";
-                for (var compId in compgroup["CheckComponents"]) {
-                    var component = compgroup["CheckComponents"][compId];
-                    component.status = component.Status;
-                    if (component.Status !== 'OK') {
+
+                var compgroup = _this.ComplianceCheckManager["results"][groupId];
+                if (compgroup.categoryStatus !== "ACCEPTED") {
+                    compgroup.categoryStatus = "ACCEPTED";
+                    for (var i = 0; i < rows.length; i++) {
+                        var compId = rows[i]["data"]["ID"];
+                        var component = compgroup["components"][compId];
                         component.status = "OK(A)";
                         for (var propertyId in component.properties) {
                             property = component.properties[propertyId];
-                            if (property.Severity !== 'OK') {
-                                property.Severity = 'ACCEPTED';
-                            }
+                            if (property.severity !== 'No Value' && property.severity !== 'OK')
+                                property.severity = 'ACCEPTED';
                         }
+                        var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                        model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                     }
-
-                    var row = categorydiv.children[1].children[0].children[0].children[index];
-                    var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
-
-                    var editedItem = {
-                        "SourceA": row.cells[ComplianceColumns.SourceName].innerText,
-                        "Status": component.status,
-                        "NodeId": row.cells[ComplianceColumns.NodeId].innerText,
-                        "SourceId": row.cells[ComplianceColumns.SourceId].innerText,
-                        "ID": row.cells[ComplianceColumns.ResultId].innerText,
-                        "groupId": row.cells[ComplianceColumns.GroupId].innerText
-                    };
-
-                    $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                        if (index == noOfComponents - 1) {
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            $(gridId).jsGrid("refresh");
-                        }
-                    });
-                    index++;
                 }
             }
         });
@@ -514,11 +498,16 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedRow,
     }
 }
 
-ComplianceReviewManager.prototype.UnAcceptCategory = function (button, tableToUpdate) {
-    var groupId = button.getAttribute("groupId");
+ComplianceReviewManager.prototype.UnAcceptCategory = function (accordion, tableToUpdate) {
     var _this = this;
-    var categorydiv = document.getElementById(button.innerHTML + "_" + this.MainReviewTableContainer);
-    var noOfComponents = categorydiv.children[1].children[0].children[0].children.length;
+
+    var groupId = Number(accordion.children[1].getAttribute("groupId"));
+    var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+    var dataGrid =  $(groupContainer).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     var tableToUpdate = tableToUpdate;
     try {
         $.ajax({
@@ -537,45 +526,20 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (button, tableToUp
                 status = msg;
                 var componentStatus = status[0];
                 var propsStatus = status[1];
-
-                var index = 0
-                var j = 0;
-
-                var compgroup = _this.ComplianceCheckManager["CheckGroups"][groupId];
+                var compgroup = _this.ComplianceCheckManager["results"][groupId];
                 compgroup.categoryStatus = "UNACCEPTED";
-
-                for (var compId in compgroup["CheckComponents"]) {
-                    var component = compgroup["CheckComponents"][compId];
-                    component.status = componentStatus[index]['status'];
-                    var propindex = 0;
-
+                for (var i = 0; i < rows.length; i++) {
+                    var compId = rows[i]["data"]["ID"];
+                    var component = compgroup["components"][compId];
+                    component.status = componentStatus[i]['status'];
+                    var propertyIndex = 0;
                     for (var propertyId in component.properties) {
                         property = component.properties[propertyId];
-                        property.Severity = propsStatus[j][propindex]['severity'];
-                        propindex++;
+                        property.severity = propsStatus[i][propertyIndex]['severity'];
+                        propertyIndex++;
                     }
-
-                    j++;
-                    var row = categorydiv.children[1].children[0].children[0].children[index];
-                    var gridId = '#' + _this.ComplianceCheckManager["CheckGroups"][groupId].ComponentClass + "_" + _this.MainReviewTableContainer;
-
-                    var editedItem = {
-                        "SourceA": row.cells[ComplianceColumns.SourceName].innerText,
-                        "Status": component.status,
-                        "NodeId": row.cells[ComplianceColumns.NodeId].innerText,
-                        "SourceId": row.cells[ComplianceColumns.SourceId].innerText,
-                        "ID": row.cells[ComplianceColumns.ResultId].innerText,
-                        "groupId": row.cells[ComplianceColumns.GroupId].innerText
-                    };
-
-                    $(gridId).jsGrid("updateItem", row, editedItem).done(function () {
-                        if (index == noOfComponents - 1) {
-                            selectedRow = categorydiv.children[1].children[0].children[0].children[0];
-                            _this.populateDetailedReviewTable(selectedRow);
-                            $(gridId).jsGrid("refresh");
-                        }
-                    });
-                    index++;
+                    var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                    model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
                 }
             }
         });

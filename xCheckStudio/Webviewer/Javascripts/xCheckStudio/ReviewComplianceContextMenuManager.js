@@ -133,6 +133,19 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function
     return false;
 }
 
+ReviewComplianceContextMenuManager.prototype.DisableAcceptForGroup = function (selectedRow) {
+    var groupId = Number(selectedRow.children[1].getAttribute("groupId"));
+    var checkGroup = complianceReviewManager.ComplianceCheckManager.results[groupId];
+
+    // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
+    if (checkGroup.categoryStatus == 'OK' ||
+    checkGroup.ComponentClass == 'Undefined') {
+        return true;
+    }
+
+    return false;
+}
+
 
 ReviewComplianceContextMenuManager.prototype.HaveSCOperations = function () {
     if (model.checks["compliance"]["viewer"].ViewerOptions) {
@@ -179,11 +192,11 @@ ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = func
 ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = function () {
 
     var _this = this;
-    var mainReviewTableDiv = "#" + this.MainReviewTableDiv;
+    var mainReviewTableDiv = "#" + this.ComplianceReviewManager.MainReviewTableContainer;
 
     $(mainReviewTableDiv).contextMenu({
         className: 'contextMenu_style',
-        selector: 'BUTTON',
+        selector: '.dx-accordion-item',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
             var accept = true;
@@ -199,7 +212,7 @@ ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = functio
                         name: conditionalName,
                         disabled: function () {
                             var disable = false;
-                            disable = _this.DisableContextMenuAccept(this);
+                            disable = _this.DisableAcceptForGroup(this[0]);
                             return disable;
                         }
                     },
@@ -228,8 +241,8 @@ ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceProperty =
 }
 
 ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceGroup = function (selectedRow) {
-    var groupId = selectedRow.getAttribute("groupId");
-    if (this.CheckGroups[groupId].categoryStatus == 'ACCEPTED') {
+    var groupId =  Number(selectedRow.children[1].getAttribute("groupId"));
+    if (this.ComplianceReviewManager.ComplianceCheckManager["results"][groupId].categoryStatus == 'ACCEPTED') {
         return false;
     }
 
@@ -408,11 +421,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptProperty = func
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptGroup = function () {
-    var tableToUpdate = "";
-    if (this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+    var tableToUpdate;
+    var fileName = this.ComplianceReviewManager.GetFileName();
+    if ('a' in model.files &&
+        model.files['a'].fileName === fileName) {
         tableToUpdate = "categoryComplianceA";
     }
-    else if (this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+    else if ('b' in model.files &&
+        model.files['b'].fileName === fileName) {
         tableToUpdate = "categoryComplianceB";
     }
     return tableToUpdate;
@@ -447,25 +463,21 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptProperty = fu
     }
 
     return tableToUpdate;   
-    
-    // var tableToUpdate = "";
-    // if (this.DetailedReviewTableDiv == "ComplianceADetailedReviewTbody") {
-    //     tableToUpdate = "rejectPropertyFromComplianceATab";
-    // }
-    // else if (this.DetailedReviewTableDiv == "ComplianceBDetailedReviewTbody") {
-    //     tableToUpdate = "rejectPropertyFromComplianceBTab";
-    // }
-    // return tableToUpdate;
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = function () {
-    var tableToUpdate = "";
-    if (this.MainReviewTableDiv == "SourceAComplianceMainReviewTbody") {
+    var tableToUpdate;
+
+    var fileName = this.ComplianceReviewManager.GetFileName();
+    if ('a' in model.files &&
+        model.files['a'].fileName === fileName) {
         tableToUpdate = "rejectCategoryFromComplianceATab";
     }
-    else if (this.MainReviewTableDiv == "SourceBComplianceMainReviewTbody") {
+    else if ('b' in model.files &&
+        model.files['b'].fileName === fileName) {
         tableToUpdate = "rejectCategoryFromComplianceBTab";
     }
+
     return tableToUpdate;
 }
 
