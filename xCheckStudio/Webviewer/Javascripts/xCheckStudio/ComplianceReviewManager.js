@@ -44,8 +44,8 @@ ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
 
         var viewerInterface  = new Review3DViewerInterface([containerId, this.ViewerData["endPointUri"]],
             this.ComponentIdVsComponentData,
-            this.NodeIdVsComponentData,
-            this);
+            this.NodeIdVsComponentData,            
+            this.ViewerData["source"]);
         viewerInterface.NodeIdStatusData = this.NodeIdStatusData;
 
         viewerInterface.setupViewer(550, 300);
@@ -830,11 +830,11 @@ ComplianceReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
     return row.cells[CompliancePropertyColumns.PropertyName].innerText;
 }
 
-ComplianceReviewManager.prototype.ResizeViewers = function () {
-    if (model.checks["compliance"]["viewer"]) {
-        model.checks["compliance"]["viewer"].ResizeViewer();
-    }
-}
+// ComplianceReviewManager.prototype.ResizeViewers = function () {
+//     if (model.checks["compliance"]["viewer"]) {
+//         model.checks["compliance"]["viewer"].ResizeViewer();
+//     }
+// }
 
 ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
     var checkGroup = this.ComplianceCheckManager.results[groupId];   
@@ -866,4 +866,8 @@ ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, compone
 
 ComplianceReviewManager.prototype.GetCheckGroup = function (groupId) {
     return this.ComplianceCheckManager.results[groupId];
+}
+
+ComplianceReviewManager.prototype.GetNodeIdvsComponentData = function (viewerId) {   
+        return reviewManager.SourceNodeIdvsCheckComponent;   
 }

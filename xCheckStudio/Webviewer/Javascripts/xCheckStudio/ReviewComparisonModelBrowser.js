@@ -1,11 +1,16 @@
-function ReviewComparisonModelBrowser(sourceFileName, checkData) {
+function ReviewComparisonModelBrowser(id,
+    sourceFileName,
+    checkData) {
     // call super constructor
-    ReviewModelBrowser.call(this, sourceFileName);
+    ReviewModelBrowser.call(this, id, sourceFileName);
 
     this.CheckData = checkData;
     this.ModelTreeData = [];
 
     this.SelectionManager = new ReviewModelBrowserSelectionManager();
+
+    this.NodeIdvsCheckComponent = {};
+    this.NodeParentList = {};
 }
 
 // assign ReviewModelBrowser's method to this class
@@ -17,16 +22,16 @@ ReviewComparisonModelBrowser.prototype.GetTableDivId = function () {
 }
 
 ReviewComparisonModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
-    var parentTable = document.getElementById(Comparison.MainReviewContainer);
-    var btn = this.CreateCheckGroupButton(this.SourceFileName);
-    parentTable.appendChild(btn);
+    // var parentTable = document.getElementById(Comparison.MainReviewContainer);
+    // var btn = this.CreateCheckGroupButton(this.SourceFileName);
+    // parentTable.appendChild(btn);
 
-    var div = document.createElement("DIV");
-    div.className = "content scrollable";
-    div.id = this.GetTableDivId();
-    // div.id =  "Plant03";
-    div.style.display = "none";
-    parentTable.appendChild(div);
+    // var div = document.createElement("DIV");
+    // div.className = "content scrollable";
+    // div.id = this.GetTableDivId();
+    // // div.id =  "Plant03";
+    // div.style.display = "none";
+    // parentTable.appendChild(div);
 
     var headers = this.CreateHeaders();
 
@@ -116,11 +121,17 @@ ReviewComparisonModelBrowser.prototype.CreateBrowserData = function (component, 
     tableRowContent[ComparisonBrowserNames.MainClass] = component.MainClass;
     tableRowContent[ComparisonBrowserNames.SubClass] = component.SubClass;
     tableRowContent[ComparisonBrowserNames.Status] = component.Status;
-    tableRowContent[ComparisonBrowserNames.NodeId] = (component.NodeId != undefined && component.NodeId != "") ? component.NodeId : "";
-    tableRowContent[ComparisonBrowserNames.ResultId] = component.Id;
-    tableRowContent[ComparisonBrowserNames.GroupId] = component.GroupId;
-    tableRowContent[ComparisonBrowserNames.Parent] = parentNode;
+    tableRowContent[ComparisonBrowserNames.NodeId] = (component.NodeId && component.NodeId != "") ? Number(component.NodeId) : "";
+    tableRowContent[ComparisonBrowserNames.ResultId] = (component.Id  && component.Id != "") ? Number(component.Id) : ""; 
+    tableRowContent[ComparisonBrowserNames.GroupId] = (component.GroupId  && component.GroupId != "") ? Number(component.GroupId) : "";
+    tableRowContent[ComparisonBrowserNames.Parent] = Number(parentNode);
     this.ModelTreeData.push(tableRowContent);
+
+    // maintain nodeId vs component data
+    this.MaintainNodeIdVsCheckComponent(component);
+
+    // maintain node id vs parent node
+    this.NodeParentList[Number(component.NodeId)] = Number(parentNode);
 
     if (component.Children && component.Children.length > 0) {
         for (var i = 0; i < component.Children.length; i++) {
@@ -140,8 +151,9 @@ ReviewComparisonModelBrowser.prototype.LoadTable = function (headers) {
         columnAutoWidth: true,
         wordWrapEnabled: false,
         showBorders: true,
-        height: "100%",
-        width: "100%",
+        // height: "100%",
+        // width: "100%",
+        scrolling : "standard",
         allowColumnResizing: true,
         hoverStateEnabled: true,
         filterRow: {
@@ -152,7 +164,7 @@ ReviewComparisonModelBrowser.prototype.LoadTable = function (headers) {
             recursive: true
         },
         onContentReady: function (e) {
-            // _this.HighlightRowByCheckStatus(container);
+            _this.AddTableContentCount(container.replace("#", ""));
         },
         onInitialized: function (e) {
 
@@ -161,17 +173,60 @@ ReviewComparisonModelBrowser.prototype.LoadTable = function (headers) {
 
         },
         onRowClick: function (e) {
+            _this.SelectionManager.MaintainHighlightedRow(e.rowElement[0], container, e.key);
+
             _this.OnComponentRowClicked(e.data);
         },
         onRowPrepared: function (e) {
             if (e.rowType !== "data") {
                 return;
-            }
+            }           
 
-            _this.SelectionManager.ChangeBackgroundColor(e.rowElement[0], e.data[ComparisonBrowserNames.Status]);
-            // _this.HighlightRowByCheckStatus(container);
+            // add tooltip to cells
+            _this.AddTooltip(e);
+
+            var highlightedRow = _this.SelectionManager.GetHighlightedRow();
+            if (highlightedRow &&
+                highlightedRow["rowKey"] === e.key) {
+                _this.SelectionManager.ApplyHighlightColor(e.rowElement[0]);
+            }
+            else {
+                _this.SelectionManager.ChangeBackgroundColor(e.rowElement[0], e.data[ComparisonBrowserNames.Status]);
+            }
         }
     });
+}
+
+ReviewComparisonModelBrowser.prototype.AddTooltip = function (e) {
+    var anotherSource;
+    var anotherComponent;
+    var groupID = e.node.data.GroupId;
+    var ResultId = e.node.data.ResultId;
+    if (!groupID || groupID === "" ||
+        !ResultId || ResultId === "") {
+        for (var i = 0; i < e.rowElement[0].cells.length; i++) {
+            var cell = e.rowElement[0].cells[i];
+            cell.setAttribute("title", "Not Mapped");
+        }
+    }
+    else {
+        var group = this.CheckData.results[groupID];
+        var component = group.components[ResultId];
+        if (this.Id === "a") {
+            anotherSource = this.CheckData.sources[1];
+            anotherComponent = component.sourceBName;
+        }
+        else if (this.Id === "b") {
+            anotherSource = this.CheckData.sources[0];
+            anotherComponent = component.sourceAName;
+        }
+        if (anotherSource && anotherComponent && anotherComponent !== "") {
+            for (var i = 0; i < e.rowElement[0].cells.length; i++) {
+                var cell = e.rowElement[0].cells[i];
+                cell.setAttribute("title", anotherSource + "/" + anotherComponent);
+            }
+        }
+    }
 }
 
 ReviewComparisonModelBrowser.prototype.CreateCheckGroupButton = function (title) {
@@ -187,7 +242,28 @@ ReviewComparisonModelBrowser.prototype.CreateCheckGroupButton = function (title)
 }
 
 ReviewComparisonModelBrowser.prototype.OnComponentRowClicked = function (rowData) {
+
     this.LoadDetailedTable(rowData);
+
+    this.HighlightInViewer(rowData);
+}
+
+ReviewComparisonModelBrowser.prototype.HighlightInViewer = function (rowData) {
+
+    var viewerInterface;
+    if (this.Id === "a" &&
+        model.checks["comparison"].sourceAViewer) {
+        viewerInterface = model.checks["comparison"].sourceAViewer;
+
+    }
+    else if (this.Id === "b" &&
+        model.checks["comparison"].sourceBViewer) {
+        viewerInterface = model.checks["comparison"].sourceBViewer;
+    }
+
+    if (viewerInterface) {
+        viewerInterface.highlightComponent(rowData.NodeId);
+    }
 }
 
 ReviewComparisonModelBrowser.prototype.LoadDetailedTable = function (rowData) {
@@ -204,7 +280,7 @@ ReviewComparisonModelBrowser.prototype.LoadDetailedTable = function (rowData) {
     var columnHeaders = this.CreatePropertiesTableHeader();
 
     // show component class name as property in detailed review table    
-    var tableData = this.CreateTableData(component.properties);
+    var tableData = this.CreateDetailedTableData(component);
     if (!tableData) {
         return;
     }
@@ -233,17 +309,22 @@ ReviewComparisonModelBrowser.prototype.CreatePropertiesTableHeader = function ()
         if (i === ComparisonBrowserDetailedColumns.PropertyName) {
             caption = ComparisonBrowserDetailedNames.PropertyName;
             dataField = ComparisonBrowserDetailedNames.PropertyName;
-            width = "35%";
+            width = "30%";
         }
         else if (i === ComparisonBrowserDetailedColumns.PropertyValue) {
             caption = ComparisonBrowserDetailedNames.PropertyValue;
             dataField = ComparisonBrowserDetailedNames.PropertyValue;
-            width = "35%";
+            width = "30%";
         }
         else if (i === ComparisonBrowserDetailedColumns.Status) {
             caption = ComparisonBrowserDetailedNames.Status;
             dataField = ComparisonBrowserDetailedNames.Status;
-            width = "30%";
+            width = "15%";
+        }
+        else if (i === ComparisonBrowserDetailedColumns.Mapping) {
+            caption = ComparisonBrowserDetailedNames.Mapping;
+            dataField = ComparisonBrowserDetailedNames.Mapping;
+            width = "25%";
         }
 
         var headerGroupComp = {}
@@ -263,7 +344,7 @@ ReviewComparisonModelBrowser.prototype.CreatePropertiesTableHeader = function ()
     return columnHeaders;
 }
 
-ReviewComparisonModelBrowser.prototype.CreateTableData = function (properties) {
+ReviewComparisonModelBrowser.prototype.CreateDetailedTableData = function (component) {
 
     var src;
     if (this.SourceFileName === this.CheckData.sources[0]) {
@@ -278,18 +359,32 @@ ReviewComparisonModelBrowser.prototype.CreateTableData = function (properties) {
 
     var property;
     var tableData = [];
-    for (var propertyId in properties) {
-        property = properties[propertyId];
+    for (var propertyId in component.properties) {
+        property = component.properties[propertyId];
 
         var tableRowContent = {};
 
         if (src === "a") {
             tableRowContent[ComparisonBrowserDetailedNames.PropertyName] = property.sourceAName;
             tableRowContent[ComparisonBrowserDetailedNames.PropertyValue] = property.sourceAValue;
+
+            if (!component.sourceBName || component.sourceBName === "") {
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "Not Mapped";
+            }
+            else {
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = this.CheckData.sources[1] + "/" + component.sourceBName + "/" + property.sourceBName;
+            }
         }
         else if (src === "b") {
             tableRowContent[ComparisonBrowserDetailedNames.PropertyName] = property.sourceBName;
             tableRowContent[ComparisonBrowserDetailedNames.PropertyValue] = property.sourceBValue;
+
+            if (!component.sourceAName || component.sourceAName === "") {
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "Not Mapped";
+            }
+            else {
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = this.CheckData.sources[0] + "/" + component.sourceAName + "/" + property.sourceAName;
+            }
         }
 
         if (!tableRowContent[ComparisonBrowserDetailedNames.PropertyName] ||
@@ -365,7 +460,7 @@ ReviewComparisonModelBrowser.prototype.LoadDetailedInfoTable = function (columnH
 };
 
 ReviewComparisonModelBrowser.prototype.DestroyDetailedInfoTable = function () {
-    
+
     var table = document.getElementById(Comparison.DetailInfoContainer);
     //Destroy dxDataGrid
     if (table.children.length > 0) {
@@ -379,17 +474,135 @@ ReviewComparisonModelBrowser.prototype.DestroyDetailedInfoTable = function () {
     tableDiv.id = Comparison.DetailInfoContainer;
     comparisonDetailInfoContainer.appendChild(tableDiv);
 }
-// ReviewComparisonModelBrowser.prototype.HighlightRowByCheckStatus = function (containerId) {
-//     var modelTree = $(containerId).dxTreeList("instance");
-//     var rows = modelTree.getVisibleRows();
 
-//     for (var i = 0; i < rows.length; i++) {
-//         var currentRow = modelTree.getRowElement(rows[i].rowIndex);
-//         // if (currentRow[0].cells.length < 3) {
-//         //     return;
-//         // }
+ReviewComparisonModelBrowser.prototype.MaintainNodeIdVsCheckComponent = function (component) {
 
-//         var status = modelTree.cellValue(rows[i].rowIndex, ComparisonBrowserNames.Status)
-//         this.SelectionManager.ChangeBackgroundColor(currentRow[0], status);
-//     }
-// }
+    // maintain track of check components
+    if (component.NodeId) {
+        this.NodeIdvsCheckComponent[Number(component.NodeId)] = {
+            "ResultId": component.Id,
+            "Name": component.Name,
+            "MainClass": component.MainClass,
+            "SubClass": component.SubClass,
+            "Status": component.Status,
+            "NodeId": Number(component.NodeId),
+            "GroupId": component.GroupId,
+        };
+    }
+}
+
+ReviewComparisonModelBrowser.prototype.GetCheckComponetDataByNodeId = function (viewerId, selectedNode) {
+    var checkComponentData;
+
+    if (this.NodeIdvsCheckComponent !== undefined &&
+        selectedNode in this.NodeIdvsCheckComponent) {
+        checkComponentData = this.NodeIdvsCheckComponent[selectedNode];
+    }
+
+    return checkComponentData;
+}
+
+ReviewComparisonModelBrowser.prototype.HighlightBrowserComponentRow = function (selectedNodeId) {
+    var path = {};
+    path['path'] = [selectedNodeId];
+    this.GetTopMostParentNode(selectedNodeId, path);
+
+    this.OpenHighlightedRow(path, selectedNodeId);
+}
+
+ReviewComparisonModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
+
+    if (rowKey in this.NodeParentList) {
+
+        if (this.NodeParentList[rowKey] === 0) {
+            return;
+        }
+        path['path'].push(this.NodeParentList[rowKey])
+
+        this.GetTopMostParentNode(this.NodeParentList[rowKey], path);
+    }
+}
+
+ReviewComparisonModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {
+
+    _this = this;
+    if (!('path' in path)) {
+        return;
+    }
+
+    expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
+
+        var nodeList = path['path'];
+        nodeList = nodeList.reverse();
+
+        var container = "#" + _this.GetTableDivId();
+        var treeList = $(container).dxTreeList("instance");
+
+        // expand tree if not expanded else select row using key
+        for (var i = 0; i < nodeList.length; i++) {
+            var node = nodeList[i];
+
+            if (!treeList.isRowExpanded(node)) {
+                treeList.expandRow(node).done(function () {
+                    _this.GetBrowserRowFromNodeId(selectedNodeId, container);
+                });
+            }
+            else {
+                if (i == nodeList.length - 1) {
+                    _this.GetBrowserRowFromNodeId(selectedNodeId, container);
+                }
+            }
+        }
+    });
+}
+
+
+ReviewComparisonModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
+
+    var _this = this;
+    var treeList = $(containerDiv).dxTreeList("instance");
+
+    //navigate scrollbar to specified row using key
+    treeList.navigateToRow(selectedNodeId).done(function () {
+
+         var rowIndex = treeList.getRowIndexByKey(selectedNodeId);
+         var row = treeList.getRowElement(rowIndex);
+
+        _this.SelectionManager.MaintainHighlightedRow(row[0], containerDiv, selectedNodeId);             
+    });
+}
+
+ReviewComparisonModelBrowser.prototype.GetBrowserRow = function (rowKey, containerDiv) {
+    var modelBrowser = $(containerDiv).dxTreeList("instance");
+
+    var rowIndex = modelBrowser.getRowIndexByKey(rowKey);
+    if (rowIndex != -1) {
+        return modelBrowser.getRowElement(rowIndex);        
+    }
+}
+
+ReviewComparisonModelBrowser.prototype.AddTableContentCount = function (containerId) {
+    var countDiv = document.getElementById(containerId + "_child");
+    if (countDiv) {
+        return;
+    }
+    else {
+        var modelBrowserData = document.getElementById(containerId);
+        
+        var modelBrowserDataTable = modelBrowserData.children[0];
+        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+
+        // var countBox;
+        var div2 = document.createElement("DIV");
+        var id = containerId + "_child";
+        div2.id = id;
+        div2.style.fontSize = "13px";
+
+        // var countBox = document.getElementById(id);
+        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
+        var rowCount = modelBrowserTableRows.length - 2;
+        div2.innerHTML = "Count :" + rowCount;
+        modelBrowserDataTable.appendChild(div2);
+    }
+}
+

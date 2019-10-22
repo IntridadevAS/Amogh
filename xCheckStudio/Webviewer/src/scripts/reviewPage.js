@@ -14,7 +14,21 @@ let model = {
       sourceCViewer: null,
       sourceDViewer: null,
       selectionManager: null,
-      modelBrowsers : {}
+      modelBrowsers: {},
+      resizeViewers: function () {
+        if (this.sourceAViewer) {
+          this.sourceAViewer.ResizeViewer();
+        }
+        if (this.sourceBViewer) {
+          this.sourceBViewer.ResizeViewer();
+        }
+        if (this.sourceCViewer) {
+          this.sourceCViewer.ResizeViewer();
+        }
+        if (this.sourceDViewer) {
+          this.sourceDViewer.ResizeViewer();
+        }
+      }
     },
     "compliance": {
       reviewManager: null,
@@ -22,7 +36,12 @@ let model = {
       detailedInfoTable: null,
       viewer: null,
       selectionManager: null,
-      modelBrowsers : {}
+      modelBrowsers: {},
+      resizeViewers: function () {
+        if (this.viewer) {
+          this.viewer.ResizeViewer();
+        }
+      }
     }
   },
   files: {
@@ -59,11 +78,35 @@ let model = {
   getCurrentReviewType: function () {
     return this.currentCheck;
   },
-  getCurrentReviewTable: function() {
-   return this.checks[model.currentCheck]["reviewTable"];
+  getCurrentReviewTable: function () {
+    return this.checks[model.currentCheck]["reviewTable"];
   },
-  getCurrentDetailedInfoTable: function() {
+  getCurrentDetailedInfoTable: function () {
     return this.checks[model.currentCheck]["detailedInfoTable"];
+  },
+  getModelBrowsers: function () {
+    return this.checks[model.currentCheck]["modelBrowsers"];
+  },
+  getModelBrowser: function (sourceName) {
+    var browsers = this.getModelBrowsers();
+    if (sourceName in browsers) {
+      return browsers[sourceName];
+    }
+
+    return undefined;
+  },
+  getCurrentResultViewer: function (sourceName) {
+    var reviewManager = this.getCurrentReviewManager();
+    if (reviewManager) {
+      return reviewManager;
+    }
+
+    var browsers = this.getModelBrowsers();
+    if (sourceName in browsers) {
+      return browsers[sourceName];
+    }
+
+    return undefined;
   }
 }
 
@@ -459,9 +502,7 @@ let viewPanels = {
     }
 
     // resize 3D viewer
-    if (model.currentView) {
-      model.currentView.ResizeViewers();
-    }
+    model.checks[model.currentCheck].resizeViewers();   
   },
 
   onMouseOverMaxMin: function(selected) {
@@ -515,10 +556,8 @@ let grabBarControl = function (element) {
     m_pos = event.x;
     previous.style.width = previous.offsetWidth - dx + "px";
 
-    // resize 3D viewer
-    if (model.currentView) {
-      model.currentView.ResizeViewers();
-    }
+    // resize 3D viewer   
+    model.checks[model.currentCheck].resizeViewers();
   }
 
   element.addEventListener("mousedown", function (event) {

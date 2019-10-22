@@ -130,8 +130,7 @@ const MenuBar = {
 }
 
 /* Comparison model browser */
-const ComparisonBrowserNames = {
-    Select: "Select",
+const ComparisonBrowserNames = {    
     Component: "Item",
     MainClass: "Category",
     SubClass: "Class",
@@ -142,29 +141,28 @@ const ComparisonBrowserNames = {
     Parent : "Parent"
 }
 
-const ComparisonBrowserColumns = {
-    Select: 0,
-    Component: 1,
-    MainClass: 2,
-    SubClass: 3,
-    Status: 4,
-    NodeId : 5,
-    ResultId : 6,
-    GroupId : 7,
-    Parent : 8
+const ComparisonBrowserColumns = {  
+    Component: 0,
+    MainClass: 1,
+    SubClass: 2,
+    Status: 3,
+    NodeId : 4,
+    ResultId : 5,
+    GroupId : 6,
+    Parent : 7
 }
 
 /* Comparison model browser detailed table */
-const ComparisonBrowserDetailedNames = {
-    Select: "Select",
+const ComparisonBrowserDetailedNames = {    
     PropertyName: "Property",
     PropertyValue: "Value",
+    Mapping: "Mapping",
     Status: "Status"
 }
 
-const ComparisonBrowserDetailedColumns = {
-    Select: 0,
-    PropertyName: 1,
-    PropertyValue: 2,
+const ComparisonBrowserDetailedColumns = {   
+    PropertyName: 0,
+    PropertyValue: 1,
+    Mapping: 2,
     Status: 3
 }
