@@ -121,9 +121,9 @@ ReviewComparisonModelBrowser.prototype.CreateBrowserData = function (component, 
     tableRowContent[ComparisonBrowserNames.MainClass] = component.MainClass;
     tableRowContent[ComparisonBrowserNames.SubClass] = component.SubClass;
     tableRowContent[ComparisonBrowserNames.Status] = component.Status;
-    tableRowContent[ComparisonBrowserNames.NodeId] = (component.NodeId != undefined && component.NodeId != "") ? Number(component.NodeId) : "";
-    tableRowContent[ComparisonBrowserNames.ResultId] = Number(component.Id);
-    tableRowContent[ComparisonBrowserNames.GroupId] = Number(component.GroupId);
+    tableRowContent[ComparisonBrowserNames.NodeId] = (component.NodeId && component.NodeId != "") ? Number(component.NodeId) : "";
+    tableRowContent[ComparisonBrowserNames.ResultId] = (component.Id  && component.Id != "") ? Number(component.Id) : ""; 
+    tableRowContent[ComparisonBrowserNames.GroupId] = (component.GroupId  && component.GroupId != "") ? Number(component.GroupId) : "";
     tableRowContent[ComparisonBrowserNames.Parent] = Number(parentNode);
     this.ModelTreeData.push(tableRowContent);
 
@@ -180,7 +180,11 @@ ReviewComparisonModelBrowser.prototype.LoadTable = function (headers) {
         onRowPrepared: function (e) {
             if (e.rowType !== "data") {
                 return;
-            }
+            }           
+
+            // add tooltip to cells
+            _this.AddTooltip(e);
+
             var highlightedRow = _this.SelectionManager.GetHighlightedRow();
             if (highlightedRow &&
                 highlightedRow["rowKey"] === e.key) {
@@ -191,6 +195,38 @@ ReviewComparisonModelBrowser.prototype.LoadTable = function (headers) {
             }
         }
     });
+}
+
+ReviewComparisonModelBrowser.prototype.AddTooltip = function (e) {
+    var anotherSource;
+    var anotherComponent;
+    var groupID = e.node.data.GroupId;
+    var ResultId = e.node.data.ResultId;
+    if (!groupID || groupID === "" ||
+        !ResultId || ResultId === "") {
+        for (var i = 0; i < e.rowElement[0].cells.length; i++) {
+            var cell = e.rowElement[0].cells[i];
+            cell.setAttribute("title", "Not Mapped");
+        }
+    }
+    else {
+        var group = this.CheckData.results[groupID];
+        var component = group.components[ResultId];
+        if (this.Id === "a") {
+            anotherSource = this.CheckData.sources[1];
+            anotherComponent = component.sourceBName;
+        }
+        else if (this.Id === "b") {
+            anotherSource = this.CheckData.sources[0];
+            anotherComponent = component.sourceAName;
+        }
+        if (anotherSource && anotherComponent && anotherComponent !== "") {
+            for (var i = 0; i < e.rowElement[0].cells.length; i++) {
+                var cell = e.rowElement[0].cells[i];
+                cell.setAttribute("title", anotherSource + "/" + anotherComponent);
+            }
+        }
+    }
 }
 
 ReviewComparisonModelBrowser.prototype.CreateCheckGroupButton = function (title) {
@@ -333,7 +369,7 @@ ReviewComparisonModelBrowser.prototype.CreateDetailedTableData = function (compo
             tableRowContent[ComparisonBrowserDetailedNames.PropertyValue] = property.sourceAValue;
 
             if (!component.sourceBName || component.sourceBName === "") {
-                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "";
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "Not Mapped";
             }
             else {
                 tableRowContent[ComparisonBrowserDetailedNames.Mapping] = this.CheckData.sources[1] + "/" + component.sourceBName + "/" + property.sourceBName;
@@ -344,7 +380,7 @@ ReviewComparisonModelBrowser.prototype.CreateDetailedTableData = function (compo
             tableRowContent[ComparisonBrowserDetailedNames.PropertyValue] = property.sourceBValue;
 
             if (!component.sourceAName || component.sourceAName === "") {
-                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "";
+                tableRowContent[ComparisonBrowserDetailedNames.Mapping] = "Not Mapped";
             }
             else {
                 tableRowContent[ComparisonBrowserDetailedNames.Mapping] = this.CheckData.sources[0] + "/" + component.sourceAName + "/" + property.sourceAName;
