@@ -414,7 +414,8 @@ ComparisonCheckResultsTable.prototype.GetAccordionIndex = function (groupName) {
     var selectedItems = accordion._selection.getSelectedItemKeys();
     for (var i = 0; i < accordionItems.length; i++) {
         if (!accordionItems[i]["template"].includes(groupName) ||
-            (selectedItems.length > 0 && accordionItems[i]["template"] == selectedItems[0]["template"])) {
+            (selectedItems.length > 0 && 
+             accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;
         }
         else {

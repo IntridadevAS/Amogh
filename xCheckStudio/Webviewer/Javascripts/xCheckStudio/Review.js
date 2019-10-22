@@ -306,13 +306,14 @@ function populateModelBrowser(comparison) {
             // make viewers enable
             enableViewers(comparison.sources);
 
+            // create accordion
+            createModelBrowserAccordion(comparison.sources);
+
             for (var i = 0; i < comparison.sources.length; i++) {
                 if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
-
-                    //var container = checkResults.sourceInfo.sourceAFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
                     var source = checkResults.sourceInfo.sourceAFileName;
 
-                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    var modelBrowser = new ReviewComparisonModelBrowser("a", source, comparison);
                     modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
                     var comparisonData = model.checks["comparison"];
@@ -322,7 +323,8 @@ function populateModelBrowser(comparison) {
 
                         var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
                             undefined,
-                            undefined);
+                            undefined,
+                            source);
                         viewerInterface.setupViewer(550, 280);
 
                         comparisonData["sourceAViewer"] = viewerInterface;
@@ -331,10 +333,9 @@ function populateModelBrowser(comparison) {
 
                 }
                 else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
-                    //var container = checkResults.sourceInfo.sourceBFileName.replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
                     var source = checkResults.sourceInfo.sourceBFileName;
 
-                    var modelBrowser = new ReviewComparisonModelBrowser(source, comparison);
+                    var modelBrowser = new ReviewComparisonModelBrowser("b", source, comparison);
                     modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
                     var comparisonData = model.checks["comparison"];
@@ -347,7 +348,8 @@ function populateModelBrowser(comparison) {
                     if (viewerOptions['b']['endPointUri'] !== undefined) {
                         var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
                             undefined,
-                            undefined);
+                            undefined,
+                            source);
                         viewerInterface.setupViewer(550, 280);
 
                         comparisonData["sourceBViewer"] = viewerInterface;
@@ -355,8 +357,8 @@ function populateModelBrowser(comparison) {
                 }
             }
 
-            // make buttons collapsible
-            setButtonsCollapsible(Comparison.MainReviewContainer);
+            // // make buttons collapsible
+            // setButtonsCollapsible(Comparison.MainReviewContainer);
         }
     });
     // createModelBrowserAccordion(comparison.sources);   
@@ -403,44 +405,119 @@ function enableViewers(sources) {
     }
 }
 
-// function createModelBrowserAccordion(sources) {
-//     var parentTable = document.getElementById(Comparison.MainReviewContainer);
+function createModelBrowserAccordion(sources) {
+    var parentTable = document.getElementById(Comparison.MainReviewContainer);
 
-//     var data = createAccordionData(sources);
-//     for (var i = 0; i < data.length; i++) {
-//         var div = document.createElement("DIV");
-//         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
-//         div.id = data[i]["template"];
-//         var datagridDiv = document.createElement("DIV");
-//         // datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + Comparison.MainReviewContainer;
-//         datagridDiv.id = data[i]["template"] + "_";
-//         div.append(datagridDiv);
-//         parentTable.append(div);
-//     }
+    var data = createAccordionData(sources);
+    for (var i = 0; i < data.length; i++) {
+        var div = document.createElement("DIV");
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+        div.id = data[i]["template"];
+        var datagridDiv = document.createElement("DIV");
+        // datagridDiv.id = data[i]["template"] + "_";
+        datagridDiv.id = data[i]["template"].replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer
 
-//     $("#" + Comparison.MainReviewContainer).dxAccordion({
-//         collapsible: true,
-//         dataSource: data,
-//         deferRendering: false,
-//         selectedIndex: -1,
-//         onSelectionChanged: function (e) {
+        div.append(datagridDiv);
+        parentTable.append(div);
+    }
 
-//         }
-//     });
-// }
+    $("#" + Comparison.MainReviewContainer).dxAccordion({
+        collapsible: true,
+        dataSource: data,
+        deferRendering: false,
+        selectedIndex: -1,
+        onSelectionChanged: function (e) {
 
-// function createAccordionData(sources) {
+        },
+        itemTitleTemplate: function (itemData, itemIndex, itemElement) {
+            var btn = $('<div>')
+            $(btn).data("index", itemIndex)
+                .dxButton({
+                    icon: "chevrondown",
+                    width: "38px",
+                    height: "30px",
+                    onClick: function (e) {
+                        e.jQueryEvent.stopPropagation();
+                        var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
+                        if (!isOpened) {
+                            $("#" + Comparison.MainReviewContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+                        }
+                        else {
+                            $("#" + Comparison.MainReviewContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
+                        }
 
-//     var data = [];
-//     for (var i = 0; i < sources.length; i++) {
-//         var source = sources[i];
+                    }
+                }).css("float", "right").appendTo(itemElement);
 
-//         var dataObject = {};
-//         dataObject["template"] = source;
-//         dataObject["title"] = source;
+            btn.css("position", "absolute");
+            btn.css("right", " 10px");
+            btn.css("top", " 5px");
+            btn.css("border", "none");
+            btn.css("background", "black");
 
-//         data.push(dataObject);
-//     }
 
-//     return data;
-// }
+
+            itemElement.append("<h1 style = 'width:320px; font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
+
+        },
+        onItemTitleClick: function (e) {
+            e.event.stopPropagation();
+        },
+        onItemClick: function (e) {
+            e.event.stopPropagation();
+        }
+    });
+}
+
+function createAccordionData(sources) {
+
+    var data = [];
+    for (var i = 0; i < sources.length; i++) {
+        var source = sources[i];
+
+        var dataObject = {};
+        dataObject["template"] = source;
+        dataObject["title"] = source;
+
+        data.push(dataObject);
+    }
+
+    return data;
+}
+
+function expandModelBrowserAccordion(groupName) {
+
+    return new Promise(function (resolve) {
+
+        var accordion = $("#" + Comparison.MainReviewContainer).dxAccordion("instance");
+
+        // scroll to table
+        var accordionIndex = getAccordionIndex(groupName)
+        if (accordionIndex >= 0) {
+            accordion.expandItem(Number(accordionIndex)).then(function (result) {
+                return resolve(true);
+            });
+        }
+        else {
+            return resolve(true);
+        }
+    });
+}
+
+function getAccordionIndex(groupName) {
+    var accordion = $("#" + Comparison.MainReviewContainer).dxAccordion("instance");
+    var accordionItems = accordion.getDataSource().items();
+    var index;
+    var selectedItems = accordion._selection.getSelectedItemKeys();
+    for (var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName) ||
+            (selectedItems.length > 0 &&
+                accordionItems[i]["template"] == selectedItems[0]["template"])) {
+            continue;
+        }
+
+        return i;
+
+    }
+    return index;
+}

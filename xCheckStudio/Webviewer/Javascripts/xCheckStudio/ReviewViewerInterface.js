@@ -1,6 +1,7 @@
 function ReviewViewerInterface(viewerOptions,
     componentIdVsComponentData,
-    nodeIdVsComponentData) {
+    nodeIdVsComponentData,
+    source) {
 
     this.ViewerOptions = viewerOptions;
     this.selectedNodeId = null;
@@ -11,6 +12,7 @@ function ReviewViewerInterface(viewerOptions,
     this.NodeIdVsComponentData = nodeIdVsComponentData;
     this.NodeIdStatusData = {};
 
+    this.DataSource = source;
     // this.ReviewManager = reviewManager;
     // this.SelectedComponentRowFromSheetA;
     // this.SelectedComponentRowFromSheetB;

@@ -1,11 +1,13 @@
 /* 3D viewer interface */
 function Review3DViewerInterface(viewerOptions,
     componentIdVsComponentData,
-    nodeIdVsComponentData) {
+    nodeIdVsComponentData,
+    source) {
     // call super constructor
     ReviewViewerInterface.call(this, viewerOptions,
         componentIdVsComponentData,
-        nodeIdVsComponentData);
+        nodeIdVsComponentData,
+        source);
 }
 // assign SelectionManager's method to this class
 Review3DViewerInterface.prototype = Object.create(ReviewViewerInterface.prototype);
@@ -173,10 +175,9 @@ Review3DViewerInterface.prototype.highlightComponentsfromResult = function () {
 }
 
 Review3DViewerInterface.prototype.unHighlightAll = function () {
-    //var _this = this;
-
+    
     var reviewManager = model.getCurrentReviewManager();
-    //_this.highlightManager.setViewOrientation(Communicator.ViewOrientation.Front);
+    
     this.selectedNodeId = undefined;
     this.selectedComponentId = undefined;
 
@@ -262,15 +263,34 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     }
 
     var reviewManager = model.getCurrentReviewManager();
+    //var resultViewer = model.getCurrentResultViewer(this.DataSource);
+    if (!reviewManager) {
+        var browser = model.getModelBrowser(this.DataSource);
+        if (browser) {
+            reviewRowData = browser.HighlightBrowserComponentRow(this.selectedNodeId);
+        }
+
+        return;
+    }
 
     // get check component id
     var checkComponentData = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], this.selectedNodeId);
-
     if (!checkComponentData) {
         return;
     }
 
-    var reviewRowData = this.GetReviewComponentRow(checkComponentData);
+    var reviewRowData;
+    // if (model.getCurrentReviewManager()) {
+        reviewRowData = this.GetReviewComponentRow(checkComponentData);
+    // }
+    // else    
+    // {
+    //     var browser = model.getModelBrowser(this.DataSource);
+    //     if(browser)
+    //     {
+    //         reviewRowData = browser.GetBrowserComponentRow(checkComponentData);
+    //     }
+    // }
     if (!reviewRowData) {
         this.unHighlightComponent();
         this.unHighlightAll();
@@ -288,11 +308,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
     this.HighlightMatchedComponent(containerDiv, rowData);
 
-    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);
-
-    // scroll to rowElement
-    // dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
-    // document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer).scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight
+    model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData);    
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
@@ -377,20 +393,50 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
 
 Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
+    var reviewManager = model.getCurrentReviewManager();    
+
     var nodeIdvsCheckComponent;
-    // if comparison
-    if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
-        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceANodeIdvsCheckComponent;
+    if(reviewManager)
+    {
+        nodeIdvsCheckComponent = reviewManager.GetNodeIdvsComponentData(this.ViewerOptions[0]);
     }
-    else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
-        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceBNodeIdvsCheckComponent;
+    else
+    {
+        var browsers = model.getModelBrowsers();
+        if (this.DataSource in browsers) {
+            nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
+        }
     }
 
-    // if compliance
-    if (!nodeIdvsCheckComponent &&
-        model.getCurrentReviewManager().SourceNodeIdvsCheckComponent) {
-        nodeIdvsCheckComponent = model.getCurrentReviewManager().SourceNodeIdvsCheckComponent;
-    }
+    // // if comparison
+    // if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
+
+    //     if (reviewManager) {
+    //         nodeIdvsCheckComponent = reviewManager.SourceANodeIdvsCheckComponent;
+    //     }
+    //     else if (this.DataSource in browsers) {
+    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
+    //     }
+    // }
+    // else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
+    //     if (reviewManager) {
+    //         nodeIdvsCheckComponent = reviewManager.SourceBNodeIdvsCheckComponent;
+    //     }
+    //     else if (this.DataSource in browsers) {
+    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
+    //     }
+    // }
+
+    // // if compliance
+    // if (!nodeIdvsCheckComponent &&
+    //     reviewManager.SourceNodeIdvsCheckComponent) {
+    //     if (reviewManager) {
+    //         nodeIdvsCheckComponent = reviewManager.SourceNodeIdvsCheckComponent;
+    //     }
+    //     else if (this.DataSource in browsers) {
+    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
+    //     }
+    // }
 
     if (!nodeIdvsCheckComponent) {
         return false;
@@ -405,12 +451,12 @@ Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
 /* This function returns the comparison check 
     component row for given check component data */
-Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcComponentData) {
-    var componentsGroupName = checkcComponentData["MainClass"];
-    var mainReviewTableContainer = document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer);
-    if (!mainReviewTableContainer) {
-        return undefined;
-    }
+Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkComponentData) {
+    var componentsGroupName = checkComponentData["MainClass"];
+    // var mainReviewTableContainer = document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer);
+    // if (!mainReviewTableContainer) {
+    //     return undefined;
+    // }
 
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     for(var groupId in checkTableIds) {
@@ -429,7 +475,7 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                     var checkComponentId;
 
                     checkComponentId = rowData.ID;
-                    if (checkComponentId == checkcComponentData["Id"]) {
+                    if (checkComponentId == checkComponentData["Id"]) {
                         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
                         if (highlightedRow) {
                             model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
@@ -440,15 +486,12 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkcCompon
                         model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
                         model.getCurrentSelectionManager().SetHighlightedRow({
                             "row": row[0],
-                            "tableId": mainReviewTableContainer,
+                            "tableId": checkTableIds[groupId],
                             "rowIndex": row[0].rowIndex
-                        });
-    
-                        // scroll to table
-                        // mainReviewTableContainer.scrollTop = categoryTable.previousSibling.offsetTop;
-    
+                        });  
+                           
                         //Expand Accordion and Scroll to Row
-                        model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkcComponentData.MainClass);
+                        model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkComponentData.MainClass);
 
                         //break;
                         return {"row" : row[0], "tableId" : checkTableIds[groupId]};
