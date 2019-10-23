@@ -2469,12 +2469,12 @@
   color: #333;
   font-weight: normal;
   font-size: 14px;
-  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+  font-family: Montserrat !important;
   line-height: 1.35715;
 }
 .dx-widget input,
 .dx-widget textarea {
-  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+  font-family: inherit;
   line-height: 1.35715;
 }
 .dx-state-disabled.dx-widget,

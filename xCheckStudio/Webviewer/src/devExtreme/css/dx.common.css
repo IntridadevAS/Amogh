@@ -492,7 +492,8 @@
   padding: 0;
   outline: 0;
   -webkit-print-color-adjust: exact;
-          color-adjust: exact;
+  color-adjust: exact;
+  font-family: Montserrat !important;
 }
 .dx-widget,
 .dx-widget:before,
@@ -6911,7 +6912,8 @@ input.dx-hidden {
   height: 100%;
   width: 100%;
   -ms-touch-action: pinch-zoom;
-      touch-action: pinch-zoom;
+  touch-action: pinch-zoom;
+  font-family: Montserrat !important;
 }
 .dx-drawer-wrapper {
   position: relative;
