@@ -148,13 +148,21 @@ let viewTabs = {
 
     // create text span
     var spanText = document.createElement("span");
-    spanText.innerHTML = view.fileName;
+    spanText.innerHTML =  xCheckStudio.Util.getFileNameWithoutExtension(view.fileName);
     spanText.style.overflow = "hidden";
+    spanText.style.textOverflow = "ellipsis"
     newNode.appendChild(spanText);
+
+    var spanTextExtension = document.createElement("span");
+    var extension = ".";
+    spanTextExtension.innerHTML = extension.concat(xCheckStudio.Util.getFileExtension(view.fileName));
+    spanTextExtension.style.overflow = "none";
+    newNode.appendChild(spanTextExtension);
 
     // create tool-tip
     var spanTooltip = document.createElement("span");
     spanTooltip.setAttribute("data-tooltip", view.fileName);
+    spanTooltip.style.textAlign = "center";
     spanTooltip.classList.add("tooltip");
     newNode.appendChild(spanTooltip);
 

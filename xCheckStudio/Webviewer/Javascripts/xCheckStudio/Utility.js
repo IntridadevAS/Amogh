@@ -13,6 +13,11 @@ var xCheckStudio;
         }
         Util.getFileExtension = getFileExtension;
 
+        function getFileNameWithoutExtension(fileName) {
+            return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
+        }
+        Util.getFileNameWithoutExtension = getFileNameWithoutExtension;
+
         function fileExists(fileURL) {
 
             return new Promise(function (resolve, reject) {
