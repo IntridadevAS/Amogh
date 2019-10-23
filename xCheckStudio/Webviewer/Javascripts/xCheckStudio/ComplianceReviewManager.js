@@ -748,5 +748,5 @@ ComplianceReviewManager.prototype.GetCheckGroup = function (groupId) {
 }
 
 ComplianceReviewManager.prototype.GetNodeIdvsComponentData = function (viewerId) {   
-        return reviewManager.SourceNodeIdvsCheckComponent;   
+        return this.SourceNodeIdvsCheckComponent;   
 }
