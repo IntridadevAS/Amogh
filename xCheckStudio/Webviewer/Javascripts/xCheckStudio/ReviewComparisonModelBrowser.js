@@ -475,6 +475,18 @@ ReviewComparisonModelBrowser.prototype.DestroyDetailedInfoTable = function () {
     comparisonDetailInfoContainer.appendChild(tableDiv);
 }
 
+ReviewComparisonModelBrowser.prototype.DestroyModelBrowserTable = function () {
+
+    $("#" + this.GetTableDivId()).remove()
+    //Destroy accordion
+
+    var comparisonTableData = document.getElementById(Comparison.MainReviewContainer).innerHTML;
+    if(comparisonTableData !== "") {
+        $("#" + Comparison.MainReviewContainer).dxAccordion("dispose");
+        comparisonTableData = "";
+    }
+}
+
 ReviewComparisonModelBrowser.prototype.MaintainNodeIdVsCheckComponent = function (component) {
 
     // maintain track of check components

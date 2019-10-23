@@ -590,6 +590,16 @@ function clearData() {
 
   currentCheckData["reviewManager"] = null;
 
+  if(currentCheckData["modelBrowsers"]) {
+    var modelBrowsers = currentCheckData["modelBrowsers"];
+    for(var modelBrowser in modelBrowsers) {
+      modelBrowsers[modelBrowser].DestroyModelBrowserTable();
+      modelBrowsers[modelBrowser].DestroyDetailedInfoTable();
+    }
+
+    currentCheckData["modelBrowsers"] = {};
+  }
+
   if (model.currentCheck === "comparison") {
     if (currentCheckData["sourceAViewer"]) {
       currentCheckData["sourceAViewer"].Destroy(Comparison.ViewerAContainer);

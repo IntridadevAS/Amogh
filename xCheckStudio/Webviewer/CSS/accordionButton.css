@@ -1,0 +1,7 @@
+  .accordionButton {
+    position: absolute !important;
+    right: 0px !important;
+    top: 5px !important;
+    border: none !important;
+    background: black !important;
+  }

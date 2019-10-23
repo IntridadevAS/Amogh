@@ -63,15 +63,9 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
                 }
             }).css("float", "right").appendTo(itemElement);
 
-            btn.css("position", "absolute");  
-            btn.css("right", " 10px");
-            btn.css("top", " 5px");
-            btn.css("border", "none");
-            btn.css("background", "black");
+            btn[0].classList.add("accordionButton");
 
-
-
-            itemElement.append("<h1 style = 'width:320px; font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
+            itemElement.append("<h1 style = 'font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
 
         },
         onItemTitleClick: function(e){
