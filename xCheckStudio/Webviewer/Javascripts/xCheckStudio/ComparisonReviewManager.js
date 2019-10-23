@@ -1104,10 +1104,10 @@ ComparisonReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewe
 
 ComparisonReviewManager.prototype.GetNodeIdvsComponentData = function (viewerId) {
     if (viewerId === Comparison.ViewerAContainer) {
-        return reviewManager.SourceANodeIdvsCheckComponent;
+        return this.SourceANodeIdvsCheckComponent;
     }
     else if (viewerId === Comparison.ViewerBContainer) {
-        return reviewManager.SourceBNodeIdvsCheckComponent;
+        return this.SourceBNodeIdvsCheckComponent;
     }
 
     return undefined;
