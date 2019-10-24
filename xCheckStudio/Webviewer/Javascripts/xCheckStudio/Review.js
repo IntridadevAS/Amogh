@@ -461,24 +461,24 @@ function populateModelBrowser(comparison) {
     // createModelBrowserAccordion(comparison.sources);   
 }
 
-function setButtonsCollapsible(containerId) {
+// function setButtonsCollapsible(containerId) {
 
-    var container = document.getElementById(containerId);
-    var acc = container.getElementsByClassName("accordion");
-    var i;
+//     var container = document.getElementById(containerId);
+//     var acc = container.getElementsByClassName("accordion");
+//     var i;
 
-    for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-        });
-    }
-}
+//     for (i = 0; i < acc.length; i++) {
+//         acc[i].addEventListener("click", function () {
+//             this.classList.toggle("active");
+//             var panel = this.nextElementSibling;
+//             if (panel.style.display === "block") {
+//                 panel.style.display = "none";
+//             } else {
+//                 panel.style.display = "block";
+//             }
+//         });
+//     }
+// }
 
 function enableViewers(sources) {
     if (sources.length > 1) {
