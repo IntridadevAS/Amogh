@@ -320,11 +320,15 @@ function populateModelBrowser(comparison) {
                         modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
                         // viewer
-                        var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
-                            undefined,
-                            undefined,
-                            source);
+                        var options = ["compare1", viewerOptions['a']['endPointUri']];
+                        var viewerInterface = new ModelBrowser3DViewer("a", source, options);
                         viewerInterface.setupViewer(550, 280);
+
+                        // var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
+                        //     undefined,
+                        //     undefined,
+                        //     source);
+                        // viewerInterface.setupViewer(550, 280);
 
                         // selection manager
                         var selectionManager = new ReviewComparisonSelectionManager();
@@ -391,11 +395,14 @@ function populateModelBrowser(comparison) {
                         // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;                       
 
                         // viewer
-                        var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
-                            undefined,
-                            undefined,
-                            source);
+                        var options = ["compare2", viewerOptions['b']['endPointUri']];
+                        var viewerInterface = new ModelBrowser3DViewer("b", source, options);
                         viewerInterface.setupViewer(550, 280);
+                        // var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
+                        //     undefined,
+                        //     undefined,
+                        //     source);
+                        // viewerInterface.setupViewer(550, 280);
 
                         // comparisonData["sourceBViewer"] = viewerInterface;
 
