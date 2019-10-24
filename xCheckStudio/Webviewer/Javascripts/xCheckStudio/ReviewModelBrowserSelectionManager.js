@@ -39,6 +39,26 @@ ReviewModelBrowserSelectionManager.prototype.MaintainHighlightedRow = function (
     });
 }
 
+ReviewModelBrowserSelectionManager.prototype.UnHighlightRow = function () {
+    var highlightedRow = this.GetHighlightedRow();
+    if (!highlightedRow ||
+        !("rowKey" in highlightedRow) ||
+        !("tableId" in highlightedRow)) {
+        return;
+    }
+
+    var modelBrowser = $(highlightedRow["tableId"]).dxTreeList("instance")
+
+    if (highlightedRow &&
+        !this.ComponentSelected(highlightedRow["rowKey"], highlightedRow["tableId"])) {
+        var rowIndex = modelBrowser.getRowIndexByKey(highlightedRow["rowKey"]);
+        if (rowIndex != -1) {
+            var row = modelBrowser.getRowElement(rowIndex)
+            this.RemoveHighlightColor(row[0]);
+        }
+    }
+}
+
 ReviewModelBrowserSelectionManager.prototype.ComponentSelected = function (rowKey, tableId) {
     for (var i = 0; i < this.SelectedCheckComponentRows.length; i++) {
         var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];

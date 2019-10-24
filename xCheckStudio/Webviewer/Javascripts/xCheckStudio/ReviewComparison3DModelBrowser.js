@@ -17,6 +17,10 @@ function ReviewComparison3DModelBrowser(id,
 ReviewComparison3DModelBrowser.prototype = Object.create(ReviewModelBrowser.prototype);
 ReviewComparison3DModelBrowser.prototype.constructor = ReviewComparison3DModelBrowser;
 
+ReviewComparison3DModelBrowser.prototype.Is3D = function () {
+    return true;
+}
+
 ReviewComparison3DModelBrowser.prototype.GetTableDivId = function () {
     return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
 }
@@ -268,17 +272,58 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
 
                 var browser = browsers[src]["browser"];
 
-                var anotherBrowserRowData = {};
-                if (browser.Id === "a") {
-                    anotherBrowserRowData.NodeId = Number(checkComponent.sourceANodeId);
+                // unhighlight previous highlighted row, if any
+                browsers[src]["selectionManager"].UnHighlightRow();
+                if (browser.Is1D()) {
+                    browsers[src]["viewer"].UnhighlightSheetRow();
                 }
-                else if (browser.Id === "b") {
-                    anotherBrowserRowData.NodeId = Number(checkComponent.sourceBNodeId);
+                else if (browser.Is3D()) {
+                    browsers[src]["viewer"].UnHighlightComponent();
                 }
 
-                if (anotherBrowserRowData.NodeId) {
-                    browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
-                    browser.HighlightInViewer(anotherBrowserRowData);
+                var anotherBrowserRowData = {};
+                if (browser.Id === "a") {
+                    if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceANodeId);
+                    }
+                    else if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length !== 2) {
+                            return;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceAName
+                        anotherBrowserRowData.Class = checkComponent.sourceASubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[0];
+                    }
+                }
+                else if (browser.Id === "b") {
+                    if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceBNodeId);
+                    }
+                    else if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length !== 2) {
+                            return;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceBName
+                        anotherBrowserRowData.Class = checkComponent.sourceBSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[1];
+                    }
+                }
+
+                if (browser.Is3D()) {
+                    if (anotherBrowserRowData.NodeId) {
+                        browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
+                        browser.HighlightInViewer(anotherBrowserRowData);
+                    }
+                }
+                else if (browser.Is1D()) {
+                    if (anotherBrowserRowData.Item && anotherBrowserRowData.Class && anotherBrowserRowData.Category) {
+                        browser.HighlightComponent(anotherBrowserRowData, false);
+                        browser.HighlightInViewer(anotherBrowserRowData);
+                    }
                 }
             }
         }

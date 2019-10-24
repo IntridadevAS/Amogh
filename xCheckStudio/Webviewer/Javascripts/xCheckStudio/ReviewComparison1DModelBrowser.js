@@ -15,6 +15,10 @@ function ReviewComparison1DModelBrowser(id,
 ReviewComparison1DModelBrowser.prototype = Object.create(ReviewModelBrowser.prototype);
 ReviewComparison1DModelBrowser.prototype.constructor = ReviewComparison1DModelBrowser;
 
+ReviewComparison1DModelBrowser.prototype.Is1D = function () {
+    return true;
+}
+
 ReviewComparison1DModelBrowser.prototype.GetTableDivId = function () {
     return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
 }
@@ -258,25 +262,52 @@ ReviewComparison1DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
             for (var src in browsers) {
                 if (src === this.SourceFileName) {
                     continue;
-                }
+                }            
 
                 var browser = browsers[src]["browser"];
+                
+                // unhighlight previous highlighted row, if any
+                browsers[src]["selectionManager"].UnHighlightRow();
+                if (browser.Is1D()) {
+                    browsers[src]["viewer"].UnhighlightSheetRow();
+                }
+                else if (browser.Is3D()) {
+                    browsers[src]["viewer"].UnHighlightComponent();
+                }
 
                 var anotherBrowserRowData = {};
                 if (browser.Id === "a") {
-                    anotherBrowserRowData.Item = checkComponent.sourceAName
-                    anotherBrowserRowData.Class = checkComponent.sourceASubComponentClass
-                    anotherBrowserRowData.Category = mainClasses[0];
+                    if (browser.Is1D()) {
+                        anotherBrowserRowData.Item = checkComponent.sourceAName
+                        anotherBrowserRowData.Class = checkComponent.sourceASubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[0];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceANodeId);
+                    }
                 }
                 else if (browser.Id === "b") {
-                    anotherBrowserRowData.Item = checkComponent.sourceBName
-                    anotherBrowserRowData.Class = checkComponent.sourceBSubComponentClass
-                    anotherBrowserRowData.Category = mainClasses[1];
+                    if (browser.Is1D()) {
+                        anotherBrowserRowData.Item = checkComponent.sourceBName
+                        anotherBrowserRowData.Class = checkComponent.sourceBSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[1];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceBNodeId);
+                    }
                 }
 
-                if (anotherBrowserRowData.Item && anotherBrowserRowData.Class && anotherBrowserRowData.Category) {
-                    browser.HighlightComponent(anotherBrowserRowData, false);
-                    browser.HighlightInViewer(anotherBrowserRowData);
+                if (browser.Is1D()) {
+                    if (anotherBrowserRowData.Item && anotherBrowserRowData.Class && anotherBrowserRowData.Category) {
+                        browser.HighlightComponent(anotherBrowserRowData, false);
+                        browser.HighlightInViewer(anotherBrowserRowData);
+                    }
+                }
+                else if (browser.Is3D()) {
+                    if (anotherBrowserRowData.NodeId) {
+                        browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
+                        browser.HighlightInViewer(anotherBrowserRowData);
+                    }
                 }
             }
         }
@@ -315,7 +346,7 @@ ReviewComparison1DModelBrowser.prototype.HighlightComponent = function (rowData,
     if (highlightFurther) {
         expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
             // scroll to row
-               document.getElementById(Comparison.MainReviewContainer).scrollTop = rowElement[0].offsetTop - rowElement[0].offsetHeight;
+            document.getElementById(Comparison.MainReviewContainer).scrollTop = rowElement[0].offsetTop - rowElement[0].offsetHeight;
         });
 
         // highlight in another browser
