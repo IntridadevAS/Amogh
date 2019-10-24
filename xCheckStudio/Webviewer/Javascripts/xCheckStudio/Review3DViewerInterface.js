@@ -262,14 +262,8 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewManager = model.getCurrentReviewManager();
-    //var resultViewer = model.getCurrentResultViewer(this.DataSource);
-    if (!reviewManager) {
-        var browser = model.getModelBrowser(this.DataSource);
-        if (browser) {
-            reviewRowData = browser.HighlightBrowserComponentRow(this.selectedNodeId);
-        }
-
+    var reviewManager = model.getCurrentReviewManager();    
+    if (!reviewManager) {       
         return;
     }
 
@@ -279,18 +273,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewRowData;
-    // if (model.getCurrentReviewManager()) {
-        reviewRowData = this.GetReviewComponentRow(checkComponentData);
-    // }
-    // else    
-    // {
-    //     var browser = model.getModelBrowser(this.DataSource);
-    //     if(browser)
-    //     {
-    //         reviewRowData = browser.GetBrowserComponentRow(checkComponentData);
-    //     }
-    // }
+    var reviewRowData = this.GetReviewComponentRow(checkComponentData);   
     if (!reviewRowData) {
         this.unHighlightComponent();
         this.unHighlightAll();
@@ -309,10 +292,6 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     this.HighlightMatchedComponent(containerDiv, rowData);
 
     model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
-
-    // scroll to rowElement
-    // dataGrid.getScrollable().scrollTo(reviewRow.offsetTop - reviewRow.offsetHeight);
-    // document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer).scrollTop = reviewRow.offsetTop - reviewRow.offsetHeight
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
@@ -397,50 +376,9 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
 
 Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
-    var reviewManager = model.getCurrentReviewManager();    
+    var reviewManager = model.getCurrentReviewManager();
 
-    var nodeIdvsCheckComponent;
-    if(reviewManager)
-    {
-        nodeIdvsCheckComponent = reviewManager.GetNodeIdvsComponentData(this.ViewerOptions[0]);
-    }
-    else
-    {
-        var browsers = model.getModelBrowsers();
-        if (this.DataSource in browsers) {
-            nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
-        }
-    }
-
-    // // if comparison
-    // if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
-
-    //     if (reviewManager) {
-    //         nodeIdvsCheckComponent = reviewManager.SourceANodeIdvsCheckComponent;
-    //     }
-    //     else if (this.DataSource in browsers) {
-    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
-    //     }
-    // }
-    // else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
-    //     if (reviewManager) {
-    //         nodeIdvsCheckComponent = reviewManager.SourceBNodeIdvsCheckComponent;
-    //     }
-    //     else if (this.DataSource in browsers) {
-    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
-    //     }
-    // }
-
-    // // if compliance
-    // if (!nodeIdvsCheckComponent &&
-    //     reviewManager.SourceNodeIdvsCheckComponent) {
-    //     if (reviewManager) {
-    //         nodeIdvsCheckComponent = reviewManager.SourceNodeIdvsCheckComponent;
-    //     }
-    //     else if (this.DataSource in browsers) {
-    //         nodeIdvsCheckComponent = browsers[this.DataSource].NodeIdvsCheckComponent;
-    //     }
-    // }
+    var nodeIdvsCheckComponent = reviewManager.GetNodeIdvsComponentData(this.ViewerOptions[0]);
 
     if (!nodeIdvsCheckComponent) {
         return false;
