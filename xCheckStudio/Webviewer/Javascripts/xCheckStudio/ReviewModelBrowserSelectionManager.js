@@ -60,7 +60,7 @@ ReviewModelBrowserSelectionManager.prototype.ApplyHighlightColor = function (row
 }
 
 ReviewModelBrowserSelectionManager.prototype.RemoveHighlightColor = function (row) {
-    var Color = this.GetRowHighlightColor(row.cells[ComparisonBrowserColumns.Status].innerHTML);
+    var Color = this.GetRowHighlightColor(row.cells[Comparison3DBrowserColumns.Status].innerHTML);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = Color;
