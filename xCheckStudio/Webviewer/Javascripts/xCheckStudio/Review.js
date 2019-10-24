@@ -313,46 +313,143 @@ function populateModelBrowser(comparison) {
                 if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceAFileName;
 
-                    var modelBrowser = new ReviewComparisonModelBrowser("a", source, comparison);
-                    modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
-
-                    var comparisonData = model.checks["comparison"];
-                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;
-
                     if (viewerOptions['a']['endPointUri'] !== undefined) {
 
+                        // model browser
+                        var modelBrowser = new ReviewComparison3DModelBrowser("a", source, comparison);
+                        modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
+
+                        // viewer
                         var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
                             undefined,
                             undefined,
                             source);
                         viewerInterface.setupViewer(550, 280);
 
-                        comparisonData["sourceAViewer"] = viewerInterface;
+                        // selection manager
+                        var selectionManager = new ReviewComparisonSelectionManager();
+
+                        var browserComponents = {};
+                        browserComponents["browser"] = modelBrowser;
+                        browserComponents["viewer"] = viewerInterface;
+                        browserComponents["selectionManager"] = selectionManager;
+
+                        var comparisonData = model.checks["comparison"];
+                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = browserComponents;
                     }
+                    else {
+                        // get class wise properties for excel and other 1D datasources               
+                        $.ajax({
+                            url: 'PHP/ClasswiseComponentsReader.php',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                'Source': "SourceA",
+                                'ProjectName': projectinfo.projectname,
+                                'CheckName': checkinfo.checkname
+                            },
+                            success: function (msg) {
+                                if (msg != 'fail') {
+                                    var sourceAClassWiseComponents = JSON.parse(msg);
 
+                                    // model browser
+                                    var modelBrowser = new ReviewComparison1DModelBrowser("a", source, comparison);
+                                    modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
+                                    var comparisonData = model.checks["comparison"];
+                                    // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;
+
+                                    // viewer
+                                    var viewerInterface = new ModelBrowser1DViewer("a", source, sourceAClassWiseComponents, "compare1");
+                                    // comparisonData["sourceAViewer"] = viewerInterface;     
+
+                                    // selection manager
+                                    var selectionManager = new ReviewComparisonSelectionManager();
+
+                                    var browserComponents = {};
+                                    browserComponents["browser"] = modelBrowser;
+                                    browserComponents["viewer"] = viewerInterface;
+                                    browserComponents["selectionManager"] = selectionManager;
+
+                                    var comparisonData = model.checks["comparison"];
+                                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = browserComponents;
+                                }
+                            }
+                        });
+                    }
                 }
                 else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceBFileName;
 
-                    var modelBrowser = new ReviewComparisonModelBrowser("b", source, comparison);
-                    modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
-
-                    var comparisonData = model.checks["comparison"];
-                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
-
-                    // selection manager
-                    var selectionManager = new ReviewComparisonSelectionManager();
-                    comparisonData["selectionManager"] = selectionManager;
-
                     if (viewerOptions['b']['endPointUri'] !== undefined) {
+
+                        // model browser
+                        var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
+                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+
+                        // var comparisonData = model.checks["comparison"];
+                        // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;                       
+
+                        // viewer
                         var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
                             undefined,
                             undefined,
                             source);
                         viewerInterface.setupViewer(550, 280);
 
-                        comparisonData["sourceBViewer"] = viewerInterface;
+                        // comparisonData["sourceBViewer"] = viewerInterface;
+
+                        // selection manager
+                        var selectionManager = new ReviewComparisonSelectionManager();
+
+                        var browserComponents = {};
+                        browserComponents["browser"] = modelBrowser;
+                        browserComponents["viewer"] = viewerInterface;
+                        browserComponents["selectionManager"] = selectionManager;
+
+                        var comparisonData = model.checks["comparison"];
+                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = browserComponents;
+                    }
+                    else {
+                        // get class wise properties for excel and other 1D datasources               
+                        $.ajax({
+                            url: 'PHP/ClasswiseComponentsReader.php',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                'Source': "SourceB",
+                                'ProjectName': projectinfo.projectname,
+                                'CheckName': checkinfo.checkname
+                            },
+                            success: function (msg) {
+                                if (msg != 'fail') {
+                                    var sourceBClassWiseComponents = JSON.parse(msg);
+
+                                    // model browser
+                                    var modelBrowser = new ReviewComparison1DModelBrowser("b", source, comparison);
+                                    modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+
+                                    // var comparisonData = model.checks["comparison"];
+                                    // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
+
+                                    // viewer
+                                    var viewerInterface = new ModelBrowser1DViewer("b", source, sourceBClassWiseComponents, "compare2");
+                                    // comparisonData["sourceBViewer"] = viewerInterface;
+
+                                    // selection manager
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();
+                                    // comparisonData["selectionManager"] = selectionManager;
+
+                                    var browserComponents = {};
+                                    browserComponents["browser"] = modelBrowser;
+                                    browserComponents["viewer"] = viewerInterface;
+                                    browserComponents["selectionManager"] = selectionManager;
+
+                                    var comparisonData = model.checks["comparison"];
+                                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = browserComponents;
+                                }
+                            }
+                        });
                     }
                 }
             }
@@ -364,24 +461,24 @@ function populateModelBrowser(comparison) {
     // createModelBrowserAccordion(comparison.sources);   
 }
 
-function setButtonsCollapsible(containerId) {
+// function setButtonsCollapsible(containerId) {
 
-    var container = document.getElementById(containerId);
-    var acc = container.getElementsByClassName("accordion");
-    var i;
+//     var container = document.getElementById(containerId);
+//     var acc = container.getElementsByClassName("accordion");
+//     var i;
 
-    for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-        });
-    }
-}
+//     for (i = 0; i < acc.length; i++) {
+//         acc[i].addEventListener("click", function () {
+//             this.classList.toggle("active");
+//             var panel = this.nextElementSibling;
+//             if (panel.style.display === "block") {
+//                 panel.style.display = "none";
+//             } else {
+//                 panel.style.display = "block";
+//             }
+//         });
+//     }
+// }
 
 function enableViewers(sources) {
     if (sources.length > 1) {
