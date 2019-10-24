@@ -1,67 +1,39 @@
 <?php
         require_once 'Utility.php';
         
-        if(!isset($_POST['CheckName']) || 
-           !isset($_POST['ProjectName']))
+        if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']) || !isset($_POST['fileName']) || !isset($_POST['Source']) || !isset($_POST['dataSourceType']))
         {
-            echo 'Project Name or Check Name not set';
+            echo 'Input argument not found';
             return; 
         }
-        if(!isset($_POST['fileName']))
-        {
-            echo 'File Name not set';
-            return;
-        }
+       
         $fileName = $_POST['fileName'];
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
-
+        $source = $_POST['Source'];
         $sourceDirectory = NULL;
-        if(isset($_POST['Source']) && $_POST['Source'] == "a")
-        {
-            $sourceDirectory = getCheckSourceAPath($projectName, $checkName);
-            // if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "3D")
-            // {
-            //     echo $sourceAPath.'/'.$fileName.'.scs';
-            //     return;
-            // }
-            // else if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "1D")
-            // {
-            //     echo $sourceAPath.'/'.$fileName.'.json';
-            //     return;
-            // }
-                  
-        }
-        else if(isset($_POST['Source']) && $_POST['Source'] == "b" )
-        {
-            $sourceDirectory = getCheckSourceBPath($projectName, $checkName);
-            // if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "3D" )
-            // {
-            //     echo $sourceBPath.'/'.$fileName.'.scs';
-            //     return;
-            // }
-            // else if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "1D")
-            // {
-            //     echo $sourceBPath.'/'.$fileName.'.json';
-            //     return;
-            // }          
-        }
-        else if(isset($_POST['Source']) && $_POST['Source'] == "c" )
-        {
-            $sourceDirectory = getCheckSourceCPath($projectName, $checkName);
-        }
-        else if(isset($_POST['Source']) && $_POST['Source'] == "d" )
-        {
-            $sourceDirectory = getCheckSourceDPath($projectName, $checkName);
+
+        switch($source) {
+            case "a":
+                $sourceDirectory = getCheckSourceAPath($projectName, $checkName);
+                break;
+            case "b":
+                $sourceDirectory = getCheckSourceBPath($projectName, $checkName);
+                break;
+            case "c":
+                $sourceDirectory = getCheckSourceCPath($projectName, $checkName);
+              break;
+            case "d":
+                $sourceDirectory = getCheckSourceDPath($projectName, $checkName);
+              break;
         }
 
-
-        if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "3D")
+        if($_POST['dataSourceType'] == "3D")
         {
             echo $sourceDirectory.'/'.$fileName.'.scs';
             return;
         }
-        else if(isset($_POST['dataSourceType']) && $_POST['dataSourceType'] == "1D")
+        else if($_POST['dataSourceType'] == "1D")
         {
             echo $sourceDirectory.'/'.$fileName.'.json';
             return;

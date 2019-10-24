@@ -20,18 +20,12 @@ SelectionManager.prototype.RemoveFromselectedCompoents = function (componentRow)
    This function 
 */
 SelectionManager.prototype.RemoveHighlightColor = function (row) {
-    for (var j = 0; j < row.cells.length; j++) {
-        cell = row.cells[j];
-        cell.style.backgroundColor = "#ffffff"
-    }
+    row.style.backgroundColor = "#ffffff";
 }
 
 /* 
    This function 
 */
 SelectionManager.prototype.ApplyHighlightColor = function (row) {
-    for (var j = 0; j < row.cells.length; j++) {
-        cell = row.cells[j];
-        cell.style.backgroundColor = "#e6e8e8";
-    }
+    row.style.backgroundColor = '#e6e8e8';
 }

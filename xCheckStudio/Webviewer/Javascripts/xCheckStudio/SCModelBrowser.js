@@ -29,7 +29,7 @@ function SCModelBrowser(modelBrowserContainer,
     //this.NodeGroups = [];
 
     // this.CreateHeaders();
-    this.InitEvents();
+    //this.InitEvents();
 
     // selectiion manager
     this.SelectionManager = new SCSelectionManager(nodeIdvsSelectedComponents);
@@ -45,61 +45,45 @@ SCModelBrowser.prototype.CreateHeaders = function () {
     for (var i = 0; i < Object.keys(ModelBrowserColumns3D).length; i++) {
         var columnHeader = {};
         var caption;
-        var dataField;
-        var width;
-        var dataType;
-        var visible = true
-        if (i === ModelBrowserColumns3D.Select) {
-            continue;
+        var width = "0%";
+        var visible = true;
+        switch(i)
+        {
+            case ModelBrowserColumns3D.Select:
+                continue;
+                break;
+            case ModelBrowserColumns3D.Component:
+                width = "40%";
+                caption = ModelBrowserColumnNames3D.Component;
+                break;
+            case ModelBrowserColumns3D.MainClass:
+                width = "30%";
+                caption = ModelBrowserColumnNames3D.MainClass;
+                break;
+            case ModelBrowserColumns3D.SubClass:
+                width = "30%";
+                caption = ModelBrowserColumnNames3D.SubClass;
+                break;
+            case ModelBrowserColumns3D.NodeId:
+                visible = false;
+                caption = ModelBrowserColumnNames3D.NodeId;
+                break;
+            case ModelBrowserColumns3D.Parent:
+                visible = false;
+                caption = ModelBrowserColumnNames3D.Parent;
+                break;
         }
-        else if (i === ModelBrowserColumns3D.Component) {
-            caption = ModelBrowserColumnNames3D.Component;
-            dataField = ModelBrowserColumnNames3D.Component.replace(/\s/g, '');
-            width = "40%";
-            // dataType = "string";
-        }
-        else if (i === ModelBrowserColumns3D.MainClass) {
-            caption = ModelBrowserColumnNames3D.MainClass;
-            dataField = ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '');
-            width = "30%";
-            // dataType = "string";
-        }
-        else if (i === ModelBrowserColumns3D.SubClass) {
-            caption = ModelBrowserColumnNames3D.SubClass;
-            dataField = ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '');
-            width = "30%";
-            // dataType = "string";
-        }
-        else if (i === ModelBrowserColumns3D.NodeId) {
-            caption = ModelBrowserColumnNames3D.NodeId;
-            dataField = ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '');
-            width = "0%";
-            visible = false;
-            // dataType = "number";
-        }
-        else if (i === ModelBrowserColumns3D.Parent) {
-            caption = ModelBrowserColumnNames3D.Parent;
-            dataField = ModelBrowserColumnNames3D.Parent.replace(/\s/g, '');
-            width = "0%";
-            visible = false;
-            // dataType = "number";
-        }
-
         columnHeader["caption"] = caption;
-        columnHeader["dataField"] = dataField;
-        // columnHeader["dataType"] = dataType;
+        columnHeader["dataField"] = caption.replace(/\s/g, '');;
         columnHeader["width"] = width;
-
-        if(visible == false) {
-            columnHeader["visible"] = visible;
-        }
+        columnHeader["visible"] = visible;
         columnHeaders.push(columnHeader);
     }
 
     return columnHeaders;
 }
-
-SCModelBrowser.prototype.InitEvents = function () {
+/*Found Absolute Method on 23/10/2019. Can be removed later..RK
+/*SCModelBrowser.prototype.InitEvents = function () {
     var _this = this;
     this.Webviewer.setCallbacks({
         assemblyTreeReady: function () {
@@ -117,7 +101,7 @@ SCModelBrowser.prototype.InitEvents = function () {
             }
         }
     });
-};
+};*/
 
 SCModelBrowser.prototype.revisedRandId = function () {
     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
@@ -145,10 +129,10 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
 
     tableRowContent = {};
 
-    tableRowContent[ModelBrowserColumnNames3D.Component.replace(/\s/g, '')] = nodeData.Name;
-    tableRowContent[ModelBrowserColumnNames3D.MainClass.replace(/\s/g, '')] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames3D.SubClass.replace(/\s/g, '')] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames3D.NodeId.replace(/\s/g, '')] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    tableRowContent[ModelBrowserColumnNames3D.Component] = nodeData.Name;
+    tableRowContent[ModelBrowserColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+    tableRowContent[ModelBrowserColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
     tableRowContent["parent"] = parentNode;
 
     this.modelTreeRowData.push(tableRowContent);
@@ -164,12 +148,9 @@ SCModelBrowser.prototype.addModelBrowser = function (components) {
     }
 
     this.Components = components;
-
     var headers = this.CreateHeaders();
-
     var rootNode = this.Webviewer.model.getAbsoluteRootNode();
-    this.addModelBrowserComponent(rootNode, -1);
-
+    this.addModelBrowserComponent(rootNode, -1);    
     if (headers === undefined ||
         headers.length === 0 ||
         this.modelTreeRowData === undefined ||
@@ -183,17 +164,11 @@ SCModelBrowser.prototype.addModelBrowser = function (components) {
 SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode) {
 
     if (nodeId !== null) {
-        var model = this.Webviewer.model;
-        var children = model.getNodeChildren(nodeId);
-
+        var children = this.Webviewer.model.getNodeChildren(nodeId);
         if (children.length > 0) {
-
             this.addComponentRow(nodeId, parentNode);
-
             for (var i = 0; i < children.length; i++) {
-                var child = children[i];
-
-                this.addModelBrowserComponent(child, nodeId);
+                this.addModelBrowserComponent(children[i], nodeId);
             }
         }
     }
@@ -235,6 +210,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             columnAutoWidth: true,
             wordWrapEnabled: false,
             showBorders: true,
+            showRowLines: true,
             height: "100%",
             width: "100%",
             allowColumnResizing : true,
@@ -243,9 +219,16 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             filterRow: {
                 visible: true
             },
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual"
+            },
+            paging: {
+                 pageSize: 50
+            },
             selection: {
                 mode: "multiple",
-                recursive: true
+                recursive: true,
             },  
             onInitialized: function(e) {
                 // initialize the context menu
@@ -303,16 +286,11 @@ SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(selectedNodeIds) 
 SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
     for (var i = 0; i < selectedRows.length; i++) {
         var selectedRow = selectedRows[i];
-
-        for(var j = 0; j < selectedRow.cells.length; j++) {
+        selectedRow.style.backgroundColor = "#b3b5b5";
+        /*for(var j = 0; j < selectedRow.cells.length; j++) {
             var cell = selectedRow.cells[j];
-            if(isHide) {
-                cell.style.color = "#b3b5b5";
-            }
-            else {
-                cell.style.color = "black";
-            }
-        }
+            isHide ? cell.style.color = "#b3b5b5" : cell.style.color = "black";
+        }*/
     }     
 }
 
