@@ -38,21 +38,21 @@
 
 
     $uploadDirectory = NULL;
-    if($_POST['Source'] == "a")
-    {
-        $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);       
-    }
-    else if($_POST['Source'] == "b")
-    {
-        $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);        
-    }
-    else if($_POST['Source'] == "c")
-    {
-        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);        
-    }
-    else if($_POST['Source'] == "d")
-    {
-        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);        
+
+    $Source = $_POST['Source'];
+    switch($Source){
+        case "a":
+        $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);
+        break;
+        case "b":
+        $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);
+        break;
+        case "c":
+        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);
+        break;
+        case "d":
+        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);
+        break;
     }
 
     if($uploadDirectory === NULL)
