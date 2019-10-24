@@ -1,18 +1,14 @@
 <?php 
+    require_once '../PHP/Utility.php';
+    // check if sourceA and sourceB paths are in session data
+    if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
+    {
+        echo 'fail';
+        return; 
+    }
 
-require_once '../PHP/Utility.php';
-// check if sourceA and sourceB paths are in session data
-if(!isset($_POST['CheckName']) || 
-!isset($_POST['ProjectName']))
-{
- echo 'fail';
- return; 
-}
-
-$projectName = $_POST['ProjectName'];
-$checkName = $_POST['CheckName'];
-
-//    $scriptParentDirectory = dirname ( __DIR__ );
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
 
     $array = explode("\\", __DIR__);
     unset($array[sizeof($array)-1]);
@@ -22,82 +18,36 @@ $checkName = $_POST['CheckName'];
     $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
     $mainFileName = $_POST['MainFile'];
-
     $uploadDirectory = NULL;
-
-    if($_POST['Source'] == "a")
-    {
+    $Source = $_POST['Source'];
+    switch($Source){
+        case "a":
         $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);
-    }
-    else if($_POST['Source'] == "b")
-    {
+        break;
+        case "b":
         $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);
+        break;
+        case "c":
+        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);
+        break;
+        case "d":
+        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);
+        break;
     }
-    else if($_POST['Source'] == "c")
-    {
-        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);      
-    }
-    else if($_POST['Source'] == "d")
-    {
-        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName); 
-    }
-
-    if($_POST['Source'] == "a")
-    {
-        $filename=  $uploadDirectory."/".$mainFileName;          
-    }
-    else if($_POST['Source'] == "b")
-    {
-        $filename=  $uploadDirectory."/".$mainFileName;              
-    }
-    else if($_POST['Source'] == "c")
-    {
-        $filename=  $uploadDirectory."/".$mainFileName;     
-    }
-    else if($_POST['Source'] == "d")
-    {
-        $filename=  $uploadDirectory."/".$mainFileName;      
-    }
-
-
+    $filename=  $uploadDirectory."/".$mainFileName; 
     $file = fileExists($filename, false);
-    if ($file) {
-        //echo "The file $file exists";    
-    } 
-    else 
-    {
-    //   echo "The file $file does not exist";
+    if (!$file) {
         echo "fail";
         return;
-    }
+    } 
 
     $file = basename($file);     
-
-    if($_POST['Source'] == "a")
-    {
-        $inputFileName=  $uploadDirectory."/".$file;          
-    }
-    else if($_POST['Source'] == "b")
-    {
-        $inputFileName=  $uploadDirectory."/".$file;               
-    }
-    else if($_POST['Source'] == "c")
-    {
-        $inputFileName=  $uploadDirectory."/".$file;       
-    }
-    else if($_POST['Source'] == "d")
-    {
-        $inputFileName=  $uploadDirectory."/".$file;       
-    }
-
+    $inputFileName=  $uploadDirectory."/".$file;
     $command = '"'.$launch_converter. '" "'. $inputFileName. '"';
     exec($command, $output);
-
     echo  trim($file);
 
 function fileExists($fileName, $caseSensitive = true) {
-
-
     $hasExtension = true;
     $file_parts = pathinfo($fileName);
     if(!isset($file_parts['extension']))
