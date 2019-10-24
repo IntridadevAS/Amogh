@@ -5,83 +5,48 @@ function createSourceManager(fileName,
     modelTreeContainer,
     uri) {
     var sourceManager = undefined;
-    if (sourceType.toLowerCase() === "xml") {
-
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-
-        sourceManager = new XMLSourceManager(fileName, sourceType, viewerOptions);
+    viewerOptions = {
+        containerId: viewerContainer,
+        endpointUri: uri,
+        modelTree: modelTreeContainer
+    };
+    var type = sourceType.toLowerCase();
+    switch(type) {
+        case "xml":
+            sourceManager = new XMLSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "rvm":
+            sourceManager = new RVMSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "sldasm":
+        case "sldprt":
+            sourceManager = new SolidWorksSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "dwg":
+            sourceManager = new DWGSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "rvt":
+        case "rfa":
+            sourceManager = new RVTSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "ifc":
+            sourceManager = new IFCSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "step":
+        case "stp":
+        case "ste":
+            sourceManager = new STEPSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "igs":
+            sourceManager = new IGSSourceManager(fileName, sourceType, viewerOptions);
+        break;
+        case "json":
+            sourceManager = new DBSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
+        break;
+        case "xls":
+            sourceManager = new ExcelSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
+        break;
     }
-    else if (sourceType.toLowerCase() === "rvm") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new RVMSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "sldasm" ||
-        sourceType.toLowerCase() === "sldprt") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new SolidWorksSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "dwg") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new DWGSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "rvt" ||
-        sourceType.toLowerCase() === "rfa") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new RVTSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "ifc") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new IFCSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "step" ||
-        sourceType.toLowerCase() === "stp" ||
-        sourceType.toLowerCase() === "ste") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new STEPSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "igs") {
-        viewerOptions = {
-            containerId: viewerContainer,
-            endpointUri: uri,
-            modelTree: modelTreeContainer
-        };
-        sourceManager = new IGSSourceManager(fileName, sourceType, viewerOptions);
-    }
-    else if (sourceType.toLowerCase() === "json") {
-        sourceManager = new DBSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
-    }
-    else if (sourceType.toLowerCase() === "xls") {
-        sourceManager = new ExcelSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
-    }
-
     return sourceManager;
 }
 
