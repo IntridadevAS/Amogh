@@ -220,6 +220,12 @@ let viewTabs = {
 
     newComparisonCard.setAttribute("onclick", "viewTabs.selectSourceForComparison()");
 
+    for(var i = 0; i < model.selectedComparisons.length; i++){
+      if(model.selectedComparisons[i].id == file.id) {
+        newComparisonCard.classList.add("fileCardSelected");
+      }
+    }
+    
     return newComparisonCard;
   },
 
@@ -229,6 +235,9 @@ let viewTabs = {
     newComplianceCard.innerHTML = file.fileName;
     newComplianceCard.id = file.id;
 
+    if(model.selectedCompliance != null && model.selectedCompliance.id == file.id) {
+      newComplianceCard.classList.add("fileCardSelected");
+    }
     newComplianceCard.setAttribute("onclick", "viewTabs.selectSourceForCompliance()");
 
     return newComplianceCard;
@@ -255,22 +264,9 @@ let viewTabs = {
       this.selectFiles.appendChild(newCard);
     };
 
-    // let enterBrowserBtn = document.createElement("div");
-    // enterBrowserBtn.classList.add("enterBtn");    
-    // //enterBrowserBtn.setAttribute("onclick", "viewTabs.enterComparison()");
-
-    // var img = document.createElement("img");
-    // img.src = "public/symbols/Model Explorer Icon.svg";
-    // enterBrowserBtn.appendChild(img);
-
-    // this.selectFiles.appendChild(enterBrowserBtn);
-
     let enterComparisonBtn = document.createElement("div");
     enterComparisonBtn.classList.add("enterBtn");
-    // enterComparisonBtn.style.position = "absolute";
-    // enterComparisonBtn.style.left = enterBrowserBtn.offsetLeft + "px";
-    // enterComparisonBtn.style.top = enterBrowserBtn.offsetTop + enterBrowserBtn.offsetHeight + "px";
-    //enterComparisonBtn.setAttribute("onclick", "viewTabs.enterComparison()");
+
 
     var browserImg = document.createElement("img");
     browserImg.src = "public/symbols/Model Explorer Icon.svg";
@@ -293,30 +289,7 @@ let viewTabs = {
 
     // TODO set enter functionality for comparison here
     var requiredComparison = viewTabs.getComparison();
-    // for (var i = 0; i < comparisons.length; i++) {
-    //   var comparison = comparisons[i];
-
-    //   if (comparison.sources.length != model.selectedComparisons.length) {
-    //     continue;
-    //   }
-
-    //   var validComparison = false;
-    //   for (var j = 0; j < model.selectedComparisons.length; j++) {
-    //     var selectedComparison = model.selectedComparisons[i];
-    //     if (!comparison.sources.includes(selectedComparison.fileName)) {
-    //       validComparison = false;
-    //       break;
-    //     }
-
-    //     validComparison = true;
-    //   }
-
-    //   if (validComparison) {
-    //     requiredComparison = comparison;
-    //     break;
-    //   }
-    // }
-
+    
     if (requiredComparison) {
       // populate check results
       populateCheckResults(requiredComparison,
@@ -372,7 +345,7 @@ let viewTabs = {
   },
 
   populateCompliances: function () {
-    model.selectedCompliance = null;
+    // model.selectedCompliance = null;
 
     this.openSelectFiles();
     for (file of Object.values(model.files)) {
@@ -381,10 +354,23 @@ let viewTabs = {
         this.selectFiles.appendChild(newCard);
       };
     }
-    let enterBtn = document.createElement("div");
-    enterBtn.classList.add("enterBtn");
-    enterBtn.setAttribute("onclick", "viewTabs.enterCompliance()");
-    this.selectFiles.appendChild(enterBtn);
+
+    let enterComparisonBtn = document.createElement("div");
+    enterComparisonBtn.classList.add("enterBtn");
+
+    var browserImg = document.createElement("img");
+    browserImg.src = "public/symbols/Model Explorer Icon.svg";
+    // browserImg.setAttribute("onclick", "viewTabs.enterComparisonBrowser()");
+    enterComparisonBtn.appendChild(browserImg);
+
+    reviewTableImg = document.createElement("img");
+    reviewTableImg.src = "public/symbols/Display Review Table icon.svg";
+    reviewTableImg.style.position = "relative";
+    reviewTableImg.style.top = "24px";
+    reviewTableImg.setAttribute("onclick", "viewTabs.enterCompliance()");
+    enterComparisonBtn.appendChild(reviewTableImg);
+
+    this.selectFiles.appendChild(enterComparisonBtn);
   },
 
   enterCompliance: function () {
@@ -414,7 +400,7 @@ let viewTabs = {
     if (!model.selectedComparisons.includes(source)) {
       model.selectedComparisons.push(source);
 
-      event.target.style.borderColor = '#15b9f9';
+      event.target.classList.add("fileCardSelected");
     }
     else {
       var index = model.selectedComparisons.indexOf(source);
@@ -422,25 +408,27 @@ let viewTabs = {
         model.selectedComparisons.splice(index, 1);
       }
 
-      event.target.style.removeProperty('border');
+      event.target.classList.remove("fileCardSelected");
     }
   },
 
   selectSourceForCompliance: function () {
     // remove background color of previously selected card, 
     // as only one source/file/card can be selected at a time
-    for (var i = 0; i < this.selectFiles.children.length; i++) {
-      var card = this.selectFiles.children[i];
-      if (!card.classList.contains("fileCard")) {
-        continue;
+    var source = model.files[event.target.id];
+    if(model.selectedCompliance !== source) {
+
+      if(model.selectedCompliance != "") {
+        document.getElementById(model.selectedCompliance.id).classList.remove("fileCardSelected");
       }
+      model.selectedCompliance = source;
+      event.target.classList.add("fileCardSelected");
 
-      card.style.removeProperty('border');
     }
-
-    event.target.style.borderColor = '#15b9f9';
-
-    model.selectedCompliance = model.files[event.target.id];
+    else {
+      model.selectedCompliance = "";
+      event.target.classList.remove("fileCardSelected");
+    }
   }
 }
 
