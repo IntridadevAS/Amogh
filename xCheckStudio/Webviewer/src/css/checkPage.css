@@ -278,9 +278,9 @@ button + button {
 }
 
 button[type="submit"] {
-  background-color: var(--xCheckBlack);
-  border: 1px solid var(--xCheckWhite);
-  border-radius: var(--borderRadiusVal);
+  /* background-color: var(--xCheckBlack); */
+  /* border: 1px solid var(--xCheckWhite); */
+  /* border-radius: var(--borderRadiusVal); */
   grid-area: submit;
   width: auto;
 }

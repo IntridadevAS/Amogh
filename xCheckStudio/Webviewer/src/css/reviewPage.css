@@ -401,16 +401,21 @@ tr {
 
 .enterBtn{
   box-sizing: border-box;
-  background-color: var(--xCheckBlack);
   height: 90px;
   width: 30px;
-  border: var(--xCheckMedGrey) solid var(--borderWidth);
   border-radius: var(--borderRadiusVal);
   z-index: 4;
 }
 
 .fileCard:hover{
-  border-color: var(--intridaBlue);
+  background: #706f6f;
+  border-color: #706f6f;
+}
+
+.fileCardSelected {
+  background: #706f6f;
+  border-color: #706f6f;
+  /* opacity: 0.8; */
 }
 
 .hide {
