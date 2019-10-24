@@ -8,7 +8,7 @@ function ModelBrowser1DViewer(id,
     this.ViewerContainer = viewerContainer;
 
     // properties which can be used to identify names   
-   
+
     this.IdentifierProperties = {};
 
     this.SelectedRow = {};
@@ -218,7 +218,7 @@ ModelBrowser1DViewer.prototype.HighlightRow = function (componentName, subClass)
     var rowData;
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
-        if (row.data[this.IdentifierProperties.name] === componentName &&           
+        if (row.data[this.IdentifierProperties.name] === componentName &&
             row.data[this.IdentifierProperties.componentClass] === subClass) {
             requiredRow = this.GridInstance.getRowElement(row.rowIndex);
             rowData = row;
@@ -255,10 +255,10 @@ ModelBrowser1DViewer.prototype.ResizeViewer = function () {
 ModelBrowser1DViewer.prototype.HighlightSheetDataRow = function (viewerContainer, rowElement, rowData) {
 
     // if already selected row, then unhighlight
-    if (Object.keys(this.SelectedRow).length > 0) {
-        this.UnhighlightSheetRow(this.SelectedRow);
-        this.SelectedRow = {};
-    }
+    // if (Object.keys(this.SelectedRow).length > 0) {
+    this.UnhighlightSheetRow();
+    this.SelectedRow = {};
+    // }
 
     // maintain selected row
     this.SelectedRow = {
@@ -273,9 +273,12 @@ ModelBrowser1DViewer.prototype.HighlightSheetDataRow = function (viewerContainer
     $(viewerContainer).dxDataGrid("instance").getScrollable().scrollTo({ top: rowElement.offsetTop - rowElement.offsetHeight });
 }
 
-ModelBrowser1DViewer.prototype.UnhighlightSheetRow = function (row) {
-    var rowIndex = row["rowIndex"];
-    //var tableId = row["tableId"];
+ModelBrowser1DViewer.prototype.UnhighlightSheetRow = function () {
+    if (Object.keys(this.SelectedRow).length === 0) {
+        return;
+    }
+
+    var rowIndex = this.SelectedRow["rowIndex"];
 
     var gridInstance = $("#" + this.ViewerContainer).dxDataGrid("instance");
 

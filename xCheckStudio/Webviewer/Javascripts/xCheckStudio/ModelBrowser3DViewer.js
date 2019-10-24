@@ -93,8 +93,8 @@ ModelBrowser3DViewer.prototype.HighlightComponent = function (nodeIdString) {
 ModelBrowser3DViewer.prototype.UnHighlightComponent = function () {
 
     this.selectedNodeId = undefined;
-    this.highlightManager.ClearSelection();
-    this.Viewer.view.fitWorld();
+    this.ClearSelection();
+//     this.Viewer.view.fitWorld();
 }
 
 ModelBrowser3DViewer.prototype.HighlightNodeInViewer = function (nodeId) {

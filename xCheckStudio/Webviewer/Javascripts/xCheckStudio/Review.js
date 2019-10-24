@@ -331,7 +331,7 @@ function populateModelBrowser(comparison) {
                         // viewerInterface.setupViewer(550, 280);
 
                         // selection manager
-                        var selectionManager = new ReviewComparisonSelectionManager();
+                        var selectionManager = new ReviewModelBrowserSelectionManager();
 
                         var browserComponents = {};
                         browserComponents["browser"] = modelBrowser;
@@ -368,7 +368,7 @@ function populateModelBrowser(comparison) {
                                     // comparisonData["sourceAViewer"] = viewerInterface;     
 
                                     // selection manager
-                                    var selectionManager = new ReviewComparisonSelectionManager();
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();
 
                                     var browserComponents = {};
                                     browserComponents["browser"] = modelBrowser;
@@ -407,7 +407,7 @@ function populateModelBrowser(comparison) {
                         // comparisonData["sourceBViewer"] = viewerInterface;
 
                         // selection manager
-                        var selectionManager = new ReviewComparisonSelectionManager();
+                        var selectionManager = new ReviewModelBrowserSelectionManager();
 
                         var browserComponents = {};
                         browserComponents["browser"] = modelBrowser;
