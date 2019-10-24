@@ -6,8 +6,8 @@ function ReviewComparison1DModelBrowser(id,
     ReviewModelBrowser.call(this, id, sourceFileName);
 
     this.CheckData = checkData;
-    this.ModelTreeData = [];   
-    
+    this.ModelTreeData = [];
+
     this.CheckComponents;
 }
 
@@ -21,12 +21,12 @@ ReviewComparison1DModelBrowser.prototype.GetTableDivId = function () {
 
 ReviewComparison1DModelBrowser.prototype.GetSelectionManager = function () {
     var browser = model.checks["comparison"]["modelBrowsers"][this.SourceFileName];
-    return browser["selectionManager"];    
+    return browser["selectionManager"];
 }
 
 ReviewComparison1DModelBrowser.prototype.GetViewer = function () {
     var browser = model.checks["comparison"]["modelBrowsers"][this.SourceFileName];
-    return browser["viewer"];    
+    return browser["viewer"];
 }
 
 ReviewComparison1DModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
@@ -154,7 +154,7 @@ ReviewComparison1DModelBrowser.prototype.LoadTable = function (headers) {
 
             var tooltipText = e.component.getCellElement(e.rowIndex, 0)[0].getAttribute("title");
 
-            _this.OnComponentRowClicked(e.data, tooltipText);                       
+            _this.OnComponentRowClicked(e.data, tooltipText);
         },
         onRowPrepared: function (e) {
             if (e.rowType !== "data") {
@@ -313,6 +313,11 @@ ReviewComparison1DModelBrowser.prototype.HighlightComponent = function (rowData,
     this.GetSelectionManager().MaintainHighlightedRow(rowElement[0], "#" + this.GetTableDivId(), rowKey);
 
     if (highlightFurther) {
+        expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
+            // scroll to row
+            document.getElementById(Comparison.MainReviewContainer).scrollTop = rowElement[0].offsetTop - rowElement[0].offsetHeight;
+        });
+
         // highlight in another browser
         this.HighlightInAnotherBrowser(completeRowData);
     }
@@ -544,5 +549,5 @@ ReviewComparison1DModelBrowser.prototype.HighlightInViewer = function (rowData) 
         }
 
         viewerInterface.HighlightComponent(rowData, componentStatusList);
-    }    
+    }
 }
