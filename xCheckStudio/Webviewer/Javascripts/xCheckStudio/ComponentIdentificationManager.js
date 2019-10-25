@@ -71,105 +71,77 @@ var xCheckStudio;
 
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
-            if (fileExtension.toLowerCase() === "xml") {
+            properties = {};
+            var name = "";
+            var mainCategory = "";
+            var subClass = "";
 
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.XMLSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.XMLSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.XMLSourceSubComponentClassProperty;
-
-                // if (mainComponentClass !== undefined) {
-                //     if (mainComponentClass.toLowerCase() === "pipingnetworksegment") {
-                //         properties['source'] = ComponentIdentificationManager.XMLPipingNWSegSourceProperty;
-                //         properties['destination'] = ComponentIdentificationManager.XMLPipingNWSegDestinationProperty;
-                //         properties['ownerId'] = ComponentIdentificationManager.XMLPipingNWSegOwnerProperty;
-                //     }                    
-                // }
+            var extension = fileExtension.toLowerCase();
+            switch(extension){
+                case "xml":
+                    name = ComponentIdentificationManager.XMLSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.XMLSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.XMLSourceSubComponentClassProperty;
+                    break;
+                case "rvt":
+                    name = ComponentIdentificationManager.RVTSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.RVTSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
+                    break;
+                case "igs":
+                    name = ComponentIdentificationManager.IGSSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.IGSSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.IGSSourceSubComponentClassProperty;
+                    break;
+                case "ifc":
+                    name = ComponentIdentificationManager.IFCSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.IFCSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
+                    break;
+                case "step":
+                    name = ComponentIdentificationManager.STEPSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.STEPSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.STEPSourceSubComponentClassProperty;
+                    break;
+                case "stp":
+                    name = ComponentIdentificationManager.STPSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.STPSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.STPSourceSubComponentClassProperty;
+                    break;
+                case "ste":
+                    name = ComponentIdentificationManager.STESourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.STESourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.STESourceSubComponentClassProperty;
+                    break;
+                case "rvm":
+                    name = ComponentIdentificationManager.RVMSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.RVMSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.RVMSourceSubComponentClassProperty;
+                    break;
+                case "xls":
+                    name = ComponentIdentificationManager.XLSSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.XLSSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.XLSSourceSubComponentClassProperty;
+                    break;
+                case "json":
+                    name = ComponentIdentificationManager.DBSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.DBSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.DBSourceSubComponentClassProperty;
+                    break;
+                case "sldasm":
+                    name = ComponentIdentificationManager.SLDSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.SLDSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.SLDSourceSubComponentClassProperty;
+                    break;
+                case "sldprt":
+                    name = ComponentIdentificationManager.SLDPRTNameProperty;
+                    mainCategory = ComponentIdentificationManager.SLDPRTMainClassProperty;
+                    subClass = ComponentIdentificationManager.SLDPRTSubComponentClassProperty;
+                    break;
             }
-            else if (fileExtension.toLowerCase() === "rvt") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.RVTSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.RVTSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.RVTSourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "igs") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.IGSSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.IGSSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.IGSSourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "ifc") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.IFCSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.IFCSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.IFCSourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "step") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.STEPSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.STEPSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.STEPSourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "stp") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.STPSourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.STPSourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.STPSourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "ste") {
-
-                properties = {};
-                properties['name'] = ComponentIdentificationManager.STESourceNameProperty;
-                properties['mainCategory'] = ComponentIdentificationManager.STESourceMainClassProperty;
-                properties['subClass'] = ComponentIdentificationManager.STESourceSubComponentClassProperty;
-
-            }
-            else if (fileExtension.toLowerCase() === "rvm") {
-                properties = {
-                    'name': ComponentIdentificationManager.RVMSourceNameProperty,
-                    'mainCategory': ComponentIdentificationManager.RVMSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.RVMSourceSubComponentClassProperty
-                };
-            }
-            else if (fileExtension.toLowerCase() === "xls") {
-                properties = {
-                    'name': ComponentIdentificationManager.XLSSourceNameProperty,
-                    'mainCategory': ComponentIdentificationManager.XLSSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.XLSSourceSubComponentClassProperty
-                };
-            }
-            else if (fileExtension.toLowerCase() === "json") {
-                properties = {
-                    'name': ComponentIdentificationManager.DBSourceNameProperty,
-                    'mainCategory': ComponentIdentificationManager.DBSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.DBSourceSubComponentClassProperty
-                };
-            }
-            else if (fileExtension.toLowerCase() === "sldasm") {
-                properties = {
-                    'name': ComponentIdentificationManager.SLDSourceNameProperty,
-                    'mainCategory': ComponentIdentificationManager.SLDSourceMainClassProperty,
-                    'subClass': ComponentIdentificationManager.SLDSourceSubComponentClassProperty
-                };
-            }
-            else if (fileExtension.toLowerCase() === "sldprt") {
-                properties = {
-                    'name': ComponentIdentificationManager.SLDPRTNameProperty,
-                    'mainCategory': ComponentIdentificationManager.SLDPRTMainClassProperty,
-                    'subClass': ComponentIdentificationManager.SLDPRTSubComponentClassProperty
-                };
-            }
-
+            properties['name'] = name;        
+            properties['mainCategory'] = mainCategory;
+            properties['subClass'] = subClass;
             return properties;
         }
         ComponentIdentificationManager.getComponentIdentificationProperties = getComponentIdentificationProperties;
