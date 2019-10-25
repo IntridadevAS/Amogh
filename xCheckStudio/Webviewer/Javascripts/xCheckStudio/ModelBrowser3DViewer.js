@@ -237,3 +237,7 @@ ModelBrowser3DViewer.prototype.ColorComponent = function (component, override, p
     this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
     this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
 }
+
+ModelBrowser3DViewer.prototype.ResizeViewer = function () {
+    this.Viewer.resizeCanvas();
+}

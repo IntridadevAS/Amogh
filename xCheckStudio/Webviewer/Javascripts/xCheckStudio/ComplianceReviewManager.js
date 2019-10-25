@@ -709,12 +709,6 @@ ComplianceReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
     return row.cells[CompliancePropertyColumns.PropertyName].innerText;
 }
 
-// ComplianceReviewManager.prototype.ResizeViewers = function () {
-//     if (model.checks["compliance"]["viewer"]) {
-//         model.checks["compliance"]["viewer"].ResizeViewer();
-//     }
-// }
-
 ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
     var checkGroup = this.ComplianceCheckManager.results[groupId];   
     var component = checkGroup.components[componentId];

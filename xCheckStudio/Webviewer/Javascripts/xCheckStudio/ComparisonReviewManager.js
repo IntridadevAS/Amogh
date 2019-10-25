@@ -1057,15 +1057,6 @@ ComparisonReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
     }
 }
 
-// ComparisonReviewManager.prototype.ResizeViewers = function () {
-//     if (model.checks["comparison"]["sourceAViewer"]) {
-//         model.checks["comparison"]["sourceAViewer"].ResizeViewer();
-//     }
-//     if (model.checks["comparison"]["sourceBViewer"]) {
-//         model.checks["comparison"]["sourceBViewer"].ResizeViewer();
-//     }
-// }
-
 ComparisonReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
     var checkGroup = this.GetCheckGroup(groupId);
     var component = checkGroup.components[componentId];
