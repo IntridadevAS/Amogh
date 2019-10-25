@@ -190,3 +190,16 @@ const ComparisonBrowserDetailedColumns = {
     Status: 3
 }
 
+const DontColorComponents = {
+    "centerline": {
+        "mainClass": "component",
+        "parentMainClass": "pipingnetworksegment"
+    }
+};
+
+const OverrideSeverityColorComponents = {
+    "pipingnetworksystem": ["pipingnetworksegment"],
+    "pipe": ["bran"],
+    "hvac": ["bran"],
+    "equi": ["cone", "cyli", "dish"]
+};
