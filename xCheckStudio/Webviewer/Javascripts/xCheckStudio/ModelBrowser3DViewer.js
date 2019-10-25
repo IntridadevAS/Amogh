@@ -11,7 +11,7 @@ function ModelBrowser3DViewer(id,
 }
 
 ModelBrowser3DViewer.prototype.GetBrowser = function () {
-    var browser = model.checks["comparison"]["modelBrowsers"][this.Source];
+    var browser = model.checks[model.currentCheck]["modelBrowsers"][this.Source];
     return browser["browser"];
 }
 

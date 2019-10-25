@@ -310,7 +310,7 @@ let viewTabs = {
     var requiredComparison = viewTabs.getComparison();
 
     if (requiredComparison) {
-      populateModelBrowser(requiredComparison);     
+      populateComparisonModelBrowser(requiredComparison);     
     }
 
     // close select files UI
@@ -360,7 +360,7 @@ let viewTabs = {
 
     var browserImg = document.createElement("img");
     browserImg.src = "public/symbols/Model Explorer Icon.svg";
-    // browserImg.setAttribute("onclick", "viewTabs.enterComparisonBrowser()");
+    browserImg.setAttribute("onclick", "viewTabs.enterComplianceBrowser()");
     enterComparisonBtn.appendChild(browserImg);
 
     reviewTableImg = document.createElement("img");
@@ -391,6 +391,25 @@ let viewTabs = {
       }
     }
 
+    // close select files UI
+    viewTabs.closeSelectFiles();
+  },
+
+  enterComplianceBrowser: function () {
+    // clear earlier data
+    clearData();   
+
+    for (var i = 0; i < compliances.length; i++) {
+      var compliance = compliances[i];
+      if (compliance.source === model.selectedCompliance.fileName) {
+
+        // populate check results
+        populateComplianceModelBrowser(compliance);
+
+        break;
+      }
+    }
+   
     // close select files UI
     viewTabs.closeSelectFiles();
   },

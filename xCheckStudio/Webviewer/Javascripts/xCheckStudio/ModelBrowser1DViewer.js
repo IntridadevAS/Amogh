@@ -21,12 +21,12 @@ function ModelBrowser1DViewer(id,
 }
 
 ModelBrowser1DViewer.prototype.GetSelectionManager = function () {
-    var browser = model.checks["comparison"]["modelBrowsers"][this.Source];
+    var browser = model.checks[model.currentCheck]["modelBrowsers"][this.Source];
     return browser["selectionManager"];
 }
 
 ModelBrowser1DViewer.prototype.GetBrowser = function () {
-    var browser = model.checks["comparison"]["modelBrowsers"][this.Source];
+    var browser = model.checks[model.currentCheck]["modelBrowsers"][this.Source];
     return browser["browser"];
 }
 

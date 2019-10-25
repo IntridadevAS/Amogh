@@ -288,7 +288,7 @@ function loadComplianceData(compliance,
 }
 
 
-function populateModelBrowser(comparison) {
+function populateComparisonModelBrowser(comparison) {
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -307,7 +307,7 @@ function populateModelBrowser(comparison) {
             enableViewers(comparison.sources);
 
             // create accordion
-            createModelBrowserAccordion(comparison.sources);
+            createModelBrowserAccordion(comparison.sources, Comparison.MainReviewContainer);
 
             for (var i = 0; i < comparison.sources.length; i++) {
                 if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
@@ -443,33 +443,68 @@ function populateModelBrowser(comparison) {
                         });
                     }
                 }
-            }
-
-            // // make buttons collapsible
-            // setButtonsCollapsible(Comparison.MainReviewContainer);
+            }           
         }
-    });
-    // createModelBrowserAccordion(comparison.sources);   
+    });    
 }
 
-// function setButtonsCollapsible(containerId) {
+function populateComplianceModelBrowser(compliance) {
 
-//     var container = document.getElementById(containerId);
-//     var acc = container.getElementsByClassName("accordion");
-//     var i;
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    $.ajax({
+        url: 'PHP/SourceViewerOptionsReader.php',
+        type: "POST",
+        async: true,
+        data: {
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        success: function (msg) {
+            var viewerOptions = JSON.parse(msg);
 
-//     for (i = 0; i < acc.length; i++) {
-//         acc[i].addEventListener("click", function () {
-//             this.classList.toggle("active");
-//             var panel = this.nextElementSibling;
-//             if (panel.style.display === "block") {
-//                 panel.style.display = "none";
-//             } else {
-//                 panel.style.display = "block";
-//             }
-//         });
-//     }
-// }
+            for (var srcId in viewerOptions) {
+                var viewerOption = viewerOptions[srcId];
+                if (viewerOption.source !== compliance.source) {
+                    continue;
+                }
+
+                // create accordion
+                createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer);
+
+                if (viewerOption['endPointUri'] !== undefined) {
+                   
+                    // model browser
+                    var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
+                    modelBrowser.AddModelBrowser();
+
+                    // viewer
+                    var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
+                    var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
+                    viewerInterface.setupViewer(550, 280);
+
+                    // var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
+                    //     undefined,
+                    //     undefined,
+                    //     source);
+                    // viewerInterface.setupViewer(550, 280);
+
+                    // selection manager
+                    var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                    var browserComponents = {};
+                    browserComponents["browser"] = modelBrowser;
+                    browserComponents["viewer"] = viewerInterface;
+                    browserComponents["selectionManager"] = selectionManager;
+
+                    var complianceData = model.checks["compliance"];
+                    complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                }
+            }
+
+        }
+    });
+}
 
 function enableViewers(sources) {
     if (sources.length > 1) {
@@ -493,8 +528,8 @@ function enableViewers(sources) {
     }
 }
 
-function createModelBrowserAccordion(sources) {
-    var parentTable = document.getElementById(Comparison.MainReviewContainer);
+function createModelBrowserAccordion(sources, container) {
+    var parentTable = document.getElementById(container);
 
     var data = createAccordionData(sources);
     for (var i = 0; i < data.length; i++) {
@@ -503,13 +538,13 @@ function createModelBrowserAccordion(sources) {
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
         // datagridDiv.id = data[i]["template"] + "_";
-        datagridDiv.id = data[i]["template"].replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer
+        datagridDiv.id = data[i]["template"].replace(/\W/g, '_') + "_" + container;
 
         div.append(datagridDiv);
         parentTable.append(div);
     }
 
-    $("#" + Comparison.MainReviewContainer).dxAccordion({
+    $("#" + container).dxAccordion({
         collapsible: true,
         dataSource: data,
         deferRendering: false,
@@ -528,10 +563,10 @@ function createModelBrowserAccordion(sources) {
                         e.jQueryEvent.stopPropagation();
                         var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
                         if (!isOpened) {
-                            $("#" + Comparison.MainReviewContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+                            $("#" + container).dxAccordion("instance").expandItem(e.element.data("index"));
                         }
                         else {
-                            $("#" + Comparison.MainReviewContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
+                            $("#" + container).dxAccordion("instance").collapseItem(e.element.data("index"));
                         }
 
                     }
@@ -567,14 +602,14 @@ function createAccordionData(sources) {
     return data;
 }
 
-function expandModelBrowserAccordion(groupName) {
+function expandModelBrowserAccordion(groupName, container) {
 
     return new Promise(function (resolve) {
 
-        var accordion = $("#" + Comparison.MainReviewContainer).dxAccordion("instance");
+        var accordion = $(container).dxAccordion("instance");
 
         // scroll to table
-        var accordionIndex = getAccordionIndex(groupName)
+        var accordionIndex = getAccordionIndex(groupName, container)
         if (accordionIndex >= 0) {
             accordion.expandItem(Number(accordionIndex)).then(function (result) {
                 return resolve(true);
@@ -586,8 +621,8 @@ function expandModelBrowserAccordion(groupName) {
     });
 }
 
-function getAccordionIndex(groupName) {
-    var accordion = $("#" + Comparison.MainReviewContainer).dxAccordion("instance");
+function getAccordionIndex(groupName, container) {
+    var accordion = $(container).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var index;
     var selectedItems = accordion._selection.getSelectedItemKeys();

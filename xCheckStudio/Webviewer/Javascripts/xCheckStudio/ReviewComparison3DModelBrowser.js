@@ -39,7 +39,7 @@ ReviewComparison3DModelBrowser.prototype.GetViewer = function () {
 
 ReviewComparison3DModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
     this.Components = comparisonComponents;
-    
+
     var headers = this.CreateHeaders();
 
 
@@ -232,7 +232,7 @@ ReviewComparison3DModelBrowser.prototype.AddTooltip = function (e) {
         if (anotherSource && anotherComponent && anotherComponent !== "") {
             for (var i = 0; i < e.rowElement[0].cells.length; i++) {
                 var cell = e.rowElement[0].cells[i];
-                cell.setAttribute("title", anotherSource + ">" + anotherComponent);
+                cell.setAttribute("title", "Matched with : " + anotherSource + ">" + anotherComponent);
             }
         }
     }
@@ -603,13 +603,20 @@ ReviewComparison3DModelBrowser.prototype.HighlightBrowserComponentRow = function
 
 
     if (originalComponent) {
-        expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
+        expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
             var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
             var row = _this.TreeInstance.getRowElement(rowIndex);
             document.getElementById(Comparison.MainReviewContainer).scrollTop = row[0].offsetTop - row[0].offsetHeight;
             // _this.TreeInstance.navigateToRow(selectedNodeId).done(function () {
             // });
         });
+
+        // load detailed table
+        var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
+        var rows = _this.TreeInstance.getVisibleRows();
+        if (rowIndex in rows) {
+            this.LoadDetailedTable(rows[rowIndex].data);
+        }
 
         // highlight in another browser
         var rows = this.TreeInstance.getVisibleRows();
@@ -641,8 +648,6 @@ ReviewComparison3DModelBrowser.prototype.HighlightRow = function (path, selected
     if (!('path' in path)) {
         return;
     }
-
-    // expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
 
     var nodeList = path['path'];
     nodeList = nodeList.reverse();
@@ -712,7 +717,7 @@ ReviewComparison3DModelBrowser.prototype.AddTableContentCount = function (contai
 
         // var countBox = document.getElementById(id);
         // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = modelBrowserTableRows.length - 2;
+        var rowCount = this.ModelTreeData.length;
         div2.innerHTML = "Count :" + rowCount;
         modelBrowserDataTable.appendChild(div2);
     }
