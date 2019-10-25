@@ -190,6 +190,66 @@ const ComparisonBrowserDetailedColumns = {
     Status: 3
 }
 
+// compliance model browser
+const Compliance3DBrowserColumns = {  
+    Component: 0,
+    MainClass: 1,
+    SubClass: 2,
+    Status: 3,
+    NodeId : 4,
+    ResultId : 5,
+    GroupId : 6,
+    Parent : 7
+}
+
+const Compliance3DBrowserNames = {    
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    Status: "Status",
+    NodeId : "NodeId",
+    ResultId : "ResultId",
+    GroupId : "GroupId",
+    Parent : "Parent"
+}
+
+const Compliance1DBrowserColumns = {  
+    Component: 0,
+    MainClass: 1,
+    SubClass: 2,
+    Status: 3,    
+    ResultId : 4,
+    GroupId : 5,
+    Parent : 6,
+    Id : 7
+}
+
+const Compliance1DBrowserNames = {    
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    Status: "Status",    
+    ResultId : "ResultId",
+    GroupId : "GroupId",
+    Parent : "Parent",
+    Id : "Id"
+}
+
+
+/* Compliance model browser detailed table */
+const ComplianceBrowserDetailedNames = {    
+    PropertyName: "Property",
+    PropertyValue: "Value",  
+    Status: "Status"
+}
+
+const ComplianceBrowserDetailedColumns = {   
+    PropertyName: 0,
+    PropertyValue: 1,   
+    Status: 2
+}
+
+
 const DontColorComponents = {
     "centerline": {
         "mainClass": "component",

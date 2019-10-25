@@ -75,16 +75,13 @@
 
             $compliance = array();
             $compliance["source"] = $datasourceInfo["sourceAFileName"];
-            $compliance["results"] = $sourceAComplianceResult;
-
-            //$results['SourceACompliance'] = $sourceAComplianceResult;
+            $compliance["results"] = $sourceAComplianceResult;            
             
              // create component hierarchy
              $sourceAComplianceComponentsHierarchy = createComplianceComponentsHierarchy($sourceAComplianceResult,                                                  
                                                  true);
             if($sourceAComplianceComponentsHierarchy !== null)
-            {
-                // $results['SourceAComplianceComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
+            {               
                 $compliance['ComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
             }
 
@@ -761,7 +758,7 @@
                         $status = $value['status'];                           
                         $nodeId = $value['nodeId'];   
 
-                        $comp = traverseRecursivelyForCompliance($dbh, 
+                        $comp = traverseRecursivelyFor3DCompliance($dbh, 
                                                                  $nodeId, 
                                                                  $traversedNodes, 
                                                                  $isSourceA); 
@@ -788,7 +785,7 @@
             }    
         }
         
-        function traverseRecursivelyForCompliance($dbh, 
+        function traverseRecursivelyFor3DCompliance($dbh, 
                                                     $nodeId, 
                                                     &$traversedNodes, 
                                                     $isSourceA)
@@ -826,6 +823,7 @@
             // read component main class and subclass
             $compStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =$nodeId"); 
             $compRow = $compStmt->fetch(\PDO::FETCH_ASSOC);
+            $component["Name"] = $compRow['name'];
             $component["MainClass"] = $compRow['mainclass'];
             $component["SubClass"] = $compRow['subclass'];
 
@@ -834,16 +832,22 @@
             $complianceComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);            
             if(!$complianceComponentRow)
             {
-                return NULL;
+                $component["accepted"] = NULL;
+                $component["Status"] =  "Not Checked";
             }
-            $component["accepted"] = $complianceComponentRow['accepted'];           
-            $component["Status"] =  $complianceComponentRow['status'];
-
+            else
+            {
+                $component["Id"] =  $complianceComponentRow['id'];
+                $component["GroupId"]  = $complianceComponentRow['ownerGroup'];
+                $component["CompId"] =  $complianceComponentRow['sourceId'];
+                $component["accepted"] = $complianceComponentRow['accepted'];           
+                $component["Status"] =  $complianceComponentRow['status'];
+            }
             // traverse children, if any
             $childrenStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where parentid =$nodeId"); 
             while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) 
             {               
-                $childComponent = traverseRecursivelyForCompliance($dbh, $childRow['nodeid'], $traversedNodes, $isSourceA);
+                $childComponent = traverseRecursivelyFor3DCompliance($dbh, $childRow['nodeid'], $traversedNodes, $isSourceA);
 
                 if($childComponent !== NULL)
                 {
@@ -858,7 +862,7 @@
             
             while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
             {    
-                $parentComponent = traverseRecursivelyFor3DComparison($dbh, $parentRow['nodeid'], $traversedNodes, $isSourceA);
+                $parentComponent = traverseRecursivelyFor3DCompliance($dbh, $parentRow['nodeid'], $traversedNodes, $isSourceA);
 
                 if($parentComponent !== NULL)
                 {

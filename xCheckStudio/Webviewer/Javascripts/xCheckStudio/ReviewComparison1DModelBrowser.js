@@ -206,7 +206,7 @@ ReviewComparison1DModelBrowser.prototype.AddTooltip = function (e) {
         if (anotherSource && anotherComponent && anotherComponent !== "") {
             for (var i = 0; i < e.rowElement[0].cells.length; i++) {
                 var cell = e.rowElement[0].cells[i];
-                cell.setAttribute("title", anotherSource + ">" + anotherComponent);
+                cell.setAttribute("title", "Matched with : " + anotherSource + ">" + anotherComponent);
             }
         }
     }
@@ -231,7 +231,7 @@ ReviewComparison1DModelBrowser.prototype.AddTableContentCount = function (contai
 
         // var countBox = document.getElementById(id);
         // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = modelBrowserTableRows.length - 2;
+        var rowCount = _this.ModelTreeData;
         div2.innerHTML = "Count :" + rowCount;
         modelBrowserDataTable.appendChild(div2);
     }
@@ -344,10 +344,13 @@ ReviewComparison1DModelBrowser.prototype.HighlightComponent = function (rowData,
     this.GetSelectionManager().MaintainHighlightedRow(rowElement[0], "#" + this.GetTableDivId(), rowKey);
 
     if (highlightFurther) {
-        expandModelBrowserAccordion(this.SourceFileName).then(function (result) {
+        expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
             // scroll to row
             document.getElementById(Comparison.MainReviewContainer).scrollTop = rowElement[0].offsetTop - rowElement[0].offsetHeight;
         });
+
+        // load detailed table
+        this.LoadDetailedTable(completeRowData);
 
         // highlight in another browser
         this.HighlightInAnotherBrowser(completeRowData);
