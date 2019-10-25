@@ -45,7 +45,8 @@ ModelBrowser3DViewer.prototype.bindEvents = function (viewer) {
             // create nav cube
             showNavigationCube(viewer);
 
-            //_this.highlightComponentsfromResult();
+            // highlight components
+            _this.HighlightComponentsfromResult();
         },
         selectionArray: function (selections) {
             if (selections.length === 0
@@ -94,7 +95,7 @@ ModelBrowser3DViewer.prototype.UnHighlightComponent = function () {
 
     this.selectedNodeId = undefined;
     this.ClearSelection();
-//     this.Viewer.view.fitWorld();
+    //     this.Viewer.view.fitWorld();
 }
 
 ModelBrowser3DViewer.prototype.HighlightNodeInViewer = function (nodeId) {
@@ -171,4 +172,68 @@ ModelBrowser3DViewer.prototype.IsNodeInCheckResults = function (node) {
     }
 
     return false;
+}
+
+ModelBrowser3DViewer.prototype.HighlightComponentsfromResult = function () {
+
+    var browser = this.GetBrowser();
+
+    for (var id in browser.Components) {
+        var component = browser.Components[id];
+        this.ChangeComponentColor(component, false, undefined);
+    }
+}
+
+ModelBrowser3DViewer.prototype.ChangeComponentColor = function (component, override, parentComponent) {
+    var status = component.Status;
+
+    if (status !== null) {
+        this.ColorComponent(component, override, parentComponent);
+    }
+
+    var children = component.Children;
+    for (var id in children) {
+        var child = children[id];
+
+        // take care of don't color components
+        if (child.SubClass.toLowerCase() in DontColorComponents) {
+            var dontColorComponent = DontColorComponents[child.SubClass.toLowerCase()];
+            if (child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
+                component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"]) {
+                continue;
+            }
+        }
+
+        // take care of color overriding from status components
+        var overrideColorWithSeverityPreference = false;
+        if (component.MainClass.toLowerCase() in OverrideSeverityColorComponents) {
+            var overrideSeverityColorComponent = OverrideSeverityColorComponents[component.MainClass.toLowerCase()];
+            if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase())) {
+                overrideColorWithSeverityPreference = true;
+            }
+        }
+
+        this.ChangeComponentColor(child, overrideColorWithSeverityPreference, component);
+    }
+}
+
+ModelBrowser3DViewer.prototype.ColorComponent = function (component, override, parentComponent) {
+
+    nodeIdString = component.NodeId;
+    var hexColor = xCheckStudio.Util.getComponentHexColor(component, override, parentComponent);
+    if (hexColor === undefined) {
+        return;
+    }
+
+    var nodeId = Number(nodeIdString);
+    if (nodeId === undefined ||
+        isNaN(nodeId)) {
+        return;
+    }
+
+    // set nodes face and line colors from status of compoentns
+    var rgbColor = xCheckStudio.Util.hexToRgb(hexColor);
+    var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
+    this.Viewer.model.setNodesFaceColor([nodeId], communicatorColor);
+    this.Viewer.model.setNodesLineColor([nodeId], communicatorColor);
 }

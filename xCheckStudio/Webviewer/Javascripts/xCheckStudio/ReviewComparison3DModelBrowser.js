@@ -11,6 +11,8 @@ function ReviewComparison3DModelBrowser(id,
     this.NodeParentList = {};
 
     this.TreeInstance;
+
+    this.Components;
 }
 
 // assign ReviewModelBrowser's method to this class
@@ -36,7 +38,8 @@ ReviewComparison3DModelBrowser.prototype.GetViewer = function () {
 }
 
 ReviewComparison3DModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
-
+    this.Components = comparisonComponents;
+    
     var headers = this.CreateHeaders();
 
 
