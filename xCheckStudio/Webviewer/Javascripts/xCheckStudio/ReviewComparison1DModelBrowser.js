@@ -582,3 +582,39 @@ ReviewComparison1DModelBrowser.prototype.HighlightInViewer = function (rowData) 
         viewerInterface.HighlightComponent(rowData, componentStatusList);
     }
 }
+
+ReviewComparison1DModelBrowser.prototype.Destroy = function () {
+
+    $("#" + this.GetTableDivId()).remove()
+    //Destroy accordion
+
+    var comparisonTableData = document.getElementById(Comparison.MainReviewContainer).innerHTML;
+    if (comparisonTableData !== "") {
+        $("#" + Comparison.MainReviewContainer).dxAccordion("dispose");
+        comparisonTableData = "";
+    }
+
+    this.DestroyDetailedInfoTable();
+    var viewerInterface = this.GetViewer();
+    viewerInterface.Destroy();
+
+
+}
+
+ReviewComparison1DModelBrowser.prototype.DestroyDetailedInfoTable = function () {
+
+    var table = document.getElementById(Comparison.DetailInfoContainer);
+    //Destroy dxDataGrid
+    if (table.children.length > 0) {
+        var tableContainer = "#" + Comparison.DetailInfoContainer;
+        $(tableContainer).dxDataGrid("dispose");
+        $(tableContainer).remove()
+    }
+
+    var comparisonDetailInfoContainer = document.getElementById("comparisonDetailInfoContainer");
+    var tableDiv = document.createElement("div");
+    tableDiv.id = Comparison.DetailInfoContainer;
+    comparisonDetailInfoContainer.appendChild(tableDiv);
+}
+
+

@@ -550,7 +550,7 @@ ReviewComparison3DModelBrowser.prototype.DestroyDetailedInfoTable = function () 
     comparisonDetailInfoContainer.appendChild(tableDiv);
 }
 
-ReviewComparison3DModelBrowser.prototype.DestroyModelBrowserTable = function () {
+ReviewComparison3DModelBrowser.prototype.Destroy = function () {
 
     $("#" + this.GetTableDivId()).remove()
     //Destroy accordion
@@ -560,6 +560,9 @@ ReviewComparison3DModelBrowser.prototype.DestroyModelBrowserTable = function () 
         $("#" + Comparison.MainReviewContainer).dxAccordion("dispose");
         comparisonTableData = "";
     }
+
+    this.DestroyDetailedInfoTable();
+
 }
 
 ReviewComparison3DModelBrowser.prototype.MaintainNodeIdVsCheckComponent = function (component) {
