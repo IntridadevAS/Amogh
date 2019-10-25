@@ -16,17 +16,24 @@ let model = {
       selectionManager: null,
       modelBrowsers: {},
       resizeViewers: function () {
-        if (this.sourceAViewer) {
-          this.sourceAViewer.ResizeViewer();
+        if (this.reviewManager) {
+          if (this.sourceAViewer) {
+            this.sourceAViewer.ResizeViewer();
+          }
+          if (this.sourceBViewer) {
+            this.sourceBViewer.ResizeViewer();
+          }
+          if (this.sourceCViewer) {
+            this.sourceCViewer.ResizeViewer();
+          }
+          if (this.sourceDViewer) {
+            this.sourceDViewer.ResizeViewer();
+          }
         }
-        if (this.sourceBViewer) {
-          this.sourceBViewer.ResizeViewer();
-        }
-        if (this.sourceCViewer) {
-          this.sourceCViewer.ResizeViewer();
-        }
-        if (this.sourceDViewer) {
-          this.sourceDViewer.ResizeViewer();
+        else {
+          for (var browser in this.modelBrowsers) {
+            this.modelBrowsers[browser]["viewer"].ResizeViewer();
+          }
         }
       }
     },
@@ -38,8 +45,15 @@ let model = {
       selectionManager: null,
       modelBrowsers: {},
       resizeViewers: function () {
-        if (this.viewer) {
-          this.viewer.ResizeViewer();
+        if (this.reviewManager) {
+          if (this.viewer) {
+            this.viewer.ResizeViewer();
+          }
+        }
+        else {
+          for (var browser in this.modelBrowsers) {
+            this.modelBrowsers[browser]["viewer"].ResizeViewer();
+          }
         }
       }
     }
@@ -220,12 +234,12 @@ let viewTabs = {
 
     newComparisonCard.setAttribute("onclick", "viewTabs.selectSourceForComparison()");
 
-    for(var i = 0; i < model.selectedComparisons.length; i++){
-      if(model.selectedComparisons[i].id == file.id) {
+    for (var i = 0; i < model.selectedComparisons.length; i++) {
+      if (model.selectedComparisons[i].id == file.id) {
         newComparisonCard.classList.add("fileCardSelected");
       }
     }
-    
+
     return newComparisonCard;
   },
 
@@ -235,7 +249,7 @@ let viewTabs = {
     newComplianceCard.innerHTML = file.fileName;
     newComplianceCard.id = file.id;
 
-    if(model.selectedCompliance != null && model.selectedCompliance.id == file.id) {
+    if (model.selectedCompliance != null && model.selectedCompliance.id == file.id) {
       newComplianceCard.classList.add("fileCardSelected");
     }
     newComplianceCard.setAttribute("onclick", "viewTabs.selectSourceForCompliance()");
@@ -289,7 +303,7 @@ let viewTabs = {
 
     // TODO set enter functionality for comparison here
     var requiredComparison = viewTabs.getComparison();
-    
+
     if (requiredComparison) {
       // populate check results
       populateCheckResults(requiredComparison,
@@ -310,14 +324,14 @@ let viewTabs = {
     var requiredComparison = viewTabs.getComparison();
 
     if (requiredComparison) {
-      populateComparisonModelBrowser(requiredComparison);     
+      populateComparisonModelBrowser(requiredComparison);
     }
 
     // close select files UI
     viewTabs.closeSelectFiles();
   },
 
-  getComparison: function () {   
+  getComparison: function () {
     for (var i = 0; i < comparisons.length; i++) {
       var comparison = comparisons[i];
 
@@ -397,7 +411,7 @@ let viewTabs = {
 
   enterComplianceBrowser: function () {
     // clear earlier data
-    clearData();   
+    clearData();
 
     for (var i = 0; i < compliances.length; i++) {
       var compliance = compliances[i];
@@ -409,7 +423,7 @@ let viewTabs = {
         break;
       }
     }
-   
+
     // close select files UI
     viewTabs.closeSelectFiles();
   },
@@ -435,9 +449,9 @@ let viewTabs = {
     // remove background color of previously selected card, 
     // as only one source/file/card can be selected at a time
     var source = model.files[event.target.id];
-    if(model.selectedCompliance !== source) {
+    if (model.selectedCompliance !== source) {
 
-      if(model.selectedCompliance != "") {
+      if (model.selectedCompliance != "") {
         document.getElementById(model.selectedCompliance.id).classList.remove("fileCardSelected");
       }
       model.selectedCompliance = source;
@@ -509,23 +523,23 @@ let viewPanels = {
     }
 
     // resize 3D viewer
-    model.checks[model.currentCheck].resizeViewers();   
+    model.checks[model.currentCheck].resizeViewers();
   },
 
-  onMouseOverMaxMin: function(selected) {
-      selected.style.opacity = 1;
+  onMouseOverMaxMin: function (selected) {
+    selected.style.opacity = 1;
   },
 
-  onMouseOutMaxMin: function(selected) {
+  onMouseOutMaxMin: function (selected) {
     selected.style.opacity = 0.2;
-  }, 
+  },
 
-  showSmallAnalytics: function(parentContainer, analyticsContainerId ) {
+  showSmallAnalytics: function (parentContainer, analyticsContainerId) {
     parentContainer.style.display = "none";
     document.getElementById(analyticsContainerId).style.display = "block";
   },
 
-  showLargeAnalytics: function() {
+  showLargeAnalytics: function () {
     var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
     modal.style.display = "block";
   },
@@ -599,8 +613,8 @@ function clearData() {
 
   var modelBrowsers = model.getModelBrowsers();
 
-  if(modelBrowsers) {
-    for(var src in modelBrowsers) {
+  if (modelBrowsers) {
+    for (var src in modelBrowsers) {
       modelBrowsers[src]["browser"].Destroy();
     }
 
