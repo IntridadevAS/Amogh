@@ -356,6 +356,21 @@ ReviewCompliance3DModelBrowser.prototype.GetCheckGroup = function (groupId) {
     return this.CheckData.results[groupId];
 }
 
+ReviewCompliance3DModelBrowser.prototype.Destroy = function () {
+
+    $("#" + this.GetTableDivId()).remove()
+    //Destroy accordion
+
+    var complianceTableData = document.getElementById(Compliance.MainReviewContainer).innerHTML;
+    if (complianceTableData !== "") {
+        $("#" + Compliance.MainReviewContainer).dxAccordion("dispose");
+        complianceTableData = "";
+    }
+
+    this.DestroyDetailedInfoTable();
+
+}
+
 ReviewCompliance3DModelBrowser.prototype.DestroyDetailedInfoTable = function () {
 
     var table = document.getElementById(Compliance.DetailInfoContainer);

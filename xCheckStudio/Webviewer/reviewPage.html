@@ -822,6 +822,17 @@
       model.checks[model.currentCheck].resizeViewers();   
     }
 
+    ShowModelViewer = function() {
+        if(model.currentCheck == "comparison") {
+            document.getElementById("comparisonSmallAnalyticsContainer").style.display = "none";
+            document.getElementById("comparisonVisualizerA").style.display = "grid";
+        }
+        else {
+            document.getElementById("complianceSmallAnalyticsContainer").style.display = "none";
+            document.getElementById("complianceVisualizerA").style.display = "block";
+        }
+    }
+
     // reference related functions
     function closeReference() {
       ReferenceManager.closeReferenceDiv();
