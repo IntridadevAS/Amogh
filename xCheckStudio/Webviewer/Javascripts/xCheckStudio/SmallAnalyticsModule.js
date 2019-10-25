@@ -41,17 +41,9 @@ function populateSmallAnalyticsData(checkResults, container) {
     }
 }
 
-function ShowModelViewer() {
-    var reviewDoc = window.frameElement.ownerDocument;
-    var currentView = window.parent.getCurrentView();
-    if(currentView.MainReviewTableContainer.includes("comparison")) {
-        reviewDoc.getElementById("comparisonSmallAnalyticsContainer").style.display = "none";
-        reviewDoc.getElementById("comparisonVisualizerA").style.display = "grid";
-    }
-    else {
-        reviewDoc.getElementById("complianceSmallAnalyticsContainer").style.display = "none";
-        reviewDoc.getElementById("complianceVisualizerA").style.display = "block";
-    }
+function HideAnalyticsViewer() {
+    // var reviewDoc = window.frameElement.ownerDocument;
+    window.parent.ShowModelViewer();
     window.parent.resizeCanvas();
 }
 
