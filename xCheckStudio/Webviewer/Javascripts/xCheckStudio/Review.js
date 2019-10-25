@@ -361,8 +361,7 @@ function populateModelBrowser(comparison) {
                                     modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
                                     var comparisonData = model.checks["comparison"];
-                                    // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = modelBrowser;
-
+                                
                                     // viewer
                                     var viewerInterface = new ModelBrowser1DViewer("a", source, sourceAClassWiseComponents, "compare1");
                                     // comparisonData["sourceAViewer"] = viewerInterface;     
@@ -389,22 +388,12 @@ function populateModelBrowser(comparison) {
 
                         // model browser
                         var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
-
-                        // var comparisonData = model.checks["comparison"];
-                        // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;                       
+                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);                    
 
                         // viewer
                         var options = ["compare2", viewerOptions['b']['endPointUri']];
                         var viewerInterface = new ModelBrowser3DViewer("b", source, options);
                         viewerInterface.setupViewer(550, 280);
-                        // var viewerInterface = new Review3DViewerInterface(["compare2", viewerOptions['b']['endPointUri']],
-                        //     undefined,
-                        //     undefined,
-                        //     source);
-                        // viewerInterface.setupViewer(550, 280);
-
-                        // comparisonData["sourceBViewer"] = viewerInterface;
 
                         // selection manager
                         var selectionManager = new ReviewModelBrowserSelectionManager();
@@ -436,16 +425,11 @@ function populateModelBrowser(comparison) {
                                     var modelBrowser = new ReviewComparison1DModelBrowser("b", source, comparison);
                                     modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
-                                    // var comparisonData = model.checks["comparison"];
-                                    // comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = modelBrowser;
-
                                     // viewer
                                     var viewerInterface = new ModelBrowser1DViewer("b", source, sourceBClassWiseComponents, "compare2");
-                                    // comparisonData["sourceBViewer"] = viewerInterface;
-
+                                   
                                     // selection manager
-                                    var selectionManager = new ReviewModelBrowserSelectionManager();
-                                    // comparisonData["selectionManager"] = selectionManager;
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();        
 
                                     var browserComponents = {};
                                     browserComponents["browser"] = modelBrowser;

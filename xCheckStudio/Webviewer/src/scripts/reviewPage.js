@@ -578,11 +578,11 @@ function clearData() {
 
   currentCheckData["reviewManager"] = null;
 
-  if(currentCheckData["modelBrowsers"]) {
-    var modelBrowsers = currentCheckData["modelBrowsers"];
-    for(var modelBrowser in modelBrowsers) {
-      modelBrowsers[modelBrowser].DestroyModelBrowserTable();
-      modelBrowsers[modelBrowser].DestroyDetailedInfoTable();
+  var modelBrowsers = model.getModelBrowsers();
+
+  if(modelBrowsers) {
+    for(var src in modelBrowsers) {
+      modelBrowsers[src]["browser"].Destroy();
     }
 
     currentCheckData["modelBrowsers"] = {};

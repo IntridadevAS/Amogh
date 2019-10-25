@@ -131,6 +131,21 @@ ModelBrowser1DViewer.prototype.HighlightComponent = function (componentRowData, 
     this.LoadSheetTableData(columnHeaders, tableData, componentRowData);
 }
 
+ModelBrowser1DViewer.prototype.Destroy = function () {
+    this.ActiveSheetName = undefined;
+    var containerDiv = "#" + this.ViewerContainer;
+    var viewerContainerElement = document.getElementById(this.ViewerContainer);
+    var parent = viewerContainerElement.parentElement;
+  
+    $(containerDiv).remove();
+  
+    var viewerContainerDiv = document.createElement("div")
+    viewerContainerDiv.id = this.ViewerContainer;
+    viewerContainerDiv.className = "tempContainer";
+  
+    parent.appendChild(viewerContainerDiv); 
+  }
+
 ModelBrowser1DViewer.prototype.LoadSheetTableData = function (columnHeaders, tableData, componentRowData) {
     var _this = this;
     this.Destroy();
