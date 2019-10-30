@@ -11,6 +11,8 @@ function ReviewCompliance3DModelBrowser(id,
     this.NodeParentList = {};
 
     this.TreeInstance;
+    
+    this.Components;
 }
 
 // assign ReviewModelBrowser's method to this class
@@ -36,13 +38,14 @@ ReviewCompliance3DModelBrowser.prototype.GetViewer = function () {
     return browser["viewer"];
 }
 
-ReviewCompliance3DModelBrowser.prototype.AddModelBrowser = function () {
+ReviewCompliance3DModelBrowser.prototype.AddModelBrowser = function (complianceComponents) {
+    this.Components = complianceComponents;
 
     var headers = this.CreateHeaders();
 
 
-    for (var key in this.CheckData.ComponentsHierarchy) {
-        this.CreateBrowserData(this.CheckData.ComponentsHierarchy[key], 0)
+    for (var key in complianceComponents) {
+        this.CreateBrowserData(complianceComponents[key], 0)
     }
 
     this.LoadTable(headers);
