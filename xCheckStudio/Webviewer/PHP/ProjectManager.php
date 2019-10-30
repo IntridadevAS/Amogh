@@ -68,22 +68,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveComponentsToCheckSpaceDB":
             SaveComponentsToCheckSpaceDB();         
             break;
-        case "CreateProjectDBonSaveInCheckModule":
-            CreateProjectDBonSaveInCheckModule();         
+        case "CreateCheckSpaceDBonSaveInCheckModule":
+            CreateCheckSpaceDBonSaveInCheckModule();         
             break;
+        case "SaveViewerOptionsToCheckSpaceDB":
+            SaveViewerOptionsToCheckSpaceDB();
+            break;
+        // case "CreateProjectDBonSaveInCheckModule":
+        //     CreateProjectDBonSaveInCheckModule();         
+        //     break;
         default:
             echo "No Function Found!";
     }
 }
 
-function CreateProjectDBonSaveInCheckModule()
+// function CreateProjectDBonSaveInCheckModule()
+// {
+//     // get project name
+//     $projectName = $_POST['ProjectName'];
+//     try
+//     {   
+
+//         $dbPath = getProjectDatabasePath($projectName);
+//         if(file_exists ($dbPath ))
+//         { 
+//             unlink($dbPath);
+//         }
+
+//         // create project database          
+//         $database = new SQLite3($dbPath);
+//     }
+//     catch(Exception $e) 
+//     {        
+//         echo "fail"; 
+//         return;
+//     } 
+
+//     echo "success"; 
+//     return;
+// }
+
+function CreateCheckSpaceDBonSaveInCheckModule()
 {
     // get project name
     $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     try
     {   
 
-        $dbPath = getProjectDatabasePath($projectName);
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
         if(file_exists ($dbPath ))
         { 
             unlink($dbPath);
@@ -132,7 +165,9 @@ function SaveComponentsToCheckSpaceDB()
             // comparison result tables table                               
             SaveComponents( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
             SaveComponents( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
-            
+            // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
+            // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
+
             // save check case info 
             SaveCheckCaseInfo($tempDbh, $dbh);
 
@@ -140,16 +175,64 @@ function SaveComponentsToCheckSpaceDB()
             $dbh->commit();
             $tempDbh->commit();
             $dbh = null; //This is how you close a PDO connection                    
-            $tempDbh = null; //This is how you close a PDO connection        
+            $tempDbh = null; //This is how you close a PDO connection                        
 
-            // // now delete the temporary project db
-            // if (!unlink($tempDBPath))
-            // {
-            //     echo "fail"; 
-            //     return;
-            // }
-                
+            echo 'success';
+            return;
+        }
+        catch(Exception $e) 
+        {        
+            echo "fail"; 
+            return;
+        } 
+}
 
+function SaveViewerOptionsToCheckSpaceDB()
+{
+
+        if(!isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['SourceViewerOptions']) ||
+        !isset($_POST['SourceViewerOptionsTable']))
+        {
+            return;
+        }
+
+       // get project name
+       $projectName = $_POST['ProjectName'];	
+       $checkName = $_POST['CheckName'];
+ 
+       $sourceViewerOptions = json_decode($_POST['SourceViewerOptions'],true);
+       $sourceViewerOptionsTable = $_POST['SourceViewerOptionsTable'];
+
+       $dbPath = getSavedCheckDatabasePath($projectName, $checkName);       
+       if(!file_exists ($dbPath ))
+       { 
+            echo 'fail';
+            return;
+       }       
+
+       $dbh;
+        try
+        {        
+            // open database          
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+
+            $command = 'CREATE TABLE '.$sourceViewerOptionsTable.'(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                    
+                endpointUri TEXT)';            
+                $dbh->exec($command);  
+    
+            $insertStmt = $dbh->prepare("INSERT INTO ".$sourceViewerOptionsTable."(endpointUri) VALUES(?)");
+            $insertStmt->execute(array($sourceViewerOptions[0]));
+
+            // commit update
+            $dbh->commit();           
+            $dbh = null; //This is how you close a PDO connection                   
+               
             echo 'success';
             return;
         }
@@ -1313,16 +1396,22 @@ function SaveComparisonCheckGroups( $tempDbh, $dbh)
 function SaveSelectedComponents()
     {
         if(!isset($_POST['selectedComponentsTableName']) ||
-           !isset($_POST['nodeIdvsComponentIdList']) ||
+        //    !isset($_POST['nodeIdvsComponentIdList']) ||
            !isset($_POST['selectedComponents']))
         {
             echo 'fail';
             return;
         }
 
-        $selectedComponentsTable = $_POST['selectedComponentsTableName'];
-        $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
+        $selectedComponentsTable = $_POST['selectedComponentsTableName'];       
         $selectedComponents = json_decode($_POST['selectedComponents'], true);
+
+
+        $nodeIdvsComponentIdList = NULL;
+        if(isset($_POST['nodeIdvsComponentIdList']))
+        {
+            $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
+        }
 
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
@@ -1367,7 +1456,9 @@ function SaveSelectedComponents()
                     }
 
                     $mainCompId = null;
-                    if($nodeId !== NULL && $nodeIdvsComponentIdList[$nodeId])
+                    if($nodeId !== NULL && 
+                       $nodeIdvsComponentIdList &&
+                       $nodeIdvsComponentIdList[$nodeId])
                     {
                         $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
                     }
@@ -1402,9 +1493,14 @@ function SaveDatasourceInfo()
     
         $sourceAName  = NULL;
         $sourceBName  = NULL;
+        $sourceCName  = NULL;
+        $sourceDName  = NULL;
         $sourceAType  = NULL;
         $sourceBType  = NULL;
+        $sourceCType  = NULL;
+        $sourceDType  = NULL;
         $orderMaintained  = 'true';
+
         if(isset($_POST["SourceAFileName"]))
         {
             $sourceAName =  $_POST['SourceAFileName'];   
@@ -1412,6 +1508,14 @@ function SaveDatasourceInfo()
         if(isset($_POST["SourceBFileName"]))
         {
             $sourceBName =  $_POST['SourceBFileName'];   
+        }
+        if(isset($_POST["SourceCFileName"]))
+        {
+            $sourceCName =  $_POST['SourceCFileName'];   
+        }
+        if(isset($_POST["SourceDFileName"]))
+        {
+            $sourceDName =  $_POST['SourceDFileName'];   
         }
 
         if(isset($_POST["SourceAType"]))
@@ -1421,7 +1525,16 @@ function SaveDatasourceInfo()
         if(isset($_POST["SourceBType"]))
         {
             $sourceBType =  $_POST['SourceBType'];   
-        }           
+        }
+        if(isset($_POST["SourceCType"]))
+        {
+            $sourceCType =  $_POST['SourceCType'];   
+        }
+        if(isset($_POST["SourceDType"]))
+        {
+            $sourceDType =  $_POST['SourceDType'];   
+        }  
+
         if(isset($_POST["orderMaintained"]))
         {
             $orderMaintained  = $_POST['orderMaintained'];   
@@ -1450,13 +1563,17 @@ function SaveDatasourceInfo()
              id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
              sourceAFileName TEXT,
              sourceBFileName TEXT,
+             sourceCFileName TEXT,
+             sourceDFileName TEXT,
              sourceAType TEXT,
              sourceBType TEXT,
+             sourceCType TEXT,
+             sourceDType TEXT,
              orderMaintained Text)';         
          $dbh->exec($command);    
 
-         $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceAType, sourceBType, orderMaintained) VALUES(?,?,?,?,?) ';
-         $values = array($sourceAName,  $sourceBName,  $sourceAType,  $sourceBType, $orderMaintained);
+         $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, sourceBFileName, sourceCFileName, sourceDFileName, sourceAType, sourceBType, sourceCType, sourceDType, orderMaintained) VALUES(?,?,?,?,?,?,?,?,?) ';
+         $values = array($sourceAName,  $sourceBName,  $sourceCName,  $sourceDName, $sourceAType,  $sourceBType, $sourceCType,  $sourceDType, $orderMaintained);
          
          $stmt = $dbh->prepare($insertQuery);                    
          $stmt->execute($values);   
@@ -1482,8 +1599,10 @@ function SaveCheckModuleControlsState()
     if(!isset($_POST["comparisonSwithOn"]) ||
     !isset($_POST["sourceAComplianceSwitchOn"]) ||
     !isset($_POST["sourceBComplianceSwitchOn"]) ||
-    !isset($_POST["sourceACheckAllSwitchOn"]) ||
-    !isset($_POST["sourceBCheckAllSwitchOn"]))
+    !isset($_POST["sourceCComplianceSwitchOn"]) ||
+    !isset($_POST["sourceDComplianceSwitchOn"]) ||
+    !isset($_POST["selectedDataSetTab"]) ||
+    !isset($_POST["selectedCheckCase"]))
     {
          echo "fail"; 
          return;
@@ -1510,16 +1629,20 @@ function SaveCheckModuleControlsState()
              comparisonSwith TEXT,
              sourceAComplianceSwitch TEXT,
              sourceBComplianceSwitch TEXT,
-             sourceACheckAllSwitch TEXT,
-             sourceBCheckAllSwitch TEXT)';         
+             sourceCComplianceSwitch TEXT,
+             sourceDComplianceSwitch TEXT,
+             selectedDataSetTab TEXT,
+             selectedCheckCase TEXT)';         
          $dbh->exec($command);    
 
-         $insertQuery = 'INSERT INTO CheckModuleControlsState(comparisonSwith, sourceAComplianceSwitch, sourceBComplianceSwitch, sourceACheckAllSwitch, sourceBCheckAllSwitch) VALUES(?,?,?,?,?) ';
+         $insertQuery = 'INSERT INTO CheckModuleControlsState(comparisonSwith, sourceAComplianceSwitch, sourceBComplianceSwitch, sourceCComplianceSwitch, sourceDComplianceSwitch, selectedDataSetTab, selectedCheckCase) VALUES(?,?,?,?,?,?,?) ';
          $values = array($_POST["comparisonSwithOn"],  
                          $_POST["sourceAComplianceSwitchOn"],  
                          $_POST["sourceBComplianceSwitchOn"],  
-                         $_POST["sourceACheckAllSwitchOn"],
-                         $_POST["sourceBCheckAllSwitchOn"]);
+                         $_POST["sourceCComplianceSwitchOn"],
+                         $_POST["sourceDComplianceSwitchOn"],
+                         $_POST["selectedDataSetTab"],
+                         $_POST["selectedCheckCase"]);
          
          $stmt = $dbh->prepare($insertQuery);                    
          $stmt->execute($values); 
