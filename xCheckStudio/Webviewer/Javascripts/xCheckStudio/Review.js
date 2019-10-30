@@ -476,7 +476,7 @@ function populateComplianceModelBrowser(compliance) {
 
                     // model browser
                     var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
-                    modelBrowser.AddModelBrowser();
+                    modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
                     // viewer
                     var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
