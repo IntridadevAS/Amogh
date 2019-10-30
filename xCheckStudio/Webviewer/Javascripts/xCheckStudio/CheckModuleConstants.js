@@ -62,13 +62,36 @@ const ModelBrowserColumnNames1D = {
 }
 
 // menu bar
-const MenuBar ={
-    ShowAllBtn : "showAll",
-    ReloadDataBtn : "reloadData",
-    ClearDataBtn : "clearData",
-    HistoryBtn : "history",
-    UnitsBtn : "units",
-    CheckInfoBtn : "checkInfo",
-    SaveProgressBtn : "saveProgress",
-    NavCubeBtn : "navCube",
+const MenuBar = {
+    ShowAllBtn: "showAll",
+    ReloadDataBtn: "reloadData",
+    ClearDataBtn: "clearData",
+    HistoryBtn: "history",
+    UnitsBtn: "units",
+    CheckInfoBtn: "checkInfo",
+    SaveProgressBtn: "saveProgress",
+    NavCubeBtn: "navCube",
+}
+
+const GlobalConstants = {
+    SourceAId : "a",
+    SourceBId : "b",
+    SourceCId : "c",
+    SourceDId : "d",
+    SourceAComponentsTable : "SourceAComponents",
+    SourceBComponentsTable : "SourceBComponents",
+    SourceCComponentsTable : "SourceCComponents",
+    SourceDComponentsTable : "SourceDComponents",
+    SourceAViewerOptionsTable : "SourceAViewerOptions",
+    SourceBViewerOptionsTable : "SourceBViewerOptions",
+    SourceCViewerOptionsTable : "SourceCViewerOptions",
+    SourceDViewerOptionsTable : "SourceDViewerOptions",
+    SourceASelectedComponentsTable : "SourceASelectedComponents",
+    SourceBSelectedComponentsTable : "SourceBSelectedComponents",
+    SourceCSelectedComponentsTable : "SourceCSelectedComponents",
+    SourceDSelectedComponentsTable : "SourceDSelectedComponents",
+    SourceANotSelectedComponentsTable :  "SourceANotSelectedComponents",
+    SourceBNotSelectedComponentsTable :  "SourceBNotSelectedComponents",
+    SourceCNotSelectedComponentsTable :  "SourceCNotSelectedComponents",
+    SourceDNotSelectedComponentsTable :  "SourceDNotSelectedComponents",
 }

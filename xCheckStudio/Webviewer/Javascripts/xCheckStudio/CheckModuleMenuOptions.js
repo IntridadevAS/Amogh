@@ -38,7 +38,7 @@ function enableMenuOptions() {
 
     // on save progress
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        alert("Not Handled");
+        CheckModule.onSaveProgress();
     }
 
     // on navigation cube
