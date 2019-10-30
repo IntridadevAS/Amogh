@@ -736,40 +736,52 @@
             //global $sourceAComplianceComponentsHierarchy;
             global $projectName;            
             global $checkName;
+            global $datasourceInfo;
+
             if($complianceResult === NULL)
             { 
                 return;
             }
+           
             $componentsHierarchy =  array();
             try
-            {   
-                // open database
-                $dbPath = getCheckDatabasePath($projectName, $checkName);            
-                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-   
-                // begin the transaction
-                $dbh->beginTransaction();
+            { 
+                 // open database
+                 $dbPath = getCheckDatabasePath($projectName, $checkName);            
+                 $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+ 
+                 // begin the transaction
+                 $dbh->beginTransaction();
 
-                $traversedNodes = [];
-                for($index = 1 ; $index <= count($complianceResult); $index++) {
-                    $group = $complianceResult[$index];
+                if(($isSourceA && isDataSource3D($datasourceInfo["sourceAType"])) || 
+                  (!$isSourceA && isDataSource3D($datasourceInfo["sourceBType"])))
+                {                   
+                    $traversedNodes = [];
+                    for($index = 1 ; $index <= count($complianceResult); $index++) {
+                        $group = $complianceResult[$index];
 
-                    foreach($group['components'] as $key =>  $value) {
-                        $status = $value['status'];                           
-                        $nodeId = $value['nodeId'];   
+                        foreach($group['components'] as $key =>  $value) {
+                            $status = $value['status'];                           
+                            $nodeId = $value['nodeId'];   
 
-                        $comp = traverseRecursivelyFor3DCompliance($dbh, 
-                                                                 $nodeId, 
-                                                                 $traversedNodes, 
-                                                                 $isSourceA); 
-                                                                 
-                        if($comp !== NULL && 
-                        !array_key_exists($comp['NodeId'], $componentsHierarchy)) 
-                        {   
-                            $componentsHierarchy[$comp['NodeId']] =  $comp;          
-                           
+                            $comp = traverseRecursivelyFor3DCompliance($dbh, 
+                                                                    $nodeId, 
+                                                                    $traversedNodes, 
+                                                                    $isSourceA); 
+                                                                    
+                            if($comp !== NULL && 
+                            !array_key_exists($comp['NodeId'], $componentsHierarchy)) 
+                            {   
+                                $componentsHierarchy[$comp['NodeId']] =  $comp;          
+                            
+                            }
                         }
                     }
+                }
+                else
+                {
+                    // 1D data source
+                    $componentsHierarchy = traverseRecursivelyFor1DCompliance($dbh, $isSourceA);
                 }
 
                 // commit update
@@ -785,6 +797,60 @@
             }    
         }
         
+        function traverseRecursivelyFor1DCompliance($dbh,                                                                         
+                                     $isSourceA)
+        {  
+            $componentsTable = NULL;
+            $complianceComponentsTable = NULL;
+            $idAttribute = "sourceId";            
+            if($isSourceA) {
+                $componentsTable = "SourceAComponents";      
+                $complianceComponentsTable = "SourceAComplianceCheckComponents";     
+            }
+            else {
+                $componentsTable = "SourceBComponents";
+                $complianceComponentsTable = "SourceBComplianceCheckComponents";     
+            }
+
+            // read component main class and subclass
+            $components = [];
+
+            $compStmt = $dbh->query("SELECT * FROM  ".$componentsTable); 
+            if($compStmt) 
+            {               
+                while ($compRow = $compStmt->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    $component = array();  
+                    $component["Id"] = $compRow['id'];
+                    $component["Name"] = $compRow['name'];
+                    $component["MainClass"] = $compRow['mainclass'];
+                    $component["SubClass"] = $compRow['subclass'];       
+                    
+                     // read an additional info
+                    $stmt = $dbh->query("SELECT * FROM  ".$complianceComponentsTable." where ".$idAttribute." = ". $component['Id']);
+                    $complianceComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);            
+                    if(!$complianceComponentRow)
+                    {
+                        $component["ResultId"] =  NULL;
+                        $component["GroupId"]  = NULL;
+                        $component["accepted"] = NULL;                        
+                        $component["Status"] =  "Not Checked";
+                    }
+                    else
+                    {
+                        $component["ResultId"] =  $complianceComponentRow['id'];
+                        $component["GroupId"]  = $complianceComponentRow['ownerGroup'];
+                        $component["accepted"] = $complianceComponentRow['accepted'];                        
+                        $component["Status"] =  $complianceComponentRow['status'];
+                    }
+
+                    $components[$compRow['id']] = $component;
+                }
+            }     
+            
+            return $components;
+        }
+
         function traverseRecursivelyFor3DCompliance($dbh, 
                                                     $nodeId, 
                                                     &$traversedNodes, 

@@ -221,7 +221,7 @@ ReviewComparison1DModelBrowser.prototype.AddTableContentCount = function (contai
         var modelBrowserData = document.getElementById(containerId);
 
         var modelBrowserDataTable = modelBrowserData.children[0];
-        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
+        // var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
 
         // var countBox;
         var div2 = document.createElement("DIV");
@@ -231,7 +231,7 @@ ReviewComparison1DModelBrowser.prototype.AddTableContentCount = function (contai
 
         // var countBox = document.getElementById(id);
         // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = _this.ModelTreeData;
+        var rowCount = this.ModelTreeData;
         div2.innerHTML = "Count :" + rowCount;
         modelBrowserDataTable.appendChild(div2);
     }
@@ -600,24 +600,4 @@ ReviewComparison1DModelBrowser.prototype.Destroy = function () {
     this.DestroyDetailedInfoTable();
     var viewerInterface = this.GetViewer();
     viewerInterface.Destroy();
-
-
 }
-
-ReviewComparison1DModelBrowser.prototype.DestroyDetailedInfoTable = function () {
-
-    var table = document.getElementById(Comparison.DetailInfoContainer);
-    //Destroy dxDataGrid
-    if (table.children.length > 0) {
-        var tableContainer = "#" + Comparison.DetailInfoContainer;
-        $(tableContainer).dxDataGrid("dispose");
-        $(tableContainer).remove()
-    }
-
-    var comparisonDetailInfoContainer = document.getElementById("comparisonDetailInfoContainer");
-    var tableDiv = document.createElement("div");
-    tableDiv.id = Comparison.DetailInfoContainer;
-    comparisonDetailInfoContainer.appendChild(tableDiv);
-}
-
-

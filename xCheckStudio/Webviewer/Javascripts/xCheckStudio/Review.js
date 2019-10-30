@@ -473,7 +473,7 @@ function populateComplianceModelBrowser(compliance) {
                 createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer);
 
                 if (viewerOption['endPointUri'] !== undefined) {
-                   
+
                     // model browser
                     var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
                     modelBrowser.AddModelBrowser();
@@ -482,12 +482,6 @@ function populateComplianceModelBrowser(compliance) {
                     var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
                     var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
                     viewerInterface.setupViewer(550, 280);
-
-                    // var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
-                    //     undefined,
-                    //     undefined,
-                    //     source);
-                    // viewerInterface.setupViewer(550, 280);
 
                     // selection manager
                     var selectionManager = new ReviewModelBrowserSelectionManager();
@@ -499,6 +493,54 @@ function populateComplianceModelBrowser(compliance) {
 
                     var complianceData = model.checks["compliance"];
                     complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                }
+                else {
+
+                    var source;
+                    if (srcId === "a") {
+                        source = "SourceA";
+                    }
+                    else if (srcId === "b") {
+                        source = "SourceB";
+                    }
+                    else {
+                        return;
+                    }
+
+                    // get class wise properties for excel and other 1D datasources               
+                    $.ajax({
+                        url: 'PHP/ClasswiseComponentsReader.php',
+                        type: "POST",
+                        async: false,
+                        data: {
+                            'Source': source,
+                            'ProjectName': projectinfo.projectname,
+                            'CheckName': checkinfo.checkname
+                        },
+                        success: function (msg) {
+                            if (msg != 'fail') {
+                                var classWiseComponents = JSON.parse(msg);
+
+                                // model browser
+                                var modelBrowser = new ReviewCompliance1DModelBrowser(srcId, compliance.source, compliance);
+                                modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
+
+                                // // viewer
+                                var viewerInterface = new ModelBrowser1DViewer(srcId, compliance.source, classWiseComponents, Compliance.ViewerContainer);                               
+
+                                // selection manager
+                                var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                                var browserComponents = {};
+                                browserComponents["browser"] = modelBrowser;
+                                browserComponents["viewer"] = viewerInterface;
+                                browserComponents["selectionManager"] = selectionManager;
+
+                                var complianceData = model.checks["compliance"];
+                                complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                            }
+                        }
+                    });
                 }
             }
 
