@@ -157,7 +157,7 @@ ModelBrowser1DViewer.prototype.LoadSheetTableData = function (columnHeaders, tab
         showRowLines: true,
         allowColumnResizing: true,
         height: "100%",
-        // width: "100%",
+        width: "100%",
         hoverStateEnabled: true,
         filterRow: {
             visible: true
