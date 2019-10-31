@@ -74,6 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveViewerOptionsToCheckSpaceDB":
             SaveViewerOptionsToCheckSpaceDB();
             break;
+        case "ClearTemporaryCheckSpaceDB":
+            ClearTemporaryCheckSpaceDB();
+            break;
         // case "CreateProjectDBonSaveInCheckModule":
         //     CreateProjectDBonSaveInCheckModule();         
         //     break;
@@ -107,6 +110,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //     echo "success"; 
 //     return;
 // }
+function ClearTemporaryCheckSpaceDB()
+{     
+    if(!isset($_POST['ProjectName']) ||
+    !isset($_POST['CheckName']) ||
+    !isset($_POST['ProjectId']))
+    {
+        echo 'fail';
+        return;
+    }
+
+    try
+    {   
+         // get project name
+        $projectName = $_POST['ProjectName'];	
+        $checkName = $_POST['CheckName'];
+        $projectId = $_POST['ProjectId'];
+        
+        $tempDBPath = getCheckDatabasePath($projectName, $checkName);           
+        if(file_exists ($tempDBPath ))
+        { 
+            unlink($tempDBPath);            
+        }     
+        
+          // check if checkspace db is saved. If not saved, then 
+        // delete the checkspace entry from project db
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+        if(!file_exists ($dbPath ))
+        {            
+            $projectDbPath = getProjectDatabasePath($projectName);
+            $dbh = new PDO("sqlite:".$projectDbPath) or die("cannot open the database");            
+            $query =  "Delete from CheckSpace where checkname='".$checkName."' and projectid='". $projectId."';";  
+            $stmt = $dbh->prepare($query);      
+            $stmt->execute();
+        }      
+        
+    }
+    catch(Exception $e) 
+    {        
+        echo "fail"; 
+        return;
+    } 
+}
 
 function CreateCheckSpaceDBonSaveInCheckModule()
 {

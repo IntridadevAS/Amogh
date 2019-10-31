@@ -17,7 +17,11 @@ function isElectron() {
     return false;
 }
 
-function onclosewindow() {
+function onclosewindow(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     var sPath = window.getURL();

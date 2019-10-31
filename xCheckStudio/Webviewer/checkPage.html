@@ -37,7 +37,7 @@
         <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
             onclick="onmaximizewindow()"></button>
         <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
-            onclick="onclosewindow()"></button>
+            onclick="onclosewindow(CheckPageCleanUp.onLeavingPage)"></button>
       </div>
     </div>
 
@@ -105,7 +105,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnHome()">
+          <div id="symYesButton___10" onclick="returnHome(CheckPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -156,7 +156,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnProjectCenter()">
+          <div id="symYesButton___10" onclick="returnProjectCenter(CheckPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -207,7 +207,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnToPREP()">
+          <div id="symYesButton___10" onclick="returnToPREP(CheckPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -342,7 +342,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="signOut()">
+          <div id="symYesButton___10" onclick="signOut(CheckPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -785,7 +785,8 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckReferenceManager.js"></script>
   
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageSave.js"></script>
-  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageCleanUp.js"></script>
+    
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

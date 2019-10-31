@@ -219,7 +219,11 @@ function cancelReturnHome() {
     popup.style.display = 'none';
 }
 
-function returnHome() {
+function returnHome(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     window.location = "landingPage.html";
 }
 
@@ -231,7 +235,11 @@ function cancelReturnProjectCenter() {
     popup.style.display = 'none';
 }
 
-function returnProjectCenter() {
+function returnProjectCenter(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     window.location = "projectsPage.html";
 }
 
@@ -243,7 +251,11 @@ function cancelReturnPREP() {
     popup.style.display = 'none';
 }
 
-function returnToPREP() {
+function returnToPREP(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     window.location = "prephomepage.html";
 }
 
@@ -255,9 +267,13 @@ function cancelSignOut() {
     popup.style.display = 'none';
 }
 
-function signOut() {
+function signOut(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     onLogoutUser().then(function (status) {
-        if (status) {
+        if (status) {          
             window.location.href = "index.html";
         }
     });
@@ -281,7 +297,11 @@ function cancelReturnCheck() {
     popup.style.display = 'none';
 }
 
-function returnCheck() {
+function returnCheck(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
     window.location = "checkPage.html";
 }
 
