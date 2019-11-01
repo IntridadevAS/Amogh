@@ -6,18 +6,18 @@ function SCSelectionManager(nodeIdvsSelectedComponents) {
     this.NodeIdvsSelectedComponents = nodeIdvsSelectedComponents;
     this.SelectedCompoents = [];
 
-    if (nodeIdvsSelectedComponents) {
-        for (var nodeId in this.NodeIdvsSelectedComponents) {
-            var selectedComponent = this.NodeIdvsSelectedComponents[nodeId];
-            var checkedComponent = {};
-            checkedComponent['Name'] = selectedComponent['name'];
-            checkedComponent['MainComponentClass'] = selectedComponent['mainClass'];
-            checkedComponent['ComponentClass'] = selectedComponent['subClass'];
-            checkedComponent["NodeId"] = selectedComponent['nodeId'];
+    // if (nodeIdvsSelectedComponents) {
+    //     for (var nodeId in this.NodeIdvsSelectedComponents) {
+    //         var selectedComponent = this.NodeIdvsSelectedComponents[nodeId];
+    //         var checkedComponent = {};
+    //         checkedComponent['Name'] = selectedComponent['name'];
+    //         checkedComponent['MainComponentClass'] = selectedComponent['mainClass'];
+    //         checkedComponent['ComponentClass'] = selectedComponent['subClass'];
+    //         checkedComponent["NodeId"] = Number(selectedComponent['nodeId']);
 
-            this.SelectedCompoents.push(checkedComponent);
-        }
-    }
+    //         this.SelectedCompoents.push(checkedComponent);
+    //     }
+    // }
 }
 // assign SelectionManager's method to this class
 SCSelectionManager.prototype = Object.create(SelectionManager.prototype);
@@ -52,7 +52,8 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
             this.SelectedComponentNodeIds.push(componentData.NodeId);
         }
     }
-    else if (this.SelectedCompoentExists(componentData)) {
+    else if (checkBoxState === "off" && 
+    this.SelectedCompoentExists(componentData)) {
         this.RemoveFromselectedCompoents(componentData);
 
         // restore color        

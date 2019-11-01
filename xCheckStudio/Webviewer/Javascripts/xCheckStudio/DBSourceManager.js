@@ -1,4 +1,5 @@
-function DBSourceManager(sourceName, 
+function DBSourceManager(id,
+  sourceName, 
   sourceType,
   viewerContainer,
   modelBrowsercontainer) {
@@ -9,7 +10,7 @@ function DBSourceManager(sourceName,
   this.ComponentIdVsData;
 
   // call super constructor
-  SourceManager.call(this,sourceName, sourceType);
+  SourceManager.call(this, id, sourceName, sourceType);
 }
 
 // assign SourceManager's method to this class
@@ -58,7 +59,8 @@ DBSourceManager.prototype.LoadData = function (uri) {
       _this.AddComponentsToDB(_this.ViewerContainer);
 
       //add model Browser Table
-      _this.ModelTree = new DBModelBrowser(_this.ModelBrowsercontainer, 
+      _this.ModelTree = new DBModelBrowser(_this.Id, 
+        _this.ModelBrowsercontainer, 
         _this.ViewerContainer,
         dbReader.DBData);
         
@@ -74,7 +76,9 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
   this.SourceProperties = dbReader.RestoreDBData(classWiseComponents);
 
   //add model Browser Table
-  this.ModelTree = new DBModeBrowser(this.ModelBrowsercontainer,
+  this.ModelTree = new DBModeBrowser(this.Id,
+    this.ModelBrowsercontainer,
+    this.ViewerContainer,
     dbReader.DBData,
     selectedComponents);
   this.ModelTree.CreateModelBrowserTable();

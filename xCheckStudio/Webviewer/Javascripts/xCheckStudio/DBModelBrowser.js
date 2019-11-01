@@ -1,10 +1,11 @@
-function DBModelBrowser(modelBrowserContainer,
+function DBModelBrowser(id,
+    modelBrowserContainer,
     viewerContainer,
     dbData,
     selectedComponents) {
 
     // call super constructor
-    ModelBrowser.call(this, modelBrowserContainer);
+    ModelBrowser.call(this, id, modelBrowserContainer);
     this.ViewerContainer = viewerContainer;
 
     this.DBData = dbData;

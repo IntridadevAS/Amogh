@@ -27,6 +27,12 @@ var CheckModule = {
                     // save not selected components
                     CheckModule.saveNotSelectedComponents();
 
+                    // save not references
+                    CheckModule.saveReferences();
+
+                     // save not references
+                     CheckModule.saveHiddenItems();
+
                     alert("Saved project information.");
                 }
             });
@@ -38,6 +44,79 @@ var CheckModule = {
             // remove busy spinner        
             hideBusyIndicator();
         }
+    },
+
+    
+    saveHiddenItems : function()
+    {
+        var hiddentItems = {};
+        var visibleItems = {};
+        for (var srcId in SourceManagers) {
+            var sourceManager = SourceManagers[srcId];
+            if (sourceManager.Is3DSource()) {
+
+                var hiddenComponents = {};
+                var visibleComponents = {};
+                for (var node in sourceManager.NodeIdvsComponentIdList) {
+                    var compId = sourceManager.NodeIdvsComponentIdList[node];
+                    var nodeId = Number(node);
+                    if (sourceManager.HiddenNodeIds.includes(nodeId)) {
+                        hiddenComponents[nodeId] = compId;
+                    }
+                    else {
+                        visibleComponents[nodeId] = compId;
+                    }
+                }
+
+                // for (var hiddenNode in sourceManager.HiddenNodeIds) {
+                //     var compId = sourceManager.NodeIdvsComponentIdList[hiddenNode];
+                //     hiddenComponents[hiddenNode] = compId;
+                // }
+
+                hiddentItems[srcId] = hiddenComponents;
+                visibleItems[srcId] = visibleComponents;
+            }
+        }
+        if (Object.keys(hiddentItems).length === 0) {
+            return;
+        }
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveHiddenItemsToCheckSpaceDB",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname,
+                'hiddenComponents': JSON.stringify(hiddentItems),
+                'visibleComponents': JSON.stringify(visibleItems)
+            },
+            success: function (msg) {
+            }
+        });
+    },
+
+    saveReferences : function()
+    {
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveReferencesToCheckSpaceDB",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
+            success: function (msg) {
+            }
+        });
     },
 
     saveComponentsToCheckSpaceDB: function () {

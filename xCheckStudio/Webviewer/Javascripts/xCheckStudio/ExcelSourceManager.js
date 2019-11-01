@@ -1,4 +1,5 @@
-function ExcelSourceManager(sourceName,
+function ExcelSourceManager(id,
+  sourceName,
   sourceType,
   viewerContainer,
   modelBrowsercontainer) {
@@ -9,7 +10,7 @@ function ExcelSourceManager(sourceName,
   this.ComponentIdVsData;
 
   // call super constructor
-  SourceManager.call(this, sourceName, sourceType);
+  SourceManager.call(this, id, sourceName, sourceType);
 }
 
 
@@ -35,7 +36,8 @@ ExcelSourceManager.prototype.LoadData = function (file) {
       _this.AddComponentsToDB();
 
       //add model Browser Table
-      _this.ModelTree = new ExcelModeBrowser(_this.ModelBrowsercontainer, 
+      _this.ModelTree = new ExcelModeBrowser(_this.Id, 
+                                             _this.ModelBrowsercontainer, 
                                             _this.ViewerContainer, 
                                             excelReader.SheetData);
       _this.ModelTree.CreateModelBrowser();
@@ -61,16 +63,15 @@ ExcelSourceManager.prototype.LoadData = function (file) {
   });
 }
 
-ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, selectedComponents) {
-
-  var excelReader = new ExcelReader();
+ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, selectedComponents) {  
 
   //this.excelReader = new ExcelReader(this.SourceType, this.checkType, this.SelectedComponents);
   var excelReader = new ExcelReader();
   this.SourceProperties = excelReader.RestoreSheetData(classWiseComponents);
 
   //add model Browser Table
-  this.ModelTree = new ExcelModeBrowser(this.ModelBrowsercontainer,
+  this.ModelTree = new ExcelModeBrowser(this.Id,
+    this.ModelBrowsercontainer,
     this.ViewerContainer, 
     excelReader.SheetData,
     selectedComponents);

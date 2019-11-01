@@ -48,10 +48,13 @@ let model = {
     this.currentTabId = tabID;
 
     // manage state of compliance switch
-    if(this.currentTabId in this.views)
-    {
+    if (this.currentTabId in this.views) {
       var complianceSwitch = document.getElementById("complianceSwitch");
-      complianceSwitch.checked =  this.views[this.currentTabId].complianceSwitchChecked;
+      complianceSwitch.checked = this.views[this.currentTabId].complianceSwitchChecked;
+    }
+
+    if (this.currentTabId in SourceManagers) {
+      SourceManagers[this.currentTabId].ResizeViewer();
     }
   }
 }
@@ -81,7 +84,7 @@ let controller = {
     const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
     // model.activeTabs++;
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
-    // addedFile.fileName = fileName;
+    addedFile.fileName = fileName;
     // SET FILENAME FOR TAB ABOVE
 
     addedFile.used = true;
@@ -131,8 +134,8 @@ let viewTabs = {
       if (deleteTab) {
         viewTabs.deleteTab(deleteTab.parentNode);
       } else if (changeTab) {
-        viewTabs.selectTab(changeTab);
         controller.selectView(changeTab.dataset.id);
+        viewTabs.selectTab(changeTab);       
       } else { return };
     })
 

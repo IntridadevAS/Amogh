@@ -1,4 +1,5 @@
-function ModelBrowser(modelBrowserContainer) {
+function ModelBrowser(id, modelBrowserContainer) {
+    this.Id = id;
     this.ModelBrowserContainer = modelBrowserContainer;
 }
 

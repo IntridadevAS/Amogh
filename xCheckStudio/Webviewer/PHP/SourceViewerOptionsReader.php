@@ -2,7 +2,8 @@
 
     include 'Utility.php';      
 
-    if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
+    if(!isset($_POST["ProjectName"]) || 
+       !isset($_POST['CheckName']))
     {
         echo "fail";
         return;
