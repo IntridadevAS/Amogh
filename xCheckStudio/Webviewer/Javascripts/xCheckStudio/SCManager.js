@@ -1,9 +1,10 @@
-function SCManager(sourceName,
+function SCManager(id, 
+    sourceName,
     sourceType,
     viewerOptions) {
 
     // call super constructor
-    SourceManager.call(this, sourceName, sourceType);
+    SourceManager.call(this, id, sourceName, sourceType);
 
     // Object.defineProperty(SCManager.prototype, 'constructor', {
     //     value: SCManager,
@@ -33,7 +34,7 @@ SCManager.prototype.GetViewerContainerID = function () {
     return this.ViewerOptions.containerId;
 }
 
-SCManager.prototype.LoadData = function (selectedComponents) {
+SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
     var _this = this;
 
@@ -50,12 +51,28 @@ SCManager.prototype.LoadData = function (selectedComponents) {
         _this.Webviewer = viewer;
 
         // set viewer's background color
-        _this.SetViewerBackgroundColor();      
+        _this.SetViewerBackgroundColor();
 
         viewer.setCallbacks({
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
                 viewer.resizeCanvas();
+
+                // restore hidden nodes
+                if (_this.HiddenNodeIds.length > 0) {
+                    // hide all
+                    var map = {};
+                    map[viewer.model.getAbsoluteRootNode()] = false;
+                    viewer.model.setNodesVisibilities(map);
+
+                    // set visible items
+                    map = {};
+                    for (var i = 0; i < visibleItems.length; i++) {
+                        var node = visibleItems[i];
+                        map[node] = true;
+                    }
+                    viewer.model.setNodesVisibilities(map);
+                }
 
                 // register viewer evenets
                 _this.BindEvents(viewer);
@@ -64,7 +81,8 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 showNavigationCube(viewer);
 
                 // construct model tree
-                _this.ModelTree = new SCModelBrowser(_this.ViewerOptions.modelTree,
+                _this.ModelTree = new SCModelBrowser(_this.Id,
+                    _this.ViewerOptions.modelTree,
                     viewer,
                     _this.SourceType,
                     selectedComponents);
@@ -79,7 +97,7 @@ SCManager.prototype.LoadData = function (selectedComponents) {
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
                 _this.ReadProperties(rootNodeId, identifierProperties, undefined);
-               
+
                 //activate context menu            
                 var ids = _this.GetControlIds();
 
@@ -99,7 +117,7 @@ SCManager.prototype.LoadData = function (selectedComponents) {
 SCManager.prototype.GetControlIds = function () {
     var ids = {};
     if (this.Webviewer._params.containerId === "visualizerA") {
-        
+
         var explode = {};
         explode["slider"] = "explodeSlider1"
         explode["output"] = "explodeValue1";
@@ -110,16 +128,16 @@ SCManager.prototype.GetControlIds = function () {
         translucency["slider"] = "translucencySlider1"
         translucency["output"] = "translucencyValue1";
         translucency["overlay"] = "translucencyOverlay1";
-        ids["translucency"] = translucency;        
+        ids["translucency"] = translucency;
     }
     else if (this.Webviewer._params.containerId === "visualizerB") {
-        
+
         var explode = {};
         explode["slider"] = "explodeSlider2"
         explode["output"] = "explodeValue2";
         explode["overlay"] = "explodeOverlay2";
-        ids["explode"] = explode;   
-        
+        ids["explode"] = explode;
+
         var translucency = {};
         translucency["slider"] = "translucencySlider2"
         translucency["output"] = "translucencyValue2";
@@ -131,7 +149,7 @@ SCManager.prototype.GetControlIds = function () {
         explode["slider"] = "explodeSlider3"
         explode["output"] = "explodeValue3";
         explode["overlay"] = "explodeOverlay3";
-        ids["explode"] = explode;      
+        ids["explode"] = explode;
 
         var translucency = {};
         translucency["slider"] = "translucencySlider3"
@@ -157,7 +175,7 @@ SCManager.prototype.GetControlIds = function () {
 }
 
 SCManager.prototype.ClearSource = function () {
-    
+
     this.ModelTree.Clear();
 
     // clear viewer
@@ -229,12 +247,12 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
     }
 };
 
-SCManager.prototype.HandleHiddenNodeIdsList = function(isHide, nodeList) {
+SCManager.prototype.HandleHiddenNodeIdsList = function (isHide, nodeList) {
 
-    for(var i = 0; i < nodeList.length; i++) {
+    for (var i = 0; i < nodeList.length; i++) {
         var nodeId = nodeList[i];
         var index = this.HiddenNodeIds.indexOf(nodeId);
-        if(isHide) {
+        if (isHide) {
             if (index < 0) {
                 this.HiddenNodeIds.push(nodeId);
             }
@@ -243,7 +261,7 @@ SCManager.prototype.HandleHiddenNodeIdsList = function(isHide, nodeList) {
             // If show is clicked, remove nodeId from list of hidden elements list
             if (index > -1) {
                 this.HiddenNodeIds.splice(index, 1);
-            }         
+            }
         }
     }
 }
@@ -438,67 +456,67 @@ SCManager.prototype.ResizeViewer = function () {
     this.Webviewer.resizeCanvas();
 }
 
-function XMLSourceManager(sourceName, sourceType, viewerOptions) {
+function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 
 }
 // inherit from parent
 XMLSourceManager.prototype = Object.create(SCManager.prototype);
 XMLSourceManager.prototype.constructor = XMLSourceManager;
 
-function RVMSourceManager(sourceName, sourceType, viewerOptions) {
+function RVMSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 RVMSourceManager.prototype = Object.create(SCManager.prototype);
 RVMSourceManager.prototype.constructor = RVMSourceManager;
 
-function SolidWorksSourceManager(sourceName, sourceType, viewerOptions) {
+function SolidWorksSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 SolidWorksSourceManager.prototype = Object.create(SCManager.prototype);
 SolidWorksSourceManager.prototype.constructor = SolidWorksSourceManager;
 
 
-function DWGSourceManager(sourceName, sourceType, viewerOptions) {
+function DWGSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 DWGSourceManager.prototype = Object.create(SCManager.prototype);
 DWGSourceManager.prototype.constructor = DWGSourceManager;
 
-function RVTSourceManager(sourceName, sourceType, viewerOptions) {
+function RVTSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 RVTSourceManager.prototype = Object.create(SCManager.prototype);
 RVTSourceManager.prototype.constructor = RVTSourceManager;
 
-function IFCSourceManager(sourceName, sourceType, viewerOptions) {
+function IFCSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 IFCSourceManager.prototype = Object.create(SCManager.prototype);
 IFCSourceManager.prototype.constructor = IFCSourceManager;
 
-function STEPSourceManager(sourceName, sourceType, viewerOptions) {
+function STEPSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 STEPSourceManager.prototype = Object.create(SCManager.prototype);
 STEPSourceManager.prototype.constructor = STEPSourceManager;
 
-function IGSSourceManager(sourceName, sourceType, viewerOptions) {
+function IGSSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
-    SCManager.call(this, sourceName, sourceType, viewerOptions);
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
 }
 // inherit from parent
 IGSSourceManager.prototype = Object.create(SCManager.prototype);

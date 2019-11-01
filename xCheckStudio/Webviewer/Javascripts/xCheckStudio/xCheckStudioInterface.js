@@ -1,5 +1,6 @@
 
-function createSourceManager(fileName,
+function createSourceManager(id,
+    fileName,
     sourceType,
     viewerContainer,
     modelTreeContainer,
@@ -13,38 +14,38 @@ function createSourceManager(fileName,
     var type = sourceType.toLowerCase();
     switch(type) {
         case "xml":
-            sourceManager = new XMLSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new XMLSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "rvm":
-            sourceManager = new RVMSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new RVMSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "sldasm":
         case "sldprt":
-            sourceManager = new SolidWorksSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new SolidWorksSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "dwg":
-            sourceManager = new DWGSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new DWGSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "rvt":
         case "rfa":
-            sourceManager = new RVTSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new RVTSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "ifc":
-            sourceManager = new IFCSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new IFCSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "step":
         case "stp":
         case "ste":
-            sourceManager = new STEPSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new STEPSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "igs":
-            sourceManager = new IGSSourceManager(fileName, sourceType, viewerOptions);
+            sourceManager = new IGSSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "json":
-            sourceManager = new DBSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
+            sourceManager = new DBSourceManager(id, fileName, sourceType, viewerContainer, modelTreeContainer);
         break;
         case "xls":
-            sourceManager = new ExcelSourceManager(fileName, sourceType, viewerContainer, modelTreeContainer);
+            sourceManager = new ExcelSourceManager(id, fileName, sourceType, viewerContainer, modelTreeContainer);
         break;
     }
     return sourceManager;

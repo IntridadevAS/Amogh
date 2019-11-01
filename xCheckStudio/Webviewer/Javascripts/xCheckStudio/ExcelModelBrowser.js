@@ -1,10 +1,11 @@
-function ExcelModeBrowser(modelBrowserContainer,
+function ExcelModeBrowser(id,
+    modelBrowserContainer,
     viewerContainer,
     sheetData,
     selectedComponents) {
 
     // call super constructor
-    ModelBrowser.call(this, modelBrowserContainer);
+    ModelBrowser.call(this, id, modelBrowserContainer);
 
     this.ViewerContainer = viewerContainer;
     this.SheetData = sheetData;

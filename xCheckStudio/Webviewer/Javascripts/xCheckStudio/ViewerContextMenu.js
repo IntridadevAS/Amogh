@@ -181,12 +181,11 @@ ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
     //Add nodeId to hidden elements list
     sourceManager.HandleHiddenNodeIdsList(true, nodeList)
 
-    if(nodeList.length > 1) {
+    if(nodeList.length > 0) {
         selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
     }
     //Grey out the text of hidden element rows
     sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
-
 }
 
 ViewerContextMenu.prototype.HideInReview = function() {
@@ -238,6 +237,28 @@ ViewerContextMenu.prototype.OnIsolateClicked = function () {
     isolateManager.Isolate(selectedNodes).then(function (affectedNodes) {
 
     });
+
+    // maintain hidden elements
+    if (model.currentTabId in SourceManagers) {
+        var sourceManager = SourceManagers[model.currentTabId];
+        sourceManager.HiddenNodeIds = [];
+
+        var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
+        for (var i = 0; i < Object.keys(allNodeIds).length; i++) {
+            var nodeId = Number(allNodeIds[i]);
+            if (!selectedNodes.includes(nodeId)) {
+                sourceManager.HiddenNodeIds.push(nodeId);
+            }
+        }
+
+        //Grey out the text of hidden element rows
+        var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);        
+        sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
+
+        // unhighlight the hidden rows made visible
+        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(selectedNodes);        
+        sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
+    }
 }
 
 

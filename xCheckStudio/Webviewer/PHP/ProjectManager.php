@@ -77,9 +77,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "ClearTemporaryCheckSpaceDB":
             ClearTemporaryCheckSpaceDB();
             break;
-        // case "CreateProjectDBonSaveInCheckModule":
-        //     CreateProjectDBonSaveInCheckModule();         
-        //     break;
+        case  "SaveHiddenItemsToCheckSpaceDB":
+            SaveHiddenItemsToCheckSpaceDB();
+            break;
+        case "SaveReferencesToCheckSpaceDB":
+            SaveReferencesToCheckSpaceDB();         
+            break;
         default:
             echo "No Function Found!";
     }
@@ -110,6 +113,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //     echo "success"; 
 //     return;
 // }
+
+// function InitCheckSpaceDBInCheckModule()
+// {
+//     if(!isset($_POST['ProjectName']) ||
+//     !isset($_POST['CheckName']))
+//     {
+//         echo json_encode(array("Msg" =>  "Invalid input.",
+//         "MsgCode" => 2));  
+//         return;
+//     }
+
+//     try
+//     {  
+//         // check if checkspace db is saved. If not saved, then return       
+//         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+//         if(!file_exists ($dbPath ))
+//         {              
+//             echo json_encode(array("Msg" =>  "Saved data not found",
+//             "MsgCode" => 0));  
+//             return;
+//         }
+
+//         // create temp DB
+//         $tempDBPath = getCheckDatabasePath($projectName, $checkName);           
+//         if(file_exists ($tempDBPath ))
+//         { 
+//             unlink($tempDBPath);            
+//         }        
+//         $tempDB = new SQLite3($tempDBPath);
+//     }
+//     catch(Exception $e) 
+//     {        
+//         echo json_encode(array("Msg" =>  "Failed to Init",
+//         "MsgCode" => 1));  
+//         return;
+//     } 
+// }
+
 function ClearTemporaryCheckSpaceDB()
 {     
     if(!isset($_POST['ProjectName']) ||
@@ -178,6 +219,145 @@ function CreateCheckSpaceDBonSaveInCheckModule()
 
     echo "success"; 
     return;
+}
+
+function SaveReferencesToCheckSpaceDB()
+{
+    // get project name
+    $projectName = $_POST['ProjectName'];	
+    $checkName = $_POST['CheckName'];
+    $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+    $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
+    if(!file_exists ($dbPath ) || 
+       !file_exists ($tempDBPath ))
+    { 
+         echo 'fail';
+         return;
+    }       
+
+    $dbh;
+     try
+     {        
+         // open database             
+         $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
+
+         //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+
+         // begin the transaction
+         $dbh->beginTransaction();
+         $tempDbh->beginTransaction();            
+       
+         // comparison result tables table                               
+         SaveReferences( $tempDbh, $dbh, "a_References");          
+         SaveReferences( $tempDbh, $dbh, "b_References");
+         SaveReferences( $tempDbh, $dbh, "c_References");          
+         SaveReferences( $tempDbh, $dbh, "d_References");
+
+         // commit update
+         $dbh->commit();
+         $tempDbh->commit();
+         $dbh = null; //This is how you close a PDO connection                    
+         $tempDbh = null; //This is how you close a PDO connection                        
+
+         echo 'success';
+         return;
+     }
+     catch(Exception $e) 
+     {        
+         echo "fail"; 
+         return;
+     } 
+}
+
+function SaveHiddenItemsToCheckSpaceDB()
+{
+    if(!isset($_POST['hiddenComponents']) ||
+    !isset($_POST['ProjectName']) ||
+    !isset($_POST['CheckName']) ||
+    !isset($_POST["visibleComponents"]))
+    {
+        echo 'fail';
+        return;
+    }
+
+    $hiddenComponents = $_POST['hiddenComponents'];
+    $visibleComponents = $_POST["visibleComponents"];
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
+
+    try
+    {   
+        // open database
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);           
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // SourceANotCheckedComponents table
+        
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS hiddenComponents;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE hiddenComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                hiddenComponents TEXT,
+                visibleComponents TEXT)'; 
+        $dbh->exec($command);
+      
+        $insertQuery = 'INSERT INTO hiddenComponents(hiddenComponents, visibleComponents) VALUES(?,?) ';
+        $values = array($hiddenComponents, $visibleComponents);
+                    
+        $stmt = $dbh->prepare($insertQuery);                    
+        $stmt->execute($values);   
+        
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection
+    }                
+    catch(Exception $e)
+    {        
+        echo "fail"; 
+        return;
+    }  
+}
+
+function SaveReferences($tempDbh, $dbh, $referenceTable)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
+    if($selectResults) 
+    {
+
+        // create table
+        $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
+        $dbh->exec($command);    
+                  
+        $command = 'CREATE TABLE IF NOT EXISTS '. $referenceTable. '(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        webAddress TEXT,
+        document TEXT,
+        pic TEXT,
+        comment TEXT,
+        component INTEGER NOT NULL       
+        )';               
+        $dbh->exec($command);    
+
+         $insertReferenceStmt = $dbh->prepare("INSERT INTO ".$referenceTable."(id, webAddress, document, pic, comment, 
+         component) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertReferenceStmt->execute(array($row['id'], 
+                                       $row['webAddress'], 
+                                       $row['document'],
+                                       $row['pic'], 
+                                       $row['comment'], 
+                                       $row['component']));
+        }  
+    }   
 }
 
 function SaveComponentsToCheckSpaceDB()
@@ -381,9 +561,8 @@ function SaveComponents( $tempDbh, $dbh, $componentTable, $propertiesTable)
                                         $row['ownercomponent']));
             }  
         }
-    }     
-  
-}
+    }   
+  }
 
 function SaveNotSelectedComponents()
 {
@@ -1912,12 +2091,9 @@ function ReadCheckModuleControlsState()
         try
         {   
             // open database
-            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-            $status = CheckIfFileExists($dbPath);
-            //echo $status;
-            //return;
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
             if(!CheckIfFileExists($dbPath)){
-                echo 'NoCheckCase';
+                echo 'fail';
                 return;
             }
 
@@ -1936,8 +2112,10 @@ function ReadCheckModuleControlsState()
                     $checkModuleControlsState = array('comparisonSwith'=>$record['comparisonSwith'], 
                                                       'sourceAComplianceSwitch'=>$record['sourceAComplianceSwitch'],  
                                                       'sourceBComplianceSwitch'=>$record['sourceBComplianceSwitch'],
-                                                      'sourceACheckAllSwitch'=>$record['sourceACheckAllSwitch'],
-                                                      'sourceBCheckAllSwitch'=>$record['sourceBCheckAllSwitch']);
+                                                      'sourceCComplianceSwitch'=>$record['sourceCComplianceSwitch'],
+                                                      'sourceDComplianceSwitch'=>$record['sourceDComplianceSwitch'],
+                                                      'selectedDataSetTab'=>$record['selectedDataSetTab'],
+                                                      'selectedCheckCase'=>$record['selectedCheckCase']);
                     break;
                 }
             }
@@ -1976,150 +2154,169 @@ function ReadSelectedComponents()
             // begin the transaction
             $dbh->beginTransaction();  
             
-            // source a selected components
-            $sourceAIdwiseComponents = NULL;
-            $sourceANodeIdwiseComponents = [];
-            if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
+            $table;
+            if(strtolower($source) === 'sourcea')
             {
-                $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
-                if($results)
-                {
-                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
-                    {
-                        $comp = array('id'=>$component['id'], 
-                                    'name'=>$component['name'],  
-                                    'mainClass'=>$component['mainClass'],
-                                    'subClass'=>$component['subClass'],
-                                    'nodeId'=>$component['nodeId'],
-                                    'mainComponentId'=>$component['mainComponentId']);
+                $table = "SourceASelectedComponents";
+            }
+            else if(strtolower($source) === 'sourceb')
+            {
+                $table = "SourceBSelectedComponents";
+            }
+            else if(strtolower($source) === 'sourcec')
+            {
+                $table = "SourceCSelectedComponents";
+            }
+            else if(strtolower($source) === 'sourced')
+            {
+                $table = "SourceDSelectedComponents";
+            }
 
-                        // id wise components
-                        $sourceAIdwiseComponents[$component['id']] = $comp;                       
+            $selectedComponents = ReadSelectedComponentsFromDB($dbh, $table);
+            // // source a selected components
+            // $sourceAIdwiseComponents = NULL;
+            // $sourceANodeIdwiseComponents = [];
+            // if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
+            // {
+            //     $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
+            //     if($results)
+            //     {
+            //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+            //         {
+            //             $comp = array('id'=>$component['id'], 
+            //                         'name'=>$component['name'],  
+            //                         'mainClass'=>$component['mainClass'],
+            //                         'subClass'=>$component['subClass'],
+            //                         'nodeId'=>$component['nodeId'],
+            //                         'mainComponentId'=>$component['mainComponentId']);
 
-                        if($component['nodeId'] !== NULL)
-                        {                           
-                            // node id wise components             
-                            if(array_key_exists($component['nodeId'], $sourceANodeIdwiseComponents))
-                            {
-                                array_push($sourceANodeIdwiseComponents[$component['nodeId']], $comp );
-                            }
-                            else
-                            {
-                                $sourceANodeIdwiseComponents[$component['nodeId']] = array( $comp );
-                            }
+            //             // id wise components
+            //             $sourceAIdwiseComponents[$component['id']] = $comp;                       
+
+            //             if($component['nodeId'] !== NULL)
+            //             {                           
+            //                 // node id wise components             
+            //                 if(array_key_exists($component['nodeId'], $sourceANodeIdwiseComponents))
+            //                 {
+            //                     array_push($sourceANodeIdwiseComponents[$component['nodeId']], $comp );
+            //                 }
+            //                 else
+            //                 {
+            //                     $sourceANodeIdwiseComponents[$component['nodeId']] = array( $comp );
+            //                 }
 
                                        
-                            // $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
-                            //                                                     'name'=>$component['name'],  
-                            //                                                     'mainClass'=>$component['mainClass'],
-                            //                                                     'subClass'=>$component['subClass'],
-                            //                                                     'nodeId'=>$component['nodeId'],
-                            //                                                     'mainComponentId'=>$component['mainComponentId']); 
-                        }
-                        else
-                        {
-                              // class wise components             
-                              if(array_key_exists($component['mainClass'], $sourceANodeIdwiseComponents))
-                              {
-                                  array_push($sourceANodeIdwiseComponents[$component['mainClass']], $comp );
-                              }
-                              else
-                              {
-                                  $sourceANodeIdwiseComponents[$component['mainClass']] = array( $comp );
-                              }
+            //                 // $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+            //                 //                                                     'name'=>$component['name'],  
+            //                 //                                                     'mainClass'=>$component['mainClass'],
+            //                 //                                                     'subClass'=>$component['subClass'],
+            //                 //                                                     'nodeId'=>$component['nodeId'],
+            //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
+            //             }
+            //             else
+            //             {
+            //                   // class wise components             
+            //                   if(array_key_exists($component['mainClass'], $sourceANodeIdwiseComponents))
+            //                   {
+            //                       array_push($sourceANodeIdwiseComponents[$component['mainClass']], $comp );
+            //                   }
+            //                   else
+            //                   {
+            //                       $sourceANodeIdwiseComponents[$component['mainClass']] = array( $comp );
+            //                   }
 
-                            //  // class wise components                        
-                            //  $sourceANodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
-                            //  'name'=>$component['name'],  
-                            //  'mainClass'=>$component['mainClass'],
-                            //  'subClass'=>$component['subClass'],
-                            //  'nodeId'=>$component['nodeId'],
-                            //  'mainComponentId'=>$component['mainComponentId']); 
-                        }
-                    }    
-                }
-            }
+            //                 //  // class wise components                        
+            //                 //  $sourceANodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
+            //                 //  'name'=>$component['name'],  
+            //                 //  'mainClass'=>$component['mainClass'],
+            //                 //  'subClass'=>$component['subClass'],
+            //                 //  'nodeId'=>$component['nodeId'],
+            //                 //  'mainComponentId'=>$component['mainComponentId']); 
+            //             }
+            //         }    
+            //     }
+            // }
             
-            // source b selected components
-            $sourceBIdwiseComponents = [];
-            $sourceBNodeIdwiseComponents = [];
-            if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
-            {
-                $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
-                if($results)
-                {
-                    while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
-                    {
-                        $comp = array('id'=>$component['id'], 
-                                'name'=>$component['name'],  
-                                'mainClass'=>$component['mainClass'],
-                                'subClass'=>$component['subClass'],
-                                'nodeId'=>$component['nodeId'],
-                                'mainComponentId'=>$component['mainComponentId']);
+            // // source b selected components
+            // $sourceBIdwiseComponents = [];
+            // $sourceBNodeIdwiseComponents = [];
+            // if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
+            // {
+            //     $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
+            //     if($results)
+            //     {
+            //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+            //         {
+            //             $comp = array('id'=>$component['id'], 
+            //                     'name'=>$component['name'],  
+            //                     'mainClass'=>$component['mainClass'],
+            //                     'subClass'=>$component['subClass'],
+            //                     'nodeId'=>$component['nodeId'],
+            //                     'mainComponentId'=>$component['mainComponentId']);
 
-                        // id wise components
-                        $sourceBIdwiseComponents[$component['id']] = $comp;     
+            //             // id wise components
+            //             $sourceBIdwiseComponents[$component['id']] = $comp;     
                       
-                        if($component['nodeId'] !== NULL)
-                        {
-                             // node id wise components             
-                             if(array_key_exists($component['nodeId'], $sourceBNodeIdwiseComponents))
-                             {
-                                 array_push($sourceBNodeIdwiseComponents[$component['nodeId']], $comp );
-                             }
-                             else
-                             {
-                                 $sourceBNodeIdwiseComponents[$component['nodeId']] = array( $comp );
-                             }
+            //             if($component['nodeId'] !== NULL)
+            //             {
+            //                  // node id wise components             
+            //                  if(array_key_exists($component['nodeId'], $sourceBNodeIdwiseComponents))
+            //                  {
+            //                      array_push($sourceBNodeIdwiseComponents[$component['nodeId']], $comp );
+            //                  }
+            //                  else
+            //                  {
+            //                      $sourceBNodeIdwiseComponents[$component['nodeId']] = array( $comp );
+            //                  }
 
-                            // // node id wise components
-                            // $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
-                            //                                                     'name'=>$component['name'],  
-                            //                                                     'mainClass'=>$component['mainClass'],
-                            //                                                     'subClass'=>$component['subClass'],
-                            //                                                     'nodeId'=>$component['nodeId'],
-                            //                                                     'mainComponentId'=>$component['mainComponentId']); 
-                        }
-                        else
-                        {
-                            // class wise components             
-                            if(array_key_exists($component['mainClass'], $sourceBNodeIdwiseComponents))
-                            {
-                                array_push($sourceBNodeIdwiseComponents[$component['mainClass']], $comp );
-                            }
-                            else
-                            {
-                                $sourceBNodeIdwiseComponents[$component['mainClass']] = array( $comp );
-                            }
+            //                 // // node id wise components
+            //                 // $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+            //                 //                                                     'name'=>$component['name'],  
+            //                 //                                                     'mainClass'=>$component['mainClass'],
+            //                 //                                                     'subClass'=>$component['subClass'],
+            //                 //                                                     'nodeId'=>$component['nodeId'],
+            //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
+            //             }
+            //             else
+            //             {
+            //                 // class wise components             
+            //                 if(array_key_exists($component['mainClass'], $sourceBNodeIdwiseComponents))
+            //                 {
+            //                     array_push($sourceBNodeIdwiseComponents[$component['mainClass']], $comp );
+            //                 }
+            //                 else
+            //                 {
+            //                     $sourceBNodeIdwiseComponents[$component['mainClass']] = array( $comp );
+            //                 }
 
 
-                            //  // node id wise components
-                            //  $sourceBNodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
-                            //                                                                 'name'=>$component['name'],  
-                            //                                                                 'mainClass'=>$component['mainClass'],
-                            //                                                                 'subClass'=>$component['subClass'],
-                            //                                                                 'nodeId'=>$component['nodeId'],
-                            //                                                                 'mainComponentId'=>$component['mainComponentId']); 
-                        }
-                    }    
-                }
-            }
+            //                 //  // node id wise components
+            //                 //  $sourceBNodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
+            //                 //                                                                 'name'=>$component['name'],  
+            //                 //                                                                 'mainClass'=>$component['mainClass'],
+            //                 //                                                                 'subClass'=>$component['subClass'],
+            //                 //                                                                 'nodeId'=>$component['nodeId'],
+            //                 //                                                                 'mainComponentId'=>$component['mainComponentId']); 
+            //             }
+            //         }    
+            //     }
+            // }
            
-            $selectedComponents =array();
+            // $selectedComponents =array();
 
-            if( $sourceAIdwiseComponents !== NULL && 
-                $sourceANodeIdwiseComponents !== NULL)
-            {
-                $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
-                $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
-            }
+            // if( $sourceAIdwiseComponents !== NULL && 
+            //     $sourceANodeIdwiseComponents !== NULL)
+            // {
+            //     $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
+            //     $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
+            // }
 
-            if( $sourceBIdwiseComponents !== NULL && 
-                $sourceBNodeIdwiseComponents !== NULL)
-            {
-                $selectedComponents['SourceBIDwiseSelectedComps'] = $sourceBIdwiseComponents;
-                $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
-            }
+            // if( $sourceBIdwiseComponents !== NULL && 
+            //     $sourceBNodeIdwiseComponents !== NULL)
+            // {
+            //     $selectedComponents['SourceBIDwiseSelectedComps'] = $sourceBIdwiseComponents;
+            //     $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
+            // }
 
             echo json_encode($selectedComponents);
 
@@ -2132,6 +2329,65 @@ function ReadSelectedComponents()
             return "fail"; 
             //return;
         } 
+}
+
+function ReadSelectedComponentsFromDB($dbh, $table)
+{
+    $idwiseComponents = NULL;
+    $nodeIdwiseComponents = [];
+
+    $results = $dbh->query("SELECT *FROM  ".$table);     
+    if($results)
+    {
+        while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $comp = array('id'=>$component['id'], 
+                        'name'=>$component['name'],  
+                        'mainClass'=>$component['mainClass'],
+                        'subClass'=>$component['subClass'],
+                        'nodeId'=>$component['nodeId'],
+                        'mainComponentId'=>$component['mainComponentId']);
+
+            // id wise components
+            $idwiseComponents[$component['id']] = $comp;                       
+
+            if($component['nodeId'] !== NULL)
+            {                           
+                // node id wise components             
+                if(array_key_exists($component['nodeId'], $nodeIdwiseComponents))
+                {
+                    array_push($nodeIdwiseComponents[$component['nodeId']], $comp );
+                }
+                else
+                {
+                    $nodeIdwiseComponents[$component['nodeId']] = array( $comp );
+                }                            
+               
+            }
+            else
+            {
+                // class wise components             
+                if(array_key_exists($component['mainClass'], $nodeIdwiseComponents))
+                {
+                    array_push($nodeIdwiseComponents[$component['mainClass']], $comp );
+                }
+                else
+                {
+                    $nodeIdwiseComponents[$component['mainClass']] = array( $comp );
+                }
+            }
+        }    
+    }
+
+    $selectedComponents =array();
+    if( $idwiseComponents !== NULL && 
+        $nodeIdwiseComponents !== NULL)    
+      {
+        $selectedComponents['IdwiseSelectedComps'] = $idwiseComponents;
+        $selectedComponents['NodeIdwiseSelectedComps'] = $nodeIdwiseComponents;
+      }  
+      
+      return $selectedComponents;
 }
 
 function CreateProjectSession()

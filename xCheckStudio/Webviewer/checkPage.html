@@ -786,6 +786,8 @@
   
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageSave.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageCleanUp.js"></script>
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProject.js"></script>
     
   <script>
     $("#loadIndicator").dxLoadPanel({
@@ -817,6 +819,9 @@
 
       // create drawer menu
       DrawerMenu.create(["check"]);
+
+      //load data from saved check space
+      loadCheckSpaceInCheckPage();
 
       // // hide busy indicator
       // hideBusyIndicator();

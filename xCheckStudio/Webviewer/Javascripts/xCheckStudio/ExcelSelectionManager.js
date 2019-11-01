@@ -36,7 +36,7 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
                this.SelectedComponentNodeIds.push(componentData.RowKey);
           }
      }
-     else if (this.SelectedCompoentExists(componentData)) {
+     else if (checkBoxState === "off" && this.SelectedCompoentExists(componentData)) {
           this.RemoveFromselectedCompoents(componentData);
 
           // restore color

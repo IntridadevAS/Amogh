@@ -7,13 +7,14 @@
 // var modelBrowserOwnerColumn = 6;
 //var modelBrowserNodeIdColumn = 4;
 
-function SCModelBrowser(modelBrowserContainer,
+function SCModelBrowser(id,
+    modelBrowserContainer,
     viewer,
     sourceType,
     nodeIdvsSelectedComponents) {
 
     // call super constructor
-    ModelBrowser.call(this, modelBrowserContainer);
+    ModelBrowser.call(this, id, modelBrowserContainer);
 
     this.Components;
     this.Webviewer = viewer;
@@ -197,7 +198,8 @@ SCModelBrowser.prototype.Clear = function () {
 }
 
 SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
-
+    
+    var loadingBrower = true;
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
     // this.Clear();
@@ -229,6 +231,13 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             selection: {
                 mode: "multiple",
                 recursive: true,
+            },
+            onContentReady: function (e) {
+                if(loadingBrower && _this.SelectionManager.NodeIdvsSelectedComponents)
+                {
+                    e.component.selectRows(Object.keys(_this.SelectionManager.NodeIdvsSelectedComponents));
+                }
+                loadingBrower = false;
             },  
             onInitialized: function(e) {
                 // initialize the context menu
@@ -252,13 +261,24 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             onRowClick: function(e) {
                 _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
             },
-            onRowPrepared: function(e) {
-                if(e.isSelected) {
+            onRowPrepared: function (e) {
+                if (e.rowType !== "data") {
+                    return;
+                }
+
+                // if (e.data.NodeId in _this.SelectionManager.NodeIdvsSelectedComponents) {
+                //     e.isSelected = true;
+                // }
+
+                if (e.isSelected) {
                     _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
                 }
-                if(e.rowType == "data" && SourceManagers[model.currentTabId].HiddenNodeIds.includes(e.data.NodeId)) {
-                    var selectedRows = [e.rowElement[0]];
-                    _this.HighlightHiddenRows(true, selectedRows);
+
+                if (_this.Id in SourceManagers) {
+                    if (SourceManagers[_this.Id].HiddenNodeIds.includes(e.data.NodeId)) {
+                        var selectedRows = [e.rowElement[0]];
+                        _this.HighlightHiddenRows(true, selectedRows);
+                    }
                 }
             }
         });
@@ -284,19 +304,34 @@ SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(selectedNodeIds) 
 }
 
 SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
+    // for (var i = 0; i < selectedRows.length; i++) {
+    //     var selectedRow = selectedRows[i];
+    //     selectedRow.style.backgroundColor = "#b3b5b5";
+    //     /*for(var j = 0; j < selectedRow.cells.length; j++) {
+    //         var cell = selectedRow.cells[j];
+    //         isHide ? cell.style.color = "#b3b5b5" : cell.style.color = "black";
+    //     }*/
+    // } 
+    
+    
     for (var i = 0; i < selectedRows.length; i++) {
         var selectedRow = selectedRows[i];
-        selectedRow.style.backgroundColor = "#b3b5b5";
-        /*for(var j = 0; j < selectedRow.cells.length; j++) {
+
+        for (var j = 0; j < selectedRow.cells.length; j++) {
             var cell = selectedRow.cells[j];
-            isHide ? cell.style.color = "#b3b5b5" : cell.style.color = "black";
-        }*/
-    }     
+            if (isHide) {
+                cell.style.color = "#b3b5b5";
+            }
+            else {
+                cell.style.color = "black";
+            }
+        }
+    }
 }
 
 SCModelBrowser.prototype.ShowAllHiddenRows = function() {
     var selectedRows = [];
-    var sourceManager = SourceManagers[model.currentTabId];
+    var sourceManager = SourceManagers[this.Id];
     var hiddenNodeIds = sourceManager.HiddenNodeIds;
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
 

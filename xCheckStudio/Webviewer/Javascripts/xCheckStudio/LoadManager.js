@@ -56,7 +56,8 @@ let LoadManager = {
                                     fileName += fileNames[i] + ", ";
                                 }
                             }
-                            var sourceManager = createSourceManager(fileName,
+                            var sourceManager = createSourceManager(sourceId,
+                                fileName,
                                 fileExtension,
                                 viewerContainer,
                                 modelTreeContainer,
@@ -102,7 +103,7 @@ let LoadManager = {
             let fileName = file.name;
             //var fileExtension = xCheckStudio.Util.getFileExtension(fileName);
 
-            var sourceManager = createSourceManager(fileName, fileExtension, viewerContainer, modelTreeContainer);
+            var sourceManager = createSourceManager(sourceId, fileName, fileExtension, viewerContainer, modelTreeContainer);
             SourceManagers[sourceId] = sourceManager;
             sourceManager.LoadData(file).then(function (result) {
                 return resolve(true);
@@ -145,7 +146,7 @@ let LoadManager = {
                        
                         if (success) {
                             
-                            var sourceManager = createSourceManager(fileName, fileExtension, viewerContainer, modelTreeContainer);
+                            var sourceManager = createSourceManager(sourceId, fileName, fileExtension, viewerContainer, modelTreeContainer);
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData(uri).then(function (result) {
                           

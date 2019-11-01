@@ -1,7 +1,8 @@
 var SourceManagers = {};
 
-function SourceManager(sourceName, sourceType)
+function SourceManager(id, sourceName, sourceType)
 {
+    this.Id = id;
     this.SourceName = sourceName;  
     this.SourceType = sourceType;  
     // this.IsFirstViewer = isFirstViewer;

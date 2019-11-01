@@ -1,6 +1,6 @@
-function ModelBrowserContextMenu() {     
+function ModelBrowserContextMenu() {
       this.ModelBrowser;
-     
+
       this.IsolateManager;
 }
 
@@ -106,11 +106,11 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       }
       else if (key.toLowerCase() === "reference") {
             this.OnReferenceClicked();
-      }      
+      }
 }
 
 ModelBrowserContextMenu.prototype.OnReferenceClicked = function () {
-      
+
       // var referenceManager = new ReferenceManager();
       // referenceManager.ShowReferenceDiv();
       var title = "";
@@ -137,6 +137,28 @@ ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
       this.IsolateManager.Isolate(nodeIds).then(function (affectedNodes) {
 
       });
+
+      // maintain hidden elements
+      if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
+            sourceManager.HiddenNodeIds = [];
+
+            var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
+            for (var i = 0; i < Object.keys(allNodeIds).length; i++) {
+                  var nodeId = Number(allNodeIds[i]);
+                  if (!nodeIds.includes(nodeId)) {
+                        sourceManager.HiddenNodeIds.push(nodeId);
+                  }
+            }
+
+            //Grey out the text of hidden element rows
+            var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
+            sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
+
+            // unhighlight the hidden rows made visible
+            selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(nodeIds);
+            sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
+      }
 }
 
 ModelBrowserContextMenu.prototype.OnHideClicked = function () {
@@ -152,7 +174,7 @@ ModelBrowserContextMenu.prototype.OnHideClicked = function () {
       }
 
       this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, false);
-      
+
       var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
 
       // Handle hidden elements nodeIds list 
@@ -192,7 +214,7 @@ ModelBrowserContextMenu.prototype.OnShowClicked = function () {
       if (this.IsolateManager) {
             this.IsolateManager.IsolatedNodes = [];
       }
-      
+
       var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
       // Handle hidden elements nodeIds list 
       SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(false, selectedNodeIds);
@@ -214,94 +236,93 @@ ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
       if (!nodeIds ||
             nodeIds.length === 0) {
             return;
-      }      
-      
+      }
+
       var selectedNodes = {};
-      selectedNodes[this.ModelBrowser.Webviewer._params.containerId] = nodeIds;   
+      selectedNodes[this.ModelBrowser.Webviewer._params.containerId] = nodeIds;
 
       var ids = this.GetControlIds();
 
       var translucencyManager = new TranslucencyManager([this.ModelBrowser.Webviewer], selectedNodes, ids["translucency"]);
       translucencyManager.Start();
-      
+
       translucencyManagers[this.ModelBrowser.Webviewer._params.containerId] = translucencyManager;
 }
 
 ModelBrowserContextMenu.prototype.GetControlIds = function () {
       var ids = {};
       if (this.ModelBrowser.Webviewer._params.containerId === "visualizerA") {
-          
-          var explode = {};
-          explode["slider"] = "explodeSlider1"
-          explode["output"] = "explodeValue1";
-          explode["overlay"] = "explodeOverlay1";
-          ids["explode"] = explode;
-  
-          var translucency = {};
-          translucency["slider"] = "translucencySlider1"
-          translucency["output"] = "translucencyValue1";
-          translucency["overlay"] = "translucencyOverlay1";
-          ids["translucency"] = translucency;        
+
+            var explode = {};
+            explode["slider"] = "explodeSlider1"
+            explode["output"] = "explodeValue1";
+            explode["overlay"] = "explodeOverlay1";
+            ids["explode"] = explode;
+
+            var translucency = {};
+            translucency["slider"] = "translucencySlider1"
+            translucency["output"] = "translucencyValue1";
+            translucency["overlay"] = "translucencyOverlay1";
+            ids["translucency"] = translucency;
       }
       else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerB") {
-          
-          var explode = {};
-          explode["slider"] = "explodeSlider2"
-          explode["output"] = "explodeValue2";
-          explode["overlay"] = "explodeOverlay2";
-          ids["explode"] = explode;   
-          
-          var translucency = {};
-          translucency["slider"] = "translucencySlider2"
-          translucency["output"] = "translucencyValue2";
-          translucency["overlay"] = "translucencyOverlay2";
-          ids["translucency"] = translucency;
+
+            var explode = {};
+            explode["slider"] = "explodeSlider2"
+            explode["output"] = "explodeValue2";
+            explode["overlay"] = "explodeOverlay2";
+            ids["explode"] = explode;
+
+            var translucency = {};
+            translucency["slider"] = "translucencySlider2"
+            translucency["output"] = "translucencyValue2";
+            translucency["overlay"] = "translucencyOverlay2";
+            ids["translucency"] = translucency;
       }
       else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerC") {
-          var explode = {};
-          explode["slider"] = "explodeSlider3"
-          explode["output"] = "explodeValue3";
-          explode["overlay"] = "explodeOverlay3";
-          ids["explode"] = explode;      
-  
-          var translucency = {};
-          translucency["slider"] = "translucencySlider3"
-          translucency["output"] = "translucencyValue3";
-          translucency["overlay"] = "translucencyOverlay3";
-          ids["translucency"] = translucency;
+            var explode = {};
+            explode["slider"] = "explodeSlider3"
+            explode["output"] = "explodeValue3";
+            explode["overlay"] = "explodeOverlay3";
+            ids["explode"] = explode;
+
+            var translucency = {};
+            translucency["slider"] = "translucencySlider3"
+            translucency["output"] = "translucencyValue3";
+            translucency["overlay"] = "translucencyOverlay3";
+            ids["translucency"] = translucency;
       }
       else if (this.ModelBrowser.Webviewer._params.containerId === "visualizerD") {
-          var explode = {};
-          explode["slider"] = "explodeSlider4"
-          explode["output"] = "explodeValue4";
-          explode["overlay"] = "explodeOverlay4";
-          ids["explode"] = explode;
-  
-          var translucency = {};
-          translucency["slider"] = "translucencySlider4"
-          translucency["output"] = "translucencyValue4";
-          translucency["overlay"] = "translucencyOverlay4";
-          ids["translucency"] = translucency;
+            var explode = {};
+            explode["slider"] = "explodeSlider4"
+            explode["output"] = "explodeValue4";
+            explode["overlay"] = "explodeOverlay4";
+            ids["explode"] = explode;
+
+            var translucency = {};
+            translucency["slider"] = "translucencySlider4"
+            translucency["output"] = "translucencyValue4";
+            translucency["overlay"] = "translucencyOverlay4";
+            ids["translucency"] = translucency;
       }
-  
+
       return ids;
-  }
+}
 
 ModelBrowserContextMenu.prototype.OnStopTranslucencyClicked = function () {
       var viewer = this.ModelBrowser.Webviewer;
       var viewerId = viewer._params.containerId
-      if (!(viewerId in translucencyManagers))
-      {
-          return;
+      if (!(viewerId in translucencyManagers)) {
+            return;
       }
-  
+
       translucencyManagers[viewerId].Stop();
-      delete translucencyManagers[viewerId]; 
+      delete translucencyManagers[viewerId];
 }
 
 ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
-      if (!this.ModelBrowser ||            
-          !this.ModelBrowser.SelectionManager) {
+      if (!this.ModelBrowser ||
+            !this.ModelBrowser.SelectionManager) {
             return;
       }
       var browserSelectionManager = this.ModelBrowser.SelectionManager;
@@ -320,5 +341,5 @@ ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
             }
       }
 
-     return nodeIds;
+      return nodeIds;
 }
