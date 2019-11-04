@@ -116,7 +116,7 @@ var CheckModule = {
             async: false,
             data:
             {
-                'InvokeFunction': "SaveHiddenItemsToCheckSpaceDB",
+                'InvokeFunction': "SaveHiddenItems",
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname,
                 'hiddenComponents': JSON.stringify(hiddentItems),
@@ -137,7 +137,7 @@ var CheckModule = {
             async: false,
             data:
             {
-                'InvokeFunction': "SaveReferencesToCheckSpaceDB",
+                'InvokeFunction': "SaveReferences",
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
@@ -175,7 +175,7 @@ var CheckModule = {
                 async: false,
                 data:
                 {
-                    'InvokeFunction': "CreateCheckSpaceDBonSaveInCheckModule",
+                    'InvokeFunction': "CreateCheckSpaceDBonSave",
                     'ProjectName': projectinfo.projectname,
                     'CheckName': checkinfo.checkname
                 },
@@ -393,7 +393,7 @@ var CheckModule = {
                 async: false,
                 data:
                 {
-                    'InvokeFunction': "SaveViewerOptionsToCheckSpaceDB",
+                    'InvokeFunction': "SaveVieweroptions",
                     "SourceViewerOptions": JSON.stringify(viewerOptions),
                     "SourceViewerOptionsTable": tableName,
                     'ProjectName': projectinfo.projectname,

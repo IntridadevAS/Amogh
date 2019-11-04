@@ -68,24 +68,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveComponentsToCheckSpaceDB":
             SaveComponentsToCheckSpaceDB();         
             break;
-        case "CreateCheckSpaceDBonSaveInCheckModule":
-            CreateCheckSpaceDBonSaveInCheckModule();         
+        case "CreateCheckSpaceDBonSave":
+             CreateCheckSpaceDBonSave();         
             break;
-        case "SaveViewerOptionsToCheckSpaceDB":
-            SaveViewerOptionsToCheckSpaceDB();
+        case "SaveVieweroptions":
+            SaveVieweroptions();
             break;
         case "ClearTemporaryCheckSpaceDB":
             ClearTemporaryCheckSpaceDB();
             break;
-        case  "SaveHiddenItemsToCheckSpaceDB":
-            SaveHiddenItemsToCheckSpaceDB();
+        case  "SaveHiddenItems":
+            SaveHiddenItems();
             break;
-        case "SaveReferencesToCheckSpaceDB":
-            SaveReferencesToCheckSpaceDB();         
+        case "SaveReferences":
+            SaveReferences();         
             break;
-        // case "SaveCheckResultsToCheckSpaceDB":
-        // SaveCheckResultsToCheckSpaceDB();         
-        //     break;            
+        case "SaveAll":
+            SaveAll();         
+            break;            
         default:
             echo "No Function Found!";
     }
@@ -154,6 +154,153 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //     } 
 // }
 
+function SaveAll()
+{   
+    if(!isset( $_POST['ProjectName']) ||
+    !isset( $_POST['CheckName']) ||
+    !isset( $_POST['Context']))
+    {
+        echo json_encode(array("Msg" =>  "Invalid input.",
+        "MsgCode" => 0));  
+
+        return;
+    }
+
+    // get project name
+    $projectName = $_POST['ProjectName'];	
+    $checkName = $_POST['CheckName'];
+   
+    $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+    $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
+    
+    // create or rewrite the main check space db
+    CreateCheckSpaceDBonSave();
+
+    if(!file_exists ($dbPath ) || 
+       !file_exists ($tempDBPath ))
+    { 
+        echo json_encode(array("Msg" =>  "DBs not found.",
+        "MsgCode" => 0));  
+
+        return;
+    }       
+
+    $context = $_POST['Context'];
+    
+    try
+    {        
+        // open database             
+        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
+
+        //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+
+        // begin the transaction
+        $dbh->beginTransaction();
+        $tempDbh->beginTransaction();   
+
+        // this will save all sources components, properties                       
+         SaveComponents( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
+         SaveComponents( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
+         // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
+         // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
+
+         // save check case info 
+         SaveCheckCaseInfo($tempDbh, $dbh);        
+       
+         // 'check' context save needs to be changed for viewer opttions
+        if($context === "check")
+        {
+            //  // save check module control state from temp check space db to main checkspace db
+            // SaveCheckModuleControlsState();
+
+            // // save loaded data sources information
+            // SaveDataSourceInfo();
+
+            // // save viewer related information            
+            // SaveVieweroptions();
+
+            // // save selected components
+
+            // // save not selected components
+
+            // // save references
+
+            // // save hiddent items
+            // SaveHiddenItems();
+
+            // // save check result statistics
+            // SaveCheckStatistics($tempDbh, $dbh);
+
+        }
+        else
+        {
+             // save check module control state from temp check space db to main checkspace db
+             SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh);
+
+            // save loaded data sources information
+            SaveDataSourceInfoFromTempDB($tempDbh, $dbh);
+
+            // save viewer related information
+            SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceAViewerOptions");
+            SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceBViewerOptions");
+
+            // save selected components
+            SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceASelectedComponents");
+            SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBSelectedComponents");
+
+            // // save not selected components
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceANotSelectedComponents");
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBNotSelectedComponents");
+
+             // save references                 
+            SaveReferencesFromTemp( $tempDbh, $dbh, "a_References");          
+            SaveReferencesFromTemp( $tempDbh, $dbh, "b_References");
+            SaveReferencesFromTemp( $tempDbh, $dbh, "c_References");          
+            SaveReferencesFromTemp( $tempDbh, $dbh, "d_References");
+
+            // save hiddent items
+            SaveHiddenItemsFromTemp($tempDbh, $dbh);     
+            
+            // save check result statistics
+            SaveCheckStatisticsFromTemp($tempDbh, $dbh);
+        }
+
+        // comparison result tables table                               
+        SaveComparisonComponentsFromTemp( $tempDbh, $dbh);          
+        SaveComparisonGroupsFromTemp( $tempDbh, $dbh);
+        SaveComparisonPropertiesFromTemp( $tempDbh, $dbh);              
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceANotMatchedComponents");
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceBNotMatchedComponents");
+
+        // source a compliance result tables table     
+        SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh);
+        SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh);
+        SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh);
+
+        // source b compliance result tables table          
+        SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh);
+        SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh);
+        SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh);     
+
+        // commit update
+        $dbh->commit();
+        $tempDbh->commit();
+        $dbh = null; //This is how you close a PDO connection                    
+        $tempDbh = null; //This is how you close a PDO connection                        
+
+        echo json_encode(array("Msg" =>  "success",
+        "MsgCode" => 1));  
+        return;
+    }
+    catch(Exception $e) 
+    {        
+        echo json_encode(array("Msg" =>  "Failed to save data.",
+        "MsgCode" => 0));  
+        return;
+    } 
+}
+
 function SaveCheckResultsToCheckSpaceDB()
 {
     // get project name
@@ -183,21 +330,21 @@ function SaveCheckResultsToCheckSpaceDB()
         $tempDbh->beginTransaction();            
     
         // comparison result tables table                               
-        SaveComparisonComponents( $tempDbh, $dbh);          
-        SaveComparisonGroups( $tempDbh, $dbh);
-        SaveComparisonProperties( $tempDbh, $dbh);              
-        SaveNotMatchedComponentsToCheckSpaceDB($tempDbh, $dbh, "SourceANotMatchedComponents");
-        SaveNotMatchedComponentsToCheckSpaceDB($tempDbh, $dbh, "SourceBNotMatchedComponents");
+        SaveComparisonComponentsFromTemp( $tempDbh, $dbh);          
+        SaveComparisonGroupsFromTemp( $tempDbh, $dbh);
+        SaveComparisonPropertiesFromTemp( $tempDbh, $dbh);              
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceANotMatchedComponents");
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceBNotMatchedComponents");
 
         // source a compliance result tables table     
-        SaveSourceAComplianceCheckGroups($tempDbh, $dbh);
-        SaveSourceAComplianceCheckComponents($tempDbh, $dbh);
-        SaveSourceAComplianceCheckProperties($tempDbh, $dbh);
+        SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh);
+        SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh);
+        SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh);
 
         // source b compliance result tables table          
-        SaveSourceBComplianceCheckGroups($tempDbh, $dbh);
-        SaveSourceBComplianceCheckComponents($tempDbh, $dbh);
-        SaveSourceBComplianceCheckProperties($tempDbh, $dbh);       
+        SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh);
+        SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh);
+        SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh);       
 
         // save check result statistics
         SaveCheckStatistics($tempDbh, $dbh);
@@ -260,7 +407,7 @@ function SaveCheckResultsToCheckSpaceDB()
 //     }
 // }
 
-function SaveComparisonProperties( $tempDbh, $dbh)
+function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckProperties;");  
     if($selectResults) 
@@ -317,7 +464,7 @@ function SaveComparisonProperties( $tempDbh, $dbh)
     }
 }
 
-function SaveComparisonGroups( $tempDbh, $dbh)
+function SaveComparisonGroupsFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups;");  
     if($selectResults) 
@@ -350,7 +497,7 @@ function SaveComparisonGroups( $tempDbh, $dbh)
     }
 }
 
-function SaveComparisonComponents( $tempDbh, $dbh)
+function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckComponents;");  
     if($selectResults) 
@@ -453,7 +600,7 @@ function ClearTemporaryCheckSpaceDB()
     } 
 }
 
-function CreateCheckSpaceDBonSaveInCheckModule()
+function CreateCheckSpaceDBonSave()
 {
     // get project name
     $projectName = $_POST['ProjectName'];
@@ -479,7 +626,7 @@ function CreateCheckSpaceDBonSaveInCheckModule()
     return;
 }
 
-function SaveReferencesToCheckSpaceDB()
+function SaveReferences()
 {
     // get project name
     $projectName = $_POST['ProjectName'];	
@@ -506,11 +653,11 @@ function SaveReferencesToCheckSpaceDB()
          $dbh->beginTransaction();
          $tempDbh->beginTransaction();            
        
-         // comparison result tables table                               
-         SaveReferences( $tempDbh, $dbh, "a_References");          
-         SaveReferences( $tempDbh, $dbh, "b_References");
-         SaveReferences( $tempDbh, $dbh, "c_References");          
-         SaveReferences( $tempDbh, $dbh, "d_References");
+         // references on components               
+         SaveReferencesFromTemp( $tempDbh, $dbh, "a_References");          
+         SaveReferencesFromTemp( $tempDbh, $dbh, "b_References");
+         SaveReferencesFromTemp( $tempDbh, $dbh, "c_References");          
+         SaveReferencesFromTemp( $tempDbh, $dbh, "d_References");
 
          // commit update
          $dbh->commit();
@@ -528,7 +675,38 @@ function SaveReferencesToCheckSpaceDB()
      } 
 }
 
-function SaveHiddenItemsToCheckSpaceDB()
+/* 
+   Save hidden items in model browser
+*/
+function SaveHiddenItemsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM hiddenComponents;");  
+    if($selectResults) 
+    {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS hiddenComponents;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE hiddenComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                hiddenComponents TEXT,
+                visibleComponents TEXT)'; 
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare("INSERT INTO hiddenComponents(id, hiddenComponents, visibleComponents) VALUES(?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['hiddenComponents'], 
+                                       $row['visibleComponents']));
+        }  
+       
+    }
+}
+
+function SaveHiddenItems()
 {
     if(!isset($_POST['hiddenComponents']) ||
     !isset($_POST['ProjectName']) ||
@@ -582,7 +760,7 @@ function SaveHiddenItemsToCheckSpaceDB()
     }  
 }
 
-function SaveReferences($tempDbh, $dbh, $referenceTable)
+function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
     if($selectResults) 
@@ -670,7 +848,33 @@ function SaveComponentsToCheckSpaceDB()
         } 
 }
 
-function SaveViewerOptionsToCheckSpaceDB()
+function SaveVieweroptionsFromTemp($tempDbh, $dbh, $tableName)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
+    if($selectResults) 
+    {
+        // create table
+        // drop table if exists
+       // drop table if exists
+       $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
+       $dbh->exec($command);
+
+       $command = 'CREATE TABLE '.$tableName.'(
+                   id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, 
+                   endpointUri TEXT)';            
+       $dbh->exec($command);  
+
+       $insertStmt = $dbh->prepare('INSERT INTO '.$tableName.'(id, endpointUri) VALUES(?,?) ');                                        
+      
+       while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['endpointUri']));
+        }           
+    }
+}
+
+function SaveVieweroptions()
 {
 
         if(!isset($_POST['ProjectName']) ||
@@ -820,7 +1024,42 @@ function SaveComponents( $tempDbh, $dbh, $componentTable, $propertiesTable)
             }  
         }
     }   
-  }
+}
+
+/*
+   Save not selected components
+*/
+function SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
+    if($selectResults) 
+    {
+
+        $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+        $dbh->exec($command);    
+        $command = 'CREATE TABLE '.$tableName.'(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            mainClass TEXT,
+            subClass TEXT,
+            nodeId TEXT,
+            mainTableId TEXT)'; 
+        $dbh->exec($command);   
+
+        $insertStmt = $dbh->prepare("INSERT INTO ".$tableName."(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainTableId']));
+        } 
+    }
+}
 
 function SaveNotSelectedComponents()
 {
@@ -1142,71 +1381,7 @@ function isComponentSelected($component, $SelectedComponents){
 //     }
 // }
 
-// function SaveSelectedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-//     if($selectResults) 
-//     {
-//         // create table
-//         // drop table if exists
-//         $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
-//         $dbh->exec($command);
-
-//         $command = 'CREATE TABLE '. $tableName. '(
-//             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-//             name TEXT NOT NULL,
-//             mainClass TEXT NOT NULL,
-//             subClass TEXT NOT NULL,
-//             nodeId INTEGER,
-//             mainComponentId INTEGER
-//             )';         
-//         $dbh->exec($command);   
-        
-//         $insertStmt = $dbh->prepare("INSERT INTO ". $tableName. "(id, name, mainClass, subClass, 
-//                       nodeId, mainComponentId) VALUES(?,?,?,?,?,?)");
-    
-    
-//         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], 
-//                                        $row['name'], 
-//                                        $row['mainClass'],
-//                                        $row['subClass'], 
-//                                        $row['nodeId'], 
-//                                        $row['mainComponentId']));
-//         }                    
-//     }  
-// }
-
-// function SaveVieweroptions($tempDbh, $dbh, $tableName)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-//     if($selectResults) 
-//     {
-//         // create table
-//         // drop table if exists
-//        // drop table if exists
-//        $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
-//        $dbh->exec($command);
-
-//        $command = 'CREATE TABLE '.$tableName.'(
-//                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
-//                    containerId TEXT,
-//                    endpointUri TEXT)';            
-//        $dbh->exec($command);  
-
-//        $insertStmt = $dbh->prepare('INSERT INTO '.$tableName.'(id, containerId, endpointUri) VALUES(?, ?,?) ');                                        
-      
-//        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], 
-//                                        $row['containerId'], 
-//                                        $row['endpointUri']));
-//         }           
-//     }
-// }
-
-function   SaveNotMatchedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
+function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
     if($selectResults) 
@@ -1239,67 +1414,6 @@ function   SaveNotMatchedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
     }
 }
 
-// function SaveNotSelectedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-//     if($selectResults) 
-//     {
-
-//         $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-//         $command = 'CREATE TABLE '.$tableName.'(
-//             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-//             name TEXT,
-//             mainClass TEXT,
-//             subClass TEXT,
-//             nodeId TEXT,
-//             mainTableId TEXT)'; 
-//         $dbh->exec($command);  
-        
-//         $insertStmt = $dbh->prepare("INSERT INTO ".$tableName."(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
-    
-    
-//         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], 
-//                                        $row['name'], 
-//                                        $row['mainClass'],
-//                                        $row['subClass'], 
-//                                        $row['nodeId'], 
-//                                        $row['mainTableId']));
-//         } 
-//     }
-// }
-
-// function SaveDataSourceInfoToCheckSpaceDB($tempDbh, $dbh)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM DatasourceInfo;");
-//     if($selectResults) 
-//     {
-
-//         $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
-//         $command = 'CREATE TABLE DatasourceInfo(
-//                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-//                     sourceAFileName TEXT,
-//                     sourceBFileName TEXT,
-//                     sourceAType TEXT,
-//                     sourceBType TEXT,
-//                     orderMaintained Text)';         
-//         $dbh->exec($command);      
-        
-//         $insertStmt = $dbh->prepare("INSERT INTO DatasourceInfo(id, sourceAFileName, sourceBFileName, sourceAType, 
-//         sourceBType ,orderMaintained) VALUES(?,?,?,?,?,?)");    
-    
-//         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], 
-//                                        $row['sourceAFileName'], 
-//                                        $row['sourceBFileName'],
-//                                        $row['sourceAType'], 
-//                                        $row['sourceBType'], 
-//                                        $row['orderMaintained']));
-//         } 
-//     }
-// }
 
 // function SaveCheckModuleControlsStateToCheckSpaceDB($tempDbh, $dbh)
 // {
@@ -1331,6 +1445,74 @@ function   SaveNotMatchedComponentsToCheckSpaceDB($tempDbh, $dbh, $tableName)
 //         } 
 //     }
 // }
+
+/* 
+    Save check statistics
+*/
+function  SaveCheckStatisticsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM CheckStatistics");
+    if($selectResults) 
+    {
+
+        $command = 'DROP TABLE IF EXISTS CheckStatistics;';
+        $dbh->exec($command);  
+
+       $command = 'CREATE TABLE IF NOT EXISTS CheckStatistics(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        comparisonOK TEXT ,
+        comparisonError TEXT ,
+        comparisonWarning TEXT ,
+        comparisonNoMatch TEXT ,
+        comparisonUndefined TEXT ,
+        comparisonCheckGroupsInfo TEXT ,
+        sourceAComplianceOK TEXT ,
+        sourceAComplianceError TEXT ,
+        sourceAComplianceWarning TEXT ,
+        sourceAComplianceCheckGroupsInfo TEXT ,
+        sourceBComplianceOK TEXT ,
+        sourceBComplianceError TEXT ,
+        sourceBComplianceWarning TEXT ,
+        sourceBComplianceCheckGroupsInfo TEXT )'; 
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO CheckStatistics(id,
+        comparisonOK, 
+        comparisonError, 
+        comparisonWarning, 
+        comparisonNoMatch,
+        comparisonUndefined,
+        comparisonCheckGroupsInfo, 
+        sourceAComplianceOK, 
+        sourceAComplianceError, 
+        sourceAComplianceWarning, 
+        sourceAComplianceCheckGroupsInfo,
+        sourceBComplianceOK, 
+        sourceBComplianceError, 
+        sourceBComplianceWarning, 
+        sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");    
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                    $row['comparisonOK'], 
+                                    $row['comparisonError'],
+                                    $row['comparisonWarning'],
+                                    $row['comparisonNoMatch'], 
+                                    $row['comparisonUndefined'], 
+                                    $row['comparisonCheckGroupsInfo'],
+                                    $row['sourceAComplianceOK'],
+                                    $row['sourceAComplianceError'], 
+                                    $row['sourceAComplianceWarning'], 
+                                    $row['sourceAComplianceCheckGroupsInfo'],
+                                    $row['sourceBComplianceOK'],
+                                    $row['sourceBComplianceError'], 
+                                    $row['sourceBComplianceWarning'], 
+                                    $row['sourceBComplianceCheckGroupsInfo']));
+        }   
+    }
+}
 
 function  SaveCheckStatistics($tempDbh, $dbh)
 {
@@ -1431,7 +1613,7 @@ function  SaveCheckStatistics($tempDbh, $dbh)
 
 }
 
-function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
+function SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckGroups");
     if($selectResults) 
@@ -1458,7 +1640,7 @@ function SaveSourceBComplianceCheckGroups($tempDbh, $dbh)
     }
 }
 
-function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
+function SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 {  
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckComponents");
     if($selectResults) 
@@ -1494,7 +1676,7 @@ function SaveSourceBComplianceCheckComponents($tempDbh, $dbh)
     }  
 }
 
-function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
+function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckProperties");
     if($selectResults) 
@@ -1532,7 +1714,7 @@ function SaveSourceBComplianceCheckProperties($tempDbh, $dbh)
     }
 }
 
-function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
+function SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckGroups");
     if($selectResults) 
@@ -1559,7 +1741,7 @@ function SaveSourceAComplianceCheckGroups($tempDbh, $dbh)
     }
 }
 
-function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
+function SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 {  
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckComponents");
     if($selectResults) 
@@ -1595,7 +1777,7 @@ function SaveSourceAComplianceCheckComponents($tempDbh, $dbh)
     }  
 }
 
-function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
+function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckProperties");
     if($selectResults) 
@@ -1850,35 +2032,47 @@ function SaveSourceAComplianceCheckProperties($tempDbh, $dbh)
 //     }  
 // }
 
-// function SaveComparisonCheckGroups( $tempDbh, $dbh)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups");
-//     if($selectResults) 
-//     {
-//         // create table
-//         $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
-//         $command = 'CREATE TABLE ComparisonCheckGroups(
-//             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-//             componentClass TEXT NOT NULL,
-//             componentCount Integer,
-//             categoryStatus TEXT NOT NULL)'; 
-//         $dbh->exec($command);    
-        
-//         $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
-    
-    
-//         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], $row['componentClass'], $row['componentCount'], $row['categoryStatus']));
-//         }                    
-//     }      
-// }
-
 /*
 |
 |   write selected components
 |
 */ 
+function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
+    if($selectResults) 
+    {
+        // create table
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE '. $tableName. '(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT NOT NULL,
+            mainClass TEXT NOT NULL,
+            subClass TEXT NOT NULL,
+            nodeId INTEGER,
+            mainComponentId INTEGER
+            )';         
+        $dbh->exec($command);          
+        
+        $insertStmt = $dbh->prepare("INSERT INTO ". $tableName. "(id, name, mainClass, subClass, 
+                      nodeId, mainComponentId) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainClass'],
+                                       $row['subClass'], 
+                                       $row['nodeId'], 
+                                       $row['mainComponentId']));
+        }                    
+    }  
+}
+
 function SaveSelectedComponents()
     {
         if(!isset($_POST['selectedComponentsTableName']) ||
@@ -1974,6 +2168,55 @@ function SaveSelectedComponents()
 |   write data sources info
 |
 */ 
+function SaveDataSourceInfoFromTempDB($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM DatasourceInfo;");
+    if($selectResults) 
+    {
+
+        $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
+        $dbh->exec($command);       
+   
+        $command = 'CREATE TABLE DatasourceInfo(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            sourceAFileName TEXT,
+            sourceBFileName TEXT,
+            sourceCFileName TEXT,
+            sourceDFileName TEXT,
+            sourceAType TEXT,
+            sourceBType TEXT,
+            sourceCType TEXT,
+            sourceDType TEXT,
+            orderMaintained Text)';      
+        $dbh->exec($command);  
+
+        $insertStmt = $dbh->prepare("INSERT INTO DatasourceInfo(id, 
+        sourceAFileName, 
+        sourceBFileName, 
+        sourceCFileName, 
+        sourceDFileName,
+        sourceAType,
+        sourceBType, 
+        sourceCType, 
+        sourceDType, 
+        orderMaintained) VALUES(?,?,?,?,?,?,?,?,?,?)");    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['sourceAFileName'], 
+                                       $row['sourceBFileName'],
+                                       $row['sourceCFileName'], 
+                                       $row['sourceDFileName'], 
+                                       $row['sourceAType'],
+                                       $row['sourceBType'],
+                                       $row['sourceCType'], 
+                                       $row['sourceDType'], 
+                                       $row['orderMaintained']));
+        } 
+    }
+}
+
 function SaveDatasourceInfo()
 {
     
@@ -2075,13 +2318,68 @@ function SaveDatasourceInfo()
      } 
 }
 
+
+
+
 /*
 |
 |   write check module controls state
 |
-*/  
+*/
+function SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh)
+{ 
+    try
+    { 
+        $selectResults = $tempDbh->query("SELECT * FROM CheckModuleControlsState;");
+        if($selectResults) 
+        {
+
+            $command = 'DROP TABLE IF EXISTS CheckModuleControlsState;';
+            $dbh->exec($command);
+            
+            $command = 'CREATE TABLE CheckModuleControlsState(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                comparisonSwith TEXT,
+                sourceAComplianceSwitch TEXT,
+                sourceBComplianceSwitch TEXT,
+                sourceCComplianceSwitch TEXT,
+                sourceDComplianceSwitch TEXT,
+                selectedDataSetTab TEXT,
+                selectedCheckCase TEXT)';         
+            $dbh->exec($command);    
+            
+            $insertStmt = $dbh->prepare("INSERT INTO CheckModuleControlsState(id, 
+            comparisonSwith, 
+            sourceAComplianceSwitch, 
+            sourceBComplianceSwitch, 
+            sourceCComplianceSwitch,
+            sourceDComplianceSwitch,
+            selectedDataSetTab,
+            selectedCheckCase) VALUES(?,?,?,?,?,?,?,?)");    
+
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                            $row['comparisonSwith'], 
+                                            $row['sourceAComplianceSwitch'],
+                                            $row['sourceBComplianceSwitch'], 
+                                            $row['sourceCComplianceSwitch'], 
+                                            $row['sourceDComplianceSwitch'],
+                                            $row['selectedDataSetTab'],
+                                            $row['selectedCheckCase']));
+            } 
+        }
+    }
+    catch(Exception $e) 
+    {       
+      return false;
+    } 
+
+    return true;
+}
+
 function SaveCheckModuleControlsState()
-{
+{   
     if(!isset($_POST["comparisonSwithOn"]) ||
     !isset($_POST["sourceAComplianceSwitchOn"]) ||
     !isset($_POST["sourceBComplianceSwitchOn"]) ||
