@@ -1,6 +1,8 @@
 var CheckModule = {
     onSaveProgress: function () {
 
+        return new Promise((resolve) => {
+
         showBusyIndicator();
 
         try {
@@ -33,7 +35,10 @@ var CheckModule = {
                      // save not references
                      CheckModule.saveHiddenItems();
 
-                    alert("Saved project information.");
+                     // save check results
+                     CheckModule.saveCheckResults();
+                    
+                     alert("Saved project information.");
                 }
             });
         }
@@ -43,10 +48,32 @@ var CheckModule = {
         finally {
             // remove busy spinner        
             hideBusyIndicator();
+
+            return resolve(true);
         }
+
+        });
     },
 
-    
+    saveCheckResults: function () {
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "SaveCheckResultsToCheckSpaceDB",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
+            success: function (msg) {
+            }
+        });
+    }, 
+
     saveHiddenItems : function()
     {
         var hiddentItems = {};

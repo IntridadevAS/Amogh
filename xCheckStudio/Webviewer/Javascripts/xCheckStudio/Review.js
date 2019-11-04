@@ -9,86 +9,90 @@ var complianceReviewManager;
 
 function initReviewModule() {
     return new Promise((resolve) => {
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-        // read  check data
-        $.ajax({
-            url: 'PHP/CheckResultsReader.php',
-            type: "POST",
-            async: true,
-            data: {
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
-            },
-            success: function (msg) {
-                checkResults = JSON.parse(msg);
+        loadCheckSpaceInReviewPage().then(function (result) {
 
-                // initialize the check data
-                model.files = {};
-                if ("sourceInfo" in checkResults) {
-                    var sourceInfo = checkResults["sourceInfo"];
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-                    // 1st source
-                    if ("sourceAFileName" in sourceInfo) {
-                        var file = {};
-                        file["id"] = "a";
-                        file["fileName"] = sourceInfo["sourceAFileName"];
-                        file["compliance"] = false;
-                        file["sourceType"] = sourceInfo["sourceAType"];
+            // read  check data
+            $.ajax({
+                url: 'PHP/CheckResultsReader.php',
+                type: "POST",
+                async: true,
+                data: {
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname
+                },
+                success: function (msg) {
+                    checkResults = JSON.parse(msg);
 
-                        model.files[file.id] = file;
+                    // initialize the check data
+                    model.files = {};
+                    if ("sourceInfo" in checkResults) {
+                        var sourceInfo = checkResults["sourceInfo"];
+
+                        // 1st source
+                        if ("sourceAFileName" in sourceInfo) {
+                            var file = {};
+                            file["id"] = "a";
+                            file["fileName"] = sourceInfo["sourceAFileName"];
+                            file["compliance"] = false;
+                            file["sourceType"] = sourceInfo["sourceAType"];
+
+                            model.files[file.id] = file;
+                        }
+
+                        // 2nd source
+                        if ("sourceBFileName" in sourceInfo) {
+                            var file = {};
+                            file["id"] = "b";
+                            file["fileName"] = sourceInfo["sourceBFileName"];
+                            file["compliance"] = false;
+                            file["sourceType"] = sourceInfo["sourceBType"];
+
+                            model.files[file.id] = file;
+                        }
                     }
 
-                    // 2nd source
-                    if ("sourceBFileName" in sourceInfo) {
-                        var file = {};
-                        file["id"] = "b";
-                        file["fileName"] = sourceInfo["sourceBFileName"];
-                        file["compliance"] = false;
-                        file["sourceType"] = sourceInfo["sourceBType"];
+                    for (var key in checkResults) {
+                        if (!checkResults.hasOwnProperty(key)) {
+                            continue;
+                        }
 
-                        model.files[file.id] = file;
-                    }
-                }
+                        if (key == 'Comparisons') {
+                            comparisons = checkResults[key];
+                        }
+                        else if (key == 'Compliances') {
+                            compliances = checkResults[key];
 
-                for (var key in checkResults) {
-                    if (!checkResults.hasOwnProperty(key)) {
-                        continue;
-                    }
+                            // set compliance true/false for sources
+                            for (var i = 0; i < compliances.length; i++) {
+                                var compliance = compliances[i];
 
-                    if (key == 'Comparisons') {
-                        comparisons = checkResults[key];
-                    }
-                    else if (key == 'Compliances') {
-                        compliances = checkResults[key];
-
-                        // set compliance true/false for sources
-                        for (var i = 0; i < compliances.length; i++) {
-                            var compliance = compliances[i];
-
-                            for (var sourceId in model.files) {
-                                var file = model.files[sourceId];
-                                if (file.fileName === compliance.source) {
-                                    file["compliance"] = true;
+                                for (var sourceId in model.files) {
+                                    var file = model.files[sourceId];
+                                    if (file.fileName === compliance.source) {
+                                        file["compliance"] = true;
+                                    }
                                 }
                             }
                         }
+                        else if (key == 'SourceAComparisonComponentsHierarchy') {
+                            sourceAComparisonHierarchy = checkResults[key];
+                        }
+                        else if (key == 'SourceBComparisonComponentsHierarchy') {
+                            sourceBComparisonHierarchy = checkResults[key];
+                        }
                     }
-                    else if (key == 'SourceAComparisonComponentsHierarchy') {
-                        sourceAComparisonHierarchy = checkResults[key];
-                    }
-                    else if (key == 'SourceBComparisonComponentsHierarchy') {
-                        sourceBComparisonHierarchy = checkResults[key];
-                    }
-                }
 
-                return resolve(true);
-            },
-            error: function (error) {
-                //alert('error; ' + eval(error));
-                return resolve(false);
-            }
+                    return resolve(true);
+                },
+                error: function (error) {
+                    //alert('error; ' + eval(error));
+                    return resolve(false);
+                }
+            });
         });
     });
 }

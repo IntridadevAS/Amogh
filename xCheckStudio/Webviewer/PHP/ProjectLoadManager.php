@@ -114,25 +114,25 @@
             // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotSelectedComponents");
             // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotSelectedComponents");
 
-            // // comparison result tables table                               
-            // CopyComparisonCheckGroups( $dbh, $tempDbh);                 
-            // CopyComparisonCheckComponents( $dbh, $tempDbh);
-            // CopyComparisonCheckProperties( $dbh, $tempDbh);
-            // CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotMatchedComponents");
-            // CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotMatchedComponents");
+            // comparison result tables table                               
+            CopyComparisonCheckGroups( $dbh, $tempDbh);                 
+            CopyComparisonCheckComponents( $dbh, $tempDbh);
+            CopyComparisonCheckProperties( $dbh, $tempDbh);
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotMatchedComponents");
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotMatchedComponents");
 
-            // // source a compliance result tables table     
-            // CopySourceAComplianceCheckGroups($dbh, $tempDbh);
-            // CopySourceAComplianceCheckComponents($dbh, $tempDbh);
-            // CopySourceAComplianceCheckProperties($dbh, $tempDbh);
+            // source a compliance result tables table     
+            CopySourceAComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceAComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceAComplianceCheckProperties($dbh, $tempDbh);
 
-            // // source b compliance result tables table          
-            // CopySourceBComplianceCheckGroups($dbh, $tempDbh);
-            // CopySourceBComplianceCheckComponents($dbh, $tempDbh);
-            // CopySourceBComplianceCheckProperties($dbh, $tempDbh);               
+            // source b compliance result tables table          
+            CopySourceBComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceBComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceBComplianceCheckProperties($dbh, $tempDbh);               
 
-            // // save check result statistics
-            // CopyCheckStatistics($dbh, $tempDbh);
+            // save check result statistics
+            CopyCheckStatistics($dbh, $tempDbh);
 
             // save refrences
             CopyCheckReferences($dbh, $tempDbh, "a_References");
@@ -674,11 +674,12 @@
                 status TEXT,
                 accepted TEXT,
                 nodeId TEXT,
+                sourceId TEXT,
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, subComponentClass, status,
-                                        accepted, nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -689,6 +690,7 @@
                                         $row['status'], 
                                         $row['accepted'], 
                                         $row['nodeId'], 
+                                        $row['sourceId'], 
                                         $row['ownerGroup']));
             }   
         }  
@@ -776,11 +778,12 @@
                 status TEXT,
                 accepted TEXT,
                 nodeId TEXT,
+                sourceId INTEGER,
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status, accepted,
-                                        nodeId, ownerGroup) VALUES(?,?,?,?,?,?,?)");
+                                        nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -791,6 +794,7 @@
                                         $row['status'], 
                                         $row['accepted'], 
                                         $row['nodeId'], 
+                                        $row['sourceId'], 
                                         $row['ownerGroup']));
             }   
         }  
@@ -886,6 +890,8 @@
                 accepted TEXT,
                 sourceANodeId TEXT,
                 sourceBNodeId TEXT,
+                sourceAId TEXT,
+                sourceBId TEXT,
                 ownerGroup INTEGER NOT NULL,
                 transpose TEXT)'; 
             $toDbh->exec($command);    
@@ -899,8 +905,10 @@
                         accepted, 
                         sourceANodeId, 
                         sourceBNodeId, 
+                        sourceAId,
+                        sourceBId,
                         ownerGroup, 
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -914,7 +922,10 @@
                                     $row['accepted'], 
                                     $row['sourceANodeId'],
                                     $row['sourceBNodeId'], 
-                                    $row['ownerGroup']));
+                                    $row['sourceAId'],
+                                    $row['sourceBId'], 
+                                    $row['ownerGroup'],
+                                    $row['transpose'],));
             }                    
         } 
     }
@@ -958,7 +969,8 @@
                                         $row['accepted'], 
                                         $row['performCheck'], 
                                         $row['description'],
-                                        $row['ownerComponent']));
+                                        $row['ownerComponent'],
+                                        $row['transpose']));
             }                    
         }  
     }

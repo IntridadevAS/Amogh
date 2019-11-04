@@ -830,7 +830,14 @@ let checkView = {
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
     //window.location.href = "checkModule.html";
-    window.location.href = "checkPage.html";
+    var fromCheckClick = localStorage.getItem('FromCheckClick')
+    // localStorage.clear();
+    if (fromCheckClick.toLowerCase() === 'true') {
+      window.location.href = "checkPage.html";
+    }
+    else if (fromCheckClick.toLowerCase() === 'false') {
+      window.location.href = "reviewPage.html";
+    }
     //localStorage.setItem("loadSavedProject",true);
   },
 
