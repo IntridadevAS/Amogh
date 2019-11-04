@@ -263,36 +263,36 @@
                                             $componentsTable)
     {          
 
-            $components = getSourceComponents($projectName, $checkName, $componentsTable);
-            if($components === NULL)
-            {               
-                return 'fail';
-            }
-          
-            $notCheckedComponents = array();
-            foreach ($components as $id => $component)
-            {            
-             
-               // check is component is selected or not for performing check
-                if(!isComponentSelected($component, $selectedComponents)) 
-                {
-                        
-                        //source A component not checked    
-                        $compKey = $component['id'];                            
-                        if(!array_key_exists($compKey, $notCheckedComponents))
-                        {
-                            $notCheckedComponents[$compKey] = $component;                                                   
-                        }
-    
-                    //continue;
-                }
-            }   
-           
-            writeNotCheckedComponentsToDB($notCheckedComponents, 
-                                          $notSelectedComponentsTable, 
-                                          $projectName,
-                                          $checkName);
+        $components = getSourceComponents($projectName, $checkName, $componentsTable);
+        if($components === NULL)
+        {               
+            return 'fail';
         }
+        
+        $notCheckedComponents = array();
+        foreach ($components as $id => $component)
+        {            
+            
+            // check is component is selected or not for performing check
+            if(!isComponentSelected($component, $selectedComponents)) 
+            {
+                    
+                    //source A component not checked    
+                    $compKey = $component['id'];                            
+                    if(!array_key_exists($compKey, $notCheckedComponents))
+                    {
+                        $notCheckedComponents[$compKey] = $component;                                                   
+                    }
+
+                //continue;
+            }
+        }   
+        
+        writeNotCheckedComponentsToDB($notCheckedComponents, 
+                                        $notSelectedComponentsTable, 
+                                        $projectName,
+                                        $checkName);
+    }
 
         
     function writeNotCheckedComponentsToDB($notCheckedComponents,                                              
@@ -357,72 +357,72 @@
     }
 
     // get source components
- function getSourceComponents($projectName, $checkName,  $componentsTable)
- {           
-     $components = array();        
+    function getSourceComponents($projectName, $checkName,  $componentsTable)
+    {           
+        $components = array();        
 
-     try{   
-             // open database
-             $dbPath = getCheckDatabasePath($projectName, $checkName);
-             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        try{   
+                // open database
+                $dbPath = getCheckDatabasePath($projectName, $checkName);
+                $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-             // begin the transaction
-             $dbh->beginTransaction();
-              
-             // fetch source omponents
-             $stmt =  $dbh->query('SELECT *FROM '.$componentsTable.';');
-            
-             if($stmt)
-             {
-                 while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                // begin the transaction
+                $dbh->beginTransaction();
+                
+                // fetch source omponents
+                $stmt =  $dbh->query('SELECT *FROM '.$componentsTable.';');
+                
+                if($stmt)
                 {
-                        $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
-                        if (array_key_exists("nodeid",$componentRow))
-                        {
-                            $values2["nodeid"] =  $componentRow['nodeid'];                               
-                        }
+                    while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                            $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
+                            if (array_key_exists("nodeid",$componentRow))
+                            {
+                                $values2["nodeid"] =  $componentRow['nodeid'];                               
+                            }
 
-                        //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
-                        $components[$componentRow['id']] = $values2;   
-                    
-                }   
-            }                  
+                            //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
+                            $components[$componentRow['id']] = $values2;   
+                        
+                    }   
+                }                  
 
-            // commit update
-             $dbh->commit();
-             $dbh = null; //This is how you close a PDO connection
-         }                
-     catch(Exception $e) {        
-         echo "fail"; 
-         return NULL;
-     }   
-     
-     return $components ;
- }   
+                // commit update
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection
+            }                
+        catch(Exception $e) {        
+            echo "fail"; 
+            return NULL;
+        }   
         
-function isComponentSelected($component, $SelectedComponents)
-{
-           
-    for($index = 0; $index < count($SelectedComponents); $index++)
+        return $components ;
+    }   
+        
+    function isComponentSelected($component, $SelectedComponents)
     {
-        $selectedComponent = $SelectedComponents[$index];              
-        if($component['name']              ==  $selectedComponent['Name'] &&
-            $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
-            $component['subclass']  ==  $selectedComponent['ComponentClass'])
-            {                     
-                if(isset($selectedComponent['NodeId']))
-                {                          
-                    if($selectedComponent['NodeId'] == $component['nodeid'])
-                    {                               
+            
+        for($index = 0; $index < count($SelectedComponents); $index++)
+        {
+            $selectedComponent = $SelectedComponents[$index];              
+            if($component['name']              ==  $selectedComponent['Name'] &&
+                $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
+                $component['subclass']  ==  $selectedComponent['ComponentClass'])
+                {                     
+                    if(isset($selectedComponent['NodeId']))
+                    {                          
+                        if($selectedComponent['NodeId'] == $component['nodeid'])
+                        {                               
+                            return true;
+                        }                           
+                    }
+                    else
+                    {                           
                         return true;
-                    }                           
-                }
-                else
-                {                           
-                    return true;
-                }
-            }                                       
-    }
-    return false;
-}   
+                    }
+                }                                       
+        }
+        return false;
+    }   
 ?>

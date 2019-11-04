@@ -59,14 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveSelectedComponents":
             SaveSelectedComponents();         
             break;  
-        case "SaveCheckResultsToCheckSpaceDB":
-            SaveCheckResultsToCheckSpaceDB();         
+        case "SaveCheckResults":
+            SaveCheckResults();         
             break;
         case "SaveNotSelectedComponents":
             SaveNotSelectedComponents();         
             break;
-        case "SaveComponentsToCheckSpaceDB":
-            SaveComponentsToCheckSpaceDB();         
+        case "SaveComponents":
+            SaveComponents();         
             break;
         case "CreateCheckSpaceDBonSave":
              CreateCheckSpaceDBonSave();         
@@ -91,69 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// function CreateProjectDBonSaveInCheckModule()
-// {
-//     // get project name
-//     $projectName = $_POST['ProjectName'];
-//     try
-//     {   
-
-//         $dbPath = getProjectDatabasePath($projectName);
-//         if(file_exists ($dbPath ))
-//         { 
-//             unlink($dbPath);
-//         }
-
-//         // create project database          
-//         $database = new SQLite3($dbPath);
-//     }
-//     catch(Exception $e) 
-//     {        
-//         echo "fail"; 
-//         return;
-//     } 
-
-//     echo "success"; 
-//     return;
-// }
-
-// function InitCheckSpaceDBInCheckModule()
-// {
-//     if(!isset($_POST['ProjectName']) ||
-//     !isset($_POST['CheckName']))
-//     {
-//         echo json_encode(array("Msg" =>  "Invalid input.",
-//         "MsgCode" => 2));  
-//         return;
-//     }
-
-//     try
-//     {  
-//         // check if checkspace db is saved. If not saved, then return       
-//         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-//         if(!file_exists ($dbPath ))
-//         {              
-//             echo json_encode(array("Msg" =>  "Saved data not found",
-//             "MsgCode" => 0));  
-//             return;
-//         }
-
-//         // create temp DB
-//         $tempDBPath = getCheckDatabasePath($projectName, $checkName);           
-//         if(file_exists ($tempDBPath ))
-//         { 
-//             unlink($tempDBPath);            
-//         }        
-//         $tempDB = new SQLite3($tempDBPath);
-//     }
-//     catch(Exception $e) 
-//     {        
-//         echo json_encode(array("Msg" =>  "Failed to Init",
-//         "MsgCode" => 1));  
-//         return;
-//     } 
-// }
-
+/* 
+   Save all data
+*/ 
 function SaveAll()
 {   
     if(!isset( $_POST['ProjectName']) ||
@@ -200,13 +140,13 @@ function SaveAll()
         $tempDbh->beginTransaction();   
 
         // this will save all sources components, properties                       
-         SaveComponents( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
-         SaveComponents( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
+         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
+         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
          // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
          // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
 
          // save check case info 
-         SaveCheckCaseInfo($tempDbh, $dbh);        
+         SaveCheckCaseInfoFromTemp($tempDbh, $dbh);        
        
          // 'check' context save needs to be changed for viewer opttions
         if($context === "check")
@@ -301,7 +241,7 @@ function SaveAll()
     } 
 }
 
-function SaveCheckResultsToCheckSpaceDB()
+function SaveCheckResults()
 {
     // get project name
     $projectName = $_POST['ProjectName'];	
@@ -364,48 +304,6 @@ function SaveCheckResultsToCheckSpaceDB()
         return;
     } 
 }
-
-// function SaveComparisonCheckStatistics( $tempDbh, $dbh)
-// {
-//     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckStatistics;");  
-//     if($selectResults) 
-//     {
-
-//         // create table
-//         $command = 'DROP TABLE IF EXISTS ComparisonCheckStatistics;';
-//         $dbh->exec($command);    
-                  
-//         $command = 'CREATE TABLE ComparisonCheckStatistics(
-//             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-//             comparisonOK INTEGER default 0,
-//             comparisonError INTEGER default 0,
-//             comparisonWarning INTEGER default 0,
-//             comparisonNoMatch INTEGER default 0,
-//             comparisonUndefined INTEGER default 0,
-//             comparisonCheckGroupsInfo TEXT)'; 
-//         $dbh->exec($command);    
-
-//          $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckStatistics(id, 
-//          comparisonOK, 
-//          comparisonError, 
-//          comparisonWarning,
-//          comparisonNoMatch, 
-//          comparisonUndefined, 
-//          comparisonCheckGroupsInfo) VALUES(?,?,?,?,?,?,?)");
-    
-    
-//         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-//         {           
-//             $insertStmt->execute(array($row['id'], 
-//                                        $row['comparisonOK'], 
-//                                        $row['comparisonError'],
-//                                        $row['comparisonWarning'],
-//                                        $row['comparisonNoMatch'], 
-//                                        $row['comparisonUndefined'], 
-//                                        $row['comparisonCheckGroupsInfo']));
-//         }  
-//     }
-// }
 
 function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
 {
@@ -626,6 +524,45 @@ function CreateCheckSpaceDBonSave()
     return;
 }
 
+/* 
+   Save references on components
+*/
+function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
+    if($selectResults) 
+    {
+
+        // create table
+        $command = 'DROP TABLE IF EXISTS '.$referenceTable.';';
+        $dbh->exec($command);    
+                  
+        $command = 'CREATE TABLE IF NOT EXISTS '. $referenceTable. '(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        webAddress TEXT,
+        document TEXT,
+        pic TEXT,
+        comment TEXT,
+        component INTEGER NOT NULL       
+        )';               
+        $dbh->exec($command);    
+
+         $insertReferenceStmt = $dbh->prepare("INSERT INTO ".$referenceTable."(id, webAddress, document, pic, comment, 
+         component) VALUES(?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertReferenceStmt->execute(array($row['id'], 
+                                       $row['webAddress'], 
+                                       $row['document'],
+                                       $row['pic'], 
+                                       $row['comment'], 
+                                       $row['component']));
+        }  
+    }   
+}
+
 function SaveReferences()
 {
     // get project name
@@ -760,43 +697,81 @@ function SaveHiddenItems()
     }  
 }
 
-function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
+/* 
+   Save Components and properties
+*/
+function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTable)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
+    $selectResults = $tempDbh->query("SELECT * FROM ".$componentTable.";");  
     if($selectResults) 
     {
 
         // create table
         $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
         $dbh->exec($command);    
-                  
-        $command = 'CREATE TABLE IF NOT EXISTS '. $referenceTable. '(
-        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-        webAddress TEXT,
-        document TEXT,
-        pic TEXT,
-        comment TEXT,
-        component INTEGER NOT NULL       
-        )';               
-        $dbh->exec($command);    
 
-         $insertReferenceStmt = $dbh->prepare("INSERT INTO ".$referenceTable."(id, webAddress, document, pic, comment, 
-         component) VALUES(?,?,?,?,?,?)");
+         // ischecked can have values 'true' or 'false'
+         $command = 'CREATE TABLE '.$componentTable.'(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT NOT NULL,
+            mainclass TEXT NOT NULL,
+            subclass TEXT NOT NULL,
+            nodeid INTEGER,
+            ischecked TEXT,
+            parentid INTEGER
+          )';         
+         $dbh->exec($command);    
+
+         $insertComponentStmt = $dbh->prepare("INSERT INTO ".$componentTable."(id, name, mainclass, subclass, nodeid, 
+                       ischecked, parentid) VALUES(?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
         {           
-            $insertReferenceStmt->execute(array($row['id'], 
-                                       $row['webAddress'], 
-                                       $row['document'],
-                                       $row['pic'], 
-                                       $row['comment'], 
-                                       $row['component']));
+            $insertComponentStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['mainclass'],
+                                       $row['subclass'], 
+                                       $row['nodeid'], 
+                                       $row['ischecked'],
+                                       $row['parentid']));
         }  
+        
+        // save properties
+        $selectPropertiesResults = $tempDbh->query("SELECT * FROM ".$propertiesTable.";");  
+        if($selectPropertiesResults) 
+        {
+            // create table
+            $command = 'DROP TABLE IF EXISTS '.$propertiesTable.';';
+            $dbh->exec($command);    
+
+            // create properties table
+            $command = 'CREATE TABLE '.$propertiesTable.'(
+                        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        name TEXT NOT NULL,
+                        format TEXT,
+                        value TEXT,                
+                        ownercomponent INTEGER NOT NULL               
+              )';         
+             $dbh->exec($command);  
+             
+             $insertPropertiesStmt = $dbh->prepare("INSERT INTO  ".$propertiesTable."(id, name, format, value, 
+                      ownercomponent) VALUES(?,?,?,?,?)");
+    
+    
+            while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertPropertiesStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['format'],
+                                        $row['value'], 
+                                        $row['ownercomponent']));
+            }  
+        }
     }   
 }
 
-function SaveComponentsToCheckSpaceDB()
+function SaveComponents()
 {
        // get project name
        $projectName = $_POST['ProjectName'];	
@@ -824,13 +799,13 @@ function SaveComponentsToCheckSpaceDB()
             $tempDbh->beginTransaction();            
           
             // comparison result tables table                               
-            SaveComponents( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
-            SaveComponents( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
+            SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
+            SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
             // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
             // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
 
             // save check case info 
-            SaveCheckCaseInfo($tempDbh, $dbh);
+            SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
 
             // commit update
             $dbh->commit();
@@ -848,6 +823,9 @@ function SaveComponentsToCheckSpaceDB()
         } 
 }
 
+/* 
+   Save viewer options
+*/
 function SaveVieweroptionsFromTemp($tempDbh, $dbh, $tableName)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
@@ -930,7 +908,10 @@ function SaveVieweroptions()
         } 
 }
 
-function SaveCheckCaseInfo($tempDbh, $dbh)
+/* 
+   Save checkcase info
+*/
+function SaveCheckCaseInfoFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM CheckCaseInfo");
     if($selectResults) 
@@ -953,77 +934,6 @@ function SaveCheckCaseInfo($tempDbh, $dbh)
                                        $row['checkCaseData']));
         }  
     }
-}
-
-function SaveComponents( $tempDbh, $dbh, $componentTable, $propertiesTable)
-{
-    $selectResults = $tempDbh->query("SELECT * FROM ".$componentTable.";");  
-    if($selectResults) 
-    {
-
-        // create table
-        $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
-        $dbh->exec($command);    
-
-         // ischecked can have values 'true' or 'false'
-         $command = 'CREATE TABLE '.$componentTable.'(
-            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-            name TEXT NOT NULL,
-            mainclass TEXT NOT NULL,
-            subclass TEXT NOT NULL,
-            nodeid INTEGER,
-            ischecked TEXT,
-            parentid INTEGER
-          )';         
-         $dbh->exec($command);    
-
-         $insertComponentStmt = $dbh->prepare("INSERT INTO ".$componentTable."(id, name, mainclass, subclass, nodeid, 
-                       ischecked, parentid) VALUES(?,?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertComponentStmt->execute(array($row['id'], 
-                                       $row['name'], 
-                                       $row['mainclass'],
-                                       $row['subclass'], 
-                                       $row['nodeid'], 
-                                       $row['ischecked'],
-                                       $row['parentid']));
-        }  
-        
-        // save properties
-        $selectPropertiesResults = $tempDbh->query("SELECT * FROM ".$propertiesTable.";");  
-        if($selectPropertiesResults) 
-        {
-            // create table
-            $command = 'DROP TABLE IF EXISTS '.$propertiesTable.';';
-            $dbh->exec($command);    
-
-            // create properties table
-            $command = 'CREATE TABLE '.$propertiesTable.'(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                        name TEXT NOT NULL,
-                        format TEXT,
-                        value TEXT,                
-                        ownercomponent INTEGER NOT NULL               
-              )';         
-             $dbh->exec($command);  
-             
-             $insertPropertiesStmt = $dbh->prepare("INSERT INTO  ".$propertiesTable."(id, name, format, value, 
-                      ownercomponent) VALUES(?,?,?,?,?)");
-    
-    
-            while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
-            {           
-                $insertPropertiesStmt->execute(array($row['id'], 
-                                        $row['name'], 
-                                        $row['format'],
-                                        $row['value'], 
-                                        $row['ownercomponent']));
-            }  
-        }
-    }   
 }
 
 /*

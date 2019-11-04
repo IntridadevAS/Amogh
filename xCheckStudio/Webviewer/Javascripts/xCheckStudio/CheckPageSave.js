@@ -65,7 +65,7 @@ var CheckModule = {
             async: false,
             data:
             {
-                'InvokeFunction': "SaveCheckResultsToCheckSpaceDB",
+                'InvokeFunction': "SaveCheckResults",
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
@@ -155,7 +155,7 @@ var CheckModule = {
             async: false,
             data:
             {
-                'InvokeFunction': "SaveComponentsToCheckSpaceDB",
+                'InvokeFunction': "SaveComponents",
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
