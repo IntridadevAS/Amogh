@@ -265,10 +265,16 @@ function cancelCheckResults() {
     document.getElementById("Check_Complete").style.display = "none";
 }
 
-function reviewResults() {
-    saveData();
-    //window.location = "module2.html";
-    window.location = "reviewPage.html";
+function reviewResults(callbackFunction) {
+    //saveData();
+
+    CheckModule.onSaveProgress().then(function (result) {
+        if (callbackFunction) {
+            callbackFunction();
+        }
+
+        window.location = "reviewPage.html";
+    });
 }
 
 function deleteCheckResultsFromDB(checkType) {

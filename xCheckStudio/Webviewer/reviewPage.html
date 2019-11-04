@@ -34,7 +34,7 @@
         <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
             onclick="onmaximizewindow()"></button>
         <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
-            onclick="onclosewindow()"></button>
+            onclick="onclosewindow(ReviewPageCleanUp.onLeavingPage)"></button>
       </div>
     </div>
 
@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnHome()">
+          <div id="symYesButton___10" onclick="returnHome(ReviewPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -152,7 +152,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnProjectCenter()">
+          <div id="symYesButton___10" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -171,7 +171,7 @@
         </div>
       </div>
 
-      <!-- Return to home page overlay -->
+      <!-- Return to check page overlay -->
       <div id="returnCheckOverlay" class="overlay"></div>
       <div id="returnCheckPopup" class="popup">
         <div id="Return_to_Home_Page">
@@ -203,7 +203,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnCheck()">
+          <div id="symYesButton___10" onclick="returnCheck(ReviewPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -255,7 +255,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="returnToPREP()">
+          <div id="symYesButton___10" onclick="returnToPREP(ReviewPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -307,7 +307,7 @@
             </div>
           </div>
 
-          <div id="symYesButton___10" onclick="signOut()">
+          <div id="symYesButton___10" onclick="signOut(ReviewPageCleanUp.onLeavingPage)">
             <svg class="Path_310" viewBox="0 0 90 30">
               <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
                 stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -774,7 +774,10 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowser1DViewer.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ModelBrowser3DViewer.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModelBrowserSelectionManager.js"></script>
-  
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProjectInReviewPage.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPageCleanUp.js"></script>
+
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
