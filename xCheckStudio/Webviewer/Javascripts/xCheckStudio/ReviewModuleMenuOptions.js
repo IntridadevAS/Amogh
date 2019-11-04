@@ -56,7 +56,7 @@ function enableMenuOptions() {
 
     // on save 
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        alert("Not Handled");
+        ReviewModule.onSaveProgress();
     }
 
     // on reset
