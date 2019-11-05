@@ -51,8 +51,7 @@ function filterCheckCases(sourceType) {
         return;
     }
 
-    var fileName;
-    var dummylist = [];
+    var fileName;    
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
     if (sourceType === undefined) {
@@ -136,88 +135,9 @@ function filterCheckCases(sourceType) {
             }
         }
 
-///////////////////////
-        // var fileExtensionA;
-        // var fileExtensionB;
-        // if (sourceAFileName !== undefined) {
-        //     fileExtensionA = xCheckStudio.Util.getFileExtension(sourceAFileName).toUpperCase();
-        // }
-        // if (sourceBFileName !== undefined) {
-        //     fileExtensionB = xCheckStudio.Util.getFileExtension(sourceBFileName).toUpperCase();
-
-        // }        
-        
-        // // if (viewerContainer == "viewerContainer1") {
-        //     if (currentTabId === "a")
-        //     {
-        //         checkCaseFilesData.FilteredCheckCaseDataList = [];
-        //         for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-        //             var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-        //             if (checkCaseFileData.SourceTypes.includes(sourceType)) {
-        //                 checkCaseFilesData.FilteredCheckCaseDataList.push(checkCaseFileData);
-        //             }
-        //         }
-        //     }
-        //     else if(currentTabId === "b" || 
-        //             currentTabId === "c" || 
-        //             currentTabId === "d")
-        //     {
-        //         for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
-                 
-        //             var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
-        //             var count = checkCaseFileData.SourceTypes.filter(x => x == sourceType).length;
-                 
-        //             if (fileExtensionA == fileExtensionB) {
-        //                 if (count >= 2)
-        //                     dummylist.push(checkCaseFileData);
-        //             }
-        //             else if (checkCaseFileData.SourceTypes.includes(sourceType)) {
-        //                 dummylist.push(checkCaseFileData);
-        //             }
-        //         }
-        //         checkCaseFilesData.FilteredCheckCaseDataList = [];
-        //         checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
-        //     }
-        //}
-
-        // else if (viewerContainer == "viewerContainer2") {
-        //     if (fileExtensionA !== undefined) {
-        //         for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
-        //             var checkCaseFileData = checkCaseFilesData.FilteredCheckCaseDataList[i];
-        //             var count = checkCaseFileData.SourceTypes.filter(x => x == sourceType).length;
-        //             if (fileExtensionA == fileExtensionB) {
-        //                 if (count >= 2)
-        //                     dummylist.push(checkCaseFileData);
-        //             }
-        //             else if (checkCaseFileData.SourceTypes.includes(sourceType)) {
-        //                 dummylist.push(checkCaseFileData);
-        //             }
-        //         }
-        //     }
-        //     else {
-        //         checkCaseFilesData.FilteredCheckCaseDataList = [];
-        //         for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-        //             var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-        //             var count = checkCaseFileData.SourceTypes.filter(x => x == sourceType).length;
-        //             if (fileExtensionA == fileExtensionB) {
-        //                 if (count >= 2)
-        //                     dummylist.push(checkCaseFileData);
-        //             }
-        //             else if (checkCaseFileData.SourceTypes.includes(sourceType)) {
-        //                 dummylist.push(checkCaseFileData);
-        //             }
-        //         }
-        //     }
-        //     checkCaseFilesData.FilteredCheckCaseDataList = [];
-        //     checkCaseFilesData.FilteredCheckCaseDataList = dummylist;
-        // }
-
         // remove all options from check case select input
         checkCaseSelect.options.length = 0;
-        // for (var i = checkCaseSelect.length - 1; i >= 0; i--) {
-        //     checkCaseSelect.remove(i);
-        // }
-
+      
         // add new check case options to check case select input        
         for (var i = 0; i < checkCaseFilesData.FilteredCheckCaseDataList.length; i++) {
             var checkCaseData = checkCaseFilesData.FilteredCheckCaseDataList[i];
@@ -225,12 +145,6 @@ function filterCheckCases(sourceType) {
             checkCaseSelect.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
         }
         checkCaseSelect.options.add(new Option("AutoSelect", "AutoSelect"));
-
-        // for (var i = 0; i < checkCaseSelect.options.length; i++) {
-        //     var checkCaseOption = checkCaseSelect.options[i];
-        //     checkCaseOption.className = "casesppidvspdm";
-        // }
-
 
         for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
             var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];

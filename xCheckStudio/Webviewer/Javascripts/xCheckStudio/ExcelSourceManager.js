@@ -41,21 +41,7 @@ ExcelSourceManager.prototype.LoadData = function (file) {
                                             _this.ViewerContainer, 
                                             excelReader.SheetData);
       _this.ModelTree.CreateModelBrowser();
-
-      // check if data source loading order is maintained
-      // if (checkCaseSelected) {
-      //   checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-      // }
-
-      // // hide view data graphics text on viewer conatainer
-      // var excelViewerContainer = document.getElementById("dataSourceViewer");
-      // for (var i = 0; i < excelViewerContainer.childElementCount; i++) {
-      //   var currentChild = excelViewerContainer.children[i];
-      //   if (currentChild.className === "viewdatagraphics") {
-      //     currentChild.style.display = "none";
-      //   }
-      // }
-
+     
       return resolve(true);
 
     });

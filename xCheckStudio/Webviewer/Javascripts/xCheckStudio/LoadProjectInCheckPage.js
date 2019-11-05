@@ -116,144 +116,7 @@ function loadCheckSpaceForCheck(data) {
         comparisonCB.checked = true;
     }
 
-    loadDataSets(data);
-    // });
-
-    // // restore the control state
-    // $.ajax({
-    //     data: {
-    //         'InvokeFunction': 'ReadCheckModuleControlsState',
-    //         'ProjectName': projectinfo.projectname,
-    //         'CheckName': checkinfo.checkname
-    //     },
-    //     type: "POST",
-    //     url: "PHP/ProjectManager.php"
-    // }).done(function (msg) {
-    //      if (msg !== 'fail') {
-    //         var checkModuleControlsState = JSON.parse(msg);
-
-    //         // comparison swith
-    //         if ("comparisonSwith" in checkModuleControlsState &&
-    //             checkModuleControlsState["comparisonSwith"].toLowerCase() === 'true') {
-
-    //             var comparisonCB = document.getElementById('comparisonSwitch');
-    //             comparisonCB.checked = true;
-    //             // var comparisonCB = document.querySelector('.module1 .group31 .comparisonswitch .toggle-2udj');
-    //             // if (comparisonCB.classList.contains('state1')) {
-    //             //     comparisonCB.classList.remove("state1");
-    //             //     comparisonCB.classList.add("state2");
-    //             //     comparisonCB.classList.add("state1-to-state2");
-    //             // }
-    //         }
-
-    //         // source A compliance swith
-    //         if ("sourceAComplianceSwitch" in checkModuleControlsState &&
-    //             checkModuleControlsState["sourceAComplianceSwitch"].toLowerCase() === 'true') {
-
-    //                 var complianceCB = document.getElementById('complianceSwitch');    
-    //                 complianceCB.checked = true;  
-    //         }
-
-    //         // source B compliance swith
-    //         if ("sourceBComplianceSwitch" in checkModuleControlsState &&
-    //             checkModuleControlsState["sourceBComplianceSwitch"].toLowerCase() === 'true') {
-
-    //             var complianceSourceBCB = document.querySelector('.module1 .group2 .complianceswitch .toggle-Hm8P2');
-    //             if (complianceSourceBCB.classList.contains('state2')) {
-    //                 complianceSourceBCB.classList.remove("state2");
-    //                 complianceSourceBCB.classList.add("state1");
-    //                 complianceSourceBCB.classList.add("state2-to-state1");
-    //             }
-    //         }
-
-    //         // source A check all swith
-    //         if ("sourceACheckAllSwitch" in checkModuleControlsState &&
-    //             checkModuleControlsState["sourceACheckAllSwitch"].toLowerCase() === 'true') {
-
-    //             var sourceACheckAllCB = document.querySelector('.module1 .group1 .checkallswitch .toggle-KJzr');
-    //             if (sourceACheckAllCB.classList.contains('state1')) {
-    //                 sourceACheckAllCB.classList.remove("state1");
-    //                 sourceACheckAllCB.classList.add("state2");
-    //                 sourceACheckAllCB.classList.add("state1-to-state2");
-
-    //             }
-    //         }
-
-    //         // source B check all swith
-    //         if ("sourceBCheckAllSwitch" in checkModuleControlsState &&
-    //             checkModuleControlsState["sourceBCheckAllSwitch"].toLowerCase() === 'true') {
-
-    //             var sourceBCheckAllCB = document.querySelector('.module1 .group2 .checkallswitch .toggle-KJzr2');
-    //             if (sourceBCheckAllCB.classList.contains('state1')) {
-    //                 sourceBCheckAllCB.classList.remove("state1");
-    //                 sourceBCheckAllCB.classList.add("state2");
-    //                 sourceBCheckAllCB.classList.add("state1-to-state2");
-    //             }
-    //         }
-    //     }
-    // });
-
-
-    // // read check case info
-    // $.ajax({
-    //     url: 'PHP/CheckCaseinfoReader.php',
-    //     type: "POST",
-    //     async: true,
-    //     data: {
-    //         'ProjectName': projectinfo.projectname,
-    //         'CheckName': checkinfo.checkname
-    //     },
-    //     success: function (checkCaseString) {
-    //         if (checkCaseString === "fail") {
-    //             return;
-    //         }
-
-    //         var checkCaseInfo = JSON.parse(checkCaseString);
-
-    //         // if ('checkCaseData' in checkCaseInfo) {
-    //         //     checkCaseManager = JSON.parse(checkCaseInfo['checkCaseData']);
-
-    //         //     if ('CheckCase' in checkCaseManager) {
-    //         //         var checkCase = checkCaseManager['CheckCase'];
-    //         //         if ('Name' in checkCase) {
-
-    //         //             var checkCaseName = checkCase['Name'];
-
-    //         //             //add check case name to check case select box and select it
-    //         //             var checkCaseSelectElement = document.getElementById("checkCaseSelect");
-    //         //             var option = document.createElement("option");
-    //         //             option.text = checkCaseName;
-    //         //             checkCaseSelectElement.add(option);
-    //         //             checkCaseSelectElement.value = checkCaseName;
-
-    //         //             checkCaseSelectElement.disabled = true;
-    //         //         }
-    //         //     }
-    //         // }
-
-    //         // // load sources in viewer and browser table                    
-    //         // $.ajax({
-    //         //     url: 'PHP/SourceViewerOptionsReader.php',
-    //         //     type: "POST",
-    //         //     async: true,
-    //         //     data: {
-    //         //         'ProjectName': projectinfo.projectname,
-    //         //         'CheckName': checkinfo.checkname
-    //         //     },
-    //         //     success: function (vieweroptionsString) {
-    //         //         var viewerOptions = JSON.parse(vieweroptionsString);
-
-    //         //         viewPanels.addFilesPanel.classList.add("hide");
-
-    //         //         for (var srcId in viewerOptions) {
-    //         //             var viewerOption = viewerOptions[srcId];
-
-    //         //             loadDataSource(viewerOption);
-    //         //         }
-    //         //     }
-    //         // });
-    //     }
-    // });
+    loadDataSets(data);    
 }
 
 function loadDataSets(data) {
@@ -434,9 +297,11 @@ function loadDataSource(viewerOption, data, checkCaseName) {
 
                     var checkCaseSelectElement = document.getElementById("checkCaseSelect");
                     checkCaseSelectElement.value = checkCaseName;
-                });
 
-                // });
+                    // triggere onchange manually
+                    checkCaseSelectElement.dispatchEvent(new Event('change'));
+                });
+               
             }
         });
     }
