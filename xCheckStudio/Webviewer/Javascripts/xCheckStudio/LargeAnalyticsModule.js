@@ -1,37 +1,30 @@
-function populateLargeAnalyticsData(checkResults) {
-    for (var key in checkResults) {
-
-        if (!checkResults.hasOwnProperty(key)) {
-            continue;
-        }
-
-        if (key == 'Comparisons') {
-            comparisonCheckGroups = true;
-        }
-        else if (key == 'Compliances') {
-            sourceAComplianceCheckGroups = true;
-            sourceBComplianceCheckGroups = true;
-        }
-    }
-
+function populateLargeAnalyticsData() {
+ 
     analyticsManager = new LargeAnalyticsManager();
 
 
     // draw pie and bar charts 
-    if (comparisonCheckGroups) {
+    if (isComparisonPerformed) {
         activeResultType = "comparison";
         openChartComparison();
     }
 
-    else if (sourceAComplianceCheckGroups) {
+    else if (isComplianceAPerformed) {
         activeResultType = "complianceA";
         OpenComplianceAChart();
     }
 
-    else if (sourceBComplianceCheckGroups) {
+    else if (isComplianceBPerformed) {
         activeResultType = "complianceB";
         OpenComplianceBChart();
     }
+
+    // if(isComplianceCPerformed) {
+    //     sourceCComplianceCheckGroups = true;
+    // }
+    // if(isComplianceDPerformed) {
+    //     sourceDComplianceCheckGroups = true;
+    // }
 }
 
 function OpenAnalyticsCharts() {
@@ -136,14 +129,14 @@ function openChartComparison() {
     document.getElementById("pie_A3_Group_12").style.backgroundColor = "rgba(143, 144, 145, 1)";
     document.getElementById("bar_A3_Group_10").style.backgroundColor = "rgba(33,37,63,0)";
 
-    if (comparisonCheckGroups) {
+    if (isComparisonPerformed) {
         analyticsManager.populateLargeAnalyticsComparisonCharts();
     }
 }
 
 function OpenComplianceAChart() {
     activeResultType = "complianceA";
-    if (sourceAComplianceCheckGroups) {
+    if (isComplianceAPerformed) {
         analyticsManager.populateLargeAnalyticsComplianceACharts();
     }
 }
@@ -151,7 +144,7 @@ function OpenComplianceAChart() {
 function OpenComplianceBChart() {
     activeResultType = "complianceB";
 
-    if (sourceBComplianceCheckGroups) {
+    if (isComplianceBPerformed) {
         analyticsManager.populateLargeAnalyticsComplianceBCharts();
     }
 }

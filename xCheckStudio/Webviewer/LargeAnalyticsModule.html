@@ -2092,81 +2092,39 @@ window.application = new Application();
 </div>
 
 <script>
-	var analyticsManager;
-
-var comparisonCheckGroups = false;
-var sourceAComplianceCheckGroups = false;
-var sourceBComplianceCheckGroups = false;
+var analyticsManager;
 var BarChartActive = false;
 var PieChartActive = true;
 var activeResultType = "";
 var SeveritybuttonActive = true;
 var InfoButtonActive = false;
+var isComparisonPerformed;
+var isComplianceAPerformed;
+var isComplianceBPerformed;
+var isComplianceCPerformed;
+var isComplianceDPerformed;
 
 
 window.onload = function () {            
 	// read data source info
-	var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-	var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-	$.ajax({
-		url: 'PHP/DataSourceInfoReader.php',
-		type: "POST",
-		async: true,
-		data: {
-			'ProjectName': projectinfo.projectname,
-			'CheckName': checkinfo.checkname
-		},
-		success: function (msg) 
-		{                   
-			if(msg !== "fail")
-			{
-				var dataSourceInfo = JSON.parse(msg);
+	isComparisonPerformed = window.parent.isComparisonPerformed();
+	isComplianceAPerformed = window.parent.isComplianceAPerformed();
+	isComplianceBPerformed = window.parent.isComplianceBPerformed();
+	isComplianceCPerformed = window.parent.isComplianceCPerformed();
+	isComplianceDPerformed = window.parent.isComplianceDPerformed();
 
-				if('sourceBFileName' in dataSourceInfo)
-				{
-					var source = dataSourceInfo['sourceBFileName'];
-					if (source !== undefined) {
-						document.getElementById("DataSet2").innerHTML = source;
-						document.getElementById("type_2_A4_Group_4").style.display = "block";
-						document.getElementById("ABC123_A3_Text_32").innerHTML = source;
-					}
-				}
-
-				if('sourceAFileName' in dataSourceInfo)
-				{
-					var source = dataSourceInfo['sourceAFileName'];
-					if(source !== undefined)
-					{
-						document.getElementById("DataSet1").innerHTML = source;
-						document.getElementById("type_2").style.display = "block";
-						document.getElementById("ABC123").innerHTML = source;
-					}
-				}
-
-				if('sourceCFileName' in dataSourceInfo)
-				{
-					var source = dataSourceInfo['sourceCFileName'];
-					if (source !== undefined) {
-						document.getElementById("DataSet3").innerHTML = source;
-						document.getElementById("type_2_A4_Group_7").style.display = "block";
-						document.getElementById("ABC123_A3_Text_34").innerHTML = source;
-					}
-				}
-
-				if('sourceDFileName' in dataSourceInfo)
-				{
-					var source = dataSourceInfo['sourceDFileName'];
-					if (source !== undefined) {
-						document.getElementById("DataSet4").innerHTML = source;
-						document.getElementById("type_2_A4_Group_10").style.display = "block";
-						document.getElementById("ABC123_A3_Text_35").innerHTML = source;
-					}
-				}
-			}                   
-		}
-	});
+	populateDataSourceInfo();
+	
 
 	// read check case info
+	populateCheckCaseInfo();
+
+	populateLargeAnalyticsData();
+}
+
+function populateCheckCaseInfo() {
+	var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+	var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 	$.ajax({
 		url: 'PHP/CheckCaseinfoReader.php',
 		type: "POST",
@@ -2194,26 +2152,54 @@ window.onload = function () {
 			}
 		}
 	});
+}
 
-	$.ajax({
-		url: 'PHP/CheckResultsReader.php',
-		type: "POST",
-		async: true,
-		data: {
-			'ProjectName': projectinfo.projectname,
-			'CheckName': checkinfo.checkname
-		},
-		success: function (msg) 
+function populateDataSourceInfo() {
+
+	var dataSourceFiles = window.parent.getDataSourceFiles();
+
+	var sourceA = dataSourceFiles["sourceAFileName"];
+	if(sourceA !== undefined)
+	{
+		document.getElementById("DataSet1").innerHTML = sourceA;
+		document.getElementById("type_2").style.display = "block";
+		if(isComplianceAPerformed)
 		{
-			var checkResults = JSON.parse(msg); 
-
-			document.getElementById("pie").style.backgroundColor = "rgba(143, 144, 145, 1)";
-			document.getElementById("severitybtn").style.fill = "rgba(143, 144, 145, 1)";
-			document.getElementById("Severity").style.color = "rgba(143, 144, 145, 1)";
-			
-			populateLargeAnalyticsData(checkResults);                    
+			document.getElementById("ABC123").innerHTML = sourceA;
 		}
-	});    
+	}
+
+
+	var sourceB = dataSourceFiles["sourceBFileName"];
+	if (sourceB !== undefined) {
+		document.getElementById("DataSet2").innerHTML = sourceB;
+		document.getElementById("type_2_A4_Group_4").style.display = "block";
+		if(isComplianceBPerformed)
+		{
+			document.getElementById("ABC123_A3_Text_32").innerHTML = sourceB;
+		}
+	}
+		
+	var sourceC = dataSourceFiles["sourceCFileName"];
+	if (sourceC !== undefined) {
+		document.getElementById("DataSet3").innerHTML = sourceC;
+		document.getElementById("type_2_A4_Group_7").style.display = "block";
+		if(isComplianceCPerformed)
+		{
+			document.getElementById("ABC123_A3_Text_34").innerHTML = sourceC;
+		}
+	}
+
+		
+	var sourceD = dataSourceFiles["sourceDFileName"];
+	if (sourceD !== undefined) {
+		document.getElementById("DataSet4").innerHTML = sourceD;
+		document.getElementById("type_2_A4_Group_10").style.display = "block";
+		if(isComplianceDPerformed)
+		{
+			document.getElementById("ABC123_A3_Text_35").innerHTML = sourceD;
+		}
+	}
 }
 
 </script>
