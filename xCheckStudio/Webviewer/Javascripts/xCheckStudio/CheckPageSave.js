@@ -3,79 +3,123 @@ var CheckModule = {
 
         return new Promise((resolve) => {
 
-        showBusyIndicator();
+            showBusyIndicator();
 
-        try {
+            try {
 
-            // create project DB
-            this.createCheckSpaceDBonSave().then(function (result) {
-                if (result) {
+                // create project DB
+                this.createCheckSpaceDBonSave().then(function (result) {
+                    if (result) {
 
-                    // save components to checkspaceDB
-                    CheckModule.saveComponentsToCheckSpaceDB();
+                        // save all
+                        CheckModule.saveAll().then(function (res) {
+                            if (res) {
+                                alert("Saved project information.");
 
-                    // save control states
-                    CheckModule.saveControlsState();
+                                // remove busy spinner        
+                                hideBusyIndicator();
 
-                    // save data source info
-                    CheckModule.saveDataSourceInfo();
+                                return resolve(true);
+                            }
 
-                    // save source viewer options
-                    CheckModule.saveSourceViewerOptions();
+                            alert("Failed to save.");
 
-                    // save selected components
-                    CheckModule.saveSelectedComponents();
+                            // remove busy spinner        
+                            hideBusyIndicator();
 
-                    // save not selected components
-                    CheckModule.saveNotSelectedComponents();
+                            return resolve(false);
+                        });
+                    }
+                    else {
 
-                    // save not references
-                    CheckModule.saveReferences();
+                        alert("Failed to save.");
+                        // remove busy spinner        
+                        hideBusyIndicator();
 
-                     // save not references
-                     CheckModule.saveHiddenItems();
-
-                     // save check results
-                     CheckModule.saveCheckResults();
-                    
-                     alert("Saved project information.");
-                }
-            });
-        }
-        catch (error) {
-            console.log(error.message);
-        }
-        finally {
-            // remove busy spinner        
-            hideBusyIndicator();
-
-            return resolve(true);
-        }
+                        return resolve(false);
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error.message);
+            }
+            finally {
+            }
 
         });
     },
 
-    saveCheckResults: function () {
+    saveAll: function () {
+        return new Promise((resolve) => {
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax({
-            url: 'PHP/ProjectManager.php',
-            type: "POST",
-            async: false,
-            data:
-            {
-                'InvokeFunction': "SaveCheckResults",
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
-            },
-            success: function (msg) {
-            }
+            // control states data
+            var controlStatesArray = this.getControlStates();
+
+            // data source info
+            var dataSourceInfo = this.getDataSourceInfo();
+
+            // get viewer options
+            var viewerOptions = this.getSourceViewerOptions();
+
+            // get selected components
+            var selectedComponents = this.getSelectedComponents();
+
+            // get not selected components
+            var notSelectedComponents = this.getNotSelectedComponents();
+
+            // get hidden items
+            var hiddenItems = this.getHiddenItems();
+
+            $.ajax({
+                url: 'PHP/ProjectManager.php',
+                type: "POST",
+                async: false,
+                data:
+                {
+                    'InvokeFunction': "SaveAll",
+                    'Context': "check",
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname,
+                    'checkModuleControlState': JSON.stringify(controlStatesArray),
+                    'dataSourceInfo': JSON.stringify(dataSourceInfo),
+                    'viewerOptions': JSON.stringify(viewerOptions),
+                    'selectedComponents': JSON.stringify(selectedComponents),
+                    'notSelectedComponents': JSON.stringify(notSelectedComponents),
+                    'hiddenItems': JSON.stringify(hiddenItems)
+                },
+                success: function (msg) {
+                    if (msg != 'fail') {
+                        return resolve(true);
+                    }
+
+                    return resolve(false);
+                }
+            });
         });
-    }, 
+    },
 
-    saveHiddenItems : function()
-    {
+    // saveCheckResults: function () {
+
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     $.ajax({
+    //         url: 'PHP/ProjectManager.php',
+    //         type: "POST",
+    //         async: false,
+    //         data:
+    //         {
+    //             'InvokeFunction': "SaveCheckResults",
+    //             'ProjectName': projectinfo.projectname,
+    //             'CheckName': checkinfo.checkname
+    //         },
+    //         success: function (msg) {
+    //         }
+    //     });
+    // },
+
+    getHiddenItems: function () {
         var hiddentItems = {};
         var visibleItems = {};
         for (var srcId in SourceManagers) {
@@ -105,46 +149,30 @@ var CheckModule = {
             }
         }
         if (Object.keys(hiddentItems).length === 0) {
-            return;
+            return undefined;
         }
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax({
-            url: 'PHP/ProjectManager.php',
-            type: "POST",
-            async: false,
-            data:
-            {
-                'InvokeFunction': "SaveHiddenItems",
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname,
-                'hiddenComponents': JSON.stringify(hiddentItems),
-                'visibleComponents': JSON.stringify(visibleItems)
-            },
-            success: function (msg) {
-            }
-        });
+        var hiddenComponentsObject = { "hiddenComponents": JSON.stringify(hiddentItems), "visibleComponents": JSON.stringify(visibleItems) };
+        return hiddenComponentsObject;
     },
 
-    saveReferences : function()
-    {
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax({
-            url: 'PHP/ProjectManager.php',
-            type: "POST",
-            async: false,
-            data:
-            {
-                'InvokeFunction': "SaveReferences",
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
-            },
-            success: function (msg) {
-            }
-        });
-    },
+    // saveReferences: function () {
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     $.ajax({
+    //         url: 'PHP/ProjectManager.php',
+    //         type: "POST",
+    //         async: false,
+    //         data:
+    //         {
+    //             'InvokeFunction': "SaveReferences",
+    //             'ProjectName': projectinfo.projectname,
+    //             'CheckName': checkinfo.checkname
+    //         },
+    //         success: function (msg) {
+    //         }
+    //     });
+    // },
 
     saveComponentsToCheckSpaceDB: function () {
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -190,39 +218,39 @@ var CheckModule = {
         });
     },
 
-    saveControlsState: function () {
-        var controlStatesArray = this.getControlStates();
+    // saveControlsState: function () {
+    //     var controlStatesArray = this.getControlStates();
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax
-            ({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveCheckModuleControlsState",
-                    "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
-                    "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
-                    "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
-                    "sourceCComplianceSwitchOn": controlStatesArray['SourceCComplianceSwitch'],
-                    "sourceDComplianceSwitchOn": controlStatesArray['SourceDComplianceSwitch'],
-                    "selectedDataSetTab": controlStatesArray['SelectedDataSetTab'],
-                    "selectedCheckCase": controlStatesArray['SelectedCheckCase'],
-                    // "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
-                    // "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
-                    "ProjectName": projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     $.ajax
+    //         ({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "SaveCheckModuleControlsState",
+    //                 "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
+    //                 "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
+    //                 "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
+    //                 "sourceCComplianceSwitchOn": controlStatesArray['SourceCComplianceSwitch'],
+    //                 "sourceDComplianceSwitchOn": controlStatesArray['SourceDComplianceSwitch'],
+    //                 "selectedDataSetTab": controlStatesArray['SelectedDataSetTab'],
+    //                 "selectedCheckCase": controlStatesArray['SelectedCheckCase'],
+    //                 // "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
+    //                 // "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
+    //                 "ProjectName": projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
 
-                },
-                error: function (error) {
-                    console.log(error)
-                }
-            });
-    },
+    //             },
+    //             error: function (error) {
+    //                 console.log(error)
+    //             }
+    //         });
+    // },
 
     getControlStates: function () {
         // control states
@@ -261,20 +289,20 @@ var CheckModule = {
         // }
 
         var controlStatesArray = {};
-        controlStatesArray['ComparisonSwitch'] = comparisonSwitchOn;
-        controlStatesArray['SourceAComplianceSwitch'] = sourceAComplianceSwitchOn;
-        controlStatesArray['SourceBComplianceSwitch'] = sourceBComplianceSwitchOn;
-        controlStatesArray['SourceCComplianceSwitch'] = sourceCComplianceSwitchOn;
-        controlStatesArray['SourceDComplianceSwitch'] = sourceDComplianceSwitchOn;
-        controlStatesArray['SelectedDataSetTab'] = model.currentTabId;
-        controlStatesArray['SelectedCheckCase'] = checkCaseManager.CheckCase.Name;
+        controlStatesArray['comparisonSwithOn'] = comparisonSwitchOn;
+        controlStatesArray['sourceAComplianceSwitchOn'] = sourceAComplianceSwitchOn;
+        controlStatesArray['sourceBComplianceSwitchOn'] = sourceBComplianceSwitchOn;
+        controlStatesArray['sourceCComplianceSwitchOn'] = sourceCComplianceSwitchOn;
+        controlStatesArray['sourceDComplianceSwitchOn'] = sourceDComplianceSwitchOn;
+        controlStatesArray['selectedDataSetTab'] = model.currentTabId;
+        controlStatesArray['selectedCheckCase'] = checkCaseManager.CheckCase.Name;
         // controlStatesArray['SourceACheckAllSwitch'] = sourceACheckAllSwitchOn;
-        // controlStatesArray['SourceBCheckAllSwitch'] = sourceBCheckAllSwitchOn;
+        // controlStatesArray['SourceBCheckAllSwitch'] = sourceBCheckAllSwitchOn;       
 
         return controlStatesArray;
     },
 
-    saveDataSourceInfo: function () {
+    getDataSourceInfo: function () {
 
         var sourceAType;
         var sourceAFileName;
@@ -324,42 +352,106 @@ var CheckModule = {
             }
         }
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax
-            ({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveDatasourceInfo",
-                    "SourceAFileName": sourceAFileName,
-                    "SourceBFileName": sourceBFileName,
-                    "SourceCFileName": sourceCFileName,
-                    "SourceDFileName": sourceDFileName,
-                    "SourceAType": sourceAType,
-                    "SourceBType": sourceBType,
-                    "SourceCType": sourceCType,
-                    "SourceDType": sourceDType,
-                    "orderMaintained": dataSourceOrderMaintained,
-                    "ProjectName": projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
+        var dataSourceInfo = {};
+        dataSourceInfo["SourceAFileName"] = sourceAFileName;
+        dataSourceInfo["SourceBFileName"] = sourceBFileName;
+        dataSourceInfo["SourceCFileName"] = sourceCFileName;
+        dataSourceInfo["SourceDFileName"] = sourceDFileName;
+        dataSourceInfo["SourceAType"] = sourceAType;
+        dataSourceInfo["SourceBType"] = sourceBType;
+        dataSourceInfo["SourceCType"] = sourceCType;
+        dataSourceInfo["SourceDType"] = sourceDType;
+        dataSourceInfo["orderMaintained"] = dataSourceOrderMaintained;
 
-                },
-                error: function (error) {
-                    console.log(error)
-                }
-            });
+        return dataSourceInfo;
     },
 
-    saveSourceViewerOptions: function () {
+    // saveDataSourceInfo: function () {
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     var sourceAType;
+    //     var sourceAFileName;
+    //     if ("a" in SourceManagers) {
+    //         var sourceManager = SourceManagers["a"];
+    //         sourceAType = sourceManager.SourceType;
+    //         sourceAFileName = sourceManager.SourceName;
 
+    //     }
+
+    //     var sourceBType;
+    //     var sourceBFileName;
+    //     if ("b" in SourceManagers) {
+    //         var sourceManager = SourceManagers["b"];
+    //         sourceBType = sourceManager.SourceType;
+    //         sourceBFileName = sourceManager.SourceName;
+
+    //     }
+
+    //     var sourceCType;
+    //     var sourceCFileName;
+    //     if ("c" in SourceManagers) {
+    //         var sourceManager = SourceManagers["c"];
+    //         sourceCType = sourceManager.SourceType;
+    //         sourceCFileName = sourceManager.SourceName;
+
+    //     }
+
+    //     var sourceDType;
+    //     var sourceDFileName;
+    //     if ("d" in SourceManagers) {
+    //         var sourceManager = SourceManagers["d"];
+    //         sourceDType = sourceManager.SourceType;
+    //         sourceDFileName = sourceManager.SourceName;
+    //     }
+
+    //     // check if data source order load order is maintained
+    //     var dataSourceOrderMaintained = true;
+    //     var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
+    //     if ((("a" in SourceManagers) &&
+    //         ("sourceA" in sourceTypesFromCheckCase)) &&
+    //         (("b" in SourceManagers) &&
+    //             ("sourceA" in sourceTypesFromCheckCase))) {
+    //         if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
+    //             SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
+    //             dataSourceOrderMaintained = false;
+    //         }
+    //     }
+
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     $.ajax
+    //         ({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "SaveDatasourceInfo",
+    //                 "SourceAFileName": sourceAFileName,
+    //                 "SourceBFileName": sourceBFileName,
+    //                 "SourceCFileName": sourceCFileName,
+    //                 "SourceDFileName": sourceDFileName,
+    //                 "SourceAType": sourceAType,
+    //                 "SourceBType": sourceBType,
+    //                 "SourceCType": sourceCType,
+    //                 "SourceDType": sourceDType,
+    //                 "orderMaintained": dataSourceOrderMaintained,
+    //                 "ProjectName": projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
+
+    //             },
+    //             error: function (error) {
+    //                 console.log(error)
+    //             }
+    //         });
+    // },
+
+    getSourceViewerOptions: function () {
+
+        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        var viewerOptionsObject = {};
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];
             if (!sourceManager.Is3DSource()) {
@@ -386,29 +478,80 @@ var CheckModule = {
                 continue;
             }
 
-            // write viewer options data to data base
-            $.ajax({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveVieweroptions",
-                    "SourceViewerOptions": JSON.stringify(viewerOptions),
-                    "SourceViewerOptionsTable": tableName,
-                    'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
-                }
-            });
+            viewerOptionsObject[tableName] = viewerOptions;
+            // // write viewer options data to data base
+            // $.ajax({
+            //     url: 'PHP/ProjectManager.php',
+            //     type: "POST",
+            //     async: false,
+            //     data:
+            //     {
+            //         'InvokeFunction': "SaveVieweroptions",
+            //         "SourceViewerOptions": JSON.stringify(viewerOptions),
+            //         "SourceViewerOptionsTable": tableName,
+            //         'ProjectName': projectinfo.projectname,
+            //         'CheckName': checkinfo.checkname
+            //     },
+            //     success: function (msg) {
+            //     }
+            // });
         }
+
+        return viewerOptionsObject;
     },
 
-    saveSelectedComponents: function () {
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // saveSourceViewerOptions: function () {
 
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    //     for (var srcId in SourceManagers) {
+    //         var sourceManager = SourceManagers[srcId];
+    //         if (!sourceManager.Is3DSource()) {
+    //             continue;
+    //         }
+
+    //         var viewerOptions = [];
+    //         viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
+
+    //         var tableName;
+    //         if (srcId === GlobalConstants.SourceAId) {
+    //             tableName = GlobalConstants.SourceAViewerOptionsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceBId) {
+    //             tableName = GlobalConstants.SourceBViewerOptionsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceCId) {
+    //             tableName = GlobalConstants.SourceCViewerOptionsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceDId) {
+    //             tableName = GlobalConstants.SourceDViewerOptionsTable;
+    //         }
+    //         else {
+    //             continue;
+    //         }
+
+    //         // write viewer options data to data base
+    //         $.ajax({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "SaveVieweroptions",
+    //                 "SourceViewerOptions": JSON.stringify(viewerOptions),
+    //                 "SourceViewerOptionsTable": tableName,
+    //                 'ProjectName': projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
+    //             }
+    //         });
+    //     }
+    // },
+    getSelectedComponents: function () {
+
+        var selectedComponentsObject = {};
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];
 
@@ -432,81 +575,88 @@ var CheckModule = {
                 continue;
             }
 
-            // write source a selected components
-            $.ajax({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveSelectedComponents",
-                    "selectedComponentsTableName": tableName,
-                    "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-                    "selectedComponents": JSON.stringify(selectedCompoents),
-                    "ProjectName": projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
-                }
-            });
+            selectedComponentsObject[tableName] = {
+                "selectedCompoents": selectedCompoents,
+                "nodeIdvsComponentIdList": nodeIdvsComponentIdList
+            };
+
+            // // write source a selected components
+            // $.ajax({
+            //     url: 'PHP/ProjectManager.php',
+            //     type: "POST",
+            //     async: false,
+            //     data:
+            //     {
+            //         'InvokeFunction': "SaveSelectedComponents",
+            //         "selectedComponentsTableName": tableName,
+            //         "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
+            //         "selectedComponents": JSON.stringify(selectedCompoents),
+            //         "ProjectName": projectinfo.projectname,
+            //         'CheckName': checkinfo.checkname
+            //     },
+            //     success: function (msg) {
+            //     }
+            // });
         }
 
-        // // write source a selected components
-        // if (sourceManager1) {
-        //     var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
-        //     var nodeIdvsComponentIdList = sourceManager1.NodeIdvsComponentIdList;
-        //     // write source a selected components
-        //     $.ajax({
-        //         url: 'PHP/ProjectManager.php',
-        //         type: "POST",
-        //         async: false,
-        //         data:
-        //         {
-        //             'InvokeFunction': "SaveSelectedComponents",
-        //             "selectedComponentsTableName": "SourceASelectedComponents",
-        //             "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-        //             "selectedComponents": JSON.stringify(selectedCompoents),
-        //             "ProjectName": projectinfo.projectname,
-        //             'CheckName': checkinfo.checkname
-        //         },
-        //         success: function (msg) {
-        //         }
-        //     });
-        // }
-
-        // // write source b selected components
-        // if (sourceManager2) {
-        //     var selectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();
-        //     var nodeIdvsComponentIdList = sourceManager2.NodeIdvsComponentIdList;
-        //     // write source a selected components
-        //     $.ajax({
-        //         url: 'PHP/ProjectManager.php',
-        //         type: "POST",
-        //         async: false,
-        //         data:
-        //         {
-        //             'InvokeFunction': "SaveSelectedComponents",
-        //             "selectedComponentsTableName": "SourceBSelectedComponents",
-        //             "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-        //             "selectedComponents": JSON.stringify(selectedCompoents),
-        //             "ProjectName": projectinfo.projectname,
-        //             'CheckName': checkinfo.checkname
-        //         },
-        //         success: function (msg) {
-        //         }
-        //     });
-        // }
+        return selectedComponentsObject;
     },
 
-    saveNotSelectedComponents: function () {
-        // write source a selected components
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // saveSelectedComponents: function () {
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    //     for (var srcId in SourceManagers) {
+    //         var sourceManager = SourceManagers[srcId];
+
+    //         var selectedCompoents = sourceManager.ModelTree.GetSelectedComponents();
+    //         var nodeIdvsComponentIdList = sourceManager.NodeIdvsComponentIdList;
+
+    //         var tableName;
+    //         if (srcId === GlobalConstants.SourceAId) {
+    //             tableName = GlobalConstants.SourceASelectedComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceBId) {
+    //             tableName = GlobalConstants.SourceBSelectedComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceCId) {
+    //             tableName = GlobalConstants.SourceCSelectedComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceDId) {
+    //             tableName = GlobalConstants.SourceDSelectedComponentsTable;
+    //         }
+    //         else {
+    //             continue;
+    //         }
+
+    //         // write source a selected components
+    //         $.ajax({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "SaveSelectedComponents",
+    //                 "selectedComponentsTableName": tableName,
+    //                 "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
+    //                 "selectedComponents": JSON.stringify(selectedCompoents),
+    //                 "ProjectName": projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
+    //             }
+    //         });
+    //     }
+    // },
+
+    getNotSelectedComponents: function () {
+
+        var notSelectedComponentsObject = {};
 
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];
 
-            var selectedCompoents = sourceManager.ModelTree.GetSelectedComponents();
+            var selectedComponents = sourceManager.ModelTree.GetSelectedComponents();
 
             var componentsTable;
             var notSelectedComponentsTable;
@@ -530,25 +680,31 @@ var CheckModule = {
                 continue;
             }
 
-            // write not selected components
-            $.ajax({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveNotSelectedComponents",
-                    "notSelectedComponentsTable": notSelectedComponentsTable,
-                    "selectedComponents": JSON.stringify(selectedCompoents),
-                    "componentsTable": componentsTable,
-                    "ProjectName": projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
-                }
-            });
+            notSelectedComponentsObject[notSelectedComponentsTable] = {
+                "selectedComponents": selectedComponents,
+                "componentsTable": componentsTable
+            };
+
+            // // write not selected components
+            // $.ajax({
+            //     url: 'PHP/ProjectManager.php',
+            //     type: "POST",
+            //     async: false,
+            //     data:
+            //     {
+            //         'InvokeFunction': "SaveNotSelectedComponents",
+            //         "notSelectedComponentsTable": notSelectedComponentsTable,
+            //         "selectedComponents": JSON.stringify(selectedCompoents),
+            //         "componentsTable": componentsTable,
+            //         "ProjectName": projectinfo.projectname,
+            //         'CheckName': checkinfo.checkname
+            //     },
+            //     success: function (msg) {
+            //     }
+            // });
         }
 
+        return notSelectedComponentsObject;
         // if (sourceManager1) {
         //     var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
 
@@ -593,6 +749,103 @@ var CheckModule = {
         //         }
         //     });
         // }
-    }
+    },
+
+    // saveNotSelectedComponents: function () {
+    //     // write source a selected components
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    //     for (var srcId in SourceManagers) {
+    //         var sourceManager = SourceManagers[srcId];
+
+    //         var selectedCompoents = sourceManager.ModelTree.GetSelectedComponents();
+
+    //         var componentsTable;
+    //         var notSelectedComponentsTable;
+    //         if (srcId === GlobalConstants.SourceAId) {
+    //             notSelectedComponentsTable = GlobalConstants.SourceANotSelectedComponentsTable;
+    //             componentsTable = GlobalConstants.SourceAComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceBId) {
+    //             notSelectedComponentsTable = GlobalConstants.SourceBNotSelectedComponentsTable;
+    //             componentsTable = GlobalConstants.SourceBComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceCId) {
+    //             notSelectedComponentsTable = GlobalConstants.SourceCNotSelectedComponentsTable;
+    //             componentsTable = GlobalConstants.SourceCComponentsTable;
+    //         }
+    //         else if (srcId === GlobalConstants.SourceDId) {
+    //             notSelectedComponentsTable = GlobalConstants.SourceDNotSelectedComponentsTable;
+    //             componentsTable = GlobalConstants.SourceDComponentsTable;
+    //         }
+    //         else {
+    //             continue;
+    //         }
+
+    //         // write not selected components
+    //         $.ajax({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "SaveNotSelectedComponents",
+    //                 "notSelectedComponentsTable": notSelectedComponentsTable,
+    //                 "selectedComponents": JSON.stringify(selectedCompoents),
+    //                 "componentsTable": componentsTable,
+    //                 "ProjectName": projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
+    //             }
+    //         });
+    //     }
+
+    //     // if (sourceManager1) {
+    //     //     var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
+
+    //     //     // write source a selected components
+    //     //     $.ajax({
+    //     //         url: 'PHP/ProjectManager.php',
+    //     //         type: "POST",
+    //     //         async: false,
+    //     //         data:
+    //     //         {
+    //     //             'InvokeFunction': "SaveNotSelectedComponents",
+    //     //             "notSelectedComponentsTable": "SourceANotSelectedComponents",
+    //     //             "selectedComponents": JSON.stringify(selectedCompoents),
+    //     //             "componentsTable": "SourceAComponents",
+    //     //             "ProjectName": projectinfo.projectname,
+    //     //             'CheckName': checkinfo.checkname
+    //     //         },
+    //     //         success: function (msg) {
+    //     //         }
+    //     //     });
+    //     // }
+
+    //     // // write source Bselected components
+    //     // if (sourceManager2) {
+    //     //     var selectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();
+
+    //     //     // write source a selected components
+    //     //     $.ajax({
+    //     //         url: 'PHP/ProjectManager.php',
+    //     //         type: "POST",
+    //     //         async: false,
+    //     //         data:
+    //     //         {
+    //     //             'InvokeFunction': "SaveNotSelectedComponents",
+    //     //             "notSelectedComponentsTable": "SourceBNotSelectedComponents",
+    //     //             "selectedComponents": JSON.stringify(selectedCompoents),
+    //     //             "componentsTable": "SourceBComponents",
+    //     //             "ProjectName": projectinfo.projectname,
+    //     //             'CheckName': checkinfo.checkname
+    //     //         },
+    //     //         success: function (msg) {
+    //     //         }
+    //     //     });
+    //     // }
+    // }
 }
 

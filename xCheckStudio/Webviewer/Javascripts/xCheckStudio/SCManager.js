@@ -396,10 +396,7 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                 _this.NodeIdArray = undefined;
 
                 _this.ModelTree.addModelBrowser(_this.SourceProperties);
-                // if (checkCaseSelected) {
-                //     checkIsOrderMaintained(checkCaseManager.CheckCase.CheckTypes[0]);
-                // }
-                // add components to database
+               
                 _this.AddComponentsToDB();
             }
         });

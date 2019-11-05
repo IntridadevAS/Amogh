@@ -830,14 +830,14 @@ let checkView = {
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
     //window.location.href = "checkModule.html";
-    var fromCheckClick = localStorage.getItem('FromCheckClick')
-    // localStorage.clear();
-    if (fromCheckClick.toLowerCase() === 'true') {
+    // var fromCheckClick = localStorage.getItem('FromCheckClick')
+    // // localStorage.clear();
+    // if (fromCheckClick.toLowerCase() === 'true') {
       window.location.href = "checkPage.html";
-    }
-    else if (fromCheckClick.toLowerCase() === 'false') {
-      window.location.href = "reviewPage.html";
-    }
+    // }
+    // else if (fromCheckClick.toLowerCase() === 'false') {
+      // window.location.href = "reviewPage.html";
+    // }
     //localStorage.setItem("loadSavedProject",true);
   },
 
@@ -895,24 +895,13 @@ let checkView = {
   },
 
   reviewClicked: function (subject) {
+    var proj = model.currentProject;
+    localStorage.setItem('projectinfo', JSON.stringify(proj));
+    
     controller.setCurrentReview(subject.id);
-    var currentProj = controller.getCurrentProj();
-    var currentReview = controller.getCurrentReview();
-
-    $.ajax({
-      data: {
-        'InvokeFunction': 'CreateTempCheckSpaceDBByCopy',
-        'ProjectName': currentProj.projectname,
-        'CheckName': currentReview.checkname,
-      },
-      type: "POST",
-      url: "PHP/ProjectLoadManager.php"
-    }).done(function (msg) {
-      if (msg === 'success') {
-        localStorage.setItem('reviewinfo', JSON.stringify(currentReview));
-        window.location.href = "reviewpage.html";
-      }
-    });
+    localStorage.setItem('checkinfo', JSON.stringify(model.currentReview));
+   
+    window.location.href = "reviewPage.html";
   },
 
 
