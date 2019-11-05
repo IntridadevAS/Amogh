@@ -1092,15 +1092,16 @@
 <script>
 
 		var analyticsManager;
-
-		var comparisonCheckGroups = false;
-		var sourceAComplianceCheckGroups = false;
-		var sourceBComplianceCheckGroups = false;
 		var BarChartActive = false;
 		var PieChartActive = true;
 		var activeResultType = "";
 		var SeveritybuttonActive = true;
 		var InfoButtonActive = false;
+		var isComparisonPerformed; 
+		var isComplianceAPerformed;
+		var isComplianceBPerformed;
+		var isComplianceCPerformed;
+		var isComplianceDPerformed;
 
 
 		function onMouseOverMaxMin(selected) {
@@ -1113,244 +1114,58 @@
 
 		window.onload = function () {            
 		// read data source info
-		var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-		var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-		$.ajax({
-			url: 'PHP/DataSourceInfoReader.php',
-			type: "POST",
-			async: true,
-			data: {
-				'ProjectName': projectinfo.projectname,
-				'CheckName': checkinfo.checkname
-			},
-			success: function (msg) 
-			{                   
-				if(msg !== "fail")
-				{
-					var dataSourceInfo = JSON.parse(msg);
+		isComparisonPerformed = window.parent.isComparisonPerformed();
+		isComplianceAPerformed = window.parent.isComplianceAPerformed();
+		isComplianceBPerformed = window.parent.isComplianceBPerformed();
+		isComplianceCPerformed = window.parent.isComplianceCPerformed();
+		isComplianceDPerformed = window.parent.isComplianceDPerformed();
 
-					if('sourceBFileName' in dataSourceInfo)
-					{
-						var source = dataSourceInfo['sourceBFileName'];
-						if (source !== undefined) {
-							document.getElementById("DataSet2").innerHTML = source;
-							document.getElementById("type_2_A4_Group_4").style.display = "block";
-						}
-					}
-
-					if('sourceAFileName' in dataSourceInfo)
-					{
-						var source = dataSourceInfo['sourceAFileName'];
-						if(source !== undefined)
-						{
-							document.getElementById("DataSet1").innerHTML = source;
-							document.getElementById("type_2").style.display = "block";
-						}
-					}
-
-					if('sourceCFileName' in dataSourceInfo)
-					{
-						var source = dataSourceInfo['sourceCFileName'];
-						if (source !== undefined) {
-							document.getElementById("DataSet3").innerHTML = source;
-							document.getElementById("type_2_A4_Group_7").style.display = "block";
-						}
-					}
-
-					if('sourceDFileName' in dataSourceInfo)
-					{
-						var source = dataSourceInfo['sourceDFileName'];
-						if (source !== undefined) {
-							document.getElementById("DataSet4").innerHTML = source;
-							document.getElementById("type_2_A4_Group_10").style.display = "block";
-						}
-					}
-				}                   
-			}
-		});
-
-		// var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-		// var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-		// // read check case info
-		// $.ajax({
-		// 	url: 'PHP/CheckCaseinfoReader.php',
-		// 	type: "POST",
-		// 	async: true,
-		// 	data: {
-		// 		'ProjectName': projectinfo.projectname,
-		// 		'CheckName': checkinfo.checkname
-		// 	},
-		// 	success: function (msg) {
-		// 		if (msg !== "fail") {
-		// 			var checkCaseInfo = JSON.parse(msg);
-
-		// 			if ('checkCaseData' in checkCaseInfo) {
-		// 				var checkCaseData = JSON.parse(checkCaseInfo['checkCaseData']);
-
-		// 				if ('CheckCase' in checkCaseData) {
-		// 					var checkCase = checkCaseData['CheckCase'];
-		// 					if ('Name' in checkCase) {
-
-		// 						var checkCaseName = checkCase['Name'];
-		// 						document.getElementById("checkCaseAnalytics").innerHTML = checkCaseName;
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// });
+		populateDataSourceInfo();
 
 
-		// read check results data
-		// read  check data
-		var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-		var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-		$.ajax({
-				url: 'PHP/CheckResultsReader.php',
-				type: "POST",
-				async: true,
-				data: {
-					'ProjectName': projectinfo.projectname,
-					'CheckName': checkinfo.checkname
-				},
-				success: function (msg) 
-				{
-					var checkResults = JSON.parse(msg);                      
-					
-					populateSmallAnalyticsData(checkResults, "AnalyticsContainer");                    
-				}
-			});            
-	}     
+		
+		populateSmallAnalyticsData();       
+	}  
 	
-	// function openChartTabCompliance(tabName) {
-	// 	var tabs = document.getElementsByClassName("AnalyticsChartContainerTab");
-	// 	for (var i = 0; i < tabs.length; i++) {
-	// 		tabs[i].style.display = "none";
-	// 	}
+	function populateDataSourceInfo() {
+		var dataSourceFiles = window.parent.getDataSourceFiles();
+		if(isComplianceAPerformed)
+		{
+			var source = dataSourceFiles["sourceAFileName"];
+			if(source !== undefined)
+			{
+				document.getElementById("DataSet1").innerHTML = source;
+				document.getElementById("type_2").style.display = "block";
+			}
+		}
 
+		if(isComplianceBPerformed)
+		{
+			var source = dataSourceFiles["sourceBFileName"];
+			if (source !== undefined) {
+				document.getElementById("DataSet2").innerHTML = source;
+				document.getElementById("type_2_A4_Group_4").style.display = "block";
+			}
+		}
 
-	// 	document.getElementById(tabName).style.display = "block";
-	// 	var currentTab = document.getElementById(tabName);
-	// 	var parentTab = currentTab.parentElement;
+		if(isComplianceCPerformed)
+		{
+			var source = dataSourceFiles["sourceCFileName"];
+			if (source !== undefined) {
+				document.getElementById("DataSet3").innerHTML = source;
+				document.getElementById("type_2_A4_Group_7").style.display = "block";
+			}
+		}
 
-	// 	//for compliance A
-	// 	if (tabName === "ComplianceABarChartTab") {
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-
-
-	// 		parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-	// 		//analyticsManager.drawBarCharts("compliance", tabName);   
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary('SourceACompliance');
-	// 	}
-	// 	if (tabName === "ComplianceAPieChartTab") {
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-
-	// 		parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-	// 		//analyticsManager.drawPieCharts("compliance", tabName);      
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary('SourceACompliance');                
-	// 	}
-
-	// 	//for compliance B
-	// 	if (tabName === "ComplianceBBarChartTab") {
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-
-
-	// 		parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-
-	// 		//analyticsManager.drawBarCharts("compliance", tabName);
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary("SourceBCompliance");
-	// 	}
-	// 	if (tabName === "ComplianceBPieChartTab") {
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-
-	// 		parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-	// 		//analyticsManager.drawPieCharts("compliance", tabName);  
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary("SourceBCompliance");
-	// 	}
-	// }
-
-
-	// function openSourceComplianceChartTab(tabName) {
-	// 	var tabs = document.getElementsByClassName("AnalyticsComplianceResultsContainerTab");
-	// 	for (var i = 0; i < tabs.length; i++) {
-	// 		tabs[i].style.display = "none";
-	// 	}
-	// 	var tabs2 = document.getElementsByClassName("AnalyticsChartContainerTab");
-	// 	for (var i = 0; i < tabs2.length; i++) {
-	// 		tabs2[i].style.display = "none";
-	// 	}
-	// 	document.getElementById(tabName).style.display = "block";
-
-	// 	var currentTab = document.getElementById(tabName);
-	// 	var parentTab = currentTab.parentElement;
-
-	// 	if (tabName === "ComplianceATab") {
-	// 		sourceAButton = parentTab.getElementsByClassName("ComplianceA");
-	// 		sourceAButton[0].style.backgroundColor = "red";
-
-	// 		sourceBButton = parentTab.getElementsByClassName("ComplianceB");
-	// 		sourceBButton[0].style.backgroundColor = "white";
-
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[0];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[0];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-
-	// 		parentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		parentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-	// 		document.getElementById("ComplianceAPieChartTab").style.display = "block";
-	// 		//analyticsManager.drawPieCharts("compliance", "ComplianceAPieChartTab");
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary("SourceACompliance");
-	// 	}
-
-	// 	if (tabName === "ComplianceBTab") {
-	// 		sourceAButton = parentTab.getElementsByClassName("ComplianceA");
-	// 		sourceAButton[0].style.backgroundColor = "white";
-
-	// 		sourceBButton = parentTab.getElementsByClassName("ComplianceB");
-	// 		sourceBButton[0].style.backgroundColor = "red";
-
-	// 		barChartDiv = parentTab.getElementsByClassName("rectanglecopy16")[1];
-	// 		pieChartDiv = parentTab.getElementsByClassName("rectanglecopy15")[1];
-	// 		barChartDiv.src = "images/Analytics/01-1-rectangle-copy-16@2x.png"
-	// 		pieChartDiv.src = "images/Analytics/01-1-rectangle-copy-15@2x.png"
-
-	// 		currentTab.getElementsByClassName("piechart")[0].style.color = "rgba(255, 255, 255, 1.0)";
-	// 		currentTab.getElementsByClassName("barchart")[0].style.color = "rgba(153, 151, 152, 1.0)";
-
-	// 		document.getElementById("ComplianceBPieChartTab").style.display = "block";
-	// 		//analyticsManager.drawPieCharts("compliance", "ComplianceBPieChartTab");
-	// 		//add data to summary
-	// 		analyticsManager.setSeveritySummary("SourceBCompliance");
-	// 	}
-
-	// }
+		if(isComplianceDPerformed)
+		{
+			var source = dataSourceFiles["sourceDFileName"];
+			if (source !== undefined) {
+				document.getElementById("DataSet4").innerHTML = source;
+				document.getElementById("type_2_A4_Group_10").style.display = "block";
+			}
+		}
+	}
    
 </script>
 

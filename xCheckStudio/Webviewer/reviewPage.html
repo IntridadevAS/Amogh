@@ -394,7 +394,7 @@
             style="width: 100%; height: 100%; padding: 6px;">
             <span onclick="this.parentElement.parentElement.style.display='none'" style="color: white; font-weight: bolder; position: absolute; top: 25px;
               right: 25px;" class="closebtn">X</span>
-            <iframe src="LargeAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe id="IFramelargeAnalytics" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
         <div id="viewPanelComparison" class="viewPanel">
@@ -502,7 +502,7 @@
             </div>
           </div>
           <div id="comparisonSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
-            <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe id="IFrameSmallAnalyticsComparison" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
 
         </div>
@@ -553,7 +553,7 @@
             </div>
           </div>
           <div id="complianceSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
-            <iframe src="SmallAnalyticsModule.html" style="height: 100%; width: 100%"></iframe>
+            <iframe id="IFrameSmallAnalyticsCompliance" src="" style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
         <div class="projectName">
@@ -801,6 +801,9 @@
 
       // init review module
       initReviewModule().then(function (result) {
+        document.getElementById("IFrameSmallAnalyticsComparison").src = "SmallAnalyticsModule.html";
+        document.getElementById("IFrameSmallAnalyticsCompliance").src = "SmallAnalyticsModule.html";
+        document.getElementById("IFramelargeAnalytics").src = "LargeAnalyticsModule.html";
         // hide loading overlay
         document.getElementById("pageLoadingOverlay").style.display = "none";
       });
@@ -816,10 +819,6 @@
     function hideBusyIndicator() {
       // hide busy indicator
       $("#loadIndicator").dxLoadPanel("hide");
-    }
-
-    getCurrentView = function () {
-      return model.getCurrentReviewManager();
     }
 
     resizeCanvas = function () {
