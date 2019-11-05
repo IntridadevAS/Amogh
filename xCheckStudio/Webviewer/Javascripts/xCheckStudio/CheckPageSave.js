@@ -1,5 +1,5 @@
 var CheckModule = {
-    onSaveProgress: function () {
+    onSaveProgress: function (silent) {
 
         return new Promise((resolve) => {
 
@@ -14,7 +14,9 @@ var CheckModule = {
                         // save all
                         CheckModule.saveAll().then(function (res) {
                             if (res) {
-                                alert("Saved project information.");
+                                if (!silent) {
+                                    alert("Saved project information.");
+                                }
 
                                 // remove busy spinner        
                                 hideBusyIndicator();
@@ -22,7 +24,9 @@ var CheckModule = {
                                 return resolve(true);
                             }
 
-                            alert("Failed to save.");
+                            if (!silent) {
+                                alert("Failed to save.");
+                            }
 
                             // remove busy spinner        
                             hideBusyIndicator();
@@ -32,7 +36,9 @@ var CheckModule = {
                     }
                     else {
 
-                        alert("Failed to save.");
+                        if (!silent) {
+                            alert("Failed to save.");
+                        }
                         // remove busy spinner        
                         hideBusyIndicator();
 
@@ -100,25 +106,6 @@ var CheckModule = {
         });
     },
 
-    // saveCheckResults: function () {
-
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //     $.ajax({
-    //         url: 'PHP/ProjectManager.php',
-    //         type: "POST",
-    //         async: false,
-    //         data:
-    //         {
-    //             'InvokeFunction': "SaveCheckResults",
-    //             'ProjectName': projectinfo.projectname,
-    //             'CheckName': checkinfo.checkname
-    //         },
-    //         success: function (msg) {
-    //         }
-    //     });
-    // },
-
     getHiddenItems: function () {
         var hiddentItems = {};
         var visibleItems = {};
@@ -139,11 +126,6 @@ var CheckModule = {
                     }
                 }
 
-                // for (var hiddenNode in sourceManager.HiddenNodeIds) {
-                //     var compId = sourceManager.NodeIdvsComponentIdList[hiddenNode];
-                //     hiddenComponents[hiddenNode] = compId;
-                // }
-
                 hiddentItems[srcId] = hiddenComponents;
                 visibleItems[srcId] = visibleComponents;
             }
@@ -155,24 +137,6 @@ var CheckModule = {
         var hiddenComponentsObject = { "hiddenComponents": JSON.stringify(hiddentItems), "visibleComponents": JSON.stringify(visibleItems) };
         return hiddenComponentsObject;
     },
-
-    // saveReferences: function () {
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //     $.ajax({
-    //         url: 'PHP/ProjectManager.php',
-    //         type: "POST",
-    //         async: false,
-    //         data:
-    //         {
-    //             'InvokeFunction': "SaveReferences",
-    //             'ProjectName': projectinfo.projectname,
-    //             'CheckName': checkinfo.checkname
-    //         },
-    //         success: function (msg) {
-    //         }
-    //     });
-    // },
 
     saveComponentsToCheckSpaceDB: function () {
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -217,40 +181,6 @@ var CheckModule = {
             });
         });
     },
-
-    // saveControlsState: function () {
-    //     var controlStatesArray = this.getControlStates();
-
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //     $.ajax
-    //         ({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "SaveCheckModuleControlsState",
-    //                 "comparisonSwithOn": controlStatesArray['ComparisonSwitch'],
-    //                 "sourceAComplianceSwitchOn": controlStatesArray['SourceAComplianceSwitch'],
-    //                 "sourceBComplianceSwitchOn": controlStatesArray['SourceBComplianceSwitch'],
-    //                 "sourceCComplianceSwitchOn": controlStatesArray['SourceCComplianceSwitch'],
-    //                 "sourceDComplianceSwitchOn": controlStatesArray['SourceDComplianceSwitch'],
-    //                 "selectedDataSetTab": controlStatesArray['SelectedDataSetTab'],
-    //                 "selectedCheckCase": controlStatesArray['SelectedCheckCase'],
-    //                 // "sourceACheckAllSwitchOn": controlStatesArray['SourceACheckAllSwitch'],
-    //                 // "sourceBCheckAllSwitchOn": controlStatesArray['SourceBCheckAllSwitch'],
-    //                 "ProjectName": projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-
-    //             },
-    //             error: function (error) {
-    //                 console.log(error)
-    //             }
-    //         });
-    // },
 
     getControlStates: function () {
         // control states
@@ -366,87 +296,6 @@ var CheckModule = {
         return dataSourceInfo;
     },
 
-    // saveDataSourceInfo: function () {
-
-    //     var sourceAType;
-    //     var sourceAFileName;
-    //     if ("a" in SourceManagers) {
-    //         var sourceManager = SourceManagers["a"];
-    //         sourceAType = sourceManager.SourceType;
-    //         sourceAFileName = sourceManager.SourceName;
-
-    //     }
-
-    //     var sourceBType;
-    //     var sourceBFileName;
-    //     if ("b" in SourceManagers) {
-    //         var sourceManager = SourceManagers["b"];
-    //         sourceBType = sourceManager.SourceType;
-    //         sourceBFileName = sourceManager.SourceName;
-
-    //     }
-
-    //     var sourceCType;
-    //     var sourceCFileName;
-    //     if ("c" in SourceManagers) {
-    //         var sourceManager = SourceManagers["c"];
-    //         sourceCType = sourceManager.SourceType;
-    //         sourceCFileName = sourceManager.SourceName;
-
-    //     }
-
-    //     var sourceDType;
-    //     var sourceDFileName;
-    //     if ("d" in SourceManagers) {
-    //         var sourceManager = SourceManagers["d"];
-    //         sourceDType = sourceManager.SourceType;
-    //         sourceDFileName = sourceManager.SourceName;
-    //     }
-
-    //     // check if data source order load order is maintained
-    //     var dataSourceOrderMaintained = true;
-    //     var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
-    //     if ((("a" in SourceManagers) &&
-    //         ("sourceA" in sourceTypesFromCheckCase)) &&
-    //         (("b" in SourceManagers) &&
-    //             ("sourceA" in sourceTypesFromCheckCase))) {
-    //         if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
-    //             SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
-    //             dataSourceOrderMaintained = false;
-    //         }
-    //     }
-
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //     $.ajax
-    //         ({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "SaveDatasourceInfo",
-    //                 "SourceAFileName": sourceAFileName,
-    //                 "SourceBFileName": sourceBFileName,
-    //                 "SourceCFileName": sourceCFileName,
-    //                 "SourceDFileName": sourceDFileName,
-    //                 "SourceAType": sourceAType,
-    //                 "SourceBType": sourceBType,
-    //                 "SourceCType": sourceCType,
-    //                 "SourceDType": sourceDType,
-    //                 "orderMaintained": dataSourceOrderMaintained,
-    //                 "ProjectName": projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-
-    //             },
-    //             error: function (error) {
-    //                 console.log(error)
-    //             }
-    //         });
-    // },
-
     getSourceViewerOptions: function () {
 
         // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -500,55 +349,6 @@ var CheckModule = {
         return viewerOptionsObject;
     },
 
-    // saveSourceViewerOptions: function () {
-
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //     for (var srcId in SourceManagers) {
-    //         var sourceManager = SourceManagers[srcId];
-    //         if (!sourceManager.Is3DSource()) {
-    //             continue;
-    //         }
-
-    //         var viewerOptions = [];
-    //         viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
-
-    //         var tableName;
-    //         if (srcId === GlobalConstants.SourceAId) {
-    //             tableName = GlobalConstants.SourceAViewerOptionsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceBId) {
-    //             tableName = GlobalConstants.SourceBViewerOptionsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceCId) {
-    //             tableName = GlobalConstants.SourceCViewerOptionsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceDId) {
-    //             tableName = GlobalConstants.SourceDViewerOptionsTable;
-    //         }
-    //         else {
-    //             continue;
-    //         }
-
-    //         // write viewer options data to data base
-    //         $.ajax({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "SaveVieweroptions",
-    //                 "SourceViewerOptions": JSON.stringify(viewerOptions),
-    //                 "SourceViewerOptionsTable": tableName,
-    //                 'ProjectName': projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-    //             }
-    //         });
-    //     }
-    // },
     getSelectedComponents: function () {
 
         var selectedComponentsObject = {};
@@ -601,53 +401,6 @@ var CheckModule = {
 
         return selectedComponentsObject;
     },
-
-    // saveSelectedComponents: function () {
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //     for (var srcId in SourceManagers) {
-    //         var sourceManager = SourceManagers[srcId];
-
-    //         var selectedCompoents = sourceManager.ModelTree.GetSelectedComponents();
-    //         var nodeIdvsComponentIdList = sourceManager.NodeIdvsComponentIdList;
-
-    //         var tableName;
-    //         if (srcId === GlobalConstants.SourceAId) {
-    //             tableName = GlobalConstants.SourceASelectedComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceBId) {
-    //             tableName = GlobalConstants.SourceBSelectedComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceCId) {
-    //             tableName = GlobalConstants.SourceCSelectedComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceDId) {
-    //             tableName = GlobalConstants.SourceDSelectedComponentsTable;
-    //         }
-    //         else {
-    //             continue;
-    //         }
-
-    //         // write source a selected components
-    //         $.ajax({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "SaveSelectedComponents",
-    //                 "selectedComponentsTableName": tableName,
-    //                 "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-    //                 "selectedComponents": JSON.stringify(selectedCompoents),
-    //                 "ProjectName": projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-    //             }
-    //         });
-    //     }
-    // },
 
     getNotSelectedComponents: function () {
 
@@ -750,102 +503,5 @@ var CheckModule = {
         //     });
         // }
     },
-
-    // saveNotSelectedComponents: function () {
-    //     // write source a selected components
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //     for (var srcId in SourceManagers) {
-    //         var sourceManager = SourceManagers[srcId];
-
-    //         var selectedCompoents = sourceManager.ModelTree.GetSelectedComponents();
-
-    //         var componentsTable;
-    //         var notSelectedComponentsTable;
-    //         if (srcId === GlobalConstants.SourceAId) {
-    //             notSelectedComponentsTable = GlobalConstants.SourceANotSelectedComponentsTable;
-    //             componentsTable = GlobalConstants.SourceAComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceBId) {
-    //             notSelectedComponentsTable = GlobalConstants.SourceBNotSelectedComponentsTable;
-    //             componentsTable = GlobalConstants.SourceBComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceCId) {
-    //             notSelectedComponentsTable = GlobalConstants.SourceCNotSelectedComponentsTable;
-    //             componentsTable = GlobalConstants.SourceCComponentsTable;
-    //         }
-    //         else if (srcId === GlobalConstants.SourceDId) {
-    //             notSelectedComponentsTable = GlobalConstants.SourceDNotSelectedComponentsTable;
-    //             componentsTable = GlobalConstants.SourceDComponentsTable;
-    //         }
-    //         else {
-    //             continue;
-    //         }
-
-    //         // write not selected components
-    //         $.ajax({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "SaveNotSelectedComponents",
-    //                 "notSelectedComponentsTable": notSelectedComponentsTable,
-    //                 "selectedComponents": JSON.stringify(selectedCompoents),
-    //                 "componentsTable": componentsTable,
-    //                 "ProjectName": projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-    //             }
-    //         });
-    //     }
-
-    //     // if (sourceManager1) {
-    //     //     var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
-
-    //     //     // write source a selected components
-    //     //     $.ajax({
-    //     //         url: 'PHP/ProjectManager.php',
-    //     //         type: "POST",
-    //     //         async: false,
-    //     //         data:
-    //     //         {
-    //     //             'InvokeFunction': "SaveNotSelectedComponents",
-    //     //             "notSelectedComponentsTable": "SourceANotSelectedComponents",
-    //     //             "selectedComponents": JSON.stringify(selectedCompoents),
-    //     //             "componentsTable": "SourceAComponents",
-    //     //             "ProjectName": projectinfo.projectname,
-    //     //             'CheckName': checkinfo.checkname
-    //     //         },
-    //     //         success: function (msg) {
-    //     //         }
-    //     //     });
-    //     // }
-
-    //     // // write source Bselected components
-    //     // if (sourceManager2) {
-    //     //     var selectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();
-
-    //     //     // write source a selected components
-    //     //     $.ajax({
-    //     //         url: 'PHP/ProjectManager.php',
-    //     //         type: "POST",
-    //     //         async: false,
-    //     //         data:
-    //     //         {
-    //     //             'InvokeFunction': "SaveNotSelectedComponents",
-    //     //             "notSelectedComponentsTable": "SourceBNotSelectedComponents",
-    //     //             "selectedComponents": JSON.stringify(selectedCompoents),
-    //     //             "componentsTable": "SourceBComponents",
-    //     //             "ProjectName": projectinfo.projectname,
-    //     //             'CheckName': checkinfo.checkname
-    //     //         },
-    //     //         success: function (msg) {
-    //     //         }
-    //     //     });
-    //     // }
-    // }
 }
 

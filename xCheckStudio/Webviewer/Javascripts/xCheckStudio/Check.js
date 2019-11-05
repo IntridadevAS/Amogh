@@ -268,7 +268,7 @@ function cancelCheckResults() {
 function reviewResults(callbackFunction) {
     //saveData();
 
-    CheckModule.onSaveProgress().then(function (result) {
+    CheckModule.onSaveProgress(true).then(function (result) {
         if (callbackFunction) {
             callbackFunction();
         }
