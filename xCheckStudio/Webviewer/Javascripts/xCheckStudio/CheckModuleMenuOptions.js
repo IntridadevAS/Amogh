@@ -38,7 +38,7 @@ function enableMenuOptions() {
 
     // on save progress
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        CheckModule.onSaveProgress();
+        CheckModule.onSaveProgress(false);
     }
 
     // on navigation cube
