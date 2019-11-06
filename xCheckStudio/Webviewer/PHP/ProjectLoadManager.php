@@ -67,6 +67,13 @@
             { 
                 echo json_encode(array("Msg" =>  "Saved data not found",
                 "MsgCode" => 0));  
+
+                // create temp checkspace db
+                $tempDBPath = getCheckDatabasePath($projectName, $checkName);
+                if(!file_exists ($tempDBPath ))
+                { 
+                    $database = new SQLite3($tempDBPath);
+                } 
                 return;
             }       
 
