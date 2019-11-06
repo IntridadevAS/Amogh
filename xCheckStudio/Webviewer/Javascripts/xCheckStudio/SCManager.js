@@ -96,17 +96,22 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
-                _this.ReadProperties(rootNodeId, identifierProperties, undefined);
+                _this.ReadProperties(rootNodeId, identifierProperties, undefined).then(function (res) {
+                    if (res) {
+                        _this.ModelTree.addModelBrowser(_this.SourceProperties);
+
+                        _this.AddComponentsToDB();
+                    }
+
+                    return resolve(true);
+                });
 
                 //activate context menu            
                 var ids = _this.GetControlIds();
 
                 _this.CheckViewerContextMenu = new ViewerContextMenu(viewer, ids);
                 _this.CheckViewerContextMenu.Init();
-
-                return resolve(true);
-
-            },
+             },
             modelLoadFailure: function () {
                 return resolve(false);
             }
@@ -303,104 +308,111 @@ SCManager.prototype.CreateNodeIdArray = function (nodeId) {
 }
 
 SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, parentNodeId) {
-    var _this = this;
+    return new Promise((resolve) => {
 
-    if (nodeId !== null &&
-        _this.Webviewer.model.isNodeLoaded(nodeId) &&
-        (_this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
-            _this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.Part ||
-            _this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.PartInstance)) {
+        var _this = this;
 
-        _this.Webviewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
+        if (nodeId !== null &&
+            _this.Webviewer.model.isNodeLoaded(nodeId) &&
+            (_this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.AssemblyNode ||
+                _this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.Part ||
+                _this.Webviewer.model.getNodeType(nodeId) === Communicator.NodeType.PartInstance)) {
 
-            if (nodeProperties != null &&
-                Object.keys(nodeProperties).length > 0 &&
-                identifierProperties !== undefined) {
+            _this.Webviewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
 
-                // get component name
-                var name = _this.GetPropertyValue(nodeProperties, identifierProperties.name);
-                if (name == undefined) {
-                    name = _this.Webviewer.model.getNodeName(nodeId)
-                }
+                if (nodeProperties != null &&
+                    Object.keys(nodeProperties).length > 0 &&
+                    identifierProperties !== undefined) {
 
-                // get main component class
-                var mainComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.mainCategory);
-                if (_this.SourceType.toLowerCase() == "rvt" &&
-                    mainComponentClass == undefined) {
-                    mainComponentClass = _this.Webviewer.model.getNodeName(parentNodeId);
-                }
+                    // get component name
+                    var name = _this.GetPropertyValue(nodeProperties, identifierProperties.name);
+                    if (name == undefined) {
+                        name = _this.Webviewer.model.getNodeName(nodeId)
+                    }
 
-                // get sub component class
-                var subComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.subClass);
-                if (_this.SourceType.toLowerCase() == "rvt" &&
-                    subComponentClass == undefined) {
-                    subComponentClass = mainComponentClass
-                }
+                    // get main component class
+                    var mainComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.mainCategory);
+                    if (_this.SourceType.toLowerCase() == "rvt" &&
+                        mainComponentClass == undefined) {
+                        mainComponentClass = _this.Webviewer.model.getNodeName(parentNodeId);
+                    }
 
-                if (mainComponentClass !== undefined &&
-                    name !== undefined &&
-                    subComponentClass !== undefined) {
+                    // get sub component class
+                    var subComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.subClass);
+                    if (_this.SourceType.toLowerCase() == "rvt" &&
+                        subComponentClass == undefined) {
+                        subComponentClass = mainComponentClass
+                    }
 
-                    // create generic properties object
-                    var genericPropertiesObject = new GenericComponent(name,
-                        mainComponentClass,
-                        subComponentClass,
-                        nodeId,
-                        parentNodeId);
+                    if (mainComponentClass !== undefined &&
+                        name !== undefined &&
+                        subComponentClass !== undefined) {
 
-                    // add component class as generic property
-                    var componentClassPropertyObject = new GenericProperty("ComponentClass",
-                        "String",
-                        subComponentClass);
+                        // create generic properties object
+                        var genericPropertiesObject = new GenericComponent(name,
+                            mainComponentClass,
+                            subComponentClass,
+                            nodeId,
+                            parentNodeId);
 
-                    genericPropertiesObject.addProperty(componentClassPropertyObject);
-
-
-                    if (_this.SourceType.toLowerCase() == "rvt") {
-                        var elementName = new GenericProperty("Name",
+                        // add component class as generic property
+                        var componentClassPropertyObject = new GenericProperty("ComponentClass",
                             "String",
-                            name);
+                            subComponentClass);
 
-                        genericPropertiesObject.addProperty(elementName);
-                    }
+                        genericPropertiesObject.addProperty(componentClassPropertyObject);
 
-                    // iterate node properties and add to generic properties object
-                    for (var key in nodeProperties) {
-                        var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
-                        genericPropertiesObject.addProperty(genericPropertyObject);
-                    }
 
-                    // add genericProperties object to sourceproperties collection
-                    _this.SourceProperties[nodeId] = (genericPropertiesObject);
-                }
-            }
+                        if (_this.SourceType.toLowerCase() == "rvt") {
+                            var elementName = new GenericProperty("Name",
+                                "String",
+                                name);
 
-            var children = _this.Webviewer.model.getNodeChildren(nodeId);
-            if (children.length > 0) {
-                for (var i = 0, children_1 = children; i < children_1.length; i++) {
-                    var child = children_1[i];
+                            genericPropertiesObject.addProperty(elementName);
+                        }
 
-                    if (child !== null &&
-                        (_this.Webviewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
-                            _this.Webviewer.model.getNodeType(child) === Communicator.NodeType.Part ||
-                            _this.Webviewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
-                        _this.ReadProperties(child, identifierProperties, nodeId)
+                        // iterate node properties and add to generic properties object
+                        for (var key in nodeProperties) {
+                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
+                            genericPropertiesObject.addProperty(genericPropertyObject);
+                        }
+
+                        // add genericProperties object to sourceproperties collection
+                        _this.SourceProperties[nodeId] = (genericPropertiesObject);
                     }
                 }
-            }
 
-            if (_this.NodeIdArray.indexOf(nodeId) != -1) {
-                _this.NodeIdArray.splice(_this.NodeIdArray.indexOf(nodeId), 1);
-            }
-            if (_this.NodeIdArray.length == 0) {
-                _this.NodeIdArray = undefined;
+                var children = _this.Webviewer.model.getNodeChildren(nodeId);
+                if (children.length > 0) {
+                    for (var i = 0, children_1 = children; i < children_1.length; i++) {
+                        var child = children_1[i];
 
-                _this.ModelTree.addModelBrowser(_this.SourceProperties);
-               
-                _this.AddComponentsToDB();
-            }
-        });
-    }
+                        if (child !== null &&
+                            (_this.Webviewer.model.getNodeType(child) === Communicator.NodeType.AssemblyNode ||
+                                _this.Webviewer.model.getNodeType(child) === Communicator.NodeType.Part ||
+                                _this.Webviewer.model.getNodeType(child) === Communicator.NodeType.PartInstance)) {
+                            _this.ReadProperties(child, identifierProperties, nodeId).then(function (res) {
+                                return resolve(res);
+                            });
+                        }
+                    }
+                }
+
+                if (_this.NodeIdArray.indexOf(nodeId) != -1) {
+                    _this.NodeIdArray.splice(_this.NodeIdArray.indexOf(nodeId), 1);
+                }
+                if (_this.NodeIdArray.length == 0) {
+                    _this.NodeIdArray = undefined;
+
+                    // _this.ModelTree.addModelBrowser(_this.SourceProperties);
+
+                    // _this.AddComponentsToDB();
+
+                    return resolve(true);
+                }                
+            });
+        }        
+    });
 };
 
 SCManager.prototype.GetPropertyValue = function (propertyCollectionObject, propertyToSearch) {
@@ -416,6 +428,7 @@ SCManager.prototype.GetPropertyValue = function (propertyCollectionObject, prope
 
 SCManager.prototype.AddComponentsToDB = function () {
 
+    console.log("start of AddComponentsToDB");
     var _this = this;
 
     var source = undefined;
@@ -446,6 +459,8 @@ SCManager.prototype.AddComponentsToDB = function () {
         // var busySpinner = document.getElementById("divLoading");
         // if (busySpinner.classList.contains('show'))
         //     busySpinner.classList.remove('show')
+
+        console.log("End of AddComponentsToDB");
     });
 }
 

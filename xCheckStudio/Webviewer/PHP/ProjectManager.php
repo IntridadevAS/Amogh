@@ -480,22 +480,22 @@ function ClearTemporaryCheckSpaceDB()
             unlink($tempDBPath);            
         }     
         
-          // check if checkspace db is saved. If not saved, then 
-        // delete the checkspace entry from project db
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-        if(!file_exists ($dbPath))
-        {           
-            // remove checkspace entry from main project db 
-            $projectDbPath = getProjectDatabasePath($projectName);
-            $dbh = new PDO("sqlite:".$projectDbPath) or die("cannot open the database");            
-            $query =  "Delete from CheckSpace where checkname='".$checkName."' and projectid='". $projectId."';";  
-            $stmt = $dbh->prepare($query);      
-            $stmt->execute();
+        //   // check if checkspace db is saved. If not saved, then 
+        // // delete the checkspace entry from project db
+        // $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+        // if(!file_exists ($dbPath))
+        // {           
+        //     // remove checkspace entry from main project db 
+        //     $projectDbPath = getProjectDatabasePath($projectName);
+        //     $dbh = new PDO("sqlite:".$projectDbPath) or die("cannot open the database");            
+        //     $query =  "Delete from CheckSpace where checkname='".$checkName."' and projectid='". $projectId."';";  
+        //     $stmt = $dbh->prepare($query);      
+        //     $stmt->execute();
 
-            // delete checkspace directory
-            $checkspaceDir = getCheckDirectoryPath($projectName, $checkName);
-            deleteDirectory($checkspaceDir);           
-        }  
+        //     // delete checkspace directory
+        //     $checkspaceDir = getCheckDirectoryPath($projectName, $checkName);
+        //     deleteDirectory($checkspaceDir);           
+        // }  
     }
     catch(Exception $e) 
     {        
@@ -2639,7 +2639,7 @@ function SaveCheckCaseData()
         // open database
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-                    
+
         // begin the transaction
         $dbh->beginTransaction();
 
@@ -2648,12 +2648,10 @@ function SaveCheckCaseData()
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
         $dbh->exec($command);
-
-        $command = 'CREATE TABLE CheckCaseInfo(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                    checkCaseData TEXT)';         
-        $dbh->exec($command);    
-
+        
+        $command = 'CREATE TABLE CheckCaseInfo(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, checkCaseData TEXT)';         
+        $dbh->exec($command);
+        
         $insertQuery = 'INSERT INTO CheckCaseInfo(checkCaseData) VALUES(?) ';
         $values = array($checkCaseData);
                     

@@ -8,14 +8,7 @@ function SourceManager(id, sourceName, sourceType)
     // this.IsFirstViewer = isFirstViewer;
     this.SourceProperties = {};
     this.ModelTree = undefined;
-
-    // // virtual function
-    // SourceManager.prototype.LoadData = function(selectedComponents) {    
-    //     return new Promise((resolve) => {
-    //         return resolve(true);
-    //     });
-    // }; 
-
+   
     // virtual function
     SourceManager.prototype.GetViewerContainerID = function () {
     }; 

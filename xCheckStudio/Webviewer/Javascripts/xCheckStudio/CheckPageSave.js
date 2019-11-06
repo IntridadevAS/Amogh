@@ -138,23 +138,23 @@ var CheckModule = {
         return hiddenComponentsObject;
     },
 
-    saveComponentsToCheckSpaceDB: function () {
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        $.ajax({
-            url: 'PHP/ProjectManager.php',
-            type: "POST",
-            async: false,
-            data:
-            {
-                'InvokeFunction': "SaveComponents",
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
-            },
-            success: function (msg) {
-            }
-        });
-    },
+    // saveComponentsToCheckSpaceDB: function () {
+    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    //     $.ajax({
+    //         url: 'PHP/ProjectManager.php',
+    //         type: "POST",
+    //         async: false,
+    //         data:
+    //         {
+    //             'InvokeFunction': "SaveComponents",
+    //             'ProjectName': projectinfo.projectname,
+    //             'CheckName': checkinfo.checkname
+    //         },
+    //         success: function (msg) {
+    //         }
+    //     });
+    // },
 
     createCheckSpaceDBonSave: function () {
         return new Promise((resolve) => {
