@@ -52,7 +52,13 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
     sheetName,
     CurrentReviewTableRowData) {
 
-    // get class wise components                                                                                    
+    // get class wise components 
+    // If component group is undefined, get its sheetName using mainclass and then get class wise components
+    if(sheetName == "Undefined") {
+        var component = model.getCurrentReviewManager().GetCheckComponent(CurrentReviewTableRowData.groupId, CurrentReviewTableRowData.ID);
+        sheetName = model.getCurrentReviewManager().GetSheetName(component, viewerContainer);
+    }
+
     var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName);
     if (!classWiseComponents) {
         return;
@@ -144,6 +150,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
 
     }
 };
+
 
 Review1DViewerInterface.prototype.unHighlightComponent = function () {
     if (this.SelectedSheetRow) {
@@ -320,43 +327,59 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     var componentsGroupName = sheetDataRow.cells[column.ComponentClass].innerText;
 
+    var checkTableIdFound = false;
+    var undefinedGroupId;
     for (var groupId in checkTableIds) {
         if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
+            if(checkTableIds[groupId].toLowerCase().includes("undefined")) {
+                undefinedGroupId = groupId;
+            }
             continue;
         }
-        else {
-            var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
 
-            var checkTableId = categoryTable.id;          
-            var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
-            var rows = checkDataGrid.getVisibleRows();
+        checkTableIdFound = true;
+        return this.GetRowAndExpandAccordion(groupId, componentsGroupName, componentName);
+    }
 
-            for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-                var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+    if(!checkTableIdFound && undefinedGroupId) {
+        return this.GetRowAndExpandAccordion(undefinedGroupId, "Undefined", componentName);
+    }
 
-                var name;
-                if (this.IsComparison) {
-                    if (this.Id === "a") {
-                        name = row.cells[ComparisonColumns.SourceAName].innerText;
-                    }
-                    else if (this.Id === "b") {
-                        name = row.cells[ComparisonColumns.SourceBName].innerText;
-                    }
-                }
-                else {
-                    name = row.cells[ComplianceColumns.SourceName].innerText;
-                }
+    return undefined;
+}
 
-                if (componentName === name) {
-                    //Expand Accordion and Scroll to Row
-                    model.getCurrentReviewTable().ExpandAccordionScrollToRow(row, componentsGroupName);
-                    
-                    return { "row": row, "tableId": "#" + checkTableId };
-                }
+Review1DViewerInterface.prototype.GetRowAndExpandAccordion = function(groupId, componentsGroupName, componentName) {
+    var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
+
+    var categoryTable = document.getElementById(checkTableIds[groupId].replace('#', ''));
+
+    var checkTableId = categoryTable.id;          
+    var checkDataGrid = $("#" + checkTableId).dxDataGrid("instance");
+    var rows = checkDataGrid.getVisibleRows();
+
+    for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        var row = checkDataGrid.getRowElement(rows[rowIndex].rowIndex)[0];
+
+        var name;
+        if (this.IsComparison) {
+            if (this.Id === "a") {
+                name = row.cells[ComparisonColumns.SourceAName].innerText;
+            }
+            else if (this.Id === "b") {
+                name = row.cells[ComparisonColumns.SourceBName].innerText;
             }
         }
+        else {
+            name = row.cells[ComplianceColumns.SourceName].innerText;
+        }
+
+        if (componentName === name) {
+            //Expand Accordion and Scroll to Row
+            model.getCurrentReviewTable().ExpandAccordionScrollToRow(row, componentsGroupName);
+            
+            return { "row": row, "tableId": "#" + checkTableId };
+        }
     }
-    return undefined;
 }
 
 Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (sheetDataRow,
@@ -389,7 +412,6 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
 }
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName) {
-
     return this.Components[sheetName];
 }
 

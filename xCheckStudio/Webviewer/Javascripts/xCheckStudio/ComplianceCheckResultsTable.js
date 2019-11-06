@@ -601,7 +601,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 
                 if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
                 {
-                    var reviewComplianceContextMenuManager = new reviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                    var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
                     model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
                 }
 

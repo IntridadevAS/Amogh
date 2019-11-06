@@ -570,6 +570,19 @@ ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function 
     }
 }
 
+ComparisonReviewManager.prototype.GetSheetName = function(component, viewerContainerId) {
+    var sheetName; 
+
+    if(viewerContainerId == Comparison.ViewerAContainer) {
+        sheetName = sourceAComparisonHierarchy[component.sourceAId].MainClass;
+    }
+    else if(viewerContainerId == Comparison.ViewerBContainer) {
+        sheetName = sourceBComparisonHierarchy[component.sourceBId].MainClass;
+    }
+
+    return sheetName;
+}
+
 ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedRow, tableContainer, componentId, groupId) {
     var _this = this;
     var transposeType = key;

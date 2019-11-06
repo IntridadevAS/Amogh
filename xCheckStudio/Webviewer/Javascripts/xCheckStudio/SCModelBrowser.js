@@ -222,8 +222,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 visible: true
             },
             scrolling: {
-                mode: "virtual",
-                rowRenderingMode: "virtual"
+                mode: "standard"          
             },
             paging: {
                  pageSize: 50
