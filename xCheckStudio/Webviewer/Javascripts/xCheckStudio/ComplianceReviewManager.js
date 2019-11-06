@@ -308,6 +308,12 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordion, 
     }
 }
 
+ComplianceReviewManager.prototype.GetSheetName =  function(component, viewerContainerId) {
+    var sheetName;
+    sheetName = this.ComplianceCheckManager["ComponentsHierarchy"][component.sourceId].MainClass;
+    return sheetName;
+}
+
 ComplianceReviewManager.prototype.UnAcceptComponent = function (selectedRow, 
                                                                 tableToUpdate,
                                                                 tableContainer, 
