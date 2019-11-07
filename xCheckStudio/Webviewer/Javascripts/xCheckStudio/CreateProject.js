@@ -38,11 +38,9 @@ function createProject(projectname, descriptionText, functionText, projectScope)
                 },
                 type: "POST",
                 url: "PHP/ProjectManager.php"
-            }).done(function (msg) 
-            {
+            }).done(function (msg) {
 
-                if (msg === 'success') 
-                {
+                if (msg === 'success') {
                     //alert("Main.db record added.");
                     window.location.href = "checkModule.html";
                 }
@@ -86,10 +84,9 @@ function createNewProject(projectname, projectDescription, projectType, projectS
                 },
                 type: "POST",
                 url: "PHP/ProjectManager.php"
-            }).done(function (msg) 
-            {
+            }).done(function (msg) {
                 var object = JSON.parse(msg);
-                if (object.projectid !== -1){
+                if (object.projectid !== -1) {
                     localStorage.setItem('projectinfo', JSON.stringify(msg));
                     //CreateNewCheckCase();
                 }
@@ -103,4 +100,39 @@ function createNewProject(projectname, projectDescription, projectType, projectS
 }
 
 
+function cancelCancelProjectCreation() {
+    hideCancelProjectCreationForm();
+}
 
+function hideCancelProjectCreationForm()
+{
+    var overlay = document.getElementById("cancelProjectCreationOverlay");
+    var popup = document.getElementById("cancelProjectCreationPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelProjectCreation() {
+    newProjectView.closeNewProject();
+    hideCancelProjectCreationForm();
+}
+
+
+function cancelCancelCheckSpaceCreation() {
+    hideCancelCheckSpaceCreationForm();
+}
+
+function hideCancelCheckSpaceCreationForm()
+{
+    var overlay = document.getElementById("cancelCheckSpaceCreationOverlay");
+    var popup = document.getElementById("cancelCheckSpaceCreationPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelCheckSpaceCreation() {
+    newCheckView.closeNewCheck();
+    hideCancelCheckSpaceCreationForm();
+}

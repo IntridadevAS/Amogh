@@ -142,7 +142,8 @@ let viewTabs = {
       let deleteTab = event.target.closest('.deleteTab');
       let changeTab = event.target.closest('.tab');
       if (deleteTab) {
-        viewTabs.deleteTab(deleteTab.parentNode);
+        viewTabs.onClearDataSource();
+        // viewTabs.deleteTab(deleteTab.parentNode);
       } else if (changeTab) {
         controller.selectView(changeTab.dataset.id);
         viewTabs.selectTab(changeTab);       
@@ -258,6 +259,20 @@ let viewTabs = {
 
   showAddTab: function () {
     this.addTab.classList.remove("hide");
+  },
+
+  onClearDataSource: function () {
+    var overlay = document.getElementById("clearDataSourceOverlay");
+    var popup = document.getElementById("clearDataSourcePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "154px";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
   }
 }
 
@@ -399,4 +414,23 @@ function onComplianceSwitchStateChanged(checkBox) {
   }
 
   model.views[model.currentTabId].complianceSwitchChecked = checkBox.checked;
+}
+
+function cancelClearDataSource() {
+  hideClearDataSourceForm();
+}
+
+function clearDataSource() {  
+  var tabToDelete = document.getElementById("tab_"+model.currentTabId)
+  viewTabs.deleteTab(tabToDelete);
+  
+  hideClearDataSourceForm();
+}
+
+function hideClearDataSourceForm() {
+  var overlay = document.getElementById("clearDataSourceOverlay");
+  var popup = document.getElementById("clearDataSourcePopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
 }

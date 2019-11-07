@@ -969,6 +969,20 @@ let newProjectView = {
   closeNewProject: function () {
     onToggleOverlayDisplay(false);
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
+  },
+  onCloseNewProject: function () {
+    var overlay = document.getElementById("cancelProjectCreationOverlay");
+    var popup = document.getElementById("cancelProjectCreationPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
   }
 }
 
@@ -984,6 +998,21 @@ let newCheckView = {
   closeNewCheck: function () {
     onToggleOverlayDisplay(false);
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
+  },
+
+  onCloseNewCheck: function () {
+    var overlay = document.getElementById("cancelCheckSpaceCreationOverlay");
+    var popup = document.getElementById("cancelCheckSpaceCreationPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
   },
 
   createNewCheck: function (checkspace) {
@@ -1191,6 +1220,9 @@ let deleteItems = {
     let delType = document.getElementById("deleteType");
     this.deleteBox.classList.add("deleteOpen");
 
+    this.deleteBox.children[0].style.top = ((window.innerHeight / 2) - 139) + "px";
+    this.deleteBox.children[0].style.left = ((window.innerWidth / 2) - 290) + "px";
+
     let deleteBtn = document.getElementById("deleteBtn");
     deleteBtn.elementid = id;
     deleteBtn.itemtype = type;
@@ -1233,31 +1265,6 @@ let deleteItems = {
 }
 
 controller.init();
-
-// function cancelReturnHome() {
-//   var overlay = document.getElementById("returnHomeOverlay");
-//   var popup = document.getElementById("returnHomePopup");
-
-//   overlay.style.display = 'none';
-//   popup.style.display = 'none';
-// }
-
-// function returnHome() {
-//   window.location = "landingPage.html";
-// }
-
-// function onHomeClick() {
-
-//   var overlay = document.getElementById("returnHomeOverlay");
-//   var popup = document.getElementById("returnHomePopup");
-
-//   overlay.style.display = 'block';
-//   popup.style.display = 'block';
-
-//   popup.style.width = "581px";
-//   popup.style.height = "155px";
-//   popup.style.overflow = "hidden";
-// }
 
 function onToggleOverlayDisplay(show) {
   if (show === true) {

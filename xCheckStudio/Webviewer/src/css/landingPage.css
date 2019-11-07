@@ -54,7 +54,7 @@
 }
 
 .disabled {
-  pointer-events: none;
+  /* pointer-events: none; */
   border-color: #C0C0C0;
   color: #C0C0C0;
   opacity: 0.4;
