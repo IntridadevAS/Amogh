@@ -518,16 +518,20 @@ ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
             viewerInterface.Viewer.view.fitWorld();
         });
 
-        var SelectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+        var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
         
         //Remove resultId on show
-        viewerInterface.RemoveHiddenResultId(this.ComponentTableContainer, SelectedComponents);
+        viewerInterface.RemoveHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
 
 
         var rows = [];
         for (var i = 0; i < SelectedComponentRows.length; i++) {
-            rows.push(SelectedComponentRows[i]["row"]);
+            var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+            var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
+            var row = dataGrid.getRowElement(rowIndex)[0];
+            rows.push(row);
         }
+
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
     }
 }
@@ -548,13 +552,18 @@ ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
             viewerInterface.Viewer.view.fitWorld();
         });
 
-        var SelectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+        var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
        
-        viewerInterface.StoreHiddenResultId(this.ComponentTableContainer, SelectedComponents);
+        viewerInterface.StoreHiddenResultId(this.ComponentTableContainer, SelectedComponentRows);
+        
         var rows = [];
         for (var i = 0; i < SelectedComponentRows.length; i++) {
-            rows.push(SelectedComponentRows[i]["row"]);
+            var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+            var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
+            var row = dataGrid.getRowElement(rowIndex)[0];
+            rows.push(row);
         }
+
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
     }
 }
@@ -572,7 +581,8 @@ ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
     for (var i = 0; i < selectedComponents.length; i++) {
         var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow["rowIndex"]];
+        var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+        var rowData = rowsData[rowIndex];
 
         if (rowData.NodeId &&
             rowData.NodeId !== "") {

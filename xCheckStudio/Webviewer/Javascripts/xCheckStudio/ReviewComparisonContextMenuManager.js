@@ -445,10 +445,10 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 
     if (key === "acceptComponent") {
         if (options.items[key].name == "Accept") {
-            this.OnAcceptComponent(selectedRow);
+            this.OnAcceptComponents(selectedRow);
         }
         else {
-            this.OnUnAcceptComponent(selectedRow);
+            this.OnUnAcceptComponents(selectedRow);
         }
     }
     else if (key === "acceptProperty") {
@@ -498,15 +498,15 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     }
 }
 
-ReviewComparisonContextMenuManager.prototype.OnAcceptComponent = function (rowClicked) {
+ReviewComparisonContextMenuManager.prototype.OnAcceptComponents = function (rowClicked) {
 
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
+    // var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
 
+    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+    // var componentId = rowData.ID;
+    // var groupId = rowData.groupId;
 
-    var componentId = rowData.ID;
-    var groupId = rowData.groupId;
-
-    comparisonReviewManager.AcceptComponent(rowClicked, this.ComponentTableContainer, componentId, groupId);
+    comparisonReviewManager.AcceptComponents(selectedGroupIdsVsResultIds);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
@@ -529,17 +529,16 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
     comparisonReviewManager.updateStatusOfCategory(rowClicked[0]);
 }
 
-ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponent = function (rowClicked) {
+ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponents = function (rowClicked) {
 
-    var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
+    // var rowData = model.getCurrentReviewTable().GetDataForSelectedRow(rowClicked[0].rowIndex, this.ComponentTableContainer);
 
-    var componentId = rowData.ID;
-    var groupId = rowData.groupId;
+    // var componentId = rowData.ID;
+    // var groupId = rowData.groupId;
 
-    comparisonReviewManager.UnAcceptComponent(rowClicked,
-        this.ComponentTableContainer,
-        componentId,
-        groupId);
+    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+
+    comparisonReviewManager.UnAcceptComponents(selectedGroupIdsVsResultIds);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
@@ -705,7 +704,10 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
 
     var rows = [];
     for (var i = 0; i < SelectedComponentRows.length; i++) {
-        rows.push(SelectedComponentRows[i]["row"]);
+        var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        rows.push(row);
     }
 
     model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
@@ -746,8 +748,12 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
 
     var rows = [];
     for (var i = 0; i < SelectedComponentRows.length; i++) {
-        rows.push(SelectedComponentRows[i]["row"]);
+        var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        rows.push(row);
     }
+
     model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
 }
 
@@ -765,7 +771,8 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
     for (var i = 0; i < selectedComponents.length; i++) {
         var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow["rowIndex"]];
+        var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+        var rowData = rowsData[rowIndex];
         // source A        
         if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
             sourceANodeIds.push(Number(rowData.SourceANodeId));
@@ -781,6 +788,38 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         "SourceA": sourceANodeIds,
         "SourceB": sourceBNodeIds
     };
+}
+
+ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = function() {
+    var selectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
+    if (selectedComponents.length === 0) {
+        return undefined;
+    }
+
+    var selectedGroupIdsVsResultIds = {};
+    // var selectedResultIdsVsRowElements = {};
+    for(var i = 0; i < selectedComponents.length; i++) {
+        var selectedRow = selectedComponents[i];
+        // var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+        // var rowsData = dataGrid.getDataSource().items();
+        // var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+
+        var tableIds = model.getCurrentReviewTable().CheckTableIds;
+        var groupId = Object.keys(tableIds).find(key => tableIds[key] === selectedRow["tableId"]);
+        var resultId = selectedRow["rowKey"];
+
+        // selectedResultIdsVsRowElements[resultId] = selectedRow["row"];
+
+        if(groupId in selectedGroupIdsVsResultIds) {
+            selectedGroupIdsVsResultIds[groupId].push(Number(resultId));
+        }
+        else {
+            selectedGroupIdsVsResultIds[groupId] = [];
+            selectedGroupIdsVsResultIds[groupId].push(Number(resultId));
+        }
+    }
+    
+    return  selectedGroupIdsVsResultIds;
 }
 
 ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {

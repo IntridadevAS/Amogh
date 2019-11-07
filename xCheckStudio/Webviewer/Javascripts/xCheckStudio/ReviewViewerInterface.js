@@ -161,7 +161,8 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
     if(model.currentCheck == "comparison") {
         for (var i = 0; i < selectedComponentRows.length; i++) {
             var selectedRow = selectedComponentRows[i];
-            var rowData = rowsData[selectedRow["rowIndex"]];
+            var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+            var rowData = rowsData[rowIndex];
                 // source A
                 if(model.checks[model.currentCheck].sourceAViewer) {
                     var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
@@ -189,7 +190,8 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
             if(viewerInterface == this) {
                 for (var i = 0; i < selectedComponentRows.length; i++) {
                     var selectedRow = selectedComponentRows[i];
-                    var rowData = rowsData[selectedRow["rowIndex"]];
+                    var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+                    var rowData = rowsData[rowIndex];
                     if (rowData.NodeId !== "" && rowData.NodeId !== null) {       
                         viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;           
                     }
@@ -205,7 +207,8 @@ ReviewViewerInterface.prototype.RemoveHiddenResultId = function(containerId, sel
     
     for (var i = 0; i < selectedComponentRows.length; i++) {
         var selectedRow = selectedComponentRows[i];
-        var rowData = rowsData[selectedRow["rowIndex"]];
+        var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
+        var rowData = rowsData[rowIndex];
         // source A
         if(model.checks[model.currentCheck].sourceAViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceAViewer;

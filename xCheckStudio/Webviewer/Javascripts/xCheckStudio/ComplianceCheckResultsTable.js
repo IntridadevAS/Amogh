@@ -355,7 +355,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function(e) {
                 _this.highlightMainReviewTableFromCheckStatus(viewerContainer.replace("#", ""));
                 model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
-                model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
+                // model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onInitialized: function(e) {
                 // initialize the context menu

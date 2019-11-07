@@ -367,7 +367,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function (e) {
                 _this.highlightMainReviewTableFromCheckStatus(containerDiv);
                 model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
-                model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
+                // model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onCellPrepared: function (e) {
                 if (e.rowType == "header") {
@@ -475,17 +475,18 @@ ComparisonCheckResultsTable.prototype.HighlightHiddenRows = function (isHide, ch
     }
 }
 
-ComparisonCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
+ComparisonCheckResultsTable.prototype.UpdateGridData = function (componentId,
     tableContainer,
     changedStatus,
     populateDetailedTable) {
 
     var dataGrid = $(tableContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
-    var rowData = data[selectedRow.rowIndex];
+    var rowIndex = dataGrid.getRowIndexByKey(componentId);
+    var rowData = data[rowIndex];
     rowData.Status = changedStatus;
 
-    dataGrid.repaintRows(selectedRow.rowIndex);
+    dataGrid.repaintRows(rowIndex);
 
     if (populateDetailedTable) {
         model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
