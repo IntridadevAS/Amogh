@@ -18,7 +18,17 @@ function enableMenuOptions() {
 
     // on clear data
     document.getElementById(MenuBar.ClearDataBtn).onclick = function () {
-        alert("Not Handled");
+        var overlay = document.getElementById("clearAllDataOverlay");
+        var popup = document.getElementById("clearAllDataPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on history
@@ -50,4 +60,20 @@ function enableMenuOptions() {
             }
         }
     }
+}
+
+function cancelClearAllData() {
+    hideClearAllDataForm();
+}
+
+function clearAllData() {
+    hideClearAllDataForm();
+}
+
+function hideClearAllDataForm() {
+    var overlay = document.getElementById("clearAllDataOverlay");
+    var popup = document.getElementById("clearAllDataPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
 }
