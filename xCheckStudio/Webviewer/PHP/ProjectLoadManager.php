@@ -451,8 +451,8 @@
                     $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
                     $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];  
                     
-                    $sourceViewerOptions['a']['sourceAType'] =  $record['sourceAType'];                   
-                    $sourceViewerOptions['b']['sourceBType'] = $record['sourceBType'];   
+                    $sourceViewerOptions['a']['sourceType'] =  $record['sourceAType'];                   
+                    $sourceViewerOptions['b']['sourceType'] = $record['sourceBType'];   
                 }
 
                 // read sourceAViewerOptions

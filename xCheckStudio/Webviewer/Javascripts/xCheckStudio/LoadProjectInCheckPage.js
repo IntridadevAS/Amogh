@@ -4,6 +4,8 @@ function loadCheckSpaceInCheckPage() {
             return;
         }
 
+        model.loadSavedCheckspace = true;
+
         // load checkspace
         loadCheckSpaceForCheck(result.Data);
     });
@@ -50,7 +52,21 @@ function loadCheckSpaceForCheck(data) {
         comparisonCB.checked = true;
     }
 
-    loadDataSets(data);    
+     // maintaint the dataset types
+     var sourceViewerOptions = data["sourceViewerOptions"];
+     if (sourceViewerOptions) {
+         var datasetTypes = [];
+         for (var srcId in sourceViewerOptions) {
+             datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
+         }
+         model.datasetTypes = datasetTypes;
+     }
+
+    // load data sets 
+    loadDataSets(data);
+    
+    // hide add new data source button
+    viewTabs.hideAddTab();   
 }
 
 function loadDataSets(data) {

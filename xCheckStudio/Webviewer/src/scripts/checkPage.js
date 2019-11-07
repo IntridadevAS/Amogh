@@ -1,10 +1,12 @@
 //var currentTabId;
 
-let model = {
+let model = {  
   activeTabs: 0,
   selectedTab: [],
   currentView: null,
   currentTabId: undefined,
+  loadSavedCheckspace : false,
+  datasetTypes : undefined, // used when loadSavedCheckspace is true. 
   views: {
     a: {
       id: "a",
@@ -13,6 +15,7 @@ let model = {
       tableData: document.getElementById("tableDataA"),
       visualizer: document.getElementById("visualizerA"),
       fileName: "",
+      type: undefined,
       complianceSwitchChecked: false
     },
     b: {
@@ -22,6 +25,7 @@ let model = {
       tableData: document.getElementById("tableDataB"),
       visualizer: document.getElementById("visualizerB"),
       fileName: "",
+      type: undefined,
       complianceSwitchChecked: false
     },
     c: {
@@ -31,6 +35,7 @@ let model = {
       tableData: document.getElementById("tableDataC"),
       visualizer: document.getElementById("visualizerC"),
       fileName: "",
+      type: undefined,
       complianceSwitchChecked: false
     },
     d: {
@@ -40,6 +45,7 @@ let model = {
       tableData: document.getElementById("tableDataD"),
       visualizer: document.getElementById("visualizerD"),
       fileName: "",
+      type: undefined,
       complianceSwitchChecked: false
     }
   },
@@ -80,17 +86,20 @@ let controller = {
   //It will find the first available "panel", create a tab for it, and select both.
   addNewFile: function (fileName) {
     const addedFile = model.views[this.nextAvailableView()];
-    const table = addedFile.tableData; //NOTE FOR PROTOTECH - This will select the 'table' for this particular panel
-    const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
+    // const table = addedFile.tableData; //NOTE FOR PROTOTECH - This will select the 'table' for this particular panel
+    // const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
     // model.activeTabs++;
     //FOR PROTOTECH - SET FILENAME FOR TAB BELOW
     addedFile.fileName = fileName;
-    // SET FILENAME FOR TAB ABOVE
+    addedFile.type = xCheckStudio.Util.getFileExtension(fileName.toLowerCase());
 
+    // SET FILENAME FOR TAB ABOVE
     addedFile.used = true;
     model.activeTabs++;
 
-    if (model.activeTabs >= 4) {
+    // hide add new source tab
+    if ((model.loadSavedCheckspace && model.datasetTypes.length === model.activeTabs) ||
+      model.activeTabs >= 4) {
       viewTabs.hideAddTab();
     }
 
@@ -102,6 +111,7 @@ let controller = {
   deleteTabData: function (id) {
     let tab = model.views[id];
     tab.fileName = "";
+    tab.type = undefined;
     tab.used = false;
     tab.complianceSwitchChecked = false;
   },
