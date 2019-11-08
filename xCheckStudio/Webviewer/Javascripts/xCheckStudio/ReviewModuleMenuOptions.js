@@ -2,7 +2,17 @@ function enableMenuOptions() {
 
     // on re check
     document.getElementById(MenuBar.ReCheckBtn).onclick = function () {
-        alert("Not Handled");
+        var overlay = document.getElementById("recheckOverlay");
+        var popup = document.getElementById("recheckPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on show all
@@ -56,17 +66,37 @@ function enableMenuOptions() {
 
     // on save 
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        ReviewModule.onSaveProgress();
+        var overlay = document.getElementById("saveResultsOverlay");
+        var popup = document.getElementById("saveResultsPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on reset
     document.getElementById(MenuBar.ResetBtn).onclick = function () {
-        alert("Not Handled");
+        var overlay = document.getElementById("resetDataOverlay");
+        var popup = document.getElementById("resetDataPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on navigation cube
     document.getElementById(MenuBar.NavCubeBtn).onclick = function () {
-        
+
         if (model.currentCheck in model.checks) {
             var check = model.checks[model.currentCheck];
             if (model.currentCheck === "comparison") {
@@ -94,7 +124,7 @@ function enableMenuOptions() {
                 }
             }
         }
-    }   
+    }
 }
 
 var ReviewMenuOptions =
@@ -109,3 +139,52 @@ var ReviewMenuOptions =
         });
     },
 };
+
+function cancelResetData() {
+    hideResetDataForm();
+}
+
+function resetData() {
+    hideResetDataForm();
+}
+
+function hideResetDataForm() {
+    var overlay = document.getElementById("resetDataOverlay");
+    var popup = document.getElementById("resetDataPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelRecheck() {
+    hideRecheckForm();
+}
+
+function recheck() {
+    hideRecheckForm();
+}
+
+function hideRecheckForm() {
+    var overlay = document.getElementById("recheckOverlay");
+    var popup = document.getElementById("recheckPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelSaveResults() {
+    hideSaveResultsForm();
+}
+
+function saveResults() {
+    ReviewModule.onSaveProgress();
+    hideSaveResultsForm();
+}
+
+function hideSaveResultsForm() {
+    var overlay = document.getElementById("saveResultsOverlay");
+    var popup = document.getElementById("saveResultsPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
