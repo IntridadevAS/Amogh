@@ -13,7 +13,17 @@ function enableMenuOptions() {
 
     // on reload data
     document.getElementById(MenuBar.ReloadDataBtn).onclick = function () {
-        alert("Not Handled");
+        var overlay = document.getElementById("resetDataOverlay");
+        var popup = document.getElementById("resetDataPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on clear data
@@ -48,7 +58,17 @@ function enableMenuOptions() {
 
     // on save progress
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        CheckModule.onSaveProgress(false);
+        var overlay = document.getElementById("saveDataOverlay");
+        var popup = document.getElementById("saveDataPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "154px";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
     // on navigation cube
@@ -73,6 +93,39 @@ function clearAllData() {
 function hideClearAllDataForm() {
     var overlay = document.getElementById("clearAllDataOverlay");
     var popup = document.getElementById("clearAllDataPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelResetData() {
+    hideResetDataForm();
+}
+
+function resetData() {
+    hideResetDataForm();
+}
+
+function hideResetDataForm() {
+    var overlay = document.getElementById("resetDataOverlay");
+    var popup = document.getElementById("resetDataPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function cancelSaveData() {
+    hideSaveDataForm();
+}
+
+function saveData() {
+    CheckModule.onSaveProgress(false);
+    hideSaveDataForm();
+}
+
+function hideSaveDataForm() {
+    var overlay = document.getElementById("saveDataOverlay");
+    var popup = document.getElementById("saveDataPopup");
 
     overlay.style.display = 'none';
     popup.style.display = 'none';

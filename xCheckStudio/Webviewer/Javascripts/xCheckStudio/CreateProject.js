@@ -136,3 +136,4 @@ function cancelCheckSpaceCreation() {
     newCheckView.closeNewCheck();
     hideCancelCheckSpaceCreationForm();
 }
+

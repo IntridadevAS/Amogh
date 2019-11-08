@@ -1,11 +1,17 @@
 var CheckModule = {
     onSaveProgress: function (silent) {
 
-        return new Promise((resolve) => {
-
-            showBusyIndicator();
+        return new Promise((resolve) => {            
 
             try {
+
+                if(Object.keys(SourceManagers).length === 0)
+                {
+                    alert("No data found to save.");
+                    return resolve(false);
+                }
+
+                showBusyIndicator();
 
                 // create project DB
                 this.createCheckSpaceDBonSave().then(function (result) {
