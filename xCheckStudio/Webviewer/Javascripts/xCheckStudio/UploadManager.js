@@ -53,8 +53,8 @@ let UploadManager = {
 
                     // validate dataset, if checkspace is loaded from saved data
                     if (model.loadSavedCheckspace) {
-                        if (!UploadManager.validateSourceFromDirDragDrop(fileEntries, item.name)) {
-                            alert('Not a Valid data source.');
+                        if (!UploadManager.validateSourceFromDirDragDrop(fileEntries, item.name)) {                            
+                            showNotValidDatasourcePrompt();
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -67,6 +67,25 @@ let UploadManager = {
 
                             return;
                         }
+                    }
+                    else
+                    {                        
+                            if (checkCaseManager && checkCaseManager.CheckCase) {
+                                if (!UploadManager.validateSourceFromDirDragDropForSelectedCheckspace(fileEntries, item.name)) {                            
+                                    showNotValidDatasource1Prompt();
+        
+                                    //hide busy spinner
+                                    hideBusyIndicator();
+        
+                                    // delete tabdata
+                                    model.activeTabs--;
+                                    controller.deleteTabData(addedSource.id);
+                                    viewTabs.showAddTab();
+                                    viewPanels.showAddPanel();
+        
+                                    return;
+                                }
+                            }                       
                     }
 
                     UploadManager.createFormDataAndUpload(formData, fileEntries, addedSource, item)
@@ -100,6 +119,28 @@ let UploadManager = {
         }
 
         if (!UploadManager.validateDataSetForSavedCheckSpace(mainFileName)) {            
+            return false;
+        }
+
+        return true;
+    },
+
+    validateSourceFromDirDragDropForSelectedCheckspace: function (allFiles, dirName) {
+        // get the main source file name
+        var mainFileName = undefined;
+        for (var i = 0; i < allFiles.length; i++) {
+            var fileEntry = allFiles[i];
+            var name = xCheckStudio.Util.getFileNameWithoutExtension(fileEntry.name);
+            if (dirName === name) {
+                mainFileName = fileEntry.name;
+                break;
+            }
+        }
+        if (!mainFileName) {
+            return false;
+        }
+
+        if (!UploadManager.validateDataSetForSelectedCheckSpace(mainFileName)) {            
             return false;
         }
 
@@ -209,8 +250,7 @@ let UploadManager = {
             cache: false,
             contentType: false,
             processData: false,
-            success: function (ret) {
-                //alert(ret);
+            success: function (ret) {               
                 UploadManager.convertDataSource(mainFileName, uploadFormData, addedSource);
 
             },
@@ -308,7 +348,7 @@ let UploadManager = {
                 // if checkspace is loaded from saved data, then validate the data set types                        
                 if (model.loadSavedCheckspace) {
                     if (!UploadManager.validateDataSetForSavedCheckSpace(sourceArray[0])) {
-                        alert('Not a Valid data source.');
+                        showNotValidDatasourcePrompt();
 
                         //hide busy spinner
                         hideBusyIndicator();
@@ -320,6 +360,24 @@ let UploadManager = {
                         viewPanels.showAddPanel();                      
 
                         return;
+                    }
+                }
+                else {
+                    if (checkCaseManager && checkCaseManager.CheckCase) {
+                        if (!UploadManager.validateDataSetForSelectedCheckSpace(sourceArray[0])) {
+                            showNotValidDatasource1Prompt();
+
+                            //hide busy spinner
+                            hideBusyIndicator();
+
+                            // delete tabdata
+                            model.activeTabs--;
+                            controller.deleteTabData(addedSource.id);
+                            viewTabs.showAddTab();
+                            viewPanels.showAddPanel();
+
+                            return;
+                        }
                     }
                 }
 
@@ -351,6 +409,51 @@ let UploadManager = {
         };
 
         xhr.send(formData);
+    },
+
+    validateDataSetForSelectedCheckSpace : function(currentSource)
+    {
+        var supportedTypes = [];
+        for (var key in checkCaseManager.CheckCase.SourceTypes)
+        {
+            supportedTypes.push(checkCaseManager.CheckCase.SourceTypes[key].toLowerCase());
+        }
+
+        var allLoadedTypes = [];
+        var currentSourceType = xCheckStudio.Util.getFileExtension(currentSource).toLowerCase();
+        allLoadedTypes.push(currentSourceType);
+
+        for (var id in model.views) {
+            var view = model.views[id];
+            if (!view.used ||
+                !view.type ||
+                view.type === "") {
+                continue;
+            }
+
+            allLoadedTypes.push(view.type.toLowerCase());
+        }
+
+        // get type wise count for loaded datasets
+        var loadedTypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(allLoadedTypes);
+
+        // get type wise count for supported datasets
+        var supportedypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(supportedTypes);
+
+        for (var type in loadedTypeOccuCounts) {
+            if (!(type in supportedypeOccuCounts)) {
+                return false;
+            }
+
+
+            var loadCnt = loadedTypeOccuCounts[type];
+            var allowedCnt = supportedypeOccuCounts[type];
+            if (loadCnt > allowedCnt) {
+                return false;
+            }
+        }
+
+        return true;   
     },
 
     validateDataSetForSavedCheckSpace: function (currentSource) {
@@ -483,4 +586,52 @@ let UploadManager = {
             xhr.send(formData);
         });
     }
+}
+
+function showNotValidDatasourcePrompt() {
+    var overlay = document.getElementById("notValidDatasetOverlay");
+    var popup = document.getElementById("notValidDatasetPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onNotValidDataSourceOk() {
+    var overlay = document.getElementById("notValidDatasetOverlay");
+    var popup = document.getElementById("notValidDatasetPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+
+}
+
+function showNotValidDatasource1Prompt() {
+    var overlay = document.getElementById("notValidDataset1Overlay");
+    var popup = document.getElementById("notValidDataset1Popup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onNotValidDataSource1Ok() {
+    var overlay = document.getElementById("notValidDataset1Overlay");
+    var popup = document.getElementById("notValidDataset1Popup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+
 }

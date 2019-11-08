@@ -12,16 +12,23 @@ function isElectron() {
         return true;
     }
     document.getElementById("loginInfo").style.display = "none";
-    document.getElementById("electroncheckDiv").style.display = "block"; 
-    document.getElementById("electroncheck").innerHTML = "Hey user,</br>We don't support running app in browser.</br>Please use installed version.";     
+    document.getElementById("electroncheckDiv").style.display = "block";
+    document.getElementById("electroncheck").innerHTML = "Hey user,</br>We don't support running app in browser.</br>Please use installed version.";
     return false;
 }
 
 function onclosewindow(callbackFunction) {
     if (callbackFunction) {
-        callbackFunction();
+        callbackFunction().then(function () {
+            closeWindow();
+        });
     }
+    else {
+        closeWindow();
+    }
+}
 
+function closeWindow() {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     var sPath = window.getURL();

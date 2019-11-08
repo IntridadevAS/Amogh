@@ -1,8 +1,7 @@
 var sourceMappings;
 var dataSetAttributes = {};
 window.onload = function () {
-
-    // alert("COnfiguration page loaed");
+   
     var generalTab = document.getElementById("generalTab");
     generalTab.onclick = function () {
         onGeneralTabClicked();

@@ -231,7 +231,12 @@ var CheckModule = {
         controlStatesArray['sourceCComplianceSwitchOn'] = sourceCComplianceSwitchOn;
         controlStatesArray['sourceDComplianceSwitchOn'] = sourceDComplianceSwitchOn;
         controlStatesArray['selectedDataSetTab'] = model.currentTabId;
-        controlStatesArray['selectedCheckCase'] = checkCaseManager.CheckCase.Name;
+        if (checkCaseManager && checkCaseManager.CheckCase) {
+            controlStatesArray['selectedCheckCase'] = checkCaseManager.CheckCase.Name;
+        }
+        else {
+            controlStatesArray['selectedCheckCase'] = "AutoSelect";
+        }
         // controlStatesArray['SourceACheckAllSwitch'] = sourceACheckAllSwitchOn;
         // controlStatesArray['SourceBCheckAllSwitch'] = sourceBCheckAllSwitchOn;       
 
@@ -277,17 +282,19 @@ var CheckModule = {
 
         // check if data source order load order is maintained
         var dataSourceOrderMaintained = true;
-        var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
-        if ((("a" in SourceManagers) &&
-            ("sourceA" in sourceTypesFromCheckCase)) &&
-            (("b" in SourceManagers) &&
-                ("sourceA" in sourceTypesFromCheckCase))) {
-            if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
-                SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
-                dataSourceOrderMaintained = false;
+        if (checkCaseManager && checkCaseManager.CheckCase) {
+            var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
+            if ((("a" in SourceManagers) &&
+                ("sourceA" in sourceTypesFromCheckCase)) &&
+                (("b" in SourceManagers) &&
+                    ("sourceA" in sourceTypesFromCheckCase))) {
+                if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
+                    SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
+                    dataSourceOrderMaintained = false;
+                }
             }
         }
-
+        
         var dataSourceInfo = {};
         dataSourceInfo["SourceAFileName"] = sourceAFileName;
         dataSourceInfo["SourceBFileName"] = sourceBFileName;

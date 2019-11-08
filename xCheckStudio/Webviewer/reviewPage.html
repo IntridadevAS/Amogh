@@ -110,7 +110,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="returnHome(ReviewPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="returnHome(ReviewPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -170,7 +170,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="returnProjectCenter(ReviewPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -282,7 +282,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="returnToPREP(ReviewPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="returnToPREP(ReviewPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -342,7 +342,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="signOut(ReviewPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="signOut(ReviewPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -402,7 +402,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="exit()">
+            <div id="YES" onclick="exit(ReviewPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -1142,8 +1142,8 @@
       popup.style.display = 'none';
     }
 
-    function exit() {
-      onclosewindow(ReviewPageCleanUp.onLeavingPage);
+    function exit(callbackFuntion) {
+      onclosewindow(callbackFuntion);
     }
 
   </script>

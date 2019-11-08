@@ -384,7 +384,7 @@ let controller = {
       var array = [];
       for (var i in object) {
         var obj = object[i];
-        if (obj.type.toLowerCase()==='private')
+        if (obj.type.toLowerCase() === 'private')
           model.myProjects.push(object[i]);
         else
           model.publicProjects.push(object[i]);
@@ -833,10 +833,10 @@ let checkView = {
     // var fromCheckClick = localStorage.getItem('FromCheckClick')
     // // localStorage.clear();
     // if (fromCheckClick.toLowerCase() === 'true') {
-      window.location.href = "checkPage.html";
+    window.location.href = "checkPage.html";
     // }
     // else if (fromCheckClick.toLowerCase() === 'false') {
-      // window.location.href = "reviewPage.html";
+    // window.location.href = "reviewPage.html";
     // }
     //localStorage.setItem("loadSavedProject",true);
   },
@@ -864,7 +864,7 @@ let checkView = {
       newDiv.setAttribute("id", check.checkid);
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
-      newDiv.setAttribute("onclick", "checkView.checkClicked(this)");
+      newDiv.setAttribute("onclick", "showEnterCheckForm(this)");
       if (check.checkisfavourite === "1") {
         newDiv.classList.add('favorite');
       }
@@ -897,10 +897,10 @@ let checkView = {
   reviewClicked: function (subject) {
     var proj = model.currentProject;
     localStorage.setItem('projectinfo', JSON.stringify(proj));
-    
+
     controller.setCurrentReview(subject.id);
     localStorage.setItem('checkinfo', JSON.stringify(model.currentReview));
-   
+
     window.location.href = "reviewPage.html";
   },
 
@@ -909,14 +909,14 @@ let checkView = {
     scrollContentDivToTop();
     let newCheckCard = "";
     this.checkCardContainer.innerHTML = newCheckCard;
-  
+
     for (review of this.selectedReviews) {
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
       newDiv.setAttribute("id", review.checkid);
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
-      newDiv.setAttribute("onclick", "checkView.reviewClicked(this)");
+      newDiv.setAttribute("onclick", "showEnterReviewForm(this)");
       if (review.checkisfavourite === "1") {
         newDiv.classList.add('favorite');
       }
@@ -1120,7 +1120,7 @@ let editCheckView = {
     let editCheckStatus = document.getElementById("editCheckStatus");
     let editCheckComments = document.getElementById("editCheckComments");
     let editCheckDescription = document.getElementById("editCheckDescription");
-    
+
     onToggleOverlayDisplay(true);
     this.editCheckOverlay.classList.add("projectOverlaysOpen");
 
@@ -1278,7 +1278,7 @@ function onToggleOverlayDisplay(show) {
   }
 }
 
-function onToggleOverlayDisplayForCheckSpaces (show) {
+function onToggleOverlayDisplayForCheckSpaces(show) {
   if (show === true) {
     scrollContentDivToTop();
     document.getElementById("content").style.overflowY = "hidden";
@@ -1290,4 +1290,126 @@ function onToggleOverlayDisplayForCheckSpaces (show) {
 function scrollContentDivToTop() {
   var contentDiv = document.getElementById("content");
   contentDiv.scrollTop = 0;
+}
+
+
+function cancelEnterCheck() {
+  var checkCardContainer = document.getElementById("checkCardContainer");
+  if (checkCardContainer) {
+
+    for (var i = 0; i < checkCardContainer.children.length; i++) {
+      var checkCard = checkCardContainer.children[i];
+      if (checkCard.classList.contains("checkSpaceCard") &&
+        checkCard.classList.contains("selected")) {
+        checkCard.classList.remove("selected");
+        break;
+      }
+    }
+  }
+
+  hideEnterCheckForm();
+}
+
+function enterCheck() {
+
+  var checkCardContainer = document.getElementById("checkCardContainer");
+  if (!checkCardContainer) {
+    return;
+  }
+
+  for (var i = 0; i < checkCardContainer.children.length; i++) {
+    var checkCard = checkCardContainer.children[i];
+    if (checkCard.classList.contains("checkSpaceCard") &&
+      checkCard.classList.contains("selected")) {
+      checkView.checkClicked(checkCard);
+      break;
+    }
+  }
+
+  hideEnterCheckForm();
+}
+
+function showEnterCheckForm(subject) {
+  subject.classList.add("selected");
+
+  var overlay = document.getElementById("enterCheckOverlay");
+  var popup = document.getElementById("enterCheckPopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function hideEnterCheckForm() {
+  var overlay = document.getElementById("enterCheckOverlay");
+  var popup = document.getElementById("enterCheckPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function cancelEnterReview() {
+  var checkCardContainer = document.getElementById("checkCardContainer");
+  if (checkCardContainer) {
+
+    for (var i = 0; i < checkCardContainer.children.length; i++) {
+      var checkCard = checkCardContainer.children[i];
+      if (checkCard.classList.contains("checkSpaceCard") &&
+        checkCard.classList.contains("selected")) {
+        checkCard.classList.remove("selected");
+        break;
+      }
+    }
+  }
+
+  hideEnterReviewForm();
+}
+
+function enterReview() {
+  var checkCardContainer = document.getElementById("checkCardContainer");
+  if (!checkCardContainer) {
+    return;
+  }
+
+  for (var i = 0; i < checkCardContainer.children.length; i++) {
+    var checkCard = checkCardContainer.children[i];
+    if (checkCard.classList.contains("checkSpaceCard") &&
+      checkCard.classList.contains("selected")) {
+      checkView.reviewClicked(checkCard);
+      break;
+    }
+  }
+
+  hideEnterReviewForm();
+}
+
+function showEnterReviewForm(subject) {
+  subject.classList.add("selected");
+
+  var overlay = document.getElementById("enterReviewOverlay");
+  var popup = document.getElementById("enterReviewPopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function hideEnterReviewForm() {
+  var overlay = document.getElementById("enterReviewOverlay");
+  var popup = document.getElementById("enterReviewPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
 }

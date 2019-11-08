@@ -221,10 +221,13 @@ function cancelReturnHome() {
 
 function returnHome(callbackFunction) {
     if (callbackFunction) {
-        callbackFunction();
+        callbackFunction().then(function (result) {
+            window.location = "landingPage.html";
+        });
     }
-
-    window.location = "landingPage.html";
+    else {
+        window.location = "landingPage.html";
+    }
 }
 
 function cancelReturnProjectCenter() {
@@ -237,10 +240,13 @@ function cancelReturnProjectCenter() {
 
 function returnProjectCenter(callbackFunction) {
     if (callbackFunction) {
-        callbackFunction();
+      callbackFunction().then(function (result) {
+        window.location = "projectsPage.html";
+      });
     }
-
-    window.location = "projectsPage.html";
+    else {
+        window.location = "projectsPage.html";
+    }   
 }
 
 function cancelReturnPREP() {
@@ -253,10 +259,13 @@ function cancelReturnPREP() {
 
 function returnToPREP(callbackFunction) {
     if (callbackFunction) {
-        callbackFunction();
+        callbackFunction().then(function (result) {
+            window.location = "prephomepage.html";
+        });
     }
-
-    window.location = "prephomepage.html";
+    else {
+        window.location = "prephomepage.html";
+    }
 }
 
 function cancelSignOut() {
@@ -269,14 +278,21 @@ function cancelSignOut() {
 
 function signOut(callbackFunction) {
     if (callbackFunction) {
-        callbackFunction();
+        callbackFunction().then(function (result) {
+            onLogoutUser().then(function (status) {
+                if (status) {
+                    window.location.href = "index.html";
+                }
+            });
+        });
     }
-
-    onLogoutUser().then(function (status) {
-        if (status) {          
-            window.location.href = "index.html";
-        }
-    });
+    else {
+        onLogoutUser().then(function (status) {
+            if (status) {
+                window.location.href = "index.html";
+            }
+        });
+    }
 }
 
 function swapIcon() {

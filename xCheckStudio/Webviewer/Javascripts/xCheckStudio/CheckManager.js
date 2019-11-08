@@ -68,8 +68,7 @@ function CheckManager(name) {
                         return resolve(true);
 
                     },
-                    error: function (error) {                        
-                        alert('error; ' + eval(error));
+                    error: function (error) {                                                
                         return resolve(false);
                     }
                 });

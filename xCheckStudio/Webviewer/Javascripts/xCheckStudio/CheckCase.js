@@ -4,7 +4,7 @@ function loadCheckCases() {
     var checkCaseSelect = document.getElementById("checkCaseSelect");
     checkCaseSelect.onchange = function () {
         if (this.value === "AutoSelect") {
-            // checkCaseManager = undefined;
+            checkCaseManager = undefined;
 
             // // disable controls
             // disableControlsOnLoad();
@@ -136,6 +136,7 @@ function filterCheckCases(sourceType) {
         }
 
         // remove all options from check case select input
+        var selectedCheckCase = checkCaseSelect.value;
         checkCaseSelect.options.length = 0;
       
         // add new check case options to check case select input        
@@ -145,12 +146,17 @@ function filterCheckCases(sourceType) {
             checkCaseSelect.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
         }
         checkCaseSelect.options.add(new Option("AutoSelect", "AutoSelect"));
-
-        for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-            var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-            if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
-                fileName = checkCaseFileData.FileName;
-                break;
+        if (selectedCheckCase.toLowerCase() === "autoselect") {
+            checkCaseSelect.value = "AutoSelect";
+        }
+        else {
+            checkCaseSelect.value = selectedCheckCase;
+            for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                if (checkCaseFileData.CheckCaseName === checkCaseSelect.value) {
+                    fileName = checkCaseFileData.FileName;
+                    break;
+                }
             }
         }
 

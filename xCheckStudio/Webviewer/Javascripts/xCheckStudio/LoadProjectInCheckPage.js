@@ -82,13 +82,15 @@ function loadDataSets(data) {
 
     // get selected check case name
     var checkCaseName;
-    if ('checkCaseData' in checkCaseInfo) {
-        var checkCaseManager = JSON.parse(checkCaseInfo['checkCaseData']);
+    if (checkCaseInfo) {
+        if ('checkCaseData' in checkCaseInfo) {
+            var checkCaseManager = JSON.parse(checkCaseInfo['checkCaseData']);
 
-        if ('CheckCase' in checkCaseManager) {
-            var checkCase = checkCaseManager['CheckCase'];
-            if ('Name' in checkCase) {
-                checkCaseName = checkCase['Name'];
+            if ('CheckCase' in checkCaseManager) {
+                var checkCase = checkCaseManager['CheckCase'];
+                if ('Name' in checkCase) {
+                    checkCaseName = checkCase['Name'];
+                }
             }
         }
     }
@@ -100,6 +102,11 @@ function loadDataSets(data) {
 }
 
 function loadDataSource(viewerOption, data, checkCaseName) {
+
+    if (!viewerOption.source ||
+        !viewerOption.sourceType) {
+        return;
+    }
 
     var addedSource = controller.addNewFile(viewerOption.source);
     restoreComplianceSwitchState(addedSource, data["controlStates"]);
@@ -165,12 +172,17 @@ function loadDataSource(viewerOption, data, checkCaseName) {
                     filterCheckCases(fileExtension);
 
                     var checkCaseSelectElement = document.getElementById("checkCaseSelect");
-                    checkCaseSelectElement.value = checkCaseName;
+                    if (checkCaseName) {
+                        checkCaseSelectElement.value = checkCaseName;
+                    }
+                    else {
+                        checkCaseSelectElement.value = "AutoSelect";
+                    }
 
                     // triggere onchange manually
                     checkCaseSelectElement.dispatchEvent(new Event('change'));
                 });
-               
+
             }
         });
     }

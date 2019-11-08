@@ -425,43 +425,6 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showDocument(event.target.response);
-            // var referenceIFrame = document.getElementById("referenceIFrame");
-            // if (!referenceIFrame) {
-            //     return;
-            // }
-
-            // var documentList = referenceIFrame.contentDocument.getElementById("documentList");
-            // if (!documentList) {
-            //     return;
-            // }
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = event.target.response;
-            // documentList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -510,43 +473,6 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showImage(event.target.response);
-
-            // var referenceIFrame = document.getElementById("referenceIFrame");
-            // if (!referenceIFrame) {
-            //     return;
-            // }
-
-            // var imageList = referenceIFrame.contentDocument.getElementById("imageList");
-            // if (!imageList) {
-            //     return;
-            // }
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = event.target.response;
-            // imageList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
