@@ -3,23 +3,69 @@ function onCheckButtonClick() {
     showBusyIndicator();
 
     setTimeout(function () {
+        // check if comparison or compliance is selected at least for one datasource
+        var continueCheck = false;
+        var comparisonCB = document.getElementById('comparisonSwitch');
+        if (comparisonCB.checked) {
+            continueCheck = true;
+        }
+        if (!continueCheck) {
+            for (var src in model.views) {
+                var view = model.views[src];
+                if (view.used &&
+                    view.complianceSwitchChecked) {
+                    continueCheck = true;
+                    break;
+                }
+            }
+
+            if (!continueCheck) {
+                showNoCheckTypePrompt();
+                // hide busy spinner
+                hideBusyIndicator();
+                return;
+            }
+        }
+
+        // check if items are selected
+        var itemsSelected = false;
+        for (var srcId in SourceManagers) {
+            if (SourceManagers[srcId].ModelTree.GetSelectedComponents().length > 0) {
+                itemsSelected = true;
+                break;
+            }
+        }
+        if (!itemsSelected) {
+            showSelectItemsPrompt();
+            
+            // hide busy spinner
+            hideBusyIndicator();
+
+            return;
+        }
+
         sourceAComplianceCheckManager = undefined;
         sourceBComplianceCheckManager = undefined;
         comparisonCheckManager = undefined;
 
         var checkCaseSelect = document.getElementById("checkCaseSelect");
-        if (checkCaseSelect.value === "None") {
+        if (checkCaseSelect.value.toLowerCase() === "autoselect") {
+
+            if (checkCaseSelect.options.length === 1) {
+                showNotValidCheckcasePrompt();
+            }
+            else {
+                showSelectValidCheckCasePrompt();
+            }
+
             // hide busy spinner
-            busySpinner.classList.remove('show');
-            //alert("Please select check case from list.")
-            alert('Please select check case from list.');
             hideBusyIndicator();
             return;
         }
 
         // check if any check case type is selected
         var comparisonSwitch = document.getElementById('comparisonSwitch');
-       
+
         // check if one of the check switch is on
         if (!comparisonSwitch.checked &&
             !complianceChecked()) {
@@ -67,22 +113,21 @@ function onCheckButtonClick() {
             });
 
         // perform source a compliance check      
-        if(model.views["a"].used && 
-           model.views["a"].complianceSwitchChecked)                
-        {
+        if (model.views["a"].used &&
+            model.views["a"].complianceSwitchChecked) {
             performSourceAComplianceCheck(checkcase,
-            dataSourceOrderMaintained).then(function (result) {
-                if (!result) {
-                    deleteCheckResultsFromDB("SourceACompliance").then(function (res) {
+                dataSourceOrderMaintained).then(function (result) {
+                    if (!result) {
+                        deleteCheckResultsFromDB("SourceACompliance").then(function (res) {
 
-                    });
-                }
+                        });
+                    }
 
-                checksCount++;
-                if (checksCount === totalChecksTobePerformed) {
-                    onCheckCompleted();
-                }
-            });
+                    checksCount++;
+                    if (checksCount === totalChecksTobePerformed) {
+                        onCheckCompleted();
+                    }
+                });
         }
 
         // perform source b compliance check       
@@ -312,3 +357,95 @@ function deleteCheckResultsFromDB(checkType) {
     });
 }
 
+function showNotValidCheckcasePrompt() {
+    var overlay = document.getElementById("notValidCheckcaseOverlay");
+    var popup = document.getElementById("notValidCheckcasePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onNotValidCheckcaseOk() {
+    var overlay = document.getElementById("notValidCheckcaseOverlay");
+    var popup = document.getElementById("notValidCheckcasePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+
+}
+
+function showNoCheckTypePrompt() {
+    var overlay = document.getElementById("noCheckTypeOverlay");
+    var popup = document.getElementById("noCheckTypePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onSelectCheckTypeOk() {
+    var overlay = document.getElementById("noCheckTypeOverlay");
+    var popup = document.getElementById("noCheckTypePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function showSelectValidCheckCasePrompt() {
+    var overlay = document.getElementById("selectValidCheckcaseOverlay");
+    var popup = document.getElementById("selectValidCheckcasePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onSelectValidCheckCaseOk() {
+    var overlay = document.getElementById("selectValidCheckcaseOverlay");
+    var popup = document.getElementById("selectValidCheckcasePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function showSelectItemsPrompt() {
+    var overlay = document.getElementById("selectItemsOverlay");
+    var popup = document.getElementById("selectItemsPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onSelectItemsOk() {
+    var overlay = document.getElementById("selectItemsOverlay");
+    var popup = document.getElementById("selectItemsPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}

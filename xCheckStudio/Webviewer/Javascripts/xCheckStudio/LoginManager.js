@@ -1,4 +1,4 @@
-function validateLogindetails(callbackfunction){
+function validateLogindetails(callbackfunction) {
     $.ajax({
         data: {
             name: $('#usernametext').val(),
@@ -6,21 +6,44 @@ function validateLogindetails(callbackfunction){
         },
         type: "POST",
         url: "PHP/login.php",
-        success: function(msg) {
+        success: function (msg) {
             if (msg === "Failed") {
                 window[callbackfunction](1);
             }
-            else if(msg === "Locked"){
-                alert('User is already logged in some other session.');
+            else if (msg === "Locked") {
+                showUserLoggedInPrompt();
             }
             else {
                 var object = JSON.parse(msg);
                 localStorage.setItem('userinfo', JSON.stringify(object));
                 window[callbackfunction](0);
             }
-        }, 
-        error: function() {
+        },
+        error: function () {
             window[callbackfunction](1);
         }
     });
+}
+
+function showUserLoggedInPrompt() {
+    var overlay = document.getElementById("userLoggedInOverlay");
+    var popup = document.getElementById("userLoggedInPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function onUserLoggedInOk() {
+    var overlay = document.getElementById("userLoggedInOverlay");
+    var popup = document.getElementById("userLoggedInPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
 }

@@ -114,7 +114,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="returnHome(CheckPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="returnHome(CheckPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -130,7 +130,7 @@
               <span>Cancel</span>
             </div>
           </div>
-        </div>        
+        </div>
       </div>
 
       <!-- Return to project center overlay -->
@@ -174,7 +174,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="returnProjectCenter(CheckPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="returnProjectCenter(CheckPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -191,66 +191,67 @@
             </div>
           </div>
         </div>
-        
+
       </div>
 
       <!-- Return to PREP overlay -->
       <div id="returnPREPOverlay" class="overlay"></div>
       <div id="returnPREPPopup" class="popup">
-          <div id="Save_and_Exit">
-              <svg class="Rectangle_1204">
-                <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-                  stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-                  y="0" width="581" height="155">
-                </rect>
-              </svg>
-              <svg class="Rectangle_1215">
-                <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-                </rect>
-              </svg>
-              <div id="Save_and_Exit_">
-                <span>Info</span>
-              </div>
-              <div id="Save_data_and_Exit_XcheckStudi">
-                <span></span><span style="font-style:normal;font-weight:normal;">Save data and Return to PREP Module?</span><span></span>
-              </div>
-              <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-                id="Component_20">
-                <svg class="Path_310" viewBox="0 0 90 30">
-                  <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                    stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                    d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-                  </path>
-                </svg>
-                <div id="NO" onclick="returnToPREP(CheckPageCleanUp.onLeavingPage)">
-                  <span>No</span>
-                </div>
-              </div>
-              <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-                id="Component_34">
-                <svg class="Rectangle_1242">
-                  <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                    stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                    x="0" y="0" width="90" height="30">
-                  </rect>
-                </svg>
-                <div id="YES" onclick="returnToPREP(CheckPageCleanUp.onLeavingPage)">
-                  <span>Yes</span>
-                </div>
-              </div>
-              <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-                id="Component_35">
-                <svg class="Rectangle_1242_A61_Rectangle_4">
-                  <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                    stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                    rx="5" ry="5" x="0" y="0" width="90" height="30">
-                  </rect>
-                </svg>
-                <div id="CANCEL" onclick="cancelReturnPREP()">
-                  <span>Cancel</span>
-                </div>
-              </div>
-            </div>        
+        <div id="Save_and_Exit">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Save_and_Exit_">
+            <span>Info</span>
+          </div>
+          <div id="Save_data_and_Exit_XcheckStudi">
+            <span></span><span style="font-style:normal;font-weight:normal;">Save data and Return to PREP
+              Module?</span><span></span>
+          </div>
+          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
+            id="Component_20">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="NO" onclick="returnToPREP(CheckPageCleanUp.onLeavingPage)">
+              <span>No</span>
+            </div>
+          </div>
+          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
+            id="Component_34">
+            <svg class="Rectangle_1242">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
+                x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="YES" onclick="returnToPREP(CheckPageCleanUp.onSaveAndLeavePage)">
+              <span>Yes</span>
+            </div>
+          </div>
+          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
+            id="Component_35">
+            <svg class="Rectangle_1242_A61_Rectangle_4">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+                rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="CANCEL" onclick="cancelReturnPREP()">
+              <span>Cancel</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Return to PREP overlay -->
@@ -377,7 +378,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="signOut(CheckPageCleanUp.onLeavingPage)">
+            <div id="YES" onclick="signOut(CheckPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -393,7 +394,7 @@
               <span>Cancel</span>
             </div>
           </div>
-        </div>        
+        </div>
       </div>
 
       <!-- clear datasource overlay -->
@@ -528,7 +529,7 @@
                 d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
               </path>
             </svg>
-            <div id="NO" onclick="exit()">
+            <div id="NO" onclick="exit(CheckPageCleanUp.onLeavingPage)">
               <span>No</span>
             </div>
           </div>
@@ -540,7 +541,7 @@
                 x="0" y="0" width="90" height="30">
               </rect>
             </svg>
-            <div id="YES" onclick="exit()">
+            <div id="YES" onclick="exit(CheckPageCleanUp.onSaveAndLeavePage)">
               <span>Yes</span>
             </div>
           </div>
@@ -557,7 +558,7 @@
             </div>
           </div>
         </div>
-       
+
       </div>
 
 
@@ -654,6 +655,267 @@
             </svg>
             <div id="OK">
               <span>Save</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- not valid dataset overlay -->
+      <div id="notValidDatasetOverlay" class="overlay"></div>
+      <div id="notValidDatasetPopup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">The selected datasource is not valid for
+              this checkspace!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onNotValidDataSourceOk()">
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- not valid dataset overlay -->
+      <div id="notValidDataset1Overlay" class="overlay"></div>
+      <div id="notValidDataset1Popup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">The selected datasource is not valid for
+              current checkspace!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onNotValidDataSource1Ok()">
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- not valid dataset overlay -->
+      <div id="noCheckTypeOverlay" class="overlay"></div>
+      <div id="noCheckTypePopup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">Select a check type to proceed!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onSelectCheckTypeOk()">
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- not valid checkcase overlay -->
+      <div id="notValidCheckcaseOverlay" class="overlay"></div>
+      <div id="notValidCheckcasePopup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">There is no valid CheckCase for the loaded
+              data source(s)!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onNotValidCheckcaseOk()">
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- select valid checkcase overlay -->
+      <div id="selectValidCheckcaseOverlay" class="overlay"></div>
+      <div id="selectValidCheckcasePopup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">Select a valid checkCase to proceed!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onSelectValidCheckCaseOk()">
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- select items overlay -->
+      <div id="selectItemsOverlay" class="overlay"></div>
+      <div id="selectItemsPopup" class="popup">
+        <div id="There_is_no_valid_checkcase">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+              y="0" width="581" height="155">
+            </rect>
+          </svg>
+          <svg class="Rectangle_1215">
+            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+            </rect>
+          </svg>
+          <div id="Alert">
+            <span>Alert</span>
+          </div>
+          <div id="There_is_no_valid_CheckCase_fo">
+            <span></span><span style="font-style:normal;font-weight:normal;">Select an item(s) to proceed!</span>
+          </div>
+          <div id="Page_1">
+            <div id="Small">
+              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
+                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
+                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
+                </path>
+              </svg>
+            </div>
+          </div>
+          <div id="Component_4">
+            <svg class="Path_310" viewBox="0 0 90 30">
+              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+              </path>
+            </svg>
+            <div id="OK" onclick="onSelectItemsOk()">
+              <span>OK</span>
             </div>
           </div>
         </div>
@@ -1087,6 +1349,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProjectInCheckPage.js"></script>
 
   <link rel="stylesheet" href="src\prompts\Save_and_Exit.css" type="text/css" />
+  <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
@@ -1179,8 +1442,7 @@
       ReferenceManager.addReference(value);
     }
 
-    function onExitClicked() {
-      console.log("onExitClicked");
+    function onExitClicked() {     
       var overlay = document.getElementById("exitOverlay");
       var popup = document.getElementById("exitPopup");
 
@@ -1203,8 +1465,8 @@
       popup.style.display = 'none';
     }
 
-    function exit() {
-      onclosewindow(CheckPageCleanUp.onLeavingPage);
+    function exit(callbackFuntion) {
+      onclosewindow(callbackFuntion);
     }
 
   </script>

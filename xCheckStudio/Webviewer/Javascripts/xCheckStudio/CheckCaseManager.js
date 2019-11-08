@@ -1,12 +1,6 @@
 var checkCaseManager;
 function CheckCaseManager() {
     this.CheckCase;
-    //this.OrderMaintained = 'true';
-
-    //this.Ready = true;
-    // CheckCaseManager.prototype.addCheckCase = function (checkCase) {
-    //     this.CheckCases.push(checkCase);
-    // }
 
     CheckCaseManager.prototype.readCheckCaseData = function (fileName) {
         var _this = this;
@@ -51,10 +45,7 @@ function CheckCaseManager() {
         var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
         if (checkCaseElements.length < 0) {
             return;
-        }
-
-        // check case manager object
-        // checkCaseManager = new CheckCaseManager();
+        }      
 
         var checkCaseElement = checkCaseElements[0];
 
@@ -171,19 +162,6 @@ function CheckCaseManager() {
         this.CheckCase = checkCase;
         this.postData();
     }
-
-    // CheckCaseManager.prototype.postData = function () {
-    //     $.ajax({
-    //         url: 'PHP/CheckCaseDataWriter.php',
-    //         type: "POST",
-    //         async: true,
-    //         data: { "ComponentClassesData": JSON.stringify(this.CheckCase) },
-    //         success: function (data) {
-    //             // alert("success");
-    //         }
-    //     });
-
-    // }
 }
 
 

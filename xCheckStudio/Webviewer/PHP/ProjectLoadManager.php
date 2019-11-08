@@ -491,10 +491,13 @@
         {               
             $results = $tempDbh->query("SELECT *FROM CheckCaseInfo;");     
 
-            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+            if($results)
             {
-                return array('checkCaseData' => $record['checkCaseData']);                                 
-            }            
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+                {
+                    return array('checkCaseData' => $record['checkCaseData']);                                 
+                }  
+            }          
         }
         catch(Exception $e) 
         {              
