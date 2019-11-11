@@ -154,13 +154,14 @@ ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDi
     }
 }
 
-ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, selectedComponentRows) {
-
-    var dataGrid = $(containerId).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items(); 
+ReviewViewerInterface.prototype.StoreHiddenResultId = function(selectedComponentRows) {
     if(model.currentCheck == "comparison") {
         for (var i = 0; i < selectedComponentRows.length; i++) {
             var selectedRow = selectedComponentRows[i];
+
+            var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+            var rowsData = dataGrid.getDataSource().items();
+            
             var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
             var rowData = rowsData[rowIndex];
                 // source A
@@ -168,7 +169,7 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
                     var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
                     if(viewerInterface == this) {
                         if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) { 
-                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;            
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = selectedRow["tableId"];            
                         }
                     }
                 }
@@ -178,7 +179,7 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
                     var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
                     if(viewerInterface == this) {
                         if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {       
-                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;           
+                            viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = selectedRow["tableId"];           
                         }
                     }
                 }
@@ -190,10 +191,14 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
             if(viewerInterface == this) {
                 for (var i = 0; i < selectedComponentRows.length; i++) {
                     var selectedRow = selectedComponentRows[i];
+
+                    var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+                    var rowsData = dataGrid.getDataSource().items();
+
                     var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
                     var rowData = rowsData[rowIndex];
                     if (rowData.NodeId !== "" && rowData.NodeId !== null) {       
-                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = containerId;           
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = selectedRow["tableId"];           
                     }
                 }
             }
@@ -201,12 +206,13 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(containerId, sele
     }      
 }
 
-ReviewViewerInterface.prototype.RemoveHiddenResultId = function(containerId, selectedComponentRows) {
-    var dataGrid = $(containerId).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items(); 
-    
+ReviewViewerInterface.prototype.RemoveHiddenResultId = function(selectedComponentRows) {    
     for (var i = 0; i < selectedComponentRows.length; i++) {
         var selectedRow = selectedComponentRows[i];
+
+        var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+        var rowsData = dataGrid.getDataSource().items(); 
+
         var rowIndex = dataGrid.getRowIndexByKey(selectedRow["rowKey"]);
         var rowData = rowsData[rowIndex];
         // source A

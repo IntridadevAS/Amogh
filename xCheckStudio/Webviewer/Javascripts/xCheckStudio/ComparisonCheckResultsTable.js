@@ -528,12 +528,13 @@ ComparisonCheckResultsTable.prototype.GetComponentIds = function (gridId) {
 
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
+    this.SelectedProperties = [];
 }
 
 ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (sources) {
     var columnHeaders = [];
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 4; i++) {
         columnHeader = {}
         var caption;
         var columns;
@@ -544,6 +545,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             var group = [];
             for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {
                 var headerGroupComp = {}
+                var visible = true;
                 if (j === ComparisonPropertyColumns.SourceAName) {
                     caption = "Property";
                     dataField = ComparisonPropertyColumnNames.SourceAName;
@@ -606,6 +608,12 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             columns = []
         }
 
+        if (i === 4) {
+            caption = "ID";
+            dataField = ComparisonPropertyColumnNames.PropertyId;
+            visible = false;
+        }
+
         columnHeader["caption"] = caption;
         if (dataField !== null) {
             columnHeader["dataField"] = dataField;
@@ -646,6 +654,8 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
             tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceBValue;
         }
 
+        tableRowContent[ComparisonPropertyColumnNames.PropertyId] = propertyId
+
         model.getCurrentReviewManager().detailedReviewRowComments[Object.keys(model.getCurrentReviewManager().detailedReviewRowComments).length] = property.description;
 
         tableData.push(tableRowContent);
@@ -685,6 +695,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,
+            keyExpr: ComparisonPropertyColumnNames.PropertyId,
             columns: columnHeaders,
             columnAutoWidth: true,
             wordWrapEnabled: false,
@@ -730,7 +741,19 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 }
             },
             onSelectionChanged: function (e) {
-
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
+                    }
+                }
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        var index = _this.SelectedProperties.indexOf(e.currentDeselectedRowKeys[i]);
+                        if (index > -1) {
+                            _this.SelectedProperties.splice(index, 1);
+                        }
+                    }
+                }
             },
             onRowClick: function (e) {
                 model.getCurrentSelectionManager().MaintainHighlightedDetailedRow(e.rowElement[0]);
@@ -799,10 +822,11 @@ ComparisonCheckPropertiesTable.prototype.GetDataForSelectedRow = function (rowIn
     return rowData;
 }
 
-ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowIndex, property) {
+ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, property) {
     var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
+    var rowIndex = dataGrid.getRowIndexByKey(rowKey);
     var rowData = data[rowIndex];
     rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
 

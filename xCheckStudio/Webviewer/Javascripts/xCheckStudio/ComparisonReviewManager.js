@@ -188,13 +188,11 @@ ComparisonReviewManager.prototype.GetComparisonResultGroupId = function (selecte
     return selectedRow.cells[ComparisonColumns.GroupId].innerHTML;
 }
 
-ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableContainer, componentId, groupId) {
+ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesKey, componentId, groupId) {
     var _this = this;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
     try {
         $.ajax({
@@ -204,57 +202,54 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
             data: {
                 'componentid': componentId,
                 'tabletoupdate': "comparisonDetailed",
-                'sourceAPropertyName': propertiesNames.SourceAName,
-                'sourceBPropertyName': propertiesNames.SourceBName,
+                'propertyIds': JSON.stringify(selectedPropertiesKey),
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var component = _this.GetCheckComponent(groupId, componentId);
 
-                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-                if (!highlightedRow) {
-                    return;
+                var results = JSON.parse(msg);
+
+                var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
+
+                if(results[componentId].accepted == "true") {
+                    checkResultComponent.status = "OK(A)";
+                }
+                else {
+                    checkResultComponent.status = results[componentId].status + "(A)";
                 }
 
-                var originalstatus = _this.getStatusFromMainReviewRow(highlightedRow["row"]);
-                var changedStatus = originalstatus;
-                if (!originalstatus.includes("(A)")) {
-                    changedStatus = originalstatus + "(A)";
-                    component["status"] = changedStatus;
-                }
-                if (msg.trim() == "OK(A)" || msg.trim() == "OK(A)(T)") {
-                    changedStatus = msg.trim();
-                    component["status"] = changedStatus;
-                }
-
-                var properties = component["properties"];
+                var properties = checkResultComponent["properties"];
+                var isPropertyTransposed = false;
 
                 for (var i = 0; i < properties.length; i++) {
+
                     var property = properties[i];
-                    var sourceAName = property["sourceAName"];
-                    if (!sourceAName) {
-                        sourceAName = "";
-                    }
-                    var sourceBName = property["sourceBName"];
-                    if (!sourceBName) {
-                        sourceBName = "";
-                    }
+                    if (property !== results[componentId]["properties"][i].accepted) {
 
-                    if (sourceAName == propertiesNames.SourceAName &&
-                        sourceBName == propertiesNames.SourceBName) {
-                        // selectedRow[0].cells[ComparisonPropertyColumns.Status].innerHTML = "ACCEPTED";
-                        property["severity"] = "ACCEPTED";
+                        property.accepted = results[componentId]["properties"][i].accepted;
 
-                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
+                        if(property.accepted == "true") {
+                            property["severity"] = "ACCEPTED";
+                            model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property)
+                        }
+                        else if(property.transpose != null) {
 
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], 'ACCEPTED');
+                            if(!isPropertyTransposed) {
+                                isPropertyTransposed = true;
+                                checkResultComponent.status = checkResultComponent.status + "(T)";
+                            }
+                        }
+                                            
+                        continue;
                     }
 
                 }
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
-                    highlightedRow["tableId"],
-                    changedStatus,
+
+                var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(componentId,
+                    tableContainer,
+                    checkResultComponent.status,
                     false);
             }
         });
@@ -263,26 +258,6 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedRow, tableC
         console.log(error);
     }
 }
-
-// ComparisonReviewManager.prototype.GetUpdatedComponentStatus = function(component) {
-//     if(component["accepted"] == "true") {
-//         component.status = "OK(A)";
-//         for (var propertyId in component.properties) {
-//             property = component.properties[propertyId];
-//             if (property.severity !== "OK" && property.severity !== "No Value") {
-//                 if(property["accepted"] == "true") {
-//                     property.severity = "ACCEPTED";
-//                 }
-//                 else if(property["transpose"] !== null){
-//                     component.status = "OK(A)(T)";
-//                 }
-//             }
-//         }    
-//     }
-
-
-    
-// }
 
 ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsVsResultsIds) {
 
@@ -377,8 +352,8 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordion) 
                                 if (property.severity !== 'No Value' && property.severity !== 'OK')
                                     property.severity = 'ACCEPTED';
                             }
-                            var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
-                            model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
+                            // var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
+                            model.getCurrentReviewTable().UpdateGridData(compId, groupContainer, component.status, true);
                         }
                     }
                 }
@@ -470,13 +445,11 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tableContainer, componentId, groupId) {
+ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertiesKey, componentId, groupId) {
     var _this = this;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    var propertiesNames = this.getSourcePropertiesNamesFromDetailedReview(selectedRow[0]);
 
     try {
         $.ajax({
@@ -487,56 +460,105 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedRow, tabl
             data: {
                 'componentid': componentId,
                 'tabletoupdate': "rejectPropertyFromComparisonTab",
-                'sourceAPropertyName': propertiesNames.SourceAName,
-                'sourceBPropertyName': propertiesNames.SourceBName,
+                'propertyIds': JSON.stringify(selectedPropertiesKey),
                 'ProjectName': projectinfo.projectname,
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var status = new Array();
-                status = msg;
-                var changedStatus = status[0];
 
-                var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
-                var properties = component["properties"];
+                var results = msg;
 
-                if (component["transpose"] !== null && !status[0].includes("(T)")) {
-                    changedStatus = status[0] + "(T)";
-                }
-                component["status"] = changedStatus;
+                var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
+                checkResultComponent.accepted = results[componentId].accepted;
+
+                checkResultComponent.status = results[componentId].status;
+                
+
+                var properties = checkResultComponent["properties"];
+                var isPropertyTransposed = false;
+                var isPropertyAccepted = false;
+
                 for (var i = 0; i < properties.length; i++) {
+
                     var property = properties[i];
-                    var sourceAName = property["sourceAName"];
-                    if (!sourceAName) {
-                        sourceAName = "";
-                    }
-                    var sourceBName = property["sourceBName"];
-                    if (!sourceBName) {
-                        sourceBName = "";
-                    }
+                    if (property !== results[componentId]["properties"][i].accepted) {
 
-                    if (sourceAName == propertiesNames.SourceAName &&
-                        sourceBName == propertiesNames.SourceBName) {
+                        property.accepted = results[componentId]["properties"][i].accepted;
 
-                        property["severity"] = status[1];
+                        if(property.accepted == "false") {
 
-                        model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
+                            property["severity"] = results[componentId]["properties"][i].severity;
+                            model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property)
 
-                        model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
+                        }
+                        else if(property.accepted == "true") {
+                            if(!isPropertyAccepted) {
+                                isPropertyAccepted = true;
+                                checkResultComponent.status = checkResultComponent.status + "(A)";
+                            }
+                        }
+                        else if(property.transpose != null) {
 
+                            if(!isPropertyTransposed) {
+                                isPropertyTransposed = true;
+                                checkResultComponent.status = checkResultComponent.status + "(T)";
+                            }
+                        }
+                                            
+                        continue;
                     }
 
                 }
 
-                var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-                if (!highlightedRow) {
-                    return;
-                }
-
-                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
-                    highlightedRow["tableId"],
-                    changedStatus,
+                var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
+                model.checks[model.currentCheck]["reviewTable"].UpdateGridData(componentId,
+                    tableContainer,
+                    checkResultComponent.status,
                     false);
+                // var status = new Array();
+                // status = msg;
+                // var changedStatus = status[0];
+
+                // var component = model.getCurrentReviewManager().GetCheckComponent(groupId, componentId);
+                // var properties = component["properties"];
+
+                // if (component["transpose"] !== null && !status[0].includes("(T)")) {
+                //     changedStatus = status[0] + "(T)";
+                // }
+                // component["status"] = changedStatus;
+                // for (var i = 0; i < properties.length; i++) {
+                //     var property = properties[i];
+                //     var sourceAName = property["sourceAName"];
+                //     if (!sourceAName) {
+                //         sourceAName = "";
+                //     }
+                //     var sourceBName = property["sourceBName"];
+                //     if (!sourceBName) {
+                //         sourceBName = "";
+                //     }
+
+                //     if (sourceAName == propertiesNames.SourceAName &&
+                //         sourceBName == propertiesNames.SourceBName) {
+
+                //         property["severity"] = status[1];
+
+                //         model.getCurrentDetailedInfoTable().UpdateGridData(selectedRow[0].rowIndex, property)
+
+                //         model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], status[1]);
+
+                //     }
+
+                // }
+
+                // var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                // if (!highlightedRow) {
+                //     return;
+                // }
+
+                // model.checks[model.currentCheck]["reviewTable"].UpdateGridData(highlightedRow["row"],
+                //     highlightedRow["tableId"],
+                //     changedStatus,
+                //     false);
             }
         });
     }
@@ -585,8 +607,7 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordion) {
                         property.severity = propsStatus[i][propertyIndex]['severity'];
                         propertyIndex++;
                     }
-                    var rowElement = dataGrid.getRowElement(rows[i].rowIndex);
-                    model.getCurrentReviewTable().UpdateGridData(rowElement[0], groupContainer, component.status, true);
+                    model.getCurrentReviewTable().UpdateGridData(compId, groupContainer, component.status, true);
                 }
             }
         });
