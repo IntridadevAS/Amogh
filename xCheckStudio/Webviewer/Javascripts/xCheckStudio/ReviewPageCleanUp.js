@@ -25,7 +25,7 @@ const ReviewPageCleanUp = {
 
     onSaveAndLeavePage: function () {
         return new Promise((resolve) => {
-            ReviewModule.onSaveProgress().then(function (result) {
+            ReviewModule.onSaveProgress(true).then(function (result) {
                 if (result) {
                     ReviewPageCleanUp.onLeavingPage().then(function (res) {
                         return resolve(true);
