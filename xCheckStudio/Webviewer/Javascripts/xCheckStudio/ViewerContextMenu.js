@@ -196,7 +196,7 @@ ViewerContextMenu.prototype.HideInReview = function() {
         // get viewerInterface on which "hide" is called
         var viewerInterface = this.GetViewerInterface();
 
-        viewerInterface.StoreHiddenResultId(row["tableId"], checkComponentRows);
+        viewerInterface.StoreHiddenResultId(checkComponentRows);
         model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
 }
 

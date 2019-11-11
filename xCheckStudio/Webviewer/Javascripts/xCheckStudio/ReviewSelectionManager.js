@@ -81,11 +81,11 @@ ReviewSelectionManager.prototype.AddSelectedComponent = function (row) {
     this.SelectedCheckComponentRows.push(row);
 }
 
-ReviewSelectionManager.prototype.ComponentSelected = function (rowIndex, tableId) {
+ReviewSelectionManager.prototype.ComponentSelected = function (rowKey, tableId) {
     for(var i = 0; i < this.SelectedCheckComponentRows.length; i++)
     {
         var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];
-        if(selectedCheckComponentRow["rowIndex"] === rowIndex &&
+        if(selectedCheckComponentRow["rowKey"] === rowKey &&
         selectedCheckComponentRow["tableId"] === tableId )
         {
             return true;
@@ -109,13 +109,13 @@ ReviewSelectionManager.prototype.GetSelectedComponent = function (rowIndex, tabl
     return undefined;
 }
 
-ReviewSelectionManager.prototype.RemoveSelectedComponent = function (rowIndex, tableId) {
+ReviewSelectionManager.prototype.RemoveSelectedComponent = function (rowKey, tableId) {
     
     var index = -1;
     for(var i = 0; i < this.SelectedCheckComponentRows.length; i++)
     {
         var selectedCheckComponentRow = this.SelectedCheckComponentRows[i];
-        if(selectedCheckComponentRow["rowIndex"] === rowIndex &&
+        if(selectedCheckComponentRow["rowKey"] === rowKey &&
         selectedCheckComponentRow["tableId"] === tableId )
         {
             index = i;

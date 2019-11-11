@@ -355,7 +355,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function(e) {
                 _this.highlightMainReviewTableFromCheckStatus(viewerContainer.replace("#", ""));
                 model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
-                model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
+                // model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onInitialized: function(e) {
                 // initialize the context menu
@@ -439,20 +439,21 @@ ComplianceCheckResultsTable.prototype.HighlightHiddenRows = function(isHide, che
     }       
 }
 
-ComplianceCheckResultsTable.prototype.UpdateGridData = function (selectedRow,
+ComplianceCheckResultsTable.prototype.UpdateGridData = function (componentId,
     tableContainer,    
     changedStatus,
     populateDetailedTable) {
 
         var dataGrid = $(tableContainer).dxDataGrid("instance");
-        var data = dataGrid.getDataSource().items(); 
-        var rowData = data[selectedRow.rowIndex];
+        var data = dataGrid.getDataSource().items();
+        var rowIndex = dataGrid.getRowIndexByKey(componentId);
+        var rowData = data[rowIndex];
         rowData.Status = changedStatus;
-        
-        dataGrid.repaintRows(selectedRow.rowIndex);
+    
+        dataGrid.repaintRows(rowIndex);
     
         if (populateDetailedTable) {
-            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));    
+            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
         }
 }
 
@@ -484,7 +485,7 @@ ComplianceCheckResultsTable.prototype.GetComponentIds = function (gridId) {
 
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
-    // this.detailedReviewRowComments = reviewManager.detailedReviewRowComments;
+    this.SelectedProperties = [];
 }
 
 ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (source) {
@@ -494,6 +495,7 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
     var columnHeaders = [];
     for (var i = 1; i < Object.keys(CompliancePropertyColumns).length; i++) {
         var headerGroupComp = {}
+        var visible = true;
         var caption;
         if (i === CompliancePropertyColumns.PropertyName) {
             caption = "Property";
@@ -507,10 +509,19 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             caption = "Status";
             dataField = CompliancePropertyColumnNames.Status;
         }
+        else if (i === CompliancePropertyColumns.PropertyId) {
+            caption = "ID";
+            dataField = CompliancePropertyColumnNames.PropertyId;
+            visible = false;
+        }
 
         headerGroupComp["caption"] = caption;
         headerGroupComp["dataField"] = dataField;
-        headerGroupComp["width"] = "25%";    
+        headerGroupComp["width"] = "25%";   
+
+        if(visible == false) {
+            headerGroupComp["visible"] = visible;
+        } 
         // headerGroupComp["dataType"] = "string";
         columns.push(headerGroupComp);
     }
@@ -522,18 +533,19 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
     return columnHeaders;
 }
 
-ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = function (property, columnHeaders) {
+ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = function (property, columnHeaders, propertyId) {
 
     tableRowContent = {};
     tableRowContent[CompliancePropertyColumnNames.PropertyName] = property.name;
     tableRowContent[CompliancePropertyColumnNames.PropertyValue] = property.value;
     if (property.performCheck === "1" &&
         property.result === "1") {
-        tableRowContent[ComparisonPropertyColumnNames.Status] = "OK";
+        tableRowContent[CompliancePropertyColumnNames.Status] = "OK";
     }
     else {
-        tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
+        tableRowContent[CompliancePropertyColumnNames.Status] = property.severity;
     }
+    tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId
     return tableRowContent;
 }
 
@@ -556,7 +568,7 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
         //this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
 
-        tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders);
+        tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders, propertyId);
         tableData.push(tableRowContent);
     }
 
@@ -572,6 +584,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,           
             columns: columnHeaders,
+            keyExpr: CompliancePropertyColumnNames.PropertyId,
             columnAutoWidth: true,
             wordWrapEnabled: false,
             showBorders: true,
@@ -615,9 +628,6 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                     e.cellElement.css("font-weight", "bold");   
                  }  
             },
-            onSelectionChanged: function (e) {
-                
-            },
             onRowClick: function(e) {
                 model.checks["compliance"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
                 // var comment = model.checks["compliance"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
@@ -629,11 +639,21 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 //     commentDiv.innerHTML = "Comment : <br>";
                 // }
             },
-            // onRowPrepared: function(e) {
-            //     if(e.isSelected) {
-            //         _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])
-            //     }
-            // }
+            onSelectionChanged: function (e) {
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
+                    }
+                }
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        var index = _this.SelectedProperties.indexOf(e.currentDeselectedRowKeys[i]);
+                        if (index > -1) {
+                            _this.SelectedProperties.splice(index, 1);
+                        }
+                    }
+                }
+            },
         });
     });
 
@@ -677,10 +697,11 @@ ComplianceCheckPropertiesTable.prototype.Destroy = function () {
     parent.appendChild(viewerContainerDiv); 
 }
 
-ComplianceCheckPropertiesTable.prototype.UpdateGridData = function(rowIndex, property) {
+ComplianceCheckPropertiesTable.prototype.UpdateGridData = function(rowKey, property) {
     var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items(); 
+    var rowIndex = dataGrid.getRowIndexByKey(rowKey);
     var rowData = data[rowIndex];
     rowData[CompliancePropertyColumnNames.Status] = property["severity"];
     dataGrid.repaintRows(rowIndex);

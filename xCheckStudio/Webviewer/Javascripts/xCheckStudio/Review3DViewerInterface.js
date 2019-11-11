@@ -226,7 +226,11 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
     }
 
     if (highlightedRow) {
-        model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+        var dataGrid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
+        rowElement = dataGrid.getRowElement(rowIndex)[0];
+
+        model.getCurrentSelectionManager().RemoveHighlightColor(rowElement);
         model.getCurrentSelectionManager().SetHighlightedRow(undefined);
 
         // clear detailed info table
@@ -420,20 +424,26 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
                     if (checkComponentId == checkComponentData["Id"]) {
                         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
                         if (highlightedRow) {
-                            model.getCurrentSelectionManager().RemoveHighlightColor(highlightedRow["row"]);
+
+                            var grid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+                            var rowIndex = grid.getRowIndexByKey(highlightedRow["rowKey"]);
+                            rowElement = grid.getRowElement(rowIndex)[0];
+
+                            model.getCurrentSelectionManager().RemoveHighlightColor(rowElement);
                         }                        
                            
-                        // highlight selected row
-                        var row = dataGrid.getRowElement(rowObj.rowIndex)
-                        model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
-                        model.getCurrentSelectionManager().SetHighlightedRow({
-                            "row": row[0],
-                            "tableId": checkTableIds[groupId],
-                            "rowIndex": row[0].rowIndex
-                        });  
+                        
+                        var row = dataGrid.getRowElement(rowObj.rowIndex) 
                            
                         //Expand Accordion and Scroll to Row
                         model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkComponentData.MainClass);
+
+                        // highlight selected row
+                        model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
+                        model.getCurrentSelectionManager().SetHighlightedRow({
+                            "tableId": checkTableIds[groupId],
+                            "rowKey": checkComponentId
+                        }); 
 
                         //break;
                         return {"row" : row[0], "tableId" : checkTableIds[groupId]};

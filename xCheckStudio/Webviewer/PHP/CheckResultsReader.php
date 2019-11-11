@@ -417,7 +417,8 @@
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
                                                             'ownerComponent'=>$propertyRow['ownerComponent'],
-                                                            'transpose' => $propertyRow['transpose']); 
+                                                            'transpose' => $propertyRow['transpose'],
+                                                            'accepted' => $propertyRow['accepted']); 
                     
                                     array_push($properties, $propertyValues);
 

@@ -8,10 +8,11 @@ ReviewComparisonSelectionManager.prototype = Object.create(ReviewSelectionManage
 ReviewComparisonSelectionManager.prototype.constructor = ReviewComparisonSelectionManager;
 
 ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, tableId, checkBoxState) {
-    
-    
+
+    var rowKey = this.GetSelectedRowKey(currentRow.rowIndex, tableId);
+
     if (checkBoxState == "on" &&
-        !this.ComponentSelected(currentRow.rowIndex, tableId)) {
+        !this.ComponentSelected(rowKey, tableId)) {
         // if check component is selected and and selected 
         // component row doesn't exist already
 
@@ -20,17 +21,16 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
 
         // keep track of selected component row
         this.AddSelectedComponent({
-            "row" : currentRow,
-            "rowIndex" : currentRow.rowIndex,
+            "rowKey" : rowKey,
             "tableId" : tableId});
     }
-    else if (this.ComponentSelected(currentRow.rowIndex, tableId)) {
+    else if (this.ComponentSelected(rowKey, tableId)) {
 
         // restore color
         this.RemoveHighlightColor(currentRow);
 
         // remove current row from selected rows array
-        this.RemoveSelectedComponent (currentRow.rowIndex, tableId);        
+        this.RemoveSelectedComponent (rowKey, tableId);        
     }
 }
 
@@ -51,22 +51,38 @@ ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row)
 
 ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (currentReviewTableRow, tableId) {
     var highlightedRow = this.GetHighlightedRow();
-    if (highlightedRow &&
-        highlightedRow["row"] === currentReviewTableRow) {
-        return;
+    var rowElement;
+
+    if (highlightedRow) {
+        var dataGrid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
+        rowElement = dataGrid.getRowElement(rowIndex)[0];
+
+        if(rowElement === currentReviewTableRow) {
+            return;
+        }
     }
 
+
     if (highlightedRow &&
-        !this.ComponentSelected(highlightedRow["rowIndex"], highlightedRow["tableId"])) {
-        this.RemoveHighlightColor(highlightedRow["row"]);
+        !this.ComponentSelected(highlightedRow["rowKey"], highlightedRow["tableId"])) {
+        this.RemoveHighlightColor(rowElement);
     }
+
+    rowKey = this.GetSelectedRowKey(currentReviewTableRow.rowIndex, tableId);
 
     this.ApplyHighlightColor(currentReviewTableRow);
     this.SetHighlightedRow({
-        "row": currentReviewTableRow,
-        "rowIndex": currentReviewTableRow.rowIndex,
+        "rowKey": rowKey,
         "tableId": tableId
     });   
+}
+
+ReviewComparisonSelectionManager.prototype.GetSelectedRowKey = function(rowIndex, tableId) {
+    var dataGrid =  $(tableId).dxDataGrid("instance");
+    var rows = dataGrid.getVisibleRows();
+    var rowData = rows[rowIndex];
+    return rowData.key;
 }
 
 ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow) {
