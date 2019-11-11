@@ -119,7 +119,7 @@ function cancelSaveData() {
 }
 
 function saveData() {
-    CheckModule.onSaveProgress(true).then(function (result) {
+    CheckModule.onSaveProgress(false).then(function (result) {
         hideSaveDataForm();
     });
 }

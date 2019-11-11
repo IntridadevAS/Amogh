@@ -21,7 +21,7 @@ var ReviewModule = {
                     }
 
                     if (!silent) {
-                        alert("Saved project information.");
+                        //showSavedDataPrompt();
                     }
 
                     // remove busy spinner        
@@ -86,3 +86,26 @@ var ReviewModule = {
         });
     },
 }
+
+// function onSavedDataOk() {
+//     var overlay = document.getElementById("savedDataOverlay");
+//     var popup = document.getElementById("savedDataPopup");
+
+//     overlay.style.display = 'none';
+//     popup.style.display = 'none';
+// }
+
+// function showSavedDataPrompt() {
+//     var overlay = document.getElementById("savedDataOverlay");
+//     var popup = document.getElementById("savedDataPopup");
+
+//     overlay.style.display = 'block';
+//     popup.style.display = 'block';
+
+//     popup.style.width = "581px";
+//     popup.style.height = "155px";
+//     popup.style.overflow = "hidden";
+
+//     popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+//     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+// }

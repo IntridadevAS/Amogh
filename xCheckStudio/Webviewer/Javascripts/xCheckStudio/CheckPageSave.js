@@ -1,13 +1,12 @@
 var CheckModule = {
     onSaveProgress: function (silent) {
 
-        return new Promise((resolve) => {            
+        return new Promise((resolve) => {
 
             try {
 
-                if(Object.keys(SourceManagers).length === 0)
-                {
-                    alert("No data found to save.");
+                if (Object.keys(SourceManagers).length === 0) {
+                    showNoDataToSavePrompt();
                     return resolve(false);
                 }
 
@@ -21,7 +20,7 @@ var CheckModule = {
                         CheckModule.saveAll().then(function (res) {
                             if (res) {
                                 if (!silent) {
-                                    alert("Saved project information.");
+                                    //showSavedDataPrompt();
                                 }
 
                                 // remove busy spinner        
@@ -31,7 +30,7 @@ var CheckModule = {
                             }
 
                             if (!silent) {
-                                alert("Failed to save.");
+                                showFailedToSavePrompt();
                             }
 
                             // remove busy spinner        
@@ -43,7 +42,7 @@ var CheckModule = {
                     else {
 
                         if (!silent) {
-                            alert("Failed to save.");
+                            showFailedToSavePrompt();
                         }
                         // remove busy spinner        
                         hideBusyIndicator();
@@ -294,7 +293,7 @@ var CheckModule = {
                 }
             }
         }
-        
+
         var dataSourceInfo = {};
         dataSourceInfo["SourceAFileName"] = sourceAFileName;
         dataSourceInfo["SourceBFileName"] = sourceBFileName;
@@ -518,3 +517,72 @@ var CheckModule = {
     },
 }
 
+
+function onNoDataToSaveOk() {
+    var overlay = document.getElementById("noDataToSaveOverlay");
+    var popup = document.getElementById("noDataToSavePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function showNoDataToSavePrompt() {
+    var overlay = document.getElementById("noDataToSaveOverlay");
+    var popup = document.getElementById("noDataToSavePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+// function onSavedDataOk() {
+//     var overlay = document.getElementById("savedDataOverlay");
+//     var popup = document.getElementById("savedDataPopup");
+
+//     overlay.style.display = 'none';
+//     popup.style.display = 'none';
+// }
+
+// function showSavedDataPrompt() {
+//     var overlay = document.getElementById("savedDataOverlay");
+//     var popup = document.getElementById("savedDataPopup");
+
+//     overlay.style.display = 'block';
+//     popup.style.display = 'block';
+
+//     popup.style.width = "581px";
+//     popup.style.height = "155px";
+//     popup.style.overflow = "hidden";
+
+//     popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+//     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+// }
+
+function onFailedToSaveOk() {
+    var overlay = document.getElementById("failedToSaveOverlay");
+    var popup = document.getElementById("failedToSavePopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function showFailedToSavePrompt() {
+    var overlay = document.getElementById("failedToSaveOverlay");
+    var popup = document.getElementById("failedToSavePopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "581px";
+    popup.style.height = "155px";
+    popup.style.overflow = "hidden";
+
+    popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
