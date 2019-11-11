@@ -177,8 +177,9 @@ function cancelSaveResults() {
 }
 
 function saveResults() {
-    ReviewModule.onSaveProgress();
-    hideSaveResultsForm();
+    ReviewModule.onSaveProgress(true).then(function (result) {
+        hideSaveResultsForm();
+    });
 }
 
 function hideSaveResultsForm() {

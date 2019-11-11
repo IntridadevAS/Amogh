@@ -1,5 +1,5 @@
 var ReviewModule = {
-    onSaveProgress: function () {
+    onSaveProgress: function (silent) {
 
         return new Promise((resolve) => {
             // show busy spinner        
@@ -20,7 +20,9 @@ var ReviewModule = {
                         return resolve(false);
                     }
 
-                    alert("Saved project information.");
+                    if (!silent) {
+                        alert("Saved project information.");
+                    }
 
                     // remove busy spinner        
                     hideBusyIndicator();

@@ -25,7 +25,7 @@ const CheckPageCleanUp = {
 
     onSaveAndLeavePage: function () {
         return new Promise((resolve) => {
-            CheckModule.onSaveProgress().then(function (result) {
+            CheckModule.onSaveProgress(true).then(function (result) {
                 if (result) {
                     CheckPageCleanUp.onLeavingPage().then(function (res) {
                         return resolve(true);
