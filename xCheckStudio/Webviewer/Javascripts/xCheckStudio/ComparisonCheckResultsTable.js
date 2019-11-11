@@ -608,7 +608,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             columns = []
         }
 
-        if (i === 4) {
+        if (i == 3) {
             caption = "ID";
             dataField = ComparisonPropertyColumnNames.PropertyId;
             visible = false;
@@ -618,6 +618,10 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
         if (dataField !== null) {
             columnHeader["dataField"] = dataField;
         }
+
+        if(visible == false) {
+            columnHeader["visible"] = visible;
+        } 
 
         if (columns.length > 1 && columns !== undefined) {
             columnHeader["columns"] = columns;

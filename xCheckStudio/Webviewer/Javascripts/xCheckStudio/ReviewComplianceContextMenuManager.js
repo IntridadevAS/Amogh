@@ -223,17 +223,14 @@ ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = functio
 }
 
 ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceComponent = function (selectedRow) {
-    // if (selectedRow.cells[ComplianceColumns.Status].innerHTML == "OK(A)" ||
-    //     selectedRow.cells[ComplianceColumns.Status].innerHTML == 'OK(A)(T)') {
-    //     return false;
-    // }
-    // else {
-    //     return true;
-    // }
-
     var accept = false;
     var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+
+    if(selectedGroupIdsVsResultIds == undefined) {
+        accept = true;
+        return accept;
+    }
 
     for(var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
@@ -251,15 +248,15 @@ ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceComponent 
 }
 
 ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceProperty = function (selectedRow) {
-    // if (selectedRow.cells[CompliancePropertyColumns.Status].innerHTML == "ACCEPTED") {
-    //     return false;
-    // }
-
-    // return true;
-
     var accept = false;
     var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)'];
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
+
+    
+    if(selectedPropertiesKey.length == 0) {
+        transpose = true;
+        return transpose;
+    }
 
     var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
@@ -273,18 +270,6 @@ ReviewComplianceContextMenuManager.prototype.ChooseActionForComplianceProperty =
             accept = true;
         }
     }
-    
-
-    // for(var groupId in selectedGroupIdsVsResultIds) {
-    //     var componentIds = selectedGroupIdsVsResultIds[groupId];
-    //     for(var componentId in componentIds) {
-    //         var checkResultComponent = this.ComplianceReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-    //         var index = ignore.indexOf(checkResultComponent.status);
-    //         if (index == -1) {
-    //             accept = true;
-    //         }
-    //     }
-    // }
 
     return accept;
 }
@@ -353,6 +338,10 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptComponents = function () {
 
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
+    if(selectedGroupIdsVsResultIds == undefined) {
+        return;
+    }
+
     this.ComplianceReviewManager.AcceptComponents(selectedGroupIdsVsResultIds, tableToUpdate);
 }
 
@@ -373,6 +362,11 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowCli
 
     var tableToUpdate = this.GetTableNameToAcceptProperty();
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
+
+    if(selectedPropertiesKey.length == 0) {
+        return;
+    }
+
     this.ComplianceReviewManager.AcceptProperty(selectedPropertiesKey, tableToUpdate, componentId, groupId)
 }
 
@@ -384,6 +378,10 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponents = function () {
     var tableToUpdate = this.GetTableNameToUnAcceptComponent();
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+
+    if(selectedGroupIdsVsResultIds == undefined) {
+        return;
+    }
 
     this.ComplianceReviewManager.UnAcceptComponents(selectedGroupIdsVsResultIds, tableToUpdate);
 }
@@ -404,6 +402,9 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
 
     var tableToUpdate = this.GetTableNameToUnAcceptProperty();
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
+    if(selectedPropertiesKey.length == 0) {
+        return;
+    }
     this.ComplianceReviewManager.UnAcceptProperty(selectedPropertiesKey, tableToUpdate, componentId, groupId)
 }
 
