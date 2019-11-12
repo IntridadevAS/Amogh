@@ -68,14 +68,26 @@ foreach($checkTypeElements as $checkTypeElement)
     $checkTypeName = $checkTypeElement->getAttribute('type');
     $sourceAType = $checkTypeElement->getAttribute('sourceType');
     $sourceBType = NULL;
-    
+    $sourceCType = NULL;
+    $sourceDType = NULL;
+
     if($sourceAType == NULL)
     {
         $sourceAType = $checkTypeElement->getAttribute('sourceAType');
         $sourceBType = $checkTypeElement->getAttribute('sourceBType');
+
+        if($checkTypeElement->hasAttribute ("sourceCType"))
+        {
+            $sourceCType =  $checkTypeElement->getAttribute('sourceCType');
+        }
+
+        if($checkTypeElement->hasAttribute ("sourceDType"))
+        {
+            $sourceDType =  $checkTypeElement->getAttribute('sourceDType');
+        }
     }
 
-    $checkType = new CheckType($checkTypeName, $sourceAType, $sourceBType);
+    $checkType = new CheckType($checkTypeName, $sourceAType, $sourceBType, $sourceCType, $sourceDType);
 
     $componentGroupElements = $checkTypeElement->getElementsByTagName("ComponentGroup");
     
@@ -84,14 +96,25 @@ foreach($checkTypeElements as $checkTypeElement)
         // ComponentGroup object
         $sourceAGroupName = $componentGroupElement->getAttribute('name');
         $sourceBGroupName = NULL;
+        $sourceCGroupName = NULL;
+        $sourceDGroupName = NULL;
 
         if($sourceAGroupName == NULL)
         {
             $sourceAGroupName = $componentGroupElement->getAttribute('sourceAGroupName');
             $sourceBGroupName = $componentGroupElement->getAttribute('sourceBGroupName');
+
+            if($componentGroupElement->hasAttribute ("sourceCGroupName"))
+            {
+                $sourceCGroupName =  $componentGroupElement->getAttribute('sourceCGroupName');
+            }
+            if($componentGroupElement->hasAttribute ("sourceDGroupName"))
+            {
+                $sourceDGroupName =  $componentGroupElement->getAttribute('sourceDGroupName');
+            }
         }
 
-        $checkCaseComponentGroup = new checkCaseComponentGroup($sourceAGroupName, $sourceBGroupName);
+        $checkCaseComponentGroup = new checkCaseComponentGroup($sourceAGroupName, $sourceBGroupName, $sourceCGroupName, $sourceDGroupName);
 
         $componentElements = $componentGroupElement->getElementsByTagName("ComponentClass");
        
@@ -100,13 +123,25 @@ foreach($checkTypeElements as $checkTypeElement)
             // Component object
             $sourceAClassName = $componentElement->getAttribute('name');
             $sourceBClassName = NULL;
+            $sourceCClassName = NULL;
+            $sourceDClassName = NULL;
+
             if($sourceAClassName == NULL)
             {
                 $sourceAClassName = $componentElement->getAttribute('sourceAComponentClass');
                 $sourceBClassName = $componentElement->getAttribute('sourceBComponentClass');
+
+                if($componentElement->hasAttribute ("sourceCComponentClass"))
+                {
+                    $sourceCClassName =  $componentElement->getAttribute('sourceCComponentClass');
+                }
+                if($componentElement->hasAttribute ("sourceDComponentClass"))
+                {
+                    $sourceDClassName =  $componentElement->getAttribute('sourceDComponentClass');
+                }
             }
 
-            $checkCaseComponentClass = new CheckCaseComponentClass($sourceAClassName, $sourceBClassName);
+            $checkCaseComponentClass = new CheckCaseComponentClass($sourceAClassName, $sourceBClassName, $sourceCClassName, $sourceDClassName);
 
             $propertyElements = $componentElement->getElementsByTagName("Matchwith");
 
@@ -114,12 +149,32 @@ foreach($checkTypeElements as $checkTypeElement)
             {
                 $sourceAMatchProperty = $propertyElement->getAttribute('sourceAPropertyname');
                 $sourceBMatchProperty = $propertyElement->getAttribute('sourceBPropertyname');
-
-                if ($sourceAMatchProperty != NULL &&
-                $sourceBMatchProperty != NULL &&
-                !(in_array($sourceAMatchProperty, $checkCaseComponentClass->MatchwithProperties))) {
-                    $checkCaseComponentClass->MatchwithProperties[$sourceAMatchProperty] =  $sourceBMatchProperty;
+                $sourceCMatchProperty = NULL;
+                $sourceDMatchProperty = NULL;
+                
+                if($propertyElement->hasAttribute ("sourceCPropertyname"))
+                {
+                    $sourceCMatchProperty =  $propertyElement->getAttribute('sourceCPropertyname');
                 }
+                if($propertyElement->hasAttribute ("sourceDPropertyname"))
+                {
+                    $sourceDMatchProperty =  $propertyElement->getAttribute('sourceDPropertyname');
+                }
+
+
+                $matchWithProperty = array();
+                $matchWithProperty["sourceA"] = $sourceAMatchProperty;
+                $matchWithProperty["sourceB"] = $sourceBMatchProperty;
+                $matchWithProperty["sourceC"] = $sourceCMatchProperty;
+                $matchWithProperty["sourceD"] = $sourceDMatchProperty;
+                array_push($checkCaseComponentClass->MatchwithProperties, $matchWithProperty);
+
+                // if ($sourceAMatchProperty != NULL &&
+                //     $sourceBMatchProperty != NULL &&
+                //     !(in_array($sourceAMatchProperty, $checkCaseComponentClass->MatchwithProperties))) {
+
+                //     $checkCaseComponentClass->MatchwithProperties[$sourceAMatchProperty] =  $sourceBMatchProperty;
+                // }
             }
 
             $propertyElements = $componentElement->getElementsByTagName("Property");
@@ -128,10 +183,22 @@ foreach($checkTypeElements as $checkTypeElement)
             {
                 $sourceAProperty = $propertyElement->getAttribute("name");
                 $sourceBProperty = NULL;
+                $sourceCProperty = NULL;
+                $sourceDProperty = NULL;
+
                 $rule = NULL;
                 if ($sourceAProperty == NULL) {
                     $sourceAProperty = $propertyElement->getAttribute("sourceAName");
                     $sourceBProperty = $propertyElement->getAttribute("sourceBName");
+
+                    if($propertyElement->hasAttribute ("sourceCName"))
+                    {
+                        $sourceCProperty =  $propertyElement->getAttribute('sourceCName');
+                    }
+                    if($propertyElement->hasAttribute ("sourceDName"))
+                    {
+                        $sourceDProperty =  $propertyElement->getAttribute('sourceDName');
+                    }
                 }
                 else {
                     $rule = $propertyElement->getAttribute("rule");
@@ -143,11 +210,12 @@ foreach($checkTypeElements as $checkTypeElement)
                 // create mapping property object 
                 $checkCaseMappingProperty = new CheckCaseMappingProperty($sourceAProperty,
                                                                         $sourceBProperty,
+                                                                        $sourceCProperty,
+                                                                        $sourceDProperty,
                                                                         $severity,
                                                                         $rule,
                                                                         $comment);
-                //var_dump($checkCaseMappingProperty);
-                
+                                
                 $checkCaseComponentClass->addMappingProperty($checkCaseMappingProperty);
             }
 
@@ -186,14 +254,19 @@ class CheckType{
     var $Name ;
     var $SourceAType;
     var $SourceBType;
+    var $SourceCType;
+    var $SourceDType;
 
     var $ComponentGroups;
 
-    function __construct( $name, $sourceAType, $sourceBType) 
+    function __construct( $name, $sourceAType, $sourceBType, $sourceCType, $sourceDType) 
         {
             $this->Name = $name;
             $this->SourceAType = $sourceAType;
             $this->SourceBType = $sourceBType;
+            $this->SourceCType = $sourceCType;
+            $this->SourceDType = $sourceDType;
+
             $this->ComponentGroups = array();
         }
 
@@ -206,13 +279,18 @@ class CheckCaseComponentGroup{
 
     var $SourceAName;
     var $SourceBName;
+    var $SourceCName;
+    var $SourceDName;
 
     var $ComponentClasses;
 
-    function __construct( $sourceAName, $sourceBName) 
+    function __construct( $sourceAName, $sourceBName, $sourceCName, $sourceDName) 
         {
             $this->SourceAName = $sourceAName;
             $this->SourceBName = $sourceBName;
+            $this->SourceCName = $sourceCName;
+            $this->SourceDName = $sourceDName;
+
             $this->ComponentClasses = array();
         }
     
@@ -225,14 +303,19 @@ class CheckCaseComponentClass{
 
     var $SourceAName;
     var $SourceBName;
+    var $SourceCName;
+    var $SourceDName;
 
     var $MatchwithProperties;
     var $MappingProperties;
 
-    function __construct( $sourceAName, $sourceBName) 
+    function __construct( $sourceAName, $sourceBName, $sourceCName, $sourceDName) 
         {
             $this->SourceAName = $sourceAName;
             $this->SourceBName = $sourceBName;
+            $this->SourceCName = $sourceCName;
+            $this->SourceDName = $sourceDName;
+
             $this->MatchwithProperties = array();
             $this->MappingProperties = array();
         }
@@ -247,17 +330,21 @@ class CheckCaseMappingProperty
 
     var $SourceAName;
     var $SourceBName;
+    var $SourceCName;
+    var $SourceDName;
     var $Severity;
     var $RuleString ;
     var $Comment ;
     var $Rule;
 
-    public  function __construct( $sourceAName, $sourceBName, $severity, $ruleString, $comment) 
+    public  function __construct( $sourceAName, $sourceBName, $sourceCName, $sourceDName, $severity, $ruleString, $comment) 
         {
             global $ComplianceCheckRulesArray;          
   
             $this->SourceAName = $sourceAName;
             $this->SourceBName = $sourceBName;
+            $this->SourceCName = $sourceCName;
+            $this->SourceDName = $sourceDName;
             $this->Severity = $severity;
             $this->RuleString = $ruleString;
             $this->Comment = $comment;
