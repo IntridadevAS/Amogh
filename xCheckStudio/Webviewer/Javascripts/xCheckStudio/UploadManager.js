@@ -46,15 +46,34 @@ let UploadManager = {
         if (filecount > 0) {
             if (input.isDirectory) {
                 //show busy spinner
-                showBusyIndicator();               
+                showBusyIndicator();
 
                 var item = input;
                 UploadManager.getFilesInDirectory(item).then(function (fileEntries) {
 
-                    // validate dataset, if checkspace is loaded from saved data
-                    if (model.loadSavedCheckspace) {
-                        if (!UploadManager.validateSourceFromDirDragDrop(fileEntries, item.name)) {                            
-                            showNotValidDatasourcePrompt();
+                    // // validate dataset, if checkspace is loaded from saved data
+                    // if (model.loadSavedCheckspace) {
+                    //     if (!UploadManager.validateSourceFromDirDragDrop(fileEntries, item.name)) {                            
+                    //         showNotValidDatasourcePrompt();
+
+                    //         //hide busy spinner
+                    //         hideBusyIndicator();
+
+                    //         // delete tabdata
+                    //         model.activeTabs--;
+                    //         controller.deleteTabData(addedSource.id);
+                    //         viewTabs.showAddTab();
+                    //         viewPanels.showAddPanel();
+
+                    //         return;
+                    //     }
+                    // }
+                    // else
+                    // {   
+                    // validate dataset for selected checkspace                     
+                    if (checkCaseManager && checkCaseManager.CheckCase) {
+                        if (!UploadManager.validateSourceFromDirDragDropForSelectedCheckspace(fileEntries, item.name)) {
+                            showNotValidDatasource1Prompt();
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -68,25 +87,7 @@ let UploadManager = {
                             return;
                         }
                     }
-                    else
-                    {                        
-                            if (checkCaseManager && checkCaseManager.CheckCase) {
-                                if (!UploadManager.validateSourceFromDirDragDropForSelectedCheckspace(fileEntries, item.name)) {                            
-                                    showNotValidDatasource1Prompt();
-        
-                                    //hide busy spinner
-                                    hideBusyIndicator();
-        
-                                    // delete tabdata
-                                    model.activeTabs--;
-                                    controller.deleteTabData(addedSource.id);
-                                    viewTabs.showAddTab();
-                                    viewPanels.showAddPanel();
-        
-                                    return;
-                                }
-                            }                       
-                    }
+                    //}
 
                     UploadManager.createFormDataAndUpload(formData, fileEntries, addedSource, item)
                 });
@@ -103,27 +104,27 @@ let UploadManager = {
         }
     },
 
-    validateSourceFromDirDragDrop: function (allFiles, dirName) {
-        // get the main source file name
-        var mainFileName = undefined;
-        for (var i = 0; i < allFiles.length; i++) {
-            var fileEntry = allFiles[i];
-            var name = xCheckStudio.Util.getFileNameWithoutExtension(fileEntry.name);
-            if (dirName === name) {
-                mainFileName = fileEntry.name;
-                break;
-            }
-        }
-        if (!mainFileName) {
-            return false;
-        }
+    // validateSourceFromDirDragDrop: function (allFiles, dirName) {
+    //     // get the main source file name
+    //     var mainFileName = undefined;
+    //     for (var i = 0; i < allFiles.length; i++) {
+    //         var fileEntry = allFiles[i];
+    //         var name = xCheckStudio.Util.getFileNameWithoutExtension(fileEntry.name);
+    //         if (dirName === name) {
+    //             mainFileName = fileEntry.name;
+    //             break;
+    //         }
+    //     }
+    //     if (!mainFileName) {
+    //         return false;
+    //     }
 
-        if (!UploadManager.validateDataSetForSavedCheckSpace(mainFileName)) {            
-            return false;
-        }
+    //     if (!UploadManager.validateDataSetForSavedCheckSpace(mainFileName)) {            
+    //         return false;
+    //     }
 
-        return true;
-    },
+    //     return true;
+    // },
 
     validateSourceFromDirDragDropForSelectedCheckspace: function (allFiles, dirName) {
         // get the main source file name
@@ -140,7 +141,7 @@ let UploadManager = {
             return false;
         }
 
-        if (!UploadManager.validateDataSetForSelectedCheckSpace(mainFileName)) {            
+        if (!UploadManager.validateDataSetForSelectedCheckSpace(mainFileName)) {
             return false;
         }
 
@@ -250,7 +251,7 @@ let UploadManager = {
             cache: false,
             contentType: false,
             processData: false,
-            success: function (ret) {               
+            success: function (ret) {
                 UploadManager.convertDataSource(mainFileName, uploadFormData, addedSource);
 
             },
@@ -279,7 +280,7 @@ let UploadManager = {
                 var tab = document.getElementById("tab_" + addedSource.id);
                 tab.children[0].innerText = ret;
                 tab.children[1].setAttribute("data-tooltip", ret);
-                
+
                 var fileExtension = xCheckStudio.Util.getFileExtension(ret).toLowerCase();
                 addedSource.fileName = ret;
                 addedSource.type = fileExtension;
@@ -339,16 +340,34 @@ let UploadManager = {
                 // delete tabdata
                 model.activeTabs--;
                 controller.deleteTabData(addedSource.id);
-                viewTabs.showAddTab();                
-                viewPanels.showAddPanel();   
+                viewTabs.showAddTab();
+                viewPanels.showAddPanel();
 
                 return;
             }
             else {
-                // if checkspace is loaded from saved data, then validate the data set types                        
-                if (model.loadSavedCheckspace) {
-                    if (!UploadManager.validateDataSetForSavedCheckSpace(sourceArray[0])) {
-                        showNotValidDatasourcePrompt();
+                // // if checkspace is loaded from saved data, then validate the data set types                        
+                // if (model.loadSavedCheckspace) {
+                //     if (!UploadManager.validateDataSetForSavedCheckSpace(sourceArray[0])) {
+                //         showNotValidDatasourcePrompt();
+
+                //         //hide busy spinner
+                //         hideBusyIndicator();
+
+                //         // delete tabdata
+                //         model.activeTabs--;
+                //         controller.deleteTabData(addedSource.id);
+                //         viewTabs.showAddTab();  
+                //         viewPanels.showAddPanel();                      
+
+                //         return;
+                //     }
+                // }
+                // else {
+                // validate datset for selected checkcase
+                if (checkCaseManager && checkCaseManager.CheckCase) {
+                    if (!UploadManager.validateDataSetForSelectedCheckSpace(sourceArray[0])) {
+                        showNotValidDatasource1Prompt();
 
                         //hide busy spinner
                         hideBusyIndicator();
@@ -356,30 +375,13 @@ let UploadManager = {
                         // delete tabdata
                         model.activeTabs--;
                         controller.deleteTabData(addedSource.id);
-                        viewTabs.showAddTab();  
-                        viewPanels.showAddPanel();                      
+                        viewTabs.showAddTab();
+                        viewPanels.showAddPanel();
 
                         return;
                     }
                 }
-                else {
-                    if (checkCaseManager && checkCaseManager.CheckCase) {
-                        if (!UploadManager.validateDataSetForSelectedCheckSpace(sourceArray[0])) {
-                            showNotValidDatasource1Prompt();
-
-                            //hide busy spinner
-                            hideBusyIndicator();
-
-                            // delete tabdata
-                            model.activeTabs--;
-                            controller.deleteTabData(addedSource.id);
-                            viewTabs.showAddTab();
-                            viewPanels.showAddPanel();
-
-                            return;
-                        }
-                    }
-                }
+                //}
 
                 //var fileName = sourceArray[0];
                 var fileName = "";
@@ -411,11 +413,9 @@ let UploadManager = {
         xhr.send(formData);
     },
 
-    validateDataSetForSelectedCheckSpace : function(currentSource)
-    {
+    validateDataSetForSelectedCheckSpace: function (currentSource) {
         var supportedTypes = [];
-        for (var key in checkCaseManager.CheckCase.SourceTypes)
-        {
+        for (var key in checkCaseManager.CheckCase.SourceTypes) {
             supportedTypes.push(checkCaseManager.CheckCase.SourceTypes[key].toLowerCase());
         }
 
@@ -453,46 +453,46 @@ let UploadManager = {
             }
         }
 
-        return true;   
-    },
-
-    validateDataSetForSavedCheckSpace: function (currentSource) {
-        var allLoadedTypes = [];
-        var currentSourceType = xCheckStudio.Util.getFileExtension(currentSource).toLowerCase();
-        allLoadedTypes.push(currentSourceType);
-
-        for (var id in model.views) {
-            var view = model.views[id];
-            if (!view.used ||
-                !view.type ||
-                view.type === "") {
-                continue;
-            }
-
-            allLoadedTypes.push(view.type.toLowerCase());
-        }
-
-        // get type wise count for loaded datasets
-        var loadedTypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(allLoadedTypes);
-
-        // get type wise count for supported datasets
-        var supportedypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(model.datasetTypes);
-
-        for (var type in loadedTypeOccuCounts) {
-            if (!(type in supportedypeOccuCounts)) {
-                return false;
-            }
-
-
-            var loadCnt = loadedTypeOccuCounts[type];
-            var allowedCnt = supportedypeOccuCounts[type];
-            if (loadCnt > allowedCnt) {
-                return false;
-            }
-        }
-
         return true;
     },
+
+    // validateDataSetForSavedCheckSpace: function (currentSource) {
+    //     var allLoadedTypes = [];
+    //     var currentSourceType = xCheckStudio.Util.getFileExtension(currentSource).toLowerCase();
+    //     allLoadedTypes.push(currentSourceType);
+
+    //     for (var id in model.views) {
+    //         var view = model.views[id];
+    //         if (!view.used ||
+    //             !view.type ||
+    //             view.type === "") {
+    //             continue;
+    //         }
+
+    //         allLoadedTypes.push(view.type.toLowerCase());
+    //     }
+
+    //     // get type wise count for loaded datasets
+    //     var loadedTypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(allLoadedTypes);
+
+    //     // get type wise count for supported datasets
+    //     var supportedypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(model.datasetTypes);
+
+    //     for (var type in loadedTypeOccuCounts) {
+    //         if (!(type in supportedypeOccuCounts)) {
+    //             return false;
+    //         }
+
+
+    //         var loadCnt = loadedTypeOccuCounts[type];
+    //         var allowedCnt = supportedypeOccuCounts[type];
+    //         if (loadCnt > allowedCnt) {
+    //             return false;
+    //         }
+    //     }
+
+    //     return true;
+    // },
 
     upload: function (fileNames,
         formData,

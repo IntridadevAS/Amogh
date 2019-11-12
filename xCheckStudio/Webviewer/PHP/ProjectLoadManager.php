@@ -445,14 +445,21 @@
                 $results = $tempDbh->query("SELECT *FROM  DatasourceInfo;");                     
                 while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
                 {
-                    $sourceViewerOptions['a']  = array();
-                    $sourceViewerOptions['b']  = array();
+                    if($record['sourceAFileName'] !== NULL &&
+                       $record['sourceAType'] !== NULL)
+                    {
+                        $sourceViewerOptions['a']  = array();
+                        $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
+                        $sourceViewerOptions['a']['sourceType'] =  $record['sourceAType'];                   
+                    }
                    
-                    $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
-                    $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];  
-                    
-                    $sourceViewerOptions['a']['sourceType'] =  $record['sourceAType'];                   
-                    $sourceViewerOptions['b']['sourceType'] = $record['sourceBType'];   
+                    if($record['sourceBFileName'] !== NULL &&
+                        $record['sourceBType'] !== NULL)
+                    {
+                        $sourceViewerOptions['b']  = array();
+                        $sourceViewerOptions['b']['source'] = $record['sourceBFileName']; 
+                        $sourceViewerOptions['b']['sourceType'] = $record['sourceBType'];   
+                    }
                 }
 
                 // read sourceAViewerOptions

@@ -6,7 +6,8 @@ let model = {
   currentView: null,
   currentTabId: undefined,
   loadSavedCheckspace : false,
-  datasetTypes : undefined, // used when loadSavedCheckspace is true. 
+  datasetTypes : undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
+  checkcaseSupportedTypes : undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
   views: {
     a: {
       id: "a",
@@ -98,7 +99,9 @@ let controller = {
     model.activeTabs++;
 
     // hide add new source tab
-    if ((model.loadSavedCheckspace && model.datasetTypes.length === model.activeTabs) ||
+    if ((model.loadSavedCheckspace &&
+      model.checkcaseSupportedTypes &&
+      model.checkcaseSupportedTypes.length === model.activeTabs) ||
       model.activeTabs >= 4) {
       viewTabs.hideAddTab();
     }
