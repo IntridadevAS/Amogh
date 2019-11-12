@@ -52,6 +52,10 @@ function loadCheckSpaceForCheck(data) {
         comparisonCB.checked = true;
     }
 
+     // get array of datasets allowed by checkcase
+     var checkCaseData = JSON.parse(data.checkCaseInfo.checkCaseData);    
+     model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
+
      // maintaint the dataset types
      var sourceViewerOptions = data["sourceViewerOptions"];
      if (sourceViewerOptions) {
@@ -65,8 +69,11 @@ function loadCheckSpaceForCheck(data) {
     // load data sets 
     loadDataSets(data);
     
-    // hide add new data source button
-    viewTabs.hideAddTab();   
+    // hide add new data source button  
+    if( model.checkcaseSupportedTypes.length === Object.keys(data.sourceViewerOptions).length)
+    {
+        viewTabs.hideAddTab();   
+    }
 }
 
 function loadDataSets(data) {
