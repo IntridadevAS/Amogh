@@ -270,70 +270,62 @@ function RestoreCategoryLevelTranspose() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
-    $dontChangeOk = 'OK';
-    $compProps;
+    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match');
+    $componentsArray = array();
+    $results = array();
 
     $dbh->beginTransaction();
-    $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
 
-    $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    $command->execute(array($groupid));
-    $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-    $index = 0;
-    while ($index < count($allCom)) 
-    {
-        $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE id=?');
-        $command->execute(array($transposeType, $allCom[$index]['id']));
+    $command = $dbh->prepare("UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($categoryStatus, $groupid));
 
-        if(strpos($allCom[$index]['status'], '(T)') == true) {
-            $allCom[$index]['status'] = str_replace("(T)", "", $allCom[$index]['status']);
-            $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-            $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
+
+    $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($transposeType, $groupid));
+
+    // $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status=?');
+    // $command->execute(array(null, $groupid, 'No Match'));
+
+    $components = $dbh->query("SELECT * FROM ComparisonCheckComponents WHERE ownerGroup= $groupid;");
+    if($components) 
+    {            
+        while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
+        {
+            $resultComponent = array();
+            $resultComponent["component"] = $comp;
+
+            // if($comp['status'] !== 'No Match') {
+                $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $index = 0;
+                while($index < count($properties)) {
+                   
+                    $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+                    $command->execute(array($transposeType, $properties[$index]['id']));
+                    
+                    $index++;
+                }
+
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
+
+                $resultComponent["component"]["properties"] = $resultProperties;
+            // }
+
+            $componentsArray[$comp['id']] = $resultComponent;
         }
-        
-        if($allCom[$index]['status'] !== 'OK' ||  $allCom[$index]['status'] !== 'No Match') {
-            $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-            $command->execute(array($allCom[$index]['id']));
-            $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
-            $indexcompProp = 0;
-            while ($indexcompProp < count($compProps)) 
-            {
-                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=?');
-                $command->execute(array($transposeType, $compProps[$indexcompProp]['id']));
-                $indexcompProp++;
-            }  
-        }
-       
-        $index++;
+
+        $results[$groupid] = $componentsArray;
     }
 
     $dbh->commit();
-
-    $dbh->beginTransaction();
-        $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-        $command->execute(array($groupid));
-        $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-        $statusArray[0] = $allCom;
-
-        $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-        $command->execute(array($groupid));
-        $components1 = $command->fetchAll(PDO::FETCH_ASSOC);
-        $noOfComp = 0;
-        $propertiesArray = array();
-        while($noOfComp < count($components1)) {
-            $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-            $command->execute(array($components1[$noOfComp]['id']));
-            $properties = $command->fetchAll(PDO::FETCH_ASSOC);
-            $propertiesArray[$noOfComp] = $properties;
-            $noOfComp++;
-        }
-
-    $statusArray[1] = $propertiesArray;
-    $dbh->commit();
-        
     $dbh = null;
-    echo json_encode($statusArray);
+
+    echo json_encode($results);
+   
 }
 
 function transposePropertiesCategoryLevel() {
@@ -352,43 +344,61 @@ function transposePropertiesCategoryLevel() {
 
     $categoryStatus = 'OK(T)';
     $status = 'true';
-    $dontChangeOk = 'OK';
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match');
+    $componentsArray = array();
+    $results = array();
 
     $dbh->beginTransaction();
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
+    $command = $dbh->prepare("UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($categoryStatus, $groupid));
 
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status!=?');
-    $command->execute(array($transposeType, $groupid, $dontChangeOk));
+    $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($transposeType, $groupid));
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status=?');
-    $command->execute(array(null, $groupid, 'No Match'));
+    // $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET transpose=? WHERE ownerGroup=? AND status=?');
+    // $command->execute(array(null, $groupid, 'No Match'));
 
     $components = $dbh->query("SELECT * FROM ComparisonCheckComponents WHERE ownerGroup= $groupid;");
     if($components) 
     {            
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
-            if($comp['status'] !== 'No Match') {
-                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=? AND severity!=?');
-                $command->execute(array($comp['id'], $dontChangeOk));
+            $resultComponent = array();
+            $resultComponent["component"] = $comp;
+
+            // if($comp['status'] !== 'No Match') {
+                $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?");
+                $command->execute(array($comp['id']));
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $index = 0;
                 while($index < count($properties)) {
-                    if($properties[$index]['severity'] !== "No Value" && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
-                        $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity!=?');
-                        $command->execute(array($transposeType, $properties[$index]['id'], $dontChangeOk));
+                    if($properties[$index]["accepted"] == "false" && !in_array($properties[$index]["severity"], $dontChangeOk) && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
+                        $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+                        $command->execute(array($transposeType, $properties[$index]['id']));
                     }
                     $index++;
                 }
-            }
+
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
+
+                $resultComponent["component"]["properties"] = $resultProperties;
+            // }
+
+            $componentsArray[$comp['id']] = $resultComponent;
         }
+
+        $results[$groupid] = $componentsArray;
     }
 
     $dbh->commit();
     $dbh = null;
+
+    echo json_encode($results);
 }
 
 ?>

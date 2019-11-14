@@ -49,7 +49,7 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
                 width: "38px",
                 height: "30px",
                 onClick: function (e) {
-                    e.jQueryEvent.stopPropagation();
+                    e.event.stopPropagation();
                     var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
                     if(!isOpened) {
                         $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
@@ -202,7 +202,8 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
                 "Id": component.id,
                 "SourceAName": component.name,
                 "MainClass": mainClass,
-                "SourceANodeId": component.nodeId
+                "SourceANodeId": component.nodeId,
+                "sourceId" : component.sourceId
             };
 
             model.getCurrentReviewManager().SourceComponentIdvsNodeId[component.id] = component.nodeId;

@@ -378,6 +378,87 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
     }
 }
 
+
+Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function(checkComponent, isSourceA) {
+
+    var reviewManager = model.getCurrentReviewManager();    
+    if (!reviewManager) {       
+        return;
+    }
+
+    var sourceComponentData = reviewManager.GetComponentData(checkComponent, isSourceA);
+
+    var isMainClassValue = false;
+
+    for(var id in this.OverrideSeverityColorComponents) {
+        var values = this.OverrideSeverityColorComponents[id];
+        if(values.includes(sourceComponentData.MainClass.toLowerCase())) {
+            isMainClassValue = true;
+            break;
+        }
+    }
+
+    if(isMainClassValue) {
+        var parentNodeId = this.Viewer.model.getNodeParent(Number(sourceComponentData.NodeId));
+        var parentComponentData;
+
+        if(this.IsNodeInCheckResults(parentNodeId)) {
+            var parentComponent = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], parentNodeId);
+
+            var groupId = reviewManager.GetComparisonResultGroupId(parentComponent.MainClass);
+            var comp = reviewManager.GetCheckComponent(groupId, parentComponent.Id);
+
+            parentComponentData =  reviewManager.GetComponentData(comp, isSourceA); 
+            if(parentComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+                this.highlightManager.changeComponentColorInViewer(parentComponentData, false, undefined);
+            }
+        }
+        
+        var children = this.Viewer.model.getNodeChildren(parentNodeId);
+        this.ChangeColorInViewer(children, parentComponentData, isSourceA);
+
+    }
+    else if(sourceComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+        this.highlightManager.changeComponentColorInViewer(sourceComponentData, false, undefined);
+        var children = this.Viewer.model.getNodeChildren(Number(sourceComponentData.NodeId));
+
+        this.ChangeColorInViewer(children, sourceComponentData, isSourceA);
+    }
+    else {
+        this.highlightManager.changeComponentColorInViewer(sourceComponentData, false, undefined);
+    }
+}
+
+Review3DViewerInterface.prototype.ChangeColorInViewer = function(children, parentComponent, isSourceA) {
+    var reviewManager = model.getCurrentReviewManager();    
+    if (!reviewManager) {       
+        return;
+    }
+
+    for(var i = 0; i < children.length; i++) {
+        var checkComponent = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], children[i]);
+        if(checkComponent) {
+
+            var groupId = reviewManager.GetComparisonResultGroupId(checkComponent.MainClass);
+            var comp = reviewManager.GetCheckComponent(groupId, checkComponent.Id);
+            var sourceComponentData = reviewManager.GetComponentData(comp, isSourceA);
+
+            overrideColorWithSeverityPreference = false;
+            if(parentComponent) {
+                if(parentComponent.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+                    var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[parentComponent.MainClass.toLowerCase()];
+                    if (overrideSeverityColorComponent.includes(sourceComponentData.MainClass.toLowerCase())) {
+                        overrideColorWithSeverityPreference = true;
+                    }    
+                }
+            }
+                             
+            this.highlightManager.changeComponentColorInViewer(sourceComponentData, overrideColorWithSeverityPreference, parentComponent);
+        }
+    }
+}
+
+
 Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
 
     var reviewManager = model.getCurrentReviewManager();
@@ -459,3 +540,4 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
 Review3DViewerInterface.prototype.Destroy = function (viewerContainer) {
     document.getElementById(viewerContainer).innerHTML = "";
 }
+

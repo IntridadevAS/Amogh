@@ -34,32 +34,6 @@ function executeContextMenuClicked(key, options, _this) {
     }
 }
 
-function acceptAllCategories() {
-    var tab = this.currentlyOpenedTab;
-    if (this.currentlyOpenedTab == "ComparisonTabPage") {
-        comparisonReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComparisonTab');
-    }
-    else if (this.currentlyOpenedTab == "SourceAComplianceTabPage") {
-        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceATab');
-    }
-    else if (this.currentlyOpenedTab == "SourceBComplianceTabPage") {
-        sourceBComplianceReviewManager.toggleAcceptAllComparedComponents('acceptAllCategoriesFromComplianceBTab');
-    }
-}
-
-function resetAllCategories() {
-    var tab = this.currentlyOpenedTab;
-    if (this.currentlyOpenedTab == "ComparisonTabPage") {
-        comparisonReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComparisonTab');
-    }
-    else if (this.currentlyOpenedTab == "SourceAComplianceTabPage") {
-        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceATab');
-    }
-    else if (this.currentlyOpenedTab == "SourceBComplianceTabPage") {
-        sourceAComplianceReviewManager.toggleAcceptAllComparedComponents('rejectAllCategoriesFromComplianceBTab');
-    }
-}
-
 function populateCheckResults(comparisonCheckGroups,
     sourceAComplianceCheckGroups,
     sourceBComplianceCheckGroups,
