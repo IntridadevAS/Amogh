@@ -11,13 +11,20 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
     else if (status.toLowerCase() === ("MATCHED").toLowerCase()) {
         return MatchedColor;
     }
-    else if (status.toLowerCase() === ("Error").toLowerCase()) {
+    else if (status.toLowerCase() === ("Error").toLowerCase() ||
+    status.toLowerCase() === ("Error(A)").toLowerCase() ||
+    status.toLowerCase() === ("Error(T)").toLowerCase() ||
+    status.toLowerCase() === ("Error(A)(T)").toLowerCase()) {
         return ErrorColor;
     }
-    else if (status.toLowerCase() === ("Warning").toLowerCase()) {
+    else if (status.toLowerCase() === ("Warning").toLowerCase() ||
+    status.toLowerCase() === ("Warning(A)").toLowerCase() ||
+    status.toLowerCase() === ("Warning(T)").toLowerCase() ||
+    status.toLowerCase() === ("Warning(A)(T)").toLowerCase()) {
         return WarningColor;
     }
-    else if (status.toLowerCase() === ("No Match").toLowerCase()) {
+    else if (status.toLowerCase() === ("No Match").toLowerCase() ||
+    status.toLowerCase() === ("No Match(A)").toLowerCase()) {
         return NoMatchColor;
     }
     else if (status.toLowerCase() === ("No Value").toLowerCase()) {
@@ -27,21 +34,8 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
         status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
         return AcceptedColor;
     }
-    else if (status.toLowerCase() === ("Error(A)").toLowerCase() ||
-        status.toLowerCase() === ("Warning(A)").toLowerCase() ||
-        status.toLowerCase() === ("No Match(A)").toLowerCase() ||
-        status.toLowerCase() === ("No Value(A)").toLowerCase()) {
-        return PropertyAcceptedColor;
-    }
-    else if (status.toLowerCase() === ("Error(T)").toLowerCase() ||
-        status.toLowerCase() === ("Warning(T)").toLowerCase()) {
-        return PropertyAcceptedColor;
-    }
     else if (status.toLowerCase() === ("OK(A)(T)").toLowerCase() || status.toLowerCase() === ("OK(T)(A)").toLowerCase()) {
         return AcceptedColor;
-    }
-    else if (status.includes("(A)(T)") || status.includes("(T)(A)")) {
-        return PropertyAcceptedColor;
     }
     else if (status.toLowerCase() === ("OK(T)").toLowerCase() || status.toLowerCase() === ("OK(A)").toLowerCase()) {
         return AcceptedColor;
@@ -49,20 +43,6 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
     else {
         return "#ffffff";
     }
-}
-
-// After accept, transpose performed, Grid data changes and so as the rows 
-// To keep track of highlighted row after grid update we take new rowKey for the componet 
-// and save highlighted row again
-ReviewSelectionManager.prototype.UpdateHighlightedCheckComponent = function (dataGridObject) {
-    var highlightedRow = this.GetHighlightedRow();
-
-    if (highlightedRow && highlightedRow["row"].rowIndex === -1) {
-        
-        var rowIndex = highlightedRow["rowIndex"];
-        highlightedRow["row"] = dataGridObject.getRowElement(rowIndex)[0];
-        this.SetHighlightedRow(highlightedRow);       
-    }    
 }
 
 ReviewSelectionManager.prototype.GetHighlightedRow = function () {

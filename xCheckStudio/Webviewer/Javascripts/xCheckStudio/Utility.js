@@ -82,7 +82,7 @@ var xCheckStudio;
                         parentComponent.transpose !== 'lefttoright' ||
                         parentComponent.transpose !== 'righttoleft') &&
                         status.toLowerCase() !== "error") {
-                        return WarningColor;
+                        return HoopsViewerWarningColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("no match")) {
@@ -128,7 +128,7 @@ var xCheckStudio;
                     return PropertyAcceptedColor;
                 }
                 else {
-                    return WarningColor;
+                    return HoopsViewerWarningColor;
                 }
             }
             else if (status.toLowerCase() === ("No Match").toLowerCase()) {

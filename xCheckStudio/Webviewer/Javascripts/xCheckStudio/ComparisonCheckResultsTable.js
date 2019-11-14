@@ -367,7 +367,6 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             onContentReady: function (e) {
                 _this.highlightMainReviewTableFromCheckStatus(containerDiv);
                 model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
-                // model.getCurrentSelectionManager().UpdateHighlightedCheckComponent(e.component);
             },
             onCellPrepared: function (e) {
                 if (e.rowType == "header") {

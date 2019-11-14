@@ -225,13 +225,6 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
-                if(results[componentId].accepted == "true") {
-                    checkResultComponent.status = "OK(A)";
-                }
-                else {
-                    checkResultComponent.status = results[componentId].status + "(A)";
-                }
-
                 var properties = checkResultComponent["properties"];
 
                 for (var i = 0; i < properties.length; i++) {
@@ -251,6 +244,14 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                         continue;
                     }
 
+                }
+
+                if(results[componentId].accepted == "true") {
+                    checkResultComponent.status = "OK(A)";
+                }
+                else {
+                    var worstSeverity = _this.GetWorstSeverityStatusOfComponent(properties);
+                    checkResultComponent.status = worstSeverity+ "(A)";
                 }
 
                 var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
@@ -355,6 +356,31 @@ ComplianceReviewManager.prototype.GetComparisonResultGroupId = function (MainCla
     }
 }
 
+ComplianceReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(properties) {
+
+    var worstSeverity = "OK";
+    for (var i = 0; i < properties.length; i++) {
+
+        var property = properties[i];
+
+        if(property.severity !== "OK" && property.severity !== "No Value") {
+            if(property.severity.toLowerCase() == "accepted" || property.severity.toLowerCase() == "ok(t)") {
+                continue;
+            }
+            else {
+                if(property.severity.toLowerCase() == "error") {
+                    worstSeverity = property.severity;
+                }
+                else if(property.severity.toLowerCase() == "warning" && worstSeverity.toLowerCase() !== "error") {
+                    worstSeverity = property.severity;
+                }
+            }
+        }
+    }
+
+    return worstSeverity;
+}
+
 ComplianceReviewManager.prototype.UnAcceptComponents = function (selectedGroupIdsVsResultIds, ActionToPerform) {
     var _this = this;
     // var componentId = this.GetComplianceResultId(selectedRow[0]);
@@ -438,8 +464,6 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
-                checkResultComponent.status = results[componentId].status;
-
                 var properties = checkResultComponent["properties"];
                 var isPropertyAccepted = false;
 
@@ -456,7 +480,6 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                         else {
                             if(!isPropertyAccepted) {
                                 isPropertyAccepted = true;
-                                checkResultComponent.status = checkResultComponent.status + "(A)";
                             }
                         }
 
@@ -465,6 +488,13 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                         continue;
                     }
 
+                }
+
+                var worstSeverity = _this.GetWorstSeverityStatusOfComponent(properties);
+                checkResultComponent.status = worstSeverity;
+
+                if(isPropertyAccepted) {
+                    checkResultComponent.status = checkResultComponent.status + "(A)";
                 }
 
                 var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
