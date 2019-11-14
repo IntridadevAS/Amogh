@@ -227,7 +227,6 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                 var properties = checkResultComponent["properties"];
                 var isPropertyAccepted = false;
                 var isPropertyTransposed = false;
-                var isComponentOK = true;
 
                 for (var i = 0; i < properties.length; i++) {
 
@@ -247,21 +246,11 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                             if(!isPropertyTransposed)
                                     isPropertyTransposed = true;
                         }
-                        else {
-                            if(isComponentOK)
-                                isComponentOK = false;
-                        }
                     }
-
                 }
 
-                if(isComponentOK) {
-                    checkResultComponent.status = "OK";
-                }
-                else {
-                    if(checkResultComponent.status !== results[componentId].status)
-                        checkResultComponent.status = results[componentId].status;
-                }
+                var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(properties);
+                checkResultComponent.status = worstSeverityStatus;
 
                 if(isPropertyAccepted) {
                     checkResultComponent.status = checkResultComponent.status + "(A)";
@@ -359,6 +348,31 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
         });
     }
     catch (error) { }
+}
+
+ComparisonReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(properties) {
+
+    var worstSeverity = "OK";
+    for (var i = 0; i < properties.length; i++) {
+
+        var property = properties[i];
+
+        if(property.severity !== "OK" && property.severity !== "No Value") {
+            if(property.severity.toLowerCase() == "accepted" || property.severity.toLowerCase() == "ok(t)") {
+                continue;
+            }
+            else {
+                if(property.severity.toLowerCase() == "error") {
+                    worstSeverity = property.severity;
+                }
+                else if(property.severity.toLowerCase() == "warning" && worstSeverity.toLowerCase() !== "error") {
+                    worstSeverity = property.severity;
+                }
+            }
+        }
+    }
+
+    return worstSeverity;
 }
 
 ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordion) {
@@ -529,10 +543,7 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 var results = JSON.parse(msg);;
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
-                checkResultComponent.accepted = results[componentId].accepted;
-
-                checkResultComponent.status = results[componentId].status;
-                
+                checkResultComponent.accepted = results[componentId].accepted;              
 
                 var properties = checkResultComponent["properties"];
                 var isPropertyTransposed = false;
@@ -563,6 +574,9 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                     }
 
                 }
+
+                var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(properties);
+                checkResultComponent.status = worstSeverityStatus;
 
                 if(isPropertyAccepted) {
                     checkResultComponent.status = checkResultComponent.status + "(A)";
@@ -787,7 +801,6 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPro
                 var properties = checkResultComponent["properties"];
                 var isPropertyAccepted = false;
                 var isPropertyTransposed = false;
-                var isComponentOK = true;
 
                 for (var i = 0; i < properties.length; i++) {
 
@@ -808,21 +821,11 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPro
                             if(!isPropertyTransposed)
                                     isPropertyTransposed = true;
                         }
-                        else {
-                            if(isComponentOK)
-                                isComponentOK = false;
-                        }
                     }
-
                 }
 
-                if(isComponentOK) {
-                    checkResultComponent.status = "OK";
-                }
-                else {
-                    if(checkResultComponent.status !== results[componentId].status)
-                        checkResultComponent.status = results[componentId].status;
-                }
+                var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(properties);
+                checkResultComponent.status = worstSeverityStatus;
 
                 if(isPropertyAccepted) {
                     checkResultComponent.status = checkResultComponent.status + "(A)";
@@ -881,7 +884,6 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedP
                 var properties = checkResultComponent["properties"];
                 var isPropertyAccepted = false;
                 var isPropertyTransposed = false;
-                var isComponentOK = true;
 
                 for (var i = 0; i < properties.length; i++) {
 
@@ -902,22 +904,14 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedP
                         else {
 
                             orginalProperty.severity = changedProperty.severity;
-                            model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), orginalProperty)
-
-                            if(isComponentOK)
-                                isComponentOK = false;
+                            model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), orginalProperty);
                         }
                     }
 
                 }
 
-                if(isComponentOK) {
-                    checkResultComponent.status = "OK";
-                }
-                else {
-                    if(checkResultComponent.status !== results[componentId].status)
-                        checkResultComponent.status = results[componentId].status;
-                }
+                var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(properties);
+                checkResultComponent.status = worstSeverityStatus;
 
                 if(isPropertyAccepted) {
                     checkResultComponent.status = checkResultComponent.status + "(A)";
