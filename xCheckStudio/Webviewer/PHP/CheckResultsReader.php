@@ -236,7 +236,8 @@
                                             'status'=>$changedStatus,
                                             'nodeId'=>$componentRow['nodeId'],
                                             'sourceId'=>$componentRow['sourceId'],
-                                            'ownerGroup'=>$componentRow['ownerGroup']);                                                         
+                                            'ownerGroup'=>$componentRow['ownerGroup'],
+                                            'accepted' => $componentRow['accepted']);                                                         
 
                             $componentId = $componentRow['id'];
                              // read properties                                                                  

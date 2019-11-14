@@ -51,7 +51,7 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
                 width: "38px",
                 height: "30px",
                 onClick: function (e) {
-                    e.jQueryEvent.stopPropagation();
+                    e.event.stopPropagation();
                     var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
                     if(!isOpened) {
                         $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));

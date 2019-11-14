@@ -252,6 +252,23 @@ function loadComparisonData(comparisonCheckGroups,
     // comparison detailed info table
     var checkPropertiesTable = new ComparisonCheckPropertiesTable(Comparison.DetailInfoContainer)
     comparisonData["detailedInfoTable"] = checkPropertiesTable;
+
+    //Save ComponentId Vs ComponentData
+    var componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
+    comparisonData["SourceAcomponentIdVsComponentData"] = componentIdVsComponentData;
+
+    var componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
+    comparisonData["SourceBcomponentIdVsComponentData"] = componentIdVsComponentData;
+}
+
+function GetComponentIdVsComponentData(sourceComponents) {
+    var componentIdVsComponentData = {};
+    for(var i = 0; i < sourceComponents.length; i++) {
+        var component = sourceComponents[i];
+        componentIdVsComponentData[Number(component.id)] = component;
+    }
+
+    return componentIdVsComponentData;
 }
 
 function loadComplianceData(compliance,
@@ -288,6 +305,23 @@ function loadComplianceData(compliance,
     // compliance detailed info table
     var checkPropertiesTable = new ComplianceCheckPropertiesTable(Compliance.DetailInfoContainer);
     complianceData["detailedInfoTable"] = checkPropertiesTable;
+
+    // save componentId vs ComponentData 
+    var componentIdVsComponentData;
+    if(model.selectedCompliance.id == "a") {
+        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
+    }
+    else if(model.selectedCompliance.id == "b") {
+        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
+    }
+    else if(model.selectedCompliance.id == "c") {
+        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceCComponents);
+    }
+    else if(model.selectedCompliance.id == "d") {
+        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceDComponents);
+    }
+
+    complianceData["ComponentIdVsComponentData"] = componentIdVsComponentData;
 
 }
 

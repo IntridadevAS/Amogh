@@ -334,7 +334,7 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptComponents = function () {
-    var tableToUpdate = this.GetTableNameToAcceptComponent();
+    var ActionToPerform = this.GetTableNameToAcceptComponent();
 
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
@@ -342,7 +342,7 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptComponents = function () {
         return;
     }
 
-    this.ComplianceReviewManager.AcceptComponents(selectedGroupIdsVsResultIds, tableToUpdate);
+    this.ComplianceReviewManager.AcceptComponents(selectedGroupIdsVsResultIds, ActionToPerform);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
@@ -360,30 +360,30 @@ ReviewComplianceContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    var tableToUpdate = this.GetTableNameToAcceptProperty();
+    var ActionToPerform = this.GetTableNameToAcceptProperty();
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
 
     if(selectedPropertiesKey.length == 0) {
         return;
     }
 
-    this.ComplianceReviewManager.AcceptProperty(selectedPropertiesKey, tableToUpdate, componentId, groupId)
+    this.ComplianceReviewManager.AcceptProperty(selectedPropertiesKey, ActionToPerform, componentId, groupId)
 }
 
 ReviewComplianceContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
-    var tableToUpdate = this.GetTableNameToAcceptGroup();
-    this.ComplianceReviewManager.UpdateStatusOfCategory(rowClicked[0], tableToUpdate);
+    var ActionToPerform = this.GetTableNameToAcceptGroup();
+    this.ComplianceReviewManager.UpdateStatusOfCategory(rowClicked[0], ActionToPerform);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptComponents = function () {
-    var tableToUpdate = this.GetTableNameToUnAcceptComponent();
+    var ActionToPerform = this.GetTableNameToUnAcceptComponent();
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if(selectedGroupIdsVsResultIds == undefined) {
         return;
     }
 
-    this.ComplianceReviewManager.UnAcceptComponents(selectedGroupIdsVsResultIds, tableToUpdate);
+    this.ComplianceReviewManager.UnAcceptComponents(selectedGroupIdsVsResultIds, ActionToPerform);
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
@@ -400,108 +400,108 @@ ReviewComplianceContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
 
-    var tableToUpdate = this.GetTableNameToUnAcceptProperty();
+    var ActionToPerform = this.GetTableNameToUnAcceptProperty();
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
     if(selectedPropertiesKey.length == 0) {
         return;
     }
-    this.ComplianceReviewManager.UnAcceptProperty(selectedPropertiesKey, tableToUpdate, componentId, groupId)
+    this.ComplianceReviewManager.UnAcceptProperty(selectedPropertiesKey, ActionToPerform, componentId, groupId)
 }
 
 ReviewComplianceContextMenuManager.prototype.OnUnAcceptGroup = function (rowClicked) {
-    var tableToUpdate = this.GetTableNameToUnAcceptGroup();
-    this.ComplianceReviewManager.UnAcceptCategory(rowClicked[0], tableToUpdate);
+    var ActionToPerform = this.GetTableNameToUnAcceptGroup();
+    this.ComplianceReviewManager.UnAcceptCategory(rowClicked[0], ActionToPerform);
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptComponent = function () {
-    var tableToUpdate;
+    var ActionToPerform;
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "complianceSourceA";
+        ActionToPerform = "acceptComplianceSourceAComponent";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "complianceSourceB";
+        ActionToPerform = "acceptComplianceSourceBComponent";
     }
 
-    return tableToUpdate;
+    return ActionToPerform;
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptProperty = function () {
-    var tableToUpdate;
+    var ActionToPerform;
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "ComplianceADetailedReview";
+        ActionToPerform = "acceptComplianceSourceAProperty";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "ComplianceBDetailedReview";
+        ActionToPerform = "acceptComplianceSourceBProperty";
     }
 
-    return tableToUpdate;   
+    return ActionToPerform;   
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptGroup = function () {
-    var tableToUpdate;
+    var ActionToPerform;
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "categoryComplianceA";
+        ActionToPerform = "acceptComplianceSourceACategory";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "categoryComplianceB";
+        ActionToPerform = "acceptComplianceSourceBCategory";
     }
-    return tableToUpdate;
+    return ActionToPerform;
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptComponent = function () {
    
-    var tableToUpdate;
+    var ActionToPerform;
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "rejectComponentFromComplianceATab";
+        ActionToPerform = "unAcceptComplianceSourceAComponent";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "rejectComponentFromComplianceBTab";
+        ActionToPerform = "unAcceptComplianceSourceBComponent";
     }
 
-    return tableToUpdate;    
+    return ActionToPerform;    
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptProperty = function () {
-    var tableToUpdate;
+    var ActionToPerform;
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "rejectPropertyFromComplianceATab";
+        ActionToPerform = "unAcceptComplianceSourceAProperty";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "rejectPropertyFromComplianceBTab";
+        ActionToPerform = "unAcceptComplianceSourceBProperty";
     }
 
-    return tableToUpdate;   
+    return ActionToPerform;   
 }
 
 ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = function () {
-    var tableToUpdate;
+    var ActionToPerform;
 
     var fileName = this.ComplianceReviewManager.GetFileName();
     if ('a' in model.files &&
         model.files['a'].fileName === fileName) {
-        tableToUpdate = "rejectCategoryFromComplianceATab";
+        ActionToPerform = "unAcceptComplianceSourceACategory";
     }
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
-        tableToUpdate = "rejectCategoryFromComplianceBTab";
+        ActionToPerform = "unAcceptComplianceSourceBCategory";
     }
 
-    return tableToUpdate;
+    return ActionToPerform;
 }
 
 ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {

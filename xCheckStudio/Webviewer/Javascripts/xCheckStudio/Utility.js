@@ -172,6 +172,9 @@ var xCheckStudio;
             else if (status.toLowerCase() === "ok(t)") {
                 return AcceptedColor;
             }
+            else if (status.toLowerCase() === "ok(a)") {
+                return AcceptedColor;
+            }
             else {
                 return "#ffffff";
             }
