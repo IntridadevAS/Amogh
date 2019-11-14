@@ -509,6 +509,10 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             caption = "Status";
             dataField = CompliancePropertyColumnNames.Status;
         }
+        else if(i == CompliancePropertyColumns.Rule) {
+            caption = "Condition";
+            dataField = CompliancePropertyColumnNames.Rule;
+        }
         else if (i === CompliancePropertyColumns.PropertyId) {
             caption = "ID";
             dataField = CompliancePropertyColumnNames.PropertyId;
@@ -546,6 +550,7 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
         tableRowContent[CompliancePropertyColumnNames.Status] = property.severity;
     }
     tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId
+    tableRowContent[CompliancePropertyColumnNames.Rule] = property.rule;
     return tableRowContent;
 }
 

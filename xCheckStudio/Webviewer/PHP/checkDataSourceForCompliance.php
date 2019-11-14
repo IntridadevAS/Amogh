@@ -662,7 +662,8 @@
                                                                 "",
                                                                 $severity,
                                                                 $performCheck,
-                                                                $checkCaseMappingProperty['Comment']);
+                                                                $checkCaseMappingProperty['Comment'],
+                                                                $checkCaseMappingProperty['RuleString']);
                             $checkProperty->Result = $result;
                         
                             $checkComponent->AddCheckProperty($checkProperty);
@@ -718,6 +719,7 @@
                                                     "",
                                                     "",
                                                     "undefined",
+                                                    NULL,
                                                     NULL,
                                                     NULL);
 

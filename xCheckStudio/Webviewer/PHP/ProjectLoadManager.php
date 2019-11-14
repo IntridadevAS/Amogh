@@ -730,11 +730,12 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
-                                        severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -747,7 +748,8 @@
                                         $row['accepted'], 
                                         $row['performCheck'], 
                                         $row['description'], 
-                                        $row['ownerComponent']));
+                                        $row['ownerComponent'],
+                                        $row['rule']));
             }   
         }
     }
@@ -834,11 +836,12 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
             $toDbh->exec($command);    
 
             $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
-                                        severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -851,7 +854,8 @@
                                         $row['accepted'],
                                         $row['performCheck'], 
                                         $row['description'], 
-                                        $row['ownerComponent']));
+                                        $row['ownerComponent'],
+                                        $row['rule']));
             }   
         }
     }
