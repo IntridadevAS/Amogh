@@ -1734,11 +1734,12 @@ function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             accepted TEXT,
             performCheck TEXT,
             description TEXT,
-            ownerComponent INTEGER NOT NULL)'; 
+            ownerComponent INTEGER NOT NULL,
+            rule TEXT)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
-                                    severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
+                                    severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1751,7 +1752,8 @@ function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
                                     $row['accepted'], 
                                     $row['performCheck'], 
                                     $row['description'], 
-                                    $row['ownerComponent']));
+                                    $row['ownerComponent'],
+                                    $row['rule']));
         }   
     }
 }
@@ -1835,11 +1837,12 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             accepted TEXT,
             performCheck TEXT,
             description TEXT,
-            ownerComponent INTEGER NOT NULL)'; 
+            ownerComponent INTEGER NOT NULL,
+            rule TEXT)'; 
         $dbh->exec($command);    
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
-                                    severity, accepted, performCheck, description, ownerComponent) VALUES(?,?,?,?,?,?,?,?,?)");
+                                    severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
         
         
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1852,7 +1855,8 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
                                     $row['accepted'], 
                                     $row['performCheck'], 
                                     $row['description'], 
-                                    $row['ownerComponent']));
+                                    $row['ownerComponent'],
+                                    $row['rule']));
         }   
     }
 }

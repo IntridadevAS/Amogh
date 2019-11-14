@@ -680,6 +680,7 @@
                 $severity= NULL;
                 $performCheck;
                 $description ="";
+                $rule ="";
                 if($orderMaintained == 'true') {
                     $checkCasePropSourceA = $checkCaseMappingProperty['SourceAName'];
                     $checkCasePropSourceB = $checkCaseMappingProperty['SourceBName'];
@@ -772,6 +773,11 @@
                     $description =  $description . $checkCaseMappingProperty['Comment'];
                 }
 
+                if ($checkCaseMappingProperty['RuleString']) 
+                {
+                    $rule =  $rule . $checkCaseMappingProperty['RuleString'];
+                }
+
                 if ($property1Name == NULL && $property2Name == NULL) 
                 {
                     return NULL;
@@ -783,7 +789,8 @@
                                                 $property2Value,
                                                 $severity,
                                                 $performCheck,
-                                                $description);
+                                                $description,
+                                                $rule);
 
                 return $checkProperty;
             }
@@ -827,6 +834,7 @@
                                                             NULL,
                                                             "No Match",
                                                             NULL,
+                                                            NULL,
                                                             NULL);
 
                         $checkProperty->PerformCheck = false;
@@ -866,6 +874,7 @@
                                                         $property["name"],
                                                         $property["value"],
                                                         "No Match",
+                                                        NULL,
                                                         NULL,
                                                         NULL);
 
@@ -917,6 +926,7 @@
                                                             NULL,
                                                             "undefined",
                                                             NULL,
+                                                            NULL,
                                                             NULL);
 
                         $checkProperty->PerformCheck = false;
@@ -957,6 +967,7 @@
                                                         $property["name"],
                                                         $property["value"],
                                                         "undefined",
+                                                        NULL,
                                                         NULL,
                                                         NULL);
 

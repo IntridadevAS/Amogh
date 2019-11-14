@@ -62,7 +62,8 @@
                 accepted TEXT,
                 performCheck TEXT,
                 description TEXT,
-                ownerComponent INTEGER NOT NULL)'; 
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
             $dbh->exec($command);    
 
 
@@ -144,7 +145,8 @@
                                                 accepted,
                                                 performCheck,
                                                 description,
-                                                ownerComponent) VALUES(?,?,?,?,?,?,?,?) ';                                        
+                                                ownerComponent,
+                                                rule) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
                         $propertyValues = array($checkProperty->SourceAName,
                                                 $checkProperty->SourceAValue,
                                                 $checkProperty->Result,
@@ -152,7 +154,8 @@
                                                 'false',
                                                 $checkProperty->PerformCheck,
                                                 $checkProperty->Description,
-                                                $componentId);
+                                                $componentId,
+                                                $checkProperty->Rule);
                         
                         $insertPropertyStmt = $dbh->prepare($insertPropertyQuery);
                         $insertPropertyStmt->execute($propertyValues);

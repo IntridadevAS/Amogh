@@ -92,6 +92,7 @@
                 var $Severity;
                 var $PerformCheck;
                 var $Description;
+                var $Rule;
             
                 function __construct( $sourceAName,
                                         $sourceAValue,
@@ -99,7 +100,8 @@
                                         $sourceBValue,
                                         $severity,
                                         $performCheck,
-                                        $description ) 
+                                        $description,
+                                        $rule) 
                     {
                         $this->SourceAName = $sourceAName;
                         $this->SourceAValue = $sourceAValue;
@@ -109,6 +111,7 @@
                         $this->Severity = $severity;
                         $this->PerformCheck = $performCheck;
                         $this->Description = $description;
+                        $this->Rule = $rule;
                     }     
                     
             }

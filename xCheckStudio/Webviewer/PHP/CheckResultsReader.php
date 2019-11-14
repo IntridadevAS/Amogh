@@ -260,7 +260,8 @@
                                                             'severity'=>$changedStatus,
                                                             'performCheck'=>$propertyRow['performCheck'],
                                                             'description'=>$propertyRow['description'],
-                                                            'ownerComponent'=>$propertyRow['ownerComponent']); 
+                                                            'ownerComponent'=>$propertyRow['ownerComponent'],
+                                                            'rule'=>$propertyRow['rule']); 
                     
                                     array_push($properties, $propertyValues);
 

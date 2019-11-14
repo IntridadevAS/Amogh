@@ -36,8 +36,7 @@ const ComparisonPropertyColumns = {
     SourceBValue: 3,
     SourceBName: 4,
     Status: 5,
-    PropertyId: 6
-    
+    PropertyId: 6   
 }
 
 // column names
@@ -48,7 +47,7 @@ const ComparisonPropertyColumnNames = {
     SourceBValue: "ValueB",
     SourceBName: "PropertyB",
     Status: "Status",
-    PropertyId: "PropertyId",
+    PropertyId: "PropertyId"
 }
 
 
@@ -86,7 +85,8 @@ const CompliancePropertyColumns = {
     PropertyName: 1,
     PropertyValue: 2,
     Status: 3,
-    PropertyId: 4
+    PropertyId: 4,
+    Rule : 5,
 }
 
 // column names
@@ -95,7 +95,8 @@ const CompliancePropertyColumnNames = {
     PropertyName: "Property",
     PropertyValue: "Value",
     PropertyId: "PropertyId",
-    Status: "Status"
+    Status: "Status",
+    Rule : "Condition",
 }
 
 
