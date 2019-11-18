@@ -190,6 +190,12 @@ let menu = {
     },
 
     onOutputClicked: function () {
+        var overlay = document.getElementById("outputOverlay");
+        var popup = document.getElementById("outputPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
     },
 
     onReportsClicked: function () {
@@ -313,6 +319,22 @@ function cancelReturnCheck() {
     popup.style.display = 'none';
 }
 
+function closeSaveAs() {
+    var overlay = document.getElementById("selectTableToExportOverlay");
+    var popup = document.getElementById("selectTableToExportPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function closeOutpuToOverlay() {
+    var overlay = document.getElementById("outputOverlay");
+    var popup = document.getElementById("outputPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
 function returnCheck(callbackFunction) {
     if (callbackFunction) {
         callbackFunction();
@@ -330,4 +352,15 @@ function disableMenuItems(items) {
             }
         }
     }
+}
+
+function onSaveAs() {
+    var overlay = document.getElementById("selectTableToExportOverlay");
+    var popup = document.getElementById("selectTableToExportPopup");
+    // var exportManager = new ExportManager();
+
+    DisplayCategoriesToExport();
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
 }
