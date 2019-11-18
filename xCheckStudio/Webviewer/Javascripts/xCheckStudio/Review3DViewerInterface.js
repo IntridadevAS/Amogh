@@ -339,7 +339,8 @@ Review3DViewerInterface.prototype.ChangeComponentColor = function (component, ov
         var overrideColorWithSeverityPreference = false;
         if (component.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
             var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[component.MainClass.toLowerCase()];
-            if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase())) {
+            // If child component is not mapped (undefined) then child should carry parent component's color
+            if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase()) && child.Status !== 'undefined') {
                 overrideColorWithSeverityPreference = true;
             }
         }
@@ -447,7 +448,8 @@ Review3DViewerInterface.prototype.ChangeColorInViewer = function(children, paren
             if(parentComponent) {
                 if(parentComponent.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
                     var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[parentComponent.MainClass.toLowerCase()];
-                    if (overrideSeverityColorComponent.includes(sourceComponentData.MainClass.toLowerCase())) {
+                    // If child component is not mapped (undefined) then child should carry parent component's color
+                    if (overrideSeverityColorComponent.includes(sourceComponentData.MainClass.toLowerCase()) && sourceComponentData.Status !== 'undefined') {
                         overrideColorWithSeverityPreference = true;
                     }    
                 }
