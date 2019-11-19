@@ -36,132 +36,132 @@ function CheckCaseManager() {
      
     }
 
-    CheckCaseManager.prototype.readCheckCaseXml = function (xml) {
-        var xmlText = xml.responseText;
+    // CheckCaseManager.prototype.readCheckCaseXml = function (xml) {
+    //     var xmlText = xml.responseText;
 
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(xmlText, "application/xml");
+    //     var parser = new DOMParser();
+    //     var xmlDoc = parser.parseFromString(xmlText, "application/xml");
 
-        var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
-        if (checkCaseElements.length < 0) {
-            return;
-        }      
+    //     var checkCaseElements = xmlDoc.getElementsByTagName("CheckCase");
+    //     if (checkCaseElements.length < 0) {
+    //         return;
+    //     }      
 
-        var checkCaseElement = checkCaseElements[0];
+    //     var checkCaseElement = checkCaseElements[0];
 
-        // CheckCase object
-        var checkCaseName = checkCaseElement.getAttribute("name");
-        // var complianceCheck = checkCaseElement.getAttribute("complianceCheck");
-        var checkCase = new CheckCase(checkCaseName/*, complianceCheck*/);
+    //     // CheckCase object
+    //     var checkCaseName = checkCaseElement.getAttribute("name");
+    //     // var complianceCheck = checkCaseElement.getAttribute("complianceCheck");
+    //     var checkCase = new CheckCase(checkCaseName/*, complianceCheck*/);
 
-        //for (var i = 0; i < checkCaseElement.children.length; i++) {
-        for (var checkTypeIndex = 0; checkTypeIndex < checkCaseElement.children.length; checkTypeIndex++) {
-            var checkTypeElement = checkCaseElement.children[checkTypeIndex];
-            if (checkTypeElement.localName != "Check") {
-                continue;
-            }
+    //     //for (var i = 0; i < checkCaseElement.children.length; i++) {
+    //     for (var checkTypeIndex = 0; checkTypeIndex < checkCaseElement.children.length; checkTypeIndex++) {
+    //         var checkTypeElement = checkCaseElement.children[checkTypeIndex];
+    //         if (checkTypeElement.localName != "Check") {
+    //             continue;
+    //         }
 
-            var checkTypeName = checkTypeElement.getAttribute("type");
-            var sourceAType = checkTypeElement.getAttribute("sourceType");
-            var sourceBType = undefined;
+    //         var checkTypeName = checkTypeElement.getAttribute("type");
+    //         var sourceAType = checkTypeElement.getAttribute("sourceType");
+    //         var sourceBType = undefined;
 
-            if (sourceAType === undefined ||
-                sourceAType === null) {
-                sourceAType = checkTypeElement.getAttribute("sourceAType");
-                sourceBType = checkTypeElement.getAttribute("sourceBType");
-            }
+    //         if (sourceAType === undefined ||
+    //             sourceAType === null) {
+    //             sourceAType = checkTypeElement.getAttribute("sourceAType");
+    //             sourceBType = checkTypeElement.getAttribute("sourceBType");
+    //         }
 
-            var checkType = new CheckType(checkTypeName, sourceAType, sourceBType);
+    //         var checkType = new CheckType(checkTypeName, sourceAType, sourceBType);
 
-            //if (sourceAType === "XLS" && sourceBType === "XML") {
-            for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
-                var componentGroupElement = checkTypeElement.children[componentGroupIndex];
-                if (componentGroupElement.localName != "ComponentGroup") {
-                    continue;
-                }
+    //         //if (sourceAType === "XLS" && sourceBType === "XML") {
+    //         for (var componentGroupIndex = 0; componentGroupIndex < checkTypeElement.children.length; componentGroupIndex++) {
+    //             var componentGroupElement = checkTypeElement.children[componentGroupIndex];
+    //             if (componentGroupElement.localName != "ComponentGroup") {
+    //                 continue;
+    //             }
 
-                // ComponentGroup object
-                var sourceAGroupName = undefined;
-                var sourceBGroupName = undefined;
-                sourceAGroupName = componentGroupElement.getAttribute("name");
-                if (!sourceAGroupName) {
-                    sourceAGroupName = componentGroupElement.getAttribute("sourceAGroupName");
-                    sourceBGroupName = componentGroupElement.getAttribute("sourceBGroupName");
-                }
+    //             // ComponentGroup object
+    //             var sourceAGroupName = undefined;
+    //             var sourceBGroupName = undefined;
+    //             sourceAGroupName = componentGroupElement.getAttribute("name");
+    //             if (!sourceAGroupName) {
+    //                 sourceAGroupName = componentGroupElement.getAttribute("sourceAGroupName");
+    //                 sourceBGroupName = componentGroupElement.getAttribute("sourceBGroupName");
+    //             }
 
-                var checkCaseComponentGroup = new CheckCaseComponentGroup(sourceAGroupName, sourceBGroupName);
+    //             var checkCaseComponentGroup = new CheckCaseComponentGroup(sourceAGroupName, sourceBGroupName);
 
-                for (var j = 0; j < componentGroupElement.children.length; j++) {
-                    var componentElement = componentGroupElement.children[j];
-                    if (componentElement.localName != "ComponentClass") {
-                        continue;
-                    }
+    //             for (var j = 0; j < componentGroupElement.children.length; j++) {
+    //                 var componentElement = componentGroupElement.children[j];
+    //                 if (componentElement.localName != "ComponentClass") {
+    //                     continue;
+    //                 }
 
-                    // Component object
-                    var sourceAClassName = undefined;
-                    var sourceBClassName = undefined;
-                    sourceAClassName = componentElement.getAttribute("name");
-                    if (!sourceAClassName) {
-                        sourceAClassName = componentElement.getAttribute("sourceAComponentClass");
-                        sourceBClassName = componentElement.getAttribute("sourceBComponentClass");
-                    }
-                    var checkCaseComponentClass = new CheckCaseComponentClass(sourceAClassName, sourceBClassName);
+    //                 // Component object
+    //                 var sourceAClassName = undefined;
+    //                 var sourceBClassName = undefined;
+    //                 sourceAClassName = componentElement.getAttribute("name");
+    //                 if (!sourceAClassName) {
+    //                     sourceAClassName = componentElement.getAttribute("sourceAComponentClass");
+    //                     sourceBClassName = componentElement.getAttribute("sourceBComponentClass");
+    //                 }
+    //                 var checkCaseComponentClass = new CheckCaseComponentClass(sourceAClassName, sourceBClassName);
 
-                    for (var k = 0; k < componentElement.children.length; k++) {
-                        var propertyElement = componentElement.children[k];
+    //                 for (var k = 0; k < componentElement.children.length; k++) {
+    //                     var propertyElement = componentElement.children[k];
 
-                        if (propertyElement.localName.toLowerCase() === "matchwith") {
-                            //checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
-                            //checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
+    //                     if (propertyElement.localName.toLowerCase() === "matchwith") {
+    //                         //checkCaseComponentClass.SourceAMatchwithProperty = propertyElement.getAttribute("sourceAPropertyname");
+    //                         //checkCaseComponentClass.SourceBMatchwithProperty = propertyElement.getAttribute("sourceBPropertyname");
 
-                            var sourceAMatchProperty = propertyElement.getAttribute("sourceAPropertyname");
-                            var sourceBMatchProperty = propertyElement.getAttribute("sourceBPropertyname");
+    //                         var sourceAMatchProperty = propertyElement.getAttribute("sourceAPropertyname");
+    //                         var sourceBMatchProperty = propertyElement.getAttribute("sourceBPropertyname");
 
-                            if (sourceAMatchProperty !== undefined &&
-                                sourceBMatchProperty !== undefined &&
-                                !(sourceAMatchProperty in checkCaseComponentClass.MatchwithProperties)) {
-                                    checkCaseComponentClass.MatchwithProperties[sourceAMatchProperty] =  sourceBMatchProperty;
-                            }
-                        }
-                        else if (propertyElement.localName.toLowerCase() === "property") {
+    //                         if (sourceAMatchProperty !== undefined &&
+    //                             sourceBMatchProperty !== undefined &&
+    //                             !(sourceAMatchProperty in checkCaseComponentClass.MatchwithProperties)) {
+    //                                 checkCaseComponentClass.MatchwithProperties[sourceAMatchProperty] =  sourceBMatchProperty;
+    //                         }
+    //                     }
+    //                     else if (propertyElement.localName.toLowerCase() === "property") {
 
-                            var sourceAProperty = propertyElement.getAttribute("name");
-                            var sourceBProperty = undefined;
-                            var rule = undefined;
-                            if (sourceAProperty === undefined ||
-                                sourceAProperty === null) {
-                                sourceAProperty = propertyElement.getAttribute("sourceAName");
-                                sourceBProperty = propertyElement.getAttribute("sourceBName");
-                            }
-                            else {
-                                rule = propertyElement.getAttribute("rule");
-                            }
-                            var severity = propertyElement.getAttribute("severity");
-                            var comment = propertyElement.getAttribute("comment");
+    //                         var sourceAProperty = propertyElement.getAttribute("name");
+    //                         var sourceBProperty = undefined;
+    //                         var rule = undefined;
+    //                         if (sourceAProperty === undefined ||
+    //                             sourceAProperty === null) {
+    //                             sourceAProperty = propertyElement.getAttribute("sourceAName");
+    //                             sourceBProperty = propertyElement.getAttribute("sourceBName");
+    //                         }
+    //                         else {
+    //                             rule = propertyElement.getAttribute("rule");
+    //                         }
+    //                         var severity = propertyElement.getAttribute("severity");
+    //                         var comment = propertyElement.getAttribute("comment");
 
-                            // create mapping property object 
-                            var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
-                                sourceBProperty,
-                                severity,
-                                rule,
-                                comment);
-                            checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
-                        }
-                    }
+    //                         // create mapping property object 
+    //                         var checkCaseMappingProperty = new CheckCaseMappingProperty(sourceAProperty,
+    //                             sourceBProperty,
+    //                             severity,
+    //                             rule,
+    //                             comment);
+    //                         checkCaseComponentClass.addMappingProperty(checkCaseMappingProperty);
+    //                     }
+    //                 }
 
-                    checkCaseComponentGroup.addComponent(checkCaseComponentClass);
-                }
+    //                 checkCaseComponentGroup.addComponent(checkCaseComponentClass);
+    //             }
 
-                checkType.addComponentGroup(checkCaseComponentGroup);
-            }
+    //             checkType.addComponentGroup(checkCaseComponentGroup);
+    //         }
 
-            checkCase.addCheckType(checkType);
-        }
+    //         checkCase.addCheckType(checkType);
+    //     }
 
-        //this.addCheckCase(checkCase);
-        this.CheckCase = checkCase;
-        this.postData();
-    }
+    //     //this.addCheckCase(checkCase);
+    //     this.CheckCase = checkCase;
+    //     this.postData();
+    // }
 }
 
 

@@ -1,5 +1,7 @@
 <?php
     require_once 'Utility.php';
+    require_once 'GlobalConstants.php';
+    
     if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
     {
         echo 'fail';
@@ -901,36 +903,39 @@
             // create table
             $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
             $toDbh->exec($command); 
-            $command = 'CREATE TABLE ComparisonCheckComponents(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceASubComponentClass TEXT,
-                sourceBSubComponentClass TEXT,
-                status TEXT,
-                accepted TEXT,
-                sourceANodeId TEXT,
-                sourceBNodeId TEXT,
-                sourceAId TEXT,
-                sourceBId TEXT,
-                ownerGroup INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckComponents(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceCName TEXT,
+            //     sourceDName TEXT,
+            //     sourceASubComponentClass TEXT,
+            //     sourceBSubComponentClass TEXT,
+            //     status TEXT,
+            //     accepted TEXT,
+            //     sourceANodeId TEXT,
+            //     sourceBNodeId TEXT,
+            //     sourceAId TEXT,
+            //     sourceBId TEXT,
+            //     ownerGroup INTEGER NOT NULL,
+            //     transpose TEXT)'; 
+            $command = CREATE_COMPARISONCOMPONETS_TABLE;
             $toDbh->exec($command);    
         
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                        sourceAName, 
-                        sourceBName, 
-                        sourceASubComponentClass, 
-                        sourceBSubComponentClass,
-                        status, 
-                        accepted, 
-                        sourceANodeId, 
-                        sourceBNodeId, 
-                        sourceAId,
-                        sourceBId,
-                        ownerGroup, 
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        
+            // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
+            //             sourceAName, 
+            //             sourceBName, 
+            //             sourceASubComponentClass, 
+            //             sourceBSubComponentClass,
+            //             status, 
+            //             accepted, 
+            //             sourceANodeId, 
+            //             sourceBNodeId, 
+            //             sourceAId,
+            //             sourceBId,
+            //             ownerGroup, 
+            //             transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONCOMPONETS_TABLE);
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
@@ -959,24 +964,25 @@
             // create table
             $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
             $toDbh->exec($command); 
-            $command = 'CREATE TABLE ComparisonCheckProperties(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceAValue TEXT,
-                sourceBValue TEXT,
-                result TEXT,
-                severity TEXT,
-                accepted TEXT,
-                performCheck TEXT,
-                description TEXT,
-                ownerComponent INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckProperties(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceAValue TEXT,
+            //     sourceBValue TEXT,
+            //     result TEXT,
+            //     severity TEXT,
+            //     accepted TEXT,
+            //     performCheck TEXT,
+            //     description TEXT,
+            //     ownerComponent INTEGER NOT NULL,
+            //     transpose TEXT)';
+            $command = CREATE_COMPARISONPROPERTIES_TABLE; 
             $toDbh->exec($command); 
             
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-        
+            // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
+            //             sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONPROPERTIES_TABLE);        
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           

@@ -64,6 +64,16 @@
                 $componentsTableName = "SourceBComponents";
                 $propertiesTableName = "SourceBProperties";
             }
+            else if(strtolower($source) == "sourcec")
+            {
+                $componentsTableName = "SourceCComponents";
+                $propertiesTableName = "SourceCProperties";
+            }
+            else if(strtolower($source) == "sourced")
+            {
+                $componentsTableName = "SourceDComponents";
+                $propertiesTableName = "SourceDProperties";
+            }
             else
             {
                 echo 'fail';
@@ -192,6 +202,16 @@
             {
                 $componentsTableName = "SourceBComponents";
                 $propertiesTableName = "SourceBProperties";
+            }
+            else if(strtolower($source) == "sourcec")
+            {
+                $componentsTableName = "SourceCComponents";
+                $propertiesTableName = "SourceCProperties";
+            }
+            else if(strtolower($source) == "sourced")
+            {
+                $componentsTableName = "SourceDComponents";
+                $propertiesTableName = "SourceDProperties";
             }
             else
             {

@@ -94,6 +94,12 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
   else if (this.ViewerContainer.toLowerCase() == "visualizerb") {
     source = "SourceB"
   }
+  else if (this.ViewerContainer.toLowerCase() == "visualizerc") {
+    source = "SourceC"
+  }
+  else if (this.ViewerContainer.toLowerCase() == "visualizerd") {
+    source = "SourceD"
+  }
   
   var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
   var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
