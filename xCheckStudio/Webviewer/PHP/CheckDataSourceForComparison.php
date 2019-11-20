@@ -44,6 +44,7 @@
         $SourceANotCheckedComponents = array();
         $SourceBNotCheckedComponents = array();
         $SourceCNotCheckedComponents = array();
+        $SourceDNotCheckedComponents = array();
 
         // read source wise components and thier properties
         getSourceComponents();  
@@ -86,6 +87,7 @@
             global $SourceANotCheckedComponents;
             global $SourceBNotCheckedComponents;
             global $SourceCNotCheckedComponents;
+            global $SourceDNotCheckedComponents;
 
             global $dataSourceOrderInCheckCase;
 
@@ -116,11 +118,7 @@
                     // if not mapped, then component will go to 'Undefined' group
                     if(!$groupMapped)
                     {
-                        // undefined component
-                        $undefinedComponent = getUndefinedComponent ($sourceAComponent, 1);
-                        $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                        $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                        addUndefinedComponent($sourceAComponent, 1);
                         continue;
                     }
 
@@ -143,11 +141,7 @@
                     }
                     if(!$isClassMapped)
                     {
-                        // undefined component
-                        $undefinedComponent = getUndefinedComponent ($sourceAComponent, 1);
-                        $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                        $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                        addUndefinedComponent($sourceAComponent, 1);
                         continue;
                     }
 
@@ -155,9 +149,14 @@
                     $sourceAClassNameAttribute = getSourceClassNameProperty("a");                     
                     $sourceBGroupNameAttribute = getSourceGroupNameProperty("b");   
                     $sourceCGroupNameAttribute = NULL;
+                    $sourceDGroupNameAttribute = NULL;
                     if($totalSources > 2)
                     {
                         $sourceCGroupNameAttribute = getSourceGroupNameProperty("c");
+                    }
+                    if($totalSources > 3)
+                    {
+                        $sourceDGroupNameAttribute = getSourceGroupNameProperty("d");
                     }
                    
                     $groupWiseMatechedComponents = array();
@@ -202,49 +201,6 @@
                                                                                         $mappedClass,
                                                                                         $dataSourceOrderInCheckCase['a'],
                                                                                         $dataSourceOrderInCheckCase['b']); 
-
-                            // if(array_key_exists($mappedGroup[$sourceBGroupNameAttribute], $SourceBComponents))
-                            // {
-                            //     $sourceBComponentsList = $SourceBComponents[$mappedGroup[$sourceBGroupNameAttribute]];
-                            //     for($sourceBComponentIndex = 0; $sourceBComponentIndex < count($sourceBComponentsList); $sourceBComponentIndex++)
-                            //     {
-                            //         $sourceBComponent = $sourceBComponentsList[$sourceBComponentIndex];
-
-                            //         if(areClassesMapped($sourceAComponent['subclass'], 
-                            //                     $sourceBComponent['subclass'], 
-                            //                     $mappedClass,
-                            //                     $dataSourceOrderInCheckCase['a'],
-                            //                     $dataSourceOrderInCheckCase['b']))
-                            //         {                                       
-                            //                 if(isComponentMatch ($sourceAComponent,
-                            //                                      $sourceBComponent,
-                            //                                      $SourceAProperties,
-                            //                                      $SourceBProperties,
-                            //                                      $mappedClass['MatchwithProperties'],
-                            //                                      $dataSourceOrderInCheckCase['a'],
-                            //                                      $dataSourceOrderInCheckCase['b'])) 
-                            //                 {
-                            //                     $sourceBMatchedComponent = $sourceBComponent;                                                
-                            //                     break;
-                            //                 }
-                            //                 else
-                            //                 {
-                            //                     // // this is no match component
-                            //                     // $isNoMatchComponent = true;
-                            //                 }                                        
-                            //         }
-                            //         else
-                            //         {
-                            //             // // this is no match component
-                            //             // $isNoMatchComponent = true;
-                            //         }
-                            //     }
-                            // }
-                            // else 
-                            // {
-                            //     // this is no match component
-                            //     // $isNoMatchComponent = true;
-                            // }
                             if($sourceBMatchedComponent)
                             {
                                 $matchedComponentArray["b"] = $sourceBMatchedComponent;
@@ -267,49 +223,6 @@
                                                                                                 $dataSourceOrderInCheckCase['a'],
                                                                                                 $dataSourceOrderInCheckCase['c']); 
 
-                                // if(array_key_exists($mappedGroup[$sourceCGroupNameAttribute], $SourceCComponents))
-                                // {
-                                //     $sourceCComponentsList = $SourceCComponents[$mappedGroup[$sourceCGroupNameAttribute]];
-                                //     for($sourceCComponentIndex = 0; $sourceCComponentIndex < count($sourceCComponentsList); $sourceCComponentIndex++)
-                                //     {
-                                //         $sourceCComponent = $sourceCComponentsList[$sourceCComponentIndex];
-
-                                //         if(areClassesMapped($sourceAComponent['subclass'], 
-                                //                     $sourceCComponent['subclass'], 
-                                //                     $mappedClass,
-                                //                     $dataSourceOrderInCheckCase['a'],
-                                //                     $dataSourceOrderInCheckCase['c']))
-                                //         {                                       
-                                //                 if(isComponentMatch ($sourceAComponent,
-                                //                                     $sourceCComponent,
-                                //                                     $SourceAProperties,
-                                //                                     $SourceCProperties,
-                                //                                     $mappedClass['MatchwithProperties'],
-                                //                                     $dataSourceOrderInCheckCase['a'],
-                                //                                     $dataSourceOrderInCheckCase['c'])) 
-                                //                 {
-                                //                     $sourceCMatchedComponent = $sourceCComponent;                                                
-                                //                     break;
-                                //                 }
-                                //                 else
-                                //                 {
-                                //                     // // this is no match component
-                                //                     // $isNoMatchComponent = true;
-                                //                 }                                        
-                                //         }
-                                //         else
-                                //         {
-                                //             // // this is no match component
-                                //             // $isNoMatchComponent = true;
-                                //         }
-                                //     }
-                                // }
-                                // else 
-                                // {
-                                //     // this is no match component
-                                //     // $isNoMatchComponent = true;
-                                // }
-
                                 if($sourceCMatchedComponent)
                                 {
                                     $matchedComponentArray["c"] = $sourceCMatchedComponent;
@@ -319,6 +232,24 @@
                             // for source d check
                             if($totalSources > 3)
                             {
+                                /* 
+                                    -> Source D <-
+                                    => find the matching component in source D
+                                */                                                
+                                $sourceDMatchedComponent =  getMatchingComponentInOtherSource($sourceAComponent, 
+                                                                                                $SourceDComponents,
+                                                                                                $SourceAProperties,
+                                                                                                $SourceDProperties,
+                                                                                                $sourceDGroupNameAttribute,
+                                                                                                $mappedGroup,
+                                                                                                $mappedClass,
+                                                                                                $dataSourceOrderInCheckCase['a'],
+                                                                                                $dataSourceOrderInCheckCase['d']); 
+
+                                if($sourceDMatchedComponent)
+                                {
+                                    $matchedComponentArray["d"] = $sourceDMatchedComponent;
+                                }
                             }
 
                             array_push( $classWiseMatechedComponents, $matchedComponentArray);    
@@ -332,10 +263,7 @@
   
                     if($isUndefinedComponent)                    
                     {
-                         // undefined component
-                         $undefinedComponent = getUndefinedComponent ($sourceAComponent, 1);
-                         $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                         $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
+                        addUndefinedComponent($sourceAComponent, 1);
                     }
                     else
                     {
@@ -372,7 +300,17 @@
                                                                         $SourceAProperties,
                                                                         1);
                                 
-                                $componentGroup = getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                                $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
+                                if($totalSources > 2)
+                                {
+                                    $groupName = $groupName ."-". $mappingGroup["SourceCName"];
+                                }
+                                if($totalSources > 3)
+                                {
+                                    $groupName = $groupName ."-". $mappingGroup["SourceDName"];
+                                }
+
+                                $componentGroup = getCheckComponentGroup($groupName);                   
                                 $componentGroup->AddCheckComponent($noMatchComponent); 
 
                             }
@@ -421,26 +359,7 @@
                                         $srcBComponent === NULL)
                                     {                                        
                                         continue;
-                                    }               
-
-                                    // if( $srcBComponent === NULL && 
-                                    //     $srcCComponent === NULL)
-                                    // {
-                                    //     if($totalSources > 2 && $srcCComponent === NULL)
-                                    //     {
-                                    //         // neglect no match component here
-                                    //         continue;
-                                    //     }
-
-                                    //     else if($totalSources > 3 && 
-                                    //             $srcBComponent === NULL && 
-                                    //             $srcCComponent === NULL && 
-                                    //             $srcDComponent === NULL)
-                                    //     {
-                                    //         // neglect no match component here
-                                    //         continue;
-                                    //     }                                        
-                                    // }
+                                    }    
 
                                     $srcAComponent = $classwiseMatchObjects['a'];
                                     $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
@@ -468,6 +387,17 @@
                                     }
                                     else if($totalSources === 4)
                                     {
+                                        compareComponentsFor4Sources($srcAComponent,
+                                                $srcBComponent,
+                                                $srcCComponent,
+                                                $srcDComponent,
+                                                $SourceAProperties,
+                                                $SourceBProperties,
+                                                $SourceCProperties,
+                                                $SourceDProperties,
+                                                $mappingGroup,
+                                                $checkCaseComponentClass,
+                                                $dataSourceOrderInCheckCase);
                                     }
                                 }
                             }                     
@@ -504,11 +434,7 @@
                     // if not mapped, then component will go to 'Undefined' group
                     if(!$groupMapped)
                     {
-                        // undefined component
-                        $undefinedComponent = getUndefinedComponent ($sourceBComponent, 2);
-                        $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                        $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                        addUndefinedComponent($sourceBComponent, 2);
                         continue;
                     }
 
@@ -531,11 +457,7 @@
                     }
                     if(!$isClassMapped)
                     {
-                        // undefined component
-                        $undefinedComponent = getUndefinedComponent ($sourceBComponent, 2);
-                        $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                        $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                        addUndefinedComponent($sourceBComponent, 2);
                         continue;
                     }
 
@@ -543,9 +465,14 @@
                     $sourceBClassNameAttribute = getSourceClassNameProperty("b"); 
                     $sourceAGroupNameAttribute = getSourceGroupNameProperty("a");
                     $sourceCGroupNameAttribute = NULL;
+                    $sourceDGroupNameAttribute = NULL;
                     if($totalSources > 2)
                     {
                         $sourceCGroupNameAttribute = getSourceGroupNameProperty("c");
+                    }
+                    if($totalSources > 3)
+                    {
+                        $sourceDGroupNameAttribute = getSourceGroupNameProperty("d");
                     }
 
                     $groupWiseMatechedComponents = array();
@@ -616,6 +543,27 @@
                                 }
                             }
 
+                            if($totalSources > 3)
+                            {
+                                /* 
+                                    -> Source D <-
+                                    => find the matching component in source D
+                                */ 
+                                $sourceDMatchedComponent =  getMatchingComponentInOtherSource($sourceBComponent, 
+                                                                                                $SourceDComponents,
+                                                                                                $SourceBProperties,
+                                                                                                $SourceDProperties,
+                                                                                                $sourceDGroupNameAttribute,
+                                                                                                $mappedGroup,
+                                                                                                $mappedClass,
+                                                                                                $dataSourceOrderInCheckCase['b'],
+                                                                                                $dataSourceOrderInCheckCase['d']);  
+                                if($sourceDMatchedComponent)
+                                {
+                                    $matchedComponentArray["d"] = $sourceDMatchedComponent;
+                                }
+                            }
+
                             // check if source a component is selected or not
                             // if it is selected, that means this curent source B 
                             // component comparison is already performed, so discard this                            
@@ -636,10 +584,7 @@
   
                     if($isUndefinedComponent)                    
                     {
-                         // undefined component
-                         $undefinedComponent = getUndefinedComponent ($sourceBComponent, 2);
-                         $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                         $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
+                        addUndefinedComponent($sourceBComponent, 2);
                     }
                     else
                     {
@@ -674,7 +619,17 @@
                                                                         $SourceBProperties,
                                                                         2);
                                 
-                                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                                $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
+                                if($totalSources > 2)
+                                {
+                                    $groupName = $groupName ."-". $mappingGroup["SourceCName"];
+                                }
+                                if($totalSources > 3)
+                                {
+                                    $groupName = $groupName ."-". $mappingGroup["SourceDName"];
+                                }
+
+                                $componentGroup = getCheckComponentGroup($groupName);   
                                 $componentGroup->AddCheckComponent($noMatchComponent); 
 
                             }
@@ -707,28 +662,16 @@
                                         $srcAComponent === NULL && 
                                         $srcCComponent === NULL && 
                                         $srcDComponent === NULL)
-                                        {                                        
-                                            continue;
-                                        }     
-                                        else if($totalSources > 2 && 
-                                            $srcAComponent === NULL && 
-                                            $srcCComponent === NULL)
-                                        {                                        
-                                            continue;
-                                        } 
-                                        else if($totalSources === 2 && 
-                                            $srcAComponent === NULL)
-                                        {                                        
-                                            continue;
-                                        }       
-
-                                    // if( $srcAComponent === NULL && 
-                                    //     $srcCComponent === NULL)
-                                    // {
-                                    //     // neglect no match component here
-                                    //     continue;
-                                    // }
-
+                                    {                                        
+                                        continue;
+                                    }     
+                                    else if($totalSources > 2 && 
+                                        $srcAComponent === NULL && 
+                                        $srcCComponent === NULL)
+                                    {                                        
+                                        continue;
+                                    } 
+                                    
                                     $srcBComponent = $classwiseMatchObjects['b'];
                                     $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
                                     
@@ -756,6 +699,17 @@
                                     }
                                     else if($totalSources === 4)
                                     {
+                                        compareComponentsFor4Sources($srcAComponent,
+                                        $srcBComponent,
+                                        $srcCComponent,
+                                        $srcDComponent,
+                                        $SourceAProperties,
+                                        $SourceBProperties,
+                                        $SourceCProperties,
+                                        $SourceDProperties,
+                                        $mappingGroup,
+                                        $checkCaseComponentClass,
+                                        $dataSourceOrderInCheckCase);
                                     }                                   
                                 }
                             }                     
@@ -794,11 +748,7 @@
                         // if not mapped, then component will go to 'Undefined' group
                         if(!$groupMapped)
                         {
-                            // undefined component
-                            $undefinedComponent = getUndefinedComponent ($sourceCComponent, 3);
-                            $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                            $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                            addUndefinedComponent($sourceCComponent, 3);
                             continue;
                         }
 
@@ -821,11 +771,7 @@
                         }
                         if(!$isClassMapped)
                         {
-                            // undefined component
-                            $undefinedComponent = getUndefinedComponent ($sourceCComponent, 3);
-                            $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                            $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
-
+                            addUndefinedComponent($sourceCComponent, 3);
                             continue;
                         }
 
@@ -833,6 +779,7 @@
                         $sourceCClassNameAttribute = getSourceClassNameProperty("c"); 
                         $sourceAGroupNameAttribute = getSourceGroupNameProperty("a");
                         $sourceBGroupNameAttribute = getSourceGroupNameProperty("b");
+                        $sourceDGroupNameAttribute = getSourceGroupNameProperty("d");
 
                         $groupWiseMatechedComponents = array();
                         $isUndefinedComponent = true;
@@ -897,7 +844,30 @@
                                 if($sourceBMatchedComponent)
                                 {
                                     $matchedComponentArray["b"] = $sourceBMatchedComponent;
-                                }   
+                                }  
+                                
+                                // for source d check
+                                if($totalSources > 3)
+                                {
+                                    /* 
+                                        -> Source D <-
+                                        => find the matching component in source D
+                                    */                                                
+                                    $sourceDMatchedComponent =  getMatchingComponentInOtherSource($sourceCComponent, 
+                                                                                                    $SourceDComponents,
+                                                                                                    $SourceCProperties,
+                                                                                                    $SourceDProperties,
+                                                                                                    $sourceDGroupNameAttribute,
+                                                                                                    $mappedGroup,
+                                                                                                    $mappedClass,
+                                                                                                    $dataSourceOrderInCheckCase['c'],
+                                                                                                    $dataSourceOrderInCheckCase['d']); 
+
+                                    if($sourceDMatchedComponent)
+                                    {
+                                        $matchedComponentArray["d"] = $sourceDMatchedComponent;
+                                    }
+                                }
 
                                 // check if source a or souce b components are selected or not
                                 // if they are either selected, that means this curent source c
@@ -921,10 +891,7 @@
         
                         if($isUndefinedComponent)                    
                         {
-                            // undefined component
-                            $undefinedComponent = getUndefinedComponent ($sourceCComponent, 3);
-                            $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
-                            $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
+                            addUndefinedComponent($sourceCComponent, 3);
                         }
                         else
                         {
@@ -945,11 +912,12 @@
                                 {
                                     $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
                                     if(array_key_exists('a', $classwiseMatchObjects) || 
-                                        array_key_exists('b', $classwiseMatchObjects))
+                                        array_key_exists('b', $classwiseMatchObjects) || 
+                                        array_key_exists('d', $classwiseMatchObjects)) 
                                     {
                                         $isAllNoMatch  = false;
                                         break;
-                                    }                               
+                                    }                        
                                 }
                                 if($isAllNoMatch)
                                 {
@@ -958,7 +926,17 @@
                                                                             $SourceCProperties,
                                                                             3);
                                     
-                                    $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                                    $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
+                                    if($totalSources > 2)
+                                    {
+                                        $groupName = $groupName ."-". $mappingGroup["SourceCName"];
+                                    }
+                                    if($totalSources > 3)
+                                    {
+                                        $groupName = $groupName ."-". $mappingGroup["SourceDName"];
+                                    }
+    
+                                    $componentGroup = getCheckComponentGroup($groupName);                      
                                     $componentGroup->AddCheckComponent($noMatchComponent); 
 
                                 }
@@ -970,6 +948,7 @@
                                         
                                         $srcAComponent = NULL;
                                         $srcBComponent = NULL;
+                                        $srcDComponent = NULL;
                                         if(array_key_exists('a', $classwiseMatchObjects))
                                         {
                                             $srcAComponent = $classwiseMatchObjects['a'];
@@ -978,8 +957,14 @@
                                         {
                                             $srcBComponent = $classwiseMatchObjects['b'];
                                         }
+                                        if($totalSources > 3 && 
+                                           array_key_exists('d', $classwiseMatchObjects))
+                                        {
+                                            $srcDComponent = $classwiseMatchObjects['d'];
+                                        }
                                         if( $srcAComponent === NULL && 
-                                            $srcBComponent === NULL)
+                                            $srcBComponent === NULL &&
+                                            $srcCComponent === NULL)
                                         {
                                             // neglect no match component here
                                             continue;
@@ -988,24 +973,325 @@
                                         $srcCComponent = $classwiseMatchObjects['c'];
                                         $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
 
-                                        compareComponentsFor3Sources($srcAComponent,
-                                                $srcBComponent,
-                                                $srcCComponent,
-                                                $SourceAProperties,
-                                                $SourceBProperties,
-                                                $SourceCProperties,
-                                                $mappingGroup,
-                                                $checkCaseComponentClass,
-                                                $dataSourceOrderInCheckCase);
+                                        if($totalSources === 3)
+                                        {
+                                            compareComponentsFor3Sources($srcAComponent,
+                                                    $srcBComponent,
+                                                    $srcCComponent,
+                                                    $SourceAProperties,
+                                                    $SourceBProperties,
+                                                    $SourceCProperties,
+                                                    $mappingGroup,
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase);
+                                        }
+                                        else if($totalSources === 4)
+                                        {
+                                            compareComponentsFor4Sources($srcAComponent,
+                                                                        $srcBComponent,
+                                                                        $srcCComponent,
+                                                                        $srcDComponent,
+                                                                        $SourceAProperties,
+                                                                        $SourceBProperties,
+                                                                        $SourceCProperties,
+                                                                        $SourceDProperties,
+                                                                        $mappingGroup,
+                                                                        $checkCaseComponentClass,
+                                                                        $dataSourceOrderInCheckCase);
+                                        }
                                     }
                                 }                     
                             }
                         }
                     }
                 }   
-            }      
+            }     
+            
+            if($totalSources > 3)
+            {
+                // perform comparison in context of source c components
+                foreach ($SourceDComponents as $mainClass => $currentComponents)
+                {
+                    // check if mainclass is mapped
+                    $groupMapped = isGroupMapped($mainClass,  $dataSourceOrderInCheckCase['d']);
+
+                    for($i = 0; $i < count($currentComponents); $i++)
+                    {
+                        $sourceDComponent = $currentComponents[$i];
+
+                        // check is component is selected or not for performing check
+                        if(!isComponentSelected($sourceDComponent, $SourceDSelectedComponents)) 
+                        {                            
+                            //source A component not checked    
+                            $compKey = $sourceDComponent['id'];                            
+                            if(!array_key_exists($compKey, $SourceDNotCheckedComponents))
+                            {
+                                $SourceDNotCheckedComponents[$compKey] = $sourceDComponent;                                                   
+                            }
+
+                            continue;
+                        }
+
+                        // check if mainclass is mapped
+                        // if not mapped, then component will go to 'Undefined' group
+                        if(!$groupMapped)
+                        {
+                            addUndefinedComponent($sourceDComponent, 4);
+                            continue;
+                        }
+
+                        // check if subclass is mapped or not
+                        // if not mapped, then component will go to 'Undefined' group
+                        // get all component group mappings for this mainclass (there may be a 
+                        // mainclass mapped multiple times in xml config file )
+                        $isClassMapped = false;
+                        $allMappedGroups = getAllGroupMapped($mainClass, $dataSourceOrderInCheckCase['d']);
+                        for($mappedGroupIndex = 0; $mappedGroupIndex < count($allMappedGroups); $mappedGroupIndex++)
+                        {
+                            $mappedGroup = $allMappedGroups[$mappedGroupIndex];   
+                            if(isClassMapped($sourceDComponent['subclass'],                                
+                            $mappedGroup,
+                            $dataSourceOrderInCheckCase['d']))
+                            {
+                                $isClassMapped = true;
+                                break;
+                            }
+                        }
+                        if(!$isClassMapped)
+                        {
+                            addUndefinedComponent($sourceDComponent, 4);
+                            continue;
+                        }
+
+                        // check for group match in other sources
+                        $sourceDClassNameAttribute = getSourceClassNameProperty("d"); 
+                        $sourceAGroupNameAttribute = getSourceGroupNameProperty("a");
+                        $sourceBGroupNameAttribute = getSourceGroupNameProperty("b");
+                        $sourceCGroupNameAttribute = getSourceGroupNameProperty("c");
+
+                        $groupWiseMatechedComponents = array();
+                        $isUndefinedComponent = true;
+                        for($mappedGroupIndex = 0; $mappedGroupIndex < count($allMappedGroups); $mappedGroupIndex++)
+                        {
+                            $mappedGroup = $allMappedGroups[$mappedGroupIndex];       
+                            if(!isClassMapped($sourceDComponent['subclass'],                                
+                                            $mappedGroup,
+                                            $dataSourceOrderInCheckCase['d']))
+                            {
+                                continue;
+                            }  
+
+                            $mappedClasses = $mappedGroup['ComponentClasses'];
+
+                            $classWiseMatechedComponents = array();                     
+
+                            for($classIndex = 0; $classIndex < count($mappedClasses); $classIndex++)
+                            {
+                                $mappedClass = $mappedClasses[$classIndex];       
+                                if (strtolower($mappedClass[$sourceDClassNameAttribute]) != strtolower($sourceDComponent['subclass']) ||
+                                    count($mappedClass['MatchwithProperties']) === 0) { 
+                                    continue;
+                                }
+                                $isUndefinedComponent = false;
+
+                                $matchedComponentArray = array("d" => $sourceDComponent);
+                                $matchedComponentArray["classMapping"] = $mappedClass;
+
+                                /* 
+                                    -> Source A <-
+                                    => find the matching component in source A
+                                */ 
+                                $sourceAMatchedComponent = getMatchingComponentInOtherSource($sourceDComponent, 
+                                                                                        $SourceAComponents,
+                                                                                        $SourceDProperties,
+                                                                                        $SourceAProperties,
+                                                                                        $sourceAGroupNameAttribute,
+                                                                                        $mappedGroup,
+                                                                                        $mappedClass,
+                                                                                        $dataSourceOrderInCheckCase['d'],
+                                                                                        $dataSourceOrderInCheckCase['a']); 
+
+                                if($sourceAMatchedComponent)
+                                {
+                                    $matchedComponentArray["a"] = $sourceAMatchedComponent;
+                                }
+
+                                /* 
+                                    -> Source B <-
+                                    => find the matching component in source B
+                                */
+                                $sourceBMatchedComponent = getMatchingComponentInOtherSource($sourceDComponent, 
+                                                                                            $SourceBComponents,
+                                                                                            $SourceDProperties,
+                                                                                            $SourceBProperties,
+                                                                                            $sourceBGroupNameAttribute,
+                                                                                            $mappedGroup,
+                                                                                            $mappedClass,
+                                                                                            $dataSourceOrderInCheckCase['d'],
+                                                                                            $dataSourceOrderInCheckCase['b']); 
+                                if($sourceBMatchedComponent)
+                                {
+                                    $matchedComponentArray["b"] = $sourceBMatchedComponent;
+                                }  
+                                
+                                // for source c check
+                                // if($totalSources > 3)
+                                // {
+                                /* 
+                                    -> Source D <-
+                                    => find the matching component in source D
+                                */                                                
+                                $sourceCMatchedComponent =  getMatchingComponentInOtherSource($sourceDComponent, 
+                                                                                                $SourceCComponents,
+                                                                                                $SourceDProperties,
+                                                                                                $SourceCProperties,
+                                                                                                $sourceCGroupNameAttribute,
+                                                                                                $mappedGroup,
+                                                                                                $mappedClass,
+                                                                                                $dataSourceOrderInCheckCase['d'],
+                                                                                                $dataSourceOrderInCheckCase['c']); 
+
+                                if($sourceCMatchedComponent)
+                                {
+                                    $matchedComponentArray["c"] = $sourceCMatchedComponent;
+                                }
+                                // }
+
+                                // check if source a or souce b components are selected or not
+                                // if they are either selected, that means this curent source c
+                                // component comparison is already performed, so discard this                            
+                                if(($sourceAMatchedComponent !== NULL &&
+                                    isComponentSelected($sourceAMatchedComponent, $SourceASelectedComponents)) || 
+                                    ($sourceBMatchedComponent !== NULL &&
+                                    isComponentSelected($sourceBMatchedComponent, $SourceBSelectedComponents))|| 
+                                    ($sourceCMatchedComponent !== NULL &&
+                                    isComponentSelected($sourceCMatchedComponent, $SourceCSelectedComponents))) 
+                                { 
+                                    continue; 
+                                }                          
+
+                                array_push( $classWiseMatechedComponents, $matchedComponentArray);    
+                            }
+
+                            $groupMatchedComponents = array();
+                            $groupMatchedComponents ['matchObject'] = $classWiseMatechedComponents;
+                            $groupMatchedComponents ['groupMapping'] = $mappedGroup;   
+                            array_push( $groupWiseMatechedComponents, $groupMatchedComponents);                        
+                        }
+        
+                        if($isUndefinedComponent)                    
+                        {
+                            addUndefinedComponent($sourceDComponent, 4);
+                        }
+                        else
+                        {
+                            for($matchedComponentIndex = 0; $matchedComponentIndex < count($groupWiseMatechedComponents); $matchedComponentIndex++)
+                            {
+                                $groupWiseMatechedComponent = $groupWiseMatechedComponents[$matchedComponentIndex];
+                                $mappingGroup = $groupWiseMatechedComponent['groupMapping'];
+                                $matchObject = $groupWiseMatechedComponent['matchObject'];
+                                if( count($matchObject) === 0)
+                                {
+                                    continue;
+                                }
+
+                                // check if it is 'no match' for all class mapping
+                                // if yes, then show only one no match component
+                                $isAllNoMatch = true;
+                                for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
+                                {
+                                    $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
+                                    if(array_key_exists('a', $classwiseMatchObjects) || 
+                                        array_key_exists('b', $classwiseMatchObjects) || 
+                                        array_key_exists('c', $classwiseMatchObjects))
+                                    {
+                                        $isAllNoMatch  = false;
+                                        break;
+                                    }                        
+                                }
+                                if($isAllNoMatch)
+                                {
+                                    // no match component                                
+                                    $noMatchComponent = getNoMatchComponent ($sourceDComponent,
+                                                                            $SourceDProperties,
+                                                                            4);
+                                    
+                                    $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
+                                    if($totalSources > 2)
+                                    {
+                                        $groupName = $groupName ."-". $mappingGroup["SourceCName"];
+                                    }
+                                    if($totalSources > 3)
+                                    {
+                                        $groupName = $groupName ."-". $mappingGroup["SourceDName"];
+                                    }
+    
+                                    $componentGroup = getCheckComponentGroup($groupName);                      
+                                    $componentGroup->AddCheckComponent($noMatchComponent); 
+
+                                }
+                                else
+                                {
+                                    for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
+                                    {
+                                        $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
+                                        
+                                        $srcAComponent = NULL;
+                                        $srcBComponent = NULL;
+                                        $srcCComponent = NULL;
+                                        if(array_key_exists('a', $classwiseMatchObjects))
+                                        {
+                                            $srcAComponent = $classwiseMatchObjects['a'];
+                                        }
+                                        if(array_key_exists('b', $classwiseMatchObjects))
+                                        {
+                                            $srcBComponent = $classwiseMatchObjects['b'];
+                                        }
+                                        if(array_key_exists('c', $classwiseMatchObjects))
+                                        {
+                                            $srcCComponent = $classwiseMatchObjects['c'];
+                                        }
+                                        if( $srcAComponent === NULL && 
+                                            $srcBComponent === NULL &&
+                                            $srcCComponent === NULL)
+                                        {
+                                            // neglect no match component here
+                                            continue;
+                                        }
+
+                                        $srcDComponent = $classwiseMatchObjects['d'];
+                                        $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
+                         
+                                        compareComponentsFor4Sources($srcAComponent,
+                                                                    $srcBComponent,
+                                                                    $srcCComponent,
+                                                                    $srcDComponent,
+                                                                    $SourceAProperties,
+                                                                    $SourceBProperties,
+                                                                    $SourceCProperties,
+                                                                    $SourceDProperties,
+                                                                    $mappingGroup,
+                                                                    $checkCaseComponentClass,
+                                                                    $dataSourceOrderInCheckCase);
+                                       
+                                    }
+                                }                     
+                            }
+                        }
+                    }
+                }   
+            } 
         }
 
+
+        function addUndefinedComponent($component, $sourceLoadOrder)
+        {
+            // undefined component
+            $undefinedComponent = getUndefinedComponent ($component, $sourceLoadOrder);
+            $undefinedCheckComponentGroup =  getCheckComponentGroup("Undefined");                   
+            $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
+        }
+        
 
         function getMatchingComponentInOtherSource($firstComponent, 
                                                 $secondComponentsCollection,
@@ -1096,6 +1382,259 @@
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
         }
+
+        function compareComponentsFor4Sources($srcAComponent,
+                                            $srcBComponent,
+                                            $srcCComponent,
+                                            $srcDComponent,
+                                            $sourceAProperties,
+                                            $sourceBProperties,
+                                            $sourceCProperties,
+                                            $sourceDProperties,
+                                            $mappingGroup,
+                                            $checkCaseComponentClass,
+                                            $dataSourceOrderInCheckCase)
+        {
+
+            $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]."-".$mappingGroup["SourceDName"]);                   
+            if( $srcAComponent !== NULL &&
+                $srcBComponent !== NULL && 
+                $srcCComponent !== NULL &&
+                $srcDComponent !== NULL)
+            {
+                // a-b-c-d
+                $checkComponent = compareComponents($srcAComponent,
+                            $srcBComponent,  
+                            $srcCComponent, 
+                            $srcDComponent, 
+                            $sourceAProperties,
+                            $sourceBProperties,  
+                            $sourceCProperties, 
+                            $sourceDProperties,
+                            $checkCaseComponentClass,
+                            $dataSourceOrderInCheckCase['a'],
+                            $dataSourceOrderInCheckCase['b'],
+                            $dataSourceOrderInCheckCase['c'],
+                            $dataSourceOrderInCheckCase['d'],
+                            4);
+                $componentGroup->AddCheckComponent($checkComponent); 
+            }
+            else if( $srcAComponent !== NULL &&
+                    $srcBComponent !== NULL && 
+                    $srcCComponent !== NULL)
+            {
+                // a-b-c
+                $checkComponent = compareComponents($srcAComponent,
+                                                    $srcBComponent,  
+                                                    $srcCComponent, 
+                                                    NULL, 
+                                                    $sourceAProperties,
+                                                    $sourceBProperties,  
+                                                    $sourceCProperties,  
+                                                    NULL,
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    NULL,
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent); 
+            }
+            else if( $srcAComponent !== NULL &&
+                    $srcBComponent !== NULL && 
+                    $srcDComponent !== NULL)
+            {
+                // a-b-d
+                $checkComponent = compareComponents($srcAComponent,
+                                                    $srcBComponent,
+                                                    NULL,   
+                                                    $srcDComponent,                                                     
+                                                    $sourceAProperties,
+                                                    $sourceBProperties,  
+                                                    NULL, 
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['d'],                                                    
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent); 
+            }
+            else if( $srcAComponent !== NULL &&
+                    $srcCComponent !== NULL && 
+                    $srcDComponent !== NULL)
+            {
+                // a-c-d
+                $checkComponent = compareComponents($srcAComponent,
+                                                    NULL,
+                                                    $srcCComponent,    
+                                                    $srcDComponent,                                                     
+                                                    $sourceAProperties,                                                   
+                                                    NULL, 
+                                                    $sourceCProperties,  
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],                                                    
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    $dataSourceOrderInCheckCase['d'],                                                    
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent); 
+            }
+            else if( $srcAComponent !== NULL &&
+            $srcBComponent !== NULL)
+            {
+                // a-b
+                $checkComponent = compareComponents($srcAComponent,
+                                                    $srcBComponent,
+                                                    NULL,
+                                                    NULL,                                                    
+                                                    $sourceAProperties,                                                   
+                                                    $sourceBProperties,  
+                                                    NULL,
+                                                    NULL,  
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],                                                    
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    NULL,
+                                                    NULL,                                                      
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcAComponent !== NULL &&
+            $srcCComponent !== NULL)
+            {
+                // a-c
+                $checkComponent = compareComponents($srcAComponent,                                                    
+                                                    NULL,
+                                                    $srcCComponent,
+                                                    NULL,                                                    
+                                                    $sourceAProperties, 
+                                                    NULL,
+                                                    $sourceCProperties,  
+                                                    NULL,  
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],                                                                                                        
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    NULL,                                                      
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcAComponent !== NULL &&
+            $srcDComponent !== NULL)
+            {
+                // a-d
+                $checkComponent = compareComponents($srcAComponent,                                                    
+                                                    NULL,                                                   
+                                                    NULL,
+                                                    $srcDComponent,                                                    
+                                                    $sourceAProperties,
+                                                    NULL,
+                                                    NULL,                                                     
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,
+                                                    $dataSourceOrderInCheckCase['a'],                                                                                                        
+                                                    NULL,
+                                                    NULL, 
+                                                    $dataSourceOrderInCheckCase['d'],                                                                                                        
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcBComponent !== NULL &&
+            $srcCComponent !== NULL && 
+            $srcDComponent !== NULL)
+            {
+                // b-c-d
+                $checkComponent = compareComponents(NULL,                                                   
+                                                    $srcBComponent,                                                    
+                                                    $srcCComponent,
+                                                    $srcDComponent,                                                    
+                                                    NULL,
+                                                    $sourceBProperties,                                                   
+                                                    $sourceCProperties,                                       
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,                                                                                                                                                            
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    $dataSourceOrderInCheckCase['d'],                                                                                                        
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcBComponent !== NULL &&
+            $srcCComponent !== NULL)
+            {
+                // b-c
+                $checkComponent = compareComponents(NULL,                                                   
+                                                    $srcBComponent,                                                    
+                                                    $srcCComponent,
+                                                    NULL,                                                   
+                                                    NULL,
+                                                    $sourceBProperties,                                                   
+                                                    $sourceCProperties,                                       
+                                                    NULL,
+                                                    $checkCaseComponentClass,                                                                                                                                                            
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    NULL,                                                                                                       
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcBComponent !== NULL &&
+                $srcDComponent !== NULL)
+            {
+                // b-d
+                $checkComponent = compareComponents(NULL,                                                   
+                                                    $srcBComponent,                                                    
+                                                    NULL,
+                                                    $srcDComponent,                                                    
+                                                    NULL,
+                                                    $sourceBProperties,                                                   
+                                                    NULL,                                       
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,                                                                                                                                                            
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['b'],
+                                                    NULL,
+                                                    $dataSourceOrderInCheckCase['d'],                                                                                                        
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }
+            else if( $srcCComponent !== NULL &&
+                $srcDComponent !== NULL)
+            {
+                // c-d
+                $checkComponent = compareComponents(NULL,                                                   
+                                                    NULL,                                                       
+                                                    $srcCComponent,
+                                                    $srcDComponent,                                                    
+                                                    NULL,
+                                                    NULL,                                                   
+                                                    $sourceCProperties,                                       
+                                                    $sourceDProperties,  
+                                                    $checkCaseComponentClass,                                                                                                                                                            
+                                                    NULL,
+                                                    NULL,   
+                                                    $dataSourceOrderInCheckCase['c'],
+                                                    $dataSourceOrderInCheckCase['d'],                                                                                                        
+                                                    4);
+                $checkComponent->Status = "Missing Item(s)";                            
+                $componentGroup->AddCheckComponent($checkComponent);
+            }           
+        }
+
 
         function compareComponentsFor3Sources($srcAComponent,
                                             $srcBComponent,
