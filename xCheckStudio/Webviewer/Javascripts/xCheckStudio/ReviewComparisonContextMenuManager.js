@@ -338,23 +338,9 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
-    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
-
-    var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
-
-    if (selectedRowStatus.includes("OK")) {
-        return true;
-    }
-
-    return false;
-}
-
-ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
-    var transpose = false;
-    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+    var ignore = ['OK', 'No Value', 'OK(T)'];
+    var accepted = true;
 
     if(selectedPropertiesKey.length == 0) {
         transpose = true;
@@ -370,7 +356,38 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
         var rowData = data[rowIndex];
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
         if (index == -1) {
-            transpose = true;
+            accepted = false;
+        }
+    }
+
+    return accepted;
+}
+
+ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
+    var transpose = false;
+    var ignore = ['OK', 'No Value', 'OK(T)'];
+    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+
+    if(selectedPropertiesKey.length == 0) {
+        transpose = true;
+        return transpose;
+    }
+
+    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+
+    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
+        var rowData = data[rowIndex];
+        var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
+        var sourceBPropertyName = rowData[ComparisonPropertyColumnNames.SourceBName];
+
+        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
+        if (index == -1) {
+            if((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
+                transpose = true;
+            }
         }
     }
 
@@ -380,7 +397,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)'];
+    var ignore = ['OK', 'No Value', 'ACCEPTED',  'OK(T)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if(selectedPropertiesKey.length == 0) {
@@ -405,28 +422,35 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
-    var componentTableId = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
-    var containerId = "#" + componentTableId;
-    var rowData = model.getCurrentDetailedInfoTable().GetDataForSelectedRow(selectedRow.rowIndex, containerId);
 
-    var selectedRowStatus = rowData[ComparisonPropertyColumnNames.Status];
-    var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
-    var sourceBPropertyName = rowData[ComparisonPropertyColumnNames.SourceBName];
+    var transpose = true;
+    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED'];
+    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
-    if (selectedRowStatus === "OK" ||
-        selectedRowStatus === "OK(T)" ||
-        selectedRowStatus === "No Value" ||
-        selectedRowStatus === "No Match" ||
-        selectedRowStatus === "undefined" ||
-        selectedRowStatus === "ACCEPTED") {
-        return true;
-    }
-    else if (sourceAPropertyName == "" || sourceBPropertyName == "") {
-        return true;
+    if(selectedPropertiesKey.length == 0) {
+        transpose = true;
+        return transpose;
     }
 
-    return false;
+    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+
+    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
+        var rowData = data[rowIndex];
+        var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
+        var sourceBPropertyName = rowData[ComparisonPropertyColumnNames.SourceBName];
+
+        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
+        if (index == -1) {
+            if((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
+                transpose = false;
+            }
+        }
+    }
+
+    return transpose;
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = function (selectedRow) {
