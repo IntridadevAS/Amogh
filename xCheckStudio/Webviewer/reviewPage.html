@@ -242,60 +242,106 @@
 
       <!-- On Output click overlay -->
       <div id="outputOverlay" class="overlay"></div>
-      <div id="outputPopup" style="width: 581px; height: 155px; overflow: hidden; top: 40%; left: 30%;" class="popup">
-        <svg class="Rectangle_1204" style="height: 100%; width: 100%;">
-          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-            y="0" width="100%" height="100%">
-          </rect>
-        </svg>
-
-        <div>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+      <div id="outputPopup" style="width: 581px; height: 350px; overflow: hidden; top: 40%; left: 30%;" class="popup">
+        <div id="Output_Data">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="581" height="349">
             </rect>
           </svg>
-          <div class="closebtn" onclick="closeOutpuToOverlay()" style="color: white; font-weight: bolder; position: absolute; top: 5%;
-          right: 5%; font-size: 25px;">
-            <span>X</span>
-          </div>
-        </div>
-        
-
-        <div style="position:absolute;width:90px;height:30px;left:458px;top:60%;overflow:visible;"id="Component_20" onclick="onSaveAs()">
-          <svg class="Path_310" viewBox="0 0 90 30">
-            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          <svg class="Path_350" viewBox="0 0 575 55">
+            <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
             </path>
           </svg>
-          <div id="exportTo">
+          <div id="Output">
+            <span>Output</span>
+          </div>
+          <div id="Save_As">
             <span>Save As</span>
           </div>
-        </div>
-
-        <div style="position:absolute;width:90px;height:30px;left:250px;top:60%;overflow:visible;"
-        id="Component_35">
-          <svg class="Rectangle_1242_A61_Rectangle_4">
-            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-              rx="5" ry="5" x="0" y="0" width="90" height="30">
-            </rect>
-          </svg>
-          <div id="publishTo">
-            <span>Publish</span>
-          </div>
-        </div>
-
-        <div style="position:absolute;width:90px;height:30px;left:50px;top:60%;overflow:visible;"id="Component_20">
-          <svg class="Path_310" viewBox="0 0 90 30">
-            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          <svg class="Line_39">
+            <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_39" d="M 0 0 L 0 230">
             </path>
           </svg>
-          <div id="report">
-            <span>Report</span>
+          <div onclick="closeOutpuToOverlay()">
+            <svg class="Path_259" viewBox="7432.354 -8028.479 18 18">
+              <path fill="rgba(255,255,255,1)" id="Path_259" d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+              </path>
+            </svg>
+          </div>
+          <div id="Publish_To">
+            <span>Publish To</span>
+          </div>
+          <div id="Component_24">
+            <svg class="Rectangle_1242">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="SQL">
+              <span>SQL</span>
+            </div>
+          </div>
+          <div id="Component_25">
+            <svg class="Rectangle_1242_A55_Rectangle_3">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_3" rx="5" ry="5" x="0" y="0" width="106.505" height="30">
+              </rect>
+            </svg>
+            <div id="DropBox">
+              <span>DropBox</span>
+            </div>
+          </div>
+          <div id="Component_26">
+            <svg class="Rectangle_1242_A55_Rectangle_4">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_4" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="Link">
+              <span>Link</span>
+            </div>
+          </div>
+          <div id="Component_27" onclick="OnExcelClick()">
+            <svg class="Rectangle_1242_A55_Rectangle_5">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="Excel">
+              <span>Excel</span>
+            </div>
+          </div>
+          <div id="Component_28">
+            <svg class="Rectangle_1242_A55_Rectangle_6">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_6" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="PDF">
+              <span>PDF</span>
+            </div>
+          </div>
+          <div id="symCancelButton___1">
+            <svg class="Rectangle_1242_A55_Rectangle_7">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_7" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="XML">
+              <span>XML</span>
+            </div>
+          </div>
+          <div id="symCancelButton___2">
+            <svg class="Rectangle_1242_A55_Rectangle_8">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_8" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="ID3D_PDF">
+              <span>3D PDF</span>
+            </div>
+          </div>
+          <div id="symCancelButton___4">
+            <svg class="Rectangle_1242_A55_Rectangle_9">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_9" rx="5" ry="5" x="0" y="0" width="117.505" height="30">
+              </rect>
+            </svg>
+            <div id="JPG___PNG">
+              <span>JPG / PNG</span>
+            </div>
           </div>
         </div>
       </div>
@@ -319,7 +365,7 @@
             <span>X</span>
           </div>
         </div>
-        <div id="Save_data_and_Exit_XcheckStudi" style="top: 8px;">
+        <div id="ChooseTablesToExport" style="top: 8px;">
           <span></span><span style="font-style:normal;font-weight:normal;">Select table names Export</span><span></span>
         </div>
 
@@ -327,40 +373,15 @@
 
         </div>
 
-        <div style="position:absolute;width:90px;height:30px;left:458px;top:90%;overflow:visible;"id="Component_20" onclick="ExportToExcel()">
+        <div style="position:absolute;width:90px;height:30px;left:458px;top:90%;overflow:visible;"id="exportToButton">
           <svg class="Path_310" viewBox="0 0 90 30">
             <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
               stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
               d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
             </path>
           </svg>
-          <div id="exportToSQL">
-            <span>SQL</span>
-          </div>
-        </div>
-
-        <div style="position:absolute;width:90px;height:30px;left:250px;top:90%;overflow:visible;"
-        id="Component_35">
-          <svg class="Rectangle_1242_A61_Rectangle_4">
-            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-              rx="5" ry="5" x="0" y="0" width="90" height="30">
-            </rect>
-          </svg>
-          <div id="exportToExcel">
-            <span>Excel</span>
-          </div>
-        </div>
-
-        <div style="position:absolute;width:90px;height:30px;left:50px;top:90%;overflow:visible;"id="Component_20">
-          <svg class="Path_310" viewBox="0 0 90 30">
-            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-            </path>
-          </svg>
-          <div id="exportToPDF">
-            <span>PDF</span>
+          <div id="exportTo">
+            <span>Export</span>
           </div>
         </div>
       </div>
@@ -1134,9 +1155,8 @@
   <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
   <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
   <script type="text/javascript" src="src\devExtreme\js\jszip.min.js"></script>
-  <script type="text/javascript" src="src\devExtreme\js\exceljs.min.js"></script>
+  <script type="text/javascript" src="Javascripts\SheetJS\xlsx.full.min.js"></script>
   <script type="text/javascript" src="src\devExtreme\js\FileSaver.min.js"></script>
-  <script type="text/javascript" src="src\devExtreme\js\exportDxDataGrid.js"></script>
   <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 
 
@@ -1195,6 +1215,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPageSave.js"></script>
 
   <link rel="stylesheet" href="src\prompts\Save_and_Exit.css" type="text/css" />
+  <link rel="stylesheet" href="src\prompts\Output_Data.css" type="text/css" />
   <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
   <script>
     $("#loadIndicator").dxLoadPanel({

@@ -1,3 +1,8 @@
+var XLSX;
+if (typeof (require) !== 'undefined') {
+    XLSX = require('xlsx');
+}
+
 var ExportManager = {
     SelectedTableIds : []
 }
@@ -15,6 +20,17 @@ function Destroy() {
     viewerContainerDiv.style.cssText = style.cssText;
 
     parent.appendChild(viewerContainerDiv);
+}
+
+function ShowSelectBox() {
+    var overlay = document.getElementById("selectTableToExportOverlay");
+    var popup = document.getElementById("selectTableToExportPopup");
+    // var exportManager = new ExportManager();
+
+    DisplayCategoriesToExport();
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
 }
 
 function DisplayCategoriesToExport() {
@@ -81,33 +97,214 @@ function DisplayCategoriesToExport() {
     });
 }
 
+function OnExcelClick() {
+    ShowSelectBox();
+    var exportButton = document.getElementById("exportToButton");
+    exportButton.onclick= function () {
+        ExportToExcel();
+    };
+}
+
+// function GetCheckInfo() {
+//     var Info = [];
+
+//     var projectName = localStorage.projectinfo["projectname"];
+//     var checkName = localStorage.checkinfo["checkname"];
+//     var userName = localStorage.userinfo["alias"];
+
+//     projectName = "Project/CheckSpace Name : " + projectName + "/" + checkName;
+//     userName - "UserName : " + userName;
+
+//     if(model.currentCheck == "comparison") {
+
+//     }
+
+// }
+
 function ExportToExcel() {
-    var workbook = new ExcelJS.Workbook();  
+    // GetCheckInfo();
+    // CreateHeaderForExcel();
+    var excelSheetData = CreateDataToExport();
+    var nextRow;
+    var ws;
 
-    for(var i = 0; i < ExportManager.SelectedTableIds.length; i++) {
-        var tableId = ExportManager.SelectedTableIds[i];
-        tableId = tableId.replace("#","");
-        var tableName = tableId.split("_")[0];
+    for(var table in excelSheetData) {
+        // var headerOfTable = excelSheetData[table][0]
+        // excelSheetData[table].shift();
+        var data = excelSheetData[table];
 
-        var worksheet = workbook.addWorksheet(tableName);
-        var grid = $(ExportManager.SelectedTableIds[i]).dxDataGrid("instance");
-
-        if(i == ExportManager.SelectedTableIds.length-1) {
-            exportDataGrid({
-                worksheet: worksheet, dataGrid: grid, topLeftCell: { row: 0, column: 1 },
-                saveEnabled: true, workbook
-            });
+        if(!ws) {
+            ws = XLSX.utils.aoa_to_sheet(data);
+            nextRow = data.length + 8;
         }
         else {
-           exportDataGrid({
-                worksheet: worksheet, dataGrid: grid, topLeftCell: { row: 0, column: 1 },
-                saveEnabled: false
-            });
+            var startFrom = "A" + nextRow;
+            XLSX.utils.sheet_add_aoa(ws, data, {origin: startFrom});
         }
         
     }
 
+    // A workbook is the name given to an Excel file
+    var wb = XLSX.utils.book_new() // make Workbook of Excel
+
+    // add Worksheet to Workbook
+    // Workbook contains one or more worksheets
+    XLSX.utils.book_append_sheet(wb, ws, model.currentCheck) // sheetAName is name of Worksheet
+
+    // export Excel file
+    XLSX.writeFile(wb, 'D:/Intrida/Output/book234.xlsx') //
+
+
     // close popup after export
     closeSaveAs();
     closeOutpuToOverlay();
+}
+
+// function CreateHeaderForExcel() {
+//     var manager = model.checks[model.currentCheck].reviewManager;
+//     var results;
+//     if(model.currentCheck.toLowerCase() == "comparison") {
+//         results = manager.ComparisonCheckManager['results'];
+//     }
+//     else {
+//         results = manager.ComplianceCheckManager['results'];
+//     }
+
+//     var sourceAHeader = [];
+//     var sourceBHeader = [];
+//     var headerArray = [];
+
+//     for(var tid = 0; tid < ExportManager.SelectedTableIds.length; tid++) {
+//         var tableId = ExportManager.SelectedTableIds[tid];
+//         tableId = tableId.replace("#","");
+//         var tableName = tableId.split("_")[0];
+//         for(var id in results) {
+//             if(results[id].componentClass.toLowerCase() == tableName.toLowerCase()) {
+//                 var components = results[id].components;
+//                 for(var i in components) {
+//                     var component = components[i];
+//                     var properties = component.properties;
+//                     for(var j in properties) {
+//                         var property = properties[j];
+
+//                         if(property.sourceAName !== null) {
+//                             if(!sourceAHeader.includes(property.sourceAName))
+//                                 sourceAHeader.push(property.sourceAName);
+//                             else if(property.sourceAName == "")
+//                                 sourceAHeader.push(property.sourceAName);
+//                         }
+//                         else {
+//                             sourceAHeader.push("");
+//                         }
+
+//                         if(property.sourceBName !== null) {
+//                             if(!sourceBHeader.includes(property.sourceBName))
+//                                 sourceBHeader.push(property.sourceBName);
+//                             else if(property.sourceBName == "")
+//                                 sourceBHeader.push(property.sourceBName);
+//                         }
+//                         else {
+//                             sourceBHeader.push("");
+//                         }
+//                     }
+//                 }
+//                 break;
+//             }
+//         }
+//     }
+
+
+
+// }
+
+function CreateDataToExport() {
+
+    var manager = model.checks[model.currentCheck].reviewManager;
+    var results;
+    if(model.currentCheck.toLowerCase() == "comparison") {
+        results = manager.ComparisonCheckManager['results'];
+    }
+    else {
+        results = manager.ComplianceCheckManager['results'];
+    }
+
+    var dataObject = {};
+
+    for(var tid = 0; tid < ExportManager.SelectedTableIds.length; tid++) {
+        var tableId = ExportManager.SelectedTableIds[tid];
+        tableId = tableId.replace("#","");
+        var tableName = tableId.split("_")[0];
+        for(var id in results) {
+            if(results[id].componentClass.toLowerCase() == tableName.toLowerCase()) {
+                var components = results[id].components;
+                var componentsArray = [];
+                var headerArray = [];
+                var headerArrayFilled = false;
+                for(var i in components) {
+                    var component = components[i];
+                    var comp = [];
+                    comp.push(component.sourceAName);
+                    comp.push(component.sourceBName);
+                    comp.push(component.status);
+
+                    if(!headerArrayFilled) {
+                        headerArray.push("Item A");
+                        headerArray.push("Item B");
+                        headerArray.push("Status");
+                    }
+                    
+                    var properties = component.properties;
+                    for(var j in properties) {
+                        var property = properties[j];
+
+                        if(!headerArrayFilled) {
+
+                            if(property.sourceAName !== null) {
+                                headerArray.push(property.sourceAName);
+                            }
+                            else {
+                                headerArray.push(" ");
+                            }
+
+                            if(property.sourceBName !== null) {
+                                headerArray.push(property.sourceBName);
+                            }
+                            else {
+                                headerArray.push(" ");
+                            }
+                            
+                            
+                            headerArray.push("Status");
+                        }
+
+                        if (property.transpose == "lefttoright") {
+                            comp.push(property.sourceAValue);    
+                            comp.push(property.sourceBValue);
+                        }
+                        else if (property.transpose == "righttoleft") {
+                            comp.push(property.sourceBValue);
+                            comp.push(property.sourceAValue);
+                        }
+                        else if (property.transpose == null) {
+                            comp.push(property.sourceAValue);
+                            comp.push(property.sourceBValue);
+                        }
+
+                        comp.push(property.severity);
+                    }
+
+                    if(!headerArrayFilled) {
+                        componentsArray.push(headerArray);
+                        headerArrayFilled = true;
+                    }
+                    componentsArray.push(comp);
+                }
+                
+                dataObject[tableName] = componentsArray;
+                break;
+            }
+        }
+    }
+    
+    return dataObject;
 }

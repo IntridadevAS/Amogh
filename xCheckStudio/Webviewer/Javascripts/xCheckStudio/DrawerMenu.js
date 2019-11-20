@@ -353,14 +353,3 @@ function disableMenuItems(items) {
         }
     }
 }
-
-function onSaveAs() {
-    var overlay = document.getElementById("selectTableToExportOverlay");
-    var popup = document.getElementById("selectTableToExportPopup");
-    // var exportManager = new ExportManager();
-
-    DisplayCategoriesToExport();
-
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
-}
