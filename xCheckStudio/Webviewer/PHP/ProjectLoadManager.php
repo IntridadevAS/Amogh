@@ -99,8 +99,8 @@
             // comparison result tables table                               
             CopyComponents( $dbh, $tempDbh, "SourceAComponents", "SourceAProperties");          
             CopyComponents( $dbh, $tempDbh, "SourceBComponents", "SourceBProperties");
-            // CopyComponents( $dbh, $tempDbh, "SourceCComponents", "SourceCProperties");          
-            // CopyComponents( $dbh, $tempDbh, "SourceDComponents", "SourceDProperties");
+            CopyComponents( $dbh, $tempDbh, "SourceCComponents", "SourceCProperties");          
+            CopyComponents( $dbh, $tempDbh, "SourceDComponents", "SourceDProperties");
 
             // save check case info 
             CopyCheckCaseInfo($dbh, $tempDbh);
@@ -110,18 +110,18 @@
 
             CopyVieweroptions($dbh, $tempDbh, "SourceAViewerOptions");
             CopyVieweroptions($dbh, $tempDbh, "SourceBViewerOptions");
-            // CopyVieweroptions($dbh, $tempDbh, "SourceCViewerOptions");
-            // CopyVieweroptions($dbh, $tempDbh, "SourceDViewerOptions");
+            CopyVieweroptions($dbh, $tempDbh, "SourceCViewerOptions");
+            CopyVieweroptions($dbh, $tempDbh, "SourceDViewerOptions");
 
             CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceASelectedComponents");
             CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBSelectedComponents");
-            // CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCSelectedComponents");
-            // CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDSelectedComponents");
+            CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCSelectedComponents");
+            CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDSelectedComponents");
 
             CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotSelectedComponents");
             CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotSelectedComponents");
-            // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotSelectedComponents");
-            // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotSelectedComponents");
+            CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotSelectedComponents");
+            CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotSelectedComponents");
 
             // comparison result tables table                               
             CopyComparisonCheckGroups( $dbh, $tempDbh);                 
@@ -129,6 +129,8 @@
             CopyComparisonCheckProperties( $dbh, $tempDbh);
             CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotMatchedComponents");
             CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotMatchedComponents");
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotMatchedComponents");
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotMatchedComponents");
 
             // source a compliance result tables table     
             CopySourceAComplianceCheckGroups($dbh, $tempDbh);
@@ -935,21 +937,33 @@
             //             sourceBId,
             //             ownerGroup, 
             //             transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONCOMPONETS_TABLE);
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE);
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                     $row['sourceAName'], 
                                     $row['sourceBName'],
+                                    $row['sourceCName'], 
+                                    $row['sourceDName'],
+                                    $row['sourceAMainClass'], 
+                                    $row['sourceBMainClass'],
+                                    $row['sourceCMainClass'], 
+                                    $row['sourceDMainClass'], 
                                     $row['sourceASubComponentClass'], 
-                                    $row['sourceBSubComponentClass'], 
+                                    $row['sourceBSubComponentClass'],
+                                    $row['sourceCSubComponentClass'], 
+                                    $row['sourceDSubComponentClass'], 
                                     $row['status'], 
                                     $row['accepted'], 
                                     $row['sourceANodeId'],
                                     $row['sourceBNodeId'], 
+                                    $row['sourceCNodeId'],
+                                    $row['sourceDNodeId'], 
                                     $row['sourceAId'],
                                     $row['sourceBId'], 
+                                    $row['sourceCId'],
+                                    $row['sourceDId'],
                                     $row['ownerGroup'],
                                     $row['transpose'],));
             }                    
@@ -982,15 +996,19 @@
             
             // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
             //             sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONPROPERTIES_TABLE);        
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);        
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['sourceAName'], 
                                         $row['sourceBName'],
+                                        $row['sourceCName'], 
+                                        $row['sourceDName'],
                                         $row['sourceAValue'], 
                                         $row['sourceBValue'], 
+                                        $row['sourceCValue'], 
+                                        $row['sourceDValue'], 
                                         $row['result'],
                                         $row['severity'], 
                                         $row['accepted'], 

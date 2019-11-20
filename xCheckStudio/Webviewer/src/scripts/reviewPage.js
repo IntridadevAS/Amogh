@@ -309,7 +309,9 @@ let viewTabs = {
       populateCheckResults(requiredComparison,
         undefined,
         sourceAComparisonHierarchy,
-        sourceBComparisonHierarchy);
+        sourceBComparisonHierarchy,
+        undefined,
+        undefined);
 
     }
 
@@ -398,6 +400,8 @@ let viewTabs = {
         // populate check results
         populateCheckResults(undefined,
           compliance,
+          undefined,
+          undefined,
           undefined,
           undefined);
 

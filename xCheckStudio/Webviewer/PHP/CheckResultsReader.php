@@ -1,6 +1,7 @@
 <?php
         include 'Utility.php';       
-        if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
+        if(!isset($_POST['CheckName']) || 
+           !isset($_POST['ProjectName']))
         {
             echo 'fail';
             return;
@@ -46,13 +47,37 @@
         {
             $results['sourceBComponents'] = $sourceBComponents;
         }   
+
+        // source c components
+        $sourceCComponents = readComponents("c");  
+        if($sourceCComponents)
+        {
+            $results['sourceCComponents'] = $sourceCComponents;
+        }   
+
+        // source c components
+        $sourceDComponents = readComponents("d");  
+        if($sourceDComponents)
+        {
+            $results['sourceDComponents'] = $sourceDComponents;
+        }   
                
         if($comparisonResult != NULL)
         {            
             //$results['Comparison'] = $comparisonResult;
             $results['Comparisons'] = array();
             $comparison = array();
-            $comparison["sources"] = array($datasourceInfo["sourceAFileName"],$datasourceInfo["sourceBFileName"]);
+            $comparison["sources"] = array($datasourceInfo["sourceAFileName"], $datasourceInfo["sourceBFileName"]);
+            
+            if($datasourceInfo["sourceCFileName"] !== NULL)
+            {
+                array_push($comparison["sources"], $datasourceInfo["sourceCFileName"]);
+            }
+            if($datasourceInfo["sourceDFileName"] !== NULL)
+            {
+                array_push($comparison["sources"], $datasourceInfo["sourceDFileName"]);
+            }
+            
             $comparison["results"] = $comparisonResult;
             array_push($results['Comparisons'], $comparison);
 
@@ -503,8 +528,12 @@
                 {
                     $data = array('sourceAFileName' => $record['sourceAFileName'], 
                                 'sourceBFileName'=> $record['sourceBFileName'], 
+                                'sourceCFileName' => $record['sourceCFileName'], 
+                                'sourceDFileName'=> $record['sourceDFileName'],
                                 'sourceAType'=>$record['sourceAType'], 
                                 'sourceBType'=>$record['sourceBType'], 
+                                'sourceCType'=>$record['sourceCType'], 
+                                'sourceDType'=>$record['sourceDType'], 
                                 'orderMaintained'=>$record['orderMaintained']);                                 
                 }
 
@@ -985,9 +1014,11 @@
                 else if($source === "b") {
                     $componentsTable = "SourceBComponents";                       
                 }
-                else if($source === "c") {                             
+                else if($source === "c") {   
+                    $componentsTable = "SourceCComponents";                          
                 }
-                else if($source === "d") {                    
+                else if($source === "d") {                 
+                    $componentsTable = "SourceDComponents";   
                 }
     
                 // read component main class and subclass

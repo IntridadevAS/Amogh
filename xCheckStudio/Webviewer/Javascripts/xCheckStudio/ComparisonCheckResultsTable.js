@@ -170,17 +170,61 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
         else if (i === ComparisonColumns.SourceAName) {
             caption = sources[0];
             dataField = ComparisonColumnNames.SourceAName;
-            width = "35%";
+            if (sources.length === 2) {
+                width = "40%";
+            }
+            else if (sources.length === 3) {
+                width = "26%";
+            }
+            else if (sources.length === 4) {
+                width = "20%";
+            }
         }
         else if (i === ComparisonColumns.SourceBName) {
             caption = sources[1];
             dataField = ComparisonColumnNames.SourceBName;
-            width = "35%";
+            if (sources.length === 2) {
+                width = "40%";
+            }
+            else if (sources.length === 3) {
+                width = "26%";
+            }
+            else if (sources.length === 4) {
+                width = "20%";
+            }
+        }
+        else if (i === ComparisonColumns.SourceCName) {
+
+            caption = dataField = ComparisonColumnNames.SourceCName;   
+            if (sources.length > 2) {
+                caption = sources[2];
+                dataField = ComparisonColumnNames.SourceCName;              
+                if (sources.length === 3) {
+                    width = "26%";
+                }
+                else if (sources.length === 4) {
+                    width = "20%";
+                }
+            }
+            else {
+                visible = false;
+            }
+        }
+        else if (i === ComparisonColumns.SourceDName) {
+            caption = dataField = ComparisonColumnNames.SourceDName;   
+            if (sources.length > 3) {
+                caption = sources[3];
+                dataField = ComparisonColumnNames.SourceDName;
+                width = "20%";
+            }
+            else {
+                visible = false;
+            }
         }
         else if (i === ComparisonColumns.Status) {
             caption = "Status";
             dataField = ComparisonColumnNames.Status;
-            width = "30%";
+            width = "20%";
         }
         else if (i === ComparisonColumns.SourceANodeId) {
             caption = "SourceANodeId";
@@ -194,6 +238,18 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
             visible = false;
             width = "0%";
         }
+        else if (i === ComparisonColumns.SourceCNodeId) {
+            caption = "SourceCNodeId";
+            dataField = ComparisonColumnNames.SourceCNodeId;
+            visible = false;
+            width = "0%";
+        }
+        else if (i === ComparisonColumns.SourceDNodeId) {
+            caption = "SourceDNodeId";
+            dataField = ComparisonColumnNames.SourceDNodeId;
+            visible = false;
+            width = "0%";
+        }
         else if (i === ComparisonColumns.SourceAId) {
             caption = "SourceAId";
             dataField = ComparisonColumnNames.SourceAId;
@@ -203,6 +259,18 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
         else if (i === ComparisonColumns.SourceBId) {
             caption = "SourceBId";
             dataField = ComparisonColumnNames.SourceBId;
+            visible = false;
+            width = "0%";
+        }
+        else if (i === ComparisonColumns.SourceCId) {
+            caption = "SourceCId";
+            dataField = ComparisonColumnNames.SourceCId;
+            visible = false;
+            width = "0%";
+        }
+        else if (i === ComparisonColumns.SourceDId) {
+            caption = "SourceDId";
+            dataField = ComparisonColumnNames.SourceDId;
             visible = false;
             width = "0%";
         }
@@ -220,8 +288,7 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
         }
 
         columnHeader["caption"] = caption;
-        columnHeader["dataField"] = dataField;
-        // columnHeader["dataType"] = "string";
+        columnHeader["dataField"] = dataField;        
         columnHeader["width"] = width;
 
         if (visible == false) {
@@ -247,11 +314,32 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 
         tableRowContent[ComparisonColumnNames.SourceAName] = component.sourceAName;
         tableRowContent[ComparisonColumnNames.SourceBName] = component.sourceBName;
+        
+        var cName = "";
+        if(component.sourceCName)
+        {
+            cName = component.sourceCName;           
+        }
+        tableRowContent[ComparisonColumnNames.SourceCName] =cName;
+
+        var dName = "";
+        if(component.sourceDName)
+        {
+            dName = component.sourceDName;        
+        }
+        tableRowContent[ComparisonColumnNames.SourceDName] = dName;
+
         tableRowContent[ComparisonColumnNames.Status] = component.status;
         tableRowContent[ComparisonColumnNames.SourceANodeId] = component.sourceANodeId;
         tableRowContent[ComparisonColumnNames.SourceBNodeId] = component.sourceBNodeId;
+        tableRowContent[ComparisonColumnNames.SourceCNodeId] = component.sourceCNodeId;
+        tableRowContent[ComparisonColumnNames.SourceDNodeId] = component.sourceDNodeId;
+
         tableRowContent[ComparisonColumnNames.SourceAId] = component.sourceAId;
         tableRowContent[ComparisonColumnNames.SourceBId] = component.sourceBId;
+        tableRowContent[ComparisonColumnNames.SourceCId] = component.sourceCId;
+        tableRowContent[ComparisonColumnNames.SourceDId] = component.sourceDId;
+
         tableRowContent[ComparisonColumnNames.ResultId] = component.id;
         tableRowContent[ComparisonColumnNames.GroupId] = component.ownerGroup;
 
@@ -299,9 +387,6 @@ ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     if (!("results" in ComparisonTableData)) {
         return;
     }
-
-    // 
-    var data = [];
 
     this.CreateAccordion();
     var checkGroups = ComparisonTableData["results"];

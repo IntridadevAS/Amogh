@@ -1,24 +1,36 @@
 function ComparisonReviewManager(comparisonCheckManager,
     sourceAViewerData,
     sourceBViewerData,
+    sourceCViewerData,
+    sourceDViewerData,
     sourceAComponents,
     sourceBComponents,
+    sourceCComponents,
+    sourceDComponents,
     mainReviewTableContainer,
     detailedReviewTableContainer,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceCComponentsHierarchy,
+    sourceDComponentsHierarchy) {
 
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
+    this.SourceCViewerData = sourceCViewerData;
+    this.SourceDViewerData = sourceDViewerData;
 
     this.SourceAComponents = sourceAComponents;
     this.SourceBComponents = sourceBComponents;
+    this.SourceCComponents = sourceCComponents;
+    this.SourceDComponents = sourceDComponents;
 
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
     this.SourceANodeIdVsStatus = sourceAComponentsHierarchy;
     this.SourceBNodeIdVsStatus = sourceBComponentsHierarchy;
+    this.SourceCNodeIdVsStatus = sourceCComponentsHierarchy;
+    this.SourceDNodeIdVsStatus = sourceDComponentsHierarchy;
 
     this.ComparisonCheckManager = comparisonCheckManager;
 
@@ -33,7 +45,8 @@ function ComparisonReviewManager(comparisonCheckManager,
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
 
-    if (this.SourceAViewerData["endPointUri"] !== undefined) {
+    // Source A
+    if (this.SourceAViewerData && this.SourceAViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData["endPointUri"]],
             this.SourceAComponentIdVsComponentData,
             this.SourceANodeIdVsComponentData,
@@ -48,7 +61,8 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
         model.checks["comparison"]["sourceAViewer"] = viewerInterface;
     }
 
-    if (this.SourceBViewerData["endPointUri"] !== undefined) {
+    // Source B
+    if (this.SourceBViewerData &&  this.SourceBViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData["endPointUri"]],
             this.SourceBComponentIdVsComponentData,
             this.SourceBNodeIdVsComponentData,
@@ -61,6 +75,39 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
     else if (this.SourceBComponents !== undefined) {
         var viewerInterface = new Review1DViewerInterface("b", this.SourceBComponents);
         model.checks["comparison"]["sourceBViewer"] = viewerInterface;
+    }
+
+
+    // Source C
+    if (this.SourceCViewerData &&  this.SourceCViewerData["endPointUri"] !== undefined) {
+        var viewerInterface = new Review3DViewerInterface(["compare3", this.SourceCViewerData["endPointUri"]],
+            this.SourceCComponentIdVsComponentData,
+            this.SourceCNodeIdVsComponentData,
+            this.SourceCViewerData["source"]);
+        viewerInterface.NodeIdStatusData = this.SourceCNodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceCViewer"] = viewerInterface;
+    }
+    else if (this.SourceCComponents !== undefined) {      
+        var viewerInterface = new Review1DViewerInterface("c", this.SourceCComponents);
+        model.checks["comparison"]["sourceCViewer"] = viewerInterface;
+    }
+
+    // Source D
+    if (this.SourceDViewerData && this.SourceDViewerData["endPointUri"] !== undefined) {
+        var viewerInterface = new Review3DViewerInterface(["compare4", this.SourceDViewerData["endPointUri"]],
+            this.SourceDComponentIdVsComponentData,
+            this.SourceDNodeIdVsComponentData,
+            this.SourceDViewerData["source"]);
+        viewerInterface.NodeIdStatusData = this.SourceDNodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceDViewer"] = viewerInterface;
+    }
+    else if (this.SourceDComponents !== undefined) {
+        var viewerInterface = new Review1DViewerInterface("d", this.SourceDComponents);
+        model.checks["comparison"]["sourceDViewer"] = viewerInterface;
     }
 }
 

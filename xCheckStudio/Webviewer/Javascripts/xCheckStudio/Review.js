@@ -33,7 +33,8 @@ function initReviewModule() {
                         var sourceInfo = checkResults["sourceInfo"];
 
                         // 1st source
-                        if ("sourceAFileName" in sourceInfo) {
+                        if ("sourceAFileName" in sourceInfo &&
+                            sourceInfo["sourceAFileName"]) {
                             var file = {};
                             file["id"] = "a";
                             file["fileName"] = sourceInfo["sourceAFileName"];
@@ -44,12 +45,37 @@ function initReviewModule() {
                         }
 
                         // 2nd source
-                        if ("sourceBFileName" in sourceInfo) {
+                        if ("sourceBFileName" in sourceInfo &&
+                            sourceInfo["sourceBFileName"]) {
                             var file = {};
                             file["id"] = "b";
                             file["fileName"] = sourceInfo["sourceBFileName"];
                             file["compliance"] = false;
                             file["sourceType"] = sourceInfo["sourceBType"];
+
+                            model.files[file.id] = file;
+                        }
+
+                        // 3rd source
+                        if ("sourceCFileName" in sourceInfo &&
+                            sourceInfo["sourceCFileName"]) {
+                            var file = {};
+                            file["id"] = "c";
+                            file["fileName"] = sourceInfo["sourceCFileName"];
+                            file["compliance"] = false;
+                            file["sourceType"] = sourceInfo["sourceCType"];
+
+                            model.files[file.id] = file;
+                        }
+
+                        // 4th source
+                        if ("sourceDFileName" in sourceInfo &&
+                            sourceInfo["sourceDFileName"]) {
+                            var file = {};
+                            file["id"] = "d";
+                            file["fileName"] = sourceInfo["sourceDFileName"];
+                            file["compliance"] = false;
+                            file["sourceType"] = sourceInfo["sourceDType"];
 
                             model.files[file.id] = file;
                         }
@@ -100,7 +126,9 @@ function initReviewModule() {
 function populateCheckResults(comparison,
     compliance,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceCComponentsHierarchy,
+    sourceDComponentsHierarchy) {
     if (!comparison &&
         !compliance) {
         return;
@@ -121,9 +149,7 @@ function populateCheckResults(comparison,
         },
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
-
-            // var sourceAViewerOptions = undefined;
-            //var sourceAClassWiseComponents = undefined;
+            
             var classWiseComponents = {};
             if (viewerOptions['a']['endPointUri'] === undefined) {
 
@@ -138,19 +164,13 @@ function populateCheckResults(comparison,
                         'CheckName': checkinfo.checkname
                     },
                     success: function (msg) {
-                        if (msg != 'fail') {
-                            // sourceAClassWiseComponents = JSON.parse(msg);
+                        if (msg != 'fail') {                           
                             classWiseComponents['a'] = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
-            }
-            // else {
-            //     sourceAViewerOptions = [viewerOptions['SourceAEndPointUri']];
-            // }
+            }            
 
-            // var sourceBViewerOptions = undefined;
-            //var sourceBClassWiseComponents = undefined;
             if (viewerOptions['b']['endPointUri'] === undefined) {
                 // this ajax call is synchronous
 
@@ -166,25 +186,48 @@ function populateCheckResults(comparison,
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
-                            // sourceBClassWiseComponents = JSON.parse(msg);
-                            classWiseComponents['b'] = sourceAClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['b'] = JSON.parse(msg);
                         }
                     }
                 });
             }
-            // else {
-            //     sourceBViewerOptions = [viewerOptions['SourceBEndPointUri']];
-            // }
 
+            if (('c' in viewerOptions) && viewerOptions['c']['endPointUri'] === undefined) {
+                // this ajax call is synchronous
+
+                // get class wise properties for excel and other 1D datasources
+                $.ajax({
+                    url: 'PHP/ClasswiseComponentsReader.php',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'Source': "SourceC",
+                        'ProjectName': projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
+                    },
+                    success: function (msg) {
+                        if (msg != 'fail' && msg != "") {
+                            classWiseComponents['c'] = JSON.parse(msg);
+                        }
+                    }
+                });
+            }
+           
 
             if (comparison) {
                 loadComparisonData(comparison,
                     viewerOptions['a'],
                     viewerOptions['b'],
+                    viewerOptions['c'],
+                    viewerOptions['d'],
                     classWiseComponents['a'],
                     classWiseComponents['b'],
+                    classWiseComponents['c'],
+                    classWiseComponents['d'],
                     sourceAComponentsHierarchy,
-                    sourceBComponentsHierarchy);
+                    sourceBComponentsHierarchy,
+                    sourceCComponentsHierarchy,
+                    sourceDComponentsHierarchy);
             }
 
             if (compliance) {
@@ -211,10 +254,16 @@ function populateCheckResults(comparison,
 function loadComparisonData(comparisonCheckGroups,
     sourceAViewerOptions,
     sourceBViewerOptions,
+    sourceCViewerOptions,
+    sourceDViewerOptions,
     sourceAClassWiseComponents,
     sourceBClassWiseComponents,
+    sourceCClassWiseComponents,
+    sourceDClassWiseComponents,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceCComponentsHierarchy,
+    sourceDComponentsHierarchy) {
 
     // make viewers enable
     enableViewers(comparisonCheckGroups.sources);
@@ -222,12 +271,18 @@ function loadComparisonData(comparisonCheckGroups,
     comparisonReviewManager = new ComparisonReviewManager(comparisonCheckGroups,
         sourceAViewerOptions,
         sourceBViewerOptions,
+        sourceCViewerOptions,
+        sourceDViewerOptions,
         sourceAClassWiseComponents,
         sourceBClassWiseComponents,
+        sourceCClassWiseComponents,
+        sourceDClassWiseComponents,
         Comparison.MainReviewContainer,
         Comparison.DetailInfoContainer,
         sourceAComponentsHierarchy,
-        sourceBComponentsHierarchy);
+        sourceBComponentsHierarchy,
+        sourceCComponentsHierarchy,
+        sourceDComponentsHierarchy);
 
     comparisonReviewManager.loadDatasources();
 
@@ -257,8 +312,18 @@ function loadComparisonData(comparisonCheckGroups,
     var componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
     comparisonData["SourceAcomponentIdVsComponentData"] = componentIdVsComponentData;
 
-    var componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
+    var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
     comparisonData["SourceBcomponentIdVsComponentData"] = componentIdVsComponentData;
+
+    if (checkResults.sourceCComponents) {
+        var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceCComponents);
+        comparisonData["SourceCcomponentIdVsComponentData"] = componentIdVsComponentData;
+    }
+
+    if (checkResults.sourceDComponents) {
+        var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceDComponents);
+        comparisonData["SourceDcomponentIdVsComponentData"] = componentIdVsComponentData;
+    }
 }
 
 function GetComponentIdVsComponentData(sourceComponents) {

@@ -56,6 +56,32 @@
                                                 ownerGroup,
                                                 transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
 
+    define('INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE', 'INSERT INTO ComparisonCheckComponents(
+                                                    id,
+                                                    sourceAName, 
+                                                    sourceBName, 
+                                                    sourceCName, 
+                                                    sourceDName,
+                                                    sourceAMainClass,
+                                                    sourceBMainClass,
+                                                    sourceCMainClass,
+                                                    sourceDMainClass, 
+                                                    sourceASubComponentClass, 
+                                                    sourceBSubComponentClass,
+                                                    sourceCSubComponentClass, 
+                                                    sourceDSubComponentClass,
+                                                    status,
+                                                    accepted, 
+                                                    sourceANodeId, 
+                                                    sourceBNodeId,
+                                                    sourceCNodeId, 
+                                                    sourceDNodeId,
+                                                    sourceAId, 
+                                                    sourceBId,
+                                                    sourceCId, 
+                                                    sourceDId,
+                                                    ownerGroup,
+                                                    transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
 
 define('CREATE_COMPARISONPROPERTIES_TABLE', 'CREATE TABLE ComparisonCheckProperties(
                                                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -91,4 +117,21 @@ define('INSERT_ALLCOMPARISONPROPERTIES_TABLE', 'INSERT INTO ComparisonCheckPrope
                                                 description,
                                                 ownerComponent,
                                                 transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
+define('INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE', 'INSERT INTO ComparisonCheckProperties(
+                                                    id,
+                                                    sourceAName, 
+                                                    sourceBName,
+                                                    sourceCName, 
+                                                    sourceDName,  
+                                                    sourceAValue, 
+                                                    sourceBValue, 
+                                                    sourceCValue, 
+                                                    sourceDValue, 
+                                                    result, 
+                                                    severity,
+                                                    accepted,
+                                                    performCheck,
+                                                    description,
+                                                    ownerComponent,
+                                                    transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
 ?>

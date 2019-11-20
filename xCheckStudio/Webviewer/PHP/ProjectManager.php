@@ -1,6 +1,7 @@
 <?php
     require_once 'Utility.php';
     require_once 'UserManagerUtility.php';
+    require_once 'GlobalConstants.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
@@ -71,9 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CreateCheckSpaceDBonSave":
              CreateCheckSpaceDBonSave();         
             break;
-        // case "SaveVieweroptions":
-        //     SaveVieweroptions();
-        //     break;
         case "ClearTemporaryCheckSpaceDB":
             ClearTemporaryCheckSpaceDB();
             break;
@@ -142,8 +140,8 @@ function SaveAll()
          // this will save all sources components, properties                       
          SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties"); 
          SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
-         // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
-         // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
+         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
+         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
         
          // save check case info 
          SaveCheckCaseInfoFromTemp($tempDbh, $dbh);        
@@ -186,14 +184,20 @@ function SaveAll()
             // save viewer related information
             SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceAViewerOptions");
             SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceBViewerOptions");
+            SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceCViewerOptions");
+            SaveVieweroptionsFromTemp($tempDbh, $dbh, "SourceDViewerOptions");
 
             // save selected components
             SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceASelectedComponents");
             SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBSelectedComponents");
+            SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceCSelectedComponents");
+            SaveSelectedComponentsFromTemp($tempDbh, $dbh, "SourceDSelectedComponents");
 
             // // save not selected components
             SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceANotSelectedComponents");
             SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBNotSelectedComponents");            
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceCNotSelectedComponents");
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceDNotSelectedComponents");      
 
             // save hiddent items
             SaveHiddenItemsFromTemp($tempDbh, $dbh);     
@@ -208,6 +212,8 @@ function SaveAll()
         SaveComparisonPropertiesFromTemp( $tempDbh, $dbh);                      
         SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceANotMatchedComponents");
         SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceBNotMatchedComponents");
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceCNotMatchedComponents");
+        SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceDNotMatchedComponents");
 
         // source a compliance result tables table     
         SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh);
@@ -345,7 +351,7 @@ function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
         //  description,
         //  ownerComponent,
         //  transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIES_TABLE);
+         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -353,8 +359,12 @@ function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
             $insertStmt->execute(array($row['id'], 
                                        $row['sourceAName'], 
                                        $row['sourceBName'],
+                                       $row['sourceCName'], 
+                                       $row['sourceDName'],
                                        $row['sourceAValue'],
                                        $row['sourceBValue'], 
+                                       $row['sourceCValue'],
+                                       $row['sourceDValue'], 
                                        $row['result'], 
                                        $row['severity'],
                                        $row['accepted'],
@@ -439,7 +449,7 @@ function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
         //  sourceBId,
         //  ownerGroup,
         //  transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONCOMPONETS_TABLE);
+        $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE);
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -447,14 +457,26 @@ function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
             $insertStmt->execute(array($row['id'], 
                                        $row['sourceAName'], 
                                        $row['sourceBName'],
+                                       $row['sourceCName'], 
+                                       $row['sourceDName'],
+                                       $row['sourceAMainClass'], 
+                                       $row['sourceBMainClass'],
+                                       $row['sourceCMainClass'], 
+                                       $row['sourceDMainClass'],
                                        $row['sourceASubComponentClass'], 
                                        $row['sourceBSubComponentClass'], 
+                                       $row['sourceCSubComponentClass'], 
+                                       $row['sourceDSubComponentClass'], 
                                        $row['status'],
                                        $row['accepted'], 
                                        $row['sourceANodeId'], 
                                        $row['sourceBNodeId'],
+                                       $row['sourceCNodeId'], 
+                                       $row['sourceDNodeId'],
                                        $row['sourceAId'], 
                                        $row['sourceBId'], 
+                                       $row['sourceCId'], 
+                                       $row['sourceDId'], 
                                        $row['ownerGroup'],
                                        $row['transpose']));
         }  

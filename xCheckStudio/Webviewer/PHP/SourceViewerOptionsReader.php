@@ -40,7 +40,16 @@
                     $sourceViewerOptions['b']  = array();
                    
                     $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
-                    $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];                               
+                    $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];  
+                    
+                    if($record['sourceCFileName'] != NULL)
+                    {
+                        $sourceViewerOptions['c']['source'] =  $record['sourceCFileName'];    
+                    }
+                    if($record['sourceDFileName'] != NULL)
+                    {
+                        $sourceViewerOptions['d']['source'] =  $record['sourceDFileName'];    
+                    }
                 }
 
                 // read sourceAViewerOptions
@@ -68,6 +77,28 @@
                         
                         $sourceViewerOptions['b']['endPointUri'] = $viewerOptions['endpointUri'];
                         // $sourceViewerOptions['b']['source'] =  $sourceB;
+                        break;
+                    }
+                 }
+
+                 // source c                
+                 $sourceCViewerOptions = $dbh->query("SELECT *FROM SourceCViewerOptions;");
+                 if($sourceCViewerOptions) 
+                 {
+                    while ($viewerOptions = $sourceCViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        $sourceViewerOptions['c']['endPointUri'] = $viewerOptions['endpointUri'];                       
+                        break;
+                    }
+                 }
+
+                 // source d
+                 $sourceDViewerOptions = $dbh->query("SELECT *FROM SourceDViewerOptions;");
+                 if($sourceDViewerOptions) 
+                 {
+                    while ($viewerOptions = $sourceDViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
+                    {
+                        $sourceViewerOptions['d']['endPointUri'] = $viewerOptions['endpointUri'];                       
                         break;
                     }
                  }

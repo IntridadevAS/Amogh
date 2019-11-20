@@ -1606,16 +1606,17 @@
                 $description =  $checkCaseMappingProperty['Comment'];
 
                 $checkProperty = new CheckProperty( $property1Name,
-                $property1Value,
-                $property2Name,
-                $property2Value,
-                $property3Name,
-                $property3Value,
-                $property4Name,
-                $property4Value,
-                $severity,
-                $performCheck,
-                $description);
+                                                    $property1Value,
+                                                    $property2Name,
+                                                    $property2Value,
+                                                    $property3Name,
+                                                    $property3Value,
+                                                    $property4Name,
+                                                    $property4Value,
+                                                    $severity,
+                                                    $performCheck,
+                                                    $description,
+                                                    NULL);
                 
                 $checkComponent->AddCheckProperty($checkProperty);
            }  
@@ -1867,6 +1868,7 @@
                                                     $dPropertyName,
                                                     $dPropertyValue,
                                                     "No Match",
+                                                    NULL,
                                                     NULL,
                                                     NULL);
 
@@ -2198,169 +2200,169 @@
             return $checkComponentGroup;
         }
 
-        function getCheckComponent ($firstSourceComponent,
-                                    $secondSourceComponent,  
-                                    $thirdSourceComponent, 
-                                    $fourthSourceComponent, 
-                                    $firstSourceProperties,
-                                    $secondSourceProperties,  
-                                    $thirdSourceProperties, 
-                                    $fourthSourceProperties,
-                                    $checkCaseComponentClass) 
-        {
+        // function getCheckComponent ($firstSourceComponent,
+        //                             $secondSourceComponent,  
+        //                             $thirdSourceComponent, 
+        //                             $fourthSourceComponent, 
+        //                             $firstSourceProperties,
+        //                             $secondSourceProperties,  
+        //                             $thirdSourceProperties, 
+        //                             $fourthSourceProperties,
+        //                             $checkCaseComponentClass) 
+        // {
 
-            $aId = NULL;
-            $aName = NULL;
-            $aSubclass = NULL;
-            $aNodeId = NULL;
-            $bId = NULL;
-            $bName = NULL;
-            $bSubclass = NULL;
-            $bNodeId = NULL;
-            $cId = NULL;
-            $cName = NULL;
-            $cSubclass = NULL;
-            $cNodeId = NULL;
-            $dId = NULL;
-            $dName = NULL;
-            $dSubclass = NULL;
-            $dNodeId = NULL;
-            if($firstSourceComponent !== NULL && $firstSourceProperties !== NULL)
-            {
-                $aId = NULL;
-                $aName = NULL;
-                $aSubclass = NULL;
-                $aNodeId = NULL;
-            }
+        //     $aId = NULL;
+        //     $aName = NULL;
+        //     $aSubclass = NULL;
+        //     $aNodeId = NULL;
+        //     $bId = NULL;
+        //     $bName = NULL;
+        //     $bSubclass = NULL;
+        //     $bNodeId = NULL;
+        //     $cId = NULL;
+        //     $cName = NULL;
+        //     $cSubclass = NULL;
+        //     $cNodeId = NULL;
+        //     $dId = NULL;
+        //     $dName = NULL;
+        //     $dSubclass = NULL;
+        //     $dNodeId = NULL;
+        //     if($firstSourceComponent !== NULL && $firstSourceProperties !== NULL)
+        //     {
+        //         $aId = NULL;
+        //         $aName = NULL;
+        //         $aSubclass = NULL;
+        //         $aNodeId = NULL;
+        //     }
 
-            if($secondSourceComponent !== NULL && $secondSourceProperties !== NULL)
-            {
-                $bId = NULL;
-                $bName = NULL;
-                $bSubclass = NULL;
-                $bNodeId = NULL;
-            }
+        //     if($secondSourceComponent !== NULL && $secondSourceProperties !== NULL)
+        //     {
+        //         $bId = NULL;
+        //         $bName = NULL;
+        //         $bSubclass = NULL;
+        //         $bNodeId = NULL;
+        //     }
 
-            if($thirdSourceComponent !== NULL && $thirdSourceProperties !== NULL)
-            {
-                $cId = NULL;
-                $cName = NULL;
-                $cSubclass = NULL;
-                $cNodeId = NULL;
-            }
+        //     if($thirdSourceComponent !== NULL && $thirdSourceProperties !== NULL)
+        //     {
+        //         $cId = NULL;
+        //         $cName = NULL;
+        //         $cSubclass = NULL;
+        //         $cNodeId = NULL;
+        //     }
 
-            if($fourthSourceComponent !== NULL && $fourthSourceProperties !== NULL)
-            {
-                $dId = NULL;
-                $dName = NULL;
-                $dSubclass = NULL;
-                $dNodeId = NULL;
-            }
-            $checkComponent = new CheckComponent($aName,
-                                                $bName,
-                                                $cName,
-                                                $dName,
-                                                $aSubclass,
-                                                $bSubclass,
-                                                $cSubclass,
-                                                $dSubclass,
-                                                $aNodeId,
-                                                $bNodeId,
-                                                $cNodeId,
-                                                $dNodeId,
-                                                $aId,
-                                                $bId,
-                                                $cId,
-                                                $dId);
+        //     if($fourthSourceComponent !== NULL && $fourthSourceProperties !== NULL)
+        //     {
+        //         $dId = NULL;
+        //         $dName = NULL;
+        //         $dSubclass = NULL;
+        //         $dNodeId = NULL;
+        //     }
+        //     $checkComponent = new CheckComponent($aName,
+        //                                         $bName,
+        //                                         $cName,
+        //                                         $dName,
+        //                                         $aSubclass,
+        //                                         $bSubclass,
+        //                                         $cSubclass,
+        //                                         $dSubclass,
+        //                                         $aNodeId,
+        //                                         $bNodeId,
+        //                                         $cNodeId,
+        //                                         $dNodeId,
+        //                                         $aId,
+        //                                         $bId,
+        //                                         $cId,
+        //                                         $dId);
 
-            $checkComponent;
-            if ($sourceAComponent) 
-            {
-                global $SourceAProperties;                  
+        //     $checkComponent;
+        //     if ($sourceAComponent) 
+        //     {
+        //         global $SourceAProperties;                  
 
-                $nodeId = NUll;
+        //         $nodeId = NUll;
                 
-                if(isset($sourceComponent['nodeid']))
-                {
-                    $nodeId = $sourceComponent['nodeid'];                        
-                }
+        //         if(isset($sourceComponent['nodeid']))
+        //         {
+        //             $nodeId = $sourceComponent['nodeid'];                        
+        //         }
 
-                $id = NULL;
-                if(isset($sourceComponent['id']))
-                {
-                    $id  = $sourceComponent['id'];
-                }
-                $checkComponent = new CheckComponent($sourceComponent["name"],
-                                                    "",
-                                                    $sourceComponent["subclass"],
-                                                    "",
-                                                    $nodeId ,
-                                                    NULL,
-                                                    $id ,
-                                                    NULL);
+        //         $id = NULL;
+        //         if(isset($sourceComponent['id']))
+        //         {
+        //             $id  = $sourceComponent['id'];
+        //         }
+        //         $checkComponent = new CheckComponent($sourceComponent["name"],
+        //                                             "",
+        //                                             $sourceComponent["subclass"],
+        //                                             "",
+        //                                             $nodeId ,
+        //                                             NULL,
+        //                                             $id ,
+        //                                             NULL);
 
-                $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
+        //         $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
             
-                foreach ($sourceAComponentProperties as $name => $property) 
-                {                       
-                    $checkProperty = new CheckProperty($property["name"],
-                                                        $property["value"],
-                                                        NULL,
-                                                        NULL,
-                                                        "No Match",
-                                                        NULL,
-                                                        NULL);
+        //         foreach ($sourceAComponentProperties as $name => $property) 
+        //         {                       
+        //             $checkProperty = new CheckProperty($property["name"],
+        //                                                 $property["value"],
+        //                                                 NULL,
+        //                                                 NULL,
+        //                                                 "No Match",
+        //                                                 NULL,
+        //                                                 NULL);
 
-                    $checkProperty->PerformCheck = false;
-                    $checkComponent->AddCheckProperty($checkProperty);
-                }               
+        //             $checkProperty->PerformCheck = false;
+        //             $checkComponent->AddCheckProperty($checkProperty);
+        //         }               
                 
-            }
-            else 
-            {
-                global $SourceBProperties;
+        //     }
+        //     else 
+        //     {
+        //         global $SourceBProperties;
 
-                $nodeId = NUll;
-                if(isset($sourceComponent['nodeid']))
-                {
-                    $nodeId = $sourceComponent['nodeid'];
-                }
+        //         $nodeId = NUll;
+        //         if(isset($sourceComponent['nodeid']))
+        //         {
+        //             $nodeId = $sourceComponent['nodeid'];
+        //         }
 
-                $id = NULL;
-                if(isset($sourceComponent['id']))
-                {
-                    $id  = $sourceComponent['id'];
-                }
-                $checkComponent = new CheckComponent("",
-                                                    $sourceComponent["name"],
-                                                    "",
-                                                    $sourceComponent["subclass"],
-                                                    NULL,
-                                                    $nodeId,
-                                                    NULL,
-                                                    $id );
+        //         $id = NULL;
+        //         if(isset($sourceComponent['id']))
+        //         {
+        //             $id  = $sourceComponent['id'];
+        //         }
+        //         $checkComponent = new CheckComponent("",
+        //                                             $sourceComponent["name"],
+        //                                             "",
+        //                                             $sourceComponent["subclass"],
+        //                                             NULL,
+        //                                             $nodeId,
+        //                                             NULL,
+        //                                             $id );
 
-                $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
-                foreach ($sourceBComponentProperties as $name => $property) 
-                {                       
-                    $checkProperty = new CheckProperty(NULL,
-                                                    NULL,
-                                                    $property["name"],
-                                                    $property["value"],
-                                                    "No Match",
-                                                    NULL,
-                                                    NULL);
+        //         $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
+        //         foreach ($sourceBComponentProperties as $name => $property) 
+        //         {                       
+        //             $checkProperty = new CheckProperty(NULL,
+        //                                             NULL,
+        //                                             $property["name"],
+        //                                             $property["value"],
+        //                                             "No Match",
+        //                                             NULL,
+        //                                             NULL);
 
 
-                    $checkProperty->PerformCheck = false;
-                    $checkComponent->AddCheckProperty($checkProperty);
-                }           
+        //             $checkProperty->PerformCheck = false;
+        //             $checkComponent->AddCheckProperty($checkProperty);
+        //         }           
 
-            }
+        //     }
 
-            $checkComponent->Status = "No Match";
-            return $checkComponent;
-        }
+        //     $checkComponent->Status = "No Match";
+        //     return $checkComponent;
+        // }
 
         function getUndefinedComponent ($sourceComponent, $dataSourceIndex) 
         {
@@ -2503,6 +2505,7 @@
                                                     $dPropertyName,
                                                     $dPropertyValue,
                                                     "undefined",
+                                                    NULL,
                                                     NULL,
                                                     NULL);
 

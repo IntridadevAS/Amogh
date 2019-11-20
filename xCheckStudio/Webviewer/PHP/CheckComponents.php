@@ -125,7 +125,8 @@
                 var $Description;
                 var $Rule;
             
-                function __construct( $sourceAValue,
+                function __construct( $sourceAName,
+                                      $sourceAValue,
                                       $sourceBName,
                                       $sourceBValue,
                                       $sourceCName,
