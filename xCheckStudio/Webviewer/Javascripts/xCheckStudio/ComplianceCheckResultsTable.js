@@ -319,13 +319,27 @@ ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = 
     var dataGrid = $("#" + containerId).dxDataGrid("instance");
     var mainReviewTableRows = dataGrid.getVisibleRows();
 
+    var highlightedRowKey = "0";
+
+    if(model.getCurrentSelectionManager().HighlightedCheckComponentRow)
+        highlightedRowKey =  model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
+
     for (var i = 0; i < mainReviewTableRows.length; i++) {
-        var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
-        if (currentRow[0].cells.length < 3) {
-            return;
+        if(!mainReviewTableRows[i].isSelected && mainReviewTableRows[i].key !== highlightedRowKey) {
+            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
+            if (currentRow[0].cells.length < 3) {
+                return;
+            }
+            var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComplianceColumns.Status)
+            model.checks["compliance"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
         }
-        var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComplianceColumns.Status)
-        model.checks["compliance"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
+        else if(mainReviewTableRows[i].key == highlightedRowKey) {
+            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
+            if (currentRow[0].cells.length < 3) {
+                return;
+            }
+            model.getCurrentSelectionManager().ApplyHighlightColor(currentRow[0]);
+        }
     }
 }
 

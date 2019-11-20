@@ -125,9 +125,26 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForComponent = functio
 
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function(selectedRow) {
     
-    var selectedRowStatus = selectedRow.cells[CompliancePropertyColumns.Status].innerHTML;
-    if (selectedRowStatus.includes("OK")) {
-        return true;
+    var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
+    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED'];
+    var accepted = false;
+
+    if(selectedPropertiesKey.length == 0) {
+        transpose = true;
+        return transpose;
+    }
+
+    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items(); 
+
+    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
+        var rowData = data[rowIndex];
+        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
+        if (index == -1) {
+            accepted = true;
+        }
     }
 
     return false;
