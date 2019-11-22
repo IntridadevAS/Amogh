@@ -190,6 +190,12 @@ let menu = {
     },
 
     onOutputClicked: function () {
+        var overlay = document.getElementById("outputOverlay");
+        var popup = document.getElementById("outputPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
     },
 
     onReportsClicked: function () {
@@ -308,6 +314,22 @@ function swapIcon() {
 function cancelReturnCheck() {
     var overlay = document.getElementById("returnCheckOverlay");
     var popup = document.getElementById("returnCheckPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function closeSaveAs() {
+    var overlay = document.getElementById("Excel_Output_overlay");
+    var popup = document.getElementById("Excel_Output_popup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function closeOutpuToOverlay() {
+    var overlay = document.getElementById("outputOverlay");
+    var popup = document.getElementById("outputPopup");
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
