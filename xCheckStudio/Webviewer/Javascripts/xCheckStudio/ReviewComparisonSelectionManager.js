@@ -27,7 +27,10 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     else if (this.ComponentSelected(rowKey, tableId)) {
 
         // restore color
-        this.RemoveHighlightColor(currentRow);
+        var grid =  $(tableId).dxDataGrid("instance");
+        var data =  grid.getDataSource().items();
+        var rowData = data[rowIndex];
+        this.RemoveHighlightColor(currentRow, rowData[ComparisonColumnNames.Status]);
 
         // remove current row from selected rows array
         this.RemoveSelectedComponent (rowKey, tableId);        
@@ -41,8 +44,8 @@ ReviewComparisonSelectionManager.prototype.ApplyHighlightColor = function (row) 
     }
 }
 
-ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row) {
-    var Color = this.GetRowHighlightColor(row.cells[ComparisonColumns.Status].innerHTML);
+ReviewComparisonSelectionManager.prototype.RemoveHighlightColor = function (row, status) {
+    var Color = this.GetRowHighlightColor(status);
     for (var j = 0; j < row.cells.length; j++) {
         cell = row.cells[j];
         cell.style.backgroundColor = Color;
@@ -66,7 +69,11 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
 
     if (highlightedRow &&
         !this.ComponentSelected(highlightedRow["rowKey"], highlightedRow["tableId"])) {
-        this.RemoveHighlightColor(rowElement);
+        var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
+        var data = dataGrid.getDataSource().items();
+        var rowData = data[rowIndex];
+        this.RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
     }
 
     rowKey = this.GetSelectedRowKey(currentReviewTableRow.rowIndex, tableId);
@@ -85,14 +92,20 @@ ReviewComparisonSelectionManager.prototype.GetSelectedRowKey = function(rowIndex
     return rowData.key;
 }
 
-ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow) {
-    if (this.HighlightedDetailedComponentRow === currentDetailedTableRow) {
+ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow, rowKey) {
+    if (this.HighlightedDetailedComponentRow &&
+        this.HighlightedDetailedComponentRow.rowKey === rowKey) {
         return;
     }
 
     if (this.HighlightedDetailedComponentRow) {
-        var row = this.HighlightedDetailedComponentRow;
-        var Color = this.GetRowHighlightColor(row.cells[ComparisonPropertyColumns.Status].innerHTML);
+        var dataGrid =  $( this.HighlightedDetailedComponentRow["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(this.HighlightedDetailedComponentRow["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        
+        var data = dataGrid.getDataSource().items();
+        var rowData = data[rowIndex];
+        var Color = this.GetRowHighlightColor(rowData[ComparisonPropertyColumnNames.Status]);
         for (var j = 0; j < row.cells.length; j++) {
             cell = row.cells[j];
             cell.style.backgroundColor = Color;
@@ -100,7 +113,10 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = func
     }
 
     this.ApplyHighlightColor(currentDetailedTableRow);
-    this.HighlightedDetailedComponentRow = currentDetailedTableRow;
+    this.HighlightedDetailedComponentRow = {
+        "rowKey" : rowKey,
+        "tableId" : '#comparisonDetailInfo'
+    };
 }
 
 ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row, status) {

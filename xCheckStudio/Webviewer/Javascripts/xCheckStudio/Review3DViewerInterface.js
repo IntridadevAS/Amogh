@@ -272,7 +272,10 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         rowElement = dataGrid.getRowElement(rowIndex)[0];
 
-        model.getCurrentSelectionManager().RemoveHighlightColor(rowElement);
+        var data = dataGrid.getDataSource().items();
+        var rowData = data[rowIndex];
+
+        model.getCurrentSelectionManager().RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
         model.getCurrentSelectionManager().SetHighlightedRow(undefined);
 
         // clear detailed info table
@@ -560,7 +563,9 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
                             var rowIndex = grid.getRowIndexByKey(highlightedRow["rowKey"]);
                             rowElement = grid.getRowElement(rowIndex)[0];
 
-                            model.getCurrentSelectionManager().RemoveHighlightColor(rowElement);
+                            var data =  grid.getDataSource().items();
+                            var rowData = data[rowIndex];
+                            model.getCurrentSelectionManager().RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
                         }                        
                            
                         

@@ -5,6 +5,10 @@ function ReviewSelectionManager()
 }
 
 ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
+    if (!status) {
+        return "#ffffff";
+    }
+
     if (status.toLowerCase() === ("OK").toLowerCase()) {
         return SuccessColor;
     }

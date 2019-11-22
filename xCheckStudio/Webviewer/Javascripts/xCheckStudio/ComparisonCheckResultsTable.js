@@ -361,21 +361,23 @@ ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = 
         highlightedRowKey =  model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
 
     for (var i = 0; i < mainReviewTableRows.length; i++) {
-        if(!mainReviewTableRows[i].isSelected && mainReviewTableRows[i].key !== highlightedRowKey) {
-            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
-            if (currentRow[0].cells.length < 3) {
-                return;
-            }
-    
-            var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComparisonColumns.Status)
-            model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
+        var reviewRow = mainReviewTableRows[i];
+        var reviewRowElement = dataGrid.getRowElement(reviewRow.rowIndex);
+
+        if(!reviewRow.isSelected && reviewRow.key !== highlightedRowKey) {
+           
+            // if (reviewRowElement[0].cells.length < 3) {
+            //     return;
+            // }    
+            
+            var status = reviewRow.data[ComparisonColumnNames.Status];
+            model.getCurrentSelectionManager().ChangeBackgroundColor(reviewRowElement[0], status);
         }
-        else if(mainReviewTableRows[i].key == highlightedRowKey) {
-            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
-            if (currentRow[0].cells.length < 3) {
-                return;
-            }
-            model.getCurrentSelectionManager().ApplyHighlightColor(currentRow[0]);
+        else if(reviewRow.key == highlightedRowKey) {           
+            // if (currentRow[0].cells.length < 3) {
+            //     return;
+            // }
+            model.getCurrentSelectionManager().ApplyHighlightColor(reviewRowElement[0]);
         }
     }
 }
@@ -635,11 +637,13 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
     var columnHeaders = [];
 
     for (var i = 0; i < 6; i++) {
-        columnHeader = {}
+        var columnHeader = {}
         var caption;
         var columns;
         var dataField;
         var width;
+        var visible = true;
+
         // var dataType;
         if (i == 0) {
             var group = [];
@@ -730,7 +734,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             caption = "SourceC";
             dataField = null;
             columns = group;
-            var visible = true;
+           
             if (sources.length < 3) {
                 visible = false;
             }
@@ -769,7 +773,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             caption = "SourceD";
             dataField = null;
             columns = group;
-            var visible = true;
+           
             if (sources.length < 4) {
                 visible = false;
             }
@@ -781,8 +785,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
         if (i == 4) {
             caption = "Status";
             dataField = ComparisonPropertyColumnNames.Status;
-            width = "20%";
-            // dataType = "string";
+            width = "20%";           
             columns = []
         }
 
@@ -825,26 +828,30 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
         tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceAValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceBValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceBName] = property.sourceBName;
-        
-        var cName = "";
-        var cValue = "";
-        if(property.sourceCName)
-        {
-            cName = property.sourceCName;
-            cValue = property.sourceCValue;
-        }
-        tableRowContent[ComparisonPropertyColumnNames.SourceCName] = cName;
-        tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = cValue;       
+        tableRowContent[ComparisonPropertyColumnNames.SourceCName] = property.sourceCName;
+        tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceCValue;  
+        tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceDValue;
+        tableRowContent[ComparisonPropertyColumnNames.SourceDName] = property.sourceDName;
 
-        var dName = "";
-        var dValue = "";
-        if(property.sourceDName)
-        {
-            dName = property.sourceDName;
-            dValue = property.sourceDValue;
-        }
-        tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = dName;
-        tableRowContent[ComparisonPropertyColumnNames.SourceDName] = dValue;
+        // var cName = "";
+        // var cValue = "";
+        // if(property.sourceCName)
+        // {
+        //     cName = property.sourceCName;
+        //     cValue = property.sourceCValue;
+        // }
+        // tableRowContent[ComparisonPropertyColumnNames.SourceCName] = cName;
+        // tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = cValue;       
+
+        // var dName = "";
+        // var dValue = "";
+        // if(property.sourceDName)
+        // {
+        //     dName = property.sourceDName;
+        //     dValue = property.sourceDValue;
+        // }
+        // tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = dName;
+        // tableRowContent[ComparisonPropertyColumnNames.SourceDName] = dValue;
 
         tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
 
@@ -959,7 +966,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 }
             },
             onRowClick: function (e) {
-                model.getCurrentSelectionManager().MaintainHighlightedDetailedRow(e.rowElement[0]);
+                model.getCurrentSelectionManager().MaintainHighlightedDetailedRow(e.rowElement[0], e.key);
             },
             // onRowPrepared: function(e) {
             //     if(e.isSelected) {
@@ -989,11 +996,13 @@ ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
 
     // skip header and filter textbox, hence i = 3
     for (var i = 0; i < detailedReviewTableRows.length; i++) {
-        var currentRow = dataGrid.getRowElement(detailedReviewTableRows[i].rowIndex);
-        if (currentRow[0].cells.length > 1) {
-            var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
+        var detailedReviewTableRow = detailedReviewTableRows[i];
+        var currentRow = dataGrid.getRowElement(detailedReviewTableRow.rowIndex);
+        // if (currentRow[0].cells.length > 1) {
+            //var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
+            var status = detailedReviewTableRow.data[ComparisonPropertyColumnNames.Status];
             model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
-        }
+        // }
     }
 }
 
