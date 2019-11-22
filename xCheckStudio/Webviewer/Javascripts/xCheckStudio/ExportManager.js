@@ -97,7 +97,6 @@ function ExportToExcel() {
         var exportProperties = exportPropertiesSwitch.option("value");
 
         exportToExcel.ExportComparisonComponents(comparisonExportManager.SelectedTableIds, exportProperties).then(function() {
-            hideBusyIndicator();
             closeSaveAs();
             closeOutpuToOverlay();
         });

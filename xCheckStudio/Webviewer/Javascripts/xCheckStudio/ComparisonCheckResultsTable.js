@@ -855,19 +855,6 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
 
         tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
 
-        if(property.sourceAName == null) {
-            tableRowContent[ComparisonPropertyColumnNames.SourceAName] = "";
-        }
-        if(property.sourceBName == null) {
-            tableRowContent[ComparisonPropertyColumnNames.SourceBName] = "";
-        }
-        if(property.sourceAValue == null) {
-            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = "";
-        }
-        if(property.sourceBValue == null) {
-            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = "";
-        }
-
         if (property.transpose == 'lefttoright' && property.severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
             tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceAValue;
