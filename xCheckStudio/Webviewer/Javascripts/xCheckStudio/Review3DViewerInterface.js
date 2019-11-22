@@ -176,48 +176,90 @@ Review3DViewerInterface.prototype.highlightComponentsfromResult = function () {
 
 Review3DViewerInterface.prototype.unHighlightAll = function () {
     
-    var reviewManager = model.getCurrentReviewManager();
-    
+    // var reviewManager = model.getCurrentReviewManager();
+
     this.selectedNodeId = undefined;
-    this.selectedComponentId = undefined;
 
     var sourceAReviewViewerInterface = model.checks["comparison"]["sourceAViewer"];
     var sourceBReviewViewerInterface = model.checks["comparison"]["sourceBViewer"];
-
-    // highlight corresponding component in another viewer
-    if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
-        if (sourceBReviewViewerInterface !== undefined) {
-            sourceBReviewViewerInterface.unHighlightComponent();
-
-            sourceBReviewViewerInterface.selectedNodeId = undefined;
-            sourceBReviewViewerInterface.selectedComponentId = undefined;
-        }
-        else if (this.SelectedComponentRowFromSheetB !== undefined) {
-            // reset color of row
-            var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
-            obj = Object.keys(reviewManager.checkStatusArrayB)
-            var status = reviewManager.checkStatusArrayB[obj[0]][rowIndex]
-            model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedComponentRowFromSheetB, status);
-            this.SelectedComponentRowFromSheetB = undefined;
-        }
+    var sourceCReviewViewerInterface = model.checks["comparison"]["sourceCViewer"];
+    var sourceDReviewViewerInterface = model.checks["comparison"]["sourceDViewer"];
+    if (sourceAReviewViewerInterface) {
+        sourceAReviewViewerInterface.unHighlightComponent();
     }
-    else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
-        if (sourceAReviewViewerInterface !== undefined) {
-            sourceAReviewViewerInterface.unHighlightComponent();
-
-            sourceAReviewViewerInterface.selectedNodeId = undefined;
-            sourceAReviewViewerInterface.selectedComponentId = undefined;
-        }
-        else if (this.SelectedSheetRow !== undefined) {
-
-            // reset color of row
-            var rowIndex = this.SelectedSheetRow.rowIndex;
-            obj = Object.keys(reviewManager.checkStatusArrayA)
-            var status = reviewManager.checkStatusArrayA[obj[0]][rowIndex]
-            model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, status);
-            this.SelectedSheetRow = undefined;
-        }
+    if (sourceBReviewViewerInterface) {
+        sourceBReviewViewerInterface.unHighlightComponent();
     }
+    if (sourceCReviewViewerInterface) {
+        sourceCReviewViewerInterface.unHighlightComponent();
+    }
+    if (sourceDReviewViewerInterface) {
+        sourceDReviewViewerInterface.unHighlightComponent();
+    }
+    // // highlight corresponding component in another viewer
+    // if (this.ViewerOptions[0] === Comparison.ViewerAContainer) {
+    //     if (sourceBReviewViewerInterface !== undefined) {
+    //         sourceBReviewViewerInterface.unHighlightComponent();
+
+    //         sourceBReviewViewerInterface.selectedNodeId = undefined;            
+    //     }
+    //     else if (this.SelectedComponentRowFromSheetB !== undefined) {
+    //         // reset color of row
+    //         var rowIndex = this.SelectedComponentRowFromSheetB.rowIndex;
+    //         obj = Object.keys(reviewManager.checkStatusArrayB)
+    //         var status = reviewManager.checkStatusArrayB[obj[0]][rowIndex]
+    //         model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedComponentRowFromSheetB, status);
+    //         this.SelectedComponentRowFromSheetB = undefined;
+    //     }
+    // }
+    // else if (this.ViewerOptions[0] === Comparison.ViewerBContainer) {
+    //     if (sourceAReviewViewerInterface !== undefined) {
+    //         sourceAReviewViewerInterface.unHighlightComponent();
+
+    //         sourceAReviewViewerInterface.selectedNodeId = undefined;            
+    //     }
+    //     else if (this.SelectedSheetRow !== undefined) {
+
+    //         // reset color of row
+    //         var rowIndex = this.SelectedSheetRow.rowIndex;
+    //         obj = Object.keys(reviewManager.checkStatusArrayA)
+    //         var status = reviewManager.checkStatusArrayA[obj[0]][rowIndex]
+    //         model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, status);
+    //         this.SelectedSheetRow = undefined;
+    //     }
+    // }
+    // else if (this.ViewerOptions[0] === Comparison.ViewerCContainer) {
+    //     if (sourceCReviewViewerInterface !== undefined) {
+    //         sourceCReviewViewerInterface.unHighlightComponent();
+
+    //         sourceCReviewViewerInterface.selectedNodeId = undefined;
+    //     }
+    //     else if (this.SelectedSheetRow !== undefined) {
+
+    //         // reset color of row
+    //         var rowIndex = this.SelectedSheetRow.rowIndex;
+    //         obj = Object.keys(reviewManager.checkStatusArrayA)
+    //         var status = reviewManager.checkStatusArrayA[obj[0]][rowIndex]
+    //         model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, status);
+    //         this.SelectedSheetRow = undefined;
+    //     }
+    // }
+    // else if (this.ViewerOptions[0] === Comparison.ViewerDContainer) {
+    //     if (sourceDReviewViewerInterface !== undefined) {
+    //         sourceDReviewViewerInterface.unHighlightComponent();
+
+    //         sourceDReviewViewerInterface.selectedNodeId = undefined;
+    //     }
+    //     else if (this.SelectedSheetRow !== undefined) {
+
+    //         // reset color of row
+    //         var rowIndex = this.SelectedSheetRow.rowIndex;
+    //         obj = Object.keys(reviewManager.checkStatusArrayA)
+    //         var status = reviewManager.checkStatusArrayA[obj[0]][rowIndex]
+    //         model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, status);
+    //         this.SelectedSheetRow = undefined;
+    //     }
+    // }
 
     // restore highlightcolor of highlightedRow row in main review table
     var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
@@ -300,11 +342,14 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
 
+    if(!this.selectedNodeId)
+    {
+        return;
+    }
+
     this.selectedNodeId = undefined;
     this.highlightManager.clearSelection();
     this.Viewer.view.fitWorld();
-    // this.Viewer.view.setViewOrientation(Communicator.ViewOrientation.Front, Communicator.DefaultTransitionDuration);
-
 }
 
 Review3DViewerInterface.prototype.menu = function (x, y) {
@@ -349,7 +394,10 @@ Review3DViewerInterface.prototype.ChangeComponentColor = function (component, ov
     }
 }
 
-Review3DViewerInterface.prototype.highlightComponent = function (nodeIdString) {
+Review3DViewerInterface.prototype.highlightComponent = function (viewerContainer,
+    sheetName,
+    CurrentReviewTableRowData,
+    nodeIdString) {
 
     var nodeId = Number(nodeIdString);
     if (!nodeIdString ||

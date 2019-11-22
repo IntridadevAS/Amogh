@@ -687,6 +687,99 @@
             return;
         }   
    }    
+
+   function writeSourceCComplianceCheckStatistics()
+   {
+        global $projectName;
+        global $checkName;
+        try
+        {   
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceCComplianceCheckComponents");
+            
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceCComplianceCheckComponents", "SourceCComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceCComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
+                sourceCComplianceOK INTEGER default 0,
+                sourceCComplianceError INTEGER default 0,
+                sourceCComplianceWarning INTEGER default 0,
+                sourceCComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceCComplianceCheckStatistics(sourceCComplianceOK, sourceCComplianceError, sourceCComplianceWarning, 
+                    sourceCComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                    $statistics['error'], 
+                                    $statistics['warning'],                                 
+                                    $checkGroupsString ));  
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+    }  
+
+    function writeSourceDComplianceCheckStatistics()
+   {
+        global $projectName;
+        global $checkName;
+        try
+        {   
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceDComplianceCheckComponents");
+            
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceDComplianceCheckComponents", "SourceDComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceDComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
+                sourceDComplianceOK INTEGER default 0,
+                sourceDComplianceError INTEGER default 0,
+                sourceDComplianceWarning INTEGER default 0,
+                sourceDComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceDComplianceCheckStatistics(sourceDComplianceOK, sourceDComplianceError, sourceDComplianceWarning, 
+                    sourceDComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                    $statistics['error'], 
+                                    $statistics['warning'],                                 
+                                    $checkGroupsString ));  
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+    }
+
     
     function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
                                             $tableName,

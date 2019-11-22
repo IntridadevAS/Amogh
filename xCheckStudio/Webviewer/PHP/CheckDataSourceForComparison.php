@@ -1966,15 +1966,20 @@
             $checkCasePropSourceA = NULL;
             $checkCasePropSourceB = NULL;
             $checkCasePropSourceC = NULL;
-            // $checkCasePropSourceD = NULL;
+            $checkCasePropSourceD = NULL;
             
             // first source
             $srcAPropertyAttribute = getSourcePropertyNameProperty("a");
             $srcBPropertyAttribute = getSourcePropertyNameProperty("b");
             $srcCPropertyAttribute = NULL;
+            $srcDPropertyAttribute = NULL;
             if($totalSources > 2)
             {
                 $srcCPropertyAttribute = getSourcePropertyNameProperty("c");
+            }
+            if($totalSources > 3)
+            {
+                $srcDPropertyAttribute = getSourcePropertyNameProperty("d");
             }
 
             $firstPropertiesLowerCase = array();
@@ -2004,6 +2009,15 @@
                 $thirdPropertiesLowerCase = array_change_key_case($thirdComponentProperties, CASE_LOWER);    
             }
 
+            $fourthPropertiesLowerCase = array();   
+            if($fourthSourceComponent !== NULL && $fourthSourceProperties !== NULL)
+            {
+                $fourthComponentProperties =  $fourthSourceProperties[$fourthSourceComponent['id']];
+                // get key array in case insestive manner
+                // only keys are in lower case      
+                $fourthPropertiesLowerCase = array_change_key_case($fourthComponentProperties, CASE_LOWER);    
+            }
+
 
             for ($k = 0; $k < count($checkCaseMappingProperties); $k++) 
             {
@@ -2017,6 +2031,10 @@
                 if($totalSources > 2)
                 {
                     $checkCasePropSourceC = strtolower($checkCaseMappingProperty[$srcCPropertyAttribute]);  
+                }
+                if($totalSources > 3)
+                {
+                    $checkCasePropSourceD = strtolower($checkCaseMappingProperty[$srcDPropertyAttribute]);  
                 }
 
                 // $fourthPropertiesLowerCase = array_change_key_case($fourthComponentProperties, CASE_LOWER);    
@@ -2062,6 +2080,15 @@
                     $property3 =$thirdPropertiesLowerCase[$checkCasePropSourceC];
                     $property3Name = $property3['name'];                   
                     $property3Value = $property3["value"];
+                }
+
+                 // get third source property
+                 if ($checkCasePropSourceD !== NULL &&
+                 array_key_exists($checkCasePropSourceD, $fourthPropertiesLowerCase)) 
+                {
+                    $property4 =$fourthPropertiesLowerCase[$checkCasePropSourceD];
+                    $property4Name = $property4['name'];                   
+                    $property4Value = $property4["value"];
                 }
 
                 if($totalSources === 2)
@@ -2140,6 +2167,46 @@
                 }
                 else if($totalSources === 4)
                 {
+                    // compare properties
+                    if($checkCasePropSourceA !== NULL &&
+                    $checkCasePropSourceB !== NULL && 
+                    $checkCasePropSourceC !== NULL &&
+                    $checkCasePropSourceD !== NULL)
+                    {
+                        if (($property1Name == NULL || 
+                            $property1Value == "") &&
+                            ($property2Name == NULL || 
+                            $property2Value == "") ||
+                            ($property3Name == NULL || 
+                            $property3Value == "") ||
+                            ($property4Name == NULL || 
+                            $property4Value == "")) 
+                        {
+                            $severity = "No Value";
+                            $performCheck = false;                    
+                        }
+                        else 
+                        {
+                            if($property1Value == $property2Value && 
+                            $property1Value == $property3Value &&
+                            $property1Value == $property4Value) 
+                            {
+                                $severity = "OK";
+                            }
+                            else 
+                            {
+                                $severity = $checkCaseMappingProperty['Severity'];
+                            }
+
+                            $performCheck = true;                  
+                        }
+                    }
+                    else 
+                    {
+                        // one/all of the (second and third dataset)properties not mapped
+                        $severity = "Error";
+                        $performCheck = false;        
+                    }
                 }
 
                 $description =  $checkCaseMappingProperty['Comment'];

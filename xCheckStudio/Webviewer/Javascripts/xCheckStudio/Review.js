@@ -3,6 +3,9 @@ var comparisons;
 var compliances;
 var sourceAComparisonHierarchy = undefined;
 var sourceBComparisonHierarchy = undefined;
+var sourceCComparisonHierarchy = undefined;
+var sourceDComparisonHierarchy = undefined;
+
 
 var comparisonReviewManager;
 var complianceReviewManager;
@@ -110,6 +113,12 @@ function initReviewModule() {
                         else if (key == 'SourceBComparisonComponentsHierarchy') {
                             sourceBComparisonHierarchy = checkResults[key];
                         }
+                        else if (key == 'SourceCComparisonComponentsHierarchy') {
+                            sourceCComparisonHierarchy = checkResults[key];
+                        }
+                        else if (key == 'SourceDComparisonComponentsHierarchy') {
+                            sourceDComparisonHierarchy = checkResults[key];
+                        }
                     }
 
                     return resolve(true);
@@ -149,7 +158,7 @@ function populateCheckResults(comparison,
         },
         success: function (msg) {
             var viewerOptions = JSON.parse(msg);
-            
+
             var classWiseComponents = {};
             if (viewerOptions['a']['endPointUri'] === undefined) {
 
@@ -164,12 +173,12 @@ function populateCheckResults(comparison,
                         'CheckName': checkinfo.checkname
                     },
                     success: function (msg) {
-                        if (msg != 'fail') {                           
+                        if (msg != 'fail') {
                             classWiseComponents['a'] = sourceAClassWiseComponents = JSON.parse(msg);
                         }
                     }
                 });
-            }            
+            }
 
             if (viewerOptions['b']['endPointUri'] === undefined) {
                 // this ajax call is synchronous
@@ -212,7 +221,29 @@ function populateCheckResults(comparison,
                     }
                 });
             }
-           
+
+            if (('d' in viewerOptions) && viewerOptions['d']['endPointUri'] === undefined) {
+                // this ajax call is synchronous
+
+                // get class wise properties for excel and other 1D datasources
+                $.ajax({
+                    url: 'PHP/ClasswiseComponentsReader.php',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'Source': "SourceD",
+                        'ProjectName': projectinfo.projectname,
+                        'CheckName': checkinfo.checkname
+                    },
+                    success: function (msg) {
+                        if (msg != 'fail' && msg != "") {
+                            classWiseComponents['d'] = JSON.parse(msg);
+                        }
+                    }
+                });
+            }
+
+
 
             if (comparison) {
                 loadComparisonData(comparison,
@@ -309,7 +340,7 @@ function loadComparisonData(comparisonCheckGroups,
     comparisonData["detailedInfoTable"] = checkPropertiesTable;
 
     //Save ComponentId Vs ComponentData
-    var componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
+    var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
     comparisonData["SourceAcomponentIdVsComponentData"] = componentIdVsComponentData;
 
     var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
@@ -328,7 +359,7 @@ function loadComparisonData(comparisonCheckGroups,
 
 function GetComponentIdVsComponentData(sourceComponents) {
     var componentIdVsComponentData = {};
-    for(var i = 0; i < sourceComponents.length; i++) {
+    for (var i = 0; i < sourceComponents.length; i++) {
         var component = sourceComponents[i];
         componentIdVsComponentData[Number(component.id)] = component;
     }
@@ -373,17 +404,17 @@ function loadComplianceData(compliance,
 
     // save componentId vs ComponentData 
     var componentIdVsComponentData;
-    if(model.selectedCompliance.id == "a") {
-        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
+    if (model.selectedCompliance.id == "a") {
+        componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceAComponents);
     }
-    else if(model.selectedCompliance.id == "b") {
-        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
+    else if (model.selectedCompliance.id == "b") {
+        componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceBComponents);
     }
-    else if(model.selectedCompliance.id == "c") {
-        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceCComponents);
+    else if (model.selectedCompliance.id == "c") {
+        componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceCComponents);
     }
-    else if(model.selectedCompliance.id == "d") {
-        componentIdVsComponentData =  this.GetComponentIdVsComponentData(checkResults.sourceDComponents);
+    else if (model.selectedCompliance.id == "d") {
+        componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceDComponents);
     }
 
     complianceData["ComponentIdVsComponentData"] = componentIdVsComponentData;
@@ -391,7 +422,7 @@ function loadComplianceData(compliance,
 }
 
 function isComparisonPerformed() {
-    if(checkResults && 'Comparisons' in checkResults) {
+    if (checkResults && 'Comparisons' in checkResults) {
         return true;
     }
     return false;
@@ -399,27 +430,27 @@ function isComparisonPerformed() {
 
 function isComplianceAPerformed() {
 
-    if(checkResults && 'sourceInfo' in checkResults){
+    if (checkResults && 'sourceInfo' in checkResults) {
         sourceAFileName = checkResults["sourceInfo"]["sourceAFileName"];
 
         for (var sourceId in model.files) {
             var file = model.files[sourceId];
-            if(sourceAFileName == file.fileName)
-            return file["compliance"];
+            if (sourceAFileName == file.fileName)
+                return file["compliance"];
         }
     }
     return false;
 }
 
 function isComplianceBPerformed() {
-    if(checkResults && 'sourceInfo' in checkResults){
+    if (checkResults && 'sourceInfo' in checkResults) {
 
         sourceBFileName = checkResults["sourceInfo"]["sourceBFileName"];
 
         for (var sourceId in model.files) {
             var file = model.files[sourceId];
-            if(sourceBFileName == file.fileName)
-            return file["compliance"];
+            if (sourceBFileName == file.fileName)
+                return file["compliance"];
         }
     }
 
@@ -429,15 +460,15 @@ function isComplianceBPerformed() {
 
 function isComplianceCPerformed() {
 
-    if(checkResults && 'sourceInfo' in checkResults){
+    if (checkResults && 'sourceInfo' in checkResults) {
 
         sourceCFileName = checkResults["sourceInfo"]["sourceCFileName"];
 
-        if(sourceCFileName) {
+        if (sourceCFileName) {
             for (var sourceId in model.files) {
-            var file = model.files[sourceId];
-            if(sourceCFileName == file.fileName)
-            return file["compliance"];
+                var file = model.files[sourceId];
+                if (sourceCFileName == file.fileName)
+                    return file["compliance"];
             }
         }
     }
@@ -447,14 +478,14 @@ function isComplianceCPerformed() {
 
 
 function isComplianceDPerformed() {
-    if(checkResults && 'sourceInfo' in checkResults){
+    if (checkResults && 'sourceInfo' in checkResults) {
 
         sourceDFileName = checkResults["sourceInfo"]["sourceDFileName"];
-        if(sourceDFileName) {
+        if (sourceDFileName) {
             for (var sourceId in model.files) {
                 var file = model.files[sourceId];
-                if(sourceDFileName == file.fileName)
-                return file["compliance"];
+                if (sourceDFileName == file.fileName)
+                    return file["compliance"];
             }
         }
     }
@@ -468,7 +499,7 @@ function getDataSourceFiles() {
             continue;
         }
         if (key == 'sourceInfo') {
-            return checkResults["sourceInfo"];  
+            return checkResults["sourceInfo"];
         }
     }
 }
@@ -546,7 +577,7 @@ function populateComparisonModelBrowser(comparison) {
                                     modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
                                     var comparisonData = model.checks["comparison"];
-                                
+
                                     // viewer
                                     var viewerInterface = new ModelBrowser1DViewer("a", source, sourceAClassWiseComponents, "compare1");
                                     // comparisonData["sourceAViewer"] = viewerInterface;     
@@ -573,7 +604,7 @@ function populateComparisonModelBrowser(comparison) {
 
                         // model browser
                         var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);                    
+                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
                         // viewer
                         var options = ["compare2", viewerOptions['b']['endPointUri']];
@@ -612,9 +643,9 @@ function populateComparisonModelBrowser(comparison) {
 
                                     // viewer
                                     var viewerInterface = new ModelBrowser1DViewer("b", source, sourceBClassWiseComponents, "compare2");
-                                   
+
                                     // selection manager
-                                    var selectionManager = new ReviewModelBrowserSelectionManager();        
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();
 
                                     var browserComponents = {};
                                     browserComponents["browser"] = modelBrowser;
@@ -628,9 +659,133 @@ function populateComparisonModelBrowser(comparison) {
                         });
                     }
                 }
-            }           
+                else if (checkResults.sourceInfo.sourceCFileName === comparison.sources[i]) {
+                    var source = checkResults.sourceInfo.sourceCFileName;
+
+                    if (viewerOptions['c']['endPointUri'] !== undefined) {
+
+                        // model browser
+                        var modelBrowser = new ReviewComparison3DModelBrowser("c", source, comparison);
+                        modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
+
+                        // viewer
+                        var options = ["compare3", viewerOptions['c']['endPointUri']];
+                        var viewerInterface = new ModelBrowser3DViewer("c", source, options);
+                        viewerInterface.setupViewer(550, 280);
+
+                        // selection manager
+                        var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                        var browserComponents = {};
+                        browserComponents["browser"] = modelBrowser;
+                        browserComponents["viewer"] = viewerInterface;
+                        browserComponents["selectionManager"] = selectionManager;
+
+                        var comparisonData = model.checks["comparison"];
+                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceCFileName] = browserComponents;
+                    }
+                    else {
+                        // get class wise properties for excel and other 1D datasources               
+                        $.ajax({
+                            url: 'PHP/ClasswiseComponentsReader.php',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                'Source': "SourceC",
+                                'ProjectName': projectinfo.projectname,
+                                'CheckName': checkinfo.checkname
+                            },
+                            success: function (msg) {
+                                if (msg != 'fail') {
+                                    var sourceCClassWiseComponents = JSON.parse(msg);
+
+                                    // model browser
+                                    var modelBrowser = new ReviewComparison1DModelBrowser("c", source, comparison);
+                                    modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
+
+                                    // viewer
+                                    var viewerInterface = new ModelBrowser1DViewer("c", source, sourceCClassWiseComponents, "compare3");
+
+                                    // selection manager
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                                    var browserComponents = {};
+                                    browserComponents["browser"] = modelBrowser;
+                                    browserComponents["viewer"] = viewerInterface;
+                                    browserComponents["selectionManager"] = selectionManager;
+
+                                    var comparisonData = model.checks["comparison"];
+                                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceCFileName] = browserComponents;
+                                }
+                            }
+                        });
+                    }
+                }
+                else if (checkResults.sourceInfo.sourceDFileName === comparison.sources[i]) {
+                    var source = checkResults.sourceInfo.sourceDFileName;
+
+                    if (viewerOptions['d']['endPointUri'] !== undefined) {
+
+                        // model browser
+                        var modelBrowser = new ReviewComparison3DModelBrowser("d", source, comparison);
+                        modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
+
+                        // viewer
+                        var options = ["compare4", viewerOptions['d']['endPointUri']];
+                        var viewerInterface = new ModelBrowser3DViewer("d", source, options);
+                        viewerInterface.setupViewer(550, 280);
+
+                        // selection manager
+                        var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                        var browserComponents = {};
+                        browserComponents["browser"] = modelBrowser;
+                        browserComponents["viewer"] = viewerInterface;
+                        browserComponents["selectionManager"] = selectionManager;
+
+                        var comparisonData = model.checks["comparison"];
+                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceDFileName] = browserComponents;
+                    }
+                    else {
+                        // get class wise properties for excel and other 1D datasources               
+                        $.ajax({
+                            url: 'PHP/ClasswiseComponentsReader.php',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                'Source': "SourceD",
+                                'ProjectName': projectinfo.projectname,
+                                'CheckName': checkinfo.checkname
+                            },
+                            success: function (msg) {
+                                if (msg != 'fail') {
+                                    var sourceDClassWiseComponents = JSON.parse(msg);
+
+                                    // model browser
+                                    var modelBrowser = new ReviewComparison1DModelBrowser("d", source, comparison);
+                                    modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
+
+                                    // viewer
+                                    var viewerInterface = new ModelBrowser1DViewer("d", source, sourceDClassWiseComponents, "compare4");
+
+                                    // selection manager
+                                    var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                                    var browserComponents = {};
+                                    browserComponents["browser"] = modelBrowser;
+                                    browserComponents["viewer"] = viewerInterface;
+                                    browserComponents["selectionManager"] = selectionManager;
+
+                                    var comparisonData = model.checks["comparison"];
+                                    comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceDFileName] = browserComponents;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         }
-    });    
+    });
 }
 
 function populateComplianceModelBrowser(compliance) {
@@ -711,7 +866,7 @@ function populateComplianceModelBrowser(compliance) {
                                 modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
                                 // // viewer
-                                var viewerInterface = new ModelBrowser1DViewer(srcId, compliance.source, classWiseComponents, Compliance.ViewerContainer);                               
+                                var viewerInterface = new ModelBrowser1DViewer(srcId, compliance.source, classWiseComponents, Compliance.ViewerContainer);
 
                                 // selection manager
                                 var selectionManager = new ReviewModelBrowserSelectionManager();

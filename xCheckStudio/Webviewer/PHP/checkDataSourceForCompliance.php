@@ -6,7 +6,7 @@
                !isset($_POST['SelectedCompoents'] ) ||
                !isset($_POST['ProjectName']) ||
                !isset($_POST['CheckName']) ||
-               !isset($_POST['ContainerId'] ) )
+               !isset($_POST['SourceId'] ) )
             {
                 echo 'fail';
                 return;
@@ -33,16 +33,15 @@
     
         $CheckCaseType = json_decode($_POST['CheckCaseType'],true);
         $SelectedComponents = json_decode($_POST['SelectedCompoents'],true);
-        $ContainerId = $_POST['ContainerId'] ;       
+        $SourceId = $_POST['SourceId'] ;       
        
         $Source= NULL;
         $CheckGroupsTable = NULL;
         $CheckComponentsTable = NULL;
         $CheckPropertiesTable = NULL;
 
-        $NotCheckedComponentsTable = NULL;
-        //$NotMatchedComponentsTable = NULL;       
-        if( $ContainerId =='visualizerA')
+        $NotCheckedComponentsTable = NULL;       
+        if( $SourceId =='a')
         {
             $Source="SourceA";
 
@@ -50,10 +49,9 @@
             $CheckComponentsTable = "SourceAComplianceCheckComponents";
             $CheckPropertiesTable = "SourceAComplianceCheckProperties";
 
-            $NotCheckedComponentsTable = "SourceAComplianceNotCheckedComponents";
-           // $NotMatchedComponentsTable = "SourceAComplianceNotMatchedComponents";           
+            $NotCheckedComponentsTable = "SourceAComplianceNotCheckedComponents";           
         }
-        else if($ContainerId == 'visualizerB')
+        else if($SourceId == 'b')
         {
             $Source="SourceB";
 
@@ -62,7 +60,26 @@
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
 
             $NotCheckedComponentsTable = "SourceBComplianceNotCheckedComponents";
-            //$NotMatchedComponentsTable = "SourceBComplianceNotMatchedComponents";
+        }
+        else if($SourceId == 'c')
+        {
+            $Source="SourceC";
+
+            $CheckGroupsTable = "SourceCComplianceCheckGroups";
+            $CheckComponentsTable = "SourceCComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceCComplianceCheckProperties";
+
+            $NotCheckedComponentsTable = "SourceCComplianceNotCheckedComponents";            
+        }
+        else if($SourceId == 'd')
+        {
+            $Source="SourceD";
+
+            $CheckGroupsTable = "SourceDComplianceCheckGroups";
+            $CheckComponentsTable = "SourceDComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceDComplianceCheckProperties";
+
+            $NotCheckedComponentsTable = "SourceDComplianceNotCheckedComponents";           
         }
         else 
         {
@@ -91,14 +108,22 @@
                                   $CheckPropertiesTable);
 
 
-        if( $ContainerId =='visualizerA')
+        if( $SourceId == 'a')
         {
             writeSourceAComplianceCheckStatistics();
         }
-        else if($ContainerId == 'visualizerB')
+        else if( $SourceId == 'b')
         {
             writeSourceBComplianceCheckStatistics();
-        }                                                
+        }  
+        else if( $SourceId == 'c')
+        {
+            writeSourceCComplianceCheckStatistics();
+        }
+        else if( $SourceId == 'd')
+        {
+            writeSourceDComplianceCheckStatistics();
+        }                                              
 
         // get source components
         function getSourceComponents()
@@ -128,6 +153,16 @@
                 {
                     $componentTableName = 'SourceBComponents';
                     $propertiesTableName = 'SourceBProperties';
+                }
+                else if($Source=="SourceC")
+                {
+                    $componentTableName = 'SourceCComponents';
+                    $propertiesTableName = 'SourceCProperties';
+                }
+                else if($Source=="SourceD")
+                {
+                    $componentTableName = 'SourceDComponents';
+                    $propertiesTableName = 'SourceDProperties';
                 }
                 else
                 {
@@ -167,7 +202,7 @@
             }                
             catch(Exception $e) 
             {        
-                echo "fail"; 
+                echo "fail";                 
                 return;
             }                
         } 
@@ -612,12 +647,20 @@
                     $id  = $sourceComponent['id'];
                 }
                 $checkComponent = new CheckComponent($sourceComponent['name'],
-                                                     "",
+                                                     NULL,
+                                                     NULL,
+                                                     NULL,
                                                     $sourceComponent['subclass'],
-                                                    "",
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
                                                     $nodeId ,
-                                                    "",
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
                                                     $id,
+                                                    NULL,
+                                                    NULL,
                                                     NULL);
 
                 $checkComponentGroup->AddCheckComponent($checkComponent);
@@ -658,12 +701,17 @@
             
                             $checkProperty = new CheckProperty($propertyName,
                                                                 $propertyValue,
-                                                                "",
-                                                                "",
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
+                                                                NULL,
                                                                 $severity,
                                                                 $performCheck,
                                                                 $checkCaseMappingProperty['Comment'],
                                                                 $checkCaseMappingProperty['RuleString']);
+                                                               
                             $checkProperty->Result = $result;
                         
                             $checkComponent->AddCheckProperty($checkProperty);
@@ -691,13 +739,21 @@
             }
 
             $checkComponent = new CheckComponent($sourceComponent['name'],
-                                        "",
-                                    $sourceComponent['subclass'],
-                                    "",
-                                    $nodeId ,
-                                    "",
-                                    $id,
-                                    NULL);
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        $sourceComponent['subclass'],
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        $nodeId ,
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        $id,
+                                        NULL,
+                                        NULL,
+                                        NULL);           
 
             if(!empty($CheckComponentsGroups) &&
                 array_key_exists('Undefined', $CheckComponentsGroups))
@@ -716,12 +772,16 @@
             {                       
                 $checkProperty = new CheckProperty($property["name"],
                                                     $property["value"],
-                                                    "",
-                                                    "",
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
+                                                    NULL,
                                                     "undefined",
                                                     NULL,
                                                     NULL,
-                                                    NULL);
+                                                    NULL);                      
 
                 $checkProperty->PerformCheck = false;
                 $checkComponent->AddCheckProperty($checkProperty);

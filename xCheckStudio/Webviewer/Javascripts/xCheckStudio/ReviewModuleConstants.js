@@ -47,8 +47,12 @@ const ComparisonPropertyColumns = {
     SourceAValue: 2,
     SourceBValue: 3,
     SourceBName: 4,
-    Status: 5,
-    PropertyId: 6   
+    SourceCName: 5,
+    SourceCValue: 6,    
+    SourceDValue: 7,
+    SourceDName: 8,
+    Status: 9,
+    PropertyId: 10   
 }
 
 // column names
@@ -58,6 +62,10 @@ const ComparisonPropertyColumnNames = {
     SourceAValue: "ValueA",
     SourceBValue: "ValueB",
     SourceBName: "PropertyB",
+    SourceCName: "PropertyC",
+    SourceCValue: "ValueC",    
+    SourceDValue: "ValueD",
+    SourceDName: "PropertyD",
     Status: "Status",
     PropertyId: "PropertyId"
 }

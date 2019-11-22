@@ -140,7 +140,17 @@
             // source b compliance result tables table          
             CopySourceBComplianceCheckGroups($dbh, $tempDbh);
             CopySourceBComplianceCheckComponents($dbh, $tempDbh);
-            CopySourceBComplianceCheckProperties($dbh, $tempDbh);               
+            CopySourceBComplianceCheckProperties($dbh, $tempDbh);  
+            
+            // source C compliance result tables table          
+            CopySourceCComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceCComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceCComplianceCheckProperties($dbh, $tempDbh);  
+
+            // source d compliance result tables table          
+            CopySourceDComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceDComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceDComplianceCheckProperties($dbh, $tempDbh); 
 
             // save check result statistics
             CopyCheckStatistics($dbh, $tempDbh);
@@ -650,6 +660,218 @@
                                     $row['sourceBComplianceCheckGroupsInfo']));
             }   
         }     
+    }
+
+    function CopySourceDComplianceCheckGroups($fromDbh, $toDbh)
+    {
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckGroups");
+        if($selectResults) 
+        {
+
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceDComplianceCheckGroups(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                componentClass TEXT NOT NULL,
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
+            $toDbh->exec($command);  
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['componentClass'], 
+                                        $row['componentCount'], 
+                                        $row['categoryStatus']));
+            }   
+        }
+    }
+
+    function CopySourceDComplianceCheckComponents($fromDbh, $toDbh)
+    {  
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckComponents");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
+            $toDbh->exec($command);    
+            $command = 'CREATE TABLE SourceDComplianceCheckComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,                
+                subComponentClass TEXT,
+                status TEXT,
+                accepted TEXT,
+                nodeId TEXT,
+                sourceId TEXT,
+                ownerGroup INTEGER NOT NULL)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckComponents(id, name, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['subComponentClass'],
+                                        $row['status'], 
+                                        $row['accepted'], 
+                                        $row['nodeId'], 
+                                        $row['sourceId'], 
+                                        $row['ownerGroup']));
+            }   
+        }  
+    }
+
+    function CopySourceDComplianceCheckProperties($fromDbh, $toDbh)
+    {   
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckProperties");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceDComplianceCheckProperties(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,              
+                value TEXT,
+                result TEXT,
+                severity TEXT,
+                accepted TEXT,
+                performCheck TEXT,
+                description TEXT,
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckProperties(id, name, value, result,
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['value'],
+                                        $row['result'], 
+                                        $row['severity'], 
+                                        $row['accepted'], 
+                                        $row['performCheck'], 
+                                        $row['description'], 
+                                        $row['ownerComponent'],
+                                        $row['rule']));
+            }   
+        }
+    }
+
+    function CopySourceCComplianceCheckGroups($fromDbh, $toDbh)
+    {
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckGroups");
+        if($selectResults) 
+        {
+
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceCComplianceCheckGroups(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                componentClass TEXT NOT NULL,
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
+            $toDbh->exec($command);  
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['componentClass'], 
+                                        $row['componentCount'], 
+                                        $row['categoryStatus']));
+            }   
+        }
+    }
+
+    function CopySourceCComplianceCheckComponents($fromDbh, $toDbh)
+    {  
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckComponents");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+            $toDbh->exec($command);    
+            $command = 'CREATE TABLE SourceCComplianceCheckComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,                
+                subComponentClass TEXT,
+                status TEXT,
+                accepted TEXT,
+                nodeId TEXT,
+                sourceId TEXT,
+                ownerGroup INTEGER NOT NULL)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckComponents(id, name, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['subComponentClass'],
+                                        $row['status'], 
+                                        $row['accepted'], 
+                                        $row['nodeId'], 
+                                        $row['sourceId'], 
+                                        $row['ownerGroup']));
+            }   
+        }  
+    }
+
+    function CopySourceCComplianceCheckProperties($fromDbh, $toDbh)
+    {   
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckProperties");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceCComplianceCheckProperties(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,              
+                value TEXT,
+                result TEXT,
+                severity TEXT,
+                accepted TEXT,
+                performCheck TEXT,
+                description TEXT,
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckProperties(id, name, value, result,
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['value'],
+                                        $row['result'], 
+                                        $row['severity'], 
+                                        $row['accepted'], 
+                                        $row['performCheck'], 
+                                        $row['description'], 
+                                        $row['ownerComponent'],
+                                        $row['rule']));
+            }   
+        }
     }
 
     function CopySourceBComplianceCheckGroups($fromDbh, $toDbh)
