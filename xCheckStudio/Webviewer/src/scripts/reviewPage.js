@@ -309,7 +309,9 @@ let viewTabs = {
       populateCheckResults(requiredComparison,
         undefined,
         sourceAComparisonHierarchy,
-        sourceBComparisonHierarchy);
+        sourceBComparisonHierarchy,
+        sourceCComparisonHierarchy,
+        sourceDComparisonHierarchy);
 
     }
 
@@ -398,6 +400,8 @@ let viewTabs = {
         // populate check results
         populateCheckResults(undefined,
           compliance,
+          undefined,
+          undefined,
           undefined,
           undefined);
 
@@ -645,4 +649,133 @@ function clearData() {
       currentCheckData["viewer"] = null;
     }
   }
+}
+
+function getDataSourceOrderInCheckcase() {
+  var dataSourceOrderInCheckCase = {};
+
+  var checkCaseData = JSON.parse(checkResults.checkcaseInfo.checkCaseData);
+  var sourceTypesFromCheckCase = checkCaseData.CheckCase.SourceTypes;
+
+  var sourcesTraversed = [];
+  if ("sourceAType" in checkResults.sourceInfo &&
+    checkResults.sourceInfo["sourceAType"]) {
+
+    if ('sourceA' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceA') &&
+      sourceTypesFromCheckCase['sourceA'].toLowerCase() === checkResults.sourceInfo["sourceAType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["a"] = 1;
+      sourcesTraversed.push('sourceA');
+    }
+    else if ('sourceB' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceB') &&
+      sourceTypesFromCheckCase['sourceB'].toLowerCase() === checkResults.sourceInfo["sourceAType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["a"] = 2;
+      sourcesTraversed.push('sourceB');
+    }
+    else if ('sourceC' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceC') &&
+      sourceTypesFromCheckCase['sourceC'].toLowerCase() === checkResults.sourceInfo["sourceAType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["a"] = 3;
+      sourcesTraversed.push('sourceC');
+    }
+    else if ('sourceD' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceD') &&
+      sourceTypesFromCheckCase['sourceD'].toLowerCase() === checkResults.sourceInfo["sourceAType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["a"] = 4;
+      sourcesTraversed.push('sourceD');
+    }
+  }
+
+  if ("sourceBType" in checkResults.sourceInfo &&
+    checkResults.sourceInfo["sourceBType"]) {
+
+    if ('sourceA' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceA') &&
+      sourceTypesFromCheckCase['sourceA'].toLowerCase() === checkResults.sourceInfo["sourceBType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["b"] = 1;
+      sourcesTraversed.push('sourceA');
+    }
+    else if ('sourceB' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceB') &&
+      sourceTypesFromCheckCase['sourceB'].toLowerCase() === checkResults.sourceInfo["sourceBType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["b"] = 2;
+      sourcesTraversed.push('sourceB');
+    }
+    else if ('sourceC' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceC') &&
+      sourceTypesFromCheckCase['sourceC'].toLowerCase() === checkResults.sourceInfo["sourceBType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["b"] = 3;
+      sourcesTraversed.push('sourceC');
+    }
+    else if ('sourceD' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceD') &&
+      sourceTypesFromCheckCase['sourceD'].toLowerCase() === checkResults.sourceInfo["sourceBType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["b"] = 4;
+      sourcesTraversed.push('sourceD');
+    }
+
+  }
+
+  if ("sourceCType" in checkResults.sourceInfo &&
+    checkResults.sourceInfo["sourceCType"]) {
+
+    if ('sourceA' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceA') &&
+      sourceTypesFromCheckCase['sourceA'].toLowerCase() === checkResults.sourceInfo["sourceCType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["c"] = 1;
+      sourcesTraversed.push('sourceA');
+    }
+    else if ('sourceB' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceB') &&
+      sourceTypesFromCheckCase['sourceB'].toLowerCase() === checkResults.sourceInfo["sourceCType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["c"] = 2;
+      sourcesTraversed.push('sourceB');
+    }
+    else if ('sourceC' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceC') &&
+      sourceTypesFromCheckCase['sourceC'].toLowerCase() === checkResults.sourceInfo["sourceCType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["c"] = 3;
+      sourcesTraversed.push('sourceC');
+    }
+    else if ('sourceD' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceD') &&
+      sourceTypesFromCheckCase['sourceD'].toLowerCase() === checkResults.sourceInfo["sourceCType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["c"] = 4;
+      sourcesTraversed.push('sourceD');
+    }
+
+  }
+
+  if ("sourceDType" in checkResults.sourceInfo &&
+    checkResults.sourceInfo["sourceDType"]) {
+
+    if ('sourceA' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceA') &&
+      sourceTypesFromCheckCase['sourceA'].toLowerCase() === checkResults.sourceInfo["sourceDType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["d"] = 1;
+      sourcesTraversed.push('sourceA');
+    }
+    else if ('sourceB' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceB') &&
+      sourceTypesFromCheckCase['sourceB'].toLowerCase() === checkResults.sourceInfo["sourceDType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["d"] = 2;
+      sourcesTraversed.push('sourceB');
+    }
+    else if ('sourceC' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceC') &&
+      sourceTypesFromCheckCase['sourceC'].toLowerCase() === checkResults.sourceInfo["sourceDType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["d"] = 3;
+      sourcesTraversed.push('sourceC');
+    }
+    else if ('sourceD' in sourceTypesFromCheckCase &&
+      !sourcesTraversed.includes('sourceD') &&
+      sourceTypesFromCheckCase['sourceD'].toLowerCase() === checkResults.sourceInfo["sourceDType"].toLowerCase()) {
+      dataSourceOrderInCheckCase["d"] = 4;
+      sourcesTraversed.push('sourceD');
+    }
+
+  }
+
+  return dataSourceOrderInCheckCase;
 }

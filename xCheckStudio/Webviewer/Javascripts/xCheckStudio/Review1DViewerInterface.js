@@ -48,6 +48,32 @@ Review1DViewerInterface.prototype.FirstViewerExists = function () {
     return false;
 }
 
+Review1DViewerInterface.prototype.highlightComponent = function (viewerContainer,
+    sheetName,
+    CurrentReviewTableRowData,
+    nodeIdString) {
+
+    // unhighlight last selected component
+    this.unHighlightComponent();
+
+    if ((this.Id === "a" &&
+        (!CurrentReviewTableRowData.SourceAId || CurrentReviewTableRowData.SourceAId == "")) ||
+        (this.Id === "b" &&
+            (!CurrentReviewTableRowData.SourceBId || CurrentReviewTableRowData.SourceBId == "")) ||
+        (this.Id === "c" &&
+            (!CurrentReviewTableRowData.SourceCId || CurrentReviewTableRowData.SourceCId == "")) ||
+        (this.Id === "d" &&
+            (!CurrentReviewTableRowData.SourceDId || CurrentReviewTableRowData.SourceDId == ""))) {
+
+        return;
+    }
+
+    this.ShowSheetDataInViewer(viewerContainer,
+        sheetName,
+        CurrentReviewTableRowData,
+        nodeIdString);
+}
+
 Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContainer,
     sheetName,
     CurrentReviewTableRowData) {
@@ -171,34 +197,35 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
 
     this.Destroy(viewerContainer.replace("#", ""));
 
-    $(function () {
+    // $(function () {
 
-        $(viewerContainer).dxDataGrid({
-            dataSource: tableData,
-            columns: columnHeaders,
-            showBorders: true,
-            showRowLines: true,
-            allowColumnResizing : true,
-            height: "100%",
-            width: "100%",
-            hoverStateEnabled: true,
-            filterRow: {
-                visible: true
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            paging: { enabled: false },
-            onContentReady: function(e) {
-                this.SelectedSheetRow = undefined;
-                _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
-            },
-            onRowClick: function(e) {
-                _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
-            }
+    $(viewerContainer).dxDataGrid({
+        dataSource: tableData,
+        columns: columnHeaders,
+        showBorders: true,
+        showRowLines: true,
+        allowColumnResizing: true,
+        height: "100%",
+        width: "100%",
+        hoverStateEnabled: true,
+        filterRow: {
+            visible: true
+        },
+        scrolling: {
+            mode: "standard"
+        },
+        paging: { enabled: false },
+        deferRendering: true,
+        onContentReady: function (e) {
+            this.SelectedSheetRow = undefined;
+            _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
+        },
+        onRowClick: function (e) {
+            _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
+        }
 
-        });
     });
+    // });
 };
 
 Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer,
@@ -212,6 +239,12 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     }
     else if (this.Id === "b") {
         selectedComponentName = reviewTableRowData.SourceB;
+    }
+    else if (this.Id === "c") {
+        selectedComponentName = reviewTableRowData.SourceC;
+    }
+    else if (this.Id === "d") {
+        selectedComponentName = reviewTableRowData.SourceD;
     }
 
     var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
@@ -231,6 +264,12 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
             }
             else if (this.Id === "b") {
                 sourceComponentName = currentReviewTableRowData.sourceBName;
+            }
+            else if (this.Id === "c") {
+                sourceComponentName = currentReviewTableRowData.sourceCName;
+            }
+            else if (this.Id === "d") {
+                sourceComponentName = currentReviewTableRowData.sourceDName;
             }
         }
         else {
@@ -287,6 +326,9 @@ Review1DViewerInterface.prototype.OnViewerRowClicked = function (row, viewerCont
     if (this.SelectedSheetRow === row) {
         return;
     }
+
+    // unhighlight last selected component
+    this.unHighlightComponent();
 
     // highlight check result component row
     this.HighlightRowInMainReviewTable(row, viewerContainer);
@@ -368,6 +410,12 @@ Review1DViewerInterface.prototype.GetRowAndExpandAccordion = function(groupId, c
             else if (this.Id === "b") {
                 name = row.cells[ComparisonColumns.SourceBName].innerText;
             }
+            else if (this.Id === "c") {
+                name = row.cells[ComparisonColumns.SourceCName].innerText;
+            }
+            else if (this.Id === "d") {
+                name = row.cells[ComparisonColumns.SourceDName].innerText;
+            }
         }
         else {
             name = row.cells[ComplianceColumns.SourceName].innerText;
@@ -422,8 +470,13 @@ Review1DViewerInterface.prototype.GetCurrentSheetInViewer = function () {
 
 Review1DViewerInterface.prototype.unhighlightSelectedSheetRowInviewer = function (checkStatusArray,
     currentRow) {
-    var rowIndex = currentRow.rowIndex;
+   
     obj = Object.keys(checkStatusArray)
+    if (obj.length === 0 || !(obj[0] in checkStatusArray)) {
+        return;
+    }
+
+    var rowIndex = currentRow.rowIndex;
     var status = checkStatusArray[obj[0]][rowIndex]
     if (status !== undefined) {
         model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
@@ -444,6 +497,15 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
     }
     else if (this.Id === "b") {
         selectedComponentName = currentReviewTableRowData.SourceB;
+    }
+    else if (this.Id === "c") {
+        selectedComponentName = currentReviewTableRowData.SourceC;
+    }
+    else if (this.Id === "d") {
+        selectedComponentName = currentReviewTableRowData.SourceD;
+    }
+    else {
+        return;
     }
 
     //var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
@@ -483,17 +545,13 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
             this.HighlightSheetDataRow(viewerContainer, row);
             // scroll to rowElement
             dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});
+
+            break;
         }
     }
 }
 
-Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContainer, row) {
-    // if (containerId === Comparison.ViewerAContainer) {
-    if (this.SelectedSheetRow) {
-        this.unhighlightSelectedSheetRowInviewer(this.CheckStatusArray,
-            this.SelectedSheetRow);
-    }
-
+Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContainer, row) { 
     this.SelectedSheetRow = row;
 
     model.getCurrentSelectionManager().ApplyHighlightColor(this.SelectedSheetRow);
@@ -503,11 +561,6 @@ Review1DViewerInterface.prototype.HighlightSheetDataRow = function (viewerContai
         containerId = "#" + viewerContainer;
     }
     $(containerId).dxDataGrid("instance").getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
-    //var sheetDataTable1 = containerChildren[0];
-    // var scrollTable = document.getElementById(viewerContainer + "_table_scroll");
-    // if (scrollTable) {
-    //     scrollTable.scrollTop = row.offsetTop - row.offsetHeight;
-    // }
 }
 
 Review1DViewerInterface.prototype.Destroy = function (viewerContainer) {

@@ -438,6 +438,13 @@ SCManager.prototype.AddComponentsToDB = function () {
     else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerb") {
         source = "SourceB"
     }
+    else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerc") {
+        source = "SourceC"
+    }
+    else if (this.Webviewer._params.containerId.toLowerCase() == "visualizerd") {
+        source = "SourceD"
+    }
+
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));

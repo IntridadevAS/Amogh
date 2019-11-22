@@ -339,23 +339,7 @@ var CheckModule = {
                 continue;
             }
 
-            viewerOptionsObject[tableName] = viewerOptions;
-            // // write viewer options data to data base
-            // $.ajax({
-            //     url: 'PHP/ProjectManager.php',
-            //     type: "POST",
-            //     async: false,
-            //     data:
-            //     {
-            //         'InvokeFunction': "SaveVieweroptions",
-            //         "SourceViewerOptions": JSON.stringify(viewerOptions),
-            //         "SourceViewerOptionsTable": tableName,
-            //         'ProjectName': projectinfo.projectname,
-            //         'CheckName': checkinfo.checkname
-            //     },
-            //     success: function (msg) {
-            //     }
-            // });
+            viewerOptionsObject[tableName] = viewerOptions;            
         }
 
         return viewerOptionsObject;

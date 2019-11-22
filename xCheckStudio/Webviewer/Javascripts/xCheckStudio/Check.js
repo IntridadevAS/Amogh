@@ -1,93 +1,43 @@
 function onCheckButtonClick() {
 
-    showBusyIndicator();
+    // showBusyIndicator();
 
     setTimeout(function () {
-        // check if comparison or compliance is selected at least for one datasource
-        var continueCheck = false;
-        var comparisonCB = document.getElementById('comparisonSwitch');
-        if (comparisonCB.checked) {
-            continueCheck = true;
-        }
-        if (!continueCheck) {
-            for (var src in model.views) {
-                var view = model.views[src];
-                if (view.used &&
-                    view.complianceSwitchChecked) {
-                    continueCheck = true;
-                    break;
-                }
-            }
-
-            if (!continueCheck) {
-                showNoCheckTypePrompt();
-                // hide busy spinner
-                hideBusyIndicator();
-                return;
-            }
+        // check if comparison or compliance is selected at least for one datasource   
+        if (!checkTypeSelected()) {
+            return;
         }
 
         // check if items are selected
-        var itemsSelected = false;
-        for (var srcId in SourceManagers) {
-            if (SourceManagers[srcId].ModelTree.GetSelectedComponents().length > 0) {
-                itemsSelected = true;
-                break;
-            }
-        }
-        if (!itemsSelected) {
-            showSelectItemsPrompt();
-            
-            // hide busy spinner
-            hideBusyIndicator();
-
+        if (!componentSelected()) {
             return;
         }
 
-        sourceAComplianceCheckManager = undefined;
-        sourceBComplianceCheckManager = undefined;
-        comparisonCheckManager = undefined;
-
-        var checkCaseSelect = document.getElementById("checkCaseSelect");
-        if (checkCaseSelect.value.toLowerCase() === "autoselect") {
-
-            if (checkCaseSelect.options.length === 1) {
-                showNotValidCheckcasePrompt();
-            }
-            else {
-                showSelectValidCheckCasePrompt();
-            }
-
-            // hide busy spinner
-            hideBusyIndicator();
+        // check if valid checkcase is selected        
+        if (!validCheckcaseSelected()) {
             return;
         }
+
+        // var sourceAComplianceCheckManager = undefined;
+        // var sourceBComplianceCheckManager = undefined;
+        // comparisonCheckManager = undefined;
 
         // check if any check case type is selected
         var comparisonSwitch = document.getElementById('comparisonSwitch');
 
-        // check if one of the check switch is on
-        if (!comparisonSwitch.checked &&
-            !complianceChecked()) {
-            // hide busy spinner
-            //busySpinner.classList.remove('show');
-            alert('No selected check type found.</br>Please select check type.');
-            hideBusyIndicator();
-            return;
-        }
 
-        // check if data source order load order is maintained
-        var dataSourceOrderMaintained = true;
-        var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
-        if ((("a" in SourceManagers) &&
-            ("sourceA" in sourceTypesFromCheckCase)) &&
-            (("b" in SourceManagers) &&
-                ("sourceA" in sourceTypesFromCheckCase))) {
-            if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
-                SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
-                dataSourceOrderMaintained = false;
-            }
-        }
+        // // check if data source order load order is maintained
+        // var dataSourceOrderMaintained = true;
+        // var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
+        // if ((("a" in SourceManagers) &&
+        //     ("sourceA" in sourceTypesFromCheckCase)) &&
+        //     (("b" in SourceManagers) &&
+        //         ("sourceA" in sourceTypesFromCheckCase))) {
+        //     if (SourceManagers["a"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceA"].toLowerCase() ||
+        //         SourceManagers["b"].SourceType.toLowerCase() !== sourceTypesFromCheckCase["sourceB"].toLowerCase()) {
+        //         dataSourceOrderMaintained = false;
+        //     }
+        // }
 
         //var checkPerformed = false;  
         var checkcase = new CheckCase("");
@@ -98,8 +48,8 @@ function onCheckButtonClick() {
 
         // perform comparison check
         performComparisonCheck(comparisonSwitch,
-            checkcase,
-            dataSourceOrderMaintained).then(function (result) {
+            checkcase).then(function (result) {
+                
                 if (!result) {
                     deleteCheckResultsFromDB("Comparison").then(function (res) {
 
@@ -115,8 +65,7 @@ function onCheckButtonClick() {
         // perform source a compliance check      
         if (model.views["a"].used &&
             model.views["a"].complianceSwitchChecked) {
-            performSourceAComplianceCheck(checkcase,
-                dataSourceOrderMaintained).then(function (result) {
+            performComplianceCheck(checkcase, "a").then(function (result) {
                     if (!result) {
                         deleteCheckResultsFromDB("SourceACompliance").then(function (res) {
 
@@ -133,8 +82,7 @@ function onCheckButtonClick() {
         // perform source b compliance check       
         if (model.views["b"].used &&
             model.views["b"].complianceSwitchChecked) {
-            performSourceBComplianceCheck(checkcase,
-                dataSourceOrderMaintained).then(function (result) {
+                performComplianceCheck(checkcase, "b").then(function (result) {
                     if (!result) {
                         deleteCheckResultsFromDB("SourceBCompliance").then(function (res) {
 
@@ -148,7 +96,98 @@ function onCheckButtonClick() {
                 });
         };
 
+        // perform source c compliance check       
+        if (model.views["c"].used &&
+            model.views["c"].complianceSwitchChecked) {
+            performComplianceCheck(checkcase, "c").then(function (result) {
+                if (!result) {
+                    deleteCheckResultsFromDB("SourceCCompliance").then(function (res) {
+
+                    });
+                }
+
+                checksCount++;
+                if (checksCount === totalChecksTobePerformed) {
+                    onCheckCompleted();
+                }
+            });
+        };
+
+        // perform source d compliance check       
+        if (model.views["d"].used &&
+            model.views["d"].complianceSwitchChecked) {
+            performComplianceCheck(checkcase, "d").then(function (result) {
+                if (!result) {
+                    deleteCheckResultsFromDB("SourceDCompliance").then(function (res) {
+
+                    });
+                }
+
+                checksCount++;
+                if (checksCount === totalChecksTobePerformed) {
+                    onCheckCompleted();
+                }
+            });
+        };
+
     }, 1000);
+}
+
+function validCheckcaseSelected() {
+    var checkCaseSelect = document.getElementById("checkCaseSelect");
+    if (checkCaseSelect.value.toLowerCase() === "autoselect") {
+
+        if (checkCaseSelect.options.length === 1) {
+            showNotValidCheckcasePrompt();
+        }
+        else {
+            showSelectValidCheckCasePrompt();
+        }
+
+        // hide busy spinner
+        hideBusyIndicator();
+
+        return false;
+    }
+
+    return true
+}
+
+function componentSelected() {
+    for (var srcId in SourceManagers) {
+        if (SourceManagers[srcId].ModelTree.GetSelectedComponents().length > 0) {
+            return true;
+        }
+    }
+
+    showSelectItemsPrompt();
+
+    // hide busy spinner
+    hideBusyIndicator();
+
+    return false;
+}
+
+function checkTypeSelected() {
+    
+    var comparisonCB = document.getElementById('comparisonSwitch');
+    if (comparisonCB.checked) {
+        return true;
+    }
+    for (var src in model.views) {
+        var view = model.views[src];
+        if (view.used &&
+            view.complianceSwitchChecked) {
+            return true;            
+        }
+    }
+
+    showNoCheckTypePrompt();
+    
+    // hide busy spinner
+    hideBusyIndicator();
+
+    return false;
 }
 
 function complianceChecked() {
@@ -192,55 +231,52 @@ function showCheckCompletePrompt() {
     document.getElementById("Check_Complete").style.display = "block";
 }
 
-function performComparisonCheck(comparisonCB, checkcase, dataSourceOrderMaintained) {
+function performComparisonCheck(comparisonCB, checkcase) {
 
     return new Promise((resolve) => {
-        //var checkPerformed = false;
+       
         if (!comparisonCB.checked) {
             return resolve(false);
         }
 
         var checkType = checkcase.getCheckType("Comparison");
 
-        if (!comparisonCheckManager) {
-            comparisonCheckManager = new CheckManager();
+        // if (!comparisonCheckManager) {
+            var comparisonCheckManager = new CheckManager();
             comparisonCheckManager.performCheck(checkType,
                 true,
-                undefined,
-                dataSourceOrderMaintained).then(function (result) {
+                undefined).then(function (result) {
                     return resolve(result);
-                });
-
-            //checkPerformed = true;
-        }
-
-        //return checkPerformed
+                });            
+        // }        
     });
 }
 
-function performSourceAComplianceCheck(checkcase, dataSourceOrderMaintained) {
-
+function performComplianceCheck(checkcase, srcId) {
     return new Promise((resolve) => {
-        if (!("a" in SourceManagers)) {
+        if (!(srcId in SourceManagers)) {
             return resolve(false);
         }
 
+        var studioInterface = SourceManagers[srcId];
         var checkType = undefined;
-        var studioInterface = undefined;
 
-        // get check type
-        studioInterface = SourceManagers["a"];
-        if (dataSourceOrderMaintained) {
-            checkType = checkcase.getCheckType("ComplianceSourceA");
-            if (!checkType) {
-                checkType = checkcase.getCheckType("Compliance");
-            }
+        var dataSourceOrderInCheckCase = getDataSourceOrderInCheckcase();
+        var sourceOrderInCheckcase = dataSourceOrderInCheckCase[srcId];
+        if (sourceOrderInCheckcase === 1) {
+            checkType = checkcase.getCheckType("ComplianceSourceA");          
         }
-        else {
+        else if (sourceOrderInCheckcase === 2) {
             checkType = checkcase.getCheckType("ComplianceSourceB");
-            if (!checkType) {
-                checkType = checkcase.getCheckType("Compliance");
-            }
+        }
+        else if (sourceOrderInCheckcase === 3) {
+            checkType = checkcase.getCheckType("ComplianceSourceC");
+        }
+        else if (sourceOrderInCheckcase === 4) {
+            checkType = checkcase.getCheckType("ComplianceSourceD");
+        }
+        if (!checkType) {
+            checkType = checkcase.getCheckType("Compliance");
         }
 
         if (!checkType ||
@@ -249,63 +285,106 @@ function performSourceAComplianceCheck(checkcase, dataSourceOrderMaintained) {
             return resolve(false);
         }
 
-        if (!sourceAComplianceCheckManager) {
-            sourceAComplianceCheckManager = new CheckManager();
-            sourceAComplianceCheckManager.performCheck(checkType,
-                false,
-                studioInterface,
-                dataSourceOrderMaintained).then(function (result) {
-                    return resolve(result);
-                });
-        }
+        // if (!sourceAComplianceCheckManager) {
+        var complianceCheckManager = new CheckManager();
+        complianceCheckManager.performCheck(checkType,
+            false,
+            studioInterface).then(function (result) {
+                return resolve(result);
+            });
+        // }
     });
 }
 
-function performSourceBComplianceCheck(checkcase, dataSourceOrderMaintained) {
-    return new Promise((resolve) => {
-        if (!("b" in SourceManagers)) {
-            return resolve(false);
-        }
+// function performSourceAComplianceCheck(checkcase) {
 
-        var checkType = undefined;
-        var studioInterface = undefined;
+//     return new Promise((resolve) => {
+//         if (!("a" in SourceManagers)) {
+//             return resolve(false);
+//         }
 
-        studioInterface = SourceManagers["b"];
-        if (dataSourceOrderMaintained) {
-            checkType = checkcase.getCheckType("ComplianceSourceB");
-            if (!checkType) {
-                checkType = checkcase.getCheckType("Compliance");
-            }
-        }
-        else {
-            checkType = checkcase.getCheckType("ComplianceSourceA");
-            if (!checkType) {
-                checkType = checkcase.getCheckType("Compliance");
-            }
-        }
+//         var checkType = undefined;
+//         var studioInterface = undefined;
 
-        if (!checkType ||
-            !studioInterface) {
-            alert('Compliance check can not be performed.');
-            return resolve(false);
-        }
+//         // get check type
+//         studioInterface = SourceManagers["a"];
+//         var dataSourceOrderInCheckCase = getDataSourceOrderInCheckcase();
+//         var sourceOrderInCheckcase = dataSourceOrderInCheckCase['a'];
+        
+//         // if (dataSourceOrderMaintained) {
+//         //     checkType = checkcase.getCheckType("ComplianceSourceA");
+//         //     if (!checkType) {
+//         //         checkType = checkcase.getCheckType("Compliance");
+//         //     }
+//         // }
+//         // else {
+//         //     checkType = checkcase.getCheckType("ComplianceSourceB");
+//         //     if (!checkType) {
+//         //         checkType = checkcase.getCheckType("Compliance");
+//         //     }
+//         // }
 
-        if (!sourceBComplianceCheckManager) {
-            sourceBComplianceCheckManager = new CheckManager();
-            sourceBComplianceCheckManager.performCheck(checkType,
-                false,
-                studioInterface,
-                dataSourceOrderMaintained).then(function (result) {
-                    return resolve(result);
-                });
-        }
-    });
-}
+//         if (!checkType ||
+//             !studioInterface) {
+//             alert('Compliance check can not be performed.');
+//             return resolve(false);
+//         }
+
+//         if (!sourceAComplianceCheckManager) {
+//             sourceAComplianceCheckManager = new CheckManager();
+//             sourceAComplianceCheckManager.performCheck(checkType,
+//                 false,
+//                 studioInterface).then(function (result) {
+//                     return resolve(result);
+//                 });
+//         }
+//     });
+// }
+
+// function performSourceBComplianceCheck(checkcase) {
+//     return new Promise((resolve) => {
+//         if (!("b" in SourceManagers)) {
+//             return resolve(false);
+//         }
+
+//         var checkType = undefined;
+//         var studioInterface = undefined;
+
+//         studioInterface = SourceManagers["b"];
+//         if (dataSourceOrderMaintained) {
+//             checkType = checkcase.getCheckType("ComplianceSourceB");
+//             if (!checkType) {
+//                 checkType = checkcase.getCheckType("Compliance");
+//             }
+//         }
+//         else {
+//             checkType = checkcase.getCheckType("ComplianceSourceA");
+//             if (!checkType) {
+//                 checkType = checkcase.getCheckType("Compliance");
+//             }
+//         }
+
+//         if (!checkType ||
+//             !studioInterface) {
+//             alert('Compliance check can not be performed.');
+//             return resolve(false);
+//         }
+
+//         if (!sourceBComplianceCheckManager) {
+//             sourceBComplianceCheckManager = new CheckManager();
+//             sourceBComplianceCheckManager.performCheck(checkType,
+//                 false,
+//                 studioInterface).then(function (result) {
+//                     return resolve(result);
+//                 });
+//         }
+//     });
+// }
 
 function cancelCheckResults() {
-    sourceAComplianceCheckManager = undefined;
-    sourceBComplianceCheckManager = undefined;
-    comparisonCheckManager = undefined;
+    // sourceAComplianceCheckManager = undefined;
+    // sourceBComplianceCheckManager = undefined;
+    // comparisonCheckManager = undefined;
 
     document.getElementById("Check_Complete").style.display = "none";
 }
@@ -334,6 +413,12 @@ function deleteCheckResultsFromDB(checkType) {
         }
         else if (checkType.toLowerCase() === "sourcebcompliance") {
             functionToInvoke = "DeleteSourceBComplianceResults";
+        }
+        else if (checkType.toLowerCase() === "sourceccompliance") {
+            functionToInvoke = "DeleteSourceCComplianceResults";
+        }
+        else if (checkType.toLowerCase() === "sourcedcompliance") {
+            functionToInvoke = "DeleteSourceDComplianceResults";
         }
 
         if (functionToInvoke === undefined) {
@@ -448,4 +533,40 @@ function onSelectItemsOk() {
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
+}
+
+function getDataSourceOrderInCheckcase()
+{
+    var dataSourceOrderInCheckCase = {};
+    var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
+    var sourcesTraversed = [];
+    for (var srcId in SourceManagers) {
+        var sourceManager = SourceManagers[srcId];
+        if ('sourceA' in sourceTypesFromCheckCase &&
+            !sourcesTraversed.includes('sourceA') &&
+            sourceTypesFromCheckCase['sourceA'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+            dataSourceOrderInCheckCase[srcId] = 1;
+            sourcesTraversed.push('sourceA');
+        }
+        else if ('sourceB' in sourceTypesFromCheckCase &&
+            !sourcesTraversed.includes('sourceB') &&
+            sourceTypesFromCheckCase['sourceB'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+            dataSourceOrderInCheckCase[srcId] = 2;
+            sourcesTraversed.push('sourceB');
+        }
+        else if ('sourceC' in sourceTypesFromCheckCase &&
+            !sourcesTraversed.includes('sourceC') &&
+            sourceTypesFromCheckCase['sourceC'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+            dataSourceOrderInCheckCase[srcId] = 3;
+            sourcesTraversed.push('sourceC');
+        }
+        else if ('sourceD' in sourceTypesFromCheckCase &&
+            !sourcesTraversed.includes('sourceD') &&
+            sourceTypesFromCheckCase['sourceD'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+            dataSourceOrderInCheckCase[srcId] = 4;
+            sourcesTraversed.push('sourceD');
+        }
+    }
+
+    return dataSourceOrderInCheckCase;
 }

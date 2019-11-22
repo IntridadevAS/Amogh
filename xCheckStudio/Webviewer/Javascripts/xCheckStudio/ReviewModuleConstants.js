@@ -4,13 +4,19 @@ const ComparisonColumns = {
     Select: 0,
     SourceAName: 1,
     SourceBName: 2,
-    Status: 3,
-    SourceANodeId: 4,
-    SourceBNodeId: 5,
-    SourceAId: 6,
-    SourceBId: 7,
-    ResultId: 8,
-    GroupId: 9
+    SourceCName: 3,
+    SourceDName: 4,
+    Status: 5,
+    SourceANodeId: 6,
+    SourceBNodeId: 7,
+    SourceCNodeId: 8,
+    SourceDNodeId: 9,
+    SourceAId: 10,
+    SourceBId: 11,
+    SourceCId: 12,
+    SourceDId: 13,
+    ResultId: 14,
+    GroupId: 15
 }
 
 // column names
@@ -18,11 +24,17 @@ const ComparisonColumnNames = {
     Select: "Select",
     SourceAName: "SourceA",
     SourceBName: "SourceB",
+    SourceCName: "SourceC",
+    SourceDName: "SourceD",
     Status: "Status",
     SourceANodeId: "SourceANodeId",
     SourceBNodeId: "SourceBNodeId",
+    SourceCNodeId: "SourceCNodeId",
+    SourceDNodeId: "SourceDNodeId",
     SourceAId: "SourceAId",
     SourceBId: "SourceBId",
+    SourceCId: "SourceCId",
+    SourceDId: "SourceDId",
     ResultId: "ID",
     GroupId: "groupId"
 }
@@ -35,8 +47,12 @@ const ComparisonPropertyColumns = {
     SourceAValue: 2,
     SourceBValue: 3,
     SourceBName: 4,
-    Status: 5,
-    PropertyId: 6   
+    SourceCName: 5,
+    SourceCValue: 6,    
+    SourceDValue: 7,
+    SourceDName: 8,
+    Status: 9,
+    PropertyId: 10   
 }
 
 // column names
@@ -46,6 +62,10 @@ const ComparisonPropertyColumnNames = {
     SourceAValue: "ValueA",
     SourceBValue: "ValueB",
     SourceBName: "PropertyB",
+    SourceCName: "PropertyC",
+    SourceCValue: "ValueC",    
+    SourceDValue: "ValueD",
+    SourceDName: "PropertyD",
     Status: "Status",
     PropertyId: "PropertyId"
 }

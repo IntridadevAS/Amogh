@@ -5,12 +5,16 @@ function ReviewSelectionManager()
 }
 
 ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
+    if (!status) {
+        return "#ffffff";
+    }
+
     if (status.toLowerCase() === ("OK").toLowerCase()) {
         return SuccessColor;
     }
-    else if (status.toLowerCase() === ("MATCHED").toLowerCase()) {
-        return MatchedColor;
-    }
+    // else if (status.toLowerCase() === ("MATCHED").toLowerCase()) {
+    //     return MatchedColor;
+    // }
     else if (status.toLowerCase() === ("Error").toLowerCase() ||
     status.toLowerCase() === ("Error(A)").toLowerCase() ||
     status.toLowerCase() === ("Error(T)").toLowerCase() ||
@@ -18,10 +22,16 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
         return ErrorColor;
     }
     else if (status.toLowerCase() === ("Warning").toLowerCase() ||
-    status.toLowerCase() === ("Warning(A)").toLowerCase() ||
-    status.toLowerCase() === ("Warning(T)").toLowerCase() ||
-    status.toLowerCase() === ("Warning(A)(T)").toLowerCase()) {
+        status.toLowerCase() === ("Warning(A)").toLowerCase() ||
+        status.toLowerCase() === ("Warning(T)").toLowerCase() ||
+        status.toLowerCase() === ("Warning(A)(T)").toLowerCase()) {
         return WarningColor;
+    }
+    else if (status.toLowerCase() === "missing item(s)" ||
+        status.toLowerCase() === "missing item(s)(a)" ||
+        status.toLowerCase() === "missing item(s)(t)" ||
+        status.toLowerCase() === "missing item(s)(a)(t)") {
+        return MissingItemsColor;
     }
     else if (status.toLowerCase() === ("No Match").toLowerCase() ||
     status.toLowerCase() === ("No Match(A)").toLowerCase()) {
@@ -34,10 +44,12 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
         status.toLowerCase() === ("Accepted(T)").toLowerCase()) {
         return AcceptedColor;
     }
-    else if (status.toLowerCase() === ("OK(A)(T)").toLowerCase() || status.toLowerCase() === ("OK(T)(A)").toLowerCase()) {
+    else if (status.toLowerCase() === ("OK(A)(T)").toLowerCase() || 
+             status.toLowerCase() === ("OK(T)(A)").toLowerCase()) {
         return AcceptedColor;
     }
-    else if (status.toLowerCase() === ("OK(T)").toLowerCase() || status.toLowerCase() === ("OK(A)").toLowerCase()) {
+    else if (status.toLowerCase() === ("OK(T)").toLowerCase() || 
+             status.toLowerCase() === ("OK(A)").toLowerCase()) {
         return AcceptedColor;
     }
     else {

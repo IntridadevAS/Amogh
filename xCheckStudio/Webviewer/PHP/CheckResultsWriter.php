@@ -1,4 +1,5 @@
 <?php
+    require_once 'GlobalConstants.php';
 
     function writeComplianceResultToDB($checkGroupsTable, 
                                        $checkComponentsTable,
@@ -175,7 +176,7 @@
 
     }
     
-    function writeComparisonResultToDB()
+    function writeComparisonResultsToDB()
     {
         global $CheckComponentsGroups;
         global $projectName;
@@ -208,20 +209,33 @@
             $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
             $dbh->exec($command);
 
-            $command = 'CREATE TABLE ComparisonCheckComponents(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceASubComponentClass TEXT,
-                sourceBSubComponentClass TEXT,
-                status TEXT,
-                accepted TEXT,
-                sourceANodeId TEXT,
-                sourceBNodeId TEXT,
-                sourceAId TEXT,
-                sourceBId TEXT,
-                ownerGroup INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckComponents(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceCName TEXT,
+            //     sourceDName TEXT,
+            //     sourceAMainClass TEXT,
+            //     sourceBMainClass TEXT,
+            //     sourceCMainClass TEXT,
+            //     sourceDMainClass TEXT,
+            //     sourceASubComponentClass TEXT,
+            //     sourceBSubComponentClass TEXT,
+            //     sourceCSubComponentClass TEXT,
+            //     sourceDSubComponentClass TEXT,
+            //     status TEXT,
+            //     accepted TEXT,
+            //     sourceANodeId TEXT,
+            //     sourceBNodeId TEXT,
+            //     sourceCNodeId TEXT,
+            //     sourceDNodeId TEXT,
+            //     sourceAId TEXT,
+            //     sourceBId TEXT,
+            //     sourceCId TEXT,
+            //     sourceDId TEXT,
+            //     ownerGroup INTEGER NOT NULL,
+            //     transpose TEXT)'; 
+            $command = CREATE_COMPARISONCOMPONETS_TABLE;
             $dbh->exec($command);    
 
             // ComparisonCheckProperties table
@@ -230,19 +244,24 @@
             $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
             $dbh->exec($command);
 
-            $command = 'CREATE TABLE ComparisonCheckProperties(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceAValue TEXT,
-                sourceBValue TEXT,
-                result TEXT,
-                severity TEXT,
-                accepted TEXT,
-                performCheck TEXT,
-                description TEXT,
-                ownerComponent INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckProperties(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceCName TEXT,
+            //     sourceDName TEXT,
+            //     sourceAValue TEXT,
+            //     sourceBValue TEXT,
+            //     sourceCValue TEXT,
+            //     sourceDValue TEXT,
+            //     result TEXT,
+            //     severity TEXT,
+            //     accepted TEXT,
+            //     performCheck TEXT,
+            //     description TEXT,
+            //     ownerComponent INTEGER NOT NULL,
+            //     transpose TEXT)'; 
+            $command = CREATE_COMPARISONPROPERTIES_TABLE;
             $dbh->exec($command);    
 
             foreach($CheckComponentsGroups as $mainClass => $checkComponentGroup)
@@ -294,31 +313,56 @@
 
                 foreach($checkComponentGroup->Components as $key => $checkComponent)
                 {
-                    $insertComponentQuery = 'INSERT INTO ComparisonCheckComponents(
-                        sourceAName, 
-                        sourceBName, 
-                        sourceASubComponentClass, 
-                        sourceBSubComponentClass,
-                        status,
-                        accepted, 
-                        sourceANodeId, 
-                        sourceBNodeId,
-                        sourceAId, 
-                        sourceBId,
-                        ownerGroup,
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ';                                        
+                    // $insertComponentQuery = 'INSERT INTO ComparisonCheckComponents(
+                    //     sourceAName, 
+                    //     sourceBName, 
+                    //     sourceCName, 
+                    //     sourceDName,
+                    //     sourceAMainClass,
+                    //     sourceBMainClass,
+                    //     sourceCMainClass,
+                    //     sourceDMainClass, 
+                    //     sourceASubComponentClass, 
+                    //     sourceBSubComponentClass,
+                    //     sourceCSubComponentClass, 
+                    //     sourceDSubComponentClass,
+                    //     status,
+                    //     accepted, 
+                    //     sourceANodeId, 
+                    //     sourceBNodeId,
+                    //     sourceCNodeId, 
+                    //     sourceDNodeId,
+                    //     sourceAId, 
+                    //     sourceBId,
+                    //     sourceCId, 
+                    //     sourceDId,
+                    //     ownerGroup,
+                    //     transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';     
+                    $insertComponentQuery = INSERT_ALLCOMPARISONCOMPONETS_TABLE;                                   
                     $componentValues = array($checkComponent->SourceAName,  
                                              $checkComponent->SourceBName,
+                                             $checkComponent->SourceCName,  
+                                             $checkComponent->SourceDName,
+                                             NULL,
+                                             NULL,
+                                             NULL,
+                                             NULL,
                                              $checkComponent->SourceASubComponentClass,
                                              $checkComponent->SourceBSubComponentClass,
+                                             $checkComponent->SourceCSubComponentClass,
+                                             $checkComponent->SourceDSubComponentClass,
                                              $checkComponent->Status,
                                              'false',
                                              $checkComponent->SourceANodeId,
                                              $checkComponent->SourceBNodeId,
+                                             $checkComponent->SourceCNodeId,
+                                             $checkComponent->SourceDNodeId,
                                              $checkComponent->SourceAId,
                                              $checkComponent->SourceBId,
+                                             $checkComponent->SourceCId,
+                                             $checkComponent->SourceDId,
                                              $groupId,
-                                            null);
+                                             null);
 
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);
@@ -337,22 +381,31 @@
 
                     foreach($checkComponent->CheckProperties as $key => $checkProperty)
                     {
-                        $insertPropertyQuery = 'INSERT INTO ComparisonCheckProperties(
-                            sourceAName, 
-                            sourceBName, 
-                            sourceAValue, 
-                            sourceBValue, 
-                            result, 
-                            severity,
-                            accepted,
-                            performCheck,
-                            description,
-                            ownerComponent,
-                            transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?) ';                                        
+                        // $insertPropertyQuery = 'INSERT INTO ComparisonCheckProperties(
+                        //     sourceAName, 
+                        //     sourceBName,
+                        //     sourceCName, 
+                        //     sourceDName,  
+                        //     sourceAValue, 
+                        //     sourceBValue, 
+                        //     sourceCValue, 
+                        //     sourceDValue, 
+                        //     result, 
+                        //     severity,
+                        //     accepted,
+                        //     performCheck,
+                        //     description,
+                        //     ownerComponent,
+                        //     transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';                                        
+                        $insertPropertyQuery = INSERT_ALLCOMPARISONPROPERTIES_TABLE;
                         $propertyValues = array($checkProperty->SourceAName,  
                                                  $checkProperty->SourceBName,
+                                                 $checkProperty->SourceCName,  
+                                                 $checkProperty->SourceDName,
                                                  $checkProperty->SourceAValue,
                                                  $checkProperty->SourceBValue,
+                                                 $checkProperty->SourceCValue,
+                                                 $checkProperty->SourceDValue,
                                                  $checkProperty->Result,
                                                  $checkProperty->Severity,
                                                  'false',
@@ -373,7 +426,7 @@
         }                
         catch(Exception $e)
         {        
-            echo "fail"; 
+            echo "fail";            
             return;
         }   
 
@@ -634,6 +687,99 @@
             return;
         }   
    }    
+
+   function writeSourceCComplianceCheckStatistics()
+   {
+        global $projectName;
+        global $checkName;
+        try
+        {   
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceCComplianceCheckComponents");
+            
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceCComplianceCheckComponents", "SourceCComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceCComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
+                sourceCComplianceOK INTEGER default 0,
+                sourceCComplianceError INTEGER default 0,
+                sourceCComplianceWarning INTEGER default 0,
+                sourceCComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceCComplianceCheckStatistics(sourceCComplianceOK, sourceCComplianceError, sourceCComplianceWarning, 
+                    sourceCComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                    $statistics['error'], 
+                                    $statistics['warning'],                                 
+                                    $checkGroupsString ));  
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+    }  
+
+    function writeSourceDComplianceCheckStatistics()
+   {
+        global $projectName;
+        global $checkName;
+        try
+        {   
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+
+            // begin the transaction
+            $dbh->beginTransaction();                     
+            
+            $statistics = getCheckStatistics($dbh, "SourceDComplianceCheckComponents");
+            
+            // read class wise check results counts
+            $checkGroups = getCheckGroupsInfo($dbh, "SourceDComplianceCheckComponents", "SourceDComplianceCheckGroups");
+            $checkGroupsString = json_encode($checkGroups);
+
+            $command = 'CREATE TABLE SourceDComplianceCheckStatistics(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                
+                sourceDComplianceOK INTEGER default 0,
+                sourceDComplianceError INTEGER default 0,
+                sourceDComplianceWarning INTEGER default 0,
+                sourceDComplianceCheckGroupsInfo TEXT)'; 
+            $dbh->exec($command); 
+
+            $qry = 'INSERT INTO SourceDComplianceCheckStatistics(sourceDComplianceOK, sourceDComplianceError, sourceDComplianceWarning, 
+                    sourceDComplianceCheckGroupsInfo) VALUES(?,?,?,?) ';                                         
+            $stmt = $dbh->prepare($qry);
+            $stmt->execute(array($statistics['ok'], 
+                                    $statistics['error'], 
+                                    $statistics['warning'],                                 
+                                    $checkGroupsString ));  
+
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+        }                
+        catch(Exception $e)
+        {        
+            echo "fail"; 
+            return;
+        }   
+    }
+
     
     function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
                                             $tableName,

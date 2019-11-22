@@ -64,6 +64,16 @@
                 $componentsTableName = "SourceBComponents";
                 $propertiesTableName = "SourceBProperties";
             }
+            else if(strtolower($source) == "sourcec")
+            {
+                $componentsTableName = "SourceCComponents";
+                $propertiesTableName = "SourceCProperties";
+            }
+            else if(strtolower($source) == "sourced")
+            {
+                $componentsTableName = "SourceDComponents";
+                $propertiesTableName = "SourceDProperties";
+            }
             else
             {
                 echo 'fail';
@@ -193,6 +203,16 @@
                 $componentsTableName = "SourceBComponents";
                 $propertiesTableName = "SourceBProperties";
             }
+            else if(strtolower($source) == "sourcec")
+            {
+                $componentsTableName = "SourceCComponents";
+                $propertiesTableName = "SourceCProperties";
+            }
+            else if(strtolower($source) == "sourced")
+            {
+                $componentsTableName = "SourceDComponents";
+                $propertiesTableName = "SourceDProperties";
+            }
             else
             {
                 echo 'fail';
@@ -212,7 +232,9 @@
                 name TEXT NOT NULL,
                 mainclass TEXT NOT NULL,
                 subclass TEXT NOT NULL,
-                ischecked TEXT
+                nodeid INTEGER,
+                ischecked TEXT,
+                parentid INTEGER
               )';         
              $dbh->exec($command);                                                            
 
@@ -236,12 +258,12 @@
             for ($i = 0; $i < count($ComponentsList); $i++) {
                 $component = $ComponentsList[$i];
 
-                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, ischecked) VALUES(?,?,?,?) ';    
+                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES(?,?,?,?,?,?) ';    
                
                 $name = $component->Name;
                 $mainComponentClass = $component->MainComponentClass;
                 $subComponentClass = $component->SubComponentClass;
-                $values = array($name,  $mainComponentClass, $subComponentClass, 'true');
+                $values = array($name,  $mainComponentClass, $subComponentClass, NULL, 'true', NULL);
                
                 $stmt = $dbh->prepare($qry);
                 $stmt->execute($values);  

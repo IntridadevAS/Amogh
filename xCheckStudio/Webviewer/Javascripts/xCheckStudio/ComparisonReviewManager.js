@@ -1,24 +1,36 @@
 function ComparisonReviewManager(comparisonCheckManager,
     sourceAViewerData,
     sourceBViewerData,
+    sourceCViewerData,
+    sourceDViewerData,
     sourceAComponents,
     sourceBComponents,
+    sourceCComponents,
+    sourceDComponents,
     mainReviewTableContainer,
     detailedReviewTableContainer,
     sourceAComponentsHierarchy,
-    sourceBComponentsHierarchy) {
+    sourceBComponentsHierarchy,
+    sourceCComponentsHierarchy,
+    sourceDComponentsHierarchy) {
 
     this.SourceAViewerData = sourceAViewerData;
     this.SourceBViewerData = sourceBViewerData;
+    this.SourceCViewerData = sourceCViewerData;
+    this.SourceDViewerData = sourceDViewerData;
 
     this.SourceAComponents = sourceAComponents;
     this.SourceBComponents = sourceBComponents;
+    this.SourceCComponents = sourceCComponents;
+    this.SourceDComponents = sourceDComponents;
 
     this.MainReviewTableContainer = mainReviewTableContainer;
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
 
     this.SourceANodeIdVsStatus = sourceAComponentsHierarchy;
     this.SourceBNodeIdVsStatus = sourceBComponentsHierarchy;
+    this.SourceCNodeIdVsStatus = sourceCComponentsHierarchy;
+    this.SourceDNodeIdVsStatus = sourceDComponentsHierarchy;
 
     this.ComparisonCheckManager = comparisonCheckManager;
 
@@ -26,14 +38,14 @@ function ComparisonReviewManager(comparisonCheckManager,
 
     this.SourceANodeIdvsCheckComponent = {};
     this.SourceBNodeIdvsCheckComponent = {};
-
-    this.SourceAComponentIdvsNodeId = {};
-    this.SourceBComponentIdvsNodeId = {};
+    this.SourceCNodeIdvsCheckComponent = {};
+    this.SourceDNodeIdvsCheckComponent = {};
 }
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
 
-    if (this.SourceAViewerData["endPointUri"] !== undefined) {
+    // Source A
+    if (this.SourceAViewerData && this.SourceAViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData["endPointUri"]],
             this.SourceAComponentIdVsComponentData,
             this.SourceANodeIdVsComponentData,
@@ -48,7 +60,8 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
         model.checks["comparison"]["sourceAViewer"] = viewerInterface;
     }
 
-    if (this.SourceBViewerData["endPointUri"] !== undefined) {
+    // Source B
+    if (this.SourceBViewerData &&  this.SourceBViewerData["endPointUri"] !== undefined) {
         var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData["endPointUri"]],
             this.SourceBComponentIdVsComponentData,
             this.SourceBNodeIdVsComponentData,
@@ -61,6 +74,39 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
     else if (this.SourceBComponents !== undefined) {
         var viewerInterface = new Review1DViewerInterface("b", this.SourceBComponents);
         model.checks["comparison"]["sourceBViewer"] = viewerInterface;
+    }
+
+
+    // Source C
+    if (this.SourceCViewerData &&  this.SourceCViewerData["endPointUri"] !== undefined) {
+        var viewerInterface = new Review3DViewerInterface(["compare3", this.SourceCViewerData["endPointUri"]],
+            this.SourceCComponentIdVsComponentData,
+            this.SourceCNodeIdVsComponentData,
+            this.SourceCViewerData["source"]);
+        viewerInterface.NodeIdStatusData = this.SourceCNodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceCViewer"] = viewerInterface;
+    }
+    else if (this.SourceCComponents !== undefined) {      
+        var viewerInterface = new Review1DViewerInterface("c", this.SourceCComponents);
+        model.checks["comparison"]["sourceCViewer"] = viewerInterface;
+    }
+
+    // Source D
+    if (this.SourceDViewerData && this.SourceDViewerData["endPointUri"] !== undefined) {
+        var viewerInterface = new Review3DViewerInterface(["compare4", this.SourceDViewerData["endPointUri"]],
+            this.SourceDComponentIdVsComponentData,
+            this.SourceDNodeIdVsComponentData,
+            this.SourceDViewerData["source"]);
+        viewerInterface.NodeIdStatusData = this.SourceDNodeIdVsStatus;
+        viewerInterface.setupViewer(550, 280);
+
+        model.checks["comparison"]["sourceDViewer"] = viewerInterface;
+    }
+    else if (this.SourceDComponents !== undefined) {
+        var viewerInterface = new Review1DViewerInterface("d", this.SourceDComponents);
+        model.checks["comparison"]["sourceDViewer"] = viewerInterface;
     }
 }
 
@@ -97,26 +143,74 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
             "Id": component.id,
             "SourceAName": component.sourceAName,
             "SourceBName": component.sourceBName,
+            "SourceCName": component.sourceCName,
+            "SourceDName": component.sourceDName,
             "MainClass": mainClass,
             "SourceANodeId": component.sourceANodeId,
             "SourceBNodeId": component.sourceBNodeId,
+            "SourceCNodeId": component.sourceCNodeId,
+            "SourceDNodeId": component.sourceDNodeId,
             "sourceAId" : component.sourceAId,
             "sourceBId" : component.sourceBId,
-        };
-        // this.SourceAComponentIdvsNodeId[component.ID] = component.SourceANodeId;
+            "sourceCId" : component.sourceCId,
+            "sourceDId" : component.sourceDId,
+        };       
     }
     if (component.sourceBNodeId) {
         this.SourceBNodeIdvsCheckComponent[component.sourceBNodeId] = {
             "Id": component.id,
             "SourceAName": component.sourceAName,
             "SourceBName": component.sourceBName,
+            "SourceCName": component.sourceCName,
+            "SourceDName": component.sourceDName,
             "MainClass": mainClass,
             "SourceANodeId": component.sourceANodeId,
             "SourceBNodeId": component.sourceBNodeId,
+            "SourceCNodeId": component.sourceCNodeId,
+            "SourceDNodeId": component.sourceDNodeId,
             "sourceAId" : component.sourceAId,
             "sourceBId" : component.sourceBId,
+            "sourceCId" : component.sourceCId,
+            "sourceDId" : component.sourceDId,
+        };       
+    }
+
+    if (component.sourceCNodeId) {
+        this.SourceCNodeIdvsCheckComponent[component.sourceCNodeId] = {
+            "Id": component.id,
+            "SourceAName": component.sourceAName,
+            "SourceBName": component.sourceBName,
+            "SourceCName": component.sourceCName,
+            "SourceDName": component.sourceDName,
+            "MainClass": mainClass,
+            "SourceANodeId": component.sourceANodeId,
+            "SourceBNodeId": component.sourceBNodeId,
+            "SourceCNodeId": component.sourceCNodeId,
+            "SourceDNodeId": component.sourceDNodeId,
+            "sourceAId" : component.sourceAId,
+            "sourceBId" : component.sourceBId,
+            "sourceCId" : component.sourceCId,
+            "sourceDId" : component.sourceDId,
         };
-        // this.SourceBComponentIdvsNodeId[component.ID] = component.SourceBNodeId;
+    }
+
+    if (component.sourceDNodeId) {
+        this.SourceDNodeIdvsCheckComponent[component.sourceDNodeId] = {
+            "Id": component.id,
+            "SourceAName": component.sourceAName,
+            "SourceBName": component.sourceBName,
+            "SourceCName": component.sourceCName,
+            "SourceDName": component.sourceDName,
+            "MainClass": mainClass,
+            "SourceANodeId": component.sourceANodeId,
+            "SourceBNodeId": component.sourceBNodeId,
+            "SourceCNodeId": component.sourceCNodeId,
+            "SourceDNodeId": component.sourceDNodeId,
+            "sourceAId" : component.sourceAId,
+            "sourceBId" : component.sourceBId,
+            "sourceCId" : component.sourceCId,
+            "sourceDId" : component.sourceDId,
+        };
     }
 }
 
@@ -126,62 +220,123 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     // populate property table
     model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
 
-    var sheetName = containerDiv.replace("#", "");
-    sheetName = sheetName.split('_')[0];
+    var sheetNameArray = containerDiv.replace("#", "");
+    sheetNameArray = sheetNameArray.split('_')[0];
+    var result = sheetNameArray.split('-');
 
-    if (this.SourceAComponents !== undefined &&
-        this.SourceBComponents !== undefined) {
+    var sourceOrdersInCheckcase = getDataSourceOrderInCheckcase();
+    if (model.checks["comparison"]["sourceAViewer"]) {
 
-        var result = sheetName.split('-');
-
-        if (rowData.SourceA && rowData.SourceA !== "") {
-            model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
+        var sheetName;
+        if (result.length === 1) {
+            sheetName = result[0];
         }
         else {
-            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
-            model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
+            sheetName = result[sourceOrdersInCheckcase['a'] - 1];
         }
 
-        if (rowData.SourceB && rowData.SourceB !== "") {
-            model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+        model.checks["comparison"]["sourceAViewer"].highlightComponent(Comparison.ViewerAContainer,
+            sheetName,
+            rowData,
+            rowData.SourceANodeId);
+    }
+    if (model.checks["comparison"]["sourceBViewer"]) {
+        var sheetName;
+        if (result.length === 1) {
+            sheetName = result[0];
         }
         else {
-            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
-            model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
-        }
-    }
-    else if (this.SourceAViewerData["endPointUri"] !== undefined &&
-        this.SourceBViewerData["endPointUri"] !== undefined) {
-        this.HighlightComponentInGraphicsViewer(rowData)
-    }
-    else if (this.SourceAComponents !== undefined &&
-        this.SourceBViewerData["endPointUri"] !== undefined) {
-        var result = sheetName.split('-');
-
-        if (rowData.SourceA && rowData.SourceA !== "") {
-            model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
-        } else {
-
-            model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
-            model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
+            sheetName = result[sourceOrdersInCheckcase['b'] - 1];
         }
 
-        this.HighlightComponentInGraphicsViewer(rowData)
+        model.checks["comparison"]["sourceBViewer"].highlightComponent(Comparison.ViewerBContainer,
+            sheetName,
+            rowData,
+            rowData.SourceBNodeId);
     }
-    else if (this.SourceAViewerData["endPointUri"] !== undefined &&
-        this.SourceBComponents !== undefined) {
-        var result = sheetName.split('-');
-
-        if (rowData.SourceB && rowData.SourceB !== "") {
-            model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+    if (model.checks["comparison"]["sourceCViewer"]) {
+        var sheetName;
+        if (result.length === 1) {
+            sheetName = result[0];
         }
         else {
-            model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
-            model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
+            sheetName = result[sourceOrdersInCheckcase['c'] - 1];
         }
 
-        this.HighlightComponentInGraphicsViewer(rowData)
+        model.checks["comparison"]["sourceCViewer"].highlightComponent(Comparison.ViewerCContainer,
+            sheetName,
+            rowData,
+            rowData.
+                SourceCNodeId);
     }
+    if (model.checks["comparison"]["sourceDViewer"]) {
+        var sheetName;
+        if (result.length === 1) {
+            sheetName = result[0];
+        }
+        else {
+            sheetName = result[sourceOrdersInCheckcase['d'] - 1];
+        }
+
+        model.checks["comparison"]["sourceDViewer"].highlightComponent(Comparison.ViewerDContainer,
+            sheetName,
+            rowData,
+            rowData.SourceDNodeId);
+    }
+   
+    // if (this.SourceAComponents !== undefined &&
+    //     this.SourceBComponents !== undefined) {
+
+    //     var result = sheetName.split('-');
+
+    //     if (rowData.SourceA && rowData.SourceA !== "") {
+    //         model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
+    //     }
+    //     else {
+    //         model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
+    //         model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
+    //     }
+
+    //     if (rowData.SourceB && rowData.SourceB !== "") {
+    //         model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+    //     }
+    //     else {
+    //         model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
+    //         model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
+    //     }
+    // }
+    // else if (this.SourceAViewerData["endPointUri"] !== undefined &&
+    //     this.SourceBViewerData["endPointUri"] !== undefined) {
+    //     this.HighlightComponentInGraphicsViewer(rowData)
+    // }
+    // else if (this.SourceAComponents !== undefined &&
+    //     this.SourceBViewerData["endPointUri"] !== undefined) {
+    //     var result = sheetName.split('-');
+
+    //     if (rowData.SourceA && rowData.SourceA !== "") {
+    //         model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
+    //     } else {
+
+    //         model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
+    //         model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
+    //     }
+
+    //     this.HighlightComponentInGraphicsViewer(rowData)
+    // }
+    // else if (this.SourceAViewerData["endPointUri"] !== undefined &&
+    //     this.SourceBComponents !== undefined) {
+    //     var result = sheetName.split('-');
+
+    //     if (rowData.SourceB && rowData.SourceB !== "") {
+    //         model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
+    //     }
+    //     else {
+    //         model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
+    //         model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
+    //     }
+
+    //     this.HighlightComponentInGraphicsViewer(rowData)
+    // }
 }
 
 ComparisonReviewManager.prototype.GetComparisonResultId = function (selectedRow) {
@@ -693,40 +848,40 @@ ComparisonReviewManager.prototype.GetCellValue = function (currentReviewTableRow
     return currentReviewTableRow.cells[cell].childNodes[0].data.trim();
 }
 
-ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {
-    var sourceANodeId;
-    if (this.SourceAViewerData["endPointUri"] !== undefined &&
-        currentReviewTableRowData.SourceANodeId !== "") {
-        sourceANodeId = currentReviewTableRowData.SourceANodeId;
-    }
+// ComparisonReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {
+//     var sourceANodeId;
+//     if (this.SourceAViewerData["endPointUri"] !== undefined &&
+//         currentReviewTableRowData.SourceANodeId !== "") {
+//         sourceANodeId = currentReviewTableRowData.SourceANodeId;
+//     }
 
-    var sourceBNodeId;
-    if (this.SourceBViewerData["endPointUri"] !== undefined &&
-        currentReviewTableRowData.SourceBNodeId !== "") {
-        sourceBNodeId = currentReviewTableRowData.SourceBNodeId;
-    }
+//     var sourceBNodeId;
+//     if (this.SourceBViewerData["endPointUri"] !== undefined &&
+//         currentReviewTableRowData.SourceBNodeId !== "") {
+//         sourceBNodeId = currentReviewTableRowData.SourceBNodeId;
+//     }
 
-    // highlight component in graphics view in both viewer
-    if (this.SourceAViewerData["endPointUri"] != undefined) {
-        if (sourceANodeId !== undefined && sourceANodeId !== "") {
-            model.checks["comparison"]["sourceAViewer"].highlightComponent(sourceANodeId);
-        }
-        else {
-            // unhighlight previous component
-            model.checks["comparison"]["sourceAViewer"].unHighlightComponent();
-        }
-    }
-    if (this.SourceBViewerData["endPointUri"] != undefined) {
+//     // highlight component in graphics view in both viewer
+//     if (this.SourceAViewerData["endPointUri"] != undefined) {
+//         if (sourceANodeId !== undefined && sourceANodeId !== "") {
+//             model.checks["comparison"]["sourceAViewer"].highlightComponent(sourceANodeId);
+//         }
+//         else {
+//             // unhighlight previous component
+//             model.checks["comparison"]["sourceAViewer"].unHighlightComponent();
+//         }
+//     }
+//     if (this.SourceBViewerData["endPointUri"] != undefined) {
 
-        if (sourceBNodeId !== undefined && sourceBNodeId !== "") {
-            model.checks["comparison"]["sourceBViewer"].highlightComponent(sourceBNodeId);
-        }
-        else {
-            // unhighlight previous component
-            model.checks["comparison"]["sourceBViewer"].unHighlightComponent();
-        }
-    }
-}
+//         if (sourceBNodeId !== undefined && sourceBNodeId !== "") {
+//             model.checks["comparison"]["sourceBViewer"].highlightComponent(sourceBNodeId);
+//         }
+//         else {
+//             // unhighlight previous component
+//             model.checks["comparison"]["sourceBViewer"].unHighlightComponent();
+//         }
+//     }
+// }
 
 ComparisonReviewManager.prototype.GetSheetName = function(component, viewerContainerId) {
     var sheetName; 
@@ -736,6 +891,12 @@ ComparisonReviewManager.prototype.GetSheetName = function(component, viewerConta
     }
     else if(viewerContainerId == Comparison.ViewerBContainer) {
         sheetName = sourceBComparisonHierarchy[component.sourceBId].MainClass;
+    }
+    else if(viewerContainerId == Comparison.ViewerCContainer) {
+        sheetName = sourceCComparisonHierarchy[component.sourceCId].MainClass;
+    }
+    else if(viewerContainerId == Comparison.ViewerDContainer) {
+        sheetName = sourceDComparisonHierarchy[component.sourceDId].MainClass;
     }
 
     return sheetName;
@@ -1382,8 +1543,16 @@ ComparisonReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewe
         }
     }
     else if (viewerId === Comparison.ViewerCContainer) {
+        if (this.SourceCNodeIdvsCheckComponent !== undefined &&
+            selectedNode in this.SourceCNodeIdvsCheckComponent) {
+            checkComponentData = this.SourceCNodeIdvsCheckComponent[selectedNode];
+        }
     }
     else if (viewerId === Comparison.ViewerDContainer) {
+        if (this.SourceDNodeIdvsCheckComponent !== undefined &&
+            selectedNode in this.SourceDNodeIdvsCheckComponent) {
+            checkComponentData = this.SourceDNodeIdvsCheckComponent[selectedNode];
+        }
 
     }
 
@@ -1396,6 +1565,12 @@ ComparisonReviewManager.prototype.GetNodeIdvsComponentData = function (viewerId)
     }
     else if (viewerId === Comparison.ViewerBContainer) {
         return this.SourceBNodeIdvsCheckComponent;
+    }
+    else if (viewerId === Comparison.ViewerCContainer) {
+        return this.SourceCNodeIdvsCheckComponent;
+    }
+    else if (viewerId === Comparison.ViewerDContainer) {
+        return this.SourceDNodeIdvsCheckComponent;
     }
 
     return undefined;

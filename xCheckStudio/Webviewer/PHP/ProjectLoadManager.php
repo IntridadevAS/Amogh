@@ -1,5 +1,7 @@
 <?php
     require_once 'Utility.php';
+    require_once 'GlobalConstants.php';
+    
     if(!isset($_POST["ProjectName"]) || !isset($_POST['CheckName']))
     {
         echo 'fail';
@@ -97,8 +99,8 @@
             // comparison result tables table                               
             CopyComponents( $dbh, $tempDbh, "SourceAComponents", "SourceAProperties");          
             CopyComponents( $dbh, $tempDbh, "SourceBComponents", "SourceBProperties");
-            // CopyComponents( $dbh, $tempDbh, "SourceCComponents", "SourceCProperties");          
-            // CopyComponents( $dbh, $tempDbh, "SourceDComponents", "SourceDProperties");
+            CopyComponents( $dbh, $tempDbh, "SourceCComponents", "SourceCProperties");          
+            CopyComponents( $dbh, $tempDbh, "SourceDComponents", "SourceDProperties");
 
             // save check case info 
             CopyCheckCaseInfo($dbh, $tempDbh);
@@ -108,18 +110,18 @@
 
             CopyVieweroptions($dbh, $tempDbh, "SourceAViewerOptions");
             CopyVieweroptions($dbh, $tempDbh, "SourceBViewerOptions");
-            // CopyVieweroptions($dbh, $tempDbh, "SourceCViewerOptions");
-            // CopyVieweroptions($dbh, $tempDbh, "SourceDViewerOptions");
+            CopyVieweroptions($dbh, $tempDbh, "SourceCViewerOptions");
+            CopyVieweroptions($dbh, $tempDbh, "SourceDViewerOptions");
 
             CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceASelectedComponents");
             CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBSelectedComponents");
-            // CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCSelectedComponents");
-            // CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDSelectedComponents");
+            CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCSelectedComponents");
+            CopySelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDSelectedComponents");
 
             CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotSelectedComponents");
             CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotSelectedComponents");
-            // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotSelectedComponents");
-            // CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotSelectedComponents");
+            CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotSelectedComponents");
+            CopyNotSelectedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotSelectedComponents");
 
             // comparison result tables table                               
             CopyComparisonCheckGroups( $dbh, $tempDbh);                 
@@ -127,6 +129,8 @@
             CopyComparisonCheckProperties( $dbh, $tempDbh);
             CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceANotMatchedComponents");
             CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceBNotMatchedComponents");
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceCNotMatchedComponents");
+            CopyNotMatchedComponentsToCheckSpaceDB($dbh, $tempDbh, "SourceDNotMatchedComponents");
 
             // source a compliance result tables table     
             CopySourceAComplianceCheckGroups($dbh, $tempDbh);
@@ -136,7 +140,17 @@
             // source b compliance result tables table          
             CopySourceBComplianceCheckGroups($dbh, $tempDbh);
             CopySourceBComplianceCheckComponents($dbh, $tempDbh);
-            CopySourceBComplianceCheckProperties($dbh, $tempDbh);               
+            CopySourceBComplianceCheckProperties($dbh, $tempDbh);  
+            
+            // source C compliance result tables table          
+            CopySourceCComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceCComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceCComplianceCheckProperties($dbh, $tempDbh);  
+
+            // source d compliance result tables table          
+            CopySourceDComplianceCheckGroups($dbh, $tempDbh);
+            CopySourceDComplianceCheckComponents($dbh, $tempDbh);
+            CopySourceDComplianceCheckProperties($dbh, $tempDbh); 
 
             // save check result statistics
             CopyCheckStatistics($dbh, $tempDbh);
@@ -648,6 +662,218 @@
         }     
     }
 
+    function CopySourceDComplianceCheckGroups($fromDbh, $toDbh)
+    {
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckGroups");
+        if($selectResults) 
+        {
+
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceDComplianceCheckGroups(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                componentClass TEXT NOT NULL,
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
+            $toDbh->exec($command);  
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['componentClass'], 
+                                        $row['componentCount'], 
+                                        $row['categoryStatus']));
+            }   
+        }
+    }
+
+    function CopySourceDComplianceCheckComponents($fromDbh, $toDbh)
+    {  
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckComponents");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
+            $toDbh->exec($command);    
+            $command = 'CREATE TABLE SourceDComplianceCheckComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,                
+                subComponentClass TEXT,
+                status TEXT,
+                accepted TEXT,
+                nodeId TEXT,
+                sourceId TEXT,
+                ownerGroup INTEGER NOT NULL)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckComponents(id, name, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['subComponentClass'],
+                                        $row['status'], 
+                                        $row['accepted'], 
+                                        $row['nodeId'], 
+                                        $row['sourceId'], 
+                                        $row['ownerGroup']));
+            }   
+        }  
+    }
+
+    function CopySourceDComplianceCheckProperties($fromDbh, $toDbh)
+    {   
+        $selectResults = $fromDbh->query("SELECT * FROM SourceDComplianceCheckProperties");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceDComplianceCheckProperties(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,              
+                value TEXT,
+                result TEXT,
+                severity TEXT,
+                accepted TEXT,
+                performCheck TEXT,
+                description TEXT,
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckProperties(id, name, value, result,
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['value'],
+                                        $row['result'], 
+                                        $row['severity'], 
+                                        $row['accepted'], 
+                                        $row['performCheck'], 
+                                        $row['description'], 
+                                        $row['ownerComponent'],
+                                        $row['rule']));
+            }   
+        }
+    }
+
+    function CopySourceCComplianceCheckGroups($fromDbh, $toDbh)
+    {
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckGroups");
+        if($selectResults) 
+        {
+
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceCComplianceCheckGroups(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                componentClass TEXT NOT NULL,
+                componentCount Integer,
+                categoryStatus TEXT NOT NULL)'; 
+            $toDbh->exec($command);  
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['componentClass'], 
+                                        $row['componentCount'], 
+                                        $row['categoryStatus']));
+            }   
+        }
+    }
+
+    function CopySourceCComplianceCheckComponents($fromDbh, $toDbh)
+    {  
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckComponents");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+            $toDbh->exec($command);    
+            $command = 'CREATE TABLE SourceCComplianceCheckComponents(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,                
+                subComponentClass TEXT,
+                status TEXT,
+                accepted TEXT,
+                nodeId TEXT,
+                sourceId TEXT,
+                ownerGroup INTEGER NOT NULL)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckComponents(id, name, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['subComponentClass'],
+                                        $row['status'], 
+                                        $row['accepted'], 
+                                        $row['nodeId'], 
+                                        $row['sourceId'], 
+                                        $row['ownerGroup']));
+            }   
+        }  
+    }
+
+    function CopySourceCComplianceCheckProperties($fromDbh, $toDbh)
+    {   
+        $selectResults = $fromDbh->query("SELECT * FROM SourceCComplianceCheckProperties");
+        if($selectResults) 
+        {
+    
+            $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE SourceCComplianceCheckProperties(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,              
+                value TEXT,
+                result TEXT,
+                severity TEXT,
+                accepted TEXT,
+                performCheck TEXT,
+                description TEXT,
+                ownerComponent INTEGER NOT NULL,
+                rule TEXT)'; 
+            $toDbh->exec($command);    
+
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckProperties(id, name, value, result,
+                                        severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            
+            
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+            {           
+                $insertStmt->execute(array($row['id'], 
+                                        $row['name'], 
+                                        $row['value'],
+                                        $row['result'], 
+                                        $row['severity'], 
+                                        $row['accepted'], 
+                                        $row['performCheck'], 
+                                        $row['description'], 
+                                        $row['ownerComponent'],
+                                        $row['rule']));
+            }   
+        }
+    }
+
     function CopySourceBComplianceCheckGroups($fromDbh, $toDbh)
     {
         $selectResults = $fromDbh->query("SELECT * FROM SourceBComplianceCheckGroups");
@@ -901,50 +1127,65 @@
             // create table
             $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
             $toDbh->exec($command); 
-            $command = 'CREATE TABLE ComparisonCheckComponents(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceASubComponentClass TEXT,
-                sourceBSubComponentClass TEXT,
-                status TEXT,
-                accepted TEXT,
-                sourceANodeId TEXT,
-                sourceBNodeId TEXT,
-                sourceAId TEXT,
-                sourceBId TEXT,
-                ownerGroup INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckComponents(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceCName TEXT,
+            //     sourceDName TEXT,
+            //     sourceASubComponentClass TEXT,
+            //     sourceBSubComponentClass TEXT,
+            //     status TEXT,
+            //     accepted TEXT,
+            //     sourceANodeId TEXT,
+            //     sourceBNodeId TEXT,
+            //     sourceAId TEXT,
+            //     sourceBId TEXT,
+            //     ownerGroup INTEGER NOT NULL,
+            //     transpose TEXT)'; 
+            $command = CREATE_COMPARISONCOMPONETS_TABLE;
             $toDbh->exec($command);    
         
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
-                        sourceAName, 
-                        sourceBName, 
-                        sourceASubComponentClass, 
-                        sourceBSubComponentClass,
-                        status, 
-                        accepted, 
-                        sourceANodeId, 
-                        sourceBNodeId, 
-                        sourceAId,
-                        sourceBId,
-                        ownerGroup, 
-                        transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        
+            // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
+            //             sourceAName, 
+            //             sourceBName, 
+            //             sourceASubComponentClass, 
+            //             sourceBSubComponentClass,
+            //             status, 
+            //             accepted, 
+            //             sourceANodeId, 
+            //             sourceBNodeId, 
+            //             sourceAId,
+            //             sourceBId,
+            //             ownerGroup, 
+            //             transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE);
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                     $row['sourceAName'], 
                                     $row['sourceBName'],
+                                    $row['sourceCName'], 
+                                    $row['sourceDName'],
+                                    $row['sourceAMainClass'], 
+                                    $row['sourceBMainClass'],
+                                    $row['sourceCMainClass'], 
+                                    $row['sourceDMainClass'], 
                                     $row['sourceASubComponentClass'], 
-                                    $row['sourceBSubComponentClass'], 
+                                    $row['sourceBSubComponentClass'],
+                                    $row['sourceCSubComponentClass'], 
+                                    $row['sourceDSubComponentClass'], 
                                     $row['status'], 
                                     $row['accepted'], 
                                     $row['sourceANodeId'],
                                     $row['sourceBNodeId'], 
+                                    $row['sourceCNodeId'],
+                                    $row['sourceDNodeId'], 
                                     $row['sourceAId'],
                                     $row['sourceBId'], 
+                                    $row['sourceCId'],
+                                    $row['sourceDId'],
                                     $row['ownerGroup'],
                                     $row['transpose'],));
             }                    
@@ -959,32 +1200,37 @@
             // create table
             $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
             $toDbh->exec($command); 
-            $command = 'CREATE TABLE ComparisonCheckProperties(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                sourceAName TEXT,
-                sourceBName TEXT,
-                sourceAValue TEXT,
-                sourceBValue TEXT,
-                result TEXT,
-                severity TEXT,
-                accepted TEXT,
-                performCheck TEXT,
-                description TEXT,
-                ownerComponent INTEGER NOT NULL,
-                transpose TEXT)'; 
+            // $command = 'CREATE TABLE ComparisonCheckProperties(
+            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            //     sourceAName TEXT,
+            //     sourceBName TEXT,
+            //     sourceAValue TEXT,
+            //     sourceBValue TEXT,
+            //     result TEXT,
+            //     severity TEXT,
+            //     accepted TEXT,
+            //     performCheck TEXT,
+            //     description TEXT,
+            //     ownerComponent INTEGER NOT NULL,
+            //     transpose TEXT)';
+            $command = CREATE_COMPARISONPROPERTIES_TABLE; 
             $toDbh->exec($command); 
             
-            $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-                        sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-        
+            // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
+            //             sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);        
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['sourceAName'], 
                                         $row['sourceBName'],
+                                        $row['sourceCName'], 
+                                        $row['sourceDName'],
                                         $row['sourceAValue'], 
                                         $row['sourceBValue'], 
+                                        $row['sourceCValue'], 
+                                        $row['sourceDValue'], 
                                         $row['result'],
                                         $row['severity'], 
                                         $row['accepted'], 

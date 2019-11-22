@@ -1,6 +1,6 @@
-var comparisonCheckManager;
-var sourceAComplianceCheckManager;
-var sourceBComplianceCheckManager;
+// var comparisonCheckManager;
+// var sourceAComplianceCheckManager;
+// var sourceBComplianceCheckManager;
 
 function CheckManager(name) {
     this.Name = name;
@@ -33,34 +33,74 @@ function CheckManager(name) {
 
     CheckManager.prototype.performCheck = function (checkCaseType,
         comparisonCheck,
-        interfaceObject,
-        orderMaintained) {
+        interfaceObject) {
 
         return new Promise((resolve) => {
             // var $this = this;
             if (comparisonCheck) {
 
+                // get datasource definition order in checkcase
+                var dataSourceOrderInCheckCase =  getDataSourceOrderInCheckcase();
+                // var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
+
+                // var sourcesTraversed = [];
+                // for (var srcId in SourceManagers) {
+                //     var sourceManager = SourceManagers[srcId];
+                //     if ('sourceA' in sourceTypesFromCheckCase &&
+                //         !sourcesTraversed.includes('sourceA') &&
+                //         sourceTypesFromCheckCase['sourceA'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+                //         dataSourceOrderInCheckCase[srcId] = 1;
+                //         sourcesTraversed.push('sourceA');
+                //     }
+                //     else if ('sourceB' in sourceTypesFromCheckCase &&
+                //         !sourcesTraversed.includes('sourceB') &&
+                //         sourceTypesFromCheckCase['sourceB'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+                //         dataSourceOrderInCheckCase[srcId] = 2;
+                //         sourcesTraversed.push('sourceB');
+                //     }
+                //     else if ('sourceC' in sourceTypesFromCheckCase &&
+                //         !sourcesTraversed.includes('sourceC') &&
+                //         sourceTypesFromCheckCase['sourceC'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+                //         dataSourceOrderInCheckCase[srcId] = 3;
+                //         sourcesTraversed.push('sourceC');
+                //     }
+                //     else if ('sourceD' in sourceTypesFromCheckCase &&
+                //         !sourcesTraversed.includes('sourceD') &&
+                //         sourceTypesFromCheckCase['sourceD'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
+                //         dataSourceOrderInCheckCase[srcId] = 4;
+                //         sourcesTraversed.push('sourceD');
+                //     }
+                // }
+
+                // selected components
                 var sourceManagerA = SourceManagers["a"];
-                var sourceManagerB = SourceManagers["b"];
-                var sourceASelectedCompoents = sourceManagerA.ModelTree.GetSelectedComponents();
-                var sourceBSelectedCompoents = sourceManagerB.ModelTree.GetSelectedComponents();
+                var sourceManagerB = SourceManagers["b"];               
+                var sourceASelectedComponents = sourceManagerA.ModelTree.GetSelectedComponents();
+                var sourceBSelectedComponents = sourceManagerB.ModelTree.GetSelectedComponents();
+                var sourceCSelectedComponents = [];
+                var sourceDSelectedComponents = [];
+                if ("c" in SourceManagers)
+                {
+                    sourceCSelectedComponents = SourceManagers["c"].ModelTree.GetSelectedComponents();
+                }
+                if("d" in SourceManagers)
+                {
+                    sourceDSelectedComponents = SourceManagers["d"].ModelTree.GetSelectedComponents();
+                }
+
                 var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
                 var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-                var dataSourceOrderMaintained = "true";
-                if (!orderMaintained) {
-                    dataSourceOrderMaintained = "false";
-                }                      
-
                 $.ajax({
                     url: 'PHP/checkDataSourceForComparison.php',
                     type: "POST",
                     async: false,
                     data: {
                         "CheckCaseType": JSON.stringify(checkCaseType),
-                        "SourceASelectedCompoents": JSON.stringify(sourceASelectedCompoents),
-                        "SourceBSelectedCompoents": JSON.stringify(sourceBSelectedCompoents),
-                        "orderMaintained": dataSourceOrderMaintained,
+                        "SourceASelectedComponents": JSON.stringify(sourceASelectedComponents),
+                        "SourceBSelectedComponents": JSON.stringify(sourceBSelectedComponents),
+                        "SourceCSelectedComponents": JSON.stringify(sourceCSelectedComponents),
+                        "SourceDSelectedComponents": JSON.stringify(sourceDSelectedComponents),
+                        "dataSourceOrderInCheckCase": JSON.stringify(dataSourceOrderInCheckCase),
                         "ProjectName": projectinfo.projectname,
                         'CheckName': checkinfo.checkname
                     },
@@ -68,7 +108,7 @@ function CheckManager(name) {
                         return resolve(true);
 
                     },
-                    error: function (error) {                                                
+                    error: function (error) {
                         return resolve(false);
                     }
                 });
@@ -86,7 +126,7 @@ function CheckManager(name) {
                     data: {
                         "CheckCaseType": JSON.stringify(checkCaseType),
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
-                        "ContainerId": containerID,
+                        "SourceId": interfaceObject.Id,
                         'ProjectName': projectinfo.projectname,
                         'CheckName': checkinfo.checkname
                     },

@@ -10,6 +10,7 @@ var AcceptedColor = "#e8ffeb";
 var PropertyAcceptedColor = "#ffff99";
 var SelectedRowColor = "#e6e8e8";
 var HiddenElementTextColor = "#b3b5b5";
+var MissingItemsColor = "#D8F5F0";
 // var TransposedColor = "#ace396";
 
 function HighlightManager(viewer,
@@ -48,8 +49,7 @@ function HighlightManager(viewer,
     }
 
     HighlightManager.prototype.clearSelection = function () {
-        this.Viewer.selectionManager.clear();  
-        //this._selectedComponentId = "";      
+        this.Viewer.selectionManager.clear();          
     }
 
     HighlightManager.prototype.setViewOrientation = function (orienatation) {
