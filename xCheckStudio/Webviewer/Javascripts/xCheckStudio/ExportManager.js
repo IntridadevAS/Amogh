@@ -3,54 +3,120 @@ if (typeof (require) !== 'undefined') {
     XLSX = require('xlsx');
 }
 
+var comparisonExportManager = new ComparisonExportManager()
+var complianceAExportManager = new ComplianceAExportManager()
+var complianceBExportManager = new ComplianceBExportManager()
+
 var ExportManager = {
-    SelectedTableIds : []
-}
-
-function Destroy() {
-    var viewerContainerElement = document.getElementById("selectionListOfTables");
-    var style = viewerContainerElement.style;
-
-    var parent = viewerContainerElement.parentElement;
-
-    $("#selectionListOfTables").remove();
-
-    var viewerContainerDiv = document.createElement("div")
-    viewerContainerDiv.id = "selectionListOfTables";
-    viewerContainerDiv.style.cssText = style.cssText;
-
-    parent.appendChild(viewerContainerDiv);
+    ExcelOutputFormInitialised : false,
 }
 
 function ShowSelectBox() {
-    var overlay = document.getElementById("selectTableToExportOverlay");
-    var popup = document.getElementById("selectTableToExportPopup");
-    // var exportManager = new ExportManager();
+    var overlay = document.getElementById("Excel_Output_overlay");
+    var popup = document.getElementById("Excel_Output_popup");
 
-    DisplayCategoriesToExport();
 
     overlay.style.display = 'block';
     popup.style.display = 'block';
+
+    var el = document.getElementById('closeExcelOutputForm');
+
+    el.addEventListener('click', function(){
+        closeSaveAs();
+    }, false);
+
+    if(!ExportManager.ExcelOutputFormInitialised) {
+        CreateDevExtremeWidgets();
+        ExportManager.ExcelOutputFormInitialised = true;
+    }
 }
 
-function DisplayCategoriesToExport() {
-    ExportManager.SelectedTableIds = [];
+function CreateDevExtremeWidgets() {
 
-    Destroy();
+    new DevExpress.ui.dxSwitch(document.getElementById("comparisonOutputSwitch"), {  });
+    new DevExpress.ui.dxSwitch(document.getElementById("complianceOutputSwitch"), {  });
+    new DevExpress.ui.dxSwitch(document.getElementById("complianceSource2OutputSwitch"), {  });
+    new DevExpress.ui.dxSwitch(document.getElementById("complianceSource1OutputSwitch"), {  });
+    new DevExpress.ui.dxSwitch(document.getElementById("ExportPropertiesSwitch"), { });
+
+    document.getElementById("Data_source_1_A95_Text_9").innerText = checkResults["sourceInfo"].sourceAFileName;
+    document.getElementById("Data_source_1_A95_Text_14").innerText = checkResults["sourceInfo"].sourceBFileName;
 
     var tableData = [];
-    var checkTableIds = model["checks"][model.currentCheck]["reviewTable"].CheckTableIds;
-    for(var id in checkTableIds) {
-        var tableId = checkTableIds[id];
-        tableId = tableId.replace("#","");
-        var tableName = tableId.split("_")[0];
+    var columnHeaders = [{dataField : "key", caption : "Key", visible : false}, {dataField : "name", caption : "Name"}];
+
+    var ComparisonGroups = checkResults["Comparisons"][0]["results"];
+    for(var id in ComparisonGroups) {
+        var tableName = ComparisonGroups[id].componentClass;
         var obj = {"key": id,  "name" : tableName};
         tableData.push(obj);
     }
-    var columnHeaders = [{dataField : "key", caption : "Key", visible : false}, {dataField : "name", caption : "Name"}];
+
+    comparisonExportManager.CreateTables("comparisonTables", columnHeaders, tableData);
+
+
+    var Compliances = checkResults["Compliances"];
+    for(var id in Compliances) {
+        var complianceGroups = Compliances[id]["results"];
+        var tableData = [];
+        for(var i in complianceGroups) {
+            var tableName = complianceGroups[i].componentClass;
+            var obj = {"key": i,  "name" : tableName};
+            tableData.push(obj);
+        }
+
+        if(document.getElementById("Data_source_1_A95_Text_9").innerText == Compliances[id].source) {
+            complianceAExportManager.CreateTables("complianceSource1tables", columnHeaders, tableData);
+        }
+        else if(document.getElementById("Data_source_1_A95_Text_14").innerText == Compliances[id].source) {
+            complianceAExportManager.CreateTables("complianceSource2tables", columnHeaders, tableData);
+        }
+    }
+}
+
+function OnExcelClick() {
+    ShowSelectBox();
+    var exportButton = document.getElementById("exportButton");
+    exportButton.onclick= function () {
+        ExportToExcel();
+    };
+}
+
+function ExportToExcel() {
+
+    showBusyIndicator();
+    var exportToExcel = new ExportExcel();
+    var comparisonSwitch = $("#comparisonOutputSwitch").dxSwitch("instance");
+    var comparisonValueswitch = comparisonSwitch.option("value");
+
+    var complianceSwitch = $("#complianceOutputSwitch").dxSwitch("instance");
+    var complianceValueswitch = complianceSwitch.option("value");
+
+    if(comparisonValueswitch) {
+        var exportPropertiesSwitch =  $("#ExportPropertiesSwitch").dxSwitch("instance");
+        var exportProperties = exportPropertiesSwitch.option("value");
+
+        exportToExcel.ExportComparisonComponents(comparisonExportManager.SelectedTableIds, exportProperties).then(function() {
+            hideBusyIndicator();
+            closeSaveAs();
+            closeOutpuToOverlay();
+        });
+    }  
+    else {
+        ExportExcel.ComparisonSheetExported = true;
+    }
+}
+
+
+function ComparisonExportManager() {
+    this.SelectedTableIds = [];
+}
+
+ComparisonExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
+    var _this = this;
 
     $(function () {
-        $("#selectionListOfTables").dxDataGrid({
+        $("#" + containerDiv).dxDataGrid({
             dataSource: tableData,
             keyExpr: "key",
             columns: columnHeaders,
@@ -59,6 +125,7 @@ function DisplayCategoriesToExport() {
             showBorders: false,
             allowColumnResizing: true,
             hoverStateEnabled: true,
+            showColumnHeaders: false,
             selection: {
                 mode: "multiple",
                 showCheckBoxesMode: "always",
@@ -71,24 +138,29 @@ function DisplayCategoriesToExport() {
                 mode: "standard"
             },
             onCellPrepared: function (e) {
-                if (e.rowType == "header") {
-                    e.cellElement.css("text-align", "center");
-                    e.cellElement.css("color", "black");
-                    e.cellElement.css("font-weight", "bold");
-                }
+                e.cellElement.css("font-size", "8px");
+                e.cellElement.css("height", "9px");
             },
             onSelectionChanged: function(e) {
                 if(e.currentSelectedRowKeys.length > 0) {
                     for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        ExportManager.SelectedTableIds.push(checkTableIds[Number(e.currentSelectedRowKeys[i])]);
+                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
+                            _this.SelectedTableIds.push(dataObject.name)
+                        }).fail(function(error) {
+                            // handle error
+                        });
                     }
                 }
                 else {
                     for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        var index = ExportManager.SelectedTableIds.indexOf(checkTableIds[Number(e.currentDeselectedRowKeys[i])]);
-                        if (index > -1) {
-                            ExportManager.SelectedTableIds.splice(index, 1);
-                        }
+                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
+                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
+                            if (index > -1) {
+                                _this.SelectedTableIds.splice(index, 1);
+                            }
+                        }).fail(function(error) {
+                            // handle error
+                        });
                     }
                 }
                 
@@ -97,214 +169,124 @@ function DisplayCategoriesToExport() {
     });
 }
 
-function OnExcelClick() {
-    ShowSelectBox();
-    var exportButton = document.getElementById("exportToButton");
-    exportButton.onclick= function () {
-        ExportToExcel();
-    };
+function ComplianceAExportManager() {
+    this.SelectedTableIds = [];
 }
 
-// function GetCheckInfo() {
-//     var Info = [];
+ComplianceAExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
+    var _this = this;
 
-//     var projectName = localStorage.projectinfo["projectname"];
-//     var checkName = localStorage.checkinfo["checkname"];
-//     var userName = localStorage.userinfo["alias"];
-
-//     projectName = "Project/CheckSpace Name : " + projectName + "/" + checkName;
-//     userName - "UserName : " + userName;
-
-//     if(model.currentCheck == "comparison") {
-
-//     }
-
-// }
-
-function ExportToExcel() {
-    // GetCheckInfo();
-    // CreateHeaderForExcel();
-    var excelSheetData = CreateDataToExport();
-    var nextRow;
-    var ws;
-
-    for(var table in excelSheetData) {
-        // var headerOfTable = excelSheetData[table][0]
-        // excelSheetData[table].shift();
-        var data = excelSheetData[table];
-
-        if(!ws) {
-            ws = XLSX.utils.aoa_to_sheet(data);
-            nextRow = data.length + 8;
-        }
-        else {
-            var startFrom = "A" + nextRow;
-            XLSX.utils.sheet_add_aoa(ws, data, {origin: startFrom});
-        }
-        
-    }
-
-    // A workbook is the name given to an Excel file
-    var wb = XLSX.utils.book_new() // make Workbook of Excel
-
-    // add Worksheet to Workbook
-    // Workbook contains one or more worksheets
-    XLSX.utils.book_append_sheet(wb, ws, model.currentCheck) // sheetAName is name of Worksheet
-
-    // export Excel file
-    XLSX.writeFile(wb, 'D:/Intrida/Output/book234.xlsx') //
-
-
-    // close popup after export
-    closeSaveAs();
-    closeOutpuToOverlay();
-}
-
-// function CreateHeaderForExcel() {
-//     var manager = model.checks[model.currentCheck].reviewManager;
-//     var results;
-//     if(model.currentCheck.toLowerCase() == "comparison") {
-//         results = manager.ComparisonCheckManager['results'];
-//     }
-//     else {
-//         results = manager.ComplianceCheckManager['results'];
-//     }
-
-//     var sourceAHeader = [];
-//     var sourceBHeader = [];
-//     var headerArray = [];
-
-//     for(var tid = 0; tid < ExportManager.SelectedTableIds.length; tid++) {
-//         var tableId = ExportManager.SelectedTableIds[tid];
-//         tableId = tableId.replace("#","");
-//         var tableName = tableId.split("_")[0];
-//         for(var id in results) {
-//             if(results[id].componentClass.toLowerCase() == tableName.toLowerCase()) {
-//                 var components = results[id].components;
-//                 for(var i in components) {
-//                     var component = components[i];
-//                     var properties = component.properties;
-//                     for(var j in properties) {
-//                         var property = properties[j];
-
-//                         if(property.sourceAName !== null) {
-//                             if(!sourceAHeader.includes(property.sourceAName))
-//                                 sourceAHeader.push(property.sourceAName);
-//                             else if(property.sourceAName == "")
-//                                 sourceAHeader.push(property.sourceAName);
-//                         }
-//                         else {
-//                             sourceAHeader.push("");
-//                         }
-
-//                         if(property.sourceBName !== null) {
-//                             if(!sourceBHeader.includes(property.sourceBName))
-//                                 sourceBHeader.push(property.sourceBName);
-//                             else if(property.sourceBName == "")
-//                                 sourceBHeader.push(property.sourceBName);
-//                         }
-//                         else {
-//                             sourceBHeader.push("");
-//                         }
-//                     }
-//                 }
-//                 break;
-//             }
-//         }
-//     }
-
-
-
-// }
-
-function CreateDataToExport() {
-
-    var manager = model.checks[model.currentCheck].reviewManager;
-    var results;
-    if(model.currentCheck.toLowerCase() == "comparison") {
-        results = manager.ComparisonCheckManager['results'];
-    }
-    else {
-        results = manager.ComplianceCheckManager['results'];
-    }
-
-    var dataObject = {};
-
-    for(var tid = 0; tid < ExportManager.SelectedTableIds.length; tid++) {
-        var tableId = ExportManager.SelectedTableIds[tid];
-        tableId = tableId.replace("#","");
-        var tableName = tableId.split("_")[0];
-        for(var id in results) {
-            if(results[id].componentClass.toLowerCase() == tableName.toLowerCase()) {
-                var components = results[id].components;
-                var componentsArray = [];
-                var headerArray = [];
-                var headerArrayFilled = false;
-                for(var i in components) {
-                    var component = components[i];
-                    var comp = [];
-                    comp.push(component.sourceAName);
-                    comp.push(component.sourceBName);
-                    comp.push(component.status);
-
-                    if(!headerArrayFilled) {
-                        headerArray.push("Item A");
-                        headerArray.push("Item B");
-                        headerArray.push("Status");
+    $(function () {
+        $("#" + containerDiv).dxDataGrid({
+            dataSource: tableData,
+            keyExpr: "key",
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: false,
+            showBorders: false,
+            allowColumnResizing: true,
+            hoverStateEnabled: true,
+            showColumnHeaders: false,
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                recursive: true
+            },
+            paging: {
+                enabled: false
+            },
+            scrolling: {
+                mode: "standard"
+            },
+            onCellPrepared: function (e) {
+                e.cellElement.css("font-size", "8px");
+                e.cellElement.css("height", "9px");
+            },
+            onSelectionChanged: function(e) {
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
+                            ExportManager.SelectedTableIds.push(dataObject.name)
+                        }).fail(function(error) {
+                            // handle error
+                        });
                     }
-                    
-                    var properties = component.properties;
-                    for(var j in properties) {
-                        var property = properties[j];
-
-                        if(!headerArrayFilled) {
-
-                            if(property.sourceAName !== null) {
-                                headerArray.push(property.sourceAName);
+                }
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
+                            var index = ExportManager.SelectedTableIds.indexOf(dataObject.name)
+                            if (index > -1) {
+                                ExportManager.SelectedTableIds.splice(index, 1);
                             }
-                            else {
-                                headerArray.push(" ");
-                            }
-
-                            if(property.sourceBName !== null) {
-                                headerArray.push(property.sourceBName);
-                            }
-                            else {
-                                headerArray.push(" ");
-                            }
-                            
-                            
-                            headerArray.push("Status");
-                        }
-
-                        if (property.transpose == "lefttoright") {
-                            comp.push(property.sourceAValue);    
-                            comp.push(property.sourceBValue);
-                        }
-                        else if (property.transpose == "righttoleft") {
-                            comp.push(property.sourceBValue);
-                            comp.push(property.sourceAValue);
-                        }
-                        else if (property.transpose == null) {
-                            comp.push(property.sourceAValue);
-                            comp.push(property.sourceBValue);
-                        }
-
-                        comp.push(property.severity);
+                        }).fail(function(error) {
+                            // handle error
+                        });
                     }
-
-                    if(!headerArrayFilled) {
-                        componentsArray.push(headerArray);
-                        headerArrayFilled = true;
-                    }
-                    componentsArray.push(comp);
                 }
                 
-                dataObject[tableName] = componentsArray;
-                break;
-            }
-        }
-    }
-    
-    return dataObject;
+            },
+        });
+    });
+}
+
+function ComplianceBExportManager() {
+    this.SelectedTableIds = [];
+}
+
+ComplianceBExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
+    var _this = this;
+
+    $(function () {
+        $("#" + containerDiv).dxDataGrid({
+            dataSource: tableData,
+            keyExpr: "key",
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            wordWrapEnabled: false,
+            showBorders: false,
+            allowColumnResizing: true,
+            hoverStateEnabled: true,
+            showColumnHeaders: false,
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                recursive: true
+            },
+            paging: {
+                enabled: false
+            },
+            scrolling: {
+                mode: "standard"
+            },
+            onCellPrepared: function (e) {
+                e.cellElement.css("font-size", "8px");
+                e.cellElement.css("height", "9px");
+            },
+            onSelectionChanged: function(e) {
+                if(e.currentSelectedRowKeys.length > 0) {
+                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
+                            ExportManager.SelectedTableIds.push(dataObject.name)
+                        }).fail(function(error) {
+                            // handle error
+                        });
+                    }
+                }
+                else {
+                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
+                            var index = ExportManager.SelectedTableIds.indexOf(dataObject.name)
+                            if (index > -1) {
+                                ExportManager.SelectedTableIds.splice(index, 1);
+                            }
+                        }).fail(function(error) {
+                            // handle error
+                        });
+                    }
+                }
+                
+            },
+        });
+    });
 }

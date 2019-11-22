@@ -320,8 +320,8 @@ function cancelReturnCheck() {
 }
 
 function closeSaveAs() {
-    var overlay = document.getElementById("selectTableToExportOverlay");
-    var popup = document.getElementById("selectTableToExportPopup");
+    var overlay = document.getElementById("Excel_Output_overlay");
+    var popup = document.getElementById("Excel_Output_popup");
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
