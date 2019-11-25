@@ -120,7 +120,11 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = func
 }
 
 ReviewComparisonSelectionManager.prototype.ChangeBackgroundColor = function (row, status) {
-    var color = this.GetRowHighlightColor(status);
+    var color = "#ffffff";
+    if (status) {
+        color = this.GetRowHighlightColor(status);
+    }
+
     for (var cell = 0; cell < row.cells.length; cell++) {
         row.cells[cell].style.backgroundColor = color;
     }
