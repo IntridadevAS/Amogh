@@ -15,6 +15,8 @@ function Review1DViewerInterface(id,
     this.SelectedSheetRow;
 
     this.Id = id;
+
+    this.RowWiseReviewRowData = {};
 }
 
 // assign SelectionManager's method to this class
@@ -255,7 +257,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     // get rowIndex vs status array
     var checkStatusArray = {};
     for (var componentId in checkGroup.components) {
-        var currentReviewTableRowData = checkGroup.components[componentId];
+        var currentReviewTableRowData = checkGroup.components[componentId];        
 
         var sourceComponentName;
         if (this.IsComparison) {
@@ -282,17 +284,19 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
         }
 
         for (var i = 0; i < rows.length; i++) {
-            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
+            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];            
 
             var componentName;
             if (column['Name'] !== undefined) {
-                componentName = row.cells[column['Name']].innerText;
+                componentName = row.cells[column['Name']].textContent;
             }
             else if (column['Tagnumber'] !== undefined) {
-                componentName = row.cells[column['Tagnumber']].innerText;
+                componentName = row.cells[column['Tagnumber']].textContent;
             }
 
             if (sourceComponentName === componentName) {
+                // maintain rowwise review row data
+                this.RowWiseReviewRowData[row.rowIndex] = currentReviewTableRowData;
 
                 if (componentName === selectedComponentName) {
                     // highlight sheet data row
@@ -360,14 +364,23 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
 
     var componentName;
     if (column.Name !== undefined) {
-        componentName = sheetDataRow.cells[column.Name].innerText;
+        componentName = sheetDataRow.cells[column.Name].textContent;
     }
     else if (column.Tagnumber !== undefined) {
-        componentName = sheetDataRow.cells[column.Tagnumber].innerText;
+        componentName = sheetDataRow.cells[column.Tagnumber].textContent;
     }
 
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
-    var componentsGroupName = sheetDataRow.cells[column.ComponentClass].innerText;
+    //var componentsGroupName = sheetDataRow.cells[column.ComponentClass].textContent;
+    // check if sheet row is in RowWiseReviewRowData. If it is not, 
+    // then it is undefined component
+    var componentsGroupName;
+    if (sheetDataRow.rowIndex in this.RowWiseReviewRowData) {
+        componentsGroupName = this.ActiveSheetName;
+    }
+    else {
+        componentsGroupName = "Undefined";
+    }
 
     var checkTableIdFound = false;
     var undefinedGroupId;
@@ -405,20 +418,20 @@ Review1DViewerInterface.prototype.GetRowAndExpandAccordion = function(groupId, c
         var name;
         if (this.IsComparison) {
             if (this.Id === "a") {
-                name = row.cells[ComparisonColumns.SourceAName].innerText;
+                name = row.cells[ComparisonColumns.SourceAName].textContent;
             }
             else if (this.Id === "b") {
-                name = row.cells[ComparisonColumns.SourceBName].innerText;
+                name = row.cells[ComparisonColumns.SourceBName].textContent;
             }
             else if (this.Id === "c") {
-                name = row.cells[ComparisonColumns.SourceCName].innerText;
+                name = row.cells[ComparisonColumns.SourceCName].textContent;
             }
             else if (this.Id === "d") {
-                name = row.cells[ComparisonColumns.SourceDName].innerText;
+                name = row.cells[ComparisonColumns.SourceDName].textContent;
             }
         }
         else {
-            name = row.cells[ComplianceColumns.SourceName].innerText;
+            name = row.cells[ComplianceColumns.SourceName].textContent;
         }
 
         if (componentName === name) {
@@ -478,16 +491,16 @@ Review1DViewerInterface.prototype.unhighlightSelectedSheetRowInviewer = function
 
     var rowIndex = currentRow.rowIndex;
     var status = checkStatusArray[obj[0]][rowIndex]
-    if (status !== undefined) {
+    // if (status !== undefined) {
         model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
-    }
-    else {
-        color = "#fffff"
-        for (var j = 0; j < currentRow.cells.length; j++) {
-            cell = currentRow.cells[j];
-            cell.style.backgroundColor = color;
-        }
-    }
+    // }
+    // else {
+    //     color = "#fffff"
+    //     for (var j = 0; j < currentRow.cells.length; j++) {
+    //         cell = currentRow.cells[j];
+    //         cell.style.backgroundColor = color;
+    //     }
+    // }
 }
 
 Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentReviewTableRowData, viewerContainer) {
@@ -535,10 +548,10 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
 
         var componentName;
         if (column.Name !== undefined) {
-            componentName = row.cells[column.Name].innerText;
+            componentName = row.cells[column.Name].textContent;
         }
         else if (column.Tagnumber !== undefined) {
-            componentName = row.cells[column.Tagnumber].innerText;
+            componentName = row.cells[column.Tagnumber].textContent;
         }
 
         if (selectedComponentName === componentName) {
