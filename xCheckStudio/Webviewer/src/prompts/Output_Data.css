@@ -1,0 +1,391 @@
+.mediaViewInfo {
+	--web-view-name: Output Data;
+	--web-view-id: Output_Data;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Output_Data;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+#Output_Data {
+	position: absolute;
+	box-sizing: border-box;
+	background: #E5E5E5;
+	width: 581px;
+	height: 820px;
+	background-color: rgba(255,255,255,1);
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	--web-view-name: Output Data;
+	--web-view-id: Output_Data;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+#Rectangle_1204 {
+	filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.502));
+}
+.Rectangle_1204 {
+	position: absolute;
+	overflow: visible;
+	width: 617px;
+	height: 385px;
+	left: 0px;
+	top: 0px;
+}
+.Path_350 {
+	overflow: visible;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 575px;
+	height: 55px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#Output {
+	position: absolute;
+	left: 15px;
+	top: 15px;
+	overflow: hidden;
+	width: 469px;
+	height: 30px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 25px;
+	color: rgba(242,243,244,1);
+}
+#Save_As {
+	position: absolute;
+	left: 84px;
+	top: 77px;
+	overflow: hidden;
+	width: 67px;
+	height: 22px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+.Line_39 {
+	overflow: visible;
+	position: absolute;
+	top: 94px;
+	left: 237px;
+	width: 1px;
+	height: 230px;
+}
+#Path_259 {
+	filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.749));
+}
+.Path_259 {
+	overflow: visible;
+	position: absolute;
+	top: 14px;
+	left: 549.854px;
+	width: 27px;
+	height: 27px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#Publish_To {
+	position: absolute;
+	left: 313px;
+	top: 77px;
+	overflow: hidden;
+	width: 191px;
+	height: 22px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+#Component_24 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 250px;
+	top: 154px;
+	overflow: visible;
+}
+.Rectangle_1242 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#SQL {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_25 {
+	position: absolute;
+	width: 106.505px;
+	height: 30px;
+	left: 355px;
+	top: 154px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_3 {
+	position: absolute;
+	overflow: visible;
+	width: 106.505px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#DropBox {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 107.505px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_26 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 477px;
+	top: 154px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_4 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#Link {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_27 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 15px;
+	top: 154px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_5 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#Excel {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Component_28 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 133px;
+	top: 154px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_6 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+
+#ChooseTablesToExport {
+	position: absolute;
+	left: 15px;
+	top: 76px;
+	overflow: hidden;
+	width: 551px;
+	height: 28px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+
+#PDF {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+
+#exportToButton {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 478px;
+	top: 112px;
+	overflow: visible;
+}
+
+#exportTo {
+	position: absolute;
+	left: 0px;
+	top: 4px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+
+#symCancelButton___1 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 15px;
+	top: 224px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_7 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#XML {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#symCancelButton___2 {
+	position: absolute;
+	width: 90px;
+	height: 30px;
+	left: 133px;
+	top: 224px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_8 {
+	position: absolute;
+	overflow: visible;
+	width: 90px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#ID3D_PDF {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 91px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#symCancelButton___4 {
+	position: absolute;
+	width: 117.505px;
+	height: 30px;
+	left: 58px;
+	top: 294px;
+	overflow: visible;
+}
+.Rectangle_1242_A55_Rectangle_9 {
+	position: absolute;
+	overflow: visible;
+	width: 117.505px;
+	height: 30px;
+	left: 0px;
+	top: 0px;
+}
+#JPG___PNG {
+	position: absolute;
+	left: 0px;
+	top: 3px;
+	overflow: hidden;
+	width: 118.505px;
+	height: 20px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}

@@ -240,6 +240,301 @@
         </div>
       </div>
 
+      <!-- On Output click overlay -->
+      <div id="outputOverlay" class="overlay"></div>
+      <div id="outputPopup" style="width: 581px; height: 350px; overflow: hidden; top: 40%; left: 30%;" class="popup">
+        <div id="Output_Data">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="581" height="349">
+            </rect>
+          </svg>
+          <svg class="Path_350" viewBox="0 0 575 55">
+            <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
+            </path>
+          </svg>
+          <div id="Output">
+            <span>Output</span>
+          </div>
+          <div id="Save_As">
+            <span>Save As</span>
+          </div>
+          <svg class="Line_39">
+            <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_39" d="M 0 0 L 0 230">
+            </path>
+          </svg>
+          <div onclick="closeOutpuToOverlay()">
+            <svg class="Path_259" viewBox="7432.354 -8028.479 18 18">
+              <path fill="rgba(255,255,255,1)" id="Path_259" d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+              </path>
+            </svg>
+          </div>
+          <div id="Publish_To">
+            <span>Publish To</span>
+          </div>
+          <div id="Component_24">
+            <svg class="Rectangle_1242">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="SQL">
+              <span>SQL</span>
+            </div>
+          </div>
+          <div id="Component_25">
+            <svg class="Rectangle_1242_A55_Rectangle_3">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_3" rx="5" ry="5" x="0" y="0" width="106.505" height="30">
+              </rect>
+            </svg>
+            <div id="DropBox">
+              <span>DropBox</span>
+            </div>
+          </div>
+          <div id="Component_26">
+            <svg class="Rectangle_1242_A55_Rectangle_4">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_4" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="Link">
+              <span>Link</span>
+            </div>
+          </div>
+          <div id="Component_27" onclick="OnExcelClick()">
+            <svg class="Rectangle_1242_A55_Rectangle_5">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="Excel">
+              <span>Excel</span>
+            </div>
+          </div>
+          <div id="Component_28">
+            <svg class="Rectangle_1242_A55_Rectangle_6">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_6" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="PDF">
+              <span>PDF</span>
+            </div>
+          </div>
+          <div id="symCancelButton___1">
+            <svg class="Rectangle_1242_A55_Rectangle_7">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_7" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="XML">
+              <span>XML</span>
+            </div>
+          </div>
+          <div id="symCancelButton___2">
+            <svg class="Rectangle_1242_A55_Rectangle_8">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_8" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="ID3D_PDF">
+              <span>3D PDF</span>
+            </div>
+          </div>
+          <div id="symCancelButton___4">
+            <svg class="Rectangle_1242_A55_Rectangle_9">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_9" rx="5" ry="5" x="0" y="0" width="117.505" height="30">
+              </rect>
+            </svg>
+            <div id="JPG___PNG">
+              <span>JPG / PNG</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="Excel_Output_overlay" class="overlay"></div>
+      <div id="Excel_Output_popup" style="width: 460px; height: 823px; overflow: hidden; top: 10%; left: 40%;" class="popup">
+      <div id="Excel_Output">
+        <div id="Group_398">
+          <svg class="Rectangle_1204">
+            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="460" height="823">
+            </rect>
+          </svg>
+          <svg class="Path_3501" viewBox="0 0 453.889 55">
+            <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 453.8886413574219 0 L 453.8886413574219 55 L 0 55 L 0 0 Z">
+            </path>
+          </svg>
+          <div id="Excel_Output_A95_Text_1">
+            <span>Excel Output</span>
+          </div>
+          <svg id="closeExcelOutputForm" class="Path_2591" viewBox="7432.354 -8028.479 18 18">
+            <path fill="rgba(255,255,255,1)" id="Path_259" d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+            </path>
+          </svg>
+          <div id="type_2">
+            <div id="pie">
+              <svg class="bg">
+                <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="8" ry="8" x="0" y="0" width="434" height="469">
+                </rect>
+              </svg>
+              <div id="Group_5">
+                <div id="Data_source_1">
+                  <span>Output Reviews</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="Group_5_A95_Group_5">
+            <div id="Data_source_1_A95_Text_3">
+              <span>Comparison</span>
+            </div>
+          </div>
+          <div id="exportComparisonDetailedTableSwitch">
+              <div id="ExportPropertiesSwitch">
+
+              </div>
+            <div id="ExportPropertiesText">
+              <span>Export Properties</span>
+            </div>
+          </div>
+          <div id="comparisonOutputSwitch" class="Rectangle_1270">
+            
+          </div>
+          <div id="comparisonTables" class="Path_364">
+            
+          </div>
+          <div id="Group_5_A95_Group_6">
+            <div id="Data_source_1_A95_Text_7">
+              <span>Category</span>
+            </div>
+          </div>
+          <div id="type_2_A95_Group_7">
+            <div id="pie_A95_Group_8">
+              <svg class="bg_A95_Rectangle_4">
+                <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A95_Rectangle_4" rx="8" ry="8" x="0" y="0" width="434" height="229">
+                </rect>
+              </svg>
+              <div id="Group_5_A95_Group_9">
+                <div id="Data_source_1_A95_Text_8">
+                  <span>Output Datasets</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="Group_5_A95_Group_10">
+            <div id="Data_source_1_A95_Text_9">
+              <span>ABC.RVM</span>
+            </div>
+          </div>
+          <div id="complianceSource1OutputSwitch" class="Rectangle_1304">
+
+          </div>
+          <div id="complianceSource1tables" class="Path_368">
+            
+          </div>
+          <div id="Group_5_A95_Group_11">
+            <div id="Data_source_1_A95_Text_13">
+              <span>Category</span>
+            </div>
+          </div>
+          <div id="Group_5_A95_Group_12">
+            <div id="Data_source_1_A95_Text_14">
+              <span>Drwng.XML</span>
+            </div>
+          </div>
+          <div id="complianceSource2OutputSwitch" class="Rectangle_1305">
+            
+          </div>
+          <div id="complianceSource2tables" class="Path_369">
+            
+          </div>
+          <div id="Group_5_A95_Group_13">
+            <div id="Data_source_1_A95_Text_18">
+              <span>Category</span>
+            </div>
+          </div>
+          <div id="Group_5_A95_Group_14">
+            <div id="Data_source_1_A95_Text_19">
+              <span>Compliance</span>
+            </div>
+          </div>
+          <div id="complianceOutputSwitch" class="Rectangle_1306">
+           
+          </div>
+          <div id="Group_5_A95_Group_15">
+            <div id="Data_source_1_A95_Text_20">
+              <span>ABC.RVM</span>
+            </div>
+          </div>
+          <div id="SourceAOutputSwitch" class="Rectangle_1307">
+            
+          </div>
+          <div id="sourceATables" class="Path_370">
+            
+          </div>
+          <div id="Group_5_A95_Group_16">
+            <div id="Data_source_1_A95_Text_24">
+              <span>Category</span>
+            </div>
+          </div>
+          <div id="Group_5_A95_Group_17">
+            <div id="Data_source_1_A95_Text_25">
+              <span>Drwng.XML</span>
+            </div>
+          </div>
+          <div id="sourceBTables" class="Path_371">
+            
+          </div>
+          <div id="Group_5_A95_Group_18">
+            <div id="Data_source_1_A95_Text_29">
+              <span>Category</span>
+            </div>
+          </div>
+          <div id="SourceBOutputSwitch" class="Rectangle_1308">
+            
+          </div>
+          <svg class="line">
+            <rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="330" height="1">
+            </rect>
+          </svg>
+          <div id="fileNameTextBox" class="Path_372">
+    
+          </div>
+          <div id="Group_5_A95_Group_19">
+            <div id="Data_source_1_A95_Text_30">
+              <span>Report name</span>
+            </div>
+          </div>
+          <svg class="line_A95_Rectangle_11">
+            <rect fill="rgba(255,255,255,1)" id="line_A95_Rectangle_11" rx="0" ry="0" x="0" y="0" width="330" height="1">
+            </rect>
+          </svg>
+          <div id="fileDestinationPath" class="Path_373">
+            
+          </div>
+          <div id="Group_5_A95_Group_20">
+            <div id="Data_source_1_A95_Text_32">
+              <span>Output Destination</span>
+            </div>
+          </div>
+          <svg class="line_A95_Rectangle_12">
+            <rect fill="rgba(255,255,255,1)" id="line_A95_Rectangle_12" rx="0" ry="0" x="0" y="0" width="330" height="1">
+            </rect>
+          </svg>
+          <svg class="Line_78" viewBox="0 0 1 30">
+            <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_78" d="M 0 0 L 0 30">
+            </path>
+          </svg>
+          <svg class="Line_79" viewBox="0 0 1 30">
+            <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_79" d="M 0 0 L 0 30">
+            </path>
+          </svg>
+          <div id="exportButton">
+            <svg class="Rectangle_1242">
+              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
+              </rect>
+            </svg>
+            <div id="Export">
+              <span>Export</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
       <!-- Return to PREP overlay -->
       <div id="returnPREPOverlay" class="overlay"></div>
@@ -885,6 +1180,7 @@
 
     .dx-datagrid {
       font-size: 11px !important;
+      background-color: transparent !important;
     }
 
     .dx-treelist {
@@ -1009,6 +1305,12 @@
   <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
   <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
 
+  <!-- excel export dependancies -->
+  <script type="text/javascript" src="src\devExtreme\js\jszip.min.js"></script>
+  <script type="text/javascript" src="src\devExtreme\js\exceljs.min.js"></script>
+  <script type="text/javascript" src="src\devExtreme\js\FileSaver.min.js"></script>
+
+
   <script type="text/javascript" src="src/scripts/main.js"></script>
   <script type="text/javascript" src="src/scripts/reviewPage.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\Review.js"></script>
@@ -1043,9 +1345,12 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModuleMenuOptions.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DrawerMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExportManager.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ExportExcel.js"></script>
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
 
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
+  <link rel="stylesheet" href="CSS\Excel_Output.css" type="text/css"/>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewReferenceManager.js"></script>
 
@@ -1063,6 +1368,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPageSave.js"></script>
 
   <link rel="stylesheet" href="src\prompts\Save_and_Exit.css" type="text/css" />
+  <link rel="stylesheet" href="src\prompts\Output_Data.css" type="text/css" />
   <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
   <script>
     $("#loadIndicator").dxLoadPanel({

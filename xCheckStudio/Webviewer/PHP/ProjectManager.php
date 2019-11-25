@@ -3097,7 +3097,7 @@ function CreateProject()
     }
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select projectname from Projects where projectname='". $projectName."' COLLATE NOCASE;";      
+        $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
         $count=0;
         foreach ($dbh->query($query) as $row)
         {
