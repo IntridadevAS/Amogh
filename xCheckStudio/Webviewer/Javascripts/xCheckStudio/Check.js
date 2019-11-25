@@ -1,6 +1,6 @@
 function onCheckButtonClick() {
 
-    // showBusyIndicator();
+    showBusyIndicator();
 
     setTimeout(function () {
         // check if comparison or compliance is selected at least for one datasource   
