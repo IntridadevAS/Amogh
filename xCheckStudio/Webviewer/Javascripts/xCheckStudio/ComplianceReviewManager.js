@@ -374,6 +374,10 @@ ComplianceReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(p
                 else if(property.severity.toLowerCase() == "warning" && worstSeverity.toLowerCase() !== "error") {
                     worstSeverity = property.severity;
                 }
+                else if(property.severity.toLowerCase() == "no match" && 
+                (worstSeverity.toLowerCase() !== "error" && worstSeverity.toLowerCase() !== "warning")) {
+                    worstSeverity = property.severity;
+                }
             }
         }
     }

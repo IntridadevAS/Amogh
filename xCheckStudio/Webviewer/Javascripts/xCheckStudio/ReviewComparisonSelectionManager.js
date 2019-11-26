@@ -29,7 +29,7 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         // restore color
         var grid =  $(tableId).dxDataGrid("instance");
         var data =  grid.getDataSource().items();
-        var rowData = data[rowIndex];
+        var rowData = data[currentRow.rowIndex];
         this.RemoveHighlightColor(currentRow, rowData[ComparisonColumnNames.Status]);
 
         // remove current row from selected rows array

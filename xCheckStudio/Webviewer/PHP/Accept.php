@@ -26,16 +26,22 @@ switch ($ActionToPerform) {
 
     case "acceptComplianceSourceAComponent":
     case "acceptComplianceSourceBComponent":
+    case "acceptComplianceSourceCComponent":
+    case "acceptComplianceSourceDComponent":
         acceptComplianceComponent();
         break;
 
     case "acceptComplianceSourceAProperty":
     case "acceptComplianceSourceBProperty":
+    case "acceptComplianceSourceCProperty":
+    case "acceptComplianceSourceDProperty":
         acceptComplianceProperty();
         break;
 
     case "acceptComplianceSourceACategory":
     case "acceptComplianceSourceBCategory":
+    case "acceptComplianceSourceCCategory":
+    case "acceptComplianceSourceDCategory":
         acceptComplianceCategory();
         break;
 
@@ -53,16 +59,22 @@ switch ($ActionToPerform) {
         
     case "unAcceptComplianceSourceAComponent":
     case "unAcceptComplianceSourceBComponent":
+    case "unAcceptComplianceSourceCComponent":
+    case "unAcceptComplianceSourceDComponent":
         unAcceptComplianceComponent();
         break;
 
     case "unAcceptComplianceSourceAProperty":
     case "unAcceptComplianceSourceBProperty":
+    case "unAcceptComplianceSourceCProperty":
+    case "unAcceptComplianceSourceDProperty":
         unAcceptComplianceProperty();
         break;
 
     case "unAcceptComplianceSourceACategory":
     case "unAcceptComplianceSourceBCategory":
+    case "unAcceptComplianceSourceCCategory":
+    case "unAcceptComplianceSourceDCategory":
         unAcceptComplianceCategory();
         break;
 
@@ -283,6 +295,16 @@ function acceptComplianceComponent() {
             $CheckComponentsTable = "SourceBComplianceCheckComponents";
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         }
+        else if($ActionToPerform == "acceptComplianceSourceCComponent") {
+
+            $CheckComponentsTable = "SourceCComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceCComplianceCheckProperties";
+        }
+        else if($ActionToPerform == "acceptComplianceSourceDComponent") {
+
+            $CheckComponentsTable = "SourceDComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceDComplianceCheckProperties";
+        }
 
         $dbh->beginTransaction();
         foreach ($selectedGroupIdsVsResultsIds as $groupid => $components) {
@@ -354,6 +376,14 @@ function acceptComplianceProperty() {
     else if($ActionToPerform == "acceptComplianceSourceBProperty") {
         $componentTableName = 'SourceBComplianceCheckComponents';
         $propertiesTableName = 'SourceBComplianceCheckProperties'; 
+    }
+    else if($ActionToPerform == "acceptComplianceSourceCProperty") {
+        $componentTableName = 'SourceCComplianceCheckComponents';
+        $propertiesTableName = 'SourceCComplianceCheckProperties'; 
+    }
+    else if($ActionToPerform == "acceptComplianceSourceDProperty") {
+        $componentTableName = 'SourceDComplianceCheckComponents';
+        $propertiesTableName = 'SourceDComplianceCheckProperties'; 
     }
 
     $command = $dbh->prepare("SELECT * FROM $propertiesTableName WHERE ownerComponent=?");
@@ -442,6 +472,20 @@ function acceptComplianceCategory() {
         $CheckComponentsTable = "SourceBComplianceCheckComponents";
         $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+        $command->execute(array($categoryStatus, $groupid)); 
+    }
+    else if($ActionToPerform == "acceptComplianceSourceCategory") {
+
+        $CheckComponentsTable = "SourceCComplianceCheckComponents";
+        $CheckPropertiesTable = "SourceCComplianceCheckProperties";
+        $command = $dbh->prepare("UPDATE SourceCComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+        $command->execute(array($categoryStatus, $groupid)); 
+    }
+    else if($ActionToPerform == "acceptComplianceSourceDCategory") {
+
+        $CheckComponentsTable = "SourceDComplianceCheckComponents";
+        $CheckPropertiesTable = "SourceDComplianceCheckProperties";
+        $command = $dbh->prepare("UPDATE SourceDComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
 
@@ -806,6 +850,16 @@ function unAcceptComplianceComponent() {
             $CheckComponentsTable = "SourceBComplianceCheckComponents";
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         }
+        else if($ActionToPerform == "unAcceptComplianceSourceCComponent") {
+
+            $CheckComponentsTable = "SourceCComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceCComplianceCheckProperties";
+        }
+        else if($ActionToPerform == "unAcceptComplianceSourceDComponent") {
+
+            $CheckComponentsTable = "SourceDComplianceCheckComponents";
+            $CheckPropertiesTable = "SourceDComplianceCheckProperties";
+        }
 
         $dbh->beginTransaction();
         foreach ($selectedGroupIdsVsResultsIds as $groupid => $components) {
@@ -878,6 +932,14 @@ function unAcceptComplianceProperty() {
         $componentTableName = 'SourceBComplianceCheckComponents';
         $propertiesTableName = 'SourceBComplianceCheckProperties'; 
     }
+    else if($ActionToPerform == "unAcceptComplianceSourceCProperty") {
+        $componentTableName = 'SourceCComplianceCheckComponents';
+        $propertiesTableName = 'SourceCComplianceCheckProperties'; 
+    }
+    else if($ActionToPerform == "unAcceptComplianceSourceDProperty") {
+        $componentTableName = 'SourceDComplianceCheckComponents';
+        $propertiesTableName = 'SourceDComplianceCheckProperties'; 
+    }
 
     $command = $dbh->prepare("SELECT * FROM $propertiesTableName WHERE ownerComponent=?");
     $command->execute(array($componentid));
@@ -948,6 +1010,20 @@ function unAcceptComplianceCategory() {
         $CheckComponentsTable = "SourceBComplianceCheckComponents";
         $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+        $command->execute(array($categoryStatus, $groupid)); 
+    }
+    else if($ActionToPerform == "unAcceptComplianceSourceCCategory") {
+
+        $CheckComponentsTable = "SourceCComplianceCheckComponents";
+        $CheckPropertiesTable = "SourceCComplianceCheckProperties";
+        $command = $dbh->prepare("UPDATE SourceCComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+        $command->execute(array($categoryStatus, $groupid)); 
+    }
+    else if($ActionToPerform == "unAcceptComplianceSourceDCategory") {
+
+        $CheckComponentsTable = "SourceDComplianceCheckComponents";
+        $CheckPropertiesTable = "SourceDComplianceCheckProperties";
+        $command = $dbh->prepare("UPDATE SourceDComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
 

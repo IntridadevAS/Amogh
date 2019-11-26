@@ -23,7 +23,7 @@ function executeContextMenuClicked(key, options, _this) {
             onRestoreTranspose(_this);
         }
     }
-    else if (key === "lefttoright" || key === "righttoleft") {
+    else if (key === "FromDataSource1" || key === "FromDataSource2" || key === "FromDataSource3" || key === "FromDataSource4") {
         onTransposeClick(key, _this);
         
     }
