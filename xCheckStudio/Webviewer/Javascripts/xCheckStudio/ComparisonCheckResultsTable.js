@@ -331,6 +331,11 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
         tableRowContent[ComparisonColumnNames.SourceDName] = dName;
 
         tableRowContent[ComparisonColumnNames.Status] = component.status;
+
+        if(component.accepted == "true") {
+            tableRowContent[ComparisonColumnNames.Status] = "OK(A)";
+        }
+
         tableRowContent[ComparisonColumnNames.SourceANodeId] = component.sourceANodeId;
         tableRowContent[ComparisonColumnNames.SourceBNodeId] = component.sourceBNodeId;
         tableRowContent[ComparisonColumnNames.SourceCNodeId] = component.sourceCNodeId;
@@ -872,14 +877,32 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
         // tableRowContent[ComparisonPropertyColumnNames.SourceDName] = dValue;
 
         tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
-
-        if (property.transpose == 'lefttoright' && property.severity !== 'No Value') {
+        if(property.accepted == "true") {
+            tableRowContent[ComparisonPropertyColumnNames.Status] = 'ACCEPTED';
+        }
+        else if (property.transpose == 'FromDataSource1' && property.severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
             tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceAValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceAValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceAValue;
         }
-        else if (property.transpose == 'righttoleft' && property.severity !== 'No Value') {
+        else if (property.transpose == 'FromDataSource2' && property.severity !== 'No Value') {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
             tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceBValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceBValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceBValue;
+        }
+        else if (property.transpose == 'FromDataSource3' && property.severity !== 'No Value') {
+            tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceCValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceCValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceCValue;
+        }
+        else if (property.transpose == 'FromDataSource4' && property.severity !== 'No Value') {
+            tableRowContent[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceDValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceDValue;
+            tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceDValue;
         }
 
         tableRowContent[ComparisonPropertyColumnNames.PropertyId] = propertyId
@@ -893,6 +916,8 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
 }
 
 ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData, containerDiv) {
+    //Clear earlier selection from detailed review table
+    this.SelectedProperties = [];
     // clear comment
     this.SetComment("");
 
@@ -919,6 +944,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
     var viewerContainer = "#" + this.DetailedReviewTableContainer;
     var _this = this;
 
+    this.Destroy();
     // var height =  document.getElementById("tableDataComparison").offsetHeight / 2 + "px";
     $(function () {
         $(viewerContainer).dxDataGrid({
@@ -951,6 +977,10 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 if(!containerDiv.includes("#")) {
                     containerDiv = "#" + containerDiv;
                 }
+
+                // if(document.getElementById(_this.DetailedReviewTableContainer).style.display == "none") {
+                //     document.getElementById(_this.DetailedReviewTableContainer).style.display = "block";
+                // }
                 
                 if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
                 {
@@ -1041,6 +1071,7 @@ ComparisonCheckPropertiesTable.prototype.Destroy = function () {
 
     var viewerContainerDiv = document.createElement("div")
     viewerContainerDiv.id = this.DetailedReviewTableContainer;
+    // viewerContainerDiv.style.display = "none";
 
     parent.appendChild(viewerContainerDiv);
 }
@@ -1061,16 +1092,35 @@ ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, prop
     rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
 
     if (property["severity"] !== "ACCEPTED") {
-        if (property.transpose == "lefttoright") {
-            rowData[ComparisonPropertyColumnNames.SourceBValue] = property["sourceAValue"];
-
+        if (property.transpose == 'FromDataSource1') {
+            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceAValue;
+            rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceAValue;
+            rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceAValue;
         }
-        else if (property.transpose == "righttoleft") {
-            rowData[ComparisonPropertyColumnNames.SourceAValue] = property["sourceBValue"];
+        else if (property.transpose == 'FromDataSource2') {
+            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceBValue;
+            rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceBValue;
+            rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceBValue;
+        }
+        else if (property.transpose == 'FromDataSource3') {
+            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceCValue;
+            rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceCValue;
+            rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceCValue;
+        }
+        else if (property.transpose == 'FromDataSource4') {
+            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceDValue;
+            rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceDValue;
+            rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceDValue;
         }
         else if (property.transpose == null) {
             rowData[ComparisonPropertyColumnNames.SourceAValue] = property["sourceAValue"];
             rowData[ComparisonPropertyColumnNames.SourceBValue] = property["sourceBValue"];
+            rowData[ComparisonPropertyColumnNames.SourceCValue] = property["sourceCValue"];
+            rowData[ComparisonPropertyColumnNames.SourceDValue] = property["sourceDValue"];
         }
     }
 

@@ -194,6 +194,10 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
         tableRowContent[ComplianceColumnNames.ResultId] = component.id;
         tableRowContent[ComplianceColumnNames.GroupId] = groupId;
 
+        if(component.accepted == "true") {
+            tableRowContent[ComplianceColumnNames.Status] = "OK(A)";
+        }
+
         tableData.push(tableRowContent);
 
         // maintain track of check components
@@ -563,6 +567,11 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
     else {
         tableRowContent[CompliancePropertyColumnNames.Status] = property.severity;
     }
+
+    if(property.accepted == "true") {
+        tableRowContent[CompliancePropertyColumnNames.Status] = "OK(A)";
+    }
+
     tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId
     tableRowContent[CompliancePropertyColumnNames.Rule] = property.rule;
     return tableRowContent;
@@ -573,6 +582,8 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
     // var tableData = [];
     // var columnHeaders = [];
+    //Clear earlier selection from detailed review table
+    this.SelectedProperties = [];
 
     var componentId = rowData.ID;
     var groupId = rowData.groupId;
@@ -599,6 +610,8 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer, containerDiv) {
     var _this = this;
   
+    this.Destroy();
+
     $(function () {
         $(viewerContainer).dxDataGrid({
             dataSource: tableData,           

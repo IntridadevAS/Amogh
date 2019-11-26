@@ -441,6 +441,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptComponent = fun
         model.files['b'].fileName === fileName) {
         ActionToPerform = "acceptComplianceSourceBComponent";
     }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceCComponent";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceDComponent";
+    }
 
     return ActionToPerform;
 }
@@ -455,6 +463,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptProperty = func
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
         ActionToPerform = "acceptComplianceSourceBProperty";
+    }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceCProperty";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceDProperty";
     }
 
     return ActionToPerform;   
@@ -471,6 +487,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToAcceptGroup = functio
         model.files['b'].fileName === fileName) {
         ActionToPerform = "acceptComplianceSourceBCategory";
     }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceCCategory";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "acceptComplianceSourceDCategory";
+    }
     return ActionToPerform;
 }
 
@@ -485,6 +509,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptComponent = f
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
         ActionToPerform = "unAcceptComplianceSourceBComponent";
+    }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceCComponent";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceDComponent";
     }
 
     return ActionToPerform;    
@@ -501,6 +533,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptProperty = fu
         model.files['b'].fileName === fileName) {
         ActionToPerform = "unAcceptComplianceSourceBProperty";
     }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceCProperty";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceDProperty";
+    }
 
     return ActionToPerform;   
 }
@@ -516,6 +556,14 @@ ReviewComplianceContextMenuManager.prototype.GetTableNameToUnAcceptGroup = funct
     else if ('b' in model.files &&
         model.files['b'].fileName === fileName) {
         ActionToPerform = "unAcceptComplianceSourceBCategory";
+    }
+    else if ('c' in model.files &&
+        model.files['c'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceCCategory";
+    }
+    else if ('d' in model.files &&
+        model.files['d'].fileName === fileName) {
+        ActionToPerform = "unAcceptComplianceSourceDCategory";
     }
 
     return ActionToPerform;

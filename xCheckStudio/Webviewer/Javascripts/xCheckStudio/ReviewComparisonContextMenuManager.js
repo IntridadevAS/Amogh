@@ -24,9 +24,11 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
             var selectedRow = $triggerElement;
             var accept = true;
             var transpose = true;
+            var transposeSubMenu = [];
             // _this.ComponentTableContainer = componentTableContainer;
             transpose = _this.ChooseRestoreTransposeForComponent(selectedRow[0]);
             accept = _this.ChooseActionForComparisonComponent(selectedRow[0]);
+            transposeSubMenu = _this.TransposeSubMenuItems();
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             _this.HighlightSelectedRowOnRightClick(selectedRow, _this.ComponentTableContainer);
@@ -59,8 +61,42 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             }
                         },
                         items: {
-                            "lefttoright": { name: "Left To Right" },
-                            "righttoleft": { name: "Right To Left" }
+                            "FromDataSource1": { name: transposeSubMenu[0] },
+                            "FromDataSource2": { name: transposeSubMenu[1] },
+                            "FromDataSource3": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 2) 
+                                        return transposeSubMenu[2];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 2) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
+                            "FromDataSource4": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 3) 
+                                        return transposeSubMenu[3];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 3) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
                         }
                     },
                     "restoreItem": {
@@ -153,8 +189,10 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
             var selectedRow = $triggerElement;
             var accept = true;
             var transpose = true;
+            var transposeSubMenu = [];
             transpose = _this.ChooseRestoreTransposeForProperty(selectedRow[0]);
             accept = _this.ChooseActionForComparisonProperty(selectedRow[0]);
+            transposeSubMenu = _this.TransposeSubMenuItems();
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
@@ -186,8 +224,42 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                             }
                         },
                         items: {
-                            "lefttoright": { name: "Left To Right" },
-                            "righttoleft": { name: "Right To Left" }
+                            "FromDataSource1": { name: transposeSubMenu[0] },
+                            "FromDataSource2": { name: transposeSubMenu[1] },
+                            "FromDataSource3": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 2) 
+                                        return transposeSubMenu[2];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 2) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
+                            "FromDataSource4": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 3) 
+                                        return transposeSubMenu[3];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 3) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
                         }
                     },
                     "restoreItem": {
@@ -210,8 +282,10 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
             var selectedRow = $triggerElement;
             var accept = true;
             var transpose = true;
+            var transposeSubMenu = []
             transpose = _this.ChooseRestoreTransposeForGroup(selectedRow[0]);
             accept = _this.ChooseActionForComparisonGroup(selectedRow[0]);
+            transposeSubMenu = _this.TransposeSubMenuItems();
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';
             var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
             return {
@@ -243,8 +317,42 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
                             }
                         },
                         items: {
-                            "lefttoright": { name: "Left To Right" },
-                            "righttoleft": { name: "Right To Left" }
+                            "FromDataSource1": { name: transposeSubMenu[0] },
+                            "FromDataSource2": { name: transposeSubMenu[1] },
+                            "FromDataSource3": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 2) 
+                                        return transposeSubMenu[2];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 2) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
+                            "FromDataSource4": 
+                            { 
+                                name : function() {
+                                    if(transposeSubMenu.length > 3) 
+                                        return transposeSubMenu[3];
+                                    else 
+                                        return "";
+                                },
+                                visible: function() {
+                                    if(transposeSubMenu.length > 3) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+                            },
                         }
                     },
                     "restoreItem": {
@@ -306,6 +414,17 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent 
     }
 
     return accept;
+}
+
+ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function() {
+    var files = model.files;
+    var transposeSubMenu = [];
+    for(var file in files) {
+        var name = "From " + files[file].fileName;
+        transposeSubMenu.push(name);
+    }
+
+    return transposeSubMenu;
 }
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
@@ -541,8 +660,10 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
             this.OnRestoreTranspose(selectedRow, source);
         }
     }
-    else if (key === "lefttoright" ||
-        key === "righttoleft") {
+    else if (key === "FromDataSource1" || 
+    key === "FromDataSource2" || 
+    key === "FromDataSource3" || 
+    key === "FromDataSource4") {
         this.OnTransposeClick(key, selectedRow, source);
     }
     else if (key === "freeze") {

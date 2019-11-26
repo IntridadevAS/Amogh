@@ -57,7 +57,10 @@ var xCheckStudio;
         function isTransposed(component) {
             var transposed = false;
 
-            if (component.transpose == 'lefttoright' || component.transpose == 'righttoleft') {
+            if (component.transpose === "FromDataSource1" || 
+            component.transpose === "FromDataSource2" || 
+            component.transpose === "FromDataSource3" || 
+            component.transpose === "FromDataSource4") {
                 transposed = true;
             }
             return transposed;
@@ -71,16 +74,20 @@ var xCheckStudio;
                 if (parentComponent.Status.toLowerCase().includes("error")) {
 
                     if (parentComponent.accepted.toLowerCase() != 'true' ||
-                        parentComponent.transpose !== 'lefttoright' ||
-                        parentComponent.transpose !== 'righttoleft') {
+                        parentComponent.transpose !== 'FromDataSource1' ||
+                        parentComponent.transpose !== 'FromDataSource2' ||
+                        parentComponent.transpose !== 'FromDataSource3' ||
+                        parentComponent.transpose !== 'FromDataSource4') {
                         return HoopsViewerErrorColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("warning")) {
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' ||
-                        parentComponent.transpose !== 'lefttoright' ||
-                        parentComponent.transpose !== 'righttoleft') &&
+                    parentComponent.transpose !== 'FromDataSource1' ||
+                    parentComponent.transpose !== 'FromDataSource2' ||
+                    parentComponent.transpose !== 'FromDataSource3' ||
+                    parentComponent.transpose !== 'FromDataSource4') &&
                         status.toLowerCase() !== "error") {
                         return HoopsViewerWarningColor;
                     }
@@ -88,8 +95,10 @@ var xCheckStudio;
                 else if (parentComponent.Status.toLowerCase().includes("no match")) {
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' ||
-                        parentComponent.transpose !== 'lefttoright' ||
-                        parentComponent.transpose !== 'righttoleft') &&
+                    parentComponent.transpose !== 'FromDataSource1' ||
+                    parentComponent.transpose !== 'FromDataSource2' ||
+                    parentComponent.transpose !== 'FromDataSource3' ||
+                    parentComponent.transpose !== 'FromDataSource4') &&
                         (status.toLowerCase() !== "error" ||
                             status.toLowerCase() !== "warning")) {
 

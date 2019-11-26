@@ -364,7 +364,7 @@ ComplianceReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(p
         var property = properties[i];
 
         if(property.severity !== "OK" && property.severity !== "No Value") {
-            if(property.severity.toLowerCase() == "accepted" || property.severity.toLowerCase() == "ok(t)") {
+            if(property.severity.toLowerCase() == "accepted" || property.accepted == "true") {
                 continue;
             }
             else {
@@ -372,6 +372,10 @@ ComplianceReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(p
                     worstSeverity = property.severity;
                 }
                 else if(property.severity.toLowerCase() == "warning" && worstSeverity.toLowerCase() !== "error") {
+                    worstSeverity = property.severity;
+                }
+                else if(property.severity.toLowerCase() == "no match" && 
+                (worstSeverity.toLowerCase() !== "error" && worstSeverity.toLowerCase() !== "warning")) {
                     worstSeverity = property.severity;
                 }
             }
