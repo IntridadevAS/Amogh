@@ -392,12 +392,36 @@ function cancelCheckResults() {
 function reviewResults(callbackFunction) {
     //saveData();
 
-    CheckModule.onSaveProgress(true).then(function (result) {
-        if (callbackFunction) {
-            callbackFunction();
-        }
+    SetCheckSpaceReviewStatus().then(function (res) {
+        CheckModule.onSaveProgress(true).then(function (result) {
+            if (callbackFunction) {
+                callbackFunction();
+            }
 
-        window.location = "reviewPage.html";
+            window.location = "reviewPage.html";
+        });
+    });
+}
+
+function SetCheckSpaceReviewStatus() {
+    return new Promise((resolve) => {
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            data: {
+                'InvokeFunction': 'SetReviewStatus',
+                'CheckId': checkinfo.checkid,
+                'ProjectName': projectinfo.projectname,
+                'Review': 1,
+            },
+            type: "POST",
+            url: "PHP/CheckSpaceManager.php"
+        }).done(function (msg) {
+            if (msg === "true") {
+                return resolve(true);
+            }
+            return resolve(false);
+        });
     });
 }
 

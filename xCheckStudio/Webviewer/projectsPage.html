@@ -908,6 +908,8 @@
         checkIsFavorite = 1;
       }
       checkspace["favoriteCheck"] = checkIsFavorite;
+      checkspace["review"] = 0;
+
       document.getElementById('checkCaseform').reset();
       if (checkspace.checkName !== '') {
         newCheckView.createNewCheck(checkspace);

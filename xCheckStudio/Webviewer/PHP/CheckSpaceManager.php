@@ -20,6 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SetCheckAsFavourite":
             SetCheckAsFavourite();
             break;
+        case "SetReviewStatus":
+            SetReviewStatus();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -40,6 +43,7 @@ function CreateCheckSpace(){
     $CheckComments = $obj['checkComments'];
     $CheckIsFavourite = $obj['favoriteCheck'];
     $CheckCreateDate = $obj['checkdate'];
+    $review = $obj['review'];
     if (CheckIfCheckSpaceExists($projectName , $ProjectId, $CheckName) == false)
     {
         try
@@ -48,9 +52,9 @@ function CreateCheckSpace(){
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             if( CreateCheckSpaceSchemaIfNot($dbh) == true)
             {
-                $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid) VALUES (?,?,?,?,?,?,?,?,?)';
+                $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid, review) VALUES (?,?,?,?,?,?,?,?,?,?)';
                 $stmt = $dbh->prepare($query);
-                $stmt->execute(array( $CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId));     
+                $stmt->execute(array( $CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId, $review));     
                 $array = array(
                 "checkid" => $dbh->lastInsertId(),
                 "checkname" => $CheckName,
@@ -61,9 +65,11 @@ function CreateCheckSpace(){
                 "favoriteCheck" => $CheckIsFavourite,
                 "checkdate" => $CheckCreateDate,
                 "projectid" => $ProjectId,
-                "userid" => $UserId
+                "userid" => $UserId,
+                "review" => $review
                 );
                 echo json_encode($array);
+               
                 $dbh = null; //This is how you close a PDO connection
                 mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
                 mkdir(getCheckSourceAPath($projectName, $CheckName), 0777, true);
@@ -187,7 +193,8 @@ function CreateCheckSpaceSchemaIfNot($dbh){
                 checkisfavourite	INTEGER,
                 checkdate	TEXT NOT NULL,
                 projectid	INTEGER NOT NULL,
-                userid	INTEGER NOT NULL)";       
+                userid	INTEGER NOT NULL,
+                review INTEGER)";       
             $dbh->exec($command);    
             $dbh->commit();
         }
@@ -240,6 +247,30 @@ function SetCheckAsFavourite()
         $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
         $query = "UPDATE CheckSpace SET checkisfavourite=? WHERE checkid=?";
         $response = $dbh->prepare($query)->execute([$favourite, $CheckId]);
+        echo json_encode($response);
+        $dbh = null;
+      }
+      catch(Exception $e) {
+        echo 'fail';
+        return;
+    } 
+}
+
+function SetReviewStatus()
+{
+    $CheckId = trim($_POST["CheckId"], " ");
+    $ProjectName = trim($_POST["ProjectName"], " ");
+    $review = trim($_POST["Review"], " ");
+    if($CheckId === -1)
+    {
+        echo 'fail';
+        return;
+    }
+
+    try{
+        $dbh = new PDO("sqlite:".getProjectDatabasePath($ProjectName)) or die("cannot open the database");
+        $query = "UPDATE CheckSpace SET review=? WHERE checkid=?";
+        $response = $dbh->prepare($query)->execute([$review, $CheckId]);
         echo json_encode($response);
         $dbh = null;
       }

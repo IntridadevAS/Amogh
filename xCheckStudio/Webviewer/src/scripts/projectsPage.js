@@ -911,6 +911,10 @@ let checkView = {
     this.checkCardContainer.innerHTML = newCheckCard;
 
     for (review of this.selectedReviews) {
+      if (review.review !== "1") {
+        continue;
+      }
+
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
       newDiv.setAttribute("id", review.checkid);
