@@ -61,43 +61,48 @@ ExportExcel.prototype.CreateComponentDataGrid = function (selectedTables) {
     });
 }
 
-ExportExcel.prototype.CreateDummyDataGrids = async function (selectedTables, exportProperties) {
+ExportExcel.prototype.CreateDummyDataGrids = async function (selectedTables) {
+    // var _this = this;
+    // var header = [{ "caption": checkResults.sourceInfo.sourceAFileName, "dataField": "SourceAName" },
+    // { "caption": checkResults.sourceInfo.sourceBFileName, "dataField": "SourceBName" },
+    // { "caption": "Status", "dataField": "Status" },
+    // { "caption": "Information", "dataField": "Information" }];
+
+    // for (var id = 0; id < selectedTables.length; id++) {
+    //     var tableName = selectedTables[id];
+
+    //     var components = this.GetCategoryComponents(tableName);
+
+    //     for (var componentId in components) {
+    //         var component = components[componentId];
+
+    //         var data = [{ "SourceAName": component.sourceAName, "SourceBName": component.sourceBName, "Status": component.status, "Information": "" }];
+
+    //         var parentTable = document.getElementById("comparisonTables");
+    //         var datagridDiv = document.createElement("DIV");
+    //         datagridDiv.id = component.id + "_tempTable";
+    //         parentTable.append(datagridDiv);
+
+    //         await _this.CreateTemporaryComponentGrid(data, datagridDiv.id, header, component.id);
+
+    //         var propertyDiv = document.createElement("DIV");
+    //         propertyDiv.id = component.id + "_tempTable" + "_tempPropertiestable";
+    //         parentTable.append(propertyDiv);
+
+    //         var sources = checkResults["Comparisons"][0]["sources"];
+    //         var headers = _this.CreateComparisonPropertiesTableHeader(sources);
+
+    //         var properties = component["properties"];
+    //         var data = _this.CreateComparisonTableData(properties);
+
+    //         await _this.CreateTemporaryPropertiesGrid(data, propertyDiv.id, headers);
+    //     }
+    // }
+
     var _this = this;
-    var header = [{ "caption": checkResults.sourceInfo.sourceAFileName, "dataField": "SourceAName" },
-    { "caption": checkResults.sourceInfo.sourceBFileName, "dataField": "SourceBName" },
-    { "caption": "Status", "dataField": "Status" },
-    { "caption": "Information", "dataField": "Information" }];
+    var comparison = new ComparisonData();
+    var headers = comparison.CreateTableHeader(selectedTables);
 
-    for (var id = 0; id < selectedTables.length; id++) {
-        var tableName = selectedTables[id];
-
-        var components = this.GetCategoryComponents(tableName);
-
-        for (var componentId in components) {
-            var component = components[componentId];
-
-            var data = [{ "SourceAName": component.sourceAName, "SourceBName": component.sourceBName, "Status": component.status, "Information": "" }];
-
-            var parentTable = document.getElementById("comparisonTables");
-            var datagridDiv = document.createElement("DIV");
-            datagridDiv.id = component.id + "_tempTable";
-            parentTable.append(datagridDiv);
-
-            await _this.CreateTemporaryComponentGrid(data, datagridDiv.id, header, component.id);
-
-            var propertyDiv = document.createElement("DIV");
-            propertyDiv.id = component.id + "_tempTable" + "_tempPropertiestable";
-            parentTable.append(propertyDiv);
-
-            var sources = checkResults["Comparisons"][0]["sources"];
-            var headers = _this.CreateComparisonPropertiesTableHeader(sources);
-
-            var properties = component["properties"];
-            var data = _this.CreateComparisonTableData(properties);
-
-            await _this.CreateTemporaryPropertiesGrid(data, propertyDiv.id, headers);
-        }
-    }
 }
 
 ExportExcel.prototype.ExportGroups = async function (selectedTables, exportProperties) {
@@ -345,188 +350,6 @@ ExportExcel.prototype.GetCategoryComponents = function(tableName) {
     }
 }
 
-ExportExcel.prototype.CreateComparisonPropertiesTableHeader = function (sources) {
-    var columnHeaders = [];
-
-    for (var i = 0; i < 6; i++) {
-        var columnHeader = {}
-        var caption;
-        var columns;
-        var dataField;
-        var width;
-        var visible = true;
-
-        if (i == 0) {
-            var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {
-                var headerGroupComp = {}
-                var visible = true;
-                if (j === ComparisonPropertyColumns.SourceAName) {
-                    caption = "Property";
-                    dataField = ComparisonPropertyColumnNames.SourceAName;
-
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[0] = headerGroupComp;
-                }
-                else if (j === ComparisonPropertyColumns.SourceAValue) {
-                    caption = "Value";
-                    dataField = ComparisonPropertyColumnNames.SourceAValue;
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[1] = headerGroupComp;
-                }
-            }
-            caption = sources[0];
-            dataField = null;
-            columns = group;
-        }
-
-        if (i == 1) {
-            var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {
-                var headerGroupComp = {}
-                if (j === ComparisonPropertyColumns.SourceBValue) {
-                    caption = "Value";
-                    dataField = ComparisonPropertyColumnNames.SourceBValue;
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[0] = headerGroupComp;
-                }
-                else if (j === ComparisonPropertyColumns.SourceBName) {
-                    caption = "Property";
-                    dataField = ComparisonPropertyColumnNames.SourceBName;
-
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[1] = headerGroupComp;
-                }
-            }
-            caption = sources[1];
-            dataField = null;
-            columns = group;
-        }
-
-        if (i == 2) {
-            var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {               
-                
-                if (j === ComparisonPropertyColumns.SourceCName) {
-                    caption = "Property";
-                    dataField = ComparisonPropertyColumnNames.SourceCName;
-
-                    var headerGroupComp = {}
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[0] = headerGroupComp;
-                }
-                else if (j === ComparisonPropertyColumns.SourceCValue) {
-                    caption = "Value";
-                    dataField = ComparisonPropertyColumnNames.SourceCValue;
-                    
-                    var headerGroupComp = {}
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[1] = headerGroupComp;
-                }              
-            }
-            caption = "SourceC";
-            dataField = null;
-            columns = group;
-           
-            if (sources.length < 3) {
-                visible = false;
-            }
-            else {
-                caption = sources[2];
-            }
-        }
-
-        if (i == 3) {
-            var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {               
-                
-                if (j === ComparisonPropertyColumns.SourceDName) {
-                    caption = "Property";
-                    dataField = ComparisonPropertyColumnNames.SourceDName;
-
-                    var headerGroupComp = {}
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[0] = headerGroupComp;
-                }
-                else if (j === ComparisonPropertyColumns.SourceDValue) {
-                    caption = "Value";
-                    dataField = ComparisonPropertyColumnNames.SourceDValue;
-                    
-                    var headerGroupComp = {}
-                    headerGroupComp["caption"] = caption;
-                    headerGroupComp["dataField"] = dataField;
-                    headerGroupComp["width"] = "20%";
-
-                    group[1] = headerGroupComp;
-                }              
-            }
-            caption = "SourceD";
-            dataField = null;
-            columns = group;
-           
-            if (sources.length < 4) {
-                visible = false;
-            }
-            else {
-                caption = sources[3];
-            }
-        }
-
-        if (i == 4) {
-            caption = "Status";
-            dataField = ComparisonPropertyColumnNames.Status;
-            width = "20%";           
-            columns = []
-        }
-
-        if (i == 5) {
-            caption = "ID";
-            dataField = ComparisonPropertyColumnNames.PropertyId;
-            visible = false;
-        }
-
-        columnHeader["caption"] = caption;
-        if (dataField !== null) {
-            columnHeader["dataField"] = dataField;
-        }
-
-        if(visible == false) {
-            columnHeader["visible"] = visible;
-        } 
-
-        if (columns.length > 1 && columns !== undefined) {
-            columnHeader["columns"] = columns;
-        }
-
-        columnHeader["width"] = width;
-
-        columnHeaders.push(columnHeader);
-    }
-
-    return columnHeaders;
-}
-
 ExportExcel.prototype.CreateComparisonTableData = function (properties) {
 
     var property;
@@ -583,4 +406,127 @@ ExportExcel.prototype.CreateComparisonTableData = function (properties) {
     }
 
     return tableData;
+}
+
+function ComparisonData() {
+    this.ComparisonExportComplete = false;
+}
+
+ComparisonData.prototype.CreateComparisonData = function(checkComponents) {
+
+    var tableData = [];
+    for (var componentId in checkComponents) {
+
+        component = checkComponents[componentId];
+
+        tableRowContent = {};
+
+        tableRowContent[ComparisonColumnNames.SourceAName] = component.sourceAName;
+        tableRowContent[ComparisonColumnNames.SourceBName] = component.sourceBName;
+        
+        var cName = "";
+        if(component.sourceCName)
+        {
+            cName = component.sourceCName;           
+        }
+        tableRowContent[ComparisonColumnNames.SourceCName] =cName;
+
+        var dName = "";
+        if(component.sourceDName)
+        {
+            dName = component.sourceDName;        
+        }
+        tableRowContent[ComparisonColumnNames.SourceDName] = dName;
+
+        tableRowContent[ComparisonColumnNames.Status] = component.status;
+
+        tableData.push(tableRowContent);
+    }
+
+    return tableData;
+}
+
+ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
+    for (var id = 0; id < selectedTables.length; id++) {
+        var tableName = selectedTables[id];
+        var components = ExportExcel.GetCategoryComponents(tableName);
+        var headers = [];
+
+        var sources = checkResults["Comparisons"][0]["sources"];
+        for(var sourceId = 0; sourceId < sources.length; sourceId++) {
+            var Obj = {};
+
+            Obj["caption"] = sources[sourceId];
+            if(sourceId == 0) {
+                Obj["dataField"] = ComparisonColumnNames.SourceAName;
+            }
+            if(sourceId == 1) {
+                Obj["dataField"] = ComparisonColumnNames.SourceBName;
+            }
+            if(sourceId == 2) {
+                Obj["dataField"] = ComparisonColumnNames.SourceCName;
+            }
+            if(sourceId == 3) {
+                Obj["dataField"] = ComparisonColumnNames.SourceDName;
+            }
+
+            headers.push(Obj);
+        }
+
+        var data = {};
+
+        var propertyIndex = 1;
+        var groups = [];
+
+        for (var componentId in components) {
+            var component = components[componentId];
+            var properties = component["properties"];
+                      
+            for (var propertyId in properties) {
+                var property = properties[propertyId];
+                
+                var group = [];
+
+                if(component.sourceAName) {
+                    var propertyHeaderObj = {};
+                    propertyHeaderObj["caption"] = property.sourceAName;
+                    propertyHeaderObj["dataField"] = "propert_A" + propertyIndex;
+                    group.push(propertyHeaderObj);
+                }
+
+                if(component.sourceBName) {
+                    var propertyHeaderObj = {};
+                    propertyHeaderObj["caption"] = property.sourceBName;
+                    propertyHeaderObj["dataField"] = "propert_B" + propertyIndex;
+                    group.push(propertyHeaderObj);
+                }
+
+                if(component.sourceCName) {
+                    var propertyHeaderObj = {};
+                    propertyHeaderObj["caption"] = property.sourceCName;
+                    propertyHeaderObj["dataField"] = "propert_C" + propertyIndex;
+                    group.push(propertyHeaderObj);
+                }
+
+                if(component.sourceDName) {
+                    var propertyHeaderObj = {};
+                    propertyHeaderObj["caption"] = property.sourceDName;
+                    propertyHeaderObj["dataField"] = "propert_D" + propertyIndex;
+                    group.push(propertyHeaderObj);
+                }
+
+                propertyHeaderObj["caption"] = "Status";
+                propertyHeaderObj["dataField"] = "Status_" + propertyIndex;
+                group.push(propertyHeaderObj);
+
+                if(!groups.includes(group)) {
+                    groups.push(group);
+                    propertyIndex++;
+                }
+            }
+        }
+
+        headers.push(groups);
+
+    }
 }
