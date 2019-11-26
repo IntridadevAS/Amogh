@@ -1217,15 +1217,18 @@ let editReviewView = {
 let deleteItems = {
   init: function (type, id) {
     event.stopPropagation();
-    this.deleteBox = document.getElementById("delete");
-    let closeDelete = document.getElementById("deleteCancel");
-    let message = document.getElementById("deleteMsg");
-    let cancel = document.getElementById("deleteCancel");
-    let delType = document.getElementById("deleteType");
-    this.deleteBox.classList.add("deleteOpen");
 
-    this.deleteBox.children[0].style.top = ((window.innerHeight / 2) - 139) + "px";
-    this.deleteBox.children[0].style.left = ((window.innerWidth / 2) - 290) + "px";
+    showDeleteForm();
+
+    //this.deleteBox = document.getElementById("delete");
+    // let closeDelete = document.getElementById("deleteCancel");
+    let message = document.getElementById("deleteMsg");
+    // let cancel = document.getElementById("deleteCancel");
+    let delType = document.getElementById("deleteType");
+    // this.deleteBox.classList.add("deleteOpen");
+
+    // this.deleteBox.children[0].style.top = ((window.innerHeight / 2) - 139) + "px";
+    // this.deleteBox.children[0].style.left = ((window.innerWidth / 2) - 290) + "px";
 
     let deleteBtn = document.getElementById("deleteBtn");
     deleteBtn.elementid = id;
@@ -1264,7 +1267,8 @@ let deleteItems = {
   },
 
   closeDeleteItems: function () {
-    this.deleteBox.classList.remove("deleteOpen");
+    //this.deleteBox.classList.remove("deleteOpen");
+    hideDeleteForm();
   }
 }
 
@@ -1413,6 +1417,29 @@ function showEnterReviewForm(subject) {
 function hideEnterReviewForm() {
   var overlay = document.getElementById("enterReviewOverlay");
   var popup = document.getElementById("enterReviewPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function showDeleteForm() { 
+  var overlay = document.getElementById("deleteOverlay");
+  var popup = document.getElementById("deletePopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function hideDeleteForm() {
+  var overlay = document.getElementById("deleteOverlay");
+  var popup = document.getElementById("deletePopup");
 
   overlay.style.display = 'none';
   popup.style.display = 'none';

@@ -701,9 +701,9 @@ input[type=checkbox] + label {
   border: var(--borderWidthHilite) solid var(--xCheckWhite);
   background-color: var(--xCheckDarkGrey);
   position: fixed;
-  top: 200px;
+  /* top: 200px;
   left: 50%;
-  margin-left: -290px;
+  margin-left: -290px; */
 }
 
 .deleteTopBar {

@@ -792,7 +792,7 @@
       </section>
       <!-- END EDIT REVIEW OVERLAY -->
       <!-- BEGINNING DELETE ITEM WARNING -->
-      <section id='delete' class="deleteWindow">
+      <!-- <section id='delete' class="deleteWindow">
         <div class="deleteContainer">
           <div class="deleteTopBar">
             <div class="btnSymbol">
@@ -810,7 +810,29 @@
             </button>
           </div>
         </div>
-      </section>
+      </section> -->
+
+       <!-- cancel checkspace creation overlay -->
+       <div id="deleteOverlay" class="overlay"></div>
+       <div id="deletePopup" class="popup">
+          <div class="deleteContainer">
+              <div class="deleteTopBar">
+                <div class="btnSymbol">
+                  <img src="public/symbols/TrashDelete.svg" alt="">
+                </div>
+                <h1>Delete <span id="deleteType"></span></h1>
+              </div>
+              <div class="msgArea">
+                <p><span id="deleteMsg"></span></p>
+              </div>
+              <div class="buttonAreaDelete">
+                <button id="deleteCancel" type="button" onclick="deleteItems.closeDeleteItems();">Cancel</button>
+                <button id="deleteBtn" type="button">
+                  <img src="public/symbols/TrashDelete.svg" alt="">YES
+                </button>
+              </div>
+            </div>
+       </div>
     </div>
   </div>
 
