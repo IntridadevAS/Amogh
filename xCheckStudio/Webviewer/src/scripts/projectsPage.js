@@ -359,7 +359,8 @@ let controller = {
         });
       }
       else {
-        alert(msg);
+        // alert(msg);
+        showAlertForm(msg);
       }
 
     });
@@ -1035,10 +1036,12 @@ let newCheckView = {
     }).done(function (msg) {
       var object = JSON.parse(msg);
       if (object.checkid === 0) {
-        alert('Check Space with provided name already exists');
+        //alert('Check Space with provided name already exists');
+        showAlertForm('Check Space with provided name already exists');
       }
       else if (object.checkid === -1) {
-        alert('Failed to create check space');
+        // alert('Failed to create check space');
+        showAlertForm('Failed to create check space');
       }
       else {
         controller.fetchProjectChecks(controller.getCurrentProj().projectid);
@@ -1422,7 +1425,7 @@ function hideEnterReviewForm() {
   popup.style.display = 'none';
 }
 
-function showDeleteForm() { 
+function showDeleteForm() {
   var overlay = document.getElementById("deleteOverlay");
   var popup = document.getElementById("deletePopup");
 
@@ -1443,4 +1446,36 @@ function hideDeleteForm() {
 
   overlay.style.display = 'none';
   popup.style.display = 'none';
+}
+
+
+function onAlertOk() {
+  hideAlertForm();
+}
+
+function hideAlertForm() {
+  var overlay = document.getElementById("alertOverlay");
+  var popup = document.getElementById("alertPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+
+function showAlertForm(alertMsg) {
+  var alertMsgHolder = document.getElementById("createProjectErrorMsg");
+  alertMsgHolder.innerText = alertMsg;
+
+  var overlay = document.getElementById("alertOverlay");
+  var popup = document.getElementById("alertPopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
 }
