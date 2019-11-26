@@ -46,7 +46,8 @@ function createProject(projectname, descriptionText, functionText, projectScope)
             });
         }
         else {
-            alert(msg);
+            // alert(msg);
+            showAlertForm(msg)
         }
 
     });
@@ -92,7 +93,8 @@ function createNewProject(projectname, projectDescription, projectType, projectS
             });
         }
         else {
-            alert(msg);
+            //alert(msg);
+            showAlertForm(msg)
         }
     });
 }
