@@ -468,7 +468,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             paging: { enabled: false },
             onContentReady: function (e) {
-                _this.highlightMainReviewTableFromCheckStatus(containerDiv);
+                //_this.highlightMainReviewTableFromCheckStatus(containerDiv);
                 model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
             },
             onCellPrepared: function (e) {
@@ -510,6 +510,24 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 // _this.CurrentTableId = id;
                 model.checks["comparison"]["selectionManager"].MaintainHighlightedRow(e.rowElement[0], containerDiv);
                 model.checks["comparison"]["reviewManager"].OnCheckComponentRowClicked(e.data, id);
+            },
+            onRowPrepared: function (e) {
+                if (e.rowType !== "data") {
+                    return;
+                }
+
+                var highlightedRowKey;
+                if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+                    highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
+                }
+
+                if (e.isSelected || e.key == highlightedRowKey) {
+                    model.getCurrentSelectionManager().ApplyHighlightColor(e.rowElement[0]);
+                }
+                else {
+                    var status = e.data["Status"];
+                    model.getCurrentSelectionManager().ChangeBackgroundColor(e.rowElement[0], status);
+                }
             }
         });
     });
