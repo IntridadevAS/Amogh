@@ -513,7 +513,8 @@ ComparisonReviewManager.prototype.GetWorstSeverityStatusOfComponent = function(p
         var property = properties[i];
 
         if(property.severity !== "OK" && property.severity !== "No Value") {
-            if(property.severity.toLowerCase() == "accepted" || property.severity.toLowerCase() == "ok(t)") {
+            if(property.severity.toLowerCase() == "accepted" || property.severity.toLowerCase() == "ok(t)" ||
+            property.accepted == "true" || property.transpose !== null) {
                 continue;
             }
             else {
