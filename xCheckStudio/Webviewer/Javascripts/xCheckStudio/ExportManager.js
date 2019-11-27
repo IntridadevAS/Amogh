@@ -19,28 +19,42 @@ function ShowSelectBox() {
     overlay.style.display = 'block';
     popup.style.display = 'block';
 
-    var el = document.getElementById('closeExcelOutputForm');
+    // var el = document.getElementById('closeExcelOutputForm');
 
-    el.addEventListener('click', function(){
-        closeSaveAs();
-    }, false);
+    // el.addEventListener('click', function(){
+    //     closeSaveAs();
+    // }, false);
 
     if(!ExportManager.ExcelOutputFormInitialised) {
         CreateDevExtremeWidgets();
         ExportManager.ExcelOutputFormInitialised = true;
     }
+    else {
+        ResetExportOptionsForm();
+    }
+}
+
+function ResetExportOptionsForm() {
+    $("#comparisonTables").dxDataGrid(("instance")).clearSelection();
+    $("#complianceSource1tables").dxDataGrid(("instance")).clearSelection();
+    $("#complianceSource2tables").dxDataGrid(("instance")).clearSelection();
+    $("#comparisonOutputSwitch").dxSwitch("instance").reset();
+    // $("#complianceSource1OutputSwitch").dxSwitch("instance").reset();
+    // $("#complianceSource2OutputSwitch").dxSwitch("instance").reset();        
+    $("#complianceOutputSwitch").dxSwitch("instance").reset();  
+    $("#ExportComparisonPropertiesSwitch").dxSwitch("instance").reset();
 }
 
 function CreateDevExtremeWidgets() {
 
     new DevExpress.ui.dxSwitch(document.getElementById("comparisonOutputSwitch"), {  });
     new DevExpress.ui.dxSwitch(document.getElementById("complianceOutputSwitch"), {  });
-    new DevExpress.ui.dxSwitch(document.getElementById("complianceSource2OutputSwitch"), {  });
-    new DevExpress.ui.dxSwitch(document.getElementById("complianceSource1OutputSwitch"), {  });
-    new DevExpress.ui.dxSwitch(document.getElementById("ExportPropertiesSwitch"), { });
+    // new DevExpress.ui.dxSwitch(document.getElementById("complianceSource2OutputSwitch"), {  });
+    // new DevExpress.ui.dxSwitch(document.getElementById("complianceSource1OutputSwitch"), {  });
+    new DevExpress.ui.dxSwitch(document.getElementById("ExportComparisonPropertiesSwitch"), { });
 
-    document.getElementById("Data_source_1_A95_Text_9").innerText = checkResults["sourceInfo"].sourceAFileName;
-    document.getElementById("Data_source_1_A95_Text_14").innerText = checkResults["sourceInfo"].sourceBFileName;
+    document.getElementById("Data_source_1_A96_Text_8").innerText = checkResults["sourceInfo"].sourceAFileName;
+    document.getElementById("Data_source_1_A96_Text_10").innerText = checkResults["sourceInfo"].sourceBFileName;
 
     var tableData = [];
     var columnHeaders = [{dataField : "key", caption : "Key", visible : false}, {dataField : "name", caption : "Name"}];
@@ -65,10 +79,10 @@ function CreateDevExtremeWidgets() {
             tableData.push(obj);
         }
 
-        if(document.getElementById("Data_source_1_A95_Text_9").innerText == Compliances[id].source) {
+        if(document.getElementById("Data_source_1_A96_Text_8").innerText == Compliances[id].source) {
             complianceAExportManager.CreateTables("complianceSource1tables", columnHeaders, tableData);
         }
-        else if(document.getElementById("Data_source_1_A95_Text_14").innerText == Compliances[id].source) {
+        else if(document.getElementById("Data_source_1_A96_Text_10").innerText == Compliances[id].source) {
             complianceAExportManager.CreateTables("complianceSource2tables", columnHeaders, tableData);
         }
     }
@@ -93,7 +107,7 @@ function ExportToExcel() {
     var complianceValueswitch = complianceSwitch.option("value");
 
     if(comparisonValueswitch) {
-        var exportPropertiesSwitch =  $("#ExportPropertiesSwitch").dxSwitch("instance");
+        var exportPropertiesSwitch =  $("#ExportComparisonPropertiesSwitch").dxSwitch("instance");
         var exportProperties = exportPropertiesSwitch.option("value");
 
         exportToExcel.ExportComparisonComponents(comparisonExportManager.SelectedTableIds, exportProperties).then(function() {
