@@ -9,18 +9,10 @@ function ExportExcel() {
 ExportExcel.prototype.ExportComparisonComponents = function (selectedTables, exportProperties) {
     var _this = this;
     return new Promise((resolve) => {
-        if (exportProperties) {
-            this.CreateDummyDataGrids(selectedTables).then(function () {
-                _this.ExportGroups(selectedTables);
-                return resolve(true);
-            });
-        }
-        else {
-            this.CreateComponentDataGrid(selectedTables).then(function () {
-                _this.ExportGroups(selectedTables);
-                return resolve(true);
-            });
-        }
+        this.CreateDummyDataGrids(selectedTables, exportProperties).then(function () {
+            _this.ExportGroups(selectedTables);
+            return resolve(true);
+        });
     })
 }
 
@@ -61,11 +53,11 @@ ExportExcel.prototype.CreateComponentDataGrid = function (selectedTables) {
     });
 }
 
-ExportExcel.prototype.CreateDummyDataGrids = async function (selectedTables) {
+ExportExcel.prototype.CreateDummyDataGrids = async function (selectedTables, exportProperties) {
     var _this = this;
     var comparison = new ComparisonData();
-    var headers = comparison.CreateTableHeader(selectedTables);
-    var data = comparison.CreateTableData(selectedTables);
+    var headers = comparison.CreateTableHeader(selectedTables, exportProperties);
+    var data = comparison.CreateTableData(selectedTables, exportProperties);
 
     for(var tableName in headers) {
         var header = headers[tableName];
@@ -244,7 +236,7 @@ function ComparisonData() {
     this.ComparisonExportComplete = false;
 }
 
-ComparisonData.prototype.CreateTableData = function(selectedTables) {
+ComparisonData.prototype.CreateTableData = function(selectedTables, exportProperties) {
 
     var tablesData = [];
     for (var id = 0; id < selectedTables.length; id++) {
@@ -277,114 +269,116 @@ ComparisonData.prototype.CreateTableData = function(selectedTables) {
 
             tableRowContent["ComponentStatus"] = component.status;
 
-            var properties = component.properties;
-            for (var propertyId in properties) {
-                var property = properties[propertyId];
-                var propertyObj = {};
-                var propName = [];
-
-                if(sources.length > 1) {
-                    var property1 = {};
-                    property1["caption"] = property.sourceAName;
-
-                    if(property.sourceAName == null) {
-                        property1["caption"] = "Missing property";
+            if(exportProperties) {
+                var properties = component.properties;
+                for (var propertyId in properties) {
+                    var property = properties[propertyId];
+                    var propertyObj = {};
+                    var propName = [];
+    
+                    if(sources.length > 1) {
+                        var property1 = {};
+                        property1["caption"] = property.sourceAName;
+    
+                        if(property.sourceAName == null) {
+                            property1["caption"] = "Missing property";
+                        }
+    
+                        propName.push(property1["caption"]);
+    
+                        propertyObj["propertA_"] = property.sourceAValue;
+    
+                        if(property.sourceAValue == null) {
+                            propertyObj["propertA_"] = "";
+                        }
+                         
+                        
+    
+                        var property2 = {};
+                        property2["caption"] = property.sourceBName;
+    
+                        if(property.sourceBName == null) {
+                            property2["caption"] = "Missing property";
+                        }
+    
+                        propertyObj["propertB_"] = property.sourceBValue;
+    
+                        if(property.sourceBValue == null) {
+                            propertyObj["propertB_"] = "";
+                        }
+    
+                        propName.push(property2["caption"]);
+    
                     }
-
-                    propName.push(property1["caption"]);
-
-                    propertyObj["propertA_"] = property.sourceAValue;
-
-                    if(property.sourceAValue == null) {
-                        propertyObj["propertA_"] = "";
-                    }
-                     
                     
-
-                    var property2 = {};
-                    property2["caption"] = property.sourceBName;
-
-                    if(property.sourceBName == null) {
-                        property2["caption"] = "Missing property";
+                    if(sources.length > 2) {
+    
+                        var property3 = {};
+                        property3["caption"] = property.sourceCName;
+    
+                        if(property.sourceCName == null) {
+                            property3["caption"] = "Missing property";
+                        }
+    
+                        propertyObj["propertC_"] = property.sourceCValue;
+    
+                        if(property.sourceBValue == null) {
+                            propertyObj["propertC_"] = "";
+                        }
+    
+    
+                        propName.push(property3["caption"]);
+    
                     }
-
-                    propertyObj["propertB_"] = property.sourceBValue;
-
-                    if(property.sourceBValue == null) {
-                        propertyObj["propertB_"] = "";
+    
+                    if(sources.length > 3) {
+                        var property4 = {};
+                        property4["caption"] = property.sourceDName;
+    
+                        if(property.sourceDName == null) {
+                            property4["caption"] = "Missing property";
+                        }
+    
+                        propertyObj["propertD_"] = property.sourceDValue;
+    
+                        if(property.sourceDValue == null) {
+                            propertyObj["propertD_"] = "";
+                        }
+    
+                        propName.push(property4["caption"]);
                     }
-
-                    propName.push(property2["caption"]);
-
-                }
-                
-                if(sources.length > 2) {
-
-                    var property3 = {};
-                    property3["caption"] = property.sourceCName;
-
-                    if(property.sourceCName == null) {
-                        property3["caption"] = "Missing property";
+    
+                    var a = JSON.stringify(sourcePropertyNamesGroup);
+                    var b = JSON.stringify(propName);
+                    var c = a.indexOf(b)
+                    if(c == -1) {
+                        sourcePropertyNamesGroup.push(propName);
+                        for(var a in propertyObj) {
+                            var key =  a + propertyIndex;
+                            tableRowContent[key] = propertyObj[a];
+                        }
+                        var statusKey = "Status_" + propertyIndex
+                        tableRowContent[statusKey] = property.severity;
+                        
+                        propertyIndex++;
                     }
-
-                    propertyObj["propertC_"] = property.sourceCValue;
-
-                    if(property.sourceBValue == null) {
-                        propertyObj["propertC_"] = "";
-                    }
-
-
-                    propName.push(property3["caption"]);
-
-                }
-
-                if(sources.length > 3) {
-                    var property4 = {};
-                    property4["caption"] = property.sourceDName;
-
-                    if(property.sourceDName == null) {
-                        property4["caption"] = "Missing property";
-                    }
-
-                    propertyObj["propertD_"] = property.sourceDValue;
-
-                    if(property.sourceDValue == null) {
-                        propertyObj["propertD_"] = "";
-                    }
-
-                    propName.push(property4["caption"]);
-                }
-
-                var a = JSON.stringify(sourcePropertyNamesGroup);
-                var b = JSON.stringify(propName);
-                var c = a.indexOf(b)
-                if(c == -1) {
-                    sourcePropertyNamesGroup.push(propName);
-                    for(var a in propertyObj) {
-                        var key =  a + propertyIndex;
-                        tableRowContent[key] = propertyObj[a];
-                    }
-                    var statusKey = "Status_" + propertyIndex
-                    tableRowContent[statusKey] = property.severity;
-                    
-                    propertyIndex++;
-                }
-                else {
-                    for(var index in sourcePropertyNamesGroup) {
-                        var arr = sourcePropertyNamesGroup[index];
-                        if(JSON.stringify(arr)==JSON.stringify(propName)) {
-                            var propIndex = Number(index)+1;
-                            for(var a in propertyObj) {
-                                var key =  a + propIndex;
-                                tableRowContent[key] = propertyObj[a];
+                    else {
+                        for(var index in sourcePropertyNamesGroup) {
+                            var arr = sourcePropertyNamesGroup[index];
+                            if(JSON.stringify(arr)==JSON.stringify(propName)) {
+                                var propIndex = Number(index)+1;
+                                for(var a in propertyObj) {
+                                    var key =  a + propIndex;
+                                    tableRowContent[key] = propertyObj[a];
+                                }
+                                var statusKey = "Status_" + propIndex
+                                tableRowContent[statusKey] = property.severity;
+                                break;
                             }
-                            var statusKey = "Status_" + propIndex
-                            tableRowContent[statusKey] = property.severity;
-                            break;
                         }
                     }
-                }
-            }    
+                }  
+            }
             tableData.push(tableRowContent);
         }
 
@@ -394,7 +388,7 @@ ComparisonData.prototype.CreateTableData = function(selectedTables) {
     return tablesData;
 }
 
-ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
+ComparisonData.prototype.CreateTableHeader = function(selectedTables, exportProperties) {
     var tablesHeaders = [];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
@@ -429,107 +423,112 @@ ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
 
         headers.push(obj);
 
-        var data = {};
+        if(exportProperties) {
+            var data = {};
 
-        var propertyIndex = 1;
-        var groups = [];
-
-        var sourcePropertyNamesGroup = []
-        for (var componentId in components) {
-            var component = components[componentId];
-            var properties = component["properties"];
-                      
-            for (var propertyId in properties) {
-                var property = properties[propertyId];
-                
-                var group = [];
-                var propName = [];
-
-                if(sources.length > 1) {
-                    var property1 = {};
-                    property1["caption"] = property.sourceAName;
-
-                    if(property.sourceAName == null) {
-                        property1["caption"] = "Missing property";
+            var propertyIndex = 1;
+            var groups = [];
+    
+            var sourcePropertyNamesGroup = []
+            for (var componentId in components) {
+                var component = components[componentId];
+                var properties = component["properties"];
+                          
+                for (var propertyId in properties) {
+                    var property = properties[propertyId];
+                    
+                    var group = [];
+                    var propName = [];
+    
+                    if(sources.length > 1) {
+                        var property1 = {};
+                        property1["caption"] = property.sourceAName;
+    
+                        if(property.sourceAName == null) {
+                            property1["caption"] = "Missing property";
+                        }
+    
+                        propName.push(property1["caption"]);
+    
+                        property1["dataField"] = "propertA_" + propertyIndex;
+    
+                        group.push(property1);
+    
+                        var property2 = {};
+                        property2["caption"] = property.sourceBName;
+    
+                        if(property.sourceBName == null) {
+                            property2["caption"] = "Missing property";
+                        }
+    
+                        propName.push(property2["caption"]);
+    
+                        property2["dataField"] = "propertB_" + propertyIndex;
+    
+                        group.push(property2);
+    
                     }
-
-                    propName.push(property1["caption"]);
-
-                    property1["dataField"] = "propertA_" + propertyIndex;
-
-                    group.push(property1);
-
-                    var property2 = {};
-                    property2["caption"] = property.sourceBName;
-
-                    if(property.sourceBName == null) {
-                        property2["caption"] = "Missing property";
+                    
+                    if(sources.length > 2) {
+    
+                        var property3 = {};
+                        property3["caption"] = property.sourceCName;
+    
+                        if(property.sourceCName == null) {
+                            property3["caption"] = "Missing property";
+                        }
+    
+                        propName.push(property3["caption"]);
+    
+                        property3["dataField"] = "propertC_" + propertyIndex;
+    
+                        group.push(property3);
+    
                     }
-
-                    propName.push(property2["caption"]);
-
-                    property2["dataField"] = "propertB_" + propertyIndex;
-
-                    group.push(property2);
-
-                }
-                
-                if(sources.length > 2) {
-
-                    var property3 = {};
-                    property3["caption"] = property.sourceCName;
-
-                    if(property.sourceCName == null) {
-                        property3["caption"] = "Missing property";
+    
+                    if(sources.length > 3) {
+                        var property4 = {};
+                        property4["caption"] = property.sourceDName;
+    
+                        if(property.sourceDName == null) {
+                            property4["caption"] = "Missing property";
+                        }
+    
+                        propName.push(property4["caption"]);
+    
+                        property4["dataField"] = "propertD_" + propertyIndex;
+    
+                        group.push(property4);
                     }
-
-                    propName.push(property3["caption"]);
-
-                    property3["dataField"] = "propertC_" + propertyIndex;
-
-                    group.push(property3);
-
-                }
-
-                if(sources.length > 3) {
-                    var property4 = {};
-                    property4["caption"] = property.sourceDName;
-
-                    if(property.sourceDName == null) {
-                        property4["caption"] = "Missing property";
+    
+                    var propertyStatus = {};
+                    propertyStatus["caption"] = "Status";
+                    propertyStatus["dataField"] = "Status_" + propertyIndex;                
+                    group.push(propertyStatus);
+    
+                    var a = JSON.stringify(sourcePropertyNamesGroup);
+                    var b = JSON.stringify(propName);
+                    var c = a.indexOf(b)
+                    if(c == -1) {
+                        sourcePropertyNamesGroup.push(propName);
+                        groups.push(group);
+                        propertyIndex++;
                     }
-
-                    propName.push(property4["caption"]);
-
-                    property4["dataField"] = "propertD_" + propertyIndex;
-
-                    group.push(property4);
-                }
-
-                var propertyStatus = {};
-                propertyStatus["caption"] = "Status";
-                propertyStatus["dataField"] = "Status_" + propertyIndex;                
-                group.push(propertyStatus);
-
-                var a = JSON.stringify(sourcePropertyNamesGroup);
-                var b = JSON.stringify(propName);
-                var c = a.indexOf(b)
-                if(c == -1) {
-                    sourcePropertyNamesGroup.push(propName);
-                    groups.push(group);
-                    propertyIndex++;
                 }
             }
-        }
-
-        // headers.push(groups);
-        for(var a in groups) {
-            for(var b in groups[a]) {
-                headers.push(groups[a][b]);
+    
+            // headers.push(groups);
+            for(var a in groups) {
+                for(var b in groups[a]) {
+                    headers.push(groups[a][b]);
+                }
             }
+    
+            tablesHeaders[tableName] = headers;
         }
-
-        tablesHeaders[tableName] = headers;
+        else {
+            tablesHeaders[tableName] = headers;
+        }
 
     }
 
