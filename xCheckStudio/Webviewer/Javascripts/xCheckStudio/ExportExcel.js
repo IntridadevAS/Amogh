@@ -51,7 +51,7 @@ ExportExcel.prototype.CreateComponentDataGrid = function (selectedTables) {
             datagridDiv.id = tableName + "_tempTable";
             parentTable.append(datagridDiv);
 
-            _this.CreateTemporaryComponentGrid(data, datagridDiv.id, header, component.id).then(function (result) {
+            _this.CreateTemporaryComponentGrid(data, datagridDiv.id, header).then(function (result) {
                 datagridCreated++;
                 if (datagridCreated == selectedTables.length) {
                     return resolve(true);
@@ -102,6 +102,20 @@ ExportExcel.prototype.CreateDummyDataGrids = async function (selectedTables) {
     var _this = this;
     var comparison = new ComparisonData();
     var headers = comparison.CreateTableHeader(selectedTables);
+    var data = comparison.CreateTableData(selectedTables);
+
+    for(var tableName in headers) {
+        var header = headers[tableName];
+        var tableData = data[tableName];
+
+        var parentTable = document.getElementById("comparisonTables");
+        var datagridDiv = document.createElement("DIV");
+        datagridDiv.id = tableName + "_tempTable";
+        parentTable.append(datagridDiv);
+
+        await _this.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header);
+
+    }
 
 }
 
@@ -155,45 +169,28 @@ ExportExcel.prototype.RemoveTempTables = function (selectedTables, exportPropert
 
 ExportExcel.prototype.ExportGroup = async function (tableName, isLastTable, worksheet, exportProperties) {
     var _this = this;
-    var components = this.GetCategoryComponents(tableName);
+    // var components = this.GetCategoryComponents(tableName);
     var save = false;
 
     worksheet.mergeCells(this.rowCount, 1, this.rowCount, 2);
     worksheet.mergeCells(this.rowCount, 3, this.rowCount, 4);
     Object.assign(worksheet.getRow(this.rowCount).getCell(1), { value: tableName, font: { bold: true, size: 16, underline: 'double' } });
 
-    if (exportProperties) {
-        var expotedComp = 1;
-        for (var componentId in components) {
-            var component = components[componentId];
+    var dataGrid = $("#" + tableName + "_tempTable").dxDataGrid(("instance"));
 
-            if (expotedComp == Object.keys(components).length && isLastTable) {
-                save = true;
-            }
-
-            await this.ExportComponent(component, worksheet, save, exportProperties).then(function (result) {
-                _this.rowCount = result;
-                expotedComp++;
-            });
+    await DevExpress.excelExporter.exportDataGrid({
+        worksheet: worksheet,
+        component: dataGrid,
+        topLeftCell: { row: _this.rowCount, column: 5 },
+    }).then(function (dataGridRange) {
+        if (isLastTable) {
+            _this.ComparisonSheetExported = true;
+            _this.SaveWorkBook();
         }
-    }
-    else {
-        var dataGrid = $("#" + tableName + "_tempTable").dxDataGrid(("instance"));
-
-        await DevExpress.excelExporter.exportDataGrid({
-            worksheet: worksheet,
-            component: dataGrid,
-            topLeftCell: { row: _this.rowCount, column: 5 },
-        }).then(function (dataGridRange) {
-            if (isLastTable) {
-                _this.ComparisonSheetExported = true;
-                _this.SaveWorkBook();
-            }
-            else {
-                _this.rowCount = dataGridRange.to.row + 3;
-            }
-        });
-    }
+        else {
+            _this.rowCount = dataGridRange.to.row + 3;
+        }
+    });
 }
 
 ExportExcel.prototype.ExportComponent = function (component, worksheet, save, exportProperties) {
@@ -235,7 +232,7 @@ ExportExcel.prototype.ExportComponent = function (component, worksheet, save, ex
     });
 }
 
-ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, containerDiv, header, componentId) {
+ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, containerDiv, header) {
     return new Promise((resolve) => {
         $(function () {
             $("#" + containerDiv).dxDataGrid({
@@ -264,7 +261,7 @@ ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, contai
                     enabled: false
                 },
                 onContentReady: function (e) {
-                    return resolve(componentId);
+                    return resolve(true);
                 },
             });
         });
@@ -341,15 +338,6 @@ ExportExcel.prototype.SaveWorkBook = function() {
     // }
 }
 
-ExportExcel.prototype.GetCategoryComponents = function(tableName) {
-    var comparisonGroups = checkResults["Comparisons"][0]["results"];
-    for(var groupId in comparisonGroups) {
-        if(tableName == comparisonGroups[groupId].componentClass) {
-            return comparisonGroups[groupId].components;
-        }
-    }
-}
-
 ExportExcel.prototype.CreateComparisonTableData = function (properties) {
 
     var property;
@@ -412,44 +400,156 @@ function ComparisonData() {
     this.ComparisonExportComplete = false;
 }
 
-ComparisonData.prototype.CreateComparisonData = function(checkComponents) {
+ComparisonData.prototype.CreateTableData = function(selectedTables) {
 
-    var tableData = [];
-    for (var componentId in checkComponents) {
+    var tablesData = [];
+    for (var id = 0; id < selectedTables.length; id++) {
+        var tableName = selectedTables[id];
 
-        component = checkComponents[componentId];
+        var sources = checkResults["Comparisons"][0]["sources"];
 
-        tableRowContent = {};
+        var checkComponents = this.GetCategoryComponents(tableName);
+        var tableData = [];
+        var propertyIndex = 1;
+        var sourcePropertyNamesGroup = []
+        for (var componentId in checkComponents) {
+            component = checkComponents[componentId];
 
-        tableRowContent[ComparisonColumnNames.SourceAName] = component.sourceAName;
-        tableRowContent[ComparisonColumnNames.SourceBName] = component.sourceBName;
-        
-        var cName = "";
-        if(component.sourceCName)
-        {
-            cName = component.sourceCName;           
+            tableRowContent = {};
+
+            if(sources.length > 1) {
+                tableRowContent[ComparisonColumnNames.SourceAName] = component.sourceAName;
+                tableRowContent[ComparisonColumnNames.SourceBName] = component.sourceBName;
+            }
+            
+            if(sources.length > 2) {
+                tableRowContent[ComparisonColumnNames.SourceCName] = component.sourceCName;
+                
+            }
+
+            if(sources.length > 3) {
+                tableRowContent[ComparisonColumnNames.SourceDName] = component.sourceDName;
+            }
+
+            tableRowContent["ComponentStatus"] = component.status;
+
+            var properties = component.properties;
+            for (var propertyId in properties) {
+                var property = properties[propertyId];
+                var propertyObj = {};
+                var propName = [];
+
+                if(sources.length > 1) {
+                    var property1 = {};
+                    property1["caption"] = property.sourceAName;
+
+                    if(property.sourceAName == null) {
+                        property1["caption"] = "";
+                    }
+
+                    propName.push(property1["caption"]);
+
+                    propertyObj["propertA_"] = property.sourceAValue;
+
+                    if(property.sourceAValue == null) {
+                        propertyObj["propertA_"] = "";
+                    }
+                     
+                    
+
+                    var property2 = {};
+                    property2["caption"] = property.sourceBName;
+
+                    if(property.sourceBName == null) {
+                        property2["caption"] = "";
+                    }
+
+                    propertyObj["propertB_"] = property.sourceBValue;
+
+                    if(property.sourceBValue == null) {
+                        propertyObj["propertB_"] = "";
+                    }
+
+                    propName.push(property2["caption"]);
+
+                }
+                
+                // if(sources.length > 2) {
+
+                //     var property3 = {};
+                //     property3["caption"] = property.sourceCName;
+
+                //     if(property.sourceCName == null) {
+                //         property3["caption"] = "";
+                //     }
+
+                //     propName.push(property3["caption"]);
+
+                //     property3["dataField"] = "propert_C" + propertyIndex;
+
+                //     group.push(property3);
+
+                // }
+
+                // if(sources.length > 3) {
+                //     var property4 = {};
+                //     property4["caption"] = property.sourceDName;
+
+                //     if(property.sourceDName == null) {
+                //         property4["caption"] = "";
+                //     }
+
+                //     propName.push(property4["caption"]);
+
+                //     property4["dataField"] = "propert_D" + propertyIndex;
+
+                //     group.push(property4);
+                // }
+
+                var a = JSON.stringify(sourcePropertyNamesGroup);
+                var b = JSON.stringify(propName);
+                var c = a.indexOf(b)
+                if(c == -1) {
+                    sourcePropertyNamesGroup.push(propName);
+                    for(var a in propertyObj) {
+                        var key =  a + propertyIndex;
+                        tableRowContent[key] = propertyObj[a];
+                    }
+                    var statusKey = "Status_" + propertyIndex
+                    tableRowContent[statusKey] = property.severity;
+                    
+                    propertyIndex++;
+                }
+                else {
+                    for(var index in sourcePropertyNamesGroup) {
+                        var arr = sourcePropertyNamesGroup[index];
+                        if(JSON.stringify(arr)==JSON.stringify(propName)) {
+                            var propIndex = Number(index)+1;
+                            for(var a in propertyObj) {
+                                var key =  a + propIndex;
+                                tableRowContent[key] = propertyObj[a];
+                            }
+                            var statusKey = "Status_" + propIndex
+                            tableRowContent[statusKey] = property.severity;
+                            break;
+                        }
+                    }
+                }
+            }    
+            tableData.push(tableRowContent);
         }
-        tableRowContent[ComparisonColumnNames.SourceCName] =cName;
 
-        var dName = "";
-        if(component.sourceDName)
-        {
-            dName = component.sourceDName;        
-        }
-        tableRowContent[ComparisonColumnNames.SourceDName] = dName;
-
-        tableRowContent[ComparisonColumnNames.Status] = component.status;
-
-        tableData.push(tableRowContent);
+        tablesData[tableName] = tableData;
     }
 
-    return tableData;
+    return tablesData;
 }
 
 ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
+    var tablesHeaders = [];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
-        var components = ExportExcel.GetCategoryComponents(tableName);
+        var components = this.GetCategoryComponents(tableName);
         var headers = [];
 
         var sources = checkResults["Comparisons"][0]["sources"];
@@ -473,11 +573,19 @@ ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
             headers.push(Obj);
         }
 
+        var obj = {
+            "caption" : "Status",
+            "dataField" : "ComponentStatus"
+        };
+
+        headers.push(obj);
+
         var data = {};
 
         var propertyIndex = 1;
         var groups = [];
 
+        var sourcePropertyNamesGroup = []
         for (var componentId in components) {
             var component = components[componentId];
             var properties = component["properties"];
@@ -486,47 +594,104 @@ ComparisonData.prototype.CreateTableHeader = function(selectedTables) {
                 var property = properties[propertyId];
                 
                 var group = [];
+                var propName = [];
 
-                if(component.sourceAName) {
-                    var propertyHeaderObj = {};
-                    propertyHeaderObj["caption"] = property.sourceAName;
-                    propertyHeaderObj["dataField"] = "propert_A" + propertyIndex;
-                    group.push(propertyHeaderObj);
+                if(sources.length > 1) {
+                    var property1 = {};
+                    property1["caption"] = property.sourceAName;
+
+                    if(property.sourceAName == null) {
+                        property1["caption"] = "";
+                    }
+
+                    propName.push(property1["caption"]);
+
+                    property1["dataField"] = "propertA_" + propertyIndex;
+
+                    group.push(property1);
+
+                    var property2 = {};
+                    property2["caption"] = property.sourceBName;
+
+                    if(property.sourceBName == null) {
+                        property2["caption"] = "";
+                    }
+
+                    propName.push(property2["caption"]);
+
+                    property2["dataField"] = "propertB_" + propertyIndex;
+
+                    group.push(property2);
+
+                }
+                
+                if(sources.length > 2) {
+
+                    var property3 = {};
+                    property3["caption"] = property.sourceCName;
+
+                    if(property.sourceCName == null) {
+                        property3["caption"] = "";
+                    }
+
+                    propName.push(property3["caption"]);
+
+                    property3["dataField"] = "propertC_" + propertyIndex;
+
+                    group.push(property3);
+
                 }
 
-                if(component.sourceBName) {
-                    var propertyHeaderObj = {};
-                    propertyHeaderObj["caption"] = property.sourceBName;
-                    propertyHeaderObj["dataField"] = "propert_B" + propertyIndex;
-                    group.push(propertyHeaderObj);
+                if(sources.length > 3) {
+                    var property4 = {};
+                    property4["caption"] = property.sourceDName;
+
+                    if(property.sourceDName == null) {
+                        property4["caption"] = "";
+                    }
+
+                    propName.push(property4["caption"]);
+
+                    property4["dataField"] = "propertD_" + propertyIndex;
+
+                    group.push(property4);
                 }
 
-                if(component.sourceCName) {
-                    var propertyHeaderObj = {};
-                    propertyHeaderObj["caption"] = property.sourceCName;
-                    propertyHeaderObj["dataField"] = "propert_C" + propertyIndex;
-                    group.push(propertyHeaderObj);
-                }
+                var propertyStatus = {};
+                propertyStatus["caption"] = "Status";
+                propertyStatus["dataField"] = "Status_" + propertyIndex;                
+                group.push(propertyStatus);
 
-                if(component.sourceDName) {
-                    var propertyHeaderObj = {};
-                    propertyHeaderObj["caption"] = property.sourceDName;
-                    propertyHeaderObj["dataField"] = "propert_D" + propertyIndex;
-                    group.push(propertyHeaderObj);
-                }
-
-                propertyHeaderObj["caption"] = "Status";
-                propertyHeaderObj["dataField"] = "Status_" + propertyIndex;
-                group.push(propertyHeaderObj);
-
-                if(!groups.includes(group)) {
+                var a = JSON.stringify(sourcePropertyNamesGroup);
+                var b = JSON.stringify(propName);
+                var c = a.indexOf(b)
+                if(c == -1) {
+                    sourcePropertyNamesGroup.push(propName);
                     groups.push(group);
                     propertyIndex++;
                 }
             }
         }
 
-        headers.push(groups);
+        // headers.push(groups);
+        for(var a in groups) {
+            for(var b in groups[a]) {
+                headers.push(groups[a][b]);
+            }
+        }
 
+        tablesHeaders[tableName] = headers;
+
+    }
+
+    return tablesHeaders;
+}
+
+ComparisonData.prototype.GetCategoryComponents = function(tableName) {
+    var comparisonGroups = checkResults["Comparisons"][0]["results"];
+    for(var groupId in comparisonGroups) {
+        if(tableName == comparisonGroups[groupId].componentClass) {
+            return comparisonGroups[groupId].components;
+        }
     }
 }
