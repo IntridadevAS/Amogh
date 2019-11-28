@@ -321,25 +321,44 @@ ModelBrowserContextMenu.prototype.OnStopTranslucencyClicked = function () {
 }
 
 ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
-      if (!this.ModelBrowser ||
-            !this.ModelBrowser.SelectionManager) {
+      if (!this.ModelBrowser) {
             return;
       }
-      var browserSelectionManager = this.ModelBrowser.SelectionManager;
-      if (browserSelectionManager.SelectedComponentNodeIds.length === 0) {
-            return;
-      }
-
       var nodeIds = [];
-      for (var i = 0; i < browserSelectionManager.SelectedComponentNodeIds.length; i++) {
 
-            // var selectedComponentRow = browserSelectionManager.SelectedComponentNodeIds[i];
-            var nodeId = Number(browserSelectionManager.SelectedComponentNodeIds[i]);
-
-            if (nodeId !== NaN) {
-                  nodeIds.push(nodeId);
+      var treeList = $("#" + this.ModelBrowser.ModelBrowserContainer).dxTreeList("instance");
+      var visibleRows = treeList.getVisibleRows();
+      for (var i = 0; i < visibleRows.length; i++) {
+            var row = visibleRows[i];
+            if (!row.isSelected) {
+                  continue;
             }
+
+            nodeIds.push(row.data.NodeId);
       }
 
       return nodeIds;
+
+      // if (!this.ModelBrowser ||
+      //       !this.ModelBrowser.SelectionManager) {
+      //       return;
+      // }
+
+      // var browserSelectionManager = this.ModelBrowser.SelectionManager;
+      // if (browserSelectionManager.SelectedComponentNodeIds.length === 0) {
+      //       return;
+      // }
+
+      // var nodeIds = [];
+      // for (var i = 0; i < browserSelectionManager.SelectedComponentNodeIds.length; i++) {
+
+      //       // var selectedComponentRow = browserSelectionManager.SelectedComponentNodeIds[i];
+      //       var nodeId = Number(browserSelectionManager.SelectedComponentNodeIds[i]);
+
+      //       if (nodeId !== NaN) {
+      //             nodeIds.push(nodeId);
+      //       }
+      // }
+
+      // return nodeIds;
 }
