@@ -45,26 +45,30 @@ function loadCheckCases() {
     checkCaseFilesData.readCheckCaseFiles();
 }
 
-function filterCheckCases(sourceType) {
-    if(!(model.currentTabId in SourceManagers))
-    {
-        return;
-    }
+function filterCheckCases(loadAll) {    
 
-    var fileName;    
+    var fileName;
     var checkCaseSelect = document.getElementById("checkCaseSelect");
 
-    if (sourceType === undefined) {
+    if (loadAll || Object.keys(SourceManagers).length === 0) {
+        var selectedCheckCase = checkCaseSelect.value;
 
         checkCaseFilesData.FilteredCheckCaseDataList = [];
         checkCaseFilesData.populateCheckCases();
+
+        if (selectedCheckCase) {
+            checkCaseSelect.value = selectedCheckCase;
+        }
     }
     else {
+        // if (!(model.currentTabId in SourceManagers)) {
+        //     return;
+        // }
 
         // get all loaded source types
         var allSourceTypes = [];
         for (var tabId in SourceManagers) {
-            allSourceTypes.push(SourceManagers[tabId].SourceType);           
+            allSourceTypes.push(SourceManagers[tabId].SourceType);
         }
 
         var loadedSourceOccCountList = xCheckStudio.Util.getArrayElementOccCount(allSourceTypes);

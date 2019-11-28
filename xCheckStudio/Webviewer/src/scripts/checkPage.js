@@ -1,13 +1,13 @@
 //var currentTabId;
 
-let model = {  
+let model = {
   activeTabs: 0,
   selectedTab: [],
   currentView: null,
   currentTabId: undefined,
-  loadSavedCheckspace : false,
-  datasetTypes : undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
-  checkcaseSupportedTypes : undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
+  loadSavedCheckspace: false,
+  datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
+  checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
   views: {
     a: {
       id: "a",
@@ -50,8 +50,7 @@ let model = {
       complianceSwitchChecked: false
     }
   },
-  onDataSourceTabChanged : function (tabID)
-  {
+  onDataSourceTabChanged: function (tabID) {
     this.currentTabId = tabID;
 
     // manage state of compliance switch
@@ -149,7 +148,7 @@ let viewTabs = {
         // viewTabs.deleteTab(deleteTab.parentNode);
       } else if (changeTab) {
         controller.selectView(changeTab.dataset.id);
-        viewTabs.selectTab(changeTab);       
+        viewTabs.selectTab(changeTab);
       } else { return };
     })
 
@@ -165,7 +164,7 @@ let viewTabs = {
 
     // create text span
     var spanText = document.createElement("span");
-    spanText.innerHTML =  xCheckStudio.Util.getFileNameWithoutExtension(view.fileName);
+    spanText.innerHTML = xCheckStudio.Util.getFileNameWithoutExtension(view.fileName);
     spanText.style.overflow = "hidden";
     spanText.style.textOverflow = "ellipsis"
     newNode.appendChild(spanText);
@@ -203,7 +202,7 @@ let viewTabs = {
     //   closeOnOutsideClick: false
     // });
 
-    
+
 
     let closeWin = document.createElement("div");
     closeWin.classList.add("deleteTab");
@@ -247,7 +246,7 @@ let viewTabs = {
     selectedTab.classList.add("selectedTab");
 
     // maintain currently active tab
-    model.onDataSourceTabChanged(tabID);    
+    model.onDataSourceTabChanged(tabID);
   },
 
   unselectAllTabs: function () {
@@ -423,11 +422,18 @@ function cancelClearDataSource() {
   hideClearDataSourceForm();
 }
 
-function clearDataSource() {  
-  var tabToDelete = document.getElementById("tab_"+model.currentTabId)
-  viewTabs.deleteTab(tabToDelete);
-  
-  hideClearDataSourceForm();
+function clearDataSource() {
+  removeDataSourceFromDB().then(function (result) {
+
+    var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+    viewTabs.deleteTab(tabToDelete);
+
+    // filter checkcases again
+    checkCaseFilesData.FilteredCheckCaseDataList = [];
+    filterCheckCases(false);
+
+    hideClearDataSourceForm();
+  });
 }
 
 function hideClearDataSourceForm() {
@@ -436,4 +442,28 @@ function hideClearDataSourceForm() {
 
   overlay.style.display = 'none';
   popup.style.display = 'none';
+}
+
+function removeDataSourceFromDB() {
+  return new Promise((resolve) => {
+    // clean up all temporary files and variables
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    $.ajax({
+      url: 'PHP/ProjectManager.php',
+      type: "POST",
+      async: false,
+      data:
+      {
+        'InvokeFunction': "RemoveSource",
+        'ProjectName': projectinfo.projectname,
+        'CheckName': checkinfo.checkname,
+        'SourceId': model.currentTabId
+      },
+      success: function (msg) {
+        return resolve(true);
+      }
+    });
+  });
 }

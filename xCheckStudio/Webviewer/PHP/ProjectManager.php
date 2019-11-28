@@ -72,14 +72,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // case "SaveNotSelectedComponents":
         //     SaveNotSelectedComponents();         
         //     break;
-        case "SaveComponents":
-            SaveComponents();         
-            break;
+        // case "SaveComponents":
+        //     SaveComponents();         
+        //     break;
         case "CreateCheckSpaceDBonSave":
              CreateCheckSpaceDBonSave();         
             break;
         case "ClearTemporaryCheckSpaceDB":
             ClearTemporaryCheckSpaceDB();
+            break;
+        case "RemoveSource":
+            RemoveSource();
+            break;
+        case "RemoveAllSources":
+            RemoveAllSources();
             break;
         // case  "SaveHiddenItems":
         //     SaveHiddenItems();
@@ -93,6 +99,191 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         default:
             echo "No Function Found!";
     }
+}
+
+
+function RemoveAllSources()
+{
+    if(!isset( $_POST['ProjectName']) ||
+    !isset( $_POST['CheckName']))
+    {
+        echo json_encode(array("Msg" =>  "Invalid input.",
+        "MsgCode" => 0));  
+
+        return;
+    }
+
+    try    
+    { 
+        // get project name
+        $projectName = $_POST['ProjectName'];	
+        $checkName = $_POST['CheckName'];        
+        
+        $dbPath = getCheckDatabasePath($projectName, $checkName);   
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");       
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // delete component tables
+        $command = 'DROP TABLE IF EXISTS SourceAComponents;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceBComponents;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceCComponents;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceDComponents;';
+        $dbh->exec($command);
+
+        // delete properties tables
+        $command = 'DROP TABLE IF EXISTS SourceAProperties;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceBProperties;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceCProperties;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS SourceDProperties;';
+        $dbh->exec($command);
+        
+        //delete references
+        $command = 'DROP TABLE IF EXISTS a_References;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS b_References;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS c_References;';
+        $dbh->exec($command);
+        $command = 'DROP TABLE IF EXISTS d_References;';
+        $dbh->exec($command);
+
+        // delete comparison results
+        DeleteComparisonResults();
+
+        // delete compliance results
+        DeleteSourceAComplianceResults();
+        DeleteSourceBComplianceResults();
+        DeleteSourceCComplianceResults();
+        DeleteSourceDComplianceResults();
+
+        // commit update
+        $dbh->commit();        
+        $dbh = null; //This is how you close a PDO connection                
+    
+        echo json_encode(array("Msg" =>  "success",
+        "MsgCode" => 1));  
+        return;
+    }
+    catch(Exception $e) 
+    {        
+        echo json_encode(array("Msg" =>  "Failed to remove all sources.",
+        "MsgCode" => 0));  
+        return;
+    } 
+}
+
+/*
+    Remove Specific source
+*/
+function RemoveSource()
+{
+    if(!isset( $_POST['ProjectName']) ||
+    !isset( $_POST['CheckName']) ||
+    !isset( $_POST['SourceId']))
+    {
+        echo json_encode(array("Msg" =>  "Invalid input.",
+        "MsgCode" => 0));  
+
+        return;
+    }
+
+    try
+    {   
+        // get project name
+        $projectName = $_POST['ProjectName'];	
+        $checkName = $_POST['CheckName'];
+        $sourceId = $_POST['SourceId'];
+        
+        $dbPath = getCheckDatabasePath($projectName, $checkName);  
+
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");        
+        
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // delete comparison results
+        DeleteComparisonResults();
+
+        $sourceComponentsTable = NULL;
+        $sourcePropertiesTable = NULL;
+        $refrenceTable = NULL;
+
+        // delete compliance results
+        if(strtolower($sourceId) === "a")
+        {
+            DeleteSourceAComplianceResults();
+
+            $sourceComponentsTable = "SourceAComponents";
+            $sourcePropertiesTable = "SourceAProperties";
+            $refrenceTable = "a_References";
+        }
+        else if(strtolower($sourceId) === "b")
+        {
+            DeleteSourceBComplianceResults();
+
+            $sourceComponentsTable = "SourceBComponents";
+            $sourcePropertiesTable = "SourceBProperties";
+            $refrenceTable = "b_References";
+        }
+        else if(strtolower($sourceId) === "c")
+        {
+            DeleteSourceCComplianceResults();
+
+            $sourceComponentsTable = "SourceCComponents";
+            $sourcePropertiesTable = "SourceCProperties";
+            $refrenceTable = "c_References";
+        }
+        else if(strtolower($sourceId) === "d")
+        {
+            DeleteSourceDComplianceResults();
+
+            $sourceComponentsTable = "SourceDComponents";
+            $sourcePropertiesTable = "SourceDProperties";
+            $refrenceTable = "d_References";
+        }
+
+        // delete source component and properties tables
+        if($sourceComponentsTable !== NULL)
+        {
+            $command = 'DROP TABLE IF EXISTS '.$sourceComponentsTable.';';
+            $dbh->exec($command);
+        }
+
+        if($sourcePropertiesTable !== NULL)
+        {
+            $command = 'DROP TABLE IF EXISTS '.$sourcePropertiesTable.';';
+            $dbh->exec($command);
+        }
+
+        if($refrenceTable !== NULL)
+        {
+            $command = 'DROP TABLE IF EXISTS '.$refrenceTable.';';
+            $dbh->exec($command);
+        }       
+
+
+        // commit update
+        $dbh->commit();        
+        $dbh = null; //This is how you close a PDO connection                
+      
+        echo json_encode(array("Msg" =>  "success",
+        "MsgCode" => 1));  
+        return;
+    }
+    catch(Exception $e) 
+    { 
+        echo json_encode(array("Msg" =>  "Failed to remove source.",
+        "MsgCode" => 0));  
+        return;
+    } 
 }
 
 /* 
@@ -269,12 +460,12 @@ function SaveAll()
 function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckProperties;");  
-    if($selectResults) 
-    {
 
-        // create table
-        $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
-        $dbh->exec($command);    
+    // delete table
+    $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
+    $dbh->exec($command);  
+    if($selectResults) 
+    {  
                   
         // $command = 'CREATE TABLE ComparisonCheckProperties(
         //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -332,12 +523,13 @@ function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
 function SaveComparisonGroupsFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups;");  
-    if($selectResults) 
-    {
 
-        // create table
-        $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
-        $dbh->exec($command);    
+     // delete table if exists
+     $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+     $dbh->exec($command);   
+
+    if($selectResults) 
+    {        
                   
         $command = 'CREATE TABLE ComparisonCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -365,12 +557,12 @@ function SaveComparisonGroupsFromTemp( $tempDbh, $dbh)
 function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckComponents;");  
-    if($selectResults) 
-    {
 
-        // create table
-        $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
-        $dbh->exec($command);    
+     // delete table, if exists
+     $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
+     $dbh->exec($command);  
+    if($selectResults) 
+    {         
                   
         // $command = 'CREATE TABLE ComparisonCheckComponents(
         //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -538,13 +730,13 @@ function CreateCheckSpaceDBonSave()
 function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
 {
     $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
-    if($selectResults) 
-    {
+     
+    // create table
+    $command = 'DROP TABLE IF EXISTS '.$referenceTable.';';
+    $dbh->exec($command);   
 
-        // create table
-        $command = 'DROP TABLE IF EXISTS '.$referenceTable.';';
-        $dbh->exec($command);    
-                  
+    if($selectResults) 
+    {             
         $command = 'CREATE TABLE IF NOT EXISTS '. $referenceTable. '(
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
         webAddress TEXT,
@@ -753,14 +945,18 @@ function SaveHiddenItems( $dbh)
 */
 function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTable)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$componentTable.";");  
+    $selectResults = $tempDbh->query("SELECT * FROM ".$componentTable.";");
+    
+    // delete table
+    $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
+    $dbh->exec($command);   
+
+    // delete table
+    $command = 'DROP TABLE IF EXISTS '.$propertiesTable.';';
+    $dbh->exec($command);  
+
     if($selectResults) 
     {
-
-        // create table
-        $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
-        $dbh->exec($command);    
-
          // ischecked can have values 'true' or 'false'
          $command = 'CREATE TABLE '.$componentTable.'(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -792,10 +988,6 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
         $selectPropertiesResults = $tempDbh->query("SELECT * FROM ".$propertiesTable.";");  
         if($selectPropertiesResults) 
         {
-            // create table
-            $command = 'DROP TABLE IF EXISTS '.$propertiesTable.';';
-            $dbh->exec($command);    
-
             // create properties table
             $command = 'CREATE TABLE '.$propertiesTable.'(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -819,60 +1011,60 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
                                         $row['ownercomponent']));
             }  
         }
-    }   
+    } 
 }
 
-function SaveComponents()
-{
-       // get project name
-       $projectName = $_POST['ProjectName'];	
-       $checkName = $_POST['CheckName'];
-       $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-       $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
-       if(!file_exists ($dbPath ) || 
-          !file_exists ($tempDBPath ))
-       { 
-            echo 'fail';
-            return;
-       }       
+// function SaveComponents()
+// {
+//        // get project name
+//        $projectName = $_POST['ProjectName'];	
+//        $checkName = $_POST['CheckName'];
+//        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
+//        $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
+//        if(!file_exists ($dbPath ) || 
+//           !file_exists ($tempDBPath ))
+//        { 
+//             echo 'fail';
+//             return;
+//        }       
 
-       $dbh;
-        try
-        {        
-            // open database             
-            $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
+//        $dbh;
+//         try
+//         {        
+//             // open database             
+//             $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
 
-            //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+//             //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+//             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
 
-            // begin the transaction
-            $dbh->beginTransaction();
-            $tempDbh->beginTransaction();            
+//             // begin the transaction
+//             $dbh->beginTransaction();
+//             $tempDbh->beginTransaction();            
           
-            // comparison result tables table                               
-            SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
-            SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
-            // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
-            // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
+//             // comparison result tables table                               
+//             SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
+//             SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
+//             // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
+//             // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
 
-            // save check case info 
-            SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
+//             // save check case info 
+//             SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
 
-            // commit update
-            $dbh->commit();
-            $tempDbh->commit();
-            $dbh = null; //This is how you close a PDO connection                    
-            $tempDbh = null; //This is how you close a PDO connection                        
+//             // commit update
+//             $dbh->commit();
+//             $tempDbh->commit();
+//             $dbh = null; //This is how you close a PDO connection                    
+//             $tempDbh = null; //This is how you close a PDO connection                        
 
-            echo 'success';
-            return;
-        }
-        catch(Exception $e) 
-        {        
-            echo "fail"; 
-            return;
-        } 
-}
+//             echo 'success';
+//             return;
+//         }
+//         catch(Exception $e) 
+//         {        
+//             echo "fail"; 
+//             return;
+//         } 
+// }
 
 /* 
    Save viewer options
@@ -1247,13 +1439,14 @@ function isComponentSelected($component, $SelectedComponents){
 
 function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
+    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");    
+
+    // drop table if exists
+    $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+    $dbh->exec($command);
+
     if($selectResults) 
     {
-
-        // drop table if exists
-        $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-        $dbh->exec($command);
 
         $command = 'CREATE TABLE '.$tableName.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -1496,10 +1689,11 @@ function  SaveCheckStatistics($tempDbh, $dbh)
 function SaveSourceDComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceDComplianceCheckGroups");
+
+    $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+    $dbh->exec($command);  
     if($selectResults) 
     {
-
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceDComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -1559,10 +1753,12 @@ function SaveSourceDComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 function SaveSourceDComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceDComplianceCheckProperties");
+    
+    $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+    $dbh->exec($command);    
     if($selectResults) 
     {
   
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
         $command = 'CREATE TABLE SourceDComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1599,10 +1795,11 @@ function SaveSourceDComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 function SaveSourceCComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckGroups");
+
+    $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
+    $dbh->exec($command);  
     if($selectResults) 
     {
-
-        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceCComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -1626,10 +1823,12 @@ function SaveSourceCComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 function SaveSourceCComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 {  
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckComponents");
+    
+    $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+    $dbh->exec($command);    
+
     if($selectResults) 
-    {
- 
-        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+    { 
         $command = 'CREATE TABLE SourceCComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,                
@@ -1662,10 +1861,11 @@ function SaveSourceCComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 function SaveSourceCComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckProperties");
+    
+    $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
+    $dbh->exec($command);    
     if($selectResults) 
     {
-  
-        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
         $command = 'CREATE TABLE SourceCComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1702,10 +1902,11 @@ function SaveSourceCComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 function SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckGroups");
+    
+    $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
+    $dbh->exec($command);  
     if($selectResults) 
     {
-
-        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceBComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -1729,10 +1930,15 @@ function SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 function SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 {  
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckComponents");
+    
+    $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
+    $dbh->exec($command); 
     if($selectResults) 
     {
  
         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
+        $dbh->exec($command); 
+
         $command = 'CREATE TABLE SourceBComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,                
@@ -1765,10 +1971,11 @@ function SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckProperties");
+
+    $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
+    $dbh->exec($command); 
     if($selectResults) 
     {
-  
-        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
         $command = 'CREATE TABLE SourceBComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1805,10 +2012,12 @@ function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 function SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckGroups");
+
+    $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
+    $dbh->exec($command);  
+
     if($selectResults) 
     {
-
-        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
         $command = 'CREATE TABLE SourceAComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
@@ -1832,10 +2041,13 @@ function SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 function SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 {  
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckComponents");
+    
+    $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
+    $dbh->exec($command);    
+
     if($selectResults) 
     {
  
-        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
         $command = 'CREATE TABLE SourceAComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,                
@@ -1868,10 +2080,12 @@ function SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh)
 function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 {   
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckProperties");
+  
+    $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
+    $dbh->exec($command);    
     if($selectResults) 
     {
-  
-        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
+
         $command = 'CREATE TABLE SourceAComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1883,7 +2097,7 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             description TEXT,
             ownerComponent INTEGER NOT NULL,
             rule TEXT)'; 
-        $dbh->exec($command);    
+        
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
@@ -2607,7 +2821,8 @@ function DeleteSourceAComplianceResults()
 function DeleteSourceBComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
- 
+    $checkName = $_POST['CheckName'];
+
      $dbh;
      try
      {    
@@ -2654,7 +2869,8 @@ function DeleteSourceBComplianceResults()
 function DeleteSourceCComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
- 
+    $checkName = $_POST['CheckName'];
+
      $dbh;
      try
      {    
@@ -2701,7 +2917,8 @@ function DeleteSourceCComplianceResults()
 function DeleteSourceDComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
- 
+    $checkName = $_POST['CheckName'];
+
      $dbh;
      try
      {    

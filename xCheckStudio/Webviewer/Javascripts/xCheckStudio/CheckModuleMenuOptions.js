@@ -87,7 +87,18 @@ function cancelClearAllData() {
 }
 
 function clearAllData() {
-    hideClearAllDataForm();
+    removeAllDataSourcesFromDB().then(function (result) {
+
+        while (model.activeTabs > 0) {
+            var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+            viewTabs.deleteTab(tabToDelete);
+        }
+
+        // show all available checkcases
+        filterCheckCases(true);
+
+        hideClearAllDataForm();
+    });
 }
 
 function hideClearAllDataForm() {
@@ -96,6 +107,30 @@ function hideClearAllDataForm() {
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
+}
+
+
+function removeAllDataSourcesFromDB() {
+    return new Promise((resolve) => {
+        // clean up all temporary files and variables
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+        $.ajax({
+            url: 'PHP/ProjectManager.php',
+            type: "POST",
+            async: false,
+            data:
+            {
+                'InvokeFunction': "RemoveAllSources",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
+            success: function (msg) {
+                return resolve(true);
+            }
+        });
+    });
 }
 
 function cancelResetData() {

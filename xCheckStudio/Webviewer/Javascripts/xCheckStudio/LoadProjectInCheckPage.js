@@ -176,7 +176,7 @@ function loadDataSource(viewerOption, data, checkCaseName) {
                 sourceManager.HiddenNodeIds = hiddenItems;
 
                 sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"], visibleItems).then(function (result) {
-                    filterCheckCases(fileExtension);
+                    filterCheckCases(false);
 
                     var checkCaseSelectElement = document.getElementById("checkCaseSelect");
                     if (checkCaseName) {
@@ -221,7 +221,7 @@ function loadDataSource(viewerOption, data, checkCaseName) {
         SourceManagers[addedSource.id] = sourceManager;
 
         sourceManager.RestoreData(classWiseComponents, selectedComponents["NodeIdwiseSelectedComps"]);  
-        filterCheckCases(fileExtension);      
+        filterCheckCases(false);      
     }   
 }
 

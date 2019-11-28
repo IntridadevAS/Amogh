@@ -5,10 +5,10 @@ var CheckModule = {
 
             try {
 
-                if (Object.keys(SourceManagers).length === 0) {
-                    showNoDataToSavePrompt();
-                    return resolve(false);
-                }
+                // if (Object.keys(SourceManagers).length === 0) {
+                //     showNoDataToSavePrompt();
+                //     return resolve(false);
+                // }
 
                 showBusyIndicator();
 
