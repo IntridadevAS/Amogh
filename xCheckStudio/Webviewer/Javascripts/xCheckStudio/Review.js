@@ -902,11 +902,15 @@ function enableViewers(sources) {
     else if (sources.length === 3) {
         document.getElementById("comparePanelB").style.display = "block";
         document.getElementById("comparePanelC").style.display = "block";
+        document.getElementById("comparePanelC").style.width = "200%";
     }
     else if (sources.length === 4) {
         document.getElementById("comparePanelB").style.display = "block";
-        document.getElementById("comparePanelC").style.display = "block";
+        document.getElementById("comparePanelC").style.display = "block";        
         document.getElementById("comparePanelD").style.display = "block";
+
+        document.getElementById("comparePanelC").style.width = "100%";
+        document.getElementById("comparePanelD").style.width = "100%";
     }
 }
 
