@@ -147,7 +147,13 @@ function filterCheckCases(sourceType) {
         }
         checkCaseSelect.options.add(new Option("AutoSelect", "AutoSelect"));
         if (selectedCheckCase.toLowerCase() === "autoselect") {
-            checkCaseSelect.value = "AutoSelect";
+            if (checkCaseSelect.options.length === 2) {
+                checkCaseSelect.value = checkCaseSelect.options[0].value;
+                checkCaseSelect.dispatchEvent(new Event('change'));
+            }
+            else{
+                checkCaseSelect.value = "AutoSelect";
+            }
         }
         else {
             checkCaseSelect.value = selectedCheckCase;
