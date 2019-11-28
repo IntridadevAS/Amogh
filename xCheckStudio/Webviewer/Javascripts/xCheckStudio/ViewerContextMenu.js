@@ -100,9 +100,32 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     }
     contextMenuDiv.appendChild(itemGroup);
 
-    contextMenuDiv.style.top = y + "px";
-    contextMenuDiv.style.left = x + "px";
     contextMenuDiv.style.display = "block";
+
+    // position the context menu
+    var menuHeight = contextMenuDiv.offsetHeight;
+    var menuWidth = contextMenuDiv.offsetWidth;
+
+    var viewerContainer = document.getElementById(this.WebViewer._params.containerId);
+
+    // get mouse X position relative to viewerContainer
+    var viewerX = x - $("#" + this.WebViewer._params.containerId).offset().left;
+
+    // get mouse Y position relative to viewerContainer
+    var viewerY = y - $("#" + this.WebViewer._params.containerId).offset().top;
+
+    // adjust x
+    if ((viewerContainer.offsetWidth - viewerX) < menuWidth) {
+        x = x - menuWidth;
+    }
+
+    // adjust y
+    if ((viewerContainer.offsetHeight - viewerY) < menuHeight) {
+        y = y - menuHeight;
+    }
+
+    contextMenuDiv.style.top = y + "px";
+    contextMenuDiv.style.left = x + "px";    
 
     // close context menu, if mouse click is done outside
     document.onclick = function (e) {
