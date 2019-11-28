@@ -2097,7 +2097,7 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             description TEXT,
             ownerComponent INTEGER NOT NULL,
             rule TEXT)'; 
-        
+        $dbh->exec($command);   
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
