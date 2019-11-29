@@ -702,7 +702,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[0] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
                 else if (j === ComparisonPropertyColumns.SourceAValue) {
                     caption = "Value";
@@ -711,7 +711,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[1] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
             }
             caption = sources[0];
@@ -730,7 +730,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[0] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
                 else if (j === ComparisonPropertyColumns.SourceBName) {
                     caption = "Property";
@@ -740,7 +740,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[1] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
             }
             caption = sources[1];
@@ -761,7 +761,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[0] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
                 else if (j === ComparisonPropertyColumns.SourceCValue) {
                     caption = "Value";
@@ -772,7 +772,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[1] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }              
             }
             caption = "SourceC";
@@ -800,7 +800,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[0] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }
                 else if (j === ComparisonPropertyColumns.SourceDValue) {
                     caption = "Value";
@@ -811,7 +811,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
-                    group[1] = headerGroupComp;
+                    group[group.length] = headerGroupComp;
                 }              
             }
             caption = "SourceD";
