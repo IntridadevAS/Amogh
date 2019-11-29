@@ -516,7 +516,8 @@
                                             'sourceDId'=>$componentRow['sourceDId'],
                                             'ownerGroup'=>$componentRow['ownerGroup'],                                                        
                                             'transpose' => $componentRow['transpose'],
-                                            'accepted' => $componentRow['accepted']); 
+                                            'accepted' => $componentRow['accepted'],
+                                            'classMappingInfo' => $componentRow['classMappingInfo']); 
 
                             $componentId = $componentRow['id'];
 

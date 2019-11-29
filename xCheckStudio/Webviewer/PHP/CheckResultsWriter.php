@@ -362,7 +362,8 @@
                                              $checkComponent->SourceCId,
                                              $checkComponent->SourceDId,
                                              $groupId,
-                                             null);
+                                             null,
+                                             $checkComponent->ClassMappingInfo);
 
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);

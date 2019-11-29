@@ -1187,7 +1187,8 @@
                                     $row['sourceCId'],
                                     $row['sourceDId'],
                                     $row['ownerGroup'],
-                                    $row['transpose'],));
+                                    $row['transpose'],
+                                    $row['classMappingInfo']));
             }                    
         } 
     }
