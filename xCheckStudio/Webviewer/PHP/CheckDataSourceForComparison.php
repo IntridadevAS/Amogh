@@ -2119,6 +2119,12 @@
                        $checkCasePropSourceB !== NULL)
                     {
 
+                        if($property1Name == NULL && 
+                           $property2Name == NULL)
+                        {
+                            continue;
+                        }
+
                         if($property1Name != NULL && 
                            $property2Name != NULL)
                         {
@@ -2156,12 +2162,21 @@
                     }
                 }
                 else if($totalSources === 3)
-                {
+                {                  
+
                     // compare properties
                     if($checkCasePropSourceA !== NULL &&
                     $checkCasePropSourceB !== NULL && 
                     $checkCasePropSourceC !== NULL)
                     {
+
+                        if($property1Name == NULL && 
+                           $property2Name == NULL &&
+                           $property3Name == NULL)
+                        {
+                            continue;
+                        }
+
                         if($property1Name != NULL &&
                            $property2Name != NULL &&
                            $property3Name != NULL)
@@ -2209,6 +2224,14 @@
                     $checkCasePropSourceC !== NULL &&
                     $checkCasePropSourceD !== NULL)
                     {
+                        if($property1Name == NULL && 
+                           $property2Name == NULL &&
+                           $property3Name == NULL &&
+                           $property4Name == NULL)
+                        {
+                            continue;
+                        }
+
 
                         if($property1Name != NULL &&
                         $property2Name != NULL &&
@@ -2462,7 +2485,7 @@
                                                     $cPropertyValue,
                                                     $dPropertyName,
                                                     $dPropertyValue,
-                                                    "No Match",
+                                                    "",
                                                     NULL,
                                                     NULL,
                                                     NULL);
