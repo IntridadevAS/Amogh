@@ -16,7 +16,8 @@ const ComparisonColumns = {
     SourceCId: 12,
     SourceDId: 13,
     ResultId: 14,
-    GroupId: 15
+    GroupId: 15,
+    ClassMappingInfo: 16
 }
 
 // column names
@@ -36,7 +37,8 @@ const ComparisonColumnNames = {
     SourceCId: "SourceCId",
     SourceDId: "SourceDId",
     ResultId: "ID",
-    GroupId: "groupId"
+    GroupId: "groupId",
+    ClassMappingInfo : "ClassMappingInfo"
 }
 
 // comparison property table

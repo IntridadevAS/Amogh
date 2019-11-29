@@ -280,9 +280,21 @@
                             // check if it is 'no match' for all class mapping
                             // if yes, then show only one no match component
                             $isAllNoMatch = true;
+                            $classMappingInfo = NULL;
                             for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
                             {
-                                $classwiseMatchObjects = $matchObject[$matchedObjectIndex];                              
+                                $classwiseMatchObjects = $matchObject[$matchedObjectIndex];   
+                                
+                                $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
+                                if($classMappingInfo != NULL)
+                                {
+                                    $classMappingInfo = $classMappingInfo. ", ". getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                }
+                                else
+                                {
+                                    $classMappingInfo = getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                }
+
                                 $srcBComponent = NULL;
                                 $srcCComponent = NULL;
                                 if(array_key_exists('b', $classwiseMatchObjects) || 
@@ -298,7 +310,8 @@
                                 // no match component                                
                                 $noMatchComponent = getNoMatchComponent ($sourceAComponent,
                                                                         $SourceAProperties,
-                                                                        1);
+                                                                        1,
+                                                                        $classMappingInfo);
                                 
                                 $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
                                 if($totalSources > 2)
@@ -601,9 +614,20 @@
                             // check if it is 'no match' for all class mapping
                             // if yes, then show only one no match component
                             $isAllNoMatch = true;
+                            $classMappingInfo = NULL;
                             for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
                             {
                                 $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
+                                $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
+                                if($classMappingInfo != NULL)
+                                {
+                                    $classMappingInfo = $classMappingInfo. ", ". getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                }
+                                else
+                                {
+                                    $classMappingInfo = getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                }
+
                                 if(array_key_exists('a', $classwiseMatchObjects) || 
                                 ($totalSources > 2 && array_key_exists('c', $classwiseMatchObjects)) ||
                                 ($totalSources > 3 && array_key_exists('d', $classwiseMatchObjects)))
@@ -617,7 +641,8 @@
                                 // no match component                                
                                 $noMatchComponent = getNoMatchComponent ($sourceBComponent,
                                                                         $SourceBProperties,
-                                                                        2);
+                                                                        2,
+                                                                        $classMappingInfo);
                                 
                                 $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
                                 if($totalSources > 2)
@@ -908,9 +933,20 @@
                                 // check if it is 'no match' for all class mapping
                                 // if yes, then show only one no match component
                                 $isAllNoMatch = true;
+                                $classMappingInfo = NULL;
                                 for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
                                 {
                                     $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
+                                    $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
+                                    if($classMappingInfo != NULL)
+                                    {
+                                        $classMappingInfo = $classMappingInfo. ", ".getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                    }
+                                    else
+                                    {
+                                        $classMappingInfo = getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                    }
+
                                     if(array_key_exists('a', $classwiseMatchObjects) || 
                                         array_key_exists('b', $classwiseMatchObjects) || 
                                         array_key_exists('d', $classwiseMatchObjects)) 
@@ -924,7 +960,8 @@
                                     // no match component                                
                                     $noMatchComponent = getNoMatchComponent ($sourceCComponent,
                                                                             $SourceCProperties,
-                                                                            3);
+                                                                            3,
+                                                                            $classMappingInfo);
                                     
                                     $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
                                     if($totalSources > 2)
@@ -1198,9 +1235,20 @@
                                 // check if it is 'no match' for all class mapping
                                 // if yes, then show only one no match component
                                 $isAllNoMatch = true;
+                                $classMappingInfo = NULL;
                                 for($matchedObjectIndex = 0; $matchedObjectIndex < count($matchObject); $matchedObjectIndex++)
                                 {
                                     $classwiseMatchObjects = $matchObject[$matchedObjectIndex];
+                                    $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
+                                    if($classMappingInfo != NULL)
+                                    {
+                                        $classMappingInfo = $classMappingInfo. ", ".getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                    }
+                                    else
+                                    {
+                                        $classMappingInfo = getClassMappingInfo($checkCaseComponentClass, $totalSources);
+                                    }
+
                                     if(array_key_exists('a', $classwiseMatchObjects) || 
                                         array_key_exists('b', $classwiseMatchObjects) || 
                                         array_key_exists('c', $classwiseMatchObjects))
@@ -1214,7 +1262,8 @@
                                     // no match component                                
                                     $noMatchComponent = getNoMatchComponent ($sourceDComponent,
                                                                             $SourceDProperties,
-                                                                            4);
+                                                                            4,
+                                                                            $classMappingInfo);
                                     
                                     $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
                                     if($totalSources > 2)
@@ -1847,7 +1896,8 @@
             $dId = NULL;
             $dName = NULL;
             $dSubclass = NULL;
-            $dNodeId = NULL;
+            $dNodeId = NULL; 
+           
             if($firstSourceComponent !== NULL && 
                $firstSourceProperties !== NULL)
             {
@@ -1899,6 +1949,10 @@
                     $dNodeId = $fourthSourceComponent['nodeid'];                        
                 }
             }
+
+            // get class mapping info
+            $classMappingInfo = getClassMappingInfo($checkCaseComponentClass, $totalSources);
+
             $checkComponent = new CheckComponent($aName,
                                                 $bName,
                                                 $cName,
@@ -1914,35 +1968,24 @@
                                                 $aId,
                                                 $bId,
                                                 $cId,
-                                                $dId);
+                                                $dId,
+                                                $classMappingInfo);
 
-            // $checkComponentGroup->AddCheckComponent($checkComponent);
-
-            // for ($k = 0; $k < count($checkCaseComponentClass['MappingProperties']); $k++) 
-            // {
-            //     // get check case mapping property object
-            //     $checkCaseMappingProperty = $checkCaseComponentClass['MappingProperties'][$k];
-            $checkProperty = compareProperties($checkComponent,
-                                            $checkCaseComponentClass['MappingProperties'], 
-                                            $firstSourceComponent, 
-                                            $secondSourceComponent,
-                                            $thirdSourceComponent, 
-                                            $fourthSourceComponent,
-                                            $firstSourceProperties,
-                                            $secondSourceProperties,
-                                            $thirdSourceProperties,
-                                            $fourthSourceProperties,
-                                            $firstSourceOrderInCheckcase,
-                                            $secondSourceOrderInCheckcase,
-                                            $thirdSourceOrderInCheckcase,
-                                            $fourthSourceOrderInCheckcase,
-                                            $totalSources);
-            //     if ($checkProperty == NULL) 
-            //     {
-            //         continue;
-            //     }
-            //     $checkComponent->AddCheckProperty($checkProperty);
-            // }
+             compareProperties($checkComponent,
+                                $checkCaseComponentClass['MappingProperties'], 
+                                $firstSourceComponent, 
+                                $secondSourceComponent,
+                                $thirdSourceComponent, 
+                                $fourthSourceComponent,
+                                $firstSourceProperties,
+                                $secondSourceProperties,
+                                $thirdSourceProperties,
+                                $fourthSourceProperties,
+                                $firstSourceOrderInCheckcase,
+                                $secondSourceOrderInCheckcase,
+                                $thirdSourceOrderInCheckcase,
+                                $fourthSourceOrderInCheckcase,
+                                $totalSources);
 
             return $checkComponent;
         }
@@ -2226,132 +2269,47 @@
                 
                 $checkComponent->AddCheckProperty($checkProperty);
            }  
+        }
 
-           // return NULL;
+        function getClassMappingInfo($checkCaseComponentClass, $totalSources)
+        {
 
-            // /////////////////////////////////////////
-            // $property1Name = NULL;
-            // $property2Name= NULL;
-            // $property1Value= NULL;
-            // $property2Value= NULL;
-            // $checkCasePropSourceA = null;
-            // $checkCasePropSourceB = null;
-            // $severity= NULL;
-            // $performCheck;
-            // $description ="";
-            // if($orderMaintained == 'true') {
-            //     $checkCasePropSourceA = $checkCaseMappingProperty['SourceAName'];
-            //     $checkCasePropSourceB = $checkCaseMappingProperty['SourceBName'];
-            // }
-            // else {
-            //     $checkCasePropSourceA = $checkCaseMappingProperty['SourceBName'];
-            //     $checkCasePropSourceB = $checkCaseMappingProperty['SourceAName'];
-            // }
+            if($totalSources < 2 )
+            {
+                return NULL;
+            }
 
-            // $checkCasePropSourceA =  strtolower($checkCasePropSourceA);
-            // $checkCasePropSourceB =  strtolower($checkCasePropSourceB);
+            $classMappingInfo = "Class: ";
 
-            // $sourceAComponentProperties =  $SourceAProperties[$sourceAComponent['id']];
-            // $sourceBComponentProperties =  $SourceBProperties[$sourceBComponent['id']];               
+            $sourceAClassNameAttribute = getSourceClassNameProperty('a');
+            $className = $checkCaseComponentClass[$sourceAClassNameAttribute];
+            $classMappingInfo =  $classMappingInfo. $className;
 
-            // // get key array in case insestive manner
-            // // only keys are in lower case
-            // $sourceAPropertiesLowerCase =array_change_key_case($sourceAComponentProperties, CASE_LOWER);
-            // $sourceBPropertiesLowerCase =array_change_key_case($sourceBComponentProperties, CASE_LOWER);     
+            $sourceBClassNameAttribute = getSourceClassNameProperty('b');
+            $className = $checkCaseComponentClass[$sourceBClassNameAttribute];
+            $classMappingInfo =  $classMappingInfo. "- ".$className;
 
-            // if (array_key_exists($checkCasePropSourceA, $sourceAPropertiesLowerCase)) 
-            // {                    
-            //     if (array_key_exists($checkCasePropSourceB, $sourceBPropertiesLowerCase)) 
-            //     {
-            //         $property1 =$sourceAPropertiesLowerCase[$checkCasePropSourceA];
-            //         $property2 =$sourceBPropertiesLowerCase[$checkCasePropSourceB];
+            if($totalSources > 2 )
+            {
+                $sourceCClassNameAttribute = getSourceClassNameProperty('c');
+                $className = $checkCaseComponentClass[$sourceCClassNameAttribute];
+                $classMappingInfo =  $classMappingInfo. "- ".$className;
+            }
 
-            //         // $property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
-            //         // $property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
+            if($totalSources > 3 )
+            {
+                $sourceDClassNameAttribute = getSourceClassNameProperty('d');
+                $className = $checkCaseComponentClass[$sourceDClassNameAttribute];
+                $classMappingInfo =  $classMappingInfo. "- ".$className;
+            }
 
-            //         $property1Name = $property1['name'];
-            //         $property2Name = $property2['name'];
-            //         $property1Value = $property1["value"];
-            //         $property2Value = $property2["value"];
-
-            //         // If both properties (Source A and Source B properties) do not have values, 
-            //         // show  'No Value' severity
-            //         if (($property1Value == NULL || $property1Value == "") &&
-            //         ($property2Value == NULL || $property2Value == "")) 
-            //         {
-            //             $severity = "No Value";
-            //             $performCheck = false;                    
-            //         }
-            //         else if (($property1Value == NULL || $property1Value == "") ||
-            //         ($property2Value == NULL || $property2Value == "")) 
-            //         {
-            //             // If anyone of the properties has no value, then show 'Error'.
-            //             $severity = "Error";
-            //             $performCheck = false;                    
-            //         }
-            //         else 
-            //         {
-            //             if($property1Value == $property2Value) 
-            //             {
-            //                 $severity = "OK";
-            //             }
-            //             else 
-            //             {
-            //                 $severity = $checkCaseMappingProperty['Severity'];
-            //             }
-            //             $performCheck = true;                  
-            //         }
-            //     }
-            //     else 
-            //     {
-            //         $property1 =$sourceAPropertiesLowerCase[$checkCasePropSourceA];
-            //         //$property1 = $sourceAComponent->getProperty($checkCasePropSourceA);
-
-            //         $property1Name = $property1["name"];
-            //         $property2Name = "";
-            //         $property1Value = $property1["value"];
-            //         $property2Value = "";
-            //         $severity = "Error";
-            //         $performCheck = false;               
-            //     }
-            // }
-            // else if (array_key_exists($checkCasePropSourceB, $sourceBPropertiesLowerCase)) 
-            // {
-            // $property2 =$sourceBPropertiesLowerCase[$checkCasePropSourceB];
-            // //$property2 = $sourceBComponent->getProperty($checkCasePropSourceB);
-
-            // $property1Name = "";
-            // $property2Name = $property2["name"];
-            // $property1Value = "";
-            // $property2Value = $property2["value"];
-            // $severity = "Error";
-            // $performCheck = false;
-            // }
-
-            // if ($checkCaseMappingProperty['Comment']) 
-            // {
-            //     $description =  $description . $checkCaseMappingProperty['Comment'];
-            // }
-
-            // if ($property1Name == NULL && $property2Name == NULL) 
-            // {
-            //     return NULL;
-            // }
-
-            // $checkProperty = new CheckProperty($property1Name,
-            //                 $property1Value,
-            //                 $property2Name,
-            //                 $property2Value,
-            //                 $severity,
-            //                 $performCheck,
-            //                 $description);
-
-            // return $checkProperty;
+            return $classMappingInfo;
         }
 
         function getNoMatchComponent ($sourceComponent,
                                       $sourceProperties,
-                                      $sourceLoadOrder) 
+                                      $sourceLoadOrder,
+                                      $classMappingInfo) 
         {
             $aId = NULL;
             $aName = NULL;
@@ -2428,7 +2386,8 @@
                                                  $aId,
                                                  $bId,
                                                  $cId,
-                                                 $dId);
+                                                 $dId,
+                                                 $classMappingInfo);
 
             $sourceComponentProperties =  $sourceProperties[$sourceComponent['id']];
 
@@ -2805,170 +2764,7 @@
                 
             return $checkComponentGroup;
         }
-
-        // function getCheckComponent ($firstSourceComponent,
-        //                             $secondSourceComponent,  
-        //                             $thirdSourceComponent, 
-        //                             $fourthSourceComponent, 
-        //                             $firstSourceProperties,
-        //                             $secondSourceProperties,  
-        //                             $thirdSourceProperties, 
-        //                             $fourthSourceProperties,
-        //                             $checkCaseComponentClass) 
-        // {
-
-        //     $aId = NULL;
-        //     $aName = NULL;
-        //     $aSubclass = NULL;
-        //     $aNodeId = NULL;
-        //     $bId = NULL;
-        //     $bName = NULL;
-        //     $bSubclass = NULL;
-        //     $bNodeId = NULL;
-        //     $cId = NULL;
-        //     $cName = NULL;
-        //     $cSubclass = NULL;
-        //     $cNodeId = NULL;
-        //     $dId = NULL;
-        //     $dName = NULL;
-        //     $dSubclass = NULL;
-        //     $dNodeId = NULL;
-        //     if($firstSourceComponent !== NULL && $firstSourceProperties !== NULL)
-        //     {
-        //         $aId = NULL;
-        //         $aName = NULL;
-        //         $aSubclass = NULL;
-        //         $aNodeId = NULL;
-        //     }
-
-        //     if($secondSourceComponent !== NULL && $secondSourceProperties !== NULL)
-        //     {
-        //         $bId = NULL;
-        //         $bName = NULL;
-        //         $bSubclass = NULL;
-        //         $bNodeId = NULL;
-        //     }
-
-        //     if($thirdSourceComponent !== NULL && $thirdSourceProperties !== NULL)
-        //     {
-        //         $cId = NULL;
-        //         $cName = NULL;
-        //         $cSubclass = NULL;
-        //         $cNodeId = NULL;
-        //     }
-
-        //     if($fourthSourceComponent !== NULL && $fourthSourceProperties !== NULL)
-        //     {
-        //         $dId = NULL;
-        //         $dName = NULL;
-        //         $dSubclass = NULL;
-        //         $dNodeId = NULL;
-        //     }
-        //     $checkComponent = new CheckComponent($aName,
-        //                                         $bName,
-        //                                         $cName,
-        //                                         $dName,
-        //                                         $aSubclass,
-        //                                         $bSubclass,
-        //                                         $cSubclass,
-        //                                         $dSubclass,
-        //                                         $aNodeId,
-        //                                         $bNodeId,
-        //                                         $cNodeId,
-        //                                         $dNodeId,
-        //                                         $aId,
-        //                                         $bId,
-        //                                         $cId,
-        //                                         $dId);
-
-        //     $checkComponent;
-        //     if ($sourceAComponent) 
-        //     {
-        //         global $SourceAProperties;                  
-
-        //         $nodeId = NUll;
-                
-        //         if(isset($sourceComponent['nodeid']))
-        //         {
-        //             $nodeId = $sourceComponent['nodeid'];                        
-        //         }
-
-        //         $id = NULL;
-        //         if(isset($sourceComponent['id']))
-        //         {
-        //             $id  = $sourceComponent['id'];
-        //         }
-        //         $checkComponent = new CheckComponent($sourceComponent["name"],
-        //                                             "",
-        //                                             $sourceComponent["subclass"],
-        //                                             "",
-        //                                             $nodeId ,
-        //                                             NULL,
-        //                                             $id ,
-        //                                             NULL);
-
-        //         $sourceAComponentProperties =  $SourceAProperties[$sourceComponent['id']];
-            
-        //         foreach ($sourceAComponentProperties as $name => $property) 
-        //         {                       
-        //             $checkProperty = new CheckProperty($property["name"],
-        //                                                 $property["value"],
-        //                                                 NULL,
-        //                                                 NULL,
-        //                                                 "No Match",
-        //                                                 NULL,
-        //                                                 NULL);
-
-        //             $checkProperty->PerformCheck = false;
-        //             $checkComponent->AddCheckProperty($checkProperty);
-        //         }               
-                
-        //     }
-        //     else 
-        //     {
-        //         global $SourceBProperties;
-
-        //         $nodeId = NUll;
-        //         if(isset($sourceComponent['nodeid']))
-        //         {
-        //             $nodeId = $sourceComponent['nodeid'];
-        //         }
-
-        //         $id = NULL;
-        //         if(isset($sourceComponent['id']))
-        //         {
-        //             $id  = $sourceComponent['id'];
-        //         }
-        //         $checkComponent = new CheckComponent("",
-        //                                             $sourceComponent["name"],
-        //                                             "",
-        //                                             $sourceComponent["subclass"],
-        //                                             NULL,
-        //                                             $nodeId,
-        //                                             NULL,
-        //                                             $id );
-
-        //         $sourceBComponentProperties =  $SourceBProperties[$sourceComponent['id']];
-        //         foreach ($sourceBComponentProperties as $name => $property) 
-        //         {                       
-        //             $checkProperty = new CheckProperty(NULL,
-        //                                             NULL,
-        //                                             $property["name"],
-        //                                             $property["value"],
-        //                                             "No Match",
-        //                                             NULL,
-        //                                             NULL);
-
-
-        //             $checkProperty->PerformCheck = false;
-        //             $checkComponent->AddCheckProperty($checkProperty);
-        //         }           
-
-        //     }
-
-        //     $checkComponent->Status = "No Match";
-        //     return $checkComponent;
-        // }
+        
 
         function getUndefinedComponent ($sourceComponent, $dataSourceIndex) 
         {
@@ -3067,7 +2863,8 @@
                                                 $aId,
                                                 $bId,
                                                 $cId,
-                                                $dId);
+                                                $dId,
+                                                NULL);
 
             $componentProperties =  $properties[$sourceComponent['id']];            
             foreach ($componentProperties as $name => $property) 

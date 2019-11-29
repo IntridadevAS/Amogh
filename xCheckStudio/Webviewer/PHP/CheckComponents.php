@@ -40,6 +40,8 @@
                 var $SourceCId;
                 var $SourceDId;
             
+                var $ClassMappingInfo;
+
                 function __construct($sourceAName,
                                      $sourceBName,
                                      $sourceCName,
@@ -55,7 +57,8 @@
                                      $sourceAId,
                                      $sourceBId,
                                      $sourceCId,
-                                     $sourceDId ) 
+                                     $sourceDId,
+                                     $classMappingInfo ) 
                 {
                     $this->SourceAName = $sourceAName;
                     $this->SourceBName = $sourceBName; 
@@ -79,6 +82,8 @@
                     $this->SourceBId = $sourceBId;
                     $this->SourceCId = $sourceCId;
                     $this->SourceDId = $sourceDId;
+
+                    $this->ClassMappingInfo = $classMappingInfo;
                 }
             
                 function AddCheckProperty($property){

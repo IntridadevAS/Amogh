@@ -25,7 +25,8 @@
                                                 sourceCId TEXT,
                                                 sourceDId TEXT,
                                                 ownerGroup INTEGER NOT NULL,
-                                                transpose TEXT)');
+                                                transpose TEXT,
+                                                classMappingInfo TEXT)');
 
 
     
@@ -54,7 +55,8 @@
                                                 sourceCId, 
                                                 sourceDId,
                                                 ownerGroup,
-                                                transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
+                                                transpose,
+                                                classMappingInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
 
     define('INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE', 'INSERT INTO ComparisonCheckComponents(
                                                     id,
@@ -81,7 +83,8 @@
                                                     sourceCId, 
                                                     sourceDId,
                                                     ownerGroup,
-                                                    transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
+                                                    transpose,
+                                                    classMappingInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ');
 
 define('CREATE_COMPARISONPROPERTIES_TABLE', 'CREATE TABLE ComparisonCheckProperties(
                                                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,

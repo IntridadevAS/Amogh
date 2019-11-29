@@ -287,6 +287,13 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
             visible = false;
             width = "0%";
         }
+        else if(i === ComparisonColumns.ClassMappingInfo)
+        {
+            caption = ComparisonColumnNames.ClassMappingInfo;
+            dataField = ComparisonColumnNames.ClassMappingInfo;
+            visible = false;
+            width = "0%"; 
+        }
 
         columnHeader["caption"] = caption;
         columnHeader["dataField"] = dataField;        
@@ -348,6 +355,8 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 
         tableRowContent[ComparisonColumnNames.ResultId] = component.id;
         tableRowContent[ComparisonColumnNames.GroupId] = component.ownerGroup;
+
+        tableRowContent[ComparisonColumnNames.ClassMappingInfo] = component.classMappingInfo;
 
         tableData.push(tableRowContent);
 
@@ -452,7 +461,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     containerDiv) {
     var _this = this;
 
-    $(function () {
+    // $(function () {
         $(containerDiv).dxDataGrid({
             dataSource: tableData,
             keyExpr: ComparisonColumnNames.ResultId,
@@ -521,6 +530,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     return;
                 }
 
+                _this.AddTooltip(e);
                 var highlightedRowKey;
                 if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
                     highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
@@ -535,13 +545,24 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 }
             }
         });
-    });
+    // });
 
     // var container = document.getElementById(containerDiv.replace("#", ""));
     // container.style.margin = "0px"
     // container.style.padding = "0";
 
 };
+
+ComparisonCheckResultsTable.prototype.AddTooltip = function (e) {
+
+    if (e.data.ClassMappingInfo) {
+        for (var i = 0; i < e.rowElement[0].cells.length; i++) {
+            var cell = e.rowElement[0].cells[i];
+            cell.setAttribute("title", e.data.ClassMappingInfo);
+        }
+    }
+}
+
 
 ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
     var dataGrid = $(containerDiv).dxDataGrid("instance");

@@ -661,6 +661,7 @@
                                                     $id,
                                                     NULL,
                                                     NULL,
+                                                    NULL,
                                                     NULL);
 
                 $checkComponentGroup->AddCheckComponent($checkComponent);
@@ -751,6 +752,7 @@
                                         NULL,
                                         NULL,
                                         $id,
+                                        NULL,
                                         NULL,
                                         NULL,
                                         NULL);           
