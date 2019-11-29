@@ -313,15 +313,8 @@
                                                                         1,
                                                                         $classMappingInfo);
                                 
-                                $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
-                                if($totalSources > 2)
-                                {
-                                    $groupName = $groupName ."-". $mappingGroup["SourceCName"];
-                                }
-                                if($totalSources > 3)
-                                {
-                                    $groupName = $groupName ."-". $mappingGroup["SourceDName"];
-                                }
+                                $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                
 
                                 $componentGroup = getCheckComponentGroup($groupName);                   
                                 $componentGroup->AddCheckComponent($noMatchComponent); 
@@ -644,15 +637,8 @@
                                                                         2,
                                                                         $classMappingInfo);
                                 
-                                $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
-                                if($totalSources > 2)
-                                {
-                                    $groupName = $groupName ."-". $mappingGroup["SourceCName"];
-                                }
-                                if($totalSources > 3)
-                                {
-                                    $groupName = $groupName ."-". $mappingGroup["SourceDName"];
-                                }
+                                $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                
 
                                 $componentGroup = getCheckComponentGroup($groupName);   
                                 $componentGroup->AddCheckComponent($noMatchComponent); 
@@ -963,15 +949,8 @@
                                                                             3,
                                                                             $classMappingInfo);
                                     
-                                    $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
-                                    if($totalSources > 2)
-                                    {
-                                        $groupName = $groupName ."-". $mappingGroup["SourceCName"];
-                                    }
-                                    if($totalSources > 3)
-                                    {
-                                        $groupName = $groupName ."-". $mappingGroup["SourceDName"];
-                                    }
+                                    $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                    
     
                                     $componentGroup = getCheckComponentGroup($groupName);                      
                                     $componentGroup->AddCheckComponent($noMatchComponent); 
@@ -1265,15 +1244,8 @@
                                                                             4,
                                                                             $classMappingInfo);
                                     
-                                    $groupName = $mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"];
-                                    if($totalSources > 2)
-                                    {
-                                        $groupName = $groupName ."-". $mappingGroup["SourceCName"];
-                                    }
-                                    if($totalSources > 3)
-                                    {
-                                        $groupName = $groupName ."-". $mappingGroup["SourceDName"];
-                                    }
+                                    $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                    
     
                                     $componentGroup = getCheckComponentGroup($groupName);                      
                                     $componentGroup->AddCheckComponent($noMatchComponent); 
@@ -1427,7 +1399,8 @@
                                                 NULL,
                                                 2);
 
-                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]);                   
+                $groupName =  getGroupTitle($mappingGroup, 2);
+                $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
         }
@@ -1445,7 +1418,8 @@
                                             $dataSourceOrderInCheckCase)
         {
 
-            $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]."-".$mappingGroup["SourceDName"]);                   
+            $groupName =  getGroupTitle($mappingGroup, 4);
+            $componentGroup =  getCheckComponentGroup($groupName);                   
             if( $srcAComponent !== NULL &&
                 $srcBComponent !== NULL && 
                 $srcCComponent !== NULL &&
@@ -1715,7 +1689,8 @@
                                                 NULL,
                                                 3);
 
-                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                $groupName =  getGroupTitle($mappingGroup, 3);
+                $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
             else if($srcAComponent !== NULL && 
@@ -1738,7 +1713,8 @@
                                                     3);
                 $checkComponent->Status = "Missing Item(s)";
 
-                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                $groupName =  getGroupTitle($mappingGroup, 3);
+                $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
             else if( $srcAComponent !== NULL && 
@@ -1761,7 +1737,8 @@
                                                     3);
                 $checkComponent->Status = "Missing Item(s)";
 
-                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                $groupName =  getGroupTitle($mappingGroup, 3);
+                $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
             else if( $srcBComponent !== NULL && 
@@ -1782,7 +1759,8 @@
                                                     $dataSourceOrderInCheckCase['c'],
                                                     NULL,
                                                     3);
-                $componentGroup =  getCheckComponentGroup($mappingGroup["SourceAName"]."-".$mappingGroup["SourceBName"]."-".$mappingGroup["SourceCName"]);                   
+                $groupName =  getGroupTitle($mappingGroup, 3);
+                $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
             }
         }
@@ -2271,6 +2249,35 @@
            }  
         }
 
+        function getGroupTitle($groupMapping, $totalSources)
+        {
+            if($totalSources < 2 )
+            {
+                return NULL;
+            }
+
+            $groupTitle;
+            $sourceAGroupNameAttribute = getSourceGroupNameProperty("a"); 
+            $groupTitle = $groupMapping[$sourceAGroupNameAttribute];
+
+            $sourceBGroupNameAttribute = getSourceGroupNameProperty("b"); 
+            $groupTitle = $groupTitle."-".$groupMapping[$sourceBGroupNameAttribute];
+
+            if($totalSources > 2 )
+            {
+                $sourceCGroupNameAttribute = getSourceGroupNameProperty("c"); 
+                $groupTitle = $groupTitle."-".$groupMapping[$sourceCGroupNameAttribute];
+            }
+
+            if($totalSources > 3 )
+            {
+                $sourceDGroupNameAttribute = getSourceGroupNameProperty("d"); 
+                $groupTitle = $groupTitle."-".$groupMapping[$sourceDGroupNameAttribute];
+            }            
+            
+            return $groupTitle;
+        }
+        
         function getClassMappingInfo($checkCaseComponentClass, $totalSources)
         {
 
