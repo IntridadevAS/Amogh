@@ -2118,26 +2118,34 @@
                     if($checkCasePropSourceA !== NULL &&
                        $checkCasePropSourceB !== NULL)
                     {
-                        if (($property1Name == NULL || 
-                            $property1Value == "") &&
-                            ($property2Name == NULL || 
-                            $property2Value == "")) 
-                        {
-                            $severity = "No Value";
-                            $performCheck = false;                    
-                        }
-                        else 
-                        {
-                            if($property1Value == $property2Value) 
-                            {
-                                $severity = "OK";
-                            }
-                            else 
-                            {
-                                $severity = $checkCaseMappingProperty['Severity'];
-                            }
 
-                            $performCheck = true;                  
+                        if($property1Name != NULL && 
+                           $property2Name != NULL)
+                        {
+                            if(($property1Value == NULL ||$property1Value == "") && 
+                               ($property2Value == NULL ||$property2Value == ""))
+                            {
+                                $severity = "No Value";
+                                $performCheck = false;      
+                            }
+                            else
+                            {
+                                if($property1Value == $property2Value) 
+                                {
+                                    $severity = "OK";
+                                }
+                                else 
+                                {
+                                    $severity = $checkCaseMappingProperty['Severity'];
+                                }
+                                $performCheck = true;     
+                            }
+                        }
+                        else
+                        {
+                            // one/more of the properties is/are missing
+                            $severity = "Error";
+                            $performCheck = false;    
                         }
                     }
                     else 
@@ -2154,30 +2162,37 @@
                     $checkCasePropSourceB !== NULL && 
                     $checkCasePropSourceC !== NULL)
                     {
-                        if (($property1Name == NULL || 
-                            $property1Value == "") &&
-                            ($property2Name == NULL || 
-                            $property2Value == "") ||
-                            ($property3Name == NULL || 
-                            $property3Value == "")) 
+                        if($property1Name != NULL &&
+                           $property2Name != NULL &&
+                           $property3Name != NULL)
                         {
-                            $severity = "No Value";
-                            $performCheck = false;                    
-                        }
-                        else 
-                        {
-                            if($property1Value == $property2Value && 
-                            $property1Value == $property3Value) 
+                            if (($property1Value == NULL || $property1Value == "") &&
+                                ($property2Value == NULL || $property2Value == "") &&
+                                ($property3Value == NULL || $property3Value == "")) 
                             {
-                                $severity = "OK";
+                                $severity = "No Value";
+                                $performCheck = false;                    
                             }
                             else 
                             {
-                                $severity = $checkCaseMappingProperty['Severity'];
+                                if($property1Value == $property2Value && 
+                                $property1Value == $property3Value) 
+                                {
+                                    $severity = "OK";
+                                }
+                                else 
+                                {
+                                    $severity = $checkCaseMappingProperty['Severity'];
+                                }
+                                $performCheck = true;                  
                             }
-
-                            $performCheck = true;                  
                         }
+                        else
+                        {
+                            $severity = "Error";
+                            $performCheck = false;  
+                        }
+                        
                     }
                     else 
                     {
@@ -2194,33 +2209,41 @@
                     $checkCasePropSourceC !== NULL &&
                     $checkCasePropSourceD !== NULL)
                     {
-                        if (($property1Name == NULL || 
-                            $property1Value == "") &&
-                            ($property2Name == NULL || 
-                            $property2Value == "") ||
-                            ($property3Name == NULL || 
-                            $property3Value == "") ||
-                            ($property4Name == NULL || 
-                            $property4Value == "")) 
+
+                        if($property1Name != NULL &&
+                        $property2Name != NULL &&
+                        $property3Name != NULL &&
+                        $property4Name != NULL)
                         {
-                            $severity = "No Value";
-                            $performCheck = false;                    
-                        }
-                        else 
-                        {
-                            if($property1Value == $property2Value && 
-                            $property1Value == $property3Value &&
-                            $property1Value == $property4Value) 
+                            if (($property1Value == NULL || $property1Value == "") &&
+                                ($property2Value == NULL || $property2Value == "") &&
+                                ($property3Value == NULL || $property3Value == "") &&
+                                ($property4Value == NULL || $property4Value == "")) 
                             {
-                                $severity = "OK";
+                                $severity = "No Value";
+                                $performCheck = false;                    
                             }
                             else 
                             {
-                                $severity = $checkCaseMappingProperty['Severity'];
-                            }
+                                if($property1Value == $property2Value && 
+                                $property1Value == $property3Value &&
+                                $property1Value == $property4Value) 
+                                {
+                                    $severity = "OK";
+                                }
+                                else 
+                                {
+                                    $severity = $checkCaseMappingProperty['Severity'];
+                                }
 
-                            $performCheck = true;                  
+                                $performCheck = true;                  
+                            }
                         }
+                        else
+                        {
+                            $severity = "Error";
+                            $performCheck = false;     
+                        }                        
                     }
                     else 
                     {
