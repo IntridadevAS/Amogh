@@ -370,48 +370,6 @@
     top: 19%;
     transform: matrix(1,0,0,1,0,0);
 }
-#Equipment {
-	position: absolute;
-	left: 583px;
-	top: 135px;
-	overflow: visible;
-	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem {
-	position: absolute;
-	left: 583px;
-	top: 148px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent {
-	position: absolute;
-	left: 582px;
-	top: 160px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
 .Path_375 {
     overflow: visible;
     position: absolute;
@@ -427,34 +385,6 @@
 	top: 257px;
 	overflow: visible;
 	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem_A96_Text_21 {
-	position: absolute;
-	left: 585px;
-	top: 270px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_22 {
-	position: absolute;
-	left: 584px;
-	top: 282px;
-	overflow: visible;
-	width: 93px;
 	white-space: nowrap;
 	text-align: left;
 	font-family: Montserrat;
@@ -560,34 +490,6 @@
 	font-size: 10px;
 	color: rgba(242,243,244,1);
 }
-#PipingnetworkSystem_A96_Text_28 {
-	position: absolute;
-	left: 583px;
-	top: 393px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_29 {
-	position: absolute;
-	left: 582px;
-	top: 405px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
 .Path_377 {
     overflow: visible;
     position: absolute;
@@ -596,48 +498,6 @@
     left: 46%;
     top: 73%;
     transform: matrix(1,0,0,1,0,0);
-}
-#Equipment_A96_Text_30 {
-	position: absolute;
-	left: 585px;
-	top: 502px;
-	overflow: visible;
-	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem_A96_Text_31 {
-	position: absolute;
-	left: 585px;
-	top: 515px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_32 {
-	position: absolute;
-	left: 584px;
-	top: 527px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
 }
 #pie_A96_Group_5 {
     position: absolute;
@@ -780,48 +640,7 @@
     top: 18%;
     transform: matrix(1,0,0,1,0,0);
 }
-#Equipment_A96_Text_38 {
-	position: absolute;
-	left: 991px;
-	top: 135px;
-	overflow: visible;
-	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem_A96_Text_39 {
-	position: absolute;
-	left: 991px;
-	top: 148px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_40 {
-	position: absolute;
-	left: 990px;
-	top: 160px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
+
 .Path_380 {
     overflow: visible;
     position: absolute;
@@ -830,48 +649,6 @@
     left: 79%;
     top: 37%;
     transform: matrix(1,0,0,1,0,0);
-}
-#Equipment_A96_Text_41 {
-	position: absolute;
-	left: 993px;
-	top: 257px;
-	overflow: visible;
-	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem_A96_Text_42 {
-	position: absolute;
-	left: 993px;
-	top: 270px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_43 {
-	position: absolute;
-	left: 992px;
-	top: 282px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
 }
 #dataset3Name {
     position: absolute;
@@ -956,48 +733,7 @@
     top: 55%;
     transform: matrix(1,0,0,1,0,0);
 }
-#Equipment_A96_Text_48 {
-	position: absolute;
-	left: 991px;
-	top: 382px;
-	overflow: visible;
-	width: 58px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#PipingnetworkSystem_A96_Text_49 {
-	position: absolute;
-	left: 991px;
-	top: 395px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_50 {
-	position: absolute;
-	left: 990px;
-	top: 407px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
+
 .Path_381 {
     overflow: visible;
     position: absolute;
@@ -1021,34 +757,7 @@
 	font-size: 10px;
 	color: rgba(242,243,244,1);
 }
-#PipingnetworkSystem_A96_Text_52 {
-	position: absolute;
-	left: 993px;
-	top: 515px;
-	overflow: visible;
-	width: 112px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
-#Pipingcomponent_A96_Text_53 {
-	position: absolute;
-	left: 992px;
-	top: 527px;
-	overflow: visible;
-	width: 93px;
-	white-space: nowrap;
-	text-align: left;
-	font-family: Montserrat;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	color: rgba(242,243,244,1);
-}
+
 .Path_383 {
 	overflow: visible;
 	position: absolute;
