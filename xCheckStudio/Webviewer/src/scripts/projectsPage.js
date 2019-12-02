@@ -954,16 +954,21 @@ let checkView = {
 }
 
 let newProjectView = {
+  active: false,
   init: function (type) {
     this.newProjectOverlay = document.getElementById("newProject");
     onToggleOverlayDisplay(true);
     this.newProjectOverlay.classList.add("projectOverlaysOpen");
     let projectType = document.getElementById("inputprojecttype");
     projectType.value = type;
+
+    this.active = true;
   },
   closeNewProject: function () {
     onToggleOverlayDisplay(false);
     this.newProjectOverlay.classList.remove("projectOverlaysOpen");
+
+    this.active = false;
   },
   onCloseNewProject: function () {
     var overlay = document.getElementById("cancelProjectCreationOverlay");
@@ -982,6 +987,8 @@ let newProjectView = {
 }
 
 let newCheckView = {
+  active: false,
+
   init: function (projectID) {
     this.currentProject = controller.getCurrentProj();
     console.log(this.currentProject);
@@ -989,10 +996,13 @@ let newCheckView = {
     onToggleOverlayDisplay(true);
     this.newCheckOverlay.classList.add("projectOverlaysOpen");
 
+    this.active = true;
   },
   closeNewCheck: function () {
     onToggleOverlayDisplay(false);
     this.newCheckOverlay.classList.remove("projectOverlaysOpen");
+
+    this.active = false;
   },
 
   onCloseNewCheck: function () {
@@ -1469,3 +1479,25 @@ function showAlertForm(alertMsg) {
   popup.style.top = ((window.innerHeight / 2) - 139) + "px";
   popup.style.left = ((window.innerWidth / 2) - 290) + "px";
 }
+
+
+document.addEventListener("keydown", function (event) {
+  
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+
+    
+    if (newProjectView.active) {
+      OnCreateProject();
+    }
+    else if(newCheckView.active)
+    {
+      OnCreateNewCheckCase();
+    } 
+    
+    return false;
+  }
+});
+
