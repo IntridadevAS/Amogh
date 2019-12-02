@@ -210,6 +210,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             parentIdExpr: "parent",
             columns: columnHeaders,
             columnAutoWidth: true,
+            columnResizingMode: 'widget',
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,

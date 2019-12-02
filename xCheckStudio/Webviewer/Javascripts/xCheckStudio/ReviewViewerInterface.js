@@ -112,89 +112,35 @@ ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDi
     sheetNameString = sheetNameString.split('_')[0];
     var sheetNameArray = sheetNameString.split('-');
 
-    var sourceOrdersInCheckcase = getDataSourceOrderInCheckcase();
     if(model.currentCheck == "comparison") {
         if(model.checks[model.currentCheck].sourceAViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
             if(viewerInterface !== this) {
                
-                var sheetName;
-                if (sheetNameArray.length === 1) {
-                    sheetName = sheetNameArray[0];
-                }
-                else {
-                    sheetName = sheetNameArray[sourceOrdersInCheckcase['a'] - 1];
-                }
-
-                // if(viewerInterface.Is3DViewer()) {
-                    viewerInterface.highlightComponent(Comparison.ViewerAContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceANodeId]);
-                // }
-                // else {
-                    // var result = sheetName.split('-');
-                    // viewerInterface.highlightComponent(Comparison.ViewerAContainer, result[0], rowData, undefined);
-                // }
+                var sheetName = sheetNameArray[0];
+                viewerInterface.highlightComponent(Comparison.ViewerAContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceANodeId]);
             }
         }
         if (model.checks[model.currentCheck].sourceBViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
             if (viewerInterface !== this) {
 
-                var sheetName;
-                if (sheetNameArray.length === 1) {
-                    sheetName = sheetNameArray[0];
-                }
-                else {
-                    sheetName = sheetNameArray[sourceOrdersInCheckcase['b'] - 1];
-                }
-
-                // if(viewerInterface.Is3DViewer()) {
+                var sheetName = sheetNameArray[1];
                 viewerInterface.highlightComponent(Comparison.ViewerBContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceBNodeId]);
-                // }
-                // else {
-                //     var result = sheetName.split('-');
-                //     viewerInterface.highlightComponent(Comparison.ViewerBContainer, result[1], rowData, undefined)
-                // }
             }
         }
         if (model.checks[model.currentCheck].sourceCViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceCViewer;
             if (viewerInterface !== this) {
-                var sheetName;
-                if (sheetNameArray.length === 1) {
-                    sheetName = sheetNameArray[0];
-                }
-                else {
-                    sheetName = sheetNameArray[sourceOrdersInCheckcase['c'] - 1];
-                }
-
-
-                // if(viewerInterface.Is3DViewer()) {
+                var sheetName = sheetNameArray[2];
                 viewerInterface.highlightComponent(Comparison.ViewerCContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceCNodeId]);
-                // }
-                // else {
-                //     var result = sheetName.split('-');
-                //     viewerInterface.highlightComponent(Comparison.ViewerCContainer, result[2], rowData, undefined)
-                // }
             }
         }
         if (model.checks[model.currentCheck].sourceDViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceDViewer;
             if (viewerInterface !== this) {
-                var sheetName;
-                if (sheetNameArray.length === 1) {
-                    sheetName = sheetNameArray[0];
-                }
-                else {
-                    sheetName = sheetNameArray[sourceOrdersInCheckcase['d'] - 1];
-                }
-
-                // if(viewerInterface.Is3DViewer()) {
+                var sheetName = sheetNameArray[3];
                 viewerInterface.highlightComponent(Comparison.ViewerDContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceDNodeId]);
-                // }
-                // else {
-                //     var result = sheetName.split('-');
-                //     viewerInterface.highlightComponent(Comparison.ViewerDContainer, result[3], rowData, undefined)
-                // }
             }
         }
     }

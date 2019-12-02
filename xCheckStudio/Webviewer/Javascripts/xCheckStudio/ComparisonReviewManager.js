@@ -225,16 +225,9 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     sheetNameArray = sheetNameArray.split('_')[0];
     var result = sheetNameArray.split('-');
 
-    var sourceOrdersInCheckcase = getDataSourceOrderInCheckcase();
     if (model.checks["comparison"]["sourceAViewer"]) {
 
-        var sheetName;
-        if (result.length === 1) {
-            sheetName = result[0];
-        }
-        else {
-            sheetName = result[sourceOrdersInCheckcase['a'] - 1];
-        }
+        var sheetName = result[0];
 
         model.checks["comparison"]["sourceAViewer"].highlightComponent(Comparison.ViewerAContainer,
             sheetName,
@@ -242,13 +235,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             rowData.SourceANodeId);
     }
     if (model.checks["comparison"]["sourceBViewer"]) {
-        var sheetName;
-        if (result.length === 1) {
-            sheetName = result[0];
-        }
-        else {
-            sheetName = result[sourceOrdersInCheckcase['b'] - 1];
-        }
+        var sheetName = result[1];
 
         model.checks["comparison"]["sourceBViewer"].highlightComponent(Comparison.ViewerBContainer,
             sheetName,
@@ -256,13 +243,7 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             rowData.SourceBNodeId);
     }
     if (model.checks["comparison"]["sourceCViewer"]) {
-        var sheetName;
-        if (result.length === 1) {
-            sheetName = result[0];
-        }
-        else {
-            sheetName = result[sourceOrdersInCheckcase['c'] - 1];
-        }
+        var sheetName = result[2];
 
         model.checks["comparison"]["sourceCViewer"].highlightComponent(Comparison.ViewerCContainer,
             sheetName,
@@ -271,73 +252,13 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
                 SourceCNodeId);
     }
     if (model.checks["comparison"]["sourceDViewer"]) {
-        var sheetName;
-        if (result.length === 1) {
-            sheetName = result[0];
-        }
-        else {
-            sheetName = result[sourceOrdersInCheckcase['d'] - 1];
-        }
+        var sheetName = result[3];
 
         model.checks["comparison"]["sourceDViewer"].highlightComponent(Comparison.ViewerDContainer,
             sheetName,
             rowData,
             rowData.SourceDNodeId);
     }
-   
-    // if (this.SourceAComponents !== undefined &&
-    //     this.SourceBComponents !== undefined) {
-
-    //     var result = sheetName.split('-');
-
-    //     if (rowData.SourceA && rowData.SourceA !== "") {
-    //         model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
-    //     }
-    //     else {
-    //         model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
-    //         model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
-    //     }
-
-    //     if (rowData.SourceB && rowData.SourceB !== "") {
-    //         model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
-    //     }
-    //     else {
-    //         model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
-    //         model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
-    //     }
-    // }
-    // else if (this.SourceAViewerData["endPointUri"] !== undefined &&
-    //     this.SourceBViewerData["endPointUri"] !== undefined) {
-    //     this.HighlightComponentInGraphicsViewer(rowData)
-    // }
-    // else if (this.SourceAComponents !== undefined &&
-    //     this.SourceBViewerData["endPointUri"] !== undefined) {
-    //     var result = sheetName.split('-');
-
-    //     if (rowData.SourceA && rowData.SourceA !== "") {
-    //         model.checks["comparison"]["sourceAViewer"].ShowSheetDataInViewer(Comparison.ViewerAContainer, result[0], rowData);
-    //     } else {
-
-    //         model.checks["comparison"]["sourceAViewer"].Destroy(Comparison.ViewerAContainer);
-    //         model.checks["comparison"]["sourceAViewer"].ActiveSheetName = undefined;
-    //     }
-
-    //     this.HighlightComponentInGraphicsViewer(rowData)
-    // }
-    // else if (this.SourceAViewerData["endPointUri"] !== undefined &&
-    //     this.SourceBComponents !== undefined) {
-    //     var result = sheetName.split('-');
-
-    //     if (rowData.SourceB && rowData.SourceB !== "") {
-    //         model.checks["comparison"]["sourceBViewer"].ShowSheetDataInViewer(Comparison.ViewerBContainer, result[1], rowData);
-    //     }
-    //     else {
-    //         model.checks["comparison"]["sourceBViewer"].Destroy(Comparison.ViewerBContainer);
-    //         model.checks["comparison"]["sourceBViewer"].ActiveSheetName = undefined;
-    //     }
-
-    //     this.HighlightComponentInGraphicsViewer(rowData)
-    // }
 }
 
 ComparisonReviewManager.prototype.GetComparisonResultId = function (selectedRow) {
