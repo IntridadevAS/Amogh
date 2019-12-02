@@ -1215,16 +1215,20 @@
                 $dbh->beginTransaction();
 
                 if($source === "a") {
-                    $componentsTable = "SourceAComponents";                   
+                    $componentsTable = "SourceAComponents";  
+                    $propertiesTable = "SourceAProperties";                
                 }
                 else if($source === "b") {
-                    $componentsTable = "SourceBComponents";                       
+                    $componentsTable = "SourceBComponents"; 
+                    $propertiesTable = "SourceBProperties";                           
                 }
                 else if($source === "c") {   
-                    $componentsTable = "SourceCComponents";                          
+                    $componentsTable = "SourceCComponents";
+                    $propertiesTable = "SourceCProperties";                              
                 }
                 else if($source === "d") {                 
-                    $componentsTable = "SourceDComponents";   
+                    $componentsTable = "SourceDComponents";
+                    $propertiesTable = "SourceDProperties";        
                 }
     
                 // read component main class and subclass
@@ -1233,6 +1237,13 @@
                 if($compStmt)
                 {
                     $result = $compStmt->fetchAll(PDO::FETCH_ASSOC);
+                    for($i = 0; $i < count($result); $i++) {
+                        $componentId = $result[$i]["id"];
+                        $command = $dbh->prepare("SELECT * FROM $propertiesTable WHERE ownerComponent=?");
+                        $command->execute(array($componentId));
+                        $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                        $result[$i]["properties"] = $properties;
+                    }
                 }
                 
                 // commit update

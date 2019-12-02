@@ -677,6 +677,26 @@
 	font-size: 14px;
 	color: rgba(255,255,255,1);
 }
+
+#reviewResultsExportSwitch {
+    position: absolute;
+    overflow: visible;
+    width: 3.5%;
+    height: 3.5%;
+    left: 18%;
+    top: 11%;
+}
+
+#modelBrowserExportSwitch {
+    position: absolute;
+    overflow: visible;
+    width: 3.5%;
+    height: 3.5%;
+    left: 95%;
+    top: 11%;
+}
+
+
 #Data_source_1_A96_Text_34 {
     position: absolute;
     left: 72.5%;
@@ -754,10 +774,10 @@
 .Path_379 {
     overflow: visible;
     position: absolute;
-    width: 1px;
-    height: 7%;
-    left: 75%;
-    top: 42%;
+    width: 19%;
+    height: 15.4%;
+    left: 79%;
+    top: 18%;
     transform: matrix(1,0,0,1,0,0);
 }
 #Equipment_A96_Text_38 {
