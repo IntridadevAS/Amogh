@@ -2150,7 +2150,7 @@
                         else
                         {
                             // one/more of the properties is/are missing
-                            $severity = "Error";
+                            $severity = "Missing Property(s)";
                             $performCheck = false;    
                         }
                     }
@@ -2204,7 +2204,8 @@
                         }
                         else
                         {
-                            $severity = "Error";
+                            // $severity = "Error";
+                            $severity = "Missing Property(s)";
                             $performCheck = false;  
                         }
                         
@@ -2264,14 +2265,15 @@
                         }
                         else
                         {
-                            $severity = "Error";
+                            // $severity = "Error";
+                            $severity = "Missing Property(s)";
                             $performCheck = false;     
                         }                        
                     }
                     else 
                     {
                         // one/all of the (second and third dataset)properties not mapped
-                        $severity = "Error";
+                        $severity = "Error";                        
                         $performCheck = false;        
                     }
                 }
