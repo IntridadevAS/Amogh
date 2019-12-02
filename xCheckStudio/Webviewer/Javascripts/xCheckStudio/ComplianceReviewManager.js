@@ -77,6 +77,7 @@ ComplianceReviewManager.prototype.AddTableContentCount = function (containerId) 
         var id = containerId + "_child";
         div2.id = id;
         div2.style.fontSize = "13px";
+        div2.style.color = "white";
     
         // var countBox = document.getElementById(id);
         // modelBrowserTableRows contains header and search bar row as row hence count is length-1
