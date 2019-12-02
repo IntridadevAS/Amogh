@@ -253,6 +253,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             keyExpr: "RowKey",
             columns: columnHeaders,
             columnAutoWidth: true,
+            columnResizingMode: 'widget',
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,

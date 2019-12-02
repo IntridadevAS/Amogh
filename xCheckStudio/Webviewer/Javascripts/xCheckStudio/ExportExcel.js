@@ -166,6 +166,7 @@ ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, contai
                 dataSource: component,
                 columns: header,
                 columnAutoWidth: true,
+                columnResizingMode: 'widget',
                 width: "0px",
                 height: "0px",
                 wordWrapEnabled: false,
