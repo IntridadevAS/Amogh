@@ -392,18 +392,8 @@ let controller = {
       }
       controller.sortProjects();
       projectView.renderProjects();
+      onToggleOverlayDisplayForCheckSpaces(false);
     });
-    /*fetch('../tests/allProjects.json', {
-      method: 'GET',
-      headers: {
-        'Sort': model.sortBy
-      }
-    })
-      .then(response => response.json())
-      .then(data => [model.publicProjects, model.myProjects] = [data.publicProjects, data.myProjects])
-      .then(function(){
-        projectView.renderProjects();
-      })*/
   },
 
   getMyProjects: function () {
@@ -640,10 +630,10 @@ let projectView = {
     });
 
     projects.addEventListener("click", function (event) {
-      onToggleOverlayDisplayForCheckSpaces(true);
       let selected = event.target.closest('.card');
       if (selected === null)
         return;
+      onToggleOverlayDisplayForCheckSpaces(true);
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init("Private");
       } else if (event.target.closest('.projectButtons')) {
@@ -654,10 +644,10 @@ let projectView = {
     });
 
     publicProjectsCont.addEventListener("click", function (event) {
-      onToggleOverlayDisplayForCheckSpaces(true);
       let selected = event.target.closest('.card');
       if (selected === null)
         return;
+      onToggleOverlayDisplayForCheckSpaces(true);
       if (selected.classList.contains('newProjectCard')) {
         newProjectView.init("Public");
       } else if (event.target.closest('.projectButtons')) {
