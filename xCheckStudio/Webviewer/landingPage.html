@@ -395,12 +395,18 @@
   </div>
   <script>
 
-    window.onload = function () {
-      setUserName();
+      window.onload = function () {
+        setUserName();
 
-      // create drawer menu
-      DrawerMenu.create(["check", "home", "output", "reports"]);
-    }
+        // create drawer menu
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+        var disabledMenuItem = ["check", "home", "output", "reports"];
+        if (userinfo.type.toLowerCase() !== 'admin') {
+          disabledMenuItem.push("prep");
+        }
+
+        DrawerMenu.create(disabledMenuItem);
+      }
 
     function setUserName() {
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
