@@ -80,8 +80,8 @@ ComplianceReviewManager.prototype.AddTableContentCount = function (containerId) 
         div2.style.color = "white";
     
         // var countBox = document.getElementById(id);
-        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = modelBrowserTableRows.length - 2;
+        // modelBrowserTableRows contains header, search bar row and freespace row as row hence count is length-3
+        var rowCount = modelBrowserTableRows.length - 3;
         div2.innerHTML = "Count :" + rowCount;
         modelBrowserDataTable.appendChild(div2);
     }

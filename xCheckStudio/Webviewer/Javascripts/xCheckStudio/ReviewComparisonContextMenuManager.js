@@ -484,7 +484,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
     var transpose = false;
-    var ignore = ['OK', 'No Value', 'OK(T)'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if(selectedPropertiesKey.length == 0) {
@@ -543,7 +543,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
 
     var transpose = true;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED', 'Missing Property(s)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if(selectedPropertiesKey.length == 0) {

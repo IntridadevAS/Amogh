@@ -33,7 +33,7 @@ function TransposeProperty() {
 
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
@@ -49,10 +49,10 @@ function TransposeProperty() {
     for($i = 0; $i < count($selectedPropertyIds); $i++) {
         for($j = 0; $j < count($properties); $j++) {
             if($j == $selectedPropertyIds[$i] && $properties[$j]["accepted"] == "false" && !in_array($properties[$j]["severity"], $dontChangeOk)) {
-                if($properties[$j]["sourceAName"] !== '' && $properties[$j]["sourceBName"] !== '') {
+                // if($properties[$j]["sourceAName"] !== null && $properties[$j]["sourceBName"] !== null) {
                     $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=?');
                     $command->execute(array($transposeType, $properties[$j]["id"]));
-                }
+                // }
             }
             else {
                 continue;
@@ -83,7 +83,7 @@ function RestoreProperty() {
 
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
@@ -136,7 +136,7 @@ function TransposeComponentProperties() {
         // open database
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
         $results = array();
         $dbh->beginTransaction();
 
@@ -162,7 +162,7 @@ function TransposeComponentProperties() {
 
                 while($index < count($properties)) { 
 
-                    if($properties[$index]['accepted'] == 'false' && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
+                    if($properties[$index]['accepted'] == 'false') {
 
                         $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                         $command->execute(array($transposeType, $properties[$index]['id']));
@@ -206,7 +206,7 @@ function RestoreComponentLevelTranspose() {
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
         $results = array();
         $dbh->beginTransaction();
 
@@ -270,7 +270,7 @@ function RestoreCategoryLevelTranspose() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
-    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match');
+    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match', 'Missing Property(s)');
     $componentsArray = array();
     $results = array();
 
@@ -344,7 +344,7 @@ function transposePropertiesCategoryLevel() {
 
     $categoryStatus = 'OK(T)';
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match', 'Missing Property(s)');
     $componentsArray = array();
     $results = array();
 
@@ -374,7 +374,7 @@ function transposePropertiesCategoryLevel() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $index = 0;
                 while($index < count($properties)) {
-                    if($properties[$index]["accepted"] == "false" && !in_array($properties[$index]["severity"], $dontChangeOk) && ($properties[$index]['sourceAName'] !== "" && $properties[$index]['sourceBName'] !== "")) {
+                    if($properties[$index]["accepted"] == "false" && !in_array($properties[$index]["severity"], $dontChangeOk)) {
                         $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET transpose=? WHERE id=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                         $command->execute(array($transposeType, $properties[$index]['id']));
                     }
