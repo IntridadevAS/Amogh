@@ -4,15 +4,15 @@ if (typeof (require) !== 'undefined') {
 }
 
 var comparisonExportManager = new ComparisonExportManager();
-var complianceAExportManager = new ComplianceAExportManager();
-var complianceBExportManager = new ComplianceBExportManager();
-var complianceCExportManager = new ComplianceCExportManager();
-var complianceDExportManager = new ComplianceDExportManager();
+var complianceAExportManager = new ComplianceExportManager();
+var complianceBExportManager = new ComplianceExportManager();
+var complianceCExportManager = new ComplianceExportManager();
+var complianceDExportManager = new ComplianceExportManager();
 
-var dataset1 = new Dataset1();
-var dataset2 = new Dataset2();
-var dataset3 = new Dataset3();
-var dataset4 = new Dataset4();
+var dataset1 = new Dataset();
+var dataset2 = new Dataset();
+var dataset3 = new Dataset();
+var dataset4 = new Dataset();
 
 var ExportManager = {
     ExcelOutputFormInitialised : false,
@@ -20,8 +20,8 @@ var ExportManager = {
 }
 
 function ShowSelectBox() {
-    var overlay = document.getElementById("Excel_Output_overlay");
-    var popup = document.getElementById("Excel_Output_popup");
+    var overlay = document.getElementById("ExcelOutputOverlay");
+    var popup = document.getElementById("ExcelOutputPopup");
 
 
     overlay.style.display = 'block';
@@ -208,25 +208,25 @@ function CreateDataSetExportForm() {
         
         if(key == "sourceAFileName") {
             components = checkResults["sourceAComponents"];
-            document.getElementById("Data_source_1_A96_Text_34").innerText = checkResults.sourceInfo[key];
+            document.getElementById("dataset1Name").innerText = checkResults.sourceInfo[key];
             tableId = "dataset1";
             datasetInstance = dataset1;
         }
         else if(key == "sourceBFileName") {
             components = checkResults["sourceBComponents"];
-            document.getElementById("Data_source_1_A96_Text_36").innerText = checkResults.sourceInfo[key];
+            document.getElementById("dataset2Name").innerText = checkResults.sourceInfo[key];
             tableId = "dataset2";
             datasetInstance = dataset2;
         }
         else if(key == "sourceCFileName") {
             components = checkResults["sourceCComponents"];
-            document.getElementById("Data_source_1_A96_Text_44").innerText = checkResults.sourceInfo[key];
+            document.getElementById("dataset3Name").innerText = checkResults.sourceInfo[key];
             tableId = "dataset3";
             datasetInstance = dataset3;
         }
         else if(key == "sourceDFileName") {
             components = checkResults["sourceDComponents"];
-            document.getElementById("Data_source_1_A96_Text_46").innerText = checkResults.sourceInfo[key];
+            document.getElementById("dataset4Name").innerText = checkResults.sourceInfo[key];
             tableId = "dataset4";
             datasetInstance = dataset4;
         }
@@ -306,19 +306,19 @@ function CreateReviewExportForm() {
         }
 
         if(id == 0) {
-            document.getElementById("Data_source_1_A96_Text_8").innerText = Compliances[id].source;
+            document.getElementById("complianceDataset1Name").innerText = Compliances[id].source;
             complianceAExportManager.CreateTables("complianceSource1tables", columnHeaders, tableData);
         }
         if(id == 1) {
-            document.getElementById("Data_source_1_A96_Text_10").innerText = Compliances[id].source;
+            document.getElementById("complianceDataset2Name").innerText = Compliances[id].source;
             complianceBExportManager.CreateTables("complianceSource2tables", columnHeaders, tableData);
         }
         if(id == 2) {
-            document.getElementById("Data_source_1_A96_Text_23").innerText = Compliances[id].source;
+            document.getElementById("complianceDataset3Name").innerText = Compliances[id].source;
             complianceCExportManager.CreateTables("complianceSource3tables", columnHeaders, tableData);
         }
         if(id == 3) {
-            document.getElementById("Data_source_1_A96_Text_25").innerText = Compliances[id].source;
+            document.getElementById("complianceDataset4Name").innerText = Compliances[id].source;
             complianceDExportManager.CreateTables("complianceSource4tables", columnHeaders, tableData);
         }
     }
@@ -495,11 +495,11 @@ ComparisonExportManager.prototype.CreateTables = function(containerDiv, columnHe
     });
 }
 
-function ComplianceAExportManager() {
+function ComplianceExportManager() {
     this.SelectedTableIds = [];
 }
 
-ComplianceAExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
+ComplianceExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
     var _this = this;
 
     $(function () {
@@ -556,377 +556,11 @@ ComplianceAExportManager.prototype.CreateTables = function(containerDiv, columnH
     });
 }
 
-function ComplianceBExportManager() {
+function Dataset() {
     this.SelectedTableIds = [];
 }
 
-ComplianceBExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function ComplianceCExportManager() {
-    this.SelectedTableIds = [];
-}
-
-ComplianceCExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function ComplianceDExportManager() {
-    this.SelectedTableIds = [];
-}
-
-ComplianceDExportManager.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function Dataset1() {
-    this.SelectedTableIds = [];
-}
-
-Dataset1.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function Dataset2() {
-    this.SelectedTableIds = [];
-}
-
-Dataset2.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function Dataset3() {
-    this.SelectedTableIds = [];
-}
-
-Dataset3.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
-    var _this = this;
-
-    $(function () {
-        $("#" + containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: "key",
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            wordWrapEnabled: false,
-            showBorders: false,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            showColumnHeaders: false,
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            paging: {
-                enabled: false
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            onCellPrepared: function (e) {
-                e.cellElement.css("font-size", "8px");
-                e.cellElement.css("height", "9px");
-            },
-            onSelectionChanged: function(e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentSelectedRowKeys[i]).done(function(dataObject) {
-                            _this.SelectedTableIds.push(dataObject.name)
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        e.component.byKey(e.currentDeselectedRowKeys[i]).done(function(dataObject) {
-                            var index = _this.SelectedTableIds.indexOf(dataObject.name)
-                            if (index > -1) {
-                                _this.SelectedTableIds.splice(index, 1);
-                            }
-                        }).fail(function(error) {
-                            // handle error
-                        });
-                    }
-                }
-                
-            },
-        });
-    });
-}
-
-function Dataset4() {
-    this.SelectedTableIds = [];
-}
-
-Dataset4.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
+Dataset.prototype.CreateTables = function(containerDiv, columnHeaders, tableData) {
     var _this = this;
 
     $(function () {

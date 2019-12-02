@@ -1,6 +1,6 @@
 function ExportExcel() {
     this.reviewWorkbook = new ExcelJS.Workbook();
-    this.modelBrowserWorkook = new ExcelJS.Workbook();
+    this.modelBrowserWorkook;
     this.currentExport = "";
     this.rowCount = 9;
 }
