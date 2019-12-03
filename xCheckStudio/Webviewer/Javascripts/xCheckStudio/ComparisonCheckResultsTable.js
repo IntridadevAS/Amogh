@@ -564,14 +564,6 @@ ComparisonCheckResultsTable.prototype.AddTooltip = function (e) {
     }
 }
 
-
-ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
-    var dataGrid = $(containerDiv).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items();
-    var rowData = data[rowIndex];
-    return rowData;
-}
-
 ComparisonCheckResultsTable.prototype.Destroy = function () {
 
     for (var groupId in this.CheckTableIds) {
@@ -640,37 +632,99 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (componentId,
     }
 }
 
-ComparisonCheckResultsTable.prototype.GetComponentIds = function (gridId) {
-    var selectionManager = model.getCurrentSelectionManager();
-    var selectedComponents = selectionManager.GetSelectedComponents();
-    if (selectedComponents.length === 0) {
-        return undefined;
-    }
+ComparisonCheckResultsTable.prototype.GetComponentIds = function () {
+    
+    return new Promise((resolve) => {
 
-    var dataGrid = $(gridId).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items();
+        this.GetDataForSelectedRows().then(function (dataObjects) {
+            if (!dataObjects ||
+                dataObjects.length === 0) {
+                return resolve(undefined);
+            }
 
-    var sourceAIds = [];
-    var sourceBIds = [];
-    for (var i = 0; i < selectedComponents.length; i++) {
-        var selectedRow = selectedComponents[i];
 
-        var rowData = rowsData[selectedRow["rowIndex"]];
-        // source A        
-        if (rowData[ComparisonColumnNames.SourceAId] !== "" && rowData[ComparisonColumnNames.SourceAId] !== null) {
-            sourceAIds.push(Number(rowData[ComparisonColumnNames.SourceAId]));
+            var sourceAIds = [];
+            var sourceBIds = [];
+            var sourceCIds = [];
+            var sourceDIds = [];
+
+            for (var i = 0; i < dataObjects.length; i++) {
+                rowData = dataObjects[i];
+
+                // source A        
+                if (rowData[ComparisonColumnNames.SourceAId] !== "" &&
+                    rowData[ComparisonColumnNames.SourceAId] !== null) {
+                    sourceAIds.push(Number(rowData[ComparisonColumnNames.SourceAId]));
+                }
+
+                // source B        
+                if (rowData[ComparisonColumnNames.SourceBId] !== "" &&
+                    rowData[ComparisonColumnNames.SourceBId] !== null) {
+                    sourceBIds.push(Number(rowData[ComparisonColumnNames.SourceBId]));
+                }
+
+                // source C        
+                if (rowData[ComparisonColumnNames.SourceCId] !== "" &&
+                    rowData[ComparisonColumnNames.SourceCId] !== null) {
+                    sourceCIds.push(Number(rowData[ComparisonColumnNames.SourceCId]));
+                }
+
+                // source D        
+                if (rowData[ComparisonColumnNames.SourceDId] !== "" &&
+                    rowData[ComparisonColumnNames.SourceDId] !== null) {
+                    sourceDIds.push(Number(rowData[ComparisonColumnNames.SourceDId]));
+                }
+            }
+
+            return resolve({
+                "a": sourceAIds,
+                "b": sourceBIds,
+                "c": sourceCIds,
+                "d": sourceDIds
+            });
+
+        });
+    });
+}
+
+ComparisonCheckResultsTable.prototype.GetDataForSelectedRows = function () {
+
+    return new Promise((resolve) => {
+
+        var selectionManager = model.getCurrentSelectionManager();
+        var selectedComponents = selectionManager.GetSelectedComponents();
+        if (selectedComponents.length === 0) {
+            return undefined;
         }
 
-        // source B        
-        if (rowData[ComparisonColumnNames.SourceBId] !== "" && rowData[ComparisonColumnNames.SourceBId] !== null) {
-            sourceBIds.push(Number(rowData[ComparisonColumnNames.SourceBId]));
-        }
-    }
+        var arr = [];
 
-    return {
-        "a": sourceAIds,
-        "b": sourceBIds
-    };
+        for (var i = 0; i < selectedComponents.length; i++) {
+            var selectedRow = selectedComponents[i];
+           
+            this.GetDataForSelectedRow(selectedRow).then(function (dataObject) {
+                arr.push(dataObject);
+
+                if (arr.length === selectedComponents.length) {
+                    return resolve(arr);
+                }
+            });
+        }
+    });
+}
+
+ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function (selectedRow) {
+    return new Promise((resolve) => {
+
+
+        var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+        dataGrid.byKey(selectedRow["rowKey"]).done(function (dataObject) {
+            return resolve(dataObject);
+        }).fail(function (error) {
+            return resolve(undefined);
+        });
+
+    });
 }
 
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
@@ -1097,13 +1151,6 @@ ComparisonCheckPropertiesTable.prototype.Destroy = function () {
     // viewerContainerDiv.style.display = "none";
 
     parent.appendChild(viewerContainerDiv);
-}
-
-ComparisonCheckPropertiesTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
-    var dataGrid = $(containerDiv).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items();
-    var rowData = data[rowIndex];
-    return rowData;
 }
 
 ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, property) {

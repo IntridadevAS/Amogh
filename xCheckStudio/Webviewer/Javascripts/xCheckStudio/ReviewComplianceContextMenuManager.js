@@ -761,24 +761,35 @@ ReviewComplianceContextMenuManager.prototype.OnStopTranslucency = function () {
 }
 
 ReviewComplianceContextMenuManager.prototype.onReferenceClick = function () {
-    var componentIds = model.checks[model.currentCheck].reviewTable.GetComponentIds(this.ComponentTableContainer);
-    var title = undefined;
-    for (var src in componentIds) {
-        var file;
-        if (src === "a") {
-            file = checkResults.sourceInfo.sourceAFileName;
-        }
-        else if (src === "b") {
-            file = checkResults.sourceInfo.sourceBFileName;
+    model.checks[model.currentCheck].reviewTable.GetComponentIds().then(function (componentIds) {
+        if (!componentIds) {
+            return;
         }
 
-        if (!title) {
-            title = file;
-        }
-        else {
-            title += " | " + file;
-        }
-    }
+        var title = undefined;
+        for (var src in componentIds) {
+            var file;
+            if (src === "a") {
+                file = checkResults.sourceInfo.sourceAFileName;
+            }
+            else if (src === "b") {
+                file = checkResults.sourceInfo.sourceBFileName;
+            }
+            else if (src === "c") {
+                file = checkResults.sourceInfo.sourceCFileName;
+            }
+            else if (src === "d") {
+                file = checkResults.sourceInfo.sourceDFileName;
+            }
 
-    ReferenceManager.showReferenceDiv(componentIds, title);
+            if (!title) {
+                title = file;
+            }
+            else {
+                title += " | " + file;
+            }
+        }
+
+        ReferenceManager.showReferenceDiv(componentIds, title);
+    });
 }

@@ -476,30 +476,75 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (componentId,
         }
 }
 
-ComplianceCheckResultsTable.prototype.GetComponentIds = function (gridId) {
-    var selectionManager = model.getCurrentSelectionManager();
-    var selectedComponents = selectionManager.GetSelectedComponents();
-    if (selectedComponents.length === 0) {
-        return undefined;
-    }
 
-    var dataGrid = $(gridId).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items();
+ComplianceCheckResultsTable.prototype.GetComponentIds = function () {
+    
+    return new Promise((resolve) => {
 
-    var sourceIds = [];    
-    for (var i = 0; i < selectedComponents.length; i++) {
-        var selectedRow = selectedComponents[i];
+        this.GetDataForSelectedRows().then(function (dataObjects) {
+            if (!dataObjects ||
+                dataObjects.length === 0) {
+                return resolve(undefined);
+            }
 
-        var rowData = rowsData[selectedRow["rowIndex"]];
+
+            var sourceIds = [];
+           
+
+            for (var i = 0; i < dataObjects.length; i++) {
+                rowData = dataObjects[i];               
         
-        if (rowData[ComplianceColumnNames.SourceId] !== "" && rowData[ComplianceColumnNames.SourceId] !== null) {
-            sourceIds.push(Number(rowData[ComplianceColumnNames.SourceId]));
-        }      
-    }
+                if (rowData[ComplianceColumnNames.SourceId] !== "" && 
+                    rowData[ComplianceColumnNames.SourceId] !== null) {
+                    sourceIds.push(Number(rowData[ComplianceColumnNames.SourceId]));
+                }    
+            }
 
-    var result = {};
-    result[model.selectedCompliance.id] = sourceIds;
-    return result;
+            var ids = {};
+            ids[model.selectedCompliance.id ] = sourceIds;
+            return resolve(ids);
+        });
+    });
+}
+
+ComplianceCheckResultsTable.prototype.GetDataForSelectedRows = function () {
+
+    return new Promise((resolve) => {
+
+        var selectionManager = model.getCurrentSelectionManager();
+        var selectedComponents = selectionManager.GetSelectedComponents();
+        if (selectedComponents.length === 0) {
+            return undefined;
+        }
+
+        var arr = [];
+
+        for (var i = 0; i < selectedComponents.length; i++) {
+            var selectedRow = selectedComponents[i];
+           
+            this.GetDataForSelectedRow(selectedRow).then(function (dataObject) {
+                arr.push(dataObject);
+
+                if (arr.length === selectedComponents.length) {
+                    return resolve(arr);
+                }
+            });
+        }
+    });
+}
+
+ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function (selectedRow) {
+    return new Promise((resolve) => {
+
+
+        var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
+        dataGrid.byKey(selectedRow["rowKey"]).done(function (dataObject) {
+            return resolve(dataObject);
+        }).fail(function (error) {
+            return resolve(undefined);
+        });
+
+    });
 }
 
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {

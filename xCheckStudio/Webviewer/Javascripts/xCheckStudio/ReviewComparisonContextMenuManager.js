@@ -63,16 +63,16 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                         items: {
                             "FromDataSource1": { name: transposeSubMenu[0] },
                             "FromDataSource2": { name: transposeSubMenu[1] },
-                            "FromDataSource3": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 2) 
+                            "FromDataSource3":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 2)
                                         return transposeSubMenu[2];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 2) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 2) {
                                         return true;
                                     }
                                     else {
@@ -80,16 +80,16 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                                     }
                                 }
                             },
-                            "FromDataSource4": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 3) 
+                            "FromDataSource4":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 3)
                                         return transposeSubMenu[3];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 3) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 3) {
                                         return true;
                                     }
                                     else {
@@ -226,16 +226,16 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                         items: {
                             "FromDataSource1": { name: transposeSubMenu[0] },
                             "FromDataSource2": { name: transposeSubMenu[1] },
-                            "FromDataSource3": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 2) 
+                            "FromDataSource3":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 2)
                                         return transposeSubMenu[2];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 2) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 2) {
                                         return true;
                                     }
                                     else {
@@ -243,16 +243,16 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                                     }
                                 }
                             },
-                            "FromDataSource4": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 3) 
+                            "FromDataSource4":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 3)
                                         return transposeSubMenu[3];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 3) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 3) {
                                         return true;
                                     }
                                     else {
@@ -319,16 +319,16 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
                         items: {
                             "FromDataSource1": { name: transposeSubMenu[0] },
                             "FromDataSource2": { name: transposeSubMenu[1] },
-                            "FromDataSource3": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 2) 
+                            "FromDataSource3":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 2)
                                         return transposeSubMenu[2];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 2) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 2) {
                                         return true;
                                     }
                                     else {
@@ -336,16 +336,16 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
                                     }
                                 }
                             },
-                            "FromDataSource4": 
-                            { 
-                                name : function() {
-                                    if(transposeSubMenu.length > 3) 
+                            "FromDataSource4":
+                            {
+                                name: function () {
+                                    if (transposeSubMenu.length > 3)
                                         return transposeSubMenu[3];
-                                    else 
+                                    else
                                         return "";
                                 },
-                                visible: function() {
-                                    if(transposeSubMenu.length > 3) {
+                                visible: function () {
+                                    if (transposeSubMenu.length > 3) {
                                         return true;
                                     }
                                     else {
@@ -371,14 +371,14 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
     var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         transpose = true;
         return transpose;
     }
 
-    for(var groupId in selectedGroupIdsVsResultIds) {
+    for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
-        for(var componentId in componentIds) {
+        for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
@@ -397,14 +397,14 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent 
     var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         accept = true;
         return accept;
     }
 
-    for(var groupId in selectedGroupIdsVsResultIds) {
+    for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
-        for(var componentId in componentIds) {
+        for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
             if (index == -1) {
@@ -416,10 +416,10 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent 
     return accept;
 }
 
-ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function() {
+ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function () {
     var files = model.files;
     var transposeSubMenu = [];
-    for(var file in files) {
+    for (var file in files) {
         var name = "From " + files[file].fileName;
         transposeSubMenu.push(name);
     }
@@ -433,13 +433,13 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
     var ignore = ['OK', 'OK(A)', 'OK(A)(T)'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         return transpose;
     }
 
-    for(var groupId in selectedGroupIdsVsResultIds) {
+    for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
-        for(var componentId in componentIds) {
+        for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
@@ -457,13 +457,13 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
     var ignore = ['OK', 'OK(T)', 'OK(A)(T)'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         return accept;
     }
 
-    for(var groupId in selectedGroupIdsVsResultIds) {
+    for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
-        for(var componentId in componentIds) {
+        for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
             if (index == -1) {
@@ -480,16 +480,16 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function
     var ignore = ['OK', 'No Value', 'OK(T)'];
     var accepted = true;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         accepted = true;
         return accepted;
     }
 
-    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
 
-    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
@@ -506,16 +506,16 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
     var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         transpose = true;
         return transpose;
     }
 
-    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
 
-    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
         var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
@@ -523,7 +523,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
         if (index == -1) {
-            if((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
+            if ((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
                 transpose = true;
             }
         }
@@ -535,19 +535,19 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'No Value', 'ACCEPTED',  'OK(T)'];
+    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         accept = true;
         return accept;
     }
 
-    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
 
-    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
@@ -565,16 +565,16 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
     var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED', 'Missing Property(s)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         transpose = true;
         return transpose;
     }
 
-    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
 
-    for(var i = 0; i < selectedPropertiesKey.length; i++) {
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
         var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
@@ -582,7 +582,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
 
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
         if (index == -1) {
-            if((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
+            if ((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
                 transpose = false;
             }
         }
@@ -595,7 +595,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = fu
     // var groupIndex = model.getCurrentReviewTable().GetAccordionIndex(selectedRow.textContext);
     var groupData = model.getCurrentReviewTable().GetAccordionData(selectedRow.textContent);
     var groupId = groupData["groupId"];
-    
+
     if (comparisonReviewManager.ComparisonCheckManager["results"][groupId].categoryStatus == 'OK(T)') {
         return false;
     }
@@ -622,7 +622,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForGroup = function (s
 
     // var selectedRowStatus = selectedRow.cells[ComparisonPropertyColumns.Status].innerHTML;
     if (checkGroup.categoryStatus == 'OK' ||
-    checkGroup.ComponentClass == 'Undefined') {
+        checkGroup.ComponentClass == 'Undefined') {
         return true;
     }
 
@@ -679,10 +679,10 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
             this.OnRestoreTranspose(selectedRow, source);
         }
     }
-    else if (key === "FromDataSource1" || 
-    key === "FromDataSource2" || 
-    key === "FromDataSource3" || 
-    key === "FromDataSource4") {
+    else if (key === "FromDataSource1" ||
+        key === "FromDataSource2" ||
+        key === "FromDataSource3" ||
+        key === "FromDataSource4") {
         this.OnTransposeClick(key, selectedRow, source);
     }
     else if (key === "freeze") {
@@ -710,7 +710,7 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponents = function () {
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         return;
     }
 
@@ -723,9 +723,9 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
     if (!highlightedRow) {
         return;
     }
-    
+
     var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items(); 
+    var rowsData = dataGrid.getDataSource().items();
     var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
     var rowData = rowsData[rowIndex];
 
@@ -734,7 +734,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
 
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         return;
     }
 
@@ -748,7 +748,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicke
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponents = function () {
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
-    if(selectedGroupIdsVsResultIds == undefined) {
+    if (selectedGroupIdsVsResultIds == undefined) {
         return;
     }
 
@@ -761,9 +761,9 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
     if (!highlightedRow) {
         return;
     }
-    
+
     var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-    var rowsData = dataGrid.getDataSource().items(); 
+    var rowsData = dataGrid.getDataSource().items();
     var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
     var rowData = rowsData[rowIndex];
 
@@ -772,7 +772,7 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
 
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-    if(selectedPropertiesKey.length == 0) {
+    if (selectedPropertiesKey.length == 0) {
         return;
     }
 
@@ -785,33 +785,33 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClic
 
 ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (selectedRow, source) {
 
-    if(source.toLowerCase() === "component") {
+    if (source.toLowerCase() === "component") {
         var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
-        if(selectedGroupIdsVsResultIds == undefined) {
+        if (selectedGroupIdsVsResultIds == undefined) {
             return;
         }
         comparisonReviewManager.RestoreComponentTranspose(selectedGroupIdsVsResultIds);
     }
-    else if(source.toLowerCase() === "property") {
+    else if (source.toLowerCase() === "property") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
         if (!highlightedRow) {
             return;
         }
-        
+
         var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-        var rowsData = dataGrid.getDataSource().items(); 
+        var rowsData = dataGrid.getDataSource().items();
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         var rowData = rowsData[rowIndex];
-    
+
         var componentId = rowData.ID;
         var groupId = rowData.groupId;
-    
+
         var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
-        if(selectedPropertiesKey.length == 0) {
+        if (selectedPropertiesKey.length == 0) {
             return;
         }
-        
+
         comparisonReviewManager.RestorePropertyTranspose(selectedPropertiesKey, componentId, groupId);
     }
     else if (source.toLowerCase() === "group") {
@@ -821,38 +821,38 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
 
 ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, selectedRow, source) {
 
-    if(source.toLowerCase() === "component") {
+    if (source.toLowerCase() === "component") {
         var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
-        if(selectedGroupIdsVsResultIds == undefined) {
+        if (selectedGroupIdsVsResultIds == undefined) {
             return;
         }
         comparisonReviewManager.TransposeComponent(key, selectedGroupIdsVsResultIds);
     }
-    else if(source.toLowerCase() === "property") {
+    else if (source.toLowerCase() === "property") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
         if (!highlightedRow) {
             return;
         }
-        
+
         var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-        var rowsData = dataGrid.getDataSource().items(); 
+        var rowsData = dataGrid.getDataSource().items();
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         var rowData = rowsData[rowIndex];
-    
+
         var componentId = rowData.ID;
         var groupId = rowData.groupId;
-    
+
         var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-        if(selectedPropertiesKey.length == 0) {
+        if (selectedPropertiesKey.length == 0) {
             return;
         }
         comparisonReviewManager.TransposeProperty(key, selectedPropertiesKey, componentId, groupId);
     }
     else if (source.toLowerCase() === "group") {
-    comparisonReviewManager.TransposeCategory(key,
-        selectedRow[0]);
+        comparisonReviewManager.TransposeCategory(key,
+            selectedRow[0]);
     }
-     
+
 }
 
 ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
@@ -901,7 +901,7 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
     }
 
     var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
-    
+
     // source A
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -945,7 +945,7 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
     if (!nodes) {
         return;
     }
-    
+
     var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
     // source A
     var sourceANodeIds = nodes["SourceA"];
@@ -1016,7 +1016,7 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
     };
 }
 
-ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = function() {
+ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = function () {
     var selectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
     if (selectedComponents.length === 0) {
         return undefined;
@@ -1024,7 +1024,7 @@ ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = f
 
     var selectedGroupIdsVsResultIds = {};
     // var selectedResultIdsVsRowElements = {};
-    for(var i = 0; i < selectedComponents.length; i++) {
+    for (var i = 0; i < selectedComponents.length; i++) {
         var selectedRow = selectedComponents[i];
         // var dataGrid = $(selectedRow["tableId"]).dxDataGrid("instance");
         // var rowsData = dataGrid.getDataSource().items();
@@ -1036,7 +1036,7 @@ ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = f
 
         // selectedResultIdsVsRowElements[resultId] = selectedRow["row"];
 
-        if(groupId in selectedGroupIdsVsResultIds) {
+        if (groupId in selectedGroupIdsVsResultIds) {
             selectedGroupIdsVsResultIds[groupId].push(Number(resultId));
         }
         else {
@@ -1044,8 +1044,8 @@ ReviewComparisonContextMenuManager.prototype.GetSelectedGroupIdsVsResultsIds = f
             selectedGroupIdsVsResultIds[groupId].push(Number(resultId));
         }
     }
-    
-    return  selectedGroupIdsVsResultIds;
+
+    return selectedGroupIdsVsResultIds;
 }
 
 ReviewComparisonContextMenuManager.prototype.OnStartTranslucency = function () {
@@ -1099,83 +1099,36 @@ ReviewComparisonContextMenuManager.prototype.OnStopTranslucency = function () {
 }
 
 ReviewComparisonContextMenuManager.prototype.onReferenceClick = function () {
-    // // get selected source A and B node ids
-    // var nodes = this.GetNodeIdsFormComponentRow();
-    // if (!nodes) {
-    //     return;
-    // }    
-    // var title = "";
 
-    // // source A
-    // var srcAIds = [];
-    // var sourceANodeIds = nodes["SourceA"];
-    // var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-    // if (sourceANodeIds.length > 0 &&
-    //     sourceAViewerInterface) {
-
-    //         // comonent ids
-    //     for (var i = 0; i < checkResults.sourceAComponents.length; i++) {
-    //         var component = checkResults.sourceAComponents[i];
-            
-    //         for(var j = 0; j < sourceANodeIds.length; j++)
-    //         {
-    //             var nodeid = sourceANodeIds[j];
-    //             if(Number(component.nodeid) === nodeid)
-    //             {
-    //                 srcAIds.push(Number(component.id));
-    //             }
-    //         }
-    //     }
-
-    //     // source name
-    //     title = checkResults.sourceInfo["sourceAFileName"];
-    // }
-
-
-    // // source B
-    // var srcBIds = [];
-    // var sourceBNodeIds = nodes["SourceB"];
-    // var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-    // if (sourceBNodeIds.length > 0 &&
-    //     sourceBViewerInterface) {
-
-    //          // comonent ids
-    //         for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
-    //             var component = checkResults.sourceBComponents[i];
-                
-    //             for(var j = 0; j < sourceBNodeIds.length; j++)
-    //             {
-    //                 var nodeid = sourceBNodeIds[j];
-    //                 if(Number(component.nodeid) === nodeid)
-    //                 {
-    //                     srcBIds.push(Number(component.id));
-    //                 }
-    //             }
-    //         }
-
-    //     // source name
-    //     title += " | " + checkResults.sourceInfo["sourceBFileName"];
-    // }
-
-    //var componentIds = { "a" : srcAIds, "b" : srcBIds};
-
-    var componentIds = model.checks[model.currentCheck].reviewTable.GetComponentIds(this.ComponentTableContainer);
-    var title = undefined;
-    for (var src in componentIds) {
-        var file;
-        if (src === "a") {
-            file = checkResults.sourceInfo.sourceAFileName;
-        }
-        else if (src === "b") {
-            file = checkResults.sourceInfo.sourceBFileName;
+    model.checks[model.currentCheck].reviewTable.GetComponentIds().then(function (componentIds) {
+        if (!componentIds) {
+            return;
         }
 
-        if (!title) {
-            title = file;
+        var title = undefined;
+        for (var src in componentIds) {
+            var file;
+            if (src === "a") {
+                file = checkResults.sourceInfo.sourceAFileName;
+            }
+            else if (src === "b") {
+                file = checkResults.sourceInfo.sourceBFileName;
+            }
+            else if (src === "c") {
+                file = checkResults.sourceInfo.sourceCFileName;
+            }
+            else if (src === "d") {
+                file = checkResults.sourceInfo.sourceDFileName;
+            }
+
+            if (!title) {
+                title = file;
+            }
+            else {
+                title += " | " + file;
+            }
         }
-        else {
-            title += " | " + file;
-        }
-    }
-    ReferenceManager.showReferenceDiv(componentIds, title);
+
+        ReferenceManager.showReferenceDiv(componentIds, title);
+    });
 }

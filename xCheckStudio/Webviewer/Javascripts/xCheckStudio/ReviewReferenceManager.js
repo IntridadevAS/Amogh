@@ -93,50 +93,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
-        // if (!webAddressList) {
-        //     return;
-        // }
-
         for (var i = 0; i < webAddresses.length; i++) {
             var webAddress = webAddresses[i];
             ReferenceManager.showWebAddress(currentSource, webAddress);
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + webAddress;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + webAddress;
-            // }
-            // webAddressList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-            //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-            //     win.loadURL(value);
-            //     win.show();
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         }
     },
 
@@ -145,53 +104,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var documentList = referenceIFrame.contentDocument.getElementById("documentList");
-        // if (!documentList) {
-        //     return;
-        // }
-
         for (var i = 0; i < documents.length; i++) {
             var doc = documents[i];
             ReferenceManager.showDocument(currentSource, doc);
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + doc;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + doc;
-            // }
-            // documentList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-            //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         }
     },
 
@@ -200,54 +115,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var imageList = referenceIFrame.contentDocument.getElementById("imageList");
-        // if (!imageList) {
-        //     return;
-        // }
-
         for (var i = 0; i < images.length; i++) {
             var image = images[i];
             ReferenceManager.showImage(currentSource, image);
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + image;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + image;
-            // }
-            // imageList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-            //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         }
     },
 
@@ -256,40 +126,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-        // if (!commentsList) {
-        //     return;
-        // }
-
         for (var i = 0; i < comments.length; i++) {
             var comment = comments[i];
             ReferenceManager.showComment(currentSource, JSON.parse(comment));
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + comment;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + comment;
-            // }
-            // commentsList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     ReferenceManager.select(this);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         }
     },
 
@@ -357,6 +196,9 @@ let ReferenceManager = {
     },
 
     processWebAddress: function (currentSource, ids, value) {
+        if (ids.length === 0) {
+            return;
+        }
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -378,46 +220,6 @@ let ReferenceManager = {
                 if (msg != 'fail') {
 
                     ReferenceManager.showWebAddress(currentSource, msg);
-                    // var referenceIFrame = document.getElementById("referenceIFrame");
-                    // if (!referenceIFrame) {
-                    //     return;
-                    // }
-
-                    // var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
-                    // if (!webAddressList) {
-                    //     return;
-                    // }
-
-                    // var listItem = referenceIFrame.contentDocument.createElement('li');
-                    // if (currentSource === "a") {                            
-                    //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + msg;
-                    // }
-                    // else if (currentSource === "b") {
-                    //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + msg;
-                    // }
-
-                    // webAddressList.appendChild(listItem);
-
-                    // listItem.onclick = function () {
-
-                    //     // select this list item
-                    //     ReferenceManager.select(this);
-                    //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-                    //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-
-                    //     const BrowserWindow = require('electron').remote.BrowserWindow;
-                    //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-                    //     win.loadURL(value);
-                    //     win.show();
-                    // }
-
-                    // listItem.onmouseover = function () {
-                    //     ReferenceManager.Highlight(this);
-                    // }
-
-                    // listItem.onmouseout = function () {
-                    //     ReferenceManager.UnHighlight(this);
-                    // }
                 }
             }
         });
@@ -465,6 +267,10 @@ let ReferenceManager = {
         }
 
         for (var src in ReferenceManager.componentIds) {
+            if (ReferenceManager.componentIds[src].length === 0) {
+                continue;
+            }
+
             ReferenceManager.uploadRefernceDocument(src, ReferenceManager.componentIds[src]);
         }
     },
@@ -485,50 +291,6 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showDocument(currentSource, event.target.response);
-            // var referenceIFrame = document.getElementById("referenceIFrame");
-            // if (!referenceIFrame) {
-            //     return;
-            // }
-
-            // var documentList = referenceIFrame.contentDocument.getElementById("documentList");
-            // if (!documentList) {
-            //     return;
-            // }
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + event.target.response;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + event.target.response;
-            // }
-            // documentList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-            //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -556,6 +318,10 @@ let ReferenceManager = {
         }
 
         for (var src in ReferenceManager.componentIds) {
+            if (ReferenceManager.componentIds[src].length === 0) {
+                continue;
+            }
+
             ReferenceManager.uploadRefernceImage(src, ReferenceManager.componentIds[src]);
         }
     },
@@ -566,7 +332,6 @@ let ReferenceManager = {
         xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
         xhr.onload = function (event) {
 
-            // document.getElementById("UploadReferenceDocForm").reset();
             if (event.target.response === "fail") {
                 alert("Adding Image reference failed.");
                 return;
@@ -577,50 +342,6 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showImage(currentSource, event.target.response);
-            // var referenceIFrame = document.getElementById("referenceIFrame");
-            // if (!referenceIFrame) {
-            //     return;
-            // }
-
-            // var imageList = referenceIFrame.contentDocument.getElementById("imageList");
-            // if (!imageList) {
-            //     return;
-            // }
-
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // if (currentSource === "a") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + event.target.response;
-            // }
-            // else if (currentSource === "b") {
-            //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + event.target.response;
-            // }
-            // imageList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
-            //     value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -649,6 +370,10 @@ let ReferenceManager = {
         }
 
         for (var src in ReferenceManager.componentIds) {
+            if (ReferenceManager.componentIds[src].length === 0) {
+                continue;
+            }
+            
             ReferenceManager.processComment(src, ReferenceManager.componentIds[src], value);
         }
         if ("referenceType" in localStorage) {
@@ -688,37 +413,6 @@ let ReferenceManager = {
                 if (msg != 'fail') {
                     var commentData = JSON.parse(msg);
                     ReferenceManager.showComment(currentSource, commentData);
-
-                    // var referenceIFrame = document.getElementById("referenceIFrame");
-                    // if (!referenceIFrame) {
-                    //     return;
-                    // }
-
-                    // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-                    // if (!commentsList) {
-                    //     return;
-                    // }
-
-                    // var listItem = referenceIFrame.contentDocument.createElement('li');
-                    // if (currentSource === "a") {
-                    //     listItem.innerText = checkResults.sourceInfo["sourceAFileName"] + " : " + event.target.response;
-                    // }
-                    // else if (currentSource === "b") {
-                    //     listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + event.target.response;
-                    // }
-                    // commentsList.appendChild(listItem);
-
-                    // listItem.onclick = function () {
-                    //     ReferenceManager.select(this);
-                    // }
-
-                    // listItem.onmouseover = function () {
-                    //     ReferenceManager.Highlight(this);
-                    // }
-
-                    // listItem.onmouseout = function () {
-                    //     ReferenceManager.UnHighlight(this);
-                    // }
                 }
             }
         });
@@ -757,12 +451,16 @@ let ReferenceManager = {
             components = ReferenceManager.componentIds["b"];
             currentSource = "b";
         }
-
-        // // get selected component ids       
-        // var componentIds = ReferenceManager.getComponentIds();
-        // if (componentIds.length === 0) {
-        //     return;
-        // }
+        else if (referenceText.includes(checkResults.sourceInfo["sourceCFileName"])) {
+            referenceText = referenceText.replace(checkResults.sourceInfo["sourceCFileName"] + " : ", "");
+            components = ReferenceManager.componentIds["c"];
+            currentSource = "c";
+        }
+        else if (referenceText.includes(checkResults.sourceInfo["sourceDFileName"])) {
+            referenceText = referenceText.replace(checkResults.sourceInfo["sourceDFileName"] + " : ", "");
+            components = ReferenceManager.componentIds["d"];
+            currentSource = "d";
+        }
 
         var typeofReference;
         if (ReferenceManager.selectedReference.offsetParent.id === "webAddressList") {
@@ -834,6 +532,12 @@ let ReferenceManager = {
         else if (currentSource === "b") {
             listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + webAddress;
         }
+        else if (currentSource === "c") {
+            listItem.innerText = checkResults.sourceInfo["sourceCFileName"] + " : " + webAddress;
+        }
+        else if (currentSource === "d") {
+            listItem.innerText = checkResults.sourceInfo["sourceDFileName"] + " : " + webAddress;
+        }
 
         webAddressList.appendChild(listItem);
         
@@ -846,6 +550,12 @@ let ReferenceManager = {
            
             var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
             value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
+            if (checkResults.sourceInfo["sourceCFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceCFileName"] + " : ", "");
+            }
+            if (checkResults.sourceInfo["sourceDFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceDFileName"] + " : ", "");
+            }
 
             const BrowserWindow = require('electron').remote.BrowserWindow;
             win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
@@ -882,6 +592,13 @@ let ReferenceManager = {
         else if (currentSource === "b") {
             listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + doc;
         }
+        else if (currentSource === "c") {
+            listItem.innerText = checkResults.sourceInfo["sourceCFileName"] + " : " + doc;
+        }
+        else if (currentSource === "d") {
+            listItem.innerText = checkResults.sourceInfo["sourceDFileName"] + " : " + doc;
+        }
+
         documentList.appendChild(listItem);
 
         listItem.onclick = function () {
@@ -901,6 +618,13 @@ let ReferenceManager = {
 
             var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
             value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
+            if (checkResults.sourceInfo["sourceCFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceCFileName"] + " : ", "");
+            }
+            if (checkResults.sourceInfo["sourceDFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceDFileName"] + " : ", "");
+            }
+
             var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
             win.loadURL(docUrl);
         }
@@ -933,6 +657,13 @@ let ReferenceManager = {
         else if (currentSource === "b") {
             listItem.innerText = checkResults.sourceInfo["sourceBFileName"] + " : " + image;
         }
+        else if (currentSource === "c") {
+            listItem.innerText = checkResults.sourceInfo["sourceCFileName"] + " : " + image;
+        }
+        else if (currentSource === "d") {
+            listItem.innerText = checkResults.sourceInfo["sourceDFileName"] + " : " + image;
+        }
+
         imageList.appendChild(listItem);
 
         listItem.onclick = function () {
@@ -951,6 +682,13 @@ let ReferenceManager = {
 
             var value = this.innerText.replace(checkResults.sourceInfo["sourceAFileName"] + " : ", "");
             value = value.replace(checkResults.sourceInfo["sourceBFileName"] + " : ", "");
+            if (checkResults.sourceInfo["sourceCFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceCFileName"] + " : ", "");
+            }
+            if (checkResults.sourceInfo["sourceDFileName"]) {
+                value = value.replace(checkResults.sourceInfo["sourceDFileName"] + " : ", "");
+            }
+
             var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
             win.loadURL(docUrl);
         }
@@ -988,6 +726,12 @@ let ReferenceManager = {
         }
         else if (currentSource === "b") {
             bold.textContent = checkResults.sourceInfo["sourceBFileName"] + " : " + commentData.value;
+        }
+        else if (currentSource === "c") {
+            bold.textContent = checkResults.sourceInfo["sourceCFileName"] + " : " + commentData.value;
+        }
+        else if (currentSource === "d") {
+            bold.textContent = checkResults.sourceInfo["sourceDFileName"] + " : " + commentData.value;
         }
 
         commentValue.appendChild(bold);
