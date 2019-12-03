@@ -3,7 +3,7 @@ var DrawerMenu = {
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
-            height: "50%",
+            height: "355px",
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
