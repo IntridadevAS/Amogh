@@ -3,7 +3,7 @@ var LoginPageDrawerMenu = {
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
-            height: "50%",
+            height: "210px",
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
