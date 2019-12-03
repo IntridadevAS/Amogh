@@ -98,7 +98,7 @@ var xCheckStudio;
             // if component is mot mapped i.e. undefined, then 
             // don't override the parent's highlight color
             if (parentComponent &&
-                status.toLowerCase() === "undefined") {
+                status.toLowerCase() === "undefined" || status.toLowerCase() === "not checked") {
                 return undefined;
             }
 
