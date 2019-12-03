@@ -73,32 +73,20 @@ var xCheckStudio;
             if (override && parentComponent) {
                 if (parentComponent.Status.toLowerCase().includes("error")) {
 
-                    if (parentComponent.accepted.toLowerCase() != 'true' ||
-                        parentComponent.transpose !== 'FromDataSource1' ||
-                        parentComponent.transpose !== 'FromDataSource2' ||
-                        parentComponent.transpose !== 'FromDataSource3' ||
-                        parentComponent.transpose !== 'FromDataSource4') {
+                    if (parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) {
                         return HoopsViewerErrorColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("warning")) {
 
-                    if ((parentComponent.accepted.toLowerCase() != 'true' ||
-                    parentComponent.transpose !== 'FromDataSource1' ||
-                    parentComponent.transpose !== 'FromDataSource2' ||
-                    parentComponent.transpose !== 'FromDataSource3' ||
-                    parentComponent.transpose !== 'FromDataSource4') &&
+                    if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
                         status.toLowerCase() !== "error") {
                         return HoopsViewerWarningColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("no match")) {
 
-                    if ((parentComponent.accepted.toLowerCase() != 'true' ||
-                    parentComponent.transpose !== 'FromDataSource1' ||
-                    parentComponent.transpose !== 'FromDataSource2' ||
-                    parentComponent.transpose !== 'FromDataSource3' ||
-                    parentComponent.transpose !== 'FromDataSource4') &&
+                    if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
                         (status.toLowerCase() !== "error" ||
                             status.toLowerCase() !== "warning")) {
 
@@ -123,7 +111,7 @@ var xCheckStudio;
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
-                    return PropertyAcceptedColor;
+                    return AcceptedColor;
                 }
                 else {
                     return HoopsViewerErrorColor;
@@ -134,7 +122,7 @@ var xCheckStudio;
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
-                    return PropertyAcceptedColor;
+                    return AcceptedColor;
                 }
                 else {
                     return HoopsViewerWarningColor;
@@ -145,7 +133,7 @@ var xCheckStudio;
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
-                    return PropertyAcceptedColor;
+                    return AcceptedColor;
                 }
                 else {
                     return NoMatchColor;
@@ -156,7 +144,7 @@ var xCheckStudio;
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
-                    return PropertyAcceptedColor;
+                    return AcceptedColor;
                 }
                 else {
                     return NoValueColor;
