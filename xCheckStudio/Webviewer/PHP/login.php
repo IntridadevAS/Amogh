@@ -11,22 +11,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");    
         $query =  "select * from LoginInfo where username='".$name."' and password='".$password."'";
         foreach ($dbh->query($query) as $row)
-        {
-            if ($row[7] === "1"){
+        {           
+            if ($row["lock"] === "1"){                
                 $dbh = null;
                 echo "Locked";
+                echo $row["lock"];
                 return;
             }
-            if($password == $row[2])
+            if($password == $row["password"])
             {
                 $array = array(
-                    "userid" => $row[0],
-                    "username" => $row[1],
-                    "alias"   => $row[4],
-                    "type"  => $row[3],
-                    "permission"  => $row[5],
+                    "userid" => $row["userid"],
+                    "username" => $row["username"],
+                    "alias"   => $row["alias"],
+                    "type"  => $row["type"],
+                    "permission"  => $row["permission"],
                 );
-                InsertLock($dbh, $row[0]);
+                InsertLock($dbh, $row["userid"]);
                 echo json_encode($array);
                 $dbh = null;
                 return;
