@@ -44,39 +44,39 @@ function ResetExportOptionsForm() {
     $("#modelBrowserExportSwitch").dxSwitch("instance").reset();
     $("#reviewResultsExportSwitch").dxSwitch("instance").reset();
 
-    if($("#comparisonTables").dxDataGrid("instance")) {
+    if(checkResults["Comparisons"].length > 0) {
         $("#comparisonTables").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#complianceSource1tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 0 && checkResults["Compliances"][0].source == checkResults.sourceInfo.sourceAFileName) {
         $("#complianceSource1tables").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#complianceSource2tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 1 && checkResults["Compliances"][1].source == checkResults.sourceInfo.sourceBFileName) {
         $("#complianceSource2tables").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#complianceSource3tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 2 &&  checkResults["Compliances"][2].source == checkResults.sourceInfo.sourceCFileName) {
         $("#complianceSource3tables").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#complianceSource4tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 3 && checkResults["Compliances"][3].source == checkResults.sourceInfo.sourceDFileName) {
         $("#complianceSource4tables").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#dataset1").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceAFileName !== null) {
         $("#dataset1").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#dataset2").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceBFileName !== null) {
         $("#dataset2").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#dataset3").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceCFileName !== null) {
         $("#dataset3").dxDataGrid("instance").clearSelection();
     }
 
-    if($("#dataset4").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceCFileName !== null) {
         $("#dataset4").dxDataGrid("instance").clearSelection();
     }
 }
@@ -305,19 +305,19 @@ function CreateReviewExportForm() {
             tableData.push(obj);
         }
 
-        if(id == 0) {
+        if(Compliances[id]["source"] == checkResults.sourceInfo.sourceAFileName) {
             document.getElementById("complianceDataset1Name").innerText = Compliances[id].source;
             complianceAExportManager.CreateTables("complianceSource1tables", columnHeaders, tableData);
         }
-        if(id == 1) {
+        if(Compliances[id]["source"] == checkResults.sourceInfo.sourceBFileName) {
             document.getElementById("complianceDataset2Name").innerText = Compliances[id].source;
             complianceBExportManager.CreateTables("complianceSource2tables", columnHeaders, tableData);
         }
-        if(id == 2) {
+        if(Compliances[id]["source"] == checkResults.sourceInfo.sourceCFileName) {
             document.getElementById("complianceDataset3Name").innerText = Compliances[id].source;
             complianceCExportManager.CreateTables("complianceSource3tables", columnHeaders, tableData);
         }
-        if(id == 3) {
+        if(Compliances[id]["source"] == checkResults.sourceInfo.sourceDFileName) {
             document.getElementById("complianceDataset4Name").innerText = Compliances[id].source;
             complianceDExportManager.CreateTables("complianceSource4tables", columnHeaders, tableData);
         }
