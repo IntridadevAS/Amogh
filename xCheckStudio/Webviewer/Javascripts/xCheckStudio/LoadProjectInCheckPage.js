@@ -52,28 +52,30 @@ function loadCheckSpaceForCheck(data) {
         comparisonCB.checked = true;
     }
 
-     // get array of datasets allowed by checkcase
-     var checkCaseData = JSON.parse(data.checkCaseInfo.checkCaseData);    
-     model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
+    // get array of datasets allowed by checkcase
+    if (data.checkCaseInfo) {
+        var checkCaseData = JSON.parse(data.checkCaseInfo.checkCaseData);
+        model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
+    }
 
-     // maintaint the dataset types
-     var sourceViewerOptions = data["sourceViewerOptions"];
-     if (sourceViewerOptions) {
-         var datasetTypes = [];
-         for (var srcId in sourceViewerOptions) {
-             datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
-         }
-         model.datasetTypes = datasetTypes;
-     }
+    // maintaint the dataset types
+    var sourceViewerOptions = data["sourceViewerOptions"];
+    if (sourceViewerOptions) {
+        var datasetTypes = [];
+        for (var srcId in sourceViewerOptions) {
+            datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
+        }
+        model.datasetTypes = datasetTypes;
+    }
 
     // load data sets 
     loadDataSets(data);
     
     // hide add new data source button  
-    if( model.checkcaseSupportedTypes.length === Object.keys(data.sourceViewerOptions).length)
-    {
-        viewTabs.hideAddTab();   
-    }
+    // if( model.checkcaseSupportedTypes.length === Object.keys(data.sourceViewerOptions).length)
+    // {
+    //     viewTabs.hideAddTab();   
+    // }
 }
 
 function loadDataSets(data) {
