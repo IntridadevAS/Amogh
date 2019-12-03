@@ -47,22 +47,22 @@
         return;
     }
 
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) 
+    // if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) 
+    // {
+    $dataToSave = $currentSource."_referenceData"."/".basename($target_file);        
+    if(AddDocumentReference($projectName, $checkName, $dataToSave))
     {
-        $dataToSave = $currentSource."_referenceData"."/".basename($target_file);        
-        if(AddDocumentReference($projectName, $checkName, $dataToSave))
-        {
-            echo $dataToSave;
-        }
-        else
-        {
-            echo "fail"; 
-        }        
+        echo $dataToSave;
     }
-     else 
+    else
     {
-        echo "fail";
-    }
+        echo "fail"; 
+    }        
+    // }
+    //  else 
+    // {
+    //     echo "fail 64";
+    // }
 
    
     function AddDocumentReference($projectName, $checkName, 
