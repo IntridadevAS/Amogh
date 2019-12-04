@@ -319,34 +319,6 @@ ComplianceCheckResultsTable.prototype.CreateTable = function(groupId, components
     this.CheckTableIds[groupId] = id;
 }
 
-ComplianceCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var dataGrid = $("#" + containerId).dxDataGrid("instance");
-    var mainReviewTableRows = dataGrid.getVisibleRows();
-
-    var highlightedRowKey = "0";
-
-    if(model.getCurrentSelectionManager().HighlightedCheckComponentRow)
-        highlightedRowKey =  model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
-
-    for (var i = 0; i < mainReviewTableRows.length; i++) {
-        if(!mainReviewTableRows[i].isSelected && mainReviewTableRows[i].key !== highlightedRowKey) {
-            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
-            if (currentRow[0].cells.length < 3) {
-                return;
-            }
-            var status = dataGrid.cellValue(mainReviewTableRows[i].rowIndex, ComplianceColumns.Status)
-            model.checks["compliance"]["selectionManager"].ChangeBackgroundColor(currentRow[0], status);
-        }
-        else if(mainReviewTableRows[i].key == highlightedRowKey) {
-            var currentRow = dataGrid.getRowElement(mainReviewTableRows[i].rowIndex);
-            if (currentRow[0].cells.length < 3) {
-                return;
-            }
-            model.getCurrentSelectionManager().ApplyHighlightColor(currentRow[0]);
-        }
-    }
-}
-
 ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHeaders, tableData, viewerContainer) {
     var _this = this;
 
@@ -373,7 +345,6 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             }, 
             paging: { enabled: false },
             onContentReady: function(e) {
-                _this.highlightMainReviewTableFromCheckStatus(viewerContainer.replace("#", ""));
                 model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
             },
             onInitialized: function(e) {
@@ -415,6 +386,24 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0], viewerContainer);
                 model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id)
             },
+            onRowPrepared: function (e) {
+                if (e.rowType !== "data") {
+                    return;
+                }
+
+                var highlightedRowKey;
+                if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+                    highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
+                }
+
+                if (e.key == highlightedRowKey) {
+                    model.getCurrentSelectionManager().ApplyHighlightColor(e.rowElement[0]);
+                }
+                else {
+                    var status = e.data["Status"];
+                    model.getCurrentSelectionManager().ChangeBackgroundColor(e.rowElement[0], status);
+                }
+            }
         });
     });
 };

@@ -100,22 +100,6 @@ ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, co
     return btn;
 }
 
-ComplianceReviewManager.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var mainReviewTableContainer = document.getElementById(containerId);
-    // jsGridHeaderTableIndex = 0 
-    // jsGridTbodyTableIndex = 1
-    var mainReviewTableRows = mainReviewTableContainer.children[0].getElementsByTagName("tr");
-
-    for (var i = 0; i < mainReviewTableRows.length; i++) {
-        var currentRow = mainReviewTableRows[i];
-        if (currentRow.cells.length === 1) {
-            return;
-        }
-        var status = currentRow.cells[ComplianceColumns.Status].innerHTML;
-        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow, status);
-    }
-}
-
 ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
     // var commentDiv = document.getElementById(this.DetailedReviewRowCommentDiv);
     // commentDiv.innerHTML = "";
@@ -133,7 +117,7 @@ ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
         model.checks["compliance"]["viewer"].ShowSheetDataInViewer(Compliance.ViewerContainer, sheetName, rowData);
     }
     else if (this.ViewerData["endPointUri"] !== undefined) {
-        this.HighlightComponentInGraphicsViewer(rowData)
+        this.HighlightComponentInGraphicsViewer(sheetName, rowData)
     }
 }
 
@@ -582,10 +566,10 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordion, Action
     }
 }
 
-ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (currentReviewTableRowData) {    
+ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (sheetName, currentReviewTableRowData) {    
     // highlight component in graphics view in both viewer
     var nodeId = currentReviewTableRowData.NodeId;
-    model.checks["compliance"]["viewer"].highlightComponent(nodeId);
+    model.checks["compliance"]["viewer"].highlightComponent(Compliance.ViewerContainer, sheetName, currentReviewTableRowData, nodeId);
 }
 
 
