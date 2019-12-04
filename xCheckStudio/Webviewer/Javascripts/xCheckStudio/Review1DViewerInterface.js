@@ -559,6 +559,9 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
         }
 
         if (selectedComponentName === componentName) {
+            if(this.SelectedSheetRow) {
+                model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, currentReviewTableRowData.Status);
+            }
             this.HighlightSheetDataRow(viewerContainer, row);
             // scroll to rowElement
             dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});

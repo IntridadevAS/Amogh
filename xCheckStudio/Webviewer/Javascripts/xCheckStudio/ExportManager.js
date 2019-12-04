@@ -88,23 +88,23 @@ function DisableReviewExportForm() {
     $("#reportNameTextBox").dxTextBox("instance").option("disabled", true);
     $("#reviewResultsExportSwitch").dxSwitch("instance").option("disabled", true);
 
-    if($("#comparisonTables").dxDataGrid("instance")) {
+    if(checkResults["Comparisons"].length > 0) {
         $("#comparisonTables").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#complianceSource1tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 0 && checkResults["Compliances"][0].source == checkResults.sourceInfo.sourceAFileName) {
         $("#complianceSource1tables").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#complianceSource2tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 1 && checkResults["Compliances"][1].source == checkResults.sourceInfo.sourceBFileName) {
         $("#complianceSource2tables").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#complianceSource3tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 2 &&  checkResults["Compliances"][2].source == checkResults.sourceInfo.sourceCFileName) {
         $("#complianceSource3tables").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#complianceSource4tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 3 && checkResults["Compliances"][3].source == checkResults.sourceInfo.sourceDFileName) {
         $("#complianceSource4tables").dxDataGrid("instance").option("disabled", true);
     }
 
@@ -119,23 +119,23 @@ function EnableReviewExportForm() {
 
     
     
-    if($("#comparisonTables").dxDataGrid("instance")) {
+    if(checkResults["Comparisons"].length > 0) {
         $("#comparisonTables").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#complianceSource1tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 0 && checkResults["Compliances"][0].source == checkResults.sourceInfo.sourceAFileName) {
         $("#complianceSource1tables").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#complianceSource2tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 1 && checkResults["Compliances"][1].source == checkResults.sourceInfo.sourceBFileName) {
         $("#complianceSource2tables").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#complianceSource3tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 2 &&  checkResults["Compliances"][2].source == checkResults.sourceInfo.sourceCFileName) {
         $("#complianceSource3tables").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#complianceSource4tables").dxDataGrid("instance")) {
+    if(checkResults["Compliances"].length > 3 && checkResults["Compliances"][3].source == checkResults.sourceInfo.sourceDFileName) {
         $("#complianceSource4tables").dxDataGrid("instance").option("disabled", false);
     }
 }
@@ -143,19 +143,19 @@ function EnableReviewExportForm() {
 function EnableModelBrowserExportForm() {
     $("#modelBrowserExportSwitch").dxSwitch("instance").option("disabled", false);
 
-    if($("#dataset1").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceAFileName !== null) {
         $("#dataset1").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#dataset2").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceBFileName !== null) {
         $("#dataset2").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#dataset3").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceCFileName !== null) {
         $("#dataset3").dxDataGrid("instance").option("disabled", false);
     }
 
-    if($("#dataset4").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceDFileName !== null) {
         $("#dataset4").dxDataGrid("instance").option("disabled", false);
     }
 }
@@ -164,19 +164,19 @@ function DisableModelBrowserExportForm() {
 
     $("#modelBrowserExportSwitch").dxSwitch("instance").option("disabled", true);
 
-    if($("#dataset1").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceAFileName !== null) {
         $("#dataset1").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#dataset2").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceBFileName !== null) {
         $("#dataset2").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#dataset3").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceCFileName !== null) {
         $("#dataset3").dxDataGrid("instance").option("disabled", true);
     }
 
-    if($("#dataset4").dxDataGrid("instance")) {
+    if(checkResults.sourceInfo.sourceDFileName !== null) {
         $("#dataset4").dxDataGrid("instance").option("disabled", true);
     }
 }

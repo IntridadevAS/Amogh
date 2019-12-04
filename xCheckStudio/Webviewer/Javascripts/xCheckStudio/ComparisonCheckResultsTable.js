@@ -366,37 +366,6 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
     return tableData;
 }
 
-ComparisonCheckResultsTable.prototype.highlightMainReviewTableFromCheckStatus = function (containerId) {
-    var dataGrid = $(containerId).dxDataGrid("instance");
-    var mainReviewTableRows = dataGrid.getVisibleRows();
-    var highlightedRowKey = "0";
-
-    if(model.getCurrentSelectionManager().HighlightedCheckComponentRow)
-        highlightedRowKey =  model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
-
-    for (var i = 0; i < mainReviewTableRows.length; i++) {
-        var reviewRow = mainReviewTableRows[i];
-        var reviewRowElement = dataGrid.getRowElement(reviewRow.rowIndex);
-
-        if(!reviewRow.isSelected && reviewRow.key !== highlightedRowKey) {
-           
-            // if (reviewRowElement[0].cells.length < 3) {
-            //     return;
-            // }    
-            
-            var status = reviewRow.data[ComparisonColumnNames.Status];
-            model.getCurrentSelectionManager().ChangeBackgroundColor(reviewRowElement[0], status);
-        }
-        else if(reviewRow.key == highlightedRowKey) {           
-            // if (currentRow[0].cells.length < 3) {
-            //     return;
-            // }
-            model.getCurrentSelectionManager().ApplyHighlightColor(reviewRowElement[0]);
-        }
-    }
-}
-
-
 ComparisonCheckResultsTable.prototype.populateReviewTable = function () {
     var _this = this;
     var ComparisonTableData = model.getCurrentReviewManager().ComparisonCheckManager;
@@ -483,7 +452,6 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             },
             paging: { enabled: false },
             onContentReady: function (e) {
-                //_this.highlightMainReviewTableFromCheckStatus(containerDiv);
                 model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
             },
             onCellPrepared: function (e) {
@@ -537,7 +505,7 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                     highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
                 }
 
-                if (e.isSelected || e.key == highlightedRowKey) {
+                if (e.key == highlightedRowKey) {
                     model.getCurrentSelectionManager().ApplyHighlightColor(e.rowElement[0]);
                 }
                 else {

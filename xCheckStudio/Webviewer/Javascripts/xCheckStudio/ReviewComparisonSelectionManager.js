@@ -16,8 +16,6 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         // if check component is selected and and selected 
         // component row doesn't exist already
 
-        // highlight selected row
-        this.ApplyHighlightColor(currentRow);
 
         // keep track of selected component row
         this.AddSelectedComponent({
@@ -30,7 +28,6 @@ ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         var grid =  $(tableId).dxDataGrid("instance");
         var data =  grid.getDataSource().items();
         var rowData = data[currentRow.rowIndex];
-        this.RemoveHighlightColor(currentRow, rowData[ComparisonColumnNames.Status]);
 
         // remove current row from selected rows array
         this.RemoveSelectedComponent (rowKey, tableId);        
@@ -67,8 +64,7 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     }
 
 
-    if (highlightedRow &&
-        !this.ComponentSelected(highlightedRow["rowKey"], highlightedRow["tableId"])) {
+    if (highlightedRow) {
         var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         var data = dataGrid.getDataSource().items();
