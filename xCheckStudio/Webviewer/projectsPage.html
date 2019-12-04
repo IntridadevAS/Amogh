@@ -895,12 +895,18 @@
   <script>
 
     window.onload = function () {
-      setPageTitle();
-      setUserName();
+        setPageTitle();
+        setUserName();
 
-      // create drawer menu
-      DrawerMenu.create(["check", "projects", "output", "reports"]);
-    }
+        // create drawer menu
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+        var disabledMenuItem = ["check", "projects", "output", "reports"];
+        if (userinfo.type.toLowerCase() !== 'admin') {
+          disabledMenuItem.push("prep");
+        }
+
+        DrawerMenu.create(disabledMenuItem);
+      }
 
     function OnCreateProject() {
       var projectname = document.getElementById("inputprojectname").value;
