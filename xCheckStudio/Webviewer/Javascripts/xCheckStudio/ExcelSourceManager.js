@@ -40,7 +40,7 @@ ExcelSourceManager.prototype.LoadData = function (file) {
                                              _this.ModelBrowsercontainer, 
                                             _this.ViewerContainer, 
                                             excelReader.SheetData);
-      _this.ModelTree.CreateModelBrowser();
+      _this.ModelTree.CreateModelBrowser(_this.SourceProperties);
      
       return resolve(true);
 
@@ -61,7 +61,7 @@ ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, select
     this.ViewerContainer, 
     excelReader.SheetData,
     selectedComponents);
-    this.ModelTree.CreateModelBrowser();
+    this.ModelTree.CreateModelBrowser(this.SourceProperties);
 }
 
 ExcelSourceManager.prototype.ClearSource = function () {

@@ -2,7 +2,8 @@ function GenericComponent(name,
                            mainComponentClass, 
                            subComponentClass,                          
                            nodeId,
-                           parentNodeId)
+                           parentNodeId,
+                           componentId)
 {
     this.Name = name;  
     this.MainComponentClass = mainComponentClass;
@@ -12,7 +13,7 @@ function GenericComponent(name,
     
     this.NodeId = nodeId;
    
-    this.ID = undefined;
+    this.ID = componentId;
 
     this.properties=[];
     GenericComponent.prototype.addProperty = function(genericProperty)

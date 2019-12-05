@@ -83,7 +83,7 @@ function DBReader() {
     DBReader.prototype.ProcessDBData = function (Db_data) {
        
         var sourceProperties = [];
-       
+        var componentId = 1;
         for (var i = 0; i < Db_data.length; i++) {
             var sourcePropertiesTemp = {};
             var rows = Db_data[i].properties;
@@ -148,7 +148,10 @@ function DBReader() {
                 // create generic properties object
                 var genericPropertiesObject = new GenericComponent(name,
                     mainComponentClass,
-                    subComponentClass);
+                    subComponentClass,
+                    undefined,
+                    undefined,
+                    componentId);
     
                 // add component class as generic property
                 var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
@@ -174,6 +177,7 @@ function DBReader() {
                 }
     
                 sourceProperties.push(genericPropertiesObject)
+                componentId++;
             }
             this.DBData[mainComponentClass] = sourcePropertiesTemp;
         }

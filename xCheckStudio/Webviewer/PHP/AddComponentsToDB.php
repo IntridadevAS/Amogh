@@ -95,7 +95,8 @@
                 subclass TEXT NOT NULL,
                 nodeid INTEGER,
                 ischecked TEXT,
-                parentid INTEGER
+                parentid INTEGER,
+                componentid INTEGER
               )';         
              $dbh->exec($command);                                                            
                        
@@ -119,14 +120,15 @@
             {
                 $component = $ComponentsList[$i];
 
-                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES(?,?,?,?,?,?) ';    
+                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid, componentid) VALUES(?,?,?,?,?,?,?) ';    
                
                 $name = $component->Name;
                 $mainComponentClass = $component->MainComponentClass;
                 $subComponentClass = $component->SubComponentClass;
                 $nodeId = $component->NodeId;
                 $parentNodeId = $component->ParentNodeId;
-                $values = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId);
+                
+                $values = array($name,  $mainComponentClass, $subComponentClass, $nodeId, 'true', $parentNodeId, NULL);
                
                 $stmt = $dbh->prepare($qry);
                 $stmt->execute($values);  
@@ -234,7 +236,8 @@
                 subclass TEXT NOT NULL,
                 nodeid INTEGER,
                 ischecked TEXT,
-                parentid INTEGER
+                parentid INTEGER,
+                componentid INTEGER
               )';         
              $dbh->exec($command);                                                            
 
@@ -257,13 +260,15 @@
              $componentIdvsDataList = array();
             for ($i = 0; $i < count($ComponentsList); $i++) {
                 $component = $ComponentsList[$i];
+                // var_dump($component);
 
-                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid) VALUES(?,?,?,?,?,?) ';    
+                $qry = 'INSERT INTO '.$componentsTableName. '(name, mainclass, subclass, nodeid, ischecked, parentid, componentid) VALUES(?,?,?,?,?,?,?) ';    
                
                 $name = $component->Name;
                 $mainComponentClass = $component->MainComponentClass;
                 $subComponentClass = $component->SubComponentClass;
-                $values = array($name,  $mainComponentClass, $subComponentClass, NULL, 'true', NULL);
+                $componentId = $component->ComponentId;
+                $values = array($name,  $mainComponentClass, $subComponentClass, NULL, 'true', NULL, $componentId);
                
                 $stmt = $dbh->prepare($qry);
                 $stmt->execute($values);  

@@ -53,9 +53,9 @@ DBModelBrowser.prototype.CreateHeaders = function () {
             width = "0%";
             visible =  false;
         }
-        else if(i == ModelBrowserColumns1D.RowKey) {
-            caption = ModelBrowserColumnNames1D.RowKey;
-            dataField = ModelBrowserColumnNames1D.RowKey.replace(/\s/g, '');
+        else if(i == ModelBrowserColumns1D.ComponentId) {
+            caption = ModelBrowserColumnNames1D.ComponentId;
+            dataField = ModelBrowserColumnNames1D.ComponentId.replace(/\s/g, '');
             width = "0%";
             visible =  false;
         }
@@ -73,85 +73,114 @@ DBModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-DBModelBrowser.prototype.CreateModelBrowserTable = function () {
+DBModelBrowser.prototype.CreateModelBrowserTable = function (sourceProperties) {
+    if(sourceProperties !== null) {
+        var _this = this;
 
-    if (!this.DBData) {
-        return;
-    }
-    // var _this = this;
+        var columnHeaders = this.CreateHeaders();
+        tableData = [];
+        
+        for(var componentId in sourceProperties) {
+            var component = sourceProperties[componentId];
+            if(component.MainComponentClass !== undefined && component.Name != undefined) {
+                tableRowContent = {};
+                tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = component.Name;
+                tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = component.MainComponentClass;
+                tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = component.SubComponentClass;
+                var description = "";
+                for (var j = 0; j < component.properties.length; j++) {
+                    var properties = component.properties[j];
+                    if (properties["Name"] === "Description") {
 
-    var columnHeaders = this.CreateHeaders();
-
-    tableData = [];
-    //add each sheet to model browser 
-    // iterate over sheets from excel file
-    // filename.split('.')[0]
-    var rowKey = 1;
-    for (var component in this.DBData) {
-        var mainComponentClass = component;
-        var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
-        var styleList = undefined;
-        var componentStyleClass = this.GetComponentstyleClass(mainComponentStyleClass);
-        //set  row data 
-        var rowData = [];
-        rowData.push(mainComponentClass);
-        rowData.push("");
-        rowData.push("");
-        rowData.push("");
-
-        //add sheet names as 1st parent(collapsible row)
-        // this.addComponentRow(styleList, componentStyleClass, rowData);
-        var parentMainClassStyleList = componentStyleClass;
-
-        //iterate over each component class in sheet
-        for (var component in this.DBData[mainComponentClass]) {
-            styleList = parentMainClassStyleList;
-            var subComponentClass = component;
-            var subComponentStyleClass = subComponentClass + "_" + this.ModelBrowserContainer;
-            componentStyleClass = this.GetComponentstyleClass(subComponentStyleClass);
-
-            //add component class as second level parent(collapsible row)
-            //iterate over each component having same component class 
-            var children = this.DBData[mainComponentClass][subComponentClass];
-            for (i = 0; i < children.length; i++) {
-                if (styleList !== undefined) {
-                    styleList = styleList + " " + componentStyleClass;
-                }
-                else {
-                    styleList = componentStyleClass;
-                }
-                var child = children[i];
-                var name = child.Name;
-                var rowData = [];
-
-                //if component name or main component class is undefined then only add compoment row to model browser
-                if (name !== undefined && mainComponentClass !== undefined) {
-
-                    tableRowContent = {};
-                    tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
-                    tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
-                    tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
-
-
-                    var description = "";
-                    for (var j = 0; j < child.properties.length; j++) {
-                        var childProperties = child.properties[j];
-                        if (childProperties["Name"] === "Description") {
-
-                            description = childProperties["Value"];
-                            break;
-                        }
+                        description = properties["Value"];
+                        break;
                     }
-                    tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
-                    tableRowContent[ModelBrowserColumnNames1D.RowKey.replace(/\s/g, '')] = rowKey;
-                    tableData.push(tableRowContent);
-                    rowKey++;
                 }
+                tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
+                tableRowContent[ModelBrowserColumnNames1D.ComponentId.replace(/\s/g, '')] = component.ID;
+                tableData.push(tableRowContent);
             }
         }
-    }
 
-    this.LoadModelBrowserTable(columnHeaders, tableData);
+        this.LoadModelBrowserTable(columnHeaders, tableData);
+    } 
+    // if (!this.DBData) {
+    //     return;
+    // }
+    // // var _this = this;
+
+    // var columnHeaders = this.CreateHeaders();
+
+    // tableData = [];
+    // //add each sheet to model browser 
+    // // iterate over sheets from excel file
+    // // filename.split('.')[0]
+    // var rowKey = 1;
+    // for (var component in this.DBData) {
+    //     var mainComponentClass = component;
+    //     var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
+    //     var styleList = undefined;
+    //     var componentStyleClass = this.GetComponentstyleClass(mainComponentStyleClass);
+    //     //set  row data 
+    //     var rowData = [];
+    //     rowData.push(mainComponentClass);
+    //     rowData.push("");
+    //     rowData.push("");
+    //     rowData.push("");
+
+    //     //add sheet names as 1st parent(collapsible row)
+    //     // this.addComponentRow(styleList, componentStyleClass, rowData);
+    //     var parentMainClassStyleList = componentStyleClass;
+
+    //     //iterate over each component class in sheet
+    //     for (var component in this.DBData[mainComponentClass]) {
+    //         styleList = parentMainClassStyleList;
+    //         var subComponentClass = component;
+    //         var subComponentStyleClass = subComponentClass + "_" + this.ModelBrowserContainer;
+    //         componentStyleClass = this.GetComponentstyleClass(subComponentStyleClass);
+
+    //         //add component class as second level parent(collapsible row)
+    //         //iterate over each component having same component class 
+    //         var children = this.DBData[mainComponentClass][subComponentClass];
+    //         for (i = 0; i < children.length; i++) {
+    //             if (styleList !== undefined) {
+    //                 styleList = styleList + " " + componentStyleClass;
+    //             }
+    //             else {
+    //                 styleList = componentStyleClass;
+    //             }
+    //             var child = children[i];
+    //             var name = child.Name;
+    //             var rowData = [];
+
+    //             //if component name or main component class is undefined then only add compoment row to model browser
+    //             if (name !== undefined && mainComponentClass !== undefined) {
+
+    //                 tableRowContent = {};
+    //                 tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
+    //                 tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
+    //                 tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
+
+
+    //                 var description = "";
+    //                 for (var j = 0; j < child.properties.length; j++) {
+    //                     var childProperties = child.properties[j];
+    //                     if (childProperties["Name"] === "Description") {
+
+    //                         description = childProperties["Value"];
+    //                         break;
+    //                     }
+    //                 }
+    //                 tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
+    //                 tableRowContent[ModelBrowserColumnNames1D.ComponentId.replace(/\s/g, '')] = rowKey;
+    //                 tableData.push(tableRowContent);
+    //                 rowKey++;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // this.LoadModelBrowserTable(columnHeaders, tableData);
 }
 
 DBModelBrowser.prototype.GetModelBrowserHeaderTable = function () {
@@ -183,12 +212,13 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
     tableData) {
 
     var _this = this;
+    var loadingBrower = true;
 
     var containerDiv = "#" + this.ModelBrowserContainer;
     $(function () {
         $(containerDiv).dxDataGrid({
             dataSource: tableData,
-            keyExpr: "RowKey",
+            keyExpr: ModelBrowserColumnNames1D.ComponentId,
             columns: columnHeaders,
             columnAutoWidth: true,
             columnResizingMode: 'widget',
@@ -216,6 +246,13 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                   
                 _this.ShowItemCount(tableData.length);
             },
+            onContentReady: function (e) {
+                if(loadingBrower && _this.SelectionManager.ComponentIdvsSelectedComponents)
+                {
+                    e.component.selectRows(Object.keys(_this.SelectionManager.ComponentIdvsSelectedComponents));
+                }
+                loadingBrower = false;
+            },  
             onSelectionChanged: function (e) {
                 if(e.currentSelectedRowKeys.length > 0) {
                     for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {

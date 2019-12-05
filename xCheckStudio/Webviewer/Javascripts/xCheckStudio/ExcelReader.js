@@ -34,7 +34,8 @@ function ExcelReader() {
             {
                 for(var i = 0; i < properties.length; i++)
                 {
-                    sourceProperties[ Object.keys(sourceProperties).length] = properties[i];                   
+                    properties[i]["ID"] = Object.keys(sourceProperties).length + 1;
+                    sourceProperties[Object.keys(sourceProperties).length + 1] = properties[i];                   
                 }                
             }
         });
@@ -152,7 +153,7 @@ function ExcelReader() {
 
     ExcelReader.prototype.RestoreSheetData = function (classWiseComponents) {
 
-        var sourceProperties = [];
+        var sourceProperties = {};
         for (var mainClass in classWiseComponents) {
             var sourcePropertiesTemp = {};
 
@@ -192,7 +193,7 @@ function ExcelReader() {
                     sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
                 }
 
-                sourceProperties.push(genericPropertiesObject)
+                sourceProperties[genericPropertiesObject.ID] = genericPropertiesObject;
             }
 
             this.SheetData[mainClass] = sourcePropertiesTemp;

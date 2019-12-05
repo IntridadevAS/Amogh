@@ -344,14 +344,15 @@
                 else
                 {
                     // class wise components             
-                    if(array_key_exists($component['mainClass'], $nodeIdwiseComponents))
-                    {
-                        array_push($nodeIdwiseComponents[$component['mainClass']], $comp );
-                    }
-                    else
-                    {
-                        $nodeIdwiseComponents[$component['mainClass']] = array( $comp );
-                    }
+                    // if(array_key_exists($component['mainClass'], $nodeIdwiseComponents))
+                    // {
+                    //     array_push($nodeIdwiseComponents[$component['mainClass']], $comp );
+                    // }
+                    // else
+                    // {
+                    //     $nodeIdwiseComponents[$component['mainClass']] = array( $comp );
+                    // }
+                    $nodeIdwiseComponents[$component['componentId']] =  $comp;
                 }
             }    
         }
@@ -1316,12 +1317,13 @@
                 mainClass TEXT NOT NULL,
                 subClass TEXT NOT NULL,
                 nodeId INTEGER,
-                mainComponentId INTEGER
+                mainComponentId INTEGER,
+                componentId INTEGER
                 )';         
             $toDbh->exec($command);   
             
             $insertStmt = $toDbh->prepare("INSERT INTO ". $tableName. "(id, name, mainClass, subClass, 
-                        nodeId, mainComponentId) VALUES(?,?,?,?,?,?)");
+                        nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1331,7 +1333,8 @@
                                         $row['mainClass'],
                                         $row['subClass'], 
                                         $row['nodeId'], 
-                                        $row['mainComponentId']));
+                                        $row['mainComponentId'],
+                                        $row['componentId']));
             }                    
         }  
     }
@@ -1481,12 +1484,13 @@
                 subclass TEXT NOT NULL,
                 nodeid INTEGER,
                 ischecked TEXT,
-                parentid INTEGER
+                parentid INTEGER,
+                componentid INTEGER
             )';         
             $tempDbh->exec($command);    
 
             $insertComponentStmt = $tempDbh->prepare("INSERT INTO ".$componentTable."(id, name, mainclass, subclass, nodeid, 
-                        ischecked, parentid) VALUES(?,?,?,?,?,?,?)");
+                        ischecked, parentid, componentid) VALUES(?,?,?,?,?,?,?,?)");
         
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -1497,7 +1501,8 @@
                                         $row['subclass'], 
                                         $row['nodeid'], 
                                         $row['ischecked'],
-                                        $row['parentid']));
+                                        $row['parentid'],
+                                        $row['componentid']));
             }  
             
             // save properties

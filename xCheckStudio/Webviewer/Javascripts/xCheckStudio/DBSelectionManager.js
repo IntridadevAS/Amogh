@@ -1,8 +1,8 @@
-function DBSelectionManager(selectedComponents) {
+function DBSelectionManager(componentIdvsSelectedComponents) {
      // call super constructor
      SelectionManager.call(this);
-
-     this.SelectedCompoents = selectedComponents !== undefined ? selectedComponents : [];
+     this.ComponentIdvsSelectedComponents = componentIdvsSelectedComponents;
+     this.SelectedCompoents = [];
 
      this.SelectedDBRow;
 }
@@ -24,6 +24,7 @@ DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           checkedComponent['MainComponentClass'] = componentData[ModelBrowserColumnNames1D.MainClass];
           checkedComponent['ComponentClass'] = componentData[ModelBrowserColumnNames1D.SubClass];
           checkedComponent['Description'] = componentData[ModelBrowserColumnNames1D.Description];
+          checkedComponent['ComponentId'] = componentData[ModelBrowserColumnNames1D.ComponentId];
 
           this.SelectedCompoents.push(checkedComponent);
 
@@ -45,7 +46,8 @@ DBSelectionManager.prototype.SelectedCompoentExists = function (componentData) {
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
                component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
                component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-               component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+               component['Description'] == componentData[ModelBrowserColumnNames1D.Description] &&
+               component['ComponentId'] == componentData[ModelBrowserColumnNames1D.ComponentId]) {
                return true;
           }
      }
@@ -59,7 +61,8 @@ DBSelectionManager.prototype.RemoveFromselectedCompoents = function (componentDa
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
                component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
                component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-               component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+               component['Description'] == componentData[ModelBrowserColumnNames1D.Description] && 
+               component['ComponentId'] == componentData[ModelBrowserColumnNames1D.ComponentId]) {
 
                this.SelectedCompoents.splice(i, 1);
                break;

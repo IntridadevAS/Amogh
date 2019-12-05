@@ -146,7 +146,7 @@ let LoadManager = {
                        
                         if (success) {
                             
-                            var sourceManager = createSourceManager(sourceId, fileName, fileExtension, viewerContainer, modelTreeContainer);
+                            var sourceManager = createSourceManager(sourceId, files[0].name, fileExtension, viewerContainer, modelTreeContainer);
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData(uri).then(function (result) {
                           

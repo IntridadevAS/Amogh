@@ -64,7 +64,7 @@ DBSourceManager.prototype.LoadData = function (uri) {
         _this.ViewerContainer,
         dbReader.DBData);
         
-      _this.ModelTree.CreateModelBrowserTable();     
+      _this.ModelTree.CreateModelBrowserTable(_this.SourceProperties);     
       return resolve(true);
     });
   });
@@ -76,12 +76,12 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
   this.SourceProperties = dbReader.RestoreDBData(classWiseComponents);
 
   //add model Browser Table
-  this.ModelTree = new DBModeBrowser(this.Id,
+  this.ModelTree = new DBModelBrowser(this.Id,
     this.ModelBrowsercontainer,
     this.ViewerContainer,
     dbReader.DBData,
     selectedComponents);
-  this.ModelTree.CreateModelBrowserTable();
+  this.ModelTree.CreateModelBrowserTable(this.SourceProperties);
 }
 
 DBSourceManager.prototype.AddComponentsToDB = function () {

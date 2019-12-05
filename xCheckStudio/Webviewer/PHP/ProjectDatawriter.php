@@ -212,7 +212,8 @@
                     mainClass TEXT NOT NULL,
                     subClass TEXT NOT NULL,
                     nodeId INTEGER,
-                    mainComponentId INTEGER
+                    mainComponentId INTEGER,
+                    componentId INTEGER
                     )';         
                 $dbh->exec($command);    
 
@@ -225,9 +226,15 @@
                     $mainClass =  $selectedComponent['MainComponentClass'];
                     $subClass =$selectedComponent['ComponentClass'];
                     $nodeId = null;
+                    $componentId = null;
                     if(isset($selectedComponent['NodeId']))
                     {
                         $nodeId = (int)$selectedComponent['NodeId'];
+                    }
+
+                    if(isset($selectedComponent['ID']))
+                    {
+                        $componentId = (int)$selectedComponent['ID'];
                     }
 
                     $mainCompId = null;
@@ -236,8 +243,8 @@
                         $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
                     }
 
-                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
-                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
+                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?) ';
+                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId, $componentId);
                     
                     $stmt = $dbh->prepare($insertQuery);                    
                     $stmt->execute($values);   

@@ -48,7 +48,7 @@ const ModelBrowserColumns1D = {
     MainClass: 2,
     SubClass: 3,
     Description: 4,
-    RowKey: 5
+    ComponentId: 5
 }
 
 // column names
@@ -58,7 +58,7 @@ const ModelBrowserColumnNames1D = {
     MainClass: "Category",
     SubClass: "Class",
     Description: "Description",
-    RowKey: "RowKey"
+    ComponentId: "ComponentId"
 }
 
 // menu bar

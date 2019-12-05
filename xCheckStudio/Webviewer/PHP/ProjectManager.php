@@ -959,19 +959,20 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
     if($selectResults) 
     {
          // ischecked can have values 'true' or 'false'
-         $command = 'CREATE TABLE '.$componentTable.'(
+         $command = 'CREATE TABLE '. $componentTable. '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT NOT NULL,
             mainclass TEXT NOT NULL,
             subclass TEXT NOT NULL,
             nodeid INTEGER,
             ischecked TEXT,
-            parentid INTEGER
+            parentid INTEGER,
+            componentid INTEGER
           )';         
          $dbh->exec($command);    
 
          $insertComponentStmt = $dbh->prepare("INSERT INTO ".$componentTable."(id, name, mainclass, subclass, nodeid, 
-                       ischecked, parentid) VALUES(?,?,?,?,?,?,?)");
+         ischecked, parentid, componentid) VALUES(?,?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -982,7 +983,8 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
                                        $row['subclass'], 
                                        $row['nodeid'], 
                                        $row['ischecked'],
-                                       $row['parentid']));
+                                       $row['parentid'],
+                                       $row['componentid']));
         }  
         
         // save properties
@@ -2141,12 +2143,13 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
             mainClass TEXT NOT NULL,
             subClass TEXT NOT NULL,
             nodeId INTEGER,
-            mainComponentId INTEGER
+            mainComponentId INTEGER,
+            componentId INTEGER
             )';         
         $dbh->exec($command);          
         
         $insertStmt = $dbh->prepare("INSERT INTO ". $tableName. "(id, name, mainClass, subClass, 
-                      nodeId, mainComponentId) VALUES(?,?,?,?,?,?)");
+                      nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?,?)");
     
     
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -2156,7 +2159,8 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
                                        $row['mainClass'],
                                        $row['subClass'], 
                                        $row['nodeId'], 
-                                       $row['mainComponentId']));
+                                       $row['mainComponentId'],
+                                       $row['componentId']));
         }                    
     }  
 }
@@ -2201,7 +2205,8 @@ function SaveSelectedComponents($dbh)
                     mainClass TEXT NOT NULL,
                     subClass TEXT NOT NULL,
                     nodeId INTEGER,
-                    mainComponentId INTEGER
+                    mainComponentId INTEGER,
+                    componentId INTEGER
                     )';         
                 $dbh->exec($command);    
 
@@ -2214,9 +2219,15 @@ function SaveSelectedComponents($dbh)
                     $mainClass =  $selectedComponent['MainComponentClass'];
                     $subClass =$selectedComponent['ComponentClass'];
                     $nodeId = null;
+                    $componentId = null;
                     if(isset($selectedComponent['NodeId']))
                     {
                         $nodeId = (int)$selectedComponent['NodeId'];
+                    }
+
+                    if(isset($selectedComponent['ComponentId']))
+                    {
+                        $componentId = (int)$selectedComponent['ComponentId'];
                     }
 
                     $mainCompId = null;
@@ -2227,8 +2238,8 @@ function SaveSelectedComponents($dbh)
                         $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
                     }
 
-                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
-                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
+                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?) ';
+                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId, $componentId);
                     
                     $stmt = $dbh->prepare($insertQuery);                    
                     $stmt->execute($values);   
@@ -3221,7 +3232,8 @@ function ReadSelectedComponentsFromDB($dbh, $table)
                         'mainClass'=>$component['mainClass'],
                         'subClass'=>$component['subClass'],
                         'nodeId'=>$component['nodeId'],
-                        'mainComponentId'=>$component['mainComponentId']);
+                        'mainComponentId'=>$component['mainComponentId'],
+                        'componentId'=>$component['componentId']);
 
             // id wise components
             $idwiseComponents[$component['id']] = $comp;                       
@@ -3242,13 +3254,13 @@ function ReadSelectedComponentsFromDB($dbh, $table)
             else
             {
                 // class wise components             
-                if(array_key_exists($component['mainClass'], $nodeIdwiseComponents))
+                if(array_key_exists($component['componentId'], $nodeIdwiseComponents))
                 {
-                    array_push($nodeIdwiseComponents[$component['mainClass']], $comp );
+                    array_push($nodeIdwiseComponents[$component['componentId']], $comp );
                 }
                 else
                 {
-                    $nodeIdwiseComponents[$component['mainClass']] = array( $comp );
+                    $nodeIdwiseComponents[$component['componentId']] = array( $comp );
                 }
             }
         }    

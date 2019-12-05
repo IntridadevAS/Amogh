@@ -1,8 +1,9 @@
-function ExcelSelectionManager(selectedComponents) {
+function ExcelSelectionManager(componentIdvsSelectedComponents) {
      // call super constructor
      SelectionManager.call(this);
 
-     this.SelectedCompoents = selectedComponents !== undefined ? selectedComponents : [];
+     this.ComponentIdvsSelectedComponents = componentIdvsSelectedComponents;
+     this.SelectedCompoents = [];
 
      this.SelectedSheetRow;
 }
@@ -24,6 +25,7 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           checkedComponent['MainComponentClass'] = componentData[ModelBrowserColumnNames1D.MainClass];
           checkedComponent['ComponentClass'] = componentData[ModelBrowserColumnNames1D.SubClass];
           checkedComponent['Description'] = componentData[ModelBrowserColumnNames1D.Description];
+          checkedComponent['ComponentId'] = componentData[ModelBrowserColumnNames1D.ComponentId];
 
 
           this.SelectedCompoents.push(checkedComponent);
@@ -32,8 +34,8 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.ApplyHighlightColor(currentRow);
 
           // maintain selected rows
-          if (!this.SelectedComponentNodeIds.includes(componentData.RowKey)) {
-               this.SelectedComponentNodeIds.push(componentData.RowKey);
+          if (!this.SelectedComponentNodeIds.includes(componentData.ComponentId)) {
+               this.SelectedComponentNodeIds.push(componentData.ComponentId);
           }
      }
      else if (checkBoxState === "off" && this.SelectedCompoentExists(componentData)) {
@@ -43,8 +45,8 @@ ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
           this.RemoveHighlightColor(currentRow);
 
           // maintain selected rows
-          if (this.SelectedComponentNodeIds.includes(componentData.RowKey)) {
-               var index = this.SelectedComponentNodeIds.indexOf(componentData.RowKey);
+          if (this.SelectedComponentNodeIds.includes(componentData.ComponentId)) {
+               var index = this.SelectedComponentNodeIds.indexOf(componentData.ComponentId);
                if (index !== -1) {
                     this.SelectedComponentNodeIds.splice(index, 1);
                }
@@ -58,7 +60,8 @@ ExcelSelectionManager.prototype.SelectedCompoentExists = function (componentData
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
           component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
           component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+          component['Description'] == componentData[ModelBrowserColumnNames1D.Description] &&
+          component['ComponentId'] == componentData[ModelBrowserColumnNames1D.ComponentId]) {
                return true;
           }
      }
@@ -72,7 +75,8 @@ ExcelSelectionManager.prototype.RemoveFromselectedCompoents = function (componen
           if (component['Name'] === componentData[ModelBrowserColumnNames1D.Component] &&
           component['MainComponentClass'] === componentData[ModelBrowserColumnNames1D.MainClass] &&
           component['ComponentClass'] === componentData[ModelBrowserColumnNames1D.SubClass] &&
-          component['Description'] == componentData[ModelBrowserColumnNames1D.Description]) {
+          component['Description'] == componentData[ModelBrowserColumnNames1D.Description] &&
+          component['ComponentId'] == componentData[ModelBrowserColumnNames1D.ComponentId]) {
 
                this.SelectedCompoents.splice(i, 1);
                break;

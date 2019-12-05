@@ -5,8 +5,10 @@
                 $Components = array();
                 foreach($ComponentsList as $key => $value) {
 
+                    // var_dump($value);
                     $nodeId = null;
                     $parentNodeId = null;
+                    $componentId = null;
                     if(isset($value->NodeId))
                     {                        
                         $nodeId = $value->NodeId;
@@ -15,11 +17,16 @@
                     {                       
                         $parentNodeId = $value->ParentNodeId;
                     }
+                    if(isset($value->ID))
+                    {                       
+                        $componentId = $value->ID;
+                    }
                     $component = new GenericComponent( $value->Name, 
                                                        $value->MainComponentClass, 
                                                        $value->SubComponentClass, 
                                                        $nodeId,
-                                                       $parentNodeId);
+                                                       $parentNodeId,
+                                                       $componentId);
                     foreach($value->properties as $propertyKey => $propertyValue) {
                         $property = new GenericProperty($propertyValue->Name, $propertyValue->Format, $propertyValue->Value);
                         $component->addProperty( $property );
@@ -39,15 +46,17 @@
                 var $SubComponentClass;
                 var $NodeId; 
                 var $ParentNodeId;
+                var $ComponentId;
                 var $properties = array(); 
 
                 // constructor
-                public function __construct($name, $mainComponentClass, $subComponentClass, $nodeId, $parentNodeId) {
+                public function __construct($name, $mainComponentClass, $subComponentClass, $nodeId, $parentNodeId, $componentId) {
                     $this->Name = $name;
                     $this->MainComponentClass = $mainComponentClass;
                     $this->SubComponentClass = $subComponentClass;
                     $this->NodeId = $nodeId;
                     $this->ParentNodeId= $parentNodeId;
+                    $this->ComponentId= $componentId;
                 }
 
                 public function addProperty($genericProperty) {
