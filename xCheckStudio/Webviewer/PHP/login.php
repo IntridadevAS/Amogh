@@ -14,8 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         {           
             if ($row["lock"] === "1"){                
                 $dbh = null;
-                echo "Locked";
-                echo $row["lock"];
+                echo "Locked";                
                 return;
             }
             if($password == $row["password"])
