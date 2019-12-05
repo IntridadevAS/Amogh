@@ -87,7 +87,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
         sheetName = model.getCurrentReviewManager().GetSheetName(component, viewerContainer);
     }
 
-    var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName);
+    var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName, true);
     if (!classWiseComponents) {
         return;
     }
@@ -476,8 +476,19 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
     dataGrid.getScrollable().scrollTo({top: reviewTableRow.offsetTop - reviewTableRow.offsetHeight});
 }
 
-Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName) {
-    return this.Components[sheetName];
+Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName, caseInsensitiveSearch) {
+    var sheet = sheetName;
+
+    if(caseInsensitiveSearch) {
+        var keys = Object.keys(this.Components);
+        for(var i = 0; i < keys.length; i++){
+            if(keys[i].toLowerCase() == sheetName.toLowerCase()) {
+                sheet = keys[i];
+                break;
+            }
+        }
+    }
+    return this.Components[sheet];
 }
 
 Review1DViewerInterface.prototype.GetCurrentSheetInViewer = function () {
@@ -559,6 +570,9 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
         }
 
         if (selectedComponentName === componentName) {
+            if(this.SelectedSheetRow) {
+                model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, currentReviewTableRowData.Status);
+            }
             this.HighlightSheetDataRow(viewerContainer, row);
             // scroll to rowElement
             dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});

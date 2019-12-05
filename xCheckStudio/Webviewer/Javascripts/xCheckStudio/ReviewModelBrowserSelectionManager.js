@@ -23,8 +23,7 @@ ReviewModelBrowserSelectionManager.prototype.MaintainHighlightedRow = function (
 
     var modelBrowser = $(tableId).dxTreeList("instance")
 
-    if (highlightedRow &&
-        !this.ComponentSelected(highlightedRow["rowKey"], highlightedRow["tableId"])) {
+    if (highlightedRow) {
         var rowIndex = modelBrowser.getRowIndexByKey(highlightedRow["rowKey"]);
         if (rowIndex != -1) {
             var row = modelBrowser.getRowElement(rowIndex)            

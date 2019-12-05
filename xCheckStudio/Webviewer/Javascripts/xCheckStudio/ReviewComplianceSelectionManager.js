@@ -38,8 +38,6 @@ ReviewComplianceSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
         // if check component is selected and and selected 
         // component row doesn't exist already
 
-        // highlight selected row
-        this.ApplyHighlightColor(currentRow);
 
         // keep track of selected component row
         this.AddSelectedComponent({
@@ -49,8 +47,7 @@ ReviewComplianceSelectionManager.prototype.HandleCheckComponentSelectFormCheckBo
     }
     else if (this.ComponentSelected(rowKey, tableId)) {
 
-        // restore color
-        this.RemoveHighlightColor(currentRow);
+
 
         // remove current row from selected rows array
         this.RemoveSelectedComponent(rowKey, tableId);
@@ -71,8 +68,7 @@ ReviewComplianceSelectionManager.prototype.MaintainHighlightedRow = function (cu
         }
     }
 
-    if (highlightedRow &&
-        !this.ComponentSelected(rowKey, tableId)) {
+    if (highlightedRow) {
         this.RemoveHighlightColor(rowElement);
     }
 

@@ -392,7 +392,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                         var changedComponent = acceptedComponents[componentId]["component"];
 
                         originalComponent.accepted = changedComponent["accepted"];
-                        originalComponent.status = "OK(A)";
+                        if(originalComponent.status.toLowerCase() !== 'ok') {
+                            originalComponent.status = "OK(A)";
+                        }
 
                         for(var propertyId in originalComponent.properties) {
 
@@ -492,8 +494,9 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordion) 
                         var changedComponent = acceptedComponents[componentId]["component"];
 
                         originalComponent.accepted = changedComponent["accepted"];
-                        originalComponent.status = "OK(A)";
-
+                        if(originalComponent.status.toLowerCase() !== 'ok') {
+                            originalComponent.status = "OK(A)";
+                        }
                         for(var propertyId in originalComponent.properties) {
 
                             var orginalProperty = originalComponent.properties[propertyId];
