@@ -146,6 +146,17 @@ function cancelResetData() {
 
 function resetData() {
     hideResetDataForm();
+    showBusyIndicator();
+    initReviewModule().then(function() {
+        if(model.currentCheck == "comparison") {
+            viewTabs.enterComparison();
+        }
+        else {
+            viewTabs.enterCompliance();
+        }
+
+        hideBusyIndicator();
+    });
 }
 
 function hideResetDataForm() {

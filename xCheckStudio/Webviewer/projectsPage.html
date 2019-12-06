@@ -943,6 +943,7 @@
       //createProject(projectname, descriptionText, functionText, projectScope);
       localStorage.setItem("loadSavedProject", false);
       document.getElementById('newProjectForm').reset();
+      document.getElementById("inputprojecttype").value = projectType;
       controller.createNewProject(projectname, projectDescription, projectType, projectStatus, projectComments, projectIsFavorite)
       //});
 
