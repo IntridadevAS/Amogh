@@ -392,6 +392,7 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                         var changedComponent = acceptedComponents[componentId]["component"];
 
                         originalComponent.accepted = changedComponent["accepted"];
+
                         if(originalComponent.status.toLowerCase() !== 'ok') {
                             originalComponent.status = "OK(A)";
                         }
@@ -1088,13 +1089,13 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                                             isPropertyTransposed = true;
                                 }
                                 else {
-
                                     orginalProperty["severity"] = changedProperty["severity"];
-                                    if(originalComponent.status !== changedComponent.status)
-                                        originalComponent.status = changedComponent.status;
                                 }
                             }
                         }
+
+                        var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(changedComponent["properties"]);
+                        originalComponent.status = worstSeverityStatus;
 
                         if(isPropertyAccepted) {
                             originalComponent.status = originalComponent.status + "(A)";
@@ -1181,13 +1182,11 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedGr
                                     if(!isPropertyTransposed)
                                             isPropertyTransposed = true;
                                 }
-                                else {
-    
-                                    if(originalComponent.status !== changedComponent.status)
-                                        originalComponent.status = changedComponent.status;
-                                }
                             }
                         }
+
+                        var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(changedComponent["properties"]);
+                        originalComponent.status = worstSeverityStatus;
 
                         if(isPropertyAccepted) {
                             originalComponent.status = originalComponent.status + "(A)";
@@ -1273,13 +1272,11 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
                                     if(!isPropertyTransposed)
                                             isPropertyTransposed = true;
                                 }
-                                else {
-    
-                                    if(originalComponent.status !== changedComponent.status)
-                                        originalComponent.status = changedComponent.status;
-                                }
                             }
                         }
+
+                        var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(changedComponent["properties"]);
+                        originalComponent.status = worstSeverityStatus;
 
                         if(isPropertyAccepted) {
                             originalComponent.status = originalComponent.status + "(A)";
@@ -1369,13 +1366,11 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordion) 
                                     if(!isPropertyTransposed)
                                             isPropertyTransposed = true;
                                 }
-                                else {
-    
-                                    if(originalComponent.status !== changedComponent.status)
-                                        originalComponent.status = changedComponent.status;
-                                }
                             }
                         }
+
+                        var worstSeverityStatus = _this.GetWorstSeverityStatusOfComponent(changedComponent["properties"]);
+                        originalComponent.status = worstSeverityStatus;
 
                         if(isPropertyAccepted) {
                             originalComponent.status = originalComponent.status + "(A)";
