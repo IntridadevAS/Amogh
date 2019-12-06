@@ -20,7 +20,8 @@ function initCheckSpace() {
             data: {
                 'InvokeFunction': "InitTempCheckSpaceDB",
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                'Context' : "Check"
             },
             async: false,
             type: "POST",

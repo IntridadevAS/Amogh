@@ -11,125 +11,112 @@ var comparisonReviewManager;
 var complianceReviewManager;
 
 function initReviewModule() {
-    return new Promise((resolve) => {
+    return new Promise((resolve) => {       
 
         loadCheckSpaceInReviewPage().then(function (result) {
+            if(!result)
+            {
+                return resolve(false);
+            }
+            checkResults = result.Data;
+            processCheckResults();
 
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            // read  check data
-            $.ajax({
-                url: 'PHP/CheckResultsReader.php',
-                type: "POST",
-                async: true,
-                data: {
-                    'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
-                    checkResults = JSON.parse(msg);
-
-                    // initialize the check data
-                    model.files = {};
-                    if ("sourceInfo" in checkResults) {
-                        var sourceInfo = checkResults["sourceInfo"];
-
-                        // 1st source
-                        if ("sourceAFileName" in sourceInfo &&
-                            sourceInfo["sourceAFileName"]) {
-                            var file = {};
-                            file["id"] = "a";
-                            file["fileName"] = sourceInfo["sourceAFileName"];
-                            file["compliance"] = false;
-                            file["sourceType"] = sourceInfo["sourceAType"];
-
-                            model.files[file.id] = file;
-                        }
-
-                        // 2nd source
-                        if ("sourceBFileName" in sourceInfo &&
-                            sourceInfo["sourceBFileName"]) {
-                            var file = {};
-                            file["id"] = "b";
-                            file["fileName"] = sourceInfo["sourceBFileName"];
-                            file["compliance"] = false;
-                            file["sourceType"] = sourceInfo["sourceBType"];
-
-                            model.files[file.id] = file;
-                        }
-
-                        // 3rd source
-                        if ("sourceCFileName" in sourceInfo &&
-                            sourceInfo["sourceCFileName"]) {
-                            var file = {};
-                            file["id"] = "c";
-                            file["fileName"] = sourceInfo["sourceCFileName"];
-                            file["compliance"] = false;
-                            file["sourceType"] = sourceInfo["sourceCType"];
-
-                            model.files[file.id] = file;
-                        }
-
-                        // 4th source
-                        if ("sourceDFileName" in sourceInfo &&
-                            sourceInfo["sourceDFileName"]) {
-                            var file = {};
-                            file["id"] = "d";
-                            file["fileName"] = sourceInfo["sourceDFileName"];
-                            file["compliance"] = false;
-                            file["sourceType"] = sourceInfo["sourceDType"];
-
-                            model.files[file.id] = file;
-                        }
-                    }
-
-                    for (var key in checkResults) {
-                        if (!checkResults.hasOwnProperty(key)) {
-                            continue;
-                        }
-
-                        if (key == 'Comparisons') {
-                            comparisons = checkResults[key];
-                        }
-                        else if (key == 'Compliances') {
-                            compliances = checkResults[key];
-
-                            // set compliance true/false for sources
-                            for (var i = 0; i < compliances.length; i++) {
-                                var compliance = compliances[i];
-
-                                for (var sourceId in model.files) {
-                                    var file = model.files[sourceId];
-                                    if (file.fileName === compliance.source) {
-                                        file["compliance"] = true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (key == 'SourceAComparisonComponentsHierarchy') {
-                            sourceAComparisonHierarchy = checkResults[key];
-                        }
-                        else if (key == 'SourceBComparisonComponentsHierarchy') {
-                            sourceBComparisonHierarchy = checkResults[key];
-                        }
-                        else if (key == 'SourceCComparisonComponentsHierarchy') {
-                            sourceCComparisonHierarchy = checkResults[key];
-                        }
-                        else if (key == 'SourceDComparisonComponentsHierarchy') {
-                            sourceDComparisonHierarchy = checkResults[key];
-                        }
-                    }
-
-                    return resolve(true);
-                },
-                error: function (error) {
-                    //alert('error; ' + eval(error));
-                    return resolve(false);
-                }
-            });
+            return resolve(true);
         });
     });
+}
+
+function processCheckResults() {
+    // initialize the check data
+    model.files = {};
+    if ("sourceInfo" in checkResults) {
+        var sourceInfo = checkResults["sourceInfo"];
+
+        // 1st source
+        if ("sourceAFileName" in sourceInfo &&
+            sourceInfo["sourceAFileName"]) {
+            var file = {};
+            file["id"] = "a";
+            file["fileName"] = sourceInfo["sourceAFileName"];
+            file["compliance"] = false;
+            file["sourceType"] = sourceInfo["sourceAType"];
+
+            model.files[file.id] = file;
+        }
+
+        // 2nd source
+        if ("sourceBFileName" in sourceInfo &&
+            sourceInfo["sourceBFileName"]) {
+            var file = {};
+            file["id"] = "b";
+            file["fileName"] = sourceInfo["sourceBFileName"];
+            file["compliance"] = false;
+            file["sourceType"] = sourceInfo["sourceBType"];
+
+            model.files[file.id] = file;
+        }
+
+        // 3rd source
+        if ("sourceCFileName" in sourceInfo &&
+            sourceInfo["sourceCFileName"]) {
+            var file = {};
+            file["id"] = "c";
+            file["fileName"] = sourceInfo["sourceCFileName"];
+            file["compliance"] = false;
+            file["sourceType"] = sourceInfo["sourceCType"];
+
+            model.files[file.id] = file;
+        }
+
+        // 4th source
+        if ("sourceDFileName" in sourceInfo &&
+            sourceInfo["sourceDFileName"]) {
+            var file = {};
+            file["id"] = "d";
+            file["fileName"] = sourceInfo["sourceDFileName"];
+            file["compliance"] = false;
+            file["sourceType"] = sourceInfo["sourceDType"];
+
+            model.files[file.id] = file;
+        }
+    }
+
+    for (var key in checkResults) {
+        if (!checkResults.hasOwnProperty(key)) {
+            continue;
+        }
+
+        if (key == 'Comparisons') {
+            comparisons = checkResults[key];
+        }
+        else if (key == 'Compliances') {
+            compliances = checkResults[key];
+
+            // set compliance true/false for sources
+            for (var i = 0; i < compliances.length; i++) {
+                var compliance = compliances[i];
+
+                for (var sourceId in model.files) {
+                    var file = model.files[sourceId];
+                    if (file.fileName === compliance.source) {
+                        file["compliance"] = true;
+                    }
+                }
+            }
+        }
+        else if (key == 'SourceAComparisonComponentsHierarchy') {
+            sourceAComparisonHierarchy = checkResults[key];
+        }
+        else if (key == 'SourceBComparisonComponentsHierarchy') {
+            sourceBComparisonHierarchy = checkResults[key];
+        }
+        else if (key == 'SourceCComparisonComponentsHierarchy') {
+            sourceCComparisonHierarchy = checkResults[key];
+        }
+        else if (key == 'SourceDComparisonComponentsHierarchy') {
+            sourceDComparisonHierarchy = checkResults[key];
+        }
+    }
 }
 
 function populateCheckResults(comparison,
