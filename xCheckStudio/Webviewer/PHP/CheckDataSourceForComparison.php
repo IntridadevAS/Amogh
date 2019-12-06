@@ -586,8 +586,8 @@
                         $groupMatchedComponents ['matchObject'] = $classWiseMatechedComponents;
                         $groupMatchedComponents ['groupMapping'] = $mappedGroup;   
                         array_push( $groupWiseMatechedComponents, $groupMatchedComponents);                        
-                    }
-  
+                    }  
+
                     if($isUndefinedComponent)                    
                     {
                         addUndefinedComponent($sourceBComponent, 2);
@@ -790,7 +790,11 @@
                         $sourceCClassNameAttribute = getSourceClassNameProperty("c"); 
                         $sourceAGroupNameAttribute = getSourceGroupNameProperty("a");
                         $sourceBGroupNameAttribute = getSourceGroupNameProperty("b");
-                        $sourceDGroupNameAttribute = getSourceGroupNameProperty("d");
+                        $sourceDGroupNameAttribute = NULL;
+                        if($totalSources > 3)
+                        {
+                            $sourceDGroupNameAttribute = getSourceGroupNameProperty("d");
+                        }                        
 
                         $groupWiseMatechedComponents = array();
                         $isUndefinedComponent = true;
@@ -1759,6 +1763,8 @@
                                                     $dataSourceOrderInCheckCase['c'],
                                                     NULL,
                                                     3);
+                $checkComponent->Status = "Missing Item(s)";
+
                 $groupName =  getGroupTitle($mappingGroup, 3);
                 $componentGroup =  getCheckComponentGroup($groupName);                   
                 $componentGroup->AddCheckComponent($checkComponent); 
