@@ -424,17 +424,45 @@ function cancelClearDataSource() {
 
 function clearDataSource() {
   removeDataSourceFromDB().then(function (result) {
-
-    var tabToDelete = document.getElementById("tab_" + model.currentTabId)
-    viewTabs.deleteTab(tabToDelete);
-
-    // filter checkcases again
-    checkCaseFilesData.FilteredCheckCaseDataList = [];
-    filterCheckCases(false);
-
-    hideClearDataSourceForm();
+    removeSourceFilesFromDirectory().then(function(result) {
+      var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+      viewTabs.deleteTab(tabToDelete);
+  
+      // filter checkcases again
+      checkCaseFilesData.FilteredCheckCaseDataList = [];
+      filterCheckCases(false);
+  
+      hideClearDataSourceForm();
+    })
   });
 }
+
+
+
+function removeSourceFilesFromDirectory() {
+  return new Promise((resolve) => {
+    // clean up all temporary files and variables
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    $.ajax({
+      url: 'PHP/ProjectManager.php',
+      type: "POST",
+      async: false,
+      data:
+      {
+        'InvokeFunction': "RemoveSourceFromDirecory",
+        'ProjectName': projectinfo.projectname,
+        'CheckName': checkinfo.checkname,
+        'SourceId': model.currentTabId
+      },
+      success: function (msg) {
+        return resolve(true);
+      }
+    });
+  });
+}
+
 
 function hideClearDataSourceForm() {
   var overlay = document.getElementById("clearDataSourceOverlay");

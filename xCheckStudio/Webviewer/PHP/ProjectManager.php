@@ -87,6 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "RemoveAllSources":
             RemoveAllSources();
             break;
+        case "RemoveSourceFromDirecory":
+            RemoveSourceFromDirecory();
+            break;
         // case  "SaveHiddenItems":
         //     SaveHiddenItems();
         //     break;
@@ -284,6 +287,73 @@ function RemoveSource()
         "MsgCode" => 0));  
         return;
     } 
+}
+
+function RemoveSourceFromDirecory() {
+    if(!isset( $_POST['ProjectName']) ||
+    !isset( $_POST['CheckName']) ||
+    !isset( $_POST['SourceId']))
+    {
+        echo json_encode(array("Msg" =>  "Invalid input.",
+        "MsgCode" => 0));  
+
+        return;
+    }
+    try
+    {   
+        // get project name
+        $projectName = $_POST['ProjectName'];	
+        $checkName = $_POST['CheckName'];
+        $sourceId = $_POST['SourceId'];
+
+        $sourcePath;
+        // delete source files
+        if(strtolower($sourceId) === "a")
+        {
+            $sourcePath = getCheckSourceAPath($projectName, $checkName);
+        }
+        else if(strtolower($sourceId) === "b")
+        {
+            $sourcePath = getCheckSourceBPath($projectName, $checkName);
+        }
+        else if(strtolower($sourceId) === "c")
+        {
+            $sourcePath = getCheckSourceCPath($projectName, $checkName);
+        }
+        else if(strtolower($sourceId) === "d")
+        {
+            $sourcePath = getCheckSourceDPath($projectName, $checkName);
+        }          
+      
+        deleteAllSourceInformation($sourcePath);
+        echo json_encode(array("Msg" =>  "success",
+        "MsgCode" => 1));  
+        return;
+    }
+    catch(Exception $e) 
+    { 
+        echo json_encode(array("Msg" =>  "Failed to remove source.",
+        "MsgCode" => 0));  
+        return;
+    } 
+}
+
+function deleteAllSourceInformation($fileName) {
+        //It it's a file.
+        if (is_file($fileName)) {
+            //Attempt to delete it.
+            return unlink($fileName);
+        }
+        //If it's a directory.
+        elseif (is_dir($fileName)) {
+            //Get a list of the files in this directory.
+            $scan = glob(rtrim($fileName,'/').'/*');
+            //Loop through the list of files.
+            foreach($scan as $index=>$path) {
+                //Call our recursive function.
+                deleteAllSourceInformation($path);
+            }
+        }
 }
 
 /* 
@@ -3519,9 +3589,9 @@ function UpdateProject()
     
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query = 'UPDATE Projects Set type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
+        $query = 'UPDATE Projects Set userid=?, type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
         $stmt = $dbh->prepare($query);
-        $response = $stmt->execute(array( $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
+        $response = $stmt->execute(array($userid, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
         echo json_encode($response);
         $dbh = null; //This is how you close a PDO connection
         return;      
