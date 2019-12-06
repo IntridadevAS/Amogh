@@ -88,7 +88,7 @@ var xCheckStudio;
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
                         (status.toLowerCase() !== "error" ||
-                            status.toLowerCase() !== "warning")) {
+                        status.toLowerCase() !== "warning")) {
 
                         return NoMatchColor;
                     }
@@ -105,6 +105,40 @@ var xCheckStudio;
             // var color;
             if (status.toLowerCase() === "ok") {
                 return SuccessColor;
+            }
+            else if (status.toLowerCase() === ("No Match").toLowerCase()) {
+                if(parentComponent && (parentComponent.Status.toLowerCase() == "error" || 
+                parentComponent.Status.toLowerCase() == "ok" || 
+                parentComponent.Status.toLowerCase() == "warning")) {
+                    if (isAccepted(parentComponent)) {
+                        return AcceptedColor;
+                    }
+                    else if (isTransposed(parentComponent)) {
+                        return AcceptedColor;
+                    }
+                    else {
+                        if(parentComponent.Status.toLowerCase() == "error") {
+                            return HoopsViewerErrorColor;
+                        }
+                        else if(parentComponent.Status.toLowerCase() == "warning") {
+                            return HoopsViewerWarningColor;
+                        }
+                        else if(parentComponent.Status.toLowerCase() == "ok") {
+                            return SuccessColor;
+                        }
+                    }
+                }
+                else {
+                    if (isAccepted(component)) {
+                        return AcceptedColor;
+                    }
+                    else if (isTransposed(component)) {
+                        return AcceptedColor;
+                    }
+                    else {
+                        return NoMatchColor;
+                    }
+                }
             }
             else if (status.toLowerCase() === ("Error").toLowerCase()) {
                 if (isAccepted(component)) {
@@ -126,17 +160,6 @@ var xCheckStudio;
                 }
                 else {
                     return HoopsViewerWarningColor;
-                }
-            }
-            else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-                if (isAccepted(component)) {
-                    return AcceptedColor;
-                }
-                else if (isTransposed(component)) {
-                    return AcceptedColor;
-                }
-                else {
-                    return NoMatchColor;
                 }
             }
             else if (status.toLowerCase() === ("No Value").toLowerCase()) {
