@@ -1,0 +1,35 @@
+.dx-list-item-icon-container,
+.dx-toolbar-before {
+  width: 36px;
+  padding-right: 0px !important;
+  text-align: center;
+}
+
+.dx-list-item-content {
+  padding-left: 10px !important;
+}
+
+.panel-list {
+  height: 100%;
+  background-color: var(--xCheckMedGrey) !important;
+  font-family: Montserrat;
+  font-size: 16px;
+}
+
+.dx-drawer-expand.dx-drawer-right .panel-list {
+  float: right;
+}
+
+.panel-list .dx-list-item {
+  color: #fff;
+  border-top: 1px solid rgba(221, 221, 221, .2);
+}
+
+.panel-list .dx-list-item .dx-icon {
+  color: #fff !important;
+}    
+
+.panel-list .dx-state-focused {
+  color: #fff  !important;
+  background-color: var(--xCheckDarkGrey) !important;
+}

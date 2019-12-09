@@ -1,5 +1,7 @@
 
 window.onload = function () {
+    HostPageDrawerMenu.create();
+
     var ip = localStorage.getItem('hostInput');
     var port = localStorage.getItem('portInput');
     if (ip !== null && port !== null) {
