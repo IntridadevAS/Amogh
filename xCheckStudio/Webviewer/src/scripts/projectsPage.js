@@ -604,6 +604,7 @@ let controller = {
       controller.setMyCurrentProj(id);
     };
     editProjectView.init();
+    editProjectView.disableEditProjectForm();
   }
 }
 
@@ -1080,11 +1081,52 @@ let editProjectView = {
     editProjectType.value = this.currentProject.type;
   },
 
-  closeEditProject: function () {
+  disableEditProjectForm: function() {
+    document.getElementById("editProjectName").disabled = true;
+    document.getElementById("editComments").disabled = true;
+    document.getElementById("editProjectStatus").disabled = true;
+    document.getElementById("editProjectType").disabled = true;
+    document.getElementById("editProjectDescription").disabled = true;
+    document.getElementById("favoriteCheck").disabled = true;
+  },
+
+  editProjectInfo: function() {
+    this.cancelEditProject(false);
+    document.getElementById("editProjectName").disabled = false;
+    document.getElementById("editComments").disabled = false;
+    document.getElementById("editProjectStatus").disabled = false;
+    document.getElementById("editProjectType").disabled = false;
+    document.getElementById("editProjectDescription").disabled = false;
+    document.getElementById("favoriteCheck").disabled = false;
+  },
+
+  cancelEditProject: function(closeProjectOverlay) {
+    var overlay = document.getElementById("editProjectOverlay");
+    var popup = document.getElementById("editProjectPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+
+    if(closeProjectOverlay) {
+      onToggleOverlayDisplay(false);
+      document.getElementById("editProject").classList.remove("projectOverlaysOpen");
+    }
+  },
+
+  openEditProjectOverlay: function() {
+    var overlay = document.getElementById("editProjectOverlay");
+    var popup = document.getElementById("editProjectPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+  },
+
+  SaveEditedProjectInfo: function () {
     this.onUpdateProject();
   },
 
   onUpdateProject: function () {
+    var _this = this;
     let editComments = document.getElementById("editComments").value;
     let editProjectStatus = document.getElementById("editProjectStatus").value;
     let editProjectType = document.getElementById("editProjectType").value;
@@ -1109,6 +1151,7 @@ let editProjectView = {
     }).done(function (msg) {
       onToggleOverlayDisplay(false);
       document.getElementById("editProject").classList.remove("projectOverlaysOpen");
+      _this.cancelEditProject(true);
       if (msg === "true") {
         controller.fetchProjects();
       }
