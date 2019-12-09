@@ -135,6 +135,7 @@ let controller = {
 }
 
 let viewTabs = {
+  tabToDelete : undefined,
   init: function () {
     this.container = document.getElementById("tabContainer");
     this.addTab = document.getElementById("addTab");
@@ -144,6 +145,7 @@ let viewTabs = {
       let deleteTab = event.target.closest('.deleteTab');
       let changeTab = event.target.closest('.tab');
       if (deleteTab) {
+        viewTabs.tabToDelete = deleteTab.parentNode;
         viewTabs.onClearDataSource();
         // viewTabs.deleteTab(deleteTab.parentNode);
       } else if (changeTab) {
@@ -423,21 +425,24 @@ function cancelClearDataSource() {
 }
 
 function clearDataSource() {
+  if (!viewTabs.tabToDelete) {
+    hideClearDataSourceForm();
+    return;
+  }
+
   removeDataSourceFromDB().then(function (result) {
-    removeSourceFilesFromDirectory().then(function(result) {
-      var tabToDelete = document.getElementById("tab_" + model.currentTabId)
-      viewTabs.deleteTab(tabToDelete);
-  
+    removeSourceFilesFromDirectory().then(function (result) {
+      //var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+      viewTabs.deleteTab(viewTabs.tabToDelete);
+
       // filter checkcases again
       checkCaseFilesData.FilteredCheckCaseDataList = [];
       filterCheckCases(false);
-  
+
       hideClearDataSourceForm();
     })
   });
 }
-
-
 
 function removeSourceFilesFromDirectory() {
   return new Promise((resolve) => {
@@ -445,6 +450,7 @@ function removeSourceFilesFromDirectory() {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
+    var tabId = viewTabs.tabToDelete.getAttribute("data-id");
     $.ajax({
       url: 'PHP/ProjectManager.php',
       type: "POST",
@@ -454,7 +460,7 @@ function removeSourceFilesFromDirectory() {
         'InvokeFunction': "RemoveSourceFromDirecory",
         'ProjectName': projectinfo.projectname,
         'CheckName': checkinfo.checkname,
-        'SourceId': model.currentTabId
+        'SourceId': tabId
       },
       success: function (msg) {
         return resolve(true);
@@ -465,11 +471,13 @@ function removeSourceFilesFromDirectory() {
 
 
 function hideClearDataSourceForm() {
+  viewTabs.tabToDelete = undefined;
+
   var overlay = document.getElementById("clearDataSourceOverlay");
   var popup = document.getElementById("clearDataSourcePopup");
 
   overlay.style.display = 'none';
-  popup.style.display = 'none';
+  popup.style.display = 'none';  
 }
 
 function removeDataSourceFromDB() {
@@ -477,6 +485,8 @@ function removeDataSourceFromDB() {
     // clean up all temporary files and variables
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+    var tabId = viewTabs.tabToDelete.getAttribute("data-id");
 
     $.ajax({
       url: 'PHP/ProjectManager.php',
@@ -487,7 +497,7 @@ function removeDataSourceFromDB() {
         'InvokeFunction': "RemoveSource",
         'ProjectName': projectinfo.projectname,
         'CheckName': checkinfo.checkname,
-        'SourceId': model.currentTabId
+        'SourceId': tabId
       },
       success: function (msg) {
         return resolve(true);
