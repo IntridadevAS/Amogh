@@ -766,30 +766,30 @@
                         if($checkPropertiesResults) 
                         {
                             // $changedStatus;
-                            $isPropertyAcceped = false;
-                            $worstSeverity = "OK";
+                            // $isPropertyAcceped = false;
+                            // $worstSeverity = "OK";
                             $properties =array();
                             while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                             {
 
-                                if($propertyRow['accepted'] == "true"){
-                                    $isPropertyAcceped = true;
-                                }
+                                // if($propertyRow['accepted'] == "true"){
+                                //     $isPropertyAcceped = true;
+                                // }
 
-                                if(($propertyRow['severity'] !== 'OK' && $propertyRow['severity'] !== 'No Value')) {
-                                    if($propertyRow['accepted'] == "false") {
-                                        if(strtolower($propertyRow['severity']) == "error") {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                        else if(strtolower($propertyRow['severity']) == "warning" && strtolower($propertyRow['severity']) !== "error") {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                        else if(strtolower($propertyRow['severity']) == "no match" && 
-                                        (strtolower($propertyRow['severity']) !== "error" && strtolower($propertyRow['severity']) !== "warning")) {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                    }
-                                }
+                                // if(($propertyRow['severity'] !== 'OK' && $propertyRow['severity'] !== 'No Value')) {
+                                //     if($propertyRow['accepted'] == "false") {
+                                //         if(strtolower($propertyRow['severity']) == "error") {
+                                //             $worstSeverity = $propertyRow['severity'];
+                                //         }
+                                //         else if(strtolower($propertyRow['severity']) == "warning" && strtolower($propertyRow['severity']) !== "error") {
+                                //             $worstSeverity = $propertyRow['severity'];
+                                //         }
+                                //         else if(strtolower($propertyRow['severity']) == "no match" && 
+                                //         (strtolower($propertyRow['severity']) !== "error" && strtolower($propertyRow['severity']) !== "warning")) {
+                                //             $worstSeverity = $propertyRow['severity'];
+                                //         }
+                                //     }
+                                // }
 
                                 $propertyValues = array('id'=>$propertyRow['id'], 
                                                     'name'=>$propertyRow['name'],  
@@ -806,10 +806,10 @@
 
                             }
 
-                            if($isPropertyAcceped) {
-                                $worstSeverity = $worstSeverity . "(A)";
-                                $componentValues['status'] = $worstSeverity;
-                            }
+                            // if($isPropertyAcceped) {
+                            //     $worstSeverity = $worstSeverity . "(A)";
+                            //     $componentValues['status'] = $worstSeverity;
+                            // }
 
                             $componentValues["properties"] = $properties;
                         }                      
@@ -839,7 +839,6 @@
 
         if($comparisonResult != NULL)
         {                
-                
                 // source A
                 if(isDataSource3D($datasourceInfo["sourceAType"]))
                 {
@@ -850,11 +849,10 @@
                         foreach($group['components'] as $key =>  $value) {                     
                         
                             // $compIndex = $value['id'];
-                            $status = $value['status'];                           
+                            $status = $value['status'];    
                             $sourceANodeId = $value['sourceANodeId'];                          
 
                             $comp = traverseRecursivelyFor3DComparison($dbh, $sourceANodeId, $traversedNodes, "a");
-                            
                             if($comp !== NULL && 
                             !array_key_exists($comp['NodeId'], $sourceAComparisonComponentsHierarchy)) {                                
                                 $sourceAComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
@@ -880,7 +878,7 @@
                         $group = $comparisonResult[$index];
             
                         foreach($group['components'] as $key =>  $value) {                           
-                            $status = $value['status'];                            
+                            $status = $value['status'];
                             $sourceBNodeId = $value['sourceBNodeId'];
 
                             $comp = traverseRecursivelyFor3DComparison($dbh, $sourceBNodeId, $traversedNodes, "b");                     
@@ -1256,9 +1254,6 @@
 
                         $componentId = $componentRow['id'];
 
-                        $isPropertyAcceped = false;
-                        $isPropertyTransposed = false;
-                        $worstSeverity = "OK";
                          // read properties                                                                  
                         $checkPropertiesResults = $dbh->query("SELECT *FROM ComparisonCheckProperties where ownerComponent=$componentId;");
                         if($checkPropertiesResults) 
@@ -1267,28 +1262,6 @@
                             $properties =array();
                             while ($propertyRow = $checkPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
                             {
-
-                                if($propertyRow['transpose'] !== null) {
-                                    $isPropertyTransposed = true;
-                                }
-                                else if($propertyRow['accepted'] == "true"){
-                                    $isPropertyAcceped = true;
-                                }
-
-                                if(($propertyRow['severity'] !== 'OK' && $propertyRow['severity'] !== 'No Value')) {
-                                    if($propertyRow['transpose'] == null && $propertyRow['accepted'] == "false") {
-                                        if(strtolower($propertyRow['severity']) == "error") {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                        else if(strtolower($propertyRow['severity']) == "warning" && strtolower($propertyRow['severity']) !== "error") {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                        else if(strtolower($propertyRow['severity']) == "no match" && 
-                                        (strtolower($propertyRow['severity']) !== "error" && strtolower($propertyRow['severity']) !== "warning")) {
-                                            $worstSeverity = $propertyRow['severity'];
-                                        }
-                                    }
-                                }
                                 
                                 $propertyValues = array('id'=>$propertyRow['id'], 
                                                         'sourceAName'=>$propertyRow['sourceAName'],  
@@ -1310,17 +1283,6 @@
                                 array_push($properties, $propertyValues);
 
                             }
-                            if($isPropertyAcceped || $isPropertyTransposed) {
-                                if($isPropertyAcceped) {
-                                    $worstSeverity = $worstSeverity . "(A)";
-                                }
-                                if($isPropertyTransposed) {
-                                    $worstSeverity = $worstSeverity . "(T)";
-                                }
-
-                                $componentValues['status'] = $worstSeverity;
-                            }
-                            // $componentValues['status'] = $componentStatus;
                             $componentValues["properties"] = $properties;
                         }
                         

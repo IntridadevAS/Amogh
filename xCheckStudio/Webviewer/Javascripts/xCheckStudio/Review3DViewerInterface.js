@@ -175,7 +175,7 @@ Review3DViewerInterface.prototype.highlightComponentsfromResult = function () {
 }
 
 Review3DViewerInterface.prototype.unHighlightAll = function () {
-    
+
     // var reviewManager = model.getCurrentReviewManager();
 
     this.selectedNodeId = undefined;
@@ -268,7 +268,7 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
     }
 
     if (highlightedRow) {
-        var dataGrid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+        var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         rowElement = dataGrid.getRowElement(rowIndex)[0];
 
@@ -311,8 +311,8 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewManager = model.getCurrentReviewManager();    
-    if (!reviewManager) {       
+    var reviewManager = model.getCurrentReviewManager();
+    if (!reviewManager) {
         return;
     }
 
@@ -322,7 +322,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-    var reviewRowData = this.GetReviewComponentRow(checkComponentData);   
+    var reviewRowData = this.GetReviewComponentRow(checkComponentData);
     if (!reviewRowData) {
         this.unHighlightComponent();
         this.unHighlightAll();
@@ -345,8 +345,7 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {
 
-    if(!this.selectedNodeId)
-    {
+    if (!this.selectedNodeId) {
         return;
     }
 
@@ -431,10 +430,10 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
 }
 
 
-Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function(checkComponent, isSourceA) {
+Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (checkComponent, isSourceA) {
 
-    var reviewManager = model.getCurrentReviewManager();    
-    if (!reviewManager) {       
+    var reviewManager = model.getCurrentReviewManager();
+    if (!reviewManager) {
         return;
     }
 
@@ -442,35 +441,35 @@ Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function
 
     var isMainClassValue = false;
 
-    for(var id in this.OverrideSeverityColorComponents) {
+    for (var id in this.OverrideSeverityColorComponents) {
         var values = this.OverrideSeverityColorComponents[id];
-        if(values.includes(sourceComponentData.MainClass.toLowerCase())) {
+        if (values.includes(sourceComponentData.MainClass.toLowerCase())) {
             isMainClassValue = true;
             break;
         }
     }
 
-    if(isMainClassValue) {
+    if (isMainClassValue) {
         var parentNodeId = this.Viewer.model.getNodeParent(Number(sourceComponentData.NodeId));
         var parentComponentData;
 
-        if(this.IsNodeInCheckResults(parentNodeId)) {
+        if (this.IsNodeInCheckResults(parentNodeId)) {
             var parentComponent = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], parentNodeId);
 
             var groupId = reviewManager.GetComparisonResultGroupId(parentComponent.MainClass);
             var comp = reviewManager.GetCheckComponent(groupId, parentComponent.Id);
 
-            parentComponentData =  reviewManager.GetComponentData(comp, isSourceA); 
-            if(parentComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+            parentComponentData = reviewManager.GetComponentData(comp, isSourceA);
+            if (parentComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
                 this.highlightManager.changeComponentColorInViewer(parentComponentData, false, undefined);
             }
         }
-        
+
         var children = this.Viewer.model.getNodeChildren(parentNodeId);
         this.ChangeColorInViewer(children, parentComponentData, isSourceA);
 
     }
-    else if(sourceComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+    else if (sourceComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
         this.highlightManager.changeComponentColorInViewer(sourceComponentData, false, undefined);
         var children = this.Viewer.model.getNodeChildren(Number(sourceComponentData.NodeId));
 
@@ -481,32 +480,34 @@ Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function
     }
 }
 
-Review3DViewerInterface.prototype.ChangeColorInViewer = function(children, parentComponent, isSourceA) {
-    var reviewManager = model.getCurrentReviewManager();    
-    if (!reviewManager) {       
+Review3DViewerInterface.prototype.ChangeColorInViewer = function (children, parentComponent, isSourceA) {
+    var reviewManager = model.getCurrentReviewManager();
+    if (!reviewManager) {
         return;
     }
 
-    for(var i = 0; i < children.length; i++) {
+    for (var i = 0; i < children.length; i++) {
         var checkComponent = reviewManager.GetCheckComponetDataByNodeId(this.ViewerOptions[0], children[i]);
-        if(checkComponent) {
+        if (checkComponent) {
 
             var groupId = reviewManager.GetComparisonResultGroupId(checkComponent.MainClass);
             var comp = reviewManager.GetCheckComponent(groupId, checkComponent.Id);
             var sourceComponentData = reviewManager.GetComponentData(comp, isSourceA);
 
             overrideColorWithSeverityPreference = false;
-            if(parentComponent) {
-                if(parentComponent.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+            if (parentComponent) {
+                if (parentComponent.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
                     var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[parentComponent.MainClass.toLowerCase()];
                     // If child component is not mapped (undefined) then child should carry parent component's color
                     if (overrideSeverityColorComponent.includes(sourceComponentData.MainClass.toLowerCase()) && sourceComponentData.Status !== 'undefined') {
                         overrideColorWithSeverityPreference = true;
-                    }    
+                    }
                 }
             }
-                             
+
             this.highlightManager.changeComponentColorInViewer(sourceComponentData, overrideColorWithSeverityPreference, parentComponent);
+            var children1 = this.Viewer.model.getNodeChildren(Number(sourceComponentData.NodeId));
+            this.ChangeColorInViewer(children1, sourceComponentData, isSourceA);
         }
     }
 }
@@ -539,17 +540,17 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
     // }
 
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
-    for(var groupId in checkTableIds) {
+    for (var groupId in checkTableIds) {
         if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
             continue;
         }
         else {
 
-            var dataGrid =  $(checkTableIds[groupId]).dxDataGrid("instance");
+            var dataGrid = $(checkTableIds[groupId]).dxDataGrid("instance");
             var rows = dataGrid.getVisibleRows();
 
-            for(var i = 0; i < rows.length; i++) {
-                if(rows[i].rowType == "data") {
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].rowType == "data") {
                     var rowObj = rows[i];
                     var rowData = rowObj.data
                     var checkComponentId;
@@ -559,18 +560,18 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
                         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
                         if (highlightedRow) {
 
-                            var grid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+                            var grid = $(highlightedRow["tableId"]).dxDataGrid("instance");
                             var rowIndex = grid.getRowIndexByKey(highlightedRow["rowKey"]);
                             rowElement = grid.getRowElement(rowIndex)[0];
 
-                            var data =  grid.getDataSource().items();
+                            var data = grid.getDataSource().items();
                             var rowData = data[rowIndex];
                             model.getCurrentSelectionManager().RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
-                        }                        
-                           
-                        
-                        var row = dataGrid.getRowElement(rowObj.rowIndex) 
-                           
+                        }
+
+
+                        var row = dataGrid.getRowElement(rowObj.rowIndex)
+
                         //Expand Accordion and Scroll to Row
                         model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkComponentData.MainClass);
 
@@ -579,10 +580,10 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
                         model.getCurrentSelectionManager().SetHighlightedRow({
                             "tableId": checkTableIds[groupId],
                             "rowKey": checkComponentId
-                        }); 
+                        });
 
                         //break;
-                        return {"row" : row[0], "tableId" : checkTableIds[groupId]};
+                        return { "row": row[0], "tableId": checkTableIds[groupId] };
                     }
                 }
             }

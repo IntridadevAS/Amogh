@@ -368,7 +368,7 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent = function (selectedRow) {
 
     var transpose = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -394,7 +394,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -430,7 +430,7 @@ ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function ()
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
 
     var transpose = true;
-    var ignore = ['OK', 'OK(A)', 'OK(A)(T)'];
+    var ignore = ['OK', 'OK(A)', 'OK(A)(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -454,7 +454,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
 
     var accept = true;
-    var ignore = ['OK', 'OK(T)', 'OK(A)(T)'];
+    var ignore = ['OK', 'OK(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -477,7 +477,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-    var ignore = ['OK', 'No Value', 'OK(T)'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)', ' '];
     var accepted = true;
 
     if (selectedPropertiesKey.length == 0) {
@@ -535,7 +535,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)'];
+    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)', 'Missing Property(s)', ' '];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -708,13 +708,41 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponents = function () {
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
         return;
     }
 
-    comparisonReviewManager.AcceptComponents(selectedGroupIdsVsResultIds);
+    // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+    // No match, OK, No Value components should not get accepted or transposed
+    var groupIdVsComponentId = {};
+    for (var groupId in selectedGroupIdsVsResultIds) {
+        for (var componentId in selectedGroupIdsVsResultIds[groupId]) {
+            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, selectedGroupIdsVsResultIds[groupId][componentId]);
+            var index = ignore.indexOf(checkResultComponent.status);
+            if (index !== -1) {
+                continue;
+            }
+            else {
+                if (groupId in groupIdVsComponentId) {
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                }
+                else {
+                    groupIdVsComponentId[groupId] = [];
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                }
+            }
+        }
+    }
+
+    if (Object.keys(groupIdVsComponentId).length == 0) {
+        return;
+    }
+
+    comparisonReviewManager.AcceptComponents(groupIdVsComponentId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowClicked) {
@@ -738,7 +766,26 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function (rowCli
         return;
     }
 
-    comparisonReviewManager.AcceptProperty(selectedPropertiesKey, componentId, groupId);
+    // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+    // No match, OK, No Value components should not get accepted or transposed
+    var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+    var selectedProperties = []
+    for (var key in selectedPropertiesKey) {
+        var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
+        var index = ignore.indexOf(property.severity);
+        if (index !== -1) {
+            continue;
+        }
+        else {
+            selectedProperties.push(Number(selectedPropertiesKey[key]));
+        }
+    }
+
+    if (selectedProperties.length == 0) {
+        return;
+    }
+
+    comparisonReviewManager.AcceptProperty(selectedProperties, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptGroup = function (rowClicked) {
@@ -752,7 +799,34 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponents = function () 
         return;
     }
 
-    comparisonReviewManager.UnAcceptComponents(selectedGroupIdsVsResultIds);
+    var ignore = ['OK', 'OK(T)', 'No Value', 'No Match'];
+    // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+    // No match, OK, No Value components should not get accepted or transposed
+    var groupIdVsComponentId = {};
+    for (var groupId in selectedGroupIdsVsResultIds) {
+        for (var componentId in selectedGroupIdsVsResultIds[groupId]) {
+            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, selectedGroupIdsVsResultIds[groupId][componentId]);
+            var index = ignore.indexOf(checkResultComponent.status);
+            if (index !== -1) {
+                continue;
+            }
+            else {
+                if (groupId in groupIdVsComponentId) {
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                }
+                else {
+                    groupIdVsComponentId[groupId] = [];
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                }
+            }
+        }
+    }
+
+    if (Object.keys(groupIdVsComponentId).length == 0) {
+        return;
+    }
+
+    comparisonReviewManager.UnAcceptComponents(groupIdVsComponentId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowClicked) {
@@ -776,7 +850,26 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
         return;
     }
 
-    comparisonReviewManager.UnAcceptProperty(selectedPropertiesKey, componentId, groupId);
+    // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+    // No match, OK, No Value components should not get accepted or transposed
+    var ignore = ['OK', 'OK(T)', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+    var selectedProperties = []
+    for (var key in selectedPropertiesKey) {
+        var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
+        var index = ignore.indexOf(property.severity);
+        if (index !== -1) {
+            continue;
+        }
+        else {
+            selectedProperties.push(Number(selectedPropertiesKey[key]));
+        }
+    }
+
+    if (selectedProperties.length == 0) {
+        return;
+    }
+
+    comparisonReviewManager.UnAcceptProperty(selectedProperties, componentId, groupId);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnUnAcceptGroup = function (rowClicked) {
@@ -790,7 +883,35 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
         if (selectedGroupIdsVsResultIds == undefined) {
             return;
         }
-        comparisonReviewManager.RestoreComponentTranspose(selectedGroupIdsVsResultIds);
+
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match'];
+        // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+        // No match, OK, No Value components should not get accepted or transposed
+        var groupIdVsComponentId = {};
+        for (var groupId in selectedGroupIdsVsResultIds) {
+            for (var componentId in selectedGroupIdsVsResultIds[groupId]) {
+                var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, selectedGroupIdsVsResultIds[groupId][componentId]);
+                var index = ignore.indexOf(checkResultComponent.status);
+                if (index !== -1) {
+                    continue;
+                }
+                else {
+                    if (groupId in groupIdVsComponentId) {
+                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                    }
+                    else {
+                        groupIdVsComponentId[groupId] = [];
+                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                    }
+                }
+            }
+        }
+
+        if (Object.keys(groupIdVsComponentId).length == 0) {
+            return;
+        }
+
+        comparisonReviewManager.RestoreComponentTranspose(groupIdVsComponentId);
     }
     else if (source.toLowerCase() === "property") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
@@ -812,7 +933,22 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (sele
             return;
         }
 
-        comparisonReviewManager.RestorePropertyTranspose(selectedPropertiesKey, componentId, groupId);
+        // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+        // No match, OK, No Value components should not get accepted or transposed
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
+        var selectedProperties = []
+        for (var key in selectedPropertiesKey) {
+            var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
+            var index = ignore.indexOf(property.severity);
+            if (index !== -1) {
+                continue;
+            }
+            else {
+                selectedProperties.push(Number(selectedPropertiesKey[key]));
+            }
+        }
+
+        comparisonReviewManager.RestorePropertyTranspose(selectedProperties, componentId, groupId);
     }
     else if (source.toLowerCase() === "group") {
         comparisonReviewManager.RestoreCategoryTranspose(selectedRow[0]);
@@ -826,7 +962,35 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
         if (selectedGroupIdsVsResultIds == undefined) {
             return;
         }
-        comparisonReviewManager.TransposeComponent(key, selectedGroupIdsVsResultIds);
+
+        var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+        // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+        // No match, OK, No Value components should not get accepted or transposed
+        var groupIdVsComponentId = {};
+        for (var groupId in selectedGroupIdsVsResultIds) {
+            for (var componentId in selectedGroupIdsVsResultIds[groupId]) {
+                var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, selectedGroupIdsVsResultIds[groupId][componentId]);
+                var index = ignore.indexOf(checkResultComponent.status);
+                if (index !== -1) {
+                    continue;
+                }
+                else {
+                    if (groupId in groupIdVsComponentId) {
+                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                    }
+                    else {
+                        groupIdVsComponentId[groupId] = [];
+                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                    }
+                }
+            }
+        }
+
+        if (Object.keys(groupIdVsComponentId).length == 0) {
+            return;
+        }
+
+        comparisonReviewManager.TransposeComponent(key, groupIdVsComponentId);
     }
     else if (source.toLowerCase() === "property") {
         var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
@@ -846,7 +1010,27 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, s
         if (selectedPropertiesKey.length == 0) {
             return;
         }
-        comparisonReviewManager.TransposeProperty(key, selectedPropertiesKey, componentId, groupId);
+
+        // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
+        // No match, OK, No Value components should not get accepted or transposed
+        var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+        var selectedProperties = []
+        for (var propertyKey in selectedPropertiesKey) {
+            var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[propertyKey]));
+            var index = ignore.indexOf(property.severity);
+            if (index !== -1) {
+                continue;
+            }
+            else {
+                selectedProperties.push(Number(selectedPropertiesKey[propertyKey]));
+            }
+        }
+
+        if (selectedProperties.length == 0) {
+            return;
+        }
+
+        comparisonReviewManager.TransposeProperty(key, selectedProperties, componentId, groupId);
     }
     else if (source.toLowerCase() === "group") {
         comparisonReviewManager.TransposeCategory(key,

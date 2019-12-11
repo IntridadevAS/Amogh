@@ -57,10 +57,10 @@ var xCheckStudio;
         function isTransposed(component) {
             var transposed = false;
 
-            if (component.transpose === "FromDataSource1" || 
-            component.transpose === "FromDataSource2" || 
-            component.transpose === "FromDataSource3" || 
-            component.transpose === "FromDataSource4") {
+            if (component.transpose === "FromDataSource1" ||
+                component.transpose === "FromDataSource2" ||
+                component.transpose === "FromDataSource3" ||
+                component.transpose === "FromDataSource4") {
                 transposed = true;
             }
             return transposed;
@@ -88,7 +88,7 @@ var xCheckStudio;
 
                     if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
                         (status.toLowerCase() !== "error" ||
-                        status.toLowerCase() !== "warning")) {
+                            status.toLowerCase() !== "warning")) {
 
                         return NoMatchColor;
                     }
@@ -103,27 +103,40 @@ var xCheckStudio;
             }
 
             // var color;
-            if (status.toLowerCase() === "ok") {
+            if (status.toLowerCase().includes("ok")) {
+                if (status.toLowerCase() == "ok(a)") {
+                    return AcceptedColor;
+                }
+                else if (status.toLowerCase() == "ok(t)") {
+                    return AcceptedColor;
+                }
+                else if (status.toLowerCase() == "ok(a)(t)") {
+                    return AcceptedColor;
+                }
                 return SuccessColor;
             }
-            else if (status.toLowerCase() === ("No Match").toLowerCase()) {
-                if(parentComponent && (parentComponent.Status.toLowerCase() == "error" || 
-                parentComponent.Status.toLowerCase() == "ok" || 
-                parentComponent.Status.toLowerCase() == "warning")) {
-                    if (isAccepted(parentComponent)) {
+            else if (status.toLowerCase().includes("no match")) {
+                if (parentComponent && (parentComponent.Status.toLowerCase().includes("error") ||
+                    parentComponent.Status.toLowerCase().includes("ok") ||
+                    parentComponent.Status.toLowerCase().includes("warning"))) {
+
+                    if (parentComponent.Status.toLowerCase().includes("(a)") || parentComponent.Status.toLowerCase().includes("(t)")) {
+                        return AcceptedColor;
+                    }
+                    else if (isAccepted(parentComponent)) {
                         return AcceptedColor;
                     }
                     else if (isTransposed(parentComponent)) {
                         return AcceptedColor;
                     }
                     else {
-                        if(parentComponent.Status.toLowerCase() == "error") {
+                        if (parentComponent.Status.toLowerCase() == "error") {
                             return HoopsViewerErrorColor;
                         }
-                        else if(parentComponent.Status.toLowerCase() == "warning") {
+                        else if (parentComponent.Status.toLowerCase() == "warning") {
                             return HoopsViewerWarningColor;
                         }
-                        else if(parentComponent.Status.toLowerCase() == "ok") {
+                        else if (parentComponent.Status.toLowerCase() == "ok") {
                             return SuccessColor;
                         }
                     }
@@ -136,12 +149,20 @@ var xCheckStudio;
                         return AcceptedColor;
                     }
                     else {
-                        return NoMatchColor;
+                        if (parentComponent && (parentComponent.Status.toLowerCase().includes("undefined"))) {
+                            return NoMatchColor;
+                        }
+                        else {
+                            return undefined;
+                        }
                     }
                 }
             }
-            else if (status.toLowerCase() === ("Error").toLowerCase()) {
-                if (isAccepted(component)) {
+            else if (status.toLowerCase().includes("error")) {
+                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                    return AcceptedColor;
+                }
+                else if (isAccepted(component)) {
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
@@ -151,8 +172,11 @@ var xCheckStudio;
                     return HoopsViewerErrorColor;
                 }
             }
-            else if (status.toLowerCase() === ("Warning").toLowerCase()) {
-                if (isAccepted(component)) {
+            else if (status.toLowerCase().includes("warning")) {
+                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                    return AcceptedColor;
+                }
+                else if (isAccepted(component)) {
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
@@ -162,8 +186,11 @@ var xCheckStudio;
                     return HoopsViewerWarningColor;
                 }
             }
-            else if (status.toLowerCase() === ("No Value").toLowerCase()) {
-                if (isAccepted(component)) {
+            else if (status.toLowerCase().includes("no value")) {
+                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                    return AcceptedColor;
+                }
+                else if (isAccepted(component)) {
                     return AcceptedColor;
                 }
                 else if (isTransposed(component)) {
@@ -264,15 +291,13 @@ var xCheckStudio;
 
             var arrayElementOccCount = {};
             for (var i = 0; i < arr.length; i++) {
-                var element  = arr[i];
-                if(element in arrayElementOccCount)
-                {
-                    arrayElementOccCount[element] +=1;
+                var element = arr[i];
+                if (element in arrayElementOccCount) {
+                    arrayElementOccCount[element] += 1;
                 }
-                else
-                {
-                    arrayElementOccCount[element] =1; 
-                }               
+                else {
+                    arrayElementOccCount[element] = 1;
+                }
             }
 
             return arrayElementOccCount;
@@ -359,7 +384,7 @@ var xCheckStudio;
 
         function getCurrentDateTime() {
             var today = new Date();
-            var date = (today.getMonth() + 1) + '/' + today.getDate() +'/'+ today.getFullYear();
+            var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
             var time = today.getHours() + ":" + today.getMinutes();
             var dateTime = date + ' ' + time;
             return dateTime;
