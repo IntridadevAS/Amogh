@@ -10,7 +10,7 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
 
     var _this = this;
     var data = this.CreateAccordionData();
-    for(var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
         var div = document.createElement("DIV");
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
         div.id = data[i]["template"];
@@ -20,13 +20,13 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         parentTable.append(div);
     }
 
-    $("#"+ this.MainReviewTableContainer).dxAccordion({
+    $("#" + this.MainReviewTableContainer).dxAccordion({
         collapsible: true,
         dataSource: data,
         deferRendering: false,
         selectedIndex: -1,
-        onSelectionChanged: function(e) {
-            if(e.addedItems.length > 0) {
+        onSelectionChanged: function (e) {
+            if (e.addedItems.length > 0) {
                 model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
         },
@@ -34,52 +34,52 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
             // initialize the context menu             
             var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
 
-            if(!(containerDiv in _this.ContextMenus)) {
-               var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-               _this.ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
-           }   
-           e.itemElement[0].id = e.itemData["template"] + "_accordion";
-           _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
-       },
-        itemTitleTemplate: function(itemData, itemIndex, itemElement) {
+            if (!(containerDiv in _this.ContextMenus)) {
+                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                _this.ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
+            }
+            e.itemElement[0].id = e.itemData["template"] + "_accordion";
+            _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
+        },
+        itemTitleTemplate: function (itemData, itemIndex, itemElement) {
             var btn = $('<div>')
             $(btn).data("index", itemIndex)
                 .dxButton({
-                icon: "chevrondown",
-                width: "38px",
-                height: "30px",
-                onClick: function (e) {
-                    e.event.stopPropagation();
-                    var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
-                    if(!isOpened) {
-                        $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+                    icon: "chevrondown",
+                    width: "38px",
+                    height: "30px",
+                    onClick: function (e) {
+                        e.event.stopPropagation();
+                        var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
+                        if (!isOpened) {
+                            $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+                        }
+                        else {
+                            $("#" + _this.MainReviewTableContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
+                        }
+
                     }
-                    else {
-                        $("#" + _this.MainReviewTableContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
-                    }
-                    
-                }
-            }).css("float", "right").appendTo(itemElement);
+                }).css("float", "right").appendTo(itemElement);
 
             btn[0].classList.add("accordionButton");
 
             itemElement.append("<h1 style = 'font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
 
         },
-        onItemTitleClick: function(e){
+        onItemTitleClick: function (e) {
             e.event.stopPropagation();
         },
-        onItemClick: function(e) {
+        onItemClick: function (e) {
             e.event.stopPropagation();
         }
     });
 }
 
-ComplianceCheckResultsTable.prototype.getTableId = function(tableName) {
+ComplianceCheckResultsTable.prototype.getTableId = function (tableName) {
     return tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
 }
 
-ComplianceCheckResultsTable.prototype.GetAccordionData = function(groupName) {
+ComplianceCheckResultsTable.prototype.GetAccordionData = function (groupName) {
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var accordionData;
@@ -95,15 +95,15 @@ ComplianceCheckResultsTable.prototype.GetAccordionData = function(groupName) {
     return accordionData;
 }
 
-ComplianceCheckResultsTable.prototype.ExpandAccordionScrollToRow = function(row, groupName) {
+ComplianceCheckResultsTable.prototype.ExpandAccordionScrollToRow = function (row, groupName) {
 
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var mainReviewTableContainer = document.getElementById(this.MainReviewTableContainer);
 
     // scroll to table
     var accordionIndex = this.GetAccordionIndex(groupName)
-    if(accordionIndex >= 0) {
-        accordion.expandItem(Number(accordionIndex)).then( function (result) {
+    if (accordionIndex >= 0) {
+        accordion.expandItem(Number(accordionIndex)).then(function (result) {
             mainReviewTableContainer.scrollTop = row.offsetTop - row.offsetHeight;
         });
     }
@@ -112,7 +112,7 @@ ComplianceCheckResultsTable.prototype.ExpandAccordionScrollToRow = function(row,
     }
 }
 
-ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
+ComplianceCheckResultsTable.prototype.CreateAccordionData = function () {
     var ComplianceTableData = model.checks["compliance"]["reviewManager"].ComplianceCheckManager;
     var checkGroups = ComplianceTableData["results"];
 
@@ -131,7 +131,7 @@ ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
         }
 
         // undefined group should be last in table
-        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+        if (componentsGroup.componentClass.toLowerCase() == "undefined") {
             undefinedGroupId = groupId;
             continue;
         }
@@ -143,7 +143,7 @@ ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
         data.push(dataObject);
     }
 
-    if(undefinedGroupId) {
+    if (undefinedGroupId) {
         var dataObject = {};
         var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
         dataObject["template"] = componentsGroup.componentClass;
@@ -154,14 +154,14 @@ ComplianceCheckResultsTable.prototype.CreateAccordionData = function() {
     return data;
 }
 
-ComplianceCheckResultsTable.prototype.GetAccordionIndex = function(groupName) {
+ComplianceCheckResultsTable.prototype.GetAccordionIndex = function (groupName) {
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var index;
     var selectedItems = accordion._selection.getSelectedItemKeys();
-    for(var i = 0; i < accordionItems.length; i++) {
-        if (!accordionItems[i]["template"].includes(groupName) || 
-        (selectedItems.length > 0 && accordionItems[i]["template"] == selectedItems[0]["template"])) {
+    for (var i = 0; i < accordionItems.length; i++) {
+        if (!accordionItems[i]["template"].includes(groupName) ||
+            (selectedItems.length > 0 && accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;
         }
         else {
@@ -194,7 +194,7 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
         tableRowContent[ComplianceColumnNames.ResultId] = component.id;
         tableRowContent[ComplianceColumnNames.GroupId] = groupId;
 
-        if(component.accepted == "true") {
+        if (component.accepted == "true") {
             tableRowContent[ComplianceColumnNames.Status] = "OK(A)";
         }
 
@@ -207,7 +207,7 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
                 "SourceAName": component.name,
                 "MainClass": mainClass,
                 "SourceANodeId": component.nodeId,
-                "sourceId" : component.sourceId
+                "sourceId": component.sourceId
             };
 
             model.getCurrentReviewManager().SourceComponentIdvsNodeId[component.id] = component.nodeId;
@@ -257,7 +257,7 @@ ComplianceCheckResultsTable.prototype.CreateMainTableHeaders = function (source)
         columnHeader["caption"] = caption;
         columnHeader["dataField"] = dataField;
         // columnHeader["dataType"] = "string";
-        if(visible == false) {
+        if (visible == false) {
             columnHeader["visible"] = visible;
         }
 
@@ -291,7 +291,7 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
             continue;
         }
 
-        if(componentsGroup.componentClass.toLowerCase() == "undefined") {
+        if (componentsGroup.componentClass.toLowerCase() == "undefined") {
             undefinedGroupId = groupId;
             continue;
         }
@@ -299,13 +299,13 @@ ComplianceCheckResultsTable.prototype.populateReviewTable = function () {
         this.CreateTable(groupId, componentsGroup);
     }
     // Add undefined category last
-    if(undefinedGroupId) {
+    if (undefinedGroupId) {
         var componentsGroup = model.checks["compliance"]["reviewManager"].GetCheckGroup(undefinedGroupId);
         this.CreateTable(undefinedGroupId, componentsGroup);
     }
 }
 
-ComplianceCheckResultsTable.prototype.CreateTable = function(groupId, componentsGroup) {
+ComplianceCheckResultsTable.prototype.CreateTable = function (groupId, componentsGroup) {
     var ComplianceData = model.getCurrentReviewManager().ComplianceCheckManager;
 
     var columnHeaders = this.CreateMainTableHeaders(ComplianceData.source);
@@ -332,7 +332,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            allowColumnResizing : true,
+            allowColumnResizing: true,
             hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
@@ -342,12 +342,12 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 mode: "multiple",
                 showCheckBoxesMode: "always",
                 recursive: true
-            }, 
+            },
             paging: { enabled: false },
-            onContentReady: function(e) {
+            onContentReady: function (e) {
                 model.checks["compliance"]["reviewManager"].AddTableContentCount(viewerContainer.replace("#", ""));
             },
-            onInitialized: function(e) {
+            onInitialized: function (e) {
                 // initialize the context menu
                 if (!(viewerContainer in _this.ContextMenus)) {
                     var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
@@ -357,30 +357,30 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 _this.ContextMenus[viewerContainer].ComponentTableContainer = viewerContainer;
                 _this.ContextMenus[viewerContainer].InitComponentLevelContextMenu(viewerContainer);
             },
-            onCellPrepared: function(e) {
-                if(e.rowType == "header"){  
-                    e.cellElement.css("text-align", "center"); 
+            onCellPrepared: function (e) {
+                if (e.rowType == "header") {
+                    e.cellElement.css("text-align", "center");
                     e.cellElement.css("color", "black");
-                    e.cellElement.css("font-weight", "bold");   
-                 }  
+                    e.cellElement.css("font-weight", "bold");
+                }
             },
             onSelectionChanged: function (e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                if (e.currentSelectedRowKeys.length > 0) {
+                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
-                        var  row = e.component.getRowElement(rowIndex);
+                        var row = e.component.getRowElement(rowIndex);
                         model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], viewerContainer, "on");
                     }
                 }
                 else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                         var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
-                        var  row = e.component.getRowElement(rowIndex);
+                        var row = e.component.getRowElement(rowIndex);
                         model.getCurrentSelectionManager().HandleCheckComponentSelectFormCheckBox(row[0], viewerContainer, "off");
                     }
                 }
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 var id = viewerContainer.replace("#", "");
                 _this.CurrentTableId = id;
                 model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0], viewerContainer);
@@ -410,7 +410,7 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
 
 ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function (rowIndex, containerDiv) {
     var dataGrid = $(containerDiv).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
     var rowData = data[rowIndex];
     return rowData;
 }
@@ -419,7 +419,7 @@ ComplianceCheckResultsTable.prototype.Destroy = function () {
 
     for (var groupId in this.CheckTableIds) {
         var id = this.CheckTableIds[groupId];
-        
+
         $(id).remove()
     }
 
@@ -430,44 +430,44 @@ ComplianceCheckResultsTable.prototype.Destroy = function () {
     document.getElementById(this.MainReviewTableContainer).innerHTML = "";
 }
 
-ComplianceCheckResultsTable.prototype.HighlightHiddenRows = function(isHide, checkComponentsRows) {
+ComplianceCheckResultsTable.prototype.HighlightHiddenRows = function (isHide, checkComponentsRows) {
 
     for (var i = 0; i < checkComponentsRows.length; i++) {
         var selectedRow = checkComponentsRows[i];
 
-        for(var j = 0; j < selectedRow.cells.length; j++) {
+        for (var j = 0; j < selectedRow.cells.length; j++) {
             var cell = selectedRow.cells[j];
-            if(isHide) {
+            if (isHide) {
                 cell.style.color = HiddenElementTextColor;
             }
             else {
                 cell.style.color = "black";
             }
         }
-    }       
+    }
 }
 
 ComplianceCheckResultsTable.prototype.UpdateGridData = function (componentId,
-    tableContainer,    
+    tableContainer,
     changedStatus,
     populateDetailedTable) {
 
-        var dataGrid = $(tableContainer).dxDataGrid("instance");
-        var data = dataGrid.getDataSource().items();
-        var rowIndex = dataGrid.getRowIndexByKey(componentId);
-        var rowData = data[rowIndex];
-        rowData.Status = changedStatus;
-    
-        dataGrid.repaintRows(rowIndex);
-    
-        if (populateDetailedTable) {
-            model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
-        }
+    var dataGrid = $(tableContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
+    var rowIndex = dataGrid.getRowIndexByKey(componentId);
+    var rowData = data[rowIndex];
+    rowData.Status = changedStatus;
+
+    dataGrid.repaintRows(rowIndex);
+
+    if (populateDetailedTable) {
+        model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
+    }
 }
 
 
 ComplianceCheckResultsTable.prototype.GetComponentIds = function () {
-    
+
     return new Promise((resolve) => {
 
         this.GetDataForSelectedRows().then(function (dataObjects) {
@@ -478,19 +478,19 @@ ComplianceCheckResultsTable.prototype.GetComponentIds = function () {
 
 
             var sourceIds = [];
-           
+
 
             for (var i = 0; i < dataObjects.length; i++) {
-                rowData = dataObjects[i];               
-        
-                if (rowData[ComplianceColumnNames.SourceId] !== "" && 
+                rowData = dataObjects[i];
+
+                if (rowData[ComplianceColumnNames.SourceId] !== "" &&
                     rowData[ComplianceColumnNames.SourceId] !== null) {
                     sourceIds.push(Number(rowData[ComplianceColumnNames.SourceId]));
-                }    
+                }
             }
 
             var ids = {};
-            ids[model.selectedCompliance.id ] = sourceIds;
+            ids[model.selectedCompliance.id] = sourceIds;
             return resolve(ids);
         });
     });
@@ -510,7 +510,7 @@ ComplianceCheckResultsTable.prototype.GetDataForSelectedRows = function () {
 
         for (var i = 0; i < selectedComponents.length; i++) {
             var selectedRow = selectedComponents[i];
-           
+
             this.GetDataForSelectedRow(selectedRow).then(function (dataObject) {
                 arr.push(dataObject);
 
@@ -562,7 +562,7 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             caption = "Status";
             dataField = CompliancePropertyColumnNames.Status;
         }
-        else if(i == CompliancePropertyColumns.Rule) {
+        else if (i == CompliancePropertyColumns.Rule) {
             caption = "Condition";
             dataField = CompliancePropertyColumnNames.Rule;
         }
@@ -574,11 +574,11 @@ ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
         headerGroupComp["caption"] = caption;
         headerGroupComp["dataField"] = dataField;
-        headerGroupComp["width"] = "25%";   
+        headerGroupComp["width"] = "25%";
 
-        if(visible == false) {
+        if (visible == false) {
             headerGroupComp["visible"] = visible;
-        } 
+        }
         // headerGroupComp["dataType"] = "string";
         columns.push(headerGroupComp);
     }
@@ -603,7 +603,7 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
         tableRowContent[CompliancePropertyColumnNames.Status] = property.severity;
     }
 
-    if(property.accepted == "true") {
+    if (property.accepted == "true") {
         tableRowContent[CompliancePropertyColumnNames.Status] = "OK(A)";
     }
 
@@ -639,17 +639,17 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 
     var id = "#" + this.DetailedReviewTableContainer;
     this.LoadDetailedReviewTableData(columnHeaders, tableData, id, containerDiv);
-    
+
 }
 
 ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer, containerDiv) {
     var _this = this;
-  
+
     this.Destroy();
 
     $(function () {
         $(viewerContainer).dxDataGrid({
-            dataSource: tableData,           
+            dataSource: tableData,
             columns: columnHeaders,
             keyExpr: CompliancePropertyColumnNames.PropertyId,
             columnAutoWidth: true,
@@ -657,7 +657,7 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             wordWrapEnabled: false,
             showBorders: true,
             showRowLines: true,
-            allowColumnResizing : true,
+            allowColumnResizing: true,
             hoverStateEnabled: true,
             filterRow: {
                 visible: true
@@ -666,37 +666,36 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 mode: "multiple",
                 showCheckBoxesMode: "always",
                 recursive: true
-            }, 
+            },
             scrolling: {
-                mode : "standard"
+                mode: "standard"
             },
             paging: {
                 enabled: false
             },
-            onContentReady: function(e) {
+            onContentReady: function (e) {
                 // initialize the context menu
                 // internal call from repaint rows gives containerId with # hence check
-                if(!containerDiv.includes("#")) {
+                if (!containerDiv.includes("#")) {
                     containerDiv = "#" + containerDiv;
                 }
-                
-                if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
-                {
+
+                if (!(containerDiv in model.getCurrentReviewTable().ContextMenus)) {
                     var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
                     model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
                 }
 
-                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);    
+                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);
                 _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
             },
-            onCellPrepared: function(e) {
-                if(e.rowType == "header"){  
-                    e.cellElement.css("text-align", "center"); 
+            onCellPrepared: function (e) {
+                if (e.rowType == "header") {
+                    e.cellElement.css("text-align", "center");
                     e.cellElement.css("color", "black");
-                    e.cellElement.css("font-weight", "bold");   
-                 }  
+                    e.cellElement.css("font-weight", "bold");
+                }
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 model.checks["compliance"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
                 // var comment = model.checks["compliance"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
                 // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
@@ -708,13 +707,13 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 // }
             },
             onSelectionChanged: function (e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                if (e.currentSelectedRowKeys.length > 0) {
+                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
                         _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
                     }
                 }
                 else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                         var index = _this.SelectedProperties.indexOf(e.currentDeselectedRowKeys[i]);
                         if (index > -1) {
                             _this.SelectedProperties.splice(index, 1);
@@ -762,13 +761,13 @@ ComplianceCheckPropertiesTable.prototype.Destroy = function () {
     var viewerContainerDiv = document.createElement("div")
     viewerContainerDiv.id = this.DetailedReviewTableContainer;
 
-    parent.appendChild(viewerContainerDiv); 
+    parent.appendChild(viewerContainerDiv);
 }
 
-ComplianceCheckPropertiesTable.prototype.UpdateGridData = function(rowKey, property) {
-    var detailInfoContainer =  model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+ComplianceCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, property) {
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
     var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items(); 
+    var data = dataGrid.getDataSource().items();
     var rowIndex = dataGrid.getRowIndexByKey(rowKey);
     var rowData = data[rowIndex];
     rowData[CompliancePropertyColumnNames.Status] = property["severity"];

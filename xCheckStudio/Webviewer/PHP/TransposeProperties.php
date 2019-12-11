@@ -49,10 +49,8 @@ function TransposeProperty() {
     for($i = 0; $i < count($selectedPropertyIds); $i++) {
         for($j = 0; $j < count($properties); $j++) {
             if($j == $selectedPropertyIds[$i] && $properties[$j]["accepted"] == "false" && !in_array($properties[$j]["severity"], $dontChangeOk)) {
-                // if($properties[$j]["sourceAName"] !== null && $properties[$j]["sourceBName"] !== null) {
-                    $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=?');
-                    $command->execute(array($transposeType, $properties[$j]["id"]));
-                // }
+                $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET transpose=? WHERE id=?');
+                $command->execute(array($transposeType, $properties[$j]["id"]));
             }
             else {
                 continue;
@@ -63,6 +61,30 @@ function TransposeProperty() {
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?");
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $isPropertyTransposed = false;
+    $isPropertyAccepted = false;
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["transpose"] !== null) {
+            $isPropertyTransposed = true;
+        }
+        else if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
+        }
+    }
+
+    $status = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $status = $status . "(A)";
+    }
+
+    if($isPropertyTransposed) {
+        $status = $status . "(T)";
+    }
+
+
+    $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+    $command->execute(array($status, $componentid)); 
 
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckComponents WHERE id=?");
     $command->execute(array($componentid));
@@ -111,6 +133,30 @@ function RestoreProperty() {
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?");
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+
+    $isPropertyTransposed = false;
+    $isPropertyAccepted = false;
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["transpose"] !== null) {
+            $isPropertyTransposed = true;
+        }
+        else if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
+        }
+    }
+
+    $status = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $status = $status . "(A)";
+    }
+
+    if($isPropertyTransposed) {
+        $status = $status . "(T)";
+    }
+
+
+    $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+    $command->execute(array($status, $componentid)); 
 
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckComponents WHERE id=?");
     $command->execute(array($componentid));
@@ -178,6 +224,31 @@ function TransposeComponentProperties() {
                 }   
                 $resultComponent["component"]["properties"] = $resultProperties;
 
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($j = 0; $j < count($resultProperties); $j++) {
+                    if($resultProperties[$j]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($resultProperties[$j]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
+
+                $status = getWorstSeverityForComponent($resultProperties);
+                if($isPropertyAccepted) {
+                    $status = $status . "(A)";
+                }
+
+                if($isPropertyTransposed) {
+                    $status = $status . "(T)";
+                }
+
+
+                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+                $command->execute(array($status, $components[$i])); 
+
+                $resultComponent["component"]["status"] = $status;
                 $componentsArray[$components[$i]] = $resultComponent;
             }
 
@@ -206,7 +277,7 @@ function RestoreComponentLevelTranspose() {
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
+    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'Missing Property(s)');
         $results = array();
         $dbh->beginTransaction();
 
@@ -248,6 +319,31 @@ function RestoreComponentLevelTranspose() {
                 }   
                 $resultComponent["component"]["properties"] = $resultProperties;
 
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($j = 0; $j < count($resultProperties); $j++) {
+                    if($resultProperties[$j]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($resultProperties[$j]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
+
+                $status = getWorstSeverityForComponent($resultProperties);
+                if($isPropertyAccepted) {
+                    $status = $status . "(A)";
+                }
+
+                if($isPropertyTransposed) {
+                    $status = $status . "(T)";
+                }
+
+
+                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+                $command->execute(array($status, $components[$i])); 
+
+                $resultComponent["component"]["status"] = $status;
                 $componentsArray[$components[$i]] = $resultComponent;
             }
 
@@ -294,7 +390,7 @@ function RestoreCategoryLevelTranspose() {
             $resultComponent = array();
             $resultComponent["component"] = $comp;
 
-            // if($comp['status'] !== 'No Match') {
+            if(!in_array($comp['status'],  $dontChangeOk)) {
                 $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($comp['id']));
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
@@ -312,9 +408,40 @@ function RestoreCategoryLevelTranspose() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
 
-                $resultComponent["component"]["properties"] = $resultProperties;
-            // }
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($j = 0; $j < count($resultProperties); $j++) {
+                    if($resultProperties[$j]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($resultProperties[$j]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
 
+                $status = getWorstSeverityForComponent($resultProperties);
+                if($isPropertyAccepted) {
+                    $status = $status . "(A)";
+                }
+
+                if($isPropertyTransposed) {
+                    $status = $status . "(T)";
+                }
+
+
+                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+                $command->execute(array($status, $comp['id'])); 
+
+                $resultComponent["component"]["status"] = $status;
+            }
+            else {
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
+            }
+
+            $resultComponent["component"]["properties"] = $resultProperties;
             $componentsArray[$comp['id']] = $resultComponent;
         }
 
@@ -325,7 +452,7 @@ function RestoreCategoryLevelTranspose() {
     $dbh = null;
 
     echo json_encode($results);
-   
+
 }
 
 function transposePropertiesCategoryLevel() {
@@ -368,7 +495,7 @@ function transposePropertiesCategoryLevel() {
             $resultComponent = array();
             $resultComponent["component"] = $comp;
 
-            // if($comp['status'] !== 'No Match') {
+            if(!in_array($comp['status'],  $dontChangeOk)) {
                 $command = $dbh->prepare("SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?");
                 $command->execute(array($comp['id']));
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
@@ -386,9 +513,40 @@ function transposePropertiesCategoryLevel() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
 
-                $resultComponent["component"]["properties"] = $resultProperties;
-            // }
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($j = 0; $j < count($resultProperties); $j++) {
+                    if($resultProperties[$j]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($resultProperties[$j]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
 
+                $worststatus = getWorstSeverityForComponent($resultProperties);
+                if($isPropertyAccepted) {
+                    $worststatus = $worststatus . "(A)";
+                }
+
+                if($isPropertyTransposed) {
+                    $worststatus = $worststatus . "(T)";
+                }
+
+
+                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=?");
+                $command->execute(array($worststatus, $comp['id'])); 
+
+                $resultComponent["component"]["status"] = $worststatus;
+            }
+            else {
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
+            }
+
+            $resultComponent["component"]["properties"] = $resultProperties;
             $componentsArray[$comp['id']] = $resultComponent;
         }
 
@@ -399,6 +557,31 @@ function transposePropertiesCategoryLevel() {
     $dbh = null;
 
     echo json_encode($results);
+}
+
+function getWorstSeverityForComponent($properties) {
+    $worstSeverity = "OK";
+    for($j = 0; $j < count($properties); $j++) {
+        if($properties[$j]["severity"] !== "OK" && $properties[$j]["severity"] !== "No Value") {
+            if($properties[$j]["accepted"] == "true" || $properties[$j]["transpose"]  !== null) {
+                continue;
+            }
+            else {
+                if(strtolower($properties[$j]["severity"]) == "error") {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+                else if(strtolower($properties[$j]["severity"]) == "warning" && strtolower($worstSeverity) !== "error") {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+                else if(strtolower($properties[$j]["severity"]) == "no match" && 
+                (strtolower($worstSeverity) !== "error" && strtolower($worstSeverity) !== "warning")) {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+            }
+        }
+    }
+
+    return $worstSeverity;
 }
 
 ?>

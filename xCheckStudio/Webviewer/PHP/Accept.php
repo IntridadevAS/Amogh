@@ -94,14 +94,14 @@ function acceptComparisonComponent() {
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'true';
 
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', ' ', 'Missing Property(s)');
         $dbh->beginTransaction();
 
         $results = array();
         foreach ($selectedGroupIdsVsResultsIds as $groupid => $components) {
             $componentsArray = array();
             for($i=0; $i < count($components); $i++){
-                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+                $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?");
                 $command->execute(array($status, $components[$i]));                
 
                 $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE id=?');
@@ -165,7 +165,7 @@ function acceptComparisonProperty() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match', ' ', 'Missing Property(s)');
     $results = array();
     $dbh->beginTransaction();
 
@@ -174,6 +174,8 @@ function acceptComparisonProperty() {
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
 
     $propertyIdIndex = 0;
+    $isPropertyTransposed = false;
+    $isPropertyAccepted = false;
 
     for($i = 0; $i < count($selectedPropertyIds); $i++) {
         for($j = 0; $j < count($properties); $j++) {
@@ -194,6 +196,27 @@ function acceptComparisonProperty() {
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
 
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["transpose"] !== null) {
+            $isPropertyTransposed = true;
+        }
+        else if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
+        }
+    }
+
+    $status = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $status = $status . "(A)";
+    }
+
+    if($isPropertyTransposed) {
+        $status = $status . "(T)";
+    }
+
+
+    $command = $dbh->prepare("UPDATE ComparisonCheckComponents SET status=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($status, $componentid)); 
    
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckComponents WHERE id=?");
     $command->execute(array($componentid));
@@ -223,7 +246,7 @@ function acceptComparisonCategory() {
 
     $categoryStatus = 'ACCEPTED';
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', '', 'No Match');
     $transpose = null;
     $componentsArray = array();
     $results = array();
@@ -245,7 +268,7 @@ function acceptComparisonCategory() {
             $resultComponent = array();
             $resultComponent["component"] = $comp;
 
-            if($comp['status'] !== $dontChangeOk) {
+            if(!in_array($comp['status'],  $dontChangeOk)) {
                 $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($status, $comp['id']));
 
@@ -254,9 +277,39 @@ function acceptComparisonCategory() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
 
-                $resultComponent["component"]["properties"] = $resultProperties;
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($i = 0; $i < count($properties); $i++) {
+                    if($properties[$i]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($properties[$i]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
+            
+                $worststatus = getWorstSeverityForComponent($properties);
+                if($isPropertyAccepted) {
+                    $worststatus = $worststatus . "(A)";
+                }
+            
+                if($isPropertyTransposed) {
+                    $worststatus = $worststatus . "(T)";
+                }
+            
+                $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+                $command->execute(array($worststatus, $comp['id']));
+
+                $resultComponent["component"]["status"] = $worststatus;
+            }
+            else {
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
             }
 
+            $resultComponent["component"]["properties"] = $resultProperties;
             $componentsArray[$comp['id']] = $resultComponent;
         }
 
@@ -282,7 +335,7 @@ function acceptComplianceComponent() {
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'true';
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
         $results = array();
 
         if($ActionToPerform == "acceptComplianceSourceAComponent") {
@@ -364,7 +417,7 @@ function acceptComplianceProperty() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
     $results = array();
 
     $dbh->beginTransaction();
@@ -411,19 +464,25 @@ function acceptComplianceProperty() {
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
 
-    for($i = 0; $i < count($properties); $i++) {
-        if(($properties[$i]["accepted"] == "true" && !in_array($properties[$i]["severity"], $dontChangeOk)) ||
-         ($properties[$i]["accepted"] == "false" && in_array($properties[$i]["severity"], $dontChangeOk))) {
-            if($i == (count($properties)-1)) {
-                $command = $dbh->prepare("UPDATE $componentTableName SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
-                $command->execute(array($status, $componentid));                
-            }
+    $isPropertyAccepted = false;
 
-            continue;
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
         }
-        else {
-            break;
-        }
+    }
+
+    $worstSeverity = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $worstSeverity = $worstSeverity . "(A)";
+    }
+
+    $command = $dbh->prepare("UPDATE $componentTableName SET status=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($worstSeverity, $componentid)); 
+
+    if($worstSeverity == 'OK(A)') {
+        $command = $dbh->prepare("UPDATE $componentTableName SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+        $command->execute(array($status, $componentid));     
     }
 
     $command = $dbh->prepare("SELECT * FROM $componentTableName WHERE id=?");
@@ -455,7 +514,7 @@ function acceptComplianceCategory() {
 
     $categoryStatus = 'ACCEPTED';
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
     $transpose = null;
     $componentsArray = array();
     $results = array();
@@ -620,8 +679,33 @@ function unAcceptComponent() {
     
                 array_push($resultProperties, $property[0]);                    
                 $index++;
-            }   
+            }  
+            
+            $isPropertyTransposed = false;
+            $isPropertyAccepted = false;
+            for($j = 0; $j < count($resultProperties); $j++) {
+                if($resultProperties[$j]["transpose"] !== null) {
+                    $isPropertyTransposed = true;
+                }
+                else if($resultProperties[$j]["accepted"] == "true") {
+                    $isPropertyAccepted = true;
+                }
+            }
+        
+            $worststatus = getWorstSeverityForComponent($resultProperties);
+            if($isPropertyAccepted) {
+                $worststatus = $worststatus . "(A)";
+            }
+        
+            if($isPropertyTransposed) {
+                $worststatus = $worststatus . "(T)";
+            }
+        
+            $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
+            $command->execute(array($worststatus, $components[$i]));
+
             $resultComponent["component"]["properties"] = $resultProperties;
+            $resultComponent["component"]["status"] = $worststatus;
 
             $componentsArray[$components[$i]] = $resultComponent;
         }
@@ -645,7 +729,7 @@ function unAcceptComparisonProperty() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'false';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
     $results = array();
     $dbh->beginTransaction();
 
@@ -674,8 +758,28 @@ function unAcceptComparisonProperty() {
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
 
-    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
-    $command->execute(array($status, $componentid));
+    $isPropertyTransposed = false;
+    $isPropertyAccepted = false;
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["transpose"] !== null) {
+            $isPropertyTransposed = true;
+        }
+        else if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
+        }
+    }
+
+    $worststatus = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $worststatus = $worststatus . "(A)";
+    }
+
+    if($isPropertyTransposed) {
+        $worststatus = $worststatus . "(T)";
+    }
+
+    $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=?, status=? WHERE id=?');
+    $command->execute(array($status, $worststatus, $componentid));
 
 
     $command = $dbh->prepare("SELECT * FROM ComparisonCheckComponents WHERE id=?");
@@ -701,7 +805,7 @@ function unAcceptComparisonCategory() {
 
     $categoryStatus = 'UNACCEPTED';
     $status = 'false';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ', 'No Match');
     $transpose = null;
     $componentsArray = array();
     $results = array();
@@ -723,7 +827,7 @@ function unAcceptComparisonCategory() {
             $resultComponent = array();
             $resultComponent["component"] = $comp;
 
-            if($comp['status'] !== $dontChangeOk) {
+            if(!in_array($comp['status'],  $dontChangeOk)) {
                 $command = $dbh->prepare("UPDATE ComparisonCheckProperties SET accepted=? WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($status, $comp['id']));
 
@@ -732,9 +836,39 @@ function unAcceptComparisonCategory() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
 
-                $resultComponent["component"]["properties"] = $resultProperties;
-            }
+                $isPropertyTransposed = false;
+                $isPropertyAccepted = false;
+                for($i = 0; $i < count($properties); $i++) {
+                    if($properties[$i]["transpose"] !== null) {
+                        $isPropertyTransposed = true;
+                    }
+                    else if($properties[$i]["accepted"] == "true") {
+                        $isPropertyAccepted = true;
+                    }
+                }
+            
+                $worststatus = getWorstSeverityForComponent($properties);
+                if($isPropertyAccepted) {
+                    $worststatus = $worststatus . "(A)";
+                }
+            
+                if($isPropertyTransposed) {
+                    $worststatus = $worststatus . "(T)";
+                }
+            
+                $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=?, status=? WHERE id=?');
+                $command->execute(array($status, $worststatus,  $comp['id']));
 
+                $resultComponent["component"]["status"] = $worststatus;
+            }
+            else {
+                $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
+                $command->execute(array($comp['id']));
+                $properties = $command->fetchAll(PDO::FETCH_ASSOC);
+                $resultProperties = $properties;
+            }
+            
+            $resultComponent["component"]["properties"] = $resultProperties;
             $componentsArray[$comp['id']] = $resultComponent;
         }
 
@@ -745,82 +879,6 @@ function unAcceptComparisonCategory() {
     $dbh = null;
 
     echo json_encode($results);
-    // $statusArray = array();
-    // global $projectName;
-    // global $checkName;
-    // $groupid = $_POST['groupid'];
-
-    // $dbPath = getCheckDatabasePath($projectName, $checkName);
-    // $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-
-    // $categoryStatus = 'UNACCEPTED';
-    // $status = 'false';
-    // $dontChangeOk = 'OK';
-    // $compProps;
-
-    // $dbh->beginTransaction();
-   
-    // $command = $dbh->prepare('UPDATE ComparisonCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    // $command->execute(array($categoryStatus, $groupid, $dontChangeOk));
-
-    // $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    // $command->execute(array($groupid));
-    // $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-    // $index = 0;
-    // while ($index < count($allCom)) 
-    // {
-    //     $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET accepted=? WHERE id=?');
-    //     $command->execute(array($status, $allCom[$index]['id']));
-
-    //     if(strpos($allCom[$index]['status'], '(A)') == true) {
-    //         $allCom[$index]['status'] = str_replace("(A)", "", $allCom[$index]['status']);
-    //         $command = $dbh->prepare('UPDATE ComparisonCheckComponents SET status=? WHERE id=?');
-    //         $command->execute(array($allCom[$index]['status'], $allCom[$index]['id']));
-    //     }
-        
-    //     if($allCom[$index]['status'] !== $dontChangeOk) {
-    //         $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-    //         $command->execute(array($allCom[$index]['id']));
-    //         $compProps = $command->fetchAll(PDO::FETCH_ASSOC);
-    //         $indexcompProp = 0;
-    //         while ($indexcompProp < count($compProps)) 
-    //         {
-    //             $command = $dbh->prepare('UPDATE ComparisonCheckProperties SET accepted=? WHERE id=?');
-    //             $command->execute(array($status, $compProps[$indexcompProp]['id']));
-    //             $indexcompProp++;
-    //         }  
-    //     }
-
-    //     $index++;
-    // }
-
-    // $dbh->commit();
-
-    // $dbh->beginTransaction();
-
-    //     $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    //     $command->execute(array($groupid));
-    //     $allCom = $command->fetchAll(PDO::FETCH_ASSOC);
-    //     $statusArray[0] = $allCom;
-
-    //     $command = $dbh->prepare('SELECT * FROM ComparisonCheckComponents WHERE ownerGroup=?');
-    //     $command->execute(array($groupid));
-    //     $components1 = $command->fetchAll(PDO::FETCH_ASSOC);
-    //     $noOfComp = 0;
-    //     $propertiesArray = array();
-    //     while($noOfComp < count($components1)) {
-    //         $command = $dbh->prepare('SELECT * FROM ComparisonCheckProperties WHERE ownerComponent=?');
-    //         $command->execute(array($components1[$noOfComp]['id']));
-    //         $properties = $command->fetchAll(PDO::FETCH_ASSOC);
-    //         $propertiesArray[$noOfComp] = $properties;
-    //         $noOfComp++;
-    //     }
-
-    //     $statusArray[1] = $propertiesArray;
-    // $dbh->commit();
-        
-    // $dbh = null;
-    // echo json_encode($statusArray);
 }
 
 function unAcceptComplianceComponent() {
@@ -837,7 +895,7 @@ function unAcceptComplianceComponent() {
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'false';
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
         $results = array();
 
         if($ActionToPerform == "unAcceptComplianceSourceAComponent") {
@@ -919,7 +977,7 @@ function unAcceptComplianceProperty() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $status = 'false';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
     $results = array();
 
     $dbh->beginTransaction();
@@ -961,13 +1019,29 @@ function unAcceptComplianceProperty() {
             }
         }
     }
-  
+
+
     $command = $dbh->prepare("SELECT * FROM $propertiesTableName WHERE ownerComponent=?");
     $command->execute(array($componentid));
     $properties = $command->fetchAll(PDO::FETCH_ASSOC);
 
+    $isPropertyAccepted = false;
+    for($i = 0; $i < count($properties); $i++) {
+        if($properties[$i]["accepted"] == "true") {
+            $isPropertyAccepted = true;
+        }
+    }
+
+    $worstSeverity = getWorstSeverityForComponent($properties);
+    if($isPropertyAccepted) {
+        $worstSeverity = $worstSeverity . "(A)";
+    }
+
+    $command = $dbh->prepare("UPDATE $componentTableName SET status=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array($worstSeverity, $componentid)); 
+
     $command = $dbh->prepare("UPDATE $componentTableName SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
-    $command->execute(array($status, $componentid));
+    $command->execute(array($status, $componentid));     
 
     $command = $dbh->prepare("SELECT * FROM $componentTableName WHERE id=?");
     $command->execute(array($componentid));
@@ -993,7 +1067,7 @@ function unAcceptComplianceCategory() {
 
     $categoryStatus = 'UNACCEPTED';
     $status = 'false';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
     $transpose = null;
     $componentsArray = array();
     $results = array();
@@ -1063,6 +1137,31 @@ function unAcceptComplianceCategory() {
     $dbh = null;
 
     echo json_encode($results);
+}
+
+function getWorstSeverityForComponent($properties) {
+    $worstSeverity = "OK";
+    for($j = 0; $j < count($properties); $j++) {
+        if($properties[$j]["severity"] !== "OK" && $properties[$j]["severity"] !== "No Value") {
+            if($properties[$j]["accepted"] == "true" || (isset($properties[$j]["transpose"]) && $properties[$j]["transpose"]!== null)) {
+                continue;
+            }
+            else {
+                if(strtolower($properties[$j]["severity"]) == "error") {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+                else if(strtolower($properties[$j]["severity"]) == "warning" && strtolower($worstSeverity) !== "error") {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+                else if(strtolower($properties[$j]["severity"]) == "no match" && 
+                (strtolower($worstSeverity) !== "error" && strtolower($worstSeverity) !== "warning")) {
+                    $worstSeverity = $properties[$j]["severity"];
+                }
+            }
+        }
+    }
+
+    return $worstSeverity;
 }
 
 ?>
