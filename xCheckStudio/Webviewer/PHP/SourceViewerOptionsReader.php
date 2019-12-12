@@ -21,8 +21,7 @@
             //global $DBPath ;
             $DBPath = getCheckDatabasePath($projectName, $checkName);
             try
-            {                   
-                //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+            {  
                 $dbh = new PDO("sqlite:$DBPath") or die("cannot open the database");       
      
                 // begin the transaction

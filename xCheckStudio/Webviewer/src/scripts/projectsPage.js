@@ -13,6 +13,8 @@ let model = {
 }
 
 let controller = {
+  projectToCopy: undefined,
+  checkSpaceToCopy: undefined,
   init: function () {
     this.fetchProjects();
     projectView.init();
@@ -331,7 +333,7 @@ let controller = {
 
       if (msg === 'success') {
 
-        var path = "Projects/" + projectname + "/" + projectname + ".db";
+        var path = "Projects/" + projectname + "/Project.db";
         var userinfo = JSON.parse(localStorage.getItem('userinfo'));
         // add this project's entry in main DB
         $.ajax({
@@ -605,6 +607,70 @@ let controller = {
     };
     editProjectView.init();
     editProjectView.disableEditProjectForm();
+  },
+
+  copyProject: function (projectname,
+    projectDescription,
+    projectType,
+    projectStatus,
+    projectComments,
+    projectIsFavorite,
+    source) {
+
+    var path = "Projects/" + projectname + "/Project.db";
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+
+    // add this project's entry in main DB
+    $.ajax({
+      data: {
+        'InvokeFunction': 'CopyProject',
+        'userid': userinfo.userid,
+        'projectname': projectname,
+        'projectDescription': projectDescription,
+        'projectType': projectType,
+        'path': path,
+        "projectStatus": projectStatus,
+        "projectComments": projectComments,
+        "projectIsFavorite": projectIsFavorite,
+        "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime(),
+        "source": source
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      var result = JSON.parse(msg);
+      if (result.MsgCode !== 1) {
+        showAlertForm(result.Msg);
+        return;
+      }
+
+      controller.fetchProjects();
+    });
+  },
+
+  CopyCheckspace: function (checkspaceData, source) {
+    var currentProj = controller.getCurrentProj();
+    // var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    $.ajax({
+      data: {
+        'InvokeFunction': 'CopyCheckSpace',
+        'ProjectName': currentProj.projectname,
+        'ProjectId': currentProj.projectid,
+        // 'userid': userinfo.userid,
+        'CheckSpaceInfo': JSON.stringify(checkspaceData),
+        "source": source
+      },
+      type: "POST",
+      url: "PHP/CheckSpaceManager.php"
+    }).done(function (msg) {
+      var object = JSON.parse(msg);
+      if (object.MsgCode !== 1) {
+        showAlertForm(object.Msg);
+        return;
+      }
+
+      controller.fetchProjectChecks(controller.getCurrentProj().projectid);
+    });
   }
 }
 
@@ -841,7 +907,7 @@ let checkView = {
     scrollContentDivToTop();
     if (controller.permissions()) {
       let newCheckCard = `
-        <div class="checkSpaceCard" onclick="newCheckView.init()">\
+        <div class="checkSpaceCard newCheckCardFlag" onclick="newCheckView.init()">\
           <div class="checkCardInfo checkCardInfoNew"><div class="plusBtn"></div></div>\
           <div class="checkCardTitle checkCardTitleNew"><h2>New Check</h2></div>\
         </div>`;
@@ -853,6 +919,7 @@ let checkView = {
 
       let newDiv = document.createElement('DIV');
       newDiv.classList.add('checkSpaceCard');
+      newDiv.classList.add('checkSpaceFlag');
       newDiv.setAttribute("id", check.checkid);
       newDiv.setAttribute("onmouseenter", "checkView.hoverCheck(this)");
       newDiv.setAttribute("onmouseleave", "checkView.leaveCheck(this)");
@@ -1081,7 +1148,7 @@ let editProjectView = {
     editProjectType.value = this.currentProject.type;
   },
 
-  disableEditProjectForm: function() {
+  disableEditProjectForm: function () {
     document.getElementById("editProjectName").disabled = true;
     document.getElementById("editComments").disabled = true;
     document.getElementById("editProjectStatus").disabled = true;
@@ -1090,7 +1157,7 @@ let editProjectView = {
     document.getElementById("favoriteCheck").disabled = true;
   },
 
-  editProjectInfo: function() {
+  editProjectInfo: function () {
     this.cancelEditProject(false);
     document.getElementById("editProjectName").disabled = false;
     document.getElementById("editComments").disabled = false;
@@ -1100,20 +1167,20 @@ let editProjectView = {
     document.getElementById("favoriteCheck").disabled = false;
   },
 
-  cancelEditProject: function(closeProjectOverlay) {
+  cancelEditProject: function (closeProjectOverlay) {
     var overlay = document.getElementById("editProjectOverlay");
     var popup = document.getElementById("editProjectPopup");
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
 
-    if(closeProjectOverlay) {
+    if (closeProjectOverlay) {
       onToggleOverlayDisplay(false);
       document.getElementById("editProject").classList.remove("projectOverlaysOpen");
     }
   },
 
-  openEditProjectOverlay: function() {
+  openEditProjectOverlay: function () {
     var overlay = document.getElementById("editProjectOverlay");
     var popup = document.getElementById("editProjectPopup");
 
@@ -1525,22 +1592,171 @@ function showAlertForm(alertMsg) {
 
 
 document.addEventListener("keydown", function (event) {
-  
+
   // Number 13 is the "Enter" key on the keyboard
   if (event.keyCode === 13) {
     // Cancel the default action, if needed
     event.preventDefault();
 
-    
+
     if (newProjectView.active) {
       OnCreateProject();
     }
-    else if(newCheckView.active)
-    {
+    else if (newCheckView.active) {
       OnCreateNewCheckCase();
-    } 
-    
+    }
+
     return false;
   }
 });
 
+function cancelCancelProjectCreation() {
+  hideCancelProjectCreationForm();
+}
+
+function hideCancelProjectCreationForm() {
+  var overlay = document.getElementById("cancelProjectCreationOverlay");
+  var popup = document.getElementById("cancelProjectCreationPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function cancelProjectCreation() {
+  newProjectView.closeNewProject();
+  hideCancelProjectCreationForm();
+}
+
+
+function cancelCancelCheckSpaceCreation() {
+  hideCancelCheckSpaceCreationForm();
+}
+
+function hideCancelCheckSpaceCreationForm() {
+  var overlay = document.getElementById("cancelCheckSpaceCreationOverlay");
+  var popup = document.getElementById("cancelCheckSpaceCreationPopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function cancelCheckSpaceCreation() {
+  newCheckView.closeNewCheck();
+  hideCancelCheckSpaceCreationForm();
+}
+
+
+function cancelDuplicate() {  
+  hideDuplicateForm();
+}
+
+function duplicate() {
+  if (controller.projectToCopy) {
+    duplicateProject();
+  }
+  else if (controller.checkSpaceToCopy) {
+    duplicateCheckspace();
+  }
+}
+
+function duplicateCheckspace() {
+  if (!controller.checkSpaceToCopy) {
+    showAlertForm("Error while copying Checkspace.");
+    return;
+  }
+
+  var checkId = controller.checkSpaceToCopy;
+  var obj = model.projectChecks.find(obj => obj.checkid == checkId);
+  if (obj === undefined) {
+    showAlertForm("Error while copying Checkspace.");
+    return;
+  }
+
+  var checkspaceName = document.getElementById("duplicateName").value;
+  if (!checkspaceName || checkspaceName == "") {
+    showAlertForm("Checkspace Name cannot be empty.");
+    return;
+  }
+
+  var checkspaceData = {};
+  checkspaceData["name"] = checkspaceName;
+  checkspaceData["status"] = obj.checkstatus
+  checkspaceData["config"]= obj.checkconfiguration;
+  checkspaceData["description"]= obj.checkdescription;
+  checkspaceData["comments"]= obj.checkcomments;
+  checkspaceData["isFav"]= obj.checkisfavourite;
+  checkspaceData["date"]= xCheckStudio.Util.getCurrentDateTime();
+  checkspaceData["projId"]= obj.projectid;
+  checkspaceData["userId"]= obj.userid;
+  checkspaceData["review"]= obj.review;
+
+  controller.CopyCheckspace(checkspaceData, obj.checkname);
+
+  controller.checkSpaceToCopy = undefined;
+  document.getElementById("duplicateName").value = "";
+  hideDuplicateForm();
+}
+
+function duplicateProject() {
+  if (!controller.projectToCopy) {
+    showAlertForm("Error while copying project.");
+    return;
+  }
+
+  var projId = controller.projectToCopy;
+
+  var obj = model.myProjects.find(obj => obj.projectid == projId);
+  if (obj === undefined) {
+    obj = model.publicProjects.find(obj => obj.projectid == projId);
+  }
+  if (!obj) {
+    showAlertForm("Error while copying project.");
+    return;
+  }
+
+  var projectName = document.getElementById("duplicateName").value;
+  if (!projectName || projectName == "") {
+    showAlertForm("Project Name cannot be empty.");
+    return;
+  }
+
+  controller.copyProject(projectName,
+    obj.description,
+    obj.type,
+    obj.status,
+    obj.comments,
+    obj.IsFavourite,
+    obj.projectname);
+
+  controller.projectToCopy = undefined;
+  document.getElementById("duplicateName").value = "";
+  hideDuplicateForm();
+}
+
+function hideDuplicateForm() {
+  controller.projectToCopy = undefined;
+  controller.checkSpaceToCopy = undefined;
+  
+  var overlay = document.getElementById("duplicateOverlay");
+  var popup = document.getElementById("duplicatePopup");
+
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function showDuplicateProjectForm(title) {
+  document.getElementById("duplicatePromptTitle").innerText = title;
+
+  var overlay = document.getElementById("duplicateOverlay");
+  var popup = document.getElementById("duplicatePopup");
+
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+
+  popup.style.width = "581px";
+  popup.style.height = "155px";
+  popup.style.overflow = "hidden";
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
