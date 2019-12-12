@@ -8,6 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CreateCheckSpace":
             CreateCheckSpace();
             break;
+        case "CopyCheckSpace":
+            CopyCheckSpace();
+            break;
         case "GetCheckSpaces":
             GetCheckSpaces();
             break;
@@ -26,6 +29,113 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         default:
             echo "No Function Found!";
     }
+}
+
+function CopyCheckSpace()
+{
+    $result = CopyCheckSpaceToProjDB();
+    if($result["MsgCode"] !== 1)
+    {
+        echo json_encode($result);
+        return;
+    }
+
+    $projectName = $_POST['ProjectName'];
+    $source = getCheckDirectoryPath($projectName, $_POST["source"]);  
+    $dest = getCheckDirectoryPath($projectName, $result["Data"]["checkname"]);     
+    if(!CopyDirRecursively($source, $dest))
+    {
+        echo json_encode(array("Msg" =>  "Failed to copy Checkspace dir(s) and file(s).",
+        "MsgCode" => 0)); 
+        return;
+    }
+
+    // rename the checkspace db
+    $DbPath = getCheckDirectoryPath($projectName, $result["Data"]["checkname"])."/".$_POST["source"].".db";
+    if(file_exists($DbPath))
+    {
+        $newDbPath = getSavedCheckDatabasePath($projectName, $result["Data"]["checkname"]);
+        rename($DbPath, $newDbPath);
+    }    
+
+    echo json_encode($result);
+}
+
+function CopyCheckSpaceToProjDB()
+{
+    $projectName = $_POST['ProjectName'];
+    $ProjectId = $_POST['ProjectId'];
+    $CheckSpaceInfo = $_POST['CheckSpaceInfo'];
+    $obj = json_decode($CheckSpaceInfo, true);
+
+    $name = $obj["name"];
+    $status = $obj["status"];
+    $config = $obj["config"];
+    $description = $obj["description"];
+    $comments = $obj["comments"];
+    $isFav = $obj["isFav"];
+    $date = $obj["date"];
+    $projId = $obj["projId"];
+    $userId = $obj["userId"];
+    $review = $obj["review"];
+
+    if (CheckIfCheckSpaceExists($projectName , $ProjectId, $name))
+    {
+        return array("Msg" =>  "Checkspace '$name' already exists.",
+        "MsgCode" => 0); 
+    }
+
+    try
+    {
+        $dbPath = getProjectDatabasePath($projectName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+
+        $query = 'INSERT INTO CheckSpace (checkname,
+                                        checkstatus,
+                                        checkconfiguration,
+                                        checkdescription,
+                                        checkcomments,
+                                        checkisfavourite,
+                                        checkdate,
+                                        projectid,
+                                        userid,
+                                        review) VALUES (?,?,?,?,?,?,?,?,?,?)';
+
+        $stmt = $dbh->prepare($query);
+        $stmt->execute(array($name, 
+                            $status, 
+                            $config, 
+                            $description,
+                            $comments, 
+                            $isFav,
+                            $date,
+                            $projId,
+                            $userId,
+                            $review));     
+
+        $array = array("checkid" => $dbh->lastInsertId(),
+                        "checkname" => $name,
+                        "checkstatus" => $status,
+                        "checkconfiguration" => $config,
+                        "checkdescription" => $description,
+                        "checkcomments" => $comments,
+                        "favoriteCheck" => $isFav,
+                        "checkdate" => $date,
+                        "projectid" => $projId,
+                        "userid" => $userId,
+                        "review" => $review);        
+        
+        $dbh = null; //This is how you close a PDO connection
+        return array("Msg" =>  "Success",
+                            "Data" => $array,
+                            "MsgCode" => 1); 
+    }
+    catch(Exception $e) 
+    { 
+    }
+
+    return array("Msg" =>  "Failed to create to Checkspace.",
+    "MsgCode" => 0); 
 }
 
 function CreateCheckSpace(){
@@ -123,13 +233,13 @@ function GetCheckSpaces(){
     $permission = GetUserPermission($userid);
     try
     {
-        $dbPath = getProjectDatabasePath($projectName);;
+        $dbPath = getProjectDatabasePath($projectName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         CreateCheckSpaceSchemaIfNot($dbh);
         /*if(strcasecmp ($permission, "check") == 0)
             $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;     
         else*/
-            $query =  "select * from CheckSpace where ProjectId=".$ProjectId;     
+            $query =  "select * from CheckSpace";     
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data);

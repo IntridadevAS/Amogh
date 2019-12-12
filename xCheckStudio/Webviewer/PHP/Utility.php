@@ -71,4 +71,38 @@
     function CheckIfFileExists($path){
         return file_exists($path);
     }
+
+    function CopyDirRecursively($source, $dest) 
+    { 
+        // Simple copy for a file 
+        if (is_file($source)) {
+            // chmod($dest, 777);
+            return copy($source, $dest); 
+        } 
+
+        // Make destination directory 
+        if (!is_dir($dest)) { 
+            mkdir($dest); 
+        }
+
+        // chmod($dest, 777);
+
+        // Loop through the folder 
+        $dir = dir($source); 
+        while (false !== $entry = $dir->read()) { 
+            // Skip pointers 
+            if ($entry == '.' || $entry == '..') { 
+                continue; 
+            } 
+
+            // Deep copy directories 
+            if ($dest !== "$source/$entry") { 
+                CopyDirRecursively("$source/$entry", "$dest/$entry"); 
+            } 
+        } 
+
+        // Clean up 
+        $dir->close(); 
+        return true; 
+    }
 ?>

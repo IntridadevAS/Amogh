@@ -27,12 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetProjects":
             GetProjects();
             break;
-        case "IsLoadProject":
-            IsLoadProject();
-            break;
-        case "CreateProjectSession":
-            CreateProjectSession();
-            break;
+        // case "IsLoadProject":
+        //     IsLoadProject();
+        //     break;
+        // case "CreateProjectSession":
+        //     CreateProjectSession();
+        //     break;
         case "ReadSelectedComponents":
             ReadSelectedComponents();
            break;
@@ -90,6 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "RemoveSourceFromDirecory":
             RemoveSourceFromDirecory();
             break;
+        case "CopyProject":
+            CopyProject();
+            break;        
         // case  "SaveHiddenItems":
         //     SaveHiddenItems();
         //     break;
@@ -395,9 +398,7 @@ function SaveAll()
     try
     {        
         // open database             
-        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
-
-        //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
+        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");       
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
 
         // begin the transaction
@@ -834,55 +835,6 @@ function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
     }   
 }
 
-// function SaveReferences()
-// {
-//     // get project name
-//     $projectName = $_POST['ProjectName'];	
-//     $checkName = $_POST['CheckName'];
-//     $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-//     $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
-//     if(!file_exists ($dbPath ) || 
-//        !file_exists ($tempDBPath ))
-//     { 
-//          echo 'fail';
-//          return;
-//     }       
-
-//     $dbh;
-//      try
-//      {        
-//          // open database             
-//          $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
-
-//          //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
-//          $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
-
-//          // begin the transaction
-//          $dbh->beginTransaction();
-//          $tempDbh->beginTransaction();            
-       
-//          // references on components               
-//          SaveReferencesFromTemp( $tempDbh, $dbh, "a_References");          
-//          SaveReferencesFromTemp( $tempDbh, $dbh, "b_References");
-//          SaveReferencesFromTemp( $tempDbh, $dbh, "c_References");          
-//          SaveReferencesFromTemp( $tempDbh, $dbh, "d_References");
-
-//          // commit update
-//          $dbh->commit();
-//          $tempDbh->commit();
-//          $dbh = null; //This is how you close a PDO connection                    
-//          $tempDbh = null; //This is how you close a PDO connection                        
-
-//          echo 'success';
-//          return;
-//      }
-//      catch(Exception $e) 
-//      {        
-//          echo "fail"; 
-//          return;
-//      } 
-// }
-
 /* 
    Save hidden items in model browser
 */
@@ -1086,58 +1038,6 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
         }
     } 
 }
-
-// function SaveComponents()
-// {
-//        // get project name
-//        $projectName = $_POST['ProjectName'];	
-//        $checkName = $_POST['CheckName'];
-//        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-//        $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
-//        if(!file_exists ($dbPath ) || 
-//           !file_exists ($tempDBPath ))
-//        { 
-//             echo 'fail';
-//             return;
-//        }       
-
-//        $dbh;
-//         try
-//         {        
-//             // open database             
-//             $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
-
-//             //$dbPath = "../Projects/".$projectName."/".$projectName.".db";
-//             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
-
-//             // begin the transaction
-//             $dbh->beginTransaction();
-//             $tempDbh->beginTransaction();            
-          
-//             // comparison result tables table                               
-//             SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties");          
-//             SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
-//             // SaveComponents( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
-//             // SaveComponents( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
-
-//             // save check case info 
-//             SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
-
-//             // commit update
-//             $dbh->commit();
-//             $tempDbh->commit();
-//             $dbh = null; //This is how you close a PDO connection                    
-//             $tempDbh = null; //This is how you close a PDO connection                        
-
-//             echo 'success';
-//             return;
-//         }
-//         catch(Exception $e) 
-//         {        
-//             echo "fail"; 
-//             return;
-//         } 
-// }
 
 /* 
    Save viewer options
@@ -3347,39 +3247,202 @@ function ReadSelectedComponentsFromDB($dbh, $table)
       return $selectedComponents;
 }
 
-function CreateProjectSession()
-{
-    if(!isset($_POST['projectName']) || 
-       !isset($_POST['loadProject']) ||
-       !isset($_POST['sourceAPath']) ||
-       !isset($_POST['sourceBPath']) ||
-       !isset($_POST['projectId']))
-       {
-           echo "fail";
-           return;
-       }
+// function CreateProjectSession()
+// {
+//     if(!isset($_POST['projectName']) || 
+//        !isset($_POST['loadProject']) ||
+//        !isset($_POST['sourceAPath']) ||
+//        !isset($_POST['sourceBPath']) ||
+//        !isset($_POST['projectId']))
+//        {
+//            echo "fail";
+//            return;
+//        }
 
-    session_start();
+//     session_start();
 
-    $_SESSION['ProjectName'] = $_POST['projectName'];
-    $_SESSION['LoadProject'] = $_POST['loadProject'];
-    $_SESSION['ProjectId'] =  $_POST['projectId'];
-    $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
-    $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
+//     $_SESSION['ProjectName'] = $_POST['projectName'];
+//     $_SESSION['LoadProject'] = $_POST['loadProject'];
+//     $_SESSION['ProjectId'] =  $_POST['projectId'];
+//     $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
+//     $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
        
-    echo 'success';
-}
+//     echo 'success';
+// }
 
-function IsLoadProject()
+// function IsLoadProject()
+// {
+//     session_start();
+//     if(isset($_SESSION['LoadProject'] ))
+//     {
+//         echo $_SESSION['LoadProject'];
+//         return;
+//     }
+    
+//     echo 'false';    
+// }
+
+function CopyProject()
 {
-    session_start();
-    if(isset($_SESSION['LoadProject'] ))
+
+    $source = getProjectDirectoryPath(trim($_POST["source"], " "));  
+    $dest = getProjectDirectoryPath(trim($_POST["projectname"], " "));  
+    $result = CopyDirRecursively($source, $dest);
+    if(!$result)
     {
-        echo $_SESSION['LoadProject'];
+        echo json_encode(array("Msg" =>  "Failed to copy project dir(s) and file(s).",
+        "MsgCode" => 0)); 
         return;
     }
     
-    echo 'false';    
+    $result = CopyProjectToMainDB();
+    if($result["MsgCode"] != 1)
+    {
+        echo json_encode($result);
+        return;
+    }
+
+    echo json_encode($result);
+}
+
+// /** 
+//  * Copy a file, or recursively copy a folder and its contents 
+//  * @param       string   $source    Source path 
+//  * @param       string   $dest      Destination path 
+//  * @return      bool     Returns TRUE on success, FALSE on failure 
+//  */ 
+// function CopyProjectDir($source, $dest) 
+// { 
+//     // Simple copy for a file 
+//     if (is_file($source)) {
+//         // chmod($dest, 777);
+//         return copy($source, $dest); 
+//     } 
+
+//     // Make destination directory 
+//     if (!is_dir($dest)) { 
+//         mkdir($dest); 
+//     }
+
+//     // chmod($dest, 777);
+
+//     // Loop through the folder 
+//     $dir = dir($source); 
+//     while (false !== $entry = $dir->read()) { 
+//         // Skip pointers 
+//         if ($entry == '.' || $entry == '..') { 
+//             continue; 
+//         } 
+
+//         // Deep copy directories 
+//         if ($dest !== "$source/$entry") { 
+//             CopyProjectDir("$source/$entry", "$dest/$entry"); 
+//         } 
+//     } 
+
+//     // Clean up 
+//     $dir->close(); 
+//     return true; 
+// }
+
+function CopyProjectToMainDB()
+{   
+
+    try{
+        $userid = trim($_POST["userid"], " ");      
+        $projectName = trim($_POST["projectname"], " ");
+        $projectType = trim($_POST["projectType"], " ");    
+        $projectComments = trim($_POST["projectComments"], " ");
+        $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+        $projectDescription = trim($_POST["projectDescription"], " ");
+        $projectPath = trim($_POST["path"], " ");
+        $projectStatus = trim($_POST["projectStatus"], " ");  
+        $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
+
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");                
+       
+        $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
+        $count=0;
+        foreach ($dbh->query($query) as $row)
+        {
+            $count = $count+1;
+        }
+        if ($count != 0)
+        {
+            return array("Msg" =>  "Project '$projectName' already exists.",                       
+                        "MsgCode" => 0); 
+            $dbh = null; //This is how you close a PDO connection
+            return;
+        }
+
+        // projectname is text column
+        // userid is integer column
+        // path is text column
+        $query = 'INSERT INTO Projects (userid,
+                                        projectname,
+                                        type,
+                                        comments,
+                                        IsFavourite,
+                                        description,
+                                        path,
+                                        status,
+                                        createddate) VALUES (?,?,?,?,?,?,?,?,?)';
+        $stmt = $dbh->prepare($query);
+
+        $stmt->execute(array( $userid, 
+                            $projectName, 
+                            $projectType, 
+                            $projectComments, 
+                            $projectIsFavorite, 
+                            $projectDescription, 
+                            $projectPath, 
+                            $projectStatus,
+                            $projectCreatedDate));
+        
+        $insertedId = $dbh->lastInsertId();
+        if($insertedId !=0 && 
+           $insertedId !=-1)
+        {
+            $array = array(
+                            "projectid" => $dbh->lastInsertId(),
+                            "projectname" => $projectName,
+                            "type" => $projectType,
+                            "comments" => $projectComments,
+                            "IsFavourite" => $projectIsFavorite,
+                            "description" => $projectDescription,
+                            "path" => $projectPath,
+                            "status" => $projectStatus,
+                            "createddate" => $projectCreatedDate);
+        
+            $dbh = null;
+            return array("Msg" =>  "Success",
+                        "Data" => $array,
+                        "MsgCode" => 1); 
+            
+        }
+        // else
+        // {
+        //     $array = array(
+        //         "projectid" => -1,
+        //     );
+        //     echo json_encode($array);
+        // }
+        
+        // $dbh = null; //This is how you close a PDO connection
+        // return;      
+    }
+    catch(Exception $e) {
+        // //echo 'Message: ' .$e->getMessage();
+        // $array = array(
+        //     "projectid" => -1,
+        // );
+        // echo json_encode($array);
+        // return;
+    } 
+
+    $dbh = null;
+    return array("Msg" =>  "fail",
+                "MsgCode" => 0); 
 }
 
 /*
@@ -3405,9 +3468,9 @@ function CreateProject()
         }
         if ($count != 0)
         {
-        echo "Project with provided name already exists. Please try some other name.";
-        $dbh = null; //This is how you close a PDO connection
-        return;
+            echo "Project with provided name already exists. Please try some other name.";
+            $dbh = null; //This is how you close a PDO connection
+            return;
         }
     }
     catch(Exception $e) {
@@ -3450,10 +3513,19 @@ function AddNewProjectToMainDB()
         // projectname is text column
         // userid is integer column
         // path is text column
-        $query = 'INSERT INTO Projects (userid,projectname,type,comments,IsFavourite,description,path,status,createddate) VALUES (?,?,?,?,?,?,?,?,?)';
+        $query = 'INSERT INTO Projects (userid,
+        projectname,
+        type,
+        comments,
+        IsFavourite,
+        description,
+        path,
+        status,
+        createddate) VALUES (?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
+
         $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate));     
-        $_SESSION['ProjectId'] = $dbh->lastInsertId();
+        // $_SESSION['ProjectId'] = $dbh->lastInsertId();
         $insertedId = $dbh->lastInsertId();
         if($insertedId !=0 && $insertedId !=-1){
             $array = array(
