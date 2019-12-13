@@ -259,11 +259,10 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
     }
 }
 
-ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordion, ActionToPerform) {
+ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionData, ActionToPerform) {
     var _this = this;
 
-    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
-    var groupId = groupData["groupId"];
+    var groupId = accordionData["groupId"];
     var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid = $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
@@ -508,11 +507,10 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
     }
 }
 
-ComplianceReviewManager.prototype.UnAcceptCategory = function (accordion, ActionToPerform) {
+ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, ActionToPerform) {
     var _this = this;
 
-    var groupData = model.getCurrentReviewTable().GetAccordionData(accordion.textContent);
-    var groupId = groupData["groupId"];
+    var groupId = accordionData["groupId"];
     var groupContainer = "#" + this.ComplianceCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
     var dataGrid = $(groupContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();

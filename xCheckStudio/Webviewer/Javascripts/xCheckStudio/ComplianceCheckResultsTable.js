@@ -30,17 +30,6 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
                 model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
             }
         },
-        onItemRendered: function (e) {
-            // initialize the context menu             
-            var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
-
-            if (!(containerDiv in _this.ContextMenus)) {
-                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-                _this.ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
-            }
-            e.itemElement[0].id = e.itemData["template"] + "_accordion";
-            _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
-        },
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
             var btn = $('<div>')
             $(btn).data("index", itemIndex)
@@ -71,6 +60,16 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         },
         onItemClick: function (e) {
             e.event.stopPropagation();
+        },        
+        onItemContextMenu: function(e) {
+            var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
+            if (!(containerDiv in _this.ContextMenus) && !e.itemData["template"].toLowerCase().includes("undefined")) {
+                var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
+                _this.ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
+            }
+            if(!e.itemData["template"].toLowerCase().includes("undefined")) {
+                _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e);
+            }
         }
     });
 }
