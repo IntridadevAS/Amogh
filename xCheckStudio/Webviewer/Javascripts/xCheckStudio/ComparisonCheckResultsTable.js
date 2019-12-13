@@ -28,22 +28,6 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         dataSource: data,
         deferRendering: false,
         selectedIndex: -1,       
-        // onSelectionChanged: function (e) {
-        //     if (e.addedItems.length > 0) {
-        //         _this.CurrentTableId = _this.getTableId(e.addedItems[0]["template"]);
-        //     }
-        // },
-        onItemRendered: function (e) {
-            // initialize the context menu             
-            var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
-
-            if (!(containerDiv in _this.ContextMenus)) {
-                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
-                _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
-            }
-            e.itemElement[0].id = e.itemData["template"] + "_accordion";
-            _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e.itemElement[0].id);
-        },
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
             var btn = $('<div>')
             $(btn).data("index", itemIndex)
@@ -74,6 +58,16 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         },
         onItemClick: function (e) {
             e.event.stopPropagation();
+        },
+        onItemContextMenu: function(e) {
+            var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
+            if (!(containerDiv in _this.ContextMenus) && !e.itemData["template"].toLowerCase().includes("undefined")) {
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
+                _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
+            }
+            if(!e.itemData["template"].toLowerCase().includes("undefined")) {
+                _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e);
+            }
         }
     });
 }
@@ -900,26 +894,6 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
         tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceDValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceDName] = property.sourceDName;
 
-        // var cName = "";
-        // var cValue = "";
-        // if(property.sourceCName)
-        // {
-        //     cName = property.sourceCName;
-        //     cValue = property.sourceCValue;
-        // }
-        // tableRowContent[ComparisonPropertyColumnNames.SourceCName] = cName;
-        // tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = cValue;       
-
-        // var dName = "";
-        // var dValue = "";
-        // if(property.sourceDName)
-        // {
-        //     dName = property.sourceDName;
-        //     dValue = property.sourceDValue;
-        // }
-        // tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = dName;
-        // tableRowContent[ComparisonPropertyColumnNames.SourceDName] = dValue;
-
         tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
         if(property.accepted == "true") {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'ACCEPTED';
@@ -1106,17 +1080,14 @@ ComparisonCheckPropertiesTable.prototype.SetComment = function (comment) {
 
 ComparisonCheckPropertiesTable.prototype.Destroy = function () {
 
-    // var viewerContainer = "#" + this.DetailedReviewTableContainer;
-
     var containerDiv = "#" + this.DetailedReviewTableContainer;
     var viewerContainerElement = document.getElementById(this.DetailedReviewTableContainer);
     var parent = viewerContainerElement.parentElement;
 
     $(containerDiv).remove();
 
-    var viewerContainerDiv = document.createElement("div")
+    var viewerContainerDiv = document.createElement("DIV")
     viewerContainerDiv.id = this.DetailedReviewTableContainer;
-    // viewerContainerDiv.style.display = "none";
 
     parent.appendChild(viewerContainerDiv);
 }
