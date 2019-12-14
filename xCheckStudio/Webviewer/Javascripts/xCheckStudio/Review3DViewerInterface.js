@@ -29,8 +29,7 @@ Review3DViewerInterface.prototype.setupViewer = function (width, height) {
     viewer.start();
     this.Viewer = viewer;
     this.bindEvents(viewer);
-    this.setViewerBackgroundColor();
-
+    
     var viewerContainer = document.getElementById(this.ViewerOptions[0]);
     viewerContainer.style.width = width;//"550px"
     viewerContainer.style.height = height;//"250px"
@@ -46,6 +45,7 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
         firstModelLoaded: function () {
             viewer.view.fitWorld();
             viewer.resizeCanvas();
+            _this.setViewerBackgroundColor();
 
             // create nav cube
             showNavigationCube(viewer);

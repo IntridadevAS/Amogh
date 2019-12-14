@@ -48,15 +48,15 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
         });
         viewer.start();
 
-        _this.Webviewer = viewer;
-
-        // set viewer's background color
-        _this.SetViewerBackgroundColor();
+        _this.Webviewer = viewer;        
 
         viewer.setCallbacks({
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
                 viewer.resizeCanvas();
+
+                // set viewer's background color
+                _this.SetViewerBackgroundColor();
 
                 // restore hidden nodes
                 if (_this.HiddenNodeIds.length > 0) {

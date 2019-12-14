@@ -25,8 +25,7 @@ ModelBrowser3DViewer.prototype.setupViewer = function (width, height) {
 
     viewer.start();
     this.Viewer = viewer;
-    this.bindEvents(viewer);
-    this.setViewerBackgroundColor();
+    this.bindEvents(viewer);    
 
     var viewerContainer = document.getElementById(this.ViewerOptions[0]);
     viewerContainer.style.width = width;
@@ -41,6 +40,8 @@ ModelBrowser3DViewer.prototype.bindEvents = function (viewer) {
         firstModelLoaded: function () {
             viewer.view.fitWorld();
             viewer.resizeCanvas();
+            
+            _this.setViewerBackgroundColor();
 
             // create nav cube
             showNavigationCube(viewer);
