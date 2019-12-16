@@ -16,7 +16,7 @@
 	position: absolute;
 	box-sizing: border-box;
 	/* background: #E5E5E5; */
-	z-index: 2;
+	z-index: 200;
 	width: 581px;
 	height: 155px;
 	/* background-color: rgba(255,255,255,1); */

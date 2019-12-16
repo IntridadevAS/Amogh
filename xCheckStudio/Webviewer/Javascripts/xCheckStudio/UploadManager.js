@@ -589,7 +589,7 @@ let UploadManager = {
 }
 
 function showNotValidDatasourcePrompt() {
-    var overlay = document.getElementById("notValidDatasetOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidDatasetPopup");
 
     overlay.style.display = 'block';
@@ -604,7 +604,7 @@ function showNotValidDatasourcePrompt() {
 }
 
 function onNotValidDataSourceOk() {
-    var overlay = document.getElementById("notValidDatasetOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidDatasetPopup");
 
     overlay.style.display = 'none';
@@ -613,7 +613,7 @@ function onNotValidDataSourceOk() {
 }
 
 function showNotValidDatasource1Prompt() {
-    var overlay = document.getElementById("notValidDataset1Overlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidDataset1Popup");
 
     overlay.style.display = 'block';
@@ -628,7 +628,7 @@ function showNotValidDatasource1Prompt() {
 }
 
 function onNotValidDataSource1Ok() {
-    var overlay = document.getElementById("notValidDataset1Overlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidDataset1Popup");
 
     overlay.style.display = 'none';

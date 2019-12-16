@@ -29,7 +29,7 @@ function onNewUserButtonClicked() {
 }
 
 var showNewUserOverlay = function () {
-    document.getElementById("newUserOverlay").style.display = "block";
+    document.getElementById("uiBlockingOverlay").style.display = "block";
     document.getElementById("newUserPopup").style.display = "block";
 
     document.getElementById("addNewUserButton").onclick = function () {
@@ -50,7 +50,7 @@ var closeNewUserOverlay = function () {
     document.getElementById("newUserPermissionSelect").value = "Reviewer";
     document.getElementById("newUserEnableCheck").checked = true;
 
-    document.getElementById("newUserOverlay").style.display = "none";
+    document.getElementById("uiBlockingOverlay").style.display = "none";
     document.getElementById("newUserPopup").style.display = "none";
 }
 

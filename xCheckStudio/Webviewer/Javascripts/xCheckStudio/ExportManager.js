@@ -20,7 +20,7 @@ var ExportManager = {
 }
 
 function ShowSelectBox() {
-    var overlay = document.getElementById("ExcelOutputOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("ExcelOutputPopup");
 
 

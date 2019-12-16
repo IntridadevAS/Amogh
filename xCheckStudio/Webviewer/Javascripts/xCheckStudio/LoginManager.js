@@ -26,7 +26,7 @@ function validateLogindetails(callbackfunction) {
 }
 
 function showUserLoggedInPrompt() {
-    var overlay = document.getElementById("userLoggedInOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("userLoggedInPopup");
 
     overlay.style.display = 'block';
@@ -41,7 +41,7 @@ function showUserLoggedInPrompt() {
 }
 
 function onUserLoggedInOk() {
-    var overlay = document.getElementById("userLoggedInOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("userLoggedInPopup");
 
     overlay.style.display = 'none';

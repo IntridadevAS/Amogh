@@ -2,7 +2,7 @@ function enableMenuOptions() {
 
     // on re check
     document.getElementById(MenuBar.ReCheckBtn).onclick = function () {
-        var overlay = document.getElementById("recheckOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("recheckPopup");
 
         overlay.style.display = 'block';
@@ -66,7 +66,7 @@ function enableMenuOptions() {
 
     // on save 
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        var overlay = document.getElementById("saveResultsOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("saveResultsPopup");
 
         overlay.style.display = 'block';
@@ -81,7 +81,7 @@ function enableMenuOptions() {
 
     // on reset
     document.getElementById(MenuBar.ResetBtn).onclick = function () {
-        var overlay = document.getElementById("resetDataOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("resetDataPopup");
 
         overlay.style.display = 'block';
@@ -160,7 +160,7 @@ function resetData() {
 }
 
 function hideResetDataForm() {
-    var overlay = document.getElementById("resetDataOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("resetDataPopup");
 
     overlay.style.display = 'none';
@@ -176,7 +176,7 @@ function recheck() {
 }
 
 function hideRecheckForm() {
-    var overlay = document.getElementById("recheckOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("recheckPopup");
 
     overlay.style.display = 'none';
@@ -194,7 +194,7 @@ function saveResults() {
 }
 
 function hideSaveResultsForm() {
-    var overlay = document.getElementById("saveResultsOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("saveResultsPopup");
 
     overlay.style.display = 'none';
